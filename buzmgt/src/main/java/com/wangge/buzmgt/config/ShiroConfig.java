@@ -42,7 +42,7 @@ public class ShiroConfig {
 
 		Map<String, String> filterChainDefinitionMapping = new LinkedHashMap<String, String>();
 
-		filterChainDefinitionMapping.put("/**/favorite.icon", "anno");
+		filterChainDefinitionMapping.put("/**/favicon.ico", "anno");
 		filterChainDefinitionMapping.put("/login", "authc");
 		filterChainDefinitionMapping.put("/logout", "logout");
 		filterChainDefinitionMapping.put("/**", "user");
