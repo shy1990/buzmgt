@@ -30,7 +30,7 @@ public class BuzmgtApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(BuzmgtApplication.class, args);
 	}
-	
+	/**
 	@Bean
 	CommandLineRunner init(UserRepository userRepository, RoleRepository roleRepository,OrganizationRepository organizationRepository,ResourceRepository moduleRepository) {
 		return (evt) -> {
@@ -68,6 +68,6 @@ public class BuzmgtApplication extends SpringBootServletInitializer {
 				userRepository.save(user);
 			});
 		
-		};
 	}
+		};*/
 }
