@@ -9,7 +9,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     open-in-view: true
   datasource:
     url: jdbc:oracle:thin:@192.168.2.247:1522:xe
