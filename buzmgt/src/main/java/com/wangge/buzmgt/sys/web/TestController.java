@@ -3,7 +3,6 @@ package com.wangge.buzmgt.sys.web;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +18,10 @@ public class TestController {
 	@Autowired
 	private ResourceService resourceService;
 	
-	@RequiresRoles("admin")
 	@RequestMapping("/test")
-	public String test(Model model){
-		List<Menu> menus = resourceService.getMenusByUsername(getCurrentUser().getUsername());
-		model.addAttribute("menu", menus);
-		return "home";
+	public String test(String test,Model model){
+		model.addAttribute("test", test);
+		return "test";
 	}
 	
 	@RequestMapping("/menu")
