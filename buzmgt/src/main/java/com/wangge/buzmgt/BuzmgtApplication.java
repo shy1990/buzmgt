@@ -31,7 +31,7 @@ public class BuzmgtApplication extends SpringBootServletInitializer {
 		SpringApplication.run(BuzmgtApplication.class, args);
 	}
 	
-	@Bean
+	//@Bean
 	CommandLineRunner init(UserRepository userRepository, RoleRepository roleRepository,OrganizationRepository organizationRepository,ResourceRepository moduleRepository) {
 		return (evt) -> {
 			
