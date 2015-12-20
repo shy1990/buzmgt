@@ -343,7 +343,7 @@ body {
 		$(function() {
 			$("#menu>li>a").click(function(event) {
 				event.preventDefault();
-				$("#main").load($(this).attr("href") + " #content", {
+				$("#main").load($(this).attr("href") + " #main", {
 					test : "sssssssssssssss"
 				},function() {
 					  $.getScript("js/ditu.js");

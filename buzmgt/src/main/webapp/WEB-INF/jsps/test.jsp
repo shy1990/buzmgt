@@ -9,12 +9,12 @@
 	src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
-	<div id="content">
+	<div id="main">
 		<div id="ditu" style="height:400px">fuck </div>
 		<div id="ditu2" style="height:400px">hello word</div>
+		<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+		<script type="text/javascript" src="static/js/ditu.js"></script>
+		<script type="text/javascript" src="static/js/ditu2.js"></script>
 	</div>
-<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-<script type="text/javascript" src="static/js/ditu.js"></script>
-<script type="text/javascript" src="static/js/ditu2.js"></script>
 </body>
 </html>
