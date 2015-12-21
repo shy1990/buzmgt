@@ -17,7 +17,6 @@ $(function() {
 			}, function() {
 				$.getScript("/static/js/ditu.js");
 				$.getScript("/static/js/ditu2.js");
-				
 			});
 		}
 	});
