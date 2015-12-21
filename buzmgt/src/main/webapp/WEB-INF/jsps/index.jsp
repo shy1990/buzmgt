@@ -652,7 +652,11 @@
 								<li><a class="" href="typography.html"><span class="sub-menu-text">任务</span></a></li>
 							</ul>
 						</li>
-						<li><a class="" href="/test"><i class="fa fa-desktop fa-fw"></i> <span class="menu-text">测试</span></a></li>
+						<li><a class="" href="region/initRegion"><i class="fa fa-desktop fa-fw"></i> <span class="menu-text">区域划分</span></a></li>
+						
+						
+						
+						
 						<li><a class="" href="inbox.html"><i class="fa fa-envelope-o fa-fw"></i> <span class="menu-text">Inbox</span></a></li>
 						<li class="has-sub">
 							<a href="javascript:;" class="">

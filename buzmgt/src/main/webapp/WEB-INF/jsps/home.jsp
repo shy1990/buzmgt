@@ -352,8 +352,6 @@ body {
 			});
 
 		});
-		
-		
 	</script>
 </body>
 </html>

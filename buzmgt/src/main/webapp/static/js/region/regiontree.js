@@ -1,0 +1,527 @@
+var rMenu;
+/**
+ * 设置zTree树
+ */
+var setting = {
+	async : {
+		enable : true,
+		url : "region/getAreaByid",
+		autoParam : [ "id" ]
+	},
+	check : {
+		enable : false
+	},
+	edit : {
+		drag : {
+			autoExpandTrigger : true,
+			prev : dropPrev,
+			inner : dropInner,
+			next : dropNext
+		},
+		enable : true,
+		showRemoveBtn : showRemoveBtn,
+		showRenameBtn : showRenameBtn
+	},
+	data : {
+		simpleData : {
+			enable : true
+		}
+	},
+	view : {
+		expandSpeed : "",
+		addHoverDom : addHoverDom,
+		removeHoverDom : removeHoverDom,
+	// addDiyDom : addDiyDom
+	},
+	callback : {
+		beforeExpand : beforeExpand,
+		onAsyncSuccess : onAsyncSuccess,
+		onAsyncError : onAsyncError,
+		onClick : zTreeOnClick,
+		beforeDrag : beforeDrag,
+		beforeEditName : beforeEditName,
+		beforeRemove : beforeRemove,
+		beforeRename : beforeRename,
+		onRemove : zTreeOnRemove,
+		onRename : zTreeOnRename,
+		onDrop : onDrop
+		
+	/*
+	 * beforeDrop: beforeDrop, beforeDragOpen: beforeDragOpen, onDrag: onDrag,
+	 * onDrop: onDrop, onExpand: onExpand
+	 */
+	}
+};
+var zNodes = [ {
+	name : "中国",
+	id : "0",
+	isParent : true,
+	open : true,
+	iconOpen : "zTree/css/zTreeStyle/img/diy/1_open.png",
+	iconClose : "zTree/css/zTreeStyle/img/diy/1_close.png"
+} ];
+
+/**
+ * @author jiabin 功能：通过NodeId获得节点的孩子节点 调用：当父节点展开时，调用，返回该父节点的子节点 后台数据格式：JSON
+ * @param treeId
+ *            树控件的Id
+ * @param treeNode
+ *            树节点对象：包含Id等信息
+ * @return
+ */
+function getUrlByNodeId(treeId, treeNode) {
+	return "area/getArea";
+}
+/**
+ * 展开之前执行的函数
+ * 
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function beforeExpand(treeId, treeNode) {
+	if (!treeNode.isAjaxing) {
+		ajaxGetNodes(treeNode, "refresh");
+		return true;
+	} else {
+		alert("Loading...");
+		return false;
+	}
+}
+/**
+ * 加载成功后执行的函数
+ * 
+ * @param event
+ *            封装了js的事件
+ * @param treeId
+ *            树控件的Id
+ * @param treeNode
+ *            树节点对象
+ * @param msg
+ *            返回的JSON格式的消息
+ * @return
+ */
+function onAsyncSuccess(event, treeId, treeNode, msg) {
+	if (!msg || msg.length == 0) {
+		return;
+	}
+	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	treeNode.icon = "";
+	zTree.updateNode(treeNode);// 更新树结构
+	zTree.selectNode(treeNode.children[0]);// 设置为第一个子节点为选中状态
+}
+function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus,
+		errorThrown) {
+	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	alert("Error ! 异步获取数据异常");
+	treeNode.icon = "";
+	zTree.updateNode(treeNode);
+}
+function ajaxGetNodes(treeNode, reloadType) {
+	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	if (reloadType == "refresh") {
+		treeNode.icon = "zTree/css/zTreeStyle/img/loading.gif";
+		zTree.updateNode(treeNode);
+	}
+	zTree.reAsyncChildNodes(treeNode, reloadType, true);
+}
+
+/**
+ * 功能：当点击树节点时，调用该函数
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function zTreeOnClick(event, treeId, treeNode) {
+	 document.getElementById("iframepage").src = "area/right?id=" +	 treeNode.id;
+}
+
+
+/**
+ * 功能：用于捕获节点编辑按钮的 click 事件，并且根据返回值确定是否允许进入名称编辑状态
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function beforeEditName(treeId, treeNode) {
+	className = (className === "dark" ? "" : "dark");
+	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	zTree.selectNode(treeNode);
+	return confirm("进入节点 -- " + treeNode.name + " 的编辑状态吗？");
+}
+/**
+ * 功能：用于捕获节点被删除之前的事件回调函数，并且根据返回值确定是否允许删除操作
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function beforeRemove(treeId, treeNode) {
+	
+	if (confirm("确认删除 节点 -- " + treeNode.name + " 吗？")) {
+		
+		return true;
+	} else {
+		return false;
+	}
+	
+
+}
+
+function zTreeOnRemove(event, treeId, treeNode) {
+	
+	$.ajax({
+		async : true, // 是否异步
+		cache : false, // 是否使用缓存
+		type : 'post', // 请求方式,post
+		data : {
+			id : treeNode.id,
+		},
+		dataType : "text", // 数据传输格式
+		url : "area/exsitManager", // 请求链接
+		success : function(data) {
+			if(data != 'no'){
+				$.ajax({
+					async : true, // 是否异步
+					cache : false, // 是否使用缓存
+					type : 'post', // 请求方式,post
+					data : {
+						id : treeNode.id,
+					},
+					dataType : "text", // 数据传输格式
+					url : "area/deleteArea", // 请求链接
+					/*success : function(data) {
+						if(data == 'no'){
+							alert("不能删除此区域");
+						}
+					}*/
+				});
+			}else{
+				alert("不能删除此区域");
+			}
+		}
+	});
+
+	
+}
+
+/**
+ * 功能：用于捕获节点编辑名称结束（Input 失去焦点 或 按下 Enter
+ * 键）之后，更新节点名称数据之前的事件回调函数，并且根据返回值确定是否允许更改名称的操作
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function beforeRename(treeId, treeNode, newName, isCancel) {
+	className = (className === "dark" ? "" : "dark");
+	if (newName.length == 0) {
+		alert("节点名称不能为空.");
+		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+		setTimeout(function() {
+			zTree.editName(treeNode)
+		}, 10);
+		return false;
+	}
+	return true;
+}
+/**
+ * 功能：用于捕获节点编辑名称结束之后的事件回调函数。
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function zTreeOnRename(event, treeId, treeNode, isCancel) {
+	$.ajax({
+		async : true, // 是否异步
+		cache : false, // 是否使用缓存
+		type : 'post', // 请求方式,post
+		data : {
+			id : treeNode.id,
+			name : treeNode.name,
+		},
+		dataType : "text", // 数据传输格式
+		url : "area/editArea" // 请求链接
+	});
+
+}
+/**
+ * 功能：设置是否显示删除按钮。[setting.edit.enable = true 时生效]
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function showRemoveBtn(treeId, treeNode) {
+	return true;
+}
+/**
+ * 功能：设置是否显示编辑名称按钮。[setting.edit.enable = true 时生效]
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function showRenameBtn(treeId, treeNode) {
+	return true;
+}
+
+
+/**
+ * 功能：用于当鼠标移动到节点上时，显示用户自定义控件，显示隐藏状态同 zTree 内部的编辑、删除按钮
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+var newCount = 0;
+function addHoverDom(treeId, treeNode) {
+	var sObj = $("#" + treeNode.tId + "_a");
+	if ($("#diyBtn_"+treeNode.id).length>0) return;
+	/*
+	 * if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
+	 * return;
+	 */
+	var addStr = "<span class='button add' id='addBtn_"
+			+ treeNode.tId
+			+ "' title='add node' onfocus='this.blur();'></span>";
+	var selStr = "<select class='selDemo ' name='selDemo' id='diyBtn_"
+			+ treeNode.id
+			+ "'><option value=1>1</option><option value=2>2</option></select>";
+	sObj.after(selStr);
+	sObj.after(addStr);
+	var btnAdd = $("#addBtn_" + treeNode.tId);
+	var btnSelect = $("#diyBtn_" + treeNode.id);
+	if (btnSelect)
+/*		btnSelect.bind("change", function() {
+			console.info("=========================>>"+$("#diyBtn_"+treeNode.id).val());
+			$.ajax({
+				async : true, // 是否异步
+				cache : false, // 是否使用缓存
+				type : 'post', // 请求方式,post
+				data : {
+					type : $("#diyBtn_"+treeNode.id).val(),
+					areaid : treeNode.id
+				},
+				dataType : "text", // 数据传输格式
+				url : "area/addArea" // 请求链接
+			});
+		});*/
+	if (btnAdd)
+		btnAdd.bind("click", function() {
+
+			$.ajax({
+				async : true, // 是否异步
+				cache : false, // 是否使用缓存
+				type : 'post', // 请求方式,post
+				data : {
+					type : $("#diyBtn_"+treeNode.id).val(),
+					areaid : treeNode.id,
+					name : "new node" + (newCount + 1)
+				},
+				dataType : "text", // 数据传输格式
+				url : "area/addArea", // 请求链接
+				error : function() {
+					alert('访问服务器出错');
+				},	
+				success : function(data) {
+					newCount++;
+					ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
+					// zNodes = zNodes.concat(ztreeNodes);
+					var zTree = $.fn.zTree.getZTreeObj(treeId);
+					zTree.addNodes(treeNode, {
+						id : (ztreeNodes.id),
+						pId : ztreeNodes.pId,
+						name : ztreeNodes.name
+					});
+					return false;
+				}
+			});
+
+		});
+};
+
+/**
+ * 功能：用于当鼠标移出节点时，隐藏用户自定义控件，显示隐藏状态同 zTree 内部的编辑、删除按钮
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+
+function removeHoverDom(treeId, treeNode) {
+	$("#diyBtn_" + treeNode.id).unbind().remove();
+	$("#addBtn_" + treeNode.tId).unbind().remove();
+	$("#diyBtn_space_" +treeNode.id).unbind().remove();
+
+};
+
+/**
+ * 功能：拖拽到目标节点时，设置是否允许移动到目标节点前面的操作。[setting.edit.enable = true 时生效]
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function dropPrev(treeId, nodes, targetNode) {
+	var pNode = targetNode.getParentNode();
+	if (pNode && pNode.dropInner === false) {
+		return false;
+	} else {
+		for (var i = 0, l = curDragNodes.length; i < l; i++)	 {
+			var curPNode = curDragNodes[i].getParentNode();
+			if (curPNode && curPNode !== targetNode.getParentNode()
+					&& curPNode.childOuter === false) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+/**
+ * 功能：拖拽到目标节点时，设置是否允许成为目标节点的子节点。[setting.edit.enable = true 时生效]
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function dropInner(treeId, nodes, targetNode) {
+	if (targetNode && targetNode.dropInner === false) {
+		return false;
+	} else {
+		for (var i = 0, l = curDragNodes.length; i < l; i++) {
+			if (!targetNode && curDragNodes[i].dropRoot === false) {
+				return false;
+			} else if (curDragNodes[i].parentTId
+					&& curDragNodes[i].getParentNode() !== targetNode
+					&& curDragNodes[i].getParentNode().childOuter === false) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+/**
+ * 功能：拖拽到目标节点时，设置是否允许移动到目标节点后面的操作。[setting.edit.enable = true 时生效]
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function dropNext(treeId, nodes, targetNode) {
+	var pNode = targetNode.getParentNode();
+	if (pNode && pNode.dropInner === false) {
+		return false;
+	} else {
+		for (var i = 0, l = curDragNodes.length; i < l; i++) {
+			var curPNode = curDragNodes[i].getParentNode();
+			if (curPNode && curPNode !== targetNode.getParentNode()
+					&& curPNode.childOuter === false) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+/**
+ * 功能：用于捕获节点被拖拽之前的事件回调函数，并且根据返回值确定是否允许开启拖拽操作
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+var log, className = "dark", curDragNodes, autoExpandNode;
+function beforeDrag(treeId, treeNodes) {
+	className = (className === "dark" ? "" : "dark");
+	for (var i = 0, l = treeNodes.length; i < l; i++) {
+		if (treeNodes[i].drag === false) {
+			curDragNodes = null;
+			return false;
+		} else if (treeNodes[i].parentTId
+				&& treeNodes[i].getParentNode().childDrag === false) {
+			curDragNodes = null;
+			return false;
+		}
+	}
+	curDragNodes = treeNodes;
+	return true;
+}
+
+/**
+ * 功能：用于捕获拖拽节点移动到折叠状态的父节点后，即将自动展开该父节点之前的事件回调函数，并且根据返回值确定是否允许自动展开操作
+ * 
+ * @param event
+ * @param treeId
+ * @param treeNode
+ * @return
+ */
+function beforeDragOpen(treeId, treeNode) {
+	autoExpandNode = treeNode;
+	return true;
+}
+
+function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
+	$.ajax({
+		async : true, // 是否异步
+		cache : false, // 是否使用缓存
+		type : 'post', // 请求方式,post
+		data : {
+			id : treeNodes[0].id,
+			pid : treeNodes[0].pId,
+		},
+		dataType : "text", // 数据传输格式
+		url : "area/dragArea" // 请求链接
+	});
+}
+/*
+ * function beforeDrop(treeId, treeNodes, targetNode, moveType, isCopy) {
+ * className = (className === "dark" ? "":"dark"); return true; } function
+ * onDrag(event, treeId, treeNodes) { className = (className === "dark" ?
+ * "":"dark"); } function onDrop(event, treeId, treeNodes, targetNode, moveType,
+ * isCopy) { className = (className === "dark" ? "":"dark"); } function
+ * onExpand(event, treeId, treeNode) { if (treeNode === autoExpandNode) {
+ * className = (className === "dark" ? "":"dark"); } }
+ */
+
+// 初始化方法
+function onloadZTree() {
+	var ztreeNodes;
+	$.ajax({
+		async : true, // 是否异步
+		cache : false, // 是否使用缓存
+		type : 'post', // 请求方式,post
+		dataType : "text", // 数据传输格式
+		url : "region/findOneRegion", // 请求链接
+		error : function() {
+			alert('访问服务器出错');
+		},
+		success : function(data) {
+			ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
+			zNodes = zNodes.concat(ztreeNodes);
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			rMenu = $("#rMenu");
+		}
+	});
+}
+
+$(document).ready(function() {
+	alert(1111);
+	onloadZTree();
+});
