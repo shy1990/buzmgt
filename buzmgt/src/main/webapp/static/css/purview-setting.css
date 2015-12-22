@@ -1,0 +1,148 @@
+.main .page-header {
+	height: 66px;
+	line-height: 66px;
+	margin-top: 0;
+	margin-left: -26px;
+	padding-left: 50px ;
+	margin-right: -40px;
+	font-size: 14px;
+	font-weight: bold;
+	background: url(../img/icon/purview-setting/ddqx.png) no-repeat 25px 22px #fff;
+}
+.box.border.blue {
+    border: 1px solid #576ea7;
+}
+.box.border {
+    border-radius: 5px;
+}
+.box {
+    clear: both;
+    margin-top: 0px;
+    margin-bottom: 25px;
+    padding: 0px;
+}
+
+/*角色*/
+.re-padd-right{
+		/*margin-right: 0;*/
+		padding-right: 0;
+	}
+	.re-padd-left{
+		padding-left: 0;
+	}
+@media (min-width:768px ) {
+	.re-padd-right{
+		/*margin-right: 0;*/
+		padding-right: 0;
+	}
+	.re-padd-left{
+		padding-left: 0;
+	}
+}
+.role-title{
+	position: relative;
+	padding: 10px 0 10px 46px;
+	border-radius: 4px 0 0 0;
+	border-right: 1px solid #567ea7;
+	font-size: 14px;
+	font-weight: bold;
+	color: #FFF;
+	background: #5e87b0;
+}
+.title-icon{
+	position: absolute;
+	top: 10px;
+	left: 20px;
+	width: 20px;
+	height: 20px;
+}
+/*角色图标*/
+.role-title .title-icon{
+	background: url(../img/icon/purview-setting/left-icon/js.png) no-repeat;
+}
+/*角色列表 */
+.role-list{
+	height: 100%;
+	background: #FFF;
+	padding: 0px 0 20px 20px;
+	padding-right: 0;
+	/*border-right: 1px solid rgb(221, 221, 221);*/
+}
+.role-list >.nav{
+	border-bottom: none;
+}
+.role-list >.nav>li{
+	float: none;
+}
+.role-list >.nav>li>a{
+	width: 100%;
+	margin-bottom: 0px;
+	margin-right: -1px;
+	font-size: 12px;
+	font-weight: bold;
+    color: #595959;
+    border-radius: 4px 0 0 4px;
+	border-right: 1px solid rgb(221, 221, 221);
+}
+.role-list >.nav>li>a:hover{
+    border: 1px solid transparent;
+    background: #FAFAFA;
+	border-right: 1px solid rgb(221, 221, 221);
+}
+.role-list .nav-tabs > li.active > a {
+	z-index: 9999;
+	color: #568095;
+    background-color: #FAFAFA;
+    margin-right: -5px;
+    border: 1px solid #ddd;
+    border-right-color: transparent;
+}
+/*权限设置*/
+.setting{
+}
+.setting-title{
+	position: relative;
+	padding: 10px 0 10px 46px;
+	border-radius:0 4px 0 0;
+	font-size: 14px;
+	font-weight: bold;
+	color: #FFF;
+	background: #567ea7;
+}
+.setting-title .title-icon{
+	background: url(../img/icon/purview-setting/right-icon/qxsz.png) no-repeat;
+}
+.visible{
+	display: block;
+	height: 20px;
+	padding-left: 30px;
+	padding-right: 30px;
+	font-style:normal;
+	background: url(../img/icon/purview-setting/right-icon/kj.png) no-repeat;
+}
+.visible-no{
+	padding-left: 30px;
+	padding-right: 30px;
+	display: block;
+	height: 20px;
+	font-style:normal;
+	background: url(../img/icon/purview-setting/right-icon/bkj.png) no-repeat;
+}
+.icon{
+	display: block;
+	width: 20px;
+	height: 20px;
+	margin-left: 10px;
+}
+.query-icon{
+	float: right;
+	cursor: pointer;
+	background: url(../img/icon/purview-setting/left-icon/ck2.png) no-repeat;
+}
+.delete-icon{
+	float: right;
+	cursor: pointer;
+	background: url(../img/icon/purview-setting/left-icon/sc2.png) no-repeat;
+	
+}
+
