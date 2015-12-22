@@ -45,6 +45,7 @@ public class ShiroConfig {
 		filterChainDefinitionMapping.put("/**/favicon.ico", "anno");
 		filterChainDefinitionMapping.put("/login", "authc");
 		filterChainDefinitionMapping.put("/logout", "logout");
+		filterChainDefinitionMapping.put("/static/**", "anon");
 		filterChainDefinitionMapping.put("/**", "user");
 		shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMapping);
 		shiroFilter.setSecurityManager(securityManager);
