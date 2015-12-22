@@ -10,6 +10,13 @@
 <head>
 <title>区域划分</title>
 <base href="<%=basePath%>" />
+<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="static/css/index.css" />
+<link rel="stylesheet" type="text/css" href="static/css/purview-setting.css"/>
+<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+
+
+
 <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="static/zTree/css/icon.css" />
 <link rel="stylesheet" type="text/css" href="static/zTree/css/main.css" />
@@ -17,6 +24,10 @@
 <script type="text/javascript" src="static/js/jquery.min.js"></script> 
 <script type="text/javascript" src="static/zTree/js/jquery.ztree.all-3.5.js"></script>
 <script type="text/javascript" src="static/js/region/regiontree.js"></script>
+
+
+
+
 <style>
 
 .main .page-header {
