@@ -12,9 +12,6 @@
 	<div id="main">
 		<div id="ditu" style="height:400px">fuck sdfsfsf</div>
 		<div id="ditu2" style="height:400px">hello word</div>
-		<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-		<script type="text/javascript" src="static/js/ditu.js"></script>
-		<script type="text/javascript" src="static/js/ditu2.js"></script>
 	</div>
 </body>
 </html>

@@ -110,9 +110,9 @@
 							<li><a href="" class="active-note">活动通知</a></li>
 							<li><a href="" class="statistics">统计</a></li>
 							<li>
-								<a href="#" class="menu-second-box basic-settings" data-toggle="dropdown">基础设置<span class="pull-right down-icon"></span></a>
+								<a href="" class="menu-second-box basic-settings" data-toggle="dropdown">基础设置<span class="pull-right down-icon"></span></a>
 								<ul class="menu-second">
-									<li class="active"><a href="/region/initRegion">区域划分</a></li>
+									<li><a href="/region/initRegion">区域划分</a></li>
 									<li><a href="">组织结构</a></li>
 									<li><a href="">权限设置</a></li>
 									<li><a href="">装好管理</a></li>
@@ -120,7 +120,7 @@
 							</li>
 						</ul>
 					</div>
-					<div id="main" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 row breadcrumb main">
+					<div id="main" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 						<h1 class="page-header">Dashboard</h1>
 						<div class="row placeholders">
 							<div class="col-xs-6 col-sm-3 placeholder">
