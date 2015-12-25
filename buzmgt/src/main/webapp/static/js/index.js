@@ -12,12 +12,11 @@ $(function() {
 		var $href = $(this).attr("href");
 		console.info($href);
 		if ($href != '' && $href != null) {
-			$("#main").load($href+" #main", {
+			$("#main").load($href+"#main", {
 				test : "sssssssssssssss"
 			}, function() {
 				$.getScript("/static/js/ditu.js");
 				$.getScript("/static/js/ditu2.js");
-				
 			});
 		}
 	});
