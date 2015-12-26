@@ -15,9 +15,13 @@ $(function() {
 			$("#main").load($href+" #main", {
 				test : "sssssssssssssss"
 			}, function() {
+				if($href=="/region/initRegion"){
+					$.getScript("/static/js/jquery/jquery.min.js");
+					$.getScript("/static/zTree/js/jquery.ztree.all-3.5.js");
+					$.getScript("/static/js/region/regiontree.js");
+				}
 				$.getScript("/static/js/ditu.js");
 				$.getScript("/static/js/ditu2.js");
-				
 			});
 		}
 	});

@@ -5,7 +5,7 @@ var rMenu;
 var setting = {
 	async : {
 		enable : true,
-		url : "region/getAreaByid",
+		url : "region/findRegionByid",
 		autoParam : [ "id" ]
 	},
 	check : {
@@ -31,6 +31,7 @@ var setting = {
 		expandSpeed : "",
 		addHoverDom : addHoverDom,
 		removeHoverDom : removeHoverDom,
+		fontCss : {'font-weight': "bolder"}
 	// addDiyDom : addDiyDom
 	},
 	callback : {
@@ -53,13 +54,18 @@ var setting = {
 	}
 };
 var zNodes = [ {
-	name : "中国",
+	name:"中国", font:{'font-weight':'italic'},
 	id : "0",
 	isParent : true,
 	open : true,
-	iconOpen : "zTree/css/zTreeStyle/img/diy/1_open.png",
-	iconClose : "zTree/css/zTreeStyle/img/diy/1_close.png"
+	iconOpen : "static/zTree/css/zTreeStyle/img/diy/zhongguo.png",
+	iconClose : "static/zTree/css/zTreeStyle/img/diy/zhongguo.png"
 } ];
+
+function getFont(treeId, node) {
+	return node.font ? node.font : {};
+}
+
 
 /**
  * @author jiabin 功能：通过NodeId获得节点的孩子节点 调用：当父节点展开时，调用，返回该父节点的子节点 后台数据格式：JSON
@@ -513,6 +519,7 @@ function onloadZTree() {
 			alert('访问服务器出错');
 		},
 		success : function(data) {
+			alert(data);
 			ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
 			zNodes = zNodes.concat(ztreeNodes);
 			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
@@ -522,6 +529,5 @@ function onloadZTree() {
 }
 
 $(document).ready(function() {
-	alert(1111);
 	onloadZTree();
 });

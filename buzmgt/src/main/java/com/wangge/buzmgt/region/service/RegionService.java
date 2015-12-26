@@ -9,5 +9,5 @@ import com.wangge.buzmgt.region.vo.RegionTree;
 public interface RegionService {
 	
 	
-	public List<RegionTree> findTreeRegion() ;
+	public List<RegionTree> findTreeRegion(String id) ;
 }

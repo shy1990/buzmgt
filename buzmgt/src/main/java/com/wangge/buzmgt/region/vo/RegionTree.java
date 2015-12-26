@@ -12,9 +12,12 @@ package com.wangge.buzmgt.region.vo;
 public class RegionTree {
 	private String id;
 	private String pId;//父id
-	private boolean isParent;//是否是父节点isParent
+	private String isParent;//是否是父节点isParent
 	private String icon;//图标
+	private String iconOpen;
+	private String iconClose;
 	private String name;//节点名字
+	
 	
 	private boolean open;//默认打开
 
@@ -60,12 +63,30 @@ public class RegionTree {
 		this.open = open;
 	}
 
-	public boolean isParent() {
+	public String getIsParent() {
 		return isParent;
 	}
 
-	public void setIsParent(boolean isParent) {
+	public void setIsParent(String isParent) {
 		this.isParent = isParent;
 	}
+
+	public String getIconOpen() {
+		return iconOpen;
+	}
+
+	public void setIconOpen(String iconOpen) {
+		this.iconOpen = iconOpen;
+	}
+
+	public String getIconClose() {
+		return iconClose;
+	}
+
+	public void setIconClose(String iconClose) {
+		this.iconClose = iconClose;
+	}
+
+	
 	
 }	
