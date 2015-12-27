@@ -11,6 +11,8 @@ $(function(){
 	$('.role-list .query-icon').click(function(){
 		$("#main").load("/character");
 	});
-	
+	$('.j_create_role').click(function(){
+		$('.modal-backdrop.fade').remove();
+	});
 	
 })

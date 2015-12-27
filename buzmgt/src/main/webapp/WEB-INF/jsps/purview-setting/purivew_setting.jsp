@@ -57,7 +57,7 @@
 												<i class="icon query-icon"><span class="query-text">查看</span></i>
 										</a></li>
 									</ul>
-									<a class="btn btn-danger " data-toggle="modal"
+									<a class="j_create_role btn btn-danger " data-toggle="modal"
 										data-target="#exampleModal" data-whatever="@mdo"><i
 										class="icon-add"></i>创建角色</a>
 									<div class="add-role modal fade " id="exampleModal"
@@ -229,6 +229,7 @@
 			</div>
 		</div>
 		<!-- 		/row -->
+		
 	</div>
 	</div>
 	</div>
@@ -240,7 +241,7 @@
 		src="static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js"
 		type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript"
-		src="static/purview-setting/purview_setting.js"></script>
+		src="static/purview-setting/purview-setting.js"></script>
 </body>
 
 </html>

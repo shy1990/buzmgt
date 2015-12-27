@@ -11,7 +11,7 @@
 		<!-- Bootstrap -->
 		<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="static/css/index.css" />
-		<link rel="stylesheet" type="text/css" href="static/css/purview-setting.css" />
+		<link rel="stylesheet" type="text/css" href="static/purview-setting/purview-setting.css" />
 		<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 
