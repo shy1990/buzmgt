@@ -7,7 +7,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-		<title>主页</title>
+		<title>控制台</title>
 		<!-- Bootstrap -->
 		<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="static/css/index.css" />
@@ -97,7 +97,7 @@
 								</ul>
 							</li>
 							<li class="">
-								<a href="" class="menu-second-box cli-manage" data-toggle="dropdown">客户管理<span class="pull-right down-icon"></span></a>
+								<a class="menu-second-box cli-manage" data-toggle="dropdown">客户管理<span class="pull-right down-icon"></span></a>
 								<ul class="menu-second">
 									<li class=""><a class="merchants-distribution" href="">商家分布</a></li>
 									<li><a href="" class="liveness">活跃度</a></li>
@@ -110,26 +110,27 @@
 							<li><a href="" class="inventory">库存</a></li>
 							<li><a href="" class="active-note">活动通知</a></li>
 							<li>
-								<a href="" class="menu-second-box statistics" data-toggle="dropdown">统计<span class="pull-right down-icon"></span></a>
+								<a class="menu-second-box statistics" data-toggle="dropdown">统计<span class="pull-right down-icon"></span></a>
 								<ul class="menu-second">
 									<li class=""><a class="business-analysis" href="">商家分析</a></li>
 									<li><a href="" class="product-analysis">产品分析</a></li>
 								</ul>
 							</li>
 							<li>
-								<a href="#" class="menu-second-box basic-settings" data-toggle="dropdown">基础设置<span class="pull-right down-icon"></span></a>
+								<a href="" class="menu-second-box basic-settings" data-toggle="dropdown">基础设置<span class="pull-right down-icon"></span></a>
 								<ul class="menu-second">
 									<li class="active"><a href="team" class="regionalism">区域划分</a></li>
 									<li><a href="" class="organiz-structure">组织结构</a></li>
-									<li><a href="" class="permis-setting">权限设置</a></li>
+									<li><a href="purviewSetting" class="permis-setting">权限设置</a></li>
 									<li><a href="" class="account-manage">账号管理</a></li>
 								</ul>
 							</li>
 						</ul>
 					</div>
-					<div id="main" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-						<h4 class="page-header">权限设置</h1>
-						<div class="row">
+					<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+						<div id="main">
+							<h4 class="page-header">权限设置</h1>
+							<div class="row">
 							<div class="col-md-12">
 								<div class="box border blue">
 									<div class="row">
@@ -282,9 +283,11 @@
 												</div>
 										  </div>
 									   </div>
+									<!--/row -->
 									</div>
 								</div>
 							</div>
+						</div>
 						</div>
 						<!-- row end -->
 					</div>

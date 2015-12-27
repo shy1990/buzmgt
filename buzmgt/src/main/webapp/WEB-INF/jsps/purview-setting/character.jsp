@@ -13,12 +13,12 @@
 		<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="static/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="static/css/index.css" />
-		<link rel="stylesheet" type="text/css" href="static/css/character.css" />
+		<link rel="stylesheet" type="text/css" href="static/purview-setting/character.css" />
 		<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 
 	<body>
-		<div class="content main">
+		<div id="main" class="content main">
 			<h4 class="page-header"><i class="icon role-check-icon"></i>角色查看</h1>
 			<div class="row">
 			    <div class="col-md-12">
@@ -71,7 +71,7 @@
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js" type="text/javascript" charset="utf-8"></script>
-		<script type="text/javascript" src="static/js/purview_setting.js"></script>
+		<script type="text/javascript" src="static/purview_setting/purview_setting.js"></script>
 	</body>
 
 </html>

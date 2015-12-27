@@ -111,16 +111,18 @@
 .visible{
 	display: block;
 	height: 20px;
-	padding-left: 30px;
+	padding-left: 25px;
 	padding-right: 30px;
+	font-size: 12px;
 	font-style:normal;
 	background: url(../img/icon/purview-setting/right-icon/kj.png) no-repeat;
 }
 .visible-no{
-	padding-left: 30px;
+	padding-left: 25px;
 	padding-right: 30px;
 	display: block;
 	height: 20px;
+	font-size: 12px;
 	font-style:normal;
 	background: url(../img/icon/purview-setting/right-icon/bkj.png) no-repeat;
 }
@@ -143,11 +145,13 @@
 }
 .query-icon{
 	display: none;
+	cursor: pointer;
 	float: right;
 	background: url(../img/icon/purview-setting/left-icon/ck2.png) no-repeat;
 }
 .delete-icon{
 	display: none;
+	cursor: pointer;
 	float: right;
 	background: url(../img/icon/purview-setting/left-icon/sc2.png) no-repeat;
 }
@@ -181,7 +185,6 @@
 	width: 8px;
 	height: 8px;
 	background: url(../img/icon/purview-setting/left-icon/add.png);
-	
 }
 .scroller {
     margin: 0 !important;
@@ -217,6 +220,7 @@
 	height: 40px;
 	line-height: 20px;
 	padding-left: 40px;
+	padding-right: 30px;
 	border-bottom: 1px solid #EAEAEA;
 	font-size: 12px;
 	color: #595959;
@@ -235,7 +239,7 @@
 }
 .dropdown-icon{
 	position: absolute;
-	left:0px;
+	left:10px;
 	display: inline-block;
 	width: 20px;
 	height: 20px;
@@ -278,7 +282,8 @@ li.active .qx-second{
 	top: 8px;
 	display: block;
 }
-.qx-second a>label>input{
+/*隐藏radio*/
+.qx-second a>label>input,a.qx-second-box >label>input{
 	display: none;
 }
 /*可见--不可见样式*/
@@ -290,8 +295,8 @@ li.active .qx-second{
 	display: block;
 	background: url(../img/icon/purview-setting/right-icon/xuanzekuang.png);
 }
-.qx-second label.pull-right{
-	margin-left: 60px;
+.qx-second label.pull-right,a.qx-second-box >label.pull-right{
+	margin-left: 70px;
 }
 /*区域划分*/
 .qx-second i.qxhf-icon{
@@ -311,7 +316,7 @@ li.active .qx-second{
 }
 .qx-second-box i.cpxlmk-icon{
 	position: absolute;
-	left:0px;
+	left:10px;
 	display: inline-block;
 	width: 20px;
 	height: 20px;

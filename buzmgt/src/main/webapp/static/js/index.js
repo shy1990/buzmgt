@@ -12,7 +12,7 @@ $(function() {
 		var $href = $(this).attr("href");
 		console.info($href);
 		if ($href != '' && $href != null) {
-			$("#main").load($href+" #main", {
+			$("#main").load($href, {
 				test : "sssssssssssssss"
 			}, function() {
 				$.getScript("/static/js/ditu.js");
