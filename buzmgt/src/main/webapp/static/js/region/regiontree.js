@@ -19,8 +19,8 @@ var setting = {
 			next : dropNext
 		},
 		enable : true,
-		showRemoveBtn : showRemoveBtn,
-		showRenameBtn : showRenameBtn
+//		showRemoveBtn : showRemoveBtn,
+//		showRenameBtn : showRenameBtn
 	},
 	data : {
 		simpleData : {
@@ -30,7 +30,7 @@ var setting = {
 	view : {
 		expandSpeed : "",
 		addHoverDom : addHoverDom,
-		removeHoverDom : removeHoverDom,
+		//removeHoverDom : removeHoverDom,
 		fontCss : {'font-weight': "bolder"}
 	// addDiyDom : addDiyDom
 	},
@@ -293,70 +293,16 @@ function showRenameBtn(treeId, treeNode) {
  */
 var newCount = 0;
 function addHoverDom(treeId, treeNode) {
-	var sObj = $("#" + treeNode.tId + "_a");
+	if (treeNode.parentNode && treeNode.parentNode.id!=1) return;
+	var aObj = $("#" + treeNode.tId + "_a");
 	if ($("#diyBtn_"+treeNode.id).length>0) return;
-	/*
-	 * if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
-	 * return;
-	 */
-	var addStr = "<span class='button add' id='addBtn_"
-			+ treeNode.tId
-			+ "' title='add node' onfocus='this.blur();'></span>";
-	var selStr = "<select class='selDemo ' name='selDemo' id='diyBtn_"
-			+ treeNode.id
-			+ "'><option value=1>1</option><option value=2>2</option></select>";
-	sObj.after(selStr);
-	sObj.after(addStr);
-	var btnAdd = $("#addBtn_" + treeNode.tId);
-	var btnSelect = $("#diyBtn_" + treeNode.id);
-	if (btnSelect)
-/*		btnSelect.bind("change", function() {
-			console.info("=========================>>"+$("#diyBtn_"+treeNode.id).val());
-			$.ajax({
-				async : true, // 是否异步
-				cache : false, // 是否使用缓存
-				type : 'post', // 请求方式,post
-				data : {
-					type : $("#diyBtn_"+treeNode.id).val(),
-					areaid : treeNode.id
-				},
-				dataType : "text", // 数据传输格式
-				url : "area/addArea" // 请求链接
-			});
-		});*/
-	if (btnAdd)
-		btnAdd.bind("click", function() {
+	var editStr = "<span class='demoIcon' id='diyBtn_" +treeNode.id+ "' title='"+treeNode.name+"' onfocus='this.blur();'><img src="+'/static/img/region/tianjia2.png'+" class='button icon03' id='diyBtn_" +treeNode.id+ "' title='"+treeNode.name+"' onfocus='this.blur();'></span>";
+	aObj.append(editStr);
+	var btn = $("#diyBtn_"+treeNode.id);
+	if (btn) btn.bind("click", function(){alert("diy Button for " + treeNode.name);});
 
-			$.ajax({
-				async : true, // 是否异步
-				cache : false, // 是否使用缓存
-				type : 'post', // 请求方式,post
-				data : {
-					type : $("#diyBtn_"+treeNode.id).val(),
-					areaid : treeNode.id,
-					name : "new node" + (newCount + 1)
-				},
-				dataType : "text", // 数据传输格式
-				url : "area/addArea", // 请求链接
-				error : function() {
-					alert('访问服务器出错');
-				},	
-				success : function(data) {
-					newCount++;
-					ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
-					// zNodes = zNodes.concat(ztreeNodes);
-					var zTree = $.fn.zTree.getZTreeObj(treeId);
-					zTree.addNodes(treeNode, {
-						id : (ztreeNodes.id),
-						pId : ztreeNodes.pId,
-						name : ztreeNodes.name
-					});
-					return false;
-				}
-			});
 
-		});
-};
+}
 
 /**
  * 功能：用于当鼠标移出节点时，隐藏用户自定义控件，显示隐藏状态同 zTree 内部的编辑、删除按钮
