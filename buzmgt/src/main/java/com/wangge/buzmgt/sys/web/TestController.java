@@ -23,6 +23,29 @@ public class TestController {
 		model.addAttribute("test", test);
 		return "test";
 	}
+	/**
+	 * 权限设置页面跳转
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/purviewSetting")
+	public String purviewSetting(String test,Model model){
+		model.addAttribute("test", test);
+		return "purview-setting/purivew_setting";
+	}
+
+	/**
+	 * 角色查看
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/character")
+	public String character(String test,Model model){
+		model.addAttribute("test", test);
+		return "purview-setting/character";
+	}
 	
 	@RequestMapping("/menu")
 	@ResponseBody
