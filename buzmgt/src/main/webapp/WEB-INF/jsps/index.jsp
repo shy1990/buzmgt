@@ -89,7 +89,7 @@
 								<!--二级菜单添加menu-second-box-->
 								<a class="menu-second-box management" href="" data-toggle="dropdown">业务管理<span class="pull-right down-icon"></span></a>
 								<ul class="menu-second">
-									<li class="active"><a class="team" href="test">团队成员</a></li>
+									<li class="active"><a class="team" href="new">团队成员</a></li>
 									<li><a class="street-settings">扫街设置</a></li>
 									<li><a href="" class="client-exploit">客户开发</a></li>
 									<li><a href="" class="yw-examine">业务考核</a></li>

@@ -1,0 +1,307 @@
+@charset "utf-8";
+/* CSS Document */
+
+* {margin:0; padding:0;}
+	
+table { font-size: 12px;
+	border:1px;}
+	
+img {border:none;}
+
+	
+/*==form==*/
+input.text {
+	border:none;}
+	
+input.text-middle {
+	height:24px;
+	width:180px;}
+	
+input.text-small {
+	height:24px;
+	width:90px;}
+	
+input.btn {
+	width:80px;
+	height:24px;
+	border:none;
+	color:#fff;
+	font-weight:bold;
+	background:url(../images/login_button.png) no-repeat;}
+	
+input.btn:hover {
+	background:url(../images/login_button_.png) no-repeat;}
+
+
+/*==登录==*/
+.div_login_box {
+	background:url(../images/login_footer_bg.jpg) bottom repeat-x;}
+	
+.div_login {
+	width:700px;
+	height:300px;
+	margin:150px auto;
+	background:url(../images/login_bg.png) no-repeat;}
+	
+.div_login_infor {
+	padding:120px 0 0 400px;}
+	
+.tbl_login_infor {
+	line-height:36px;}
+	
+.tbl_login_infor th {
+	color:#3c3c3c;}
+	
+.div_valid {
+	width:80px;
+	height:24px;
+	padding-top:6px;
+	display:inline;}
+	
+.p_error {
+	height:18px;
+	color:#9d3e3e;
+	font-size:13px;}
+
+
+/*==首页==*/
+.div_head {
+	height:70px;
+	background:url(../images/head_bg.jpg) repeat-x;}
+	
+.h1_top {
+	height:70px;
+	width:870px;
+	background:url(../images/h1_bg.jpg) no-repeat;}
+	
+.p_head_login {
+	float:right;
+	font-size:14px;
+	padding:10px;}
+
+.p_head_login a {color:#000;}
+
+.p_head_login a:hover {color:#f00;}
+
+
+/*==导航==*/
+.div_nav a {color:#fff;}
+
+.div_nav a:hover {color:#000;}
+	
+.div_nav span.m-btn-downarrow {display:none;}
+
+.menu-item a {color:#000; text-decoration:none;}
+
+
+/*==内容==*/
+.div_panel-header {}
+
+/*.layout-split-west {
+	border-right: 5px solid #666;}
+	
+.layout-split-south {
+	border-top: 5px solid #666;}*/
+	
+.div_tit {
+	overflow: auto;
+	padding-top:20px;
+	padding-bottom:10px;
+	background:url(../images/bg_div_tit.jpg) repeat-x #333;}
+	
+.div_tit_none {
+	background:#fff;}
+
+	
+/*信道监视图形*/
+.div_xd_box [class*="span"]  {
+	margin-left:0;
+	text-align:center;}
+		
+.div_panel {
+	text-align: center;
+	display: inline-block;
+	margin:0 8px;
+	vertical-align:top;}
+	
+.div_panel h6 {
+	width:70px;
+	text-align:center;
+	margin:5px 0 2px;
+	line-height:14px;
+	font-size:12px;
+	height:30px;
+	color:#eee;}
+	
+.div_xdz , .div_xd {
+	height:70px;
+	width:70px;
+	margin:0 auto;}
+	
+.div_xdz .badge {
+	float:right;}
+	
+.xdz_kx {
+	background:url(../images/xdz_kx.png) no-repeat;}
+	
+.xdz_tw {
+	background:url(../images/xdz_tw.png) no-repeat;}
+	
+.xdz_tx {
+	background:url(../images/xdz_tx.gif) no-repeat;}
+	
+.xdz_rw {
+	background:url(../images/xdz_rw.png) no-repeat;}
+	
+.xdz_gz {
+	background:url(../images/xdz_gz.png) no-repeat;}
+		
+.xdz_hj {
+	background:url(../images/xdz_hj.png) no-repeat;}
+	
+.xd_kx {
+	background:url(../images/xd_kx.png) no-repeat;}
+	
+.xd_tw {
+	background:url(../images/xd_tw.png) no-repeat;}
+	
+.xd_tx {
+	background:url(../images/xd_tx.gif) no-repeat;}
+	
+.xd_rw {
+	background:url(../images/xd_rw.png) no-repeat;}
+	
+.xd_gz {
+	background:url(../images/xd_gz.png) no-repeat;}
+		
+.xd_hj {
+	background:url(../images/xd_hj.png) no-repeat;}
+	
+.p_xdz {
+	color:#6a0505;
+	font-weight:bold;
+	padding-top:10px;
+	padding-left:4px;}
+	
+.p_xd {
+	color:#6a0505;
+	font-weight:bold;
+	padding-top:10px;}
+	
+.p_xdz .span_p1 , .p_xdz .span_p2 , .p_xdz .span_p3 {
+	padding:0;
+	margin:0;
+	display:inline;
+	width:20px;}
+	
+.p_xdz .span_p1 {
+	color:#f00;	}
+	
+.p_xdz .span_p2 {
+	color:#00f;	}
+	
+.p_xdz .span_p3 {
+	color:#000;	}
+	
+/*SIP监视*/
+.tr_thead {
+	background-color:#eee;}
+	
+.i_icon_16 {
+  display: inline-block;
+  width:16px;
+  height:16px;
+  line-height:16px;
+  margin-right:3px;
+  vertical-align:top;
+  background-repeat: no-repeat;}
+	
+.icon-gou {
+	background: url(../images/icons/ok.png) no-repeat;}
+	
+.icon-cha {
+	background: url(../images/icons/cancel.png) no-repeat;}
+	
+.lab_head {
+	width:80px;
+	text-align:right;}
+	
+	
+/*综合态势*/
+/*==结果列表==*/	
+.hr_sr {
+	margin:5px 2px;}
+
+.div_srl_box {
+	overflow:auto;}
+
+.tbl_list {
+	width:95%;
+	height: 95%;
+	border:1px;
+	margin-left: 8px;
+	margin-top: 8px;}
+		
+.tbl_list tr:hover {
+	background-color:#f1f1f1;}
+		
+.tbl_list th , .tbl_list td {
+	border:1px;
+	vertical-align:top;
+	padding:5px;}
+	
+.tbl_list th {
+	width:12px;}
+	
+.tabel_list {
+	width:95%;
+	height: 95%;
+	border:1px;
+	margin-left: 8px;
+	margin-top: 8px;
+	}
+		
+.tabel_list th , .tabel_list td {
+	border:1px;
+	}
+.table_reg_input{
+	border:1px solid #A4BED4;
+	height:22px;}
+		
+.div_mark {
+	width:12px;
+	height:15px;
+	cursor:pointer;
+	background:url(../images/mark.png) no-repeat;}
+	
+.p_view {
+	color:#444;
+	line-height:20px;
+	margin:0;}
+	
+.tbl_newline th {
+	color:#666;}
+
+
+/*=====================================Sakya Zhu===================================================*/
+
+.tbl_nrml {
+	border-collapse:collapse;
+	width:100%;
+	margin:0}
+
+.tbl_nrml td, .tbl_nrml th {
+	padding:10px;
+	border:1px solid #99BBE8;
+	background:#fffbe6;
+	font-size:14px;}
+	
+.tbl_nrml th {
+	color:#15428b;}
+
+.tbl_nrml td {
+	background:none;}
+	
+.tbl_nrml input {
+	background:none;}
+

@@ -20,17 +20,22 @@ import com.wangge.buzmgt.sys.service.ResourceService.Menu;
  * 
 * @ClassName: teamMembersController
 * @Description: TODO(这里用一句话描述这个类的作用)
-* @author A18ccms a18ccms_gmail_com
+* @author SongBaozhen
 * @date 2015年12月22日 上午9:45:34
 *
  */
 @Controller
 public class teamMembersController {
 	
-	
 	@RequestMapping("/new")
 	public String toTeamMembers(String news , Model model){
 		model.addAttribute("new", news);
+		return "salesman/salesman_list";
+	}
+	
+	@RequestMapping("/add")
+	public String toAddTeamMembers(String add , Model model){
+		model.addAttribute("new", add);
 		return "salesman/salesman_list";
 	}
 	

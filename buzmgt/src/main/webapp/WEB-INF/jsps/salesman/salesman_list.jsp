@@ -12,6 +12,11 @@
 </head>
 <body>
 	<div id="main">
+	      <link rel="stylesheet" href="static/bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
+        <link rel="stylesheet" href="static/css/salesman_list.css" type="text/css"/>
+        <script src="static/js/jquery/jquery-2.1.4.min.js"></script>
+		<script src="static/js/salesman_list.js"></script>
+        <script type="text/javascript" src="static/bootstrap/js/bootstrap-multiselect.js"></script>
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-12 col-md-12">
@@ -22,7 +27,7 @@
 					<div style="margin-top: 30px;margin-bottom: 30px;">
 						<span><strong style="font-family: '微软雅黑';font-size:larger;margin-left: 20px;">团队成员</strong></span>
 						<span style="margin-left:50px ;"><button class="btn btn-default" type="button">中国</button></span>
-						<span style="margin-left:50px ;"><a class="btn btn-lg btn-default" data-toggle="modal" data-target="#myModal"  href="#" role="button">+添加成员</a></span>
+						<span style="margin-left:50px ;"><a class="btn btn-lg btn-default" data-toggle="modal" data-target="#myModal"  href="/" role="button">+添加成员</a></span>
 						<span style="margin-left:50px ;margin-top: 200px;"><small>共 203 位成员     今日新增0+</small></span>
 					</div>
 					<!--</div>-->
@@ -337,6 +342,12 @@
 					</div>
 					<div class="modal-body">
 						<form class="form-horizontal" role="form">
+						<div class="form-group">
+						   <label for="firstname" class="col-sm-2 control-label">用户名：</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="firstname" placeholder="请输入名字">
+								</div>
+							</div>
 							<div class="form-group">
 								<label for="firstname" class="col-sm-2 control-label">名字：</label>
 								<div class="col-sm-10">
@@ -355,6 +366,9 @@
 								<label for="disabledSelect" class="col-sm-2 control-label">角色权限：</label>
 								<div class="col-sm-10">
 									<select id="disabledSelect" class="form-control">
+										<option>服务站经理</option>
+										<option>禁止选择</option>
+										<option>禁止选择</option>
 										<option>禁止选择</option>
 									</select>
 								</div>
@@ -377,7 +391,13 @@
 									<table>
 										<tr>
 											<td>
-												<select id="provice" class="single-selected" style="width: 110px;">
+												<select id="provice" class="single-selected" style="width: 105px;height: 30px" onchange="getRegion(this.value,this.id)" >
+												       <option value = '' selected='selected'>---请选择---</option>
+												       <option value = '370000'>山东省</option>
+												</select>
+											</td>
+											<td>
+												<select id="city" class="single-selected" style="width: 105px;height: 30px" onchange="getRegion(this.value,this.id)">
 													<option value="1" selected="selected">Option 0</option>
 													<option value="1">Option 1</option>
 													<option value="2">Option 2</option>
@@ -389,7 +409,7 @@
 												</select>
 											</td>
 											<td>
-												<select id="city" class="single-selected" style="width: 110px;">
+												<select id="area" class="single-selected" style="width: 105px;height: 30px" onchange="create(this.value,this.id)">
 													<option value="1" selected="selected">Option 0</option>
 													<option value="1">Option 1</option>
 													<option value="2">Option 2</option>
@@ -398,43 +418,6 @@
 													<option value="4">Option 4</option>
 													<option value="5">Option 5</option>
 													<option value="6">Option 6</option>
-												</select>
-											</td>
-											<td>
-												<select id="area" class="single-selected" style="width: 110px;">
-													<option value="1" selected="selected">Option 0</option>
-													<option value="1">Option 1</option>
-													<option value="2">Option 2</option>
-													<!-- Option 3 will be selected in advance ... -->
-													<option value="3">Option 3</option>
-													<option value="4">Option 4</option>
-													<option value="5">Option 5</option>
-													<option value="6">Option 6</option>
-												</select>
-											</td>
-											<td>
-												<select id="town" class="multiple-selected" multiple="multiple" style="width: 110px;">
-													<option value="1">Option 1</option>
-													<option value="2">Option 2</option>
-													<!-- Option 3 will be selected in advance ... -->
-													<option value="3">Option 3</option>
-													<option value="4">Option 4</option>
-													<option value="5">Option 5</option>
-													<option value="6">Option 6</option>
-													<option value="6">Option 7</option>
-													<option value="6">Option 8</option>
-													<option value="6">Option 9</option>
-													<option value="6">Option 10</option>
-													<option value="6">Option 11</option>
-													<option value="6">Option 12</option>
-													<option value="6">Option 13</option>
-													<option value="6">Option 14</option>
-													<option value="6">Option 15</option>
-													<option value="6">Option 16</option>
-													<option value="6">Option 17</option>
-													<option value="6">Option 18</option>
-													<option value="6">Option 19</option>
-													<option value="6">Option 20</option>
 												</select>
 											</td>
 
@@ -466,10 +449,5 @@
 			<!-- /.modal -->
 		</div>
 	</div>
-	    <link rel="stylesheet" href="static/bootstrap/css/bootstrap-multiselect.css" type="text/css"/>
-        <link rel="stylesheet" href="static/css/salesman_list.css" type="text/css"/>
-        <script src="static/js/jquery/jquery-2.1.4.min.js"></script>
-		<script src="static/js/salesman_list.js"></script>
-        <script type="text/javascript" src="static/bootstrap/js/bootstrap-multiselect.js"></script>
 </body>
 </html>
