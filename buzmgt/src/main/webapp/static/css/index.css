@@ -9,7 +9,11 @@ body {
 	padding-top: 50px;
 	font-family: simsun;
 }
-
+a:hover,a:focus,button,button:hover;button:focus{
+	outline: none;
+	border-style: normal;
+	
+}
 
 /*
  * Global add-ons
@@ -67,42 +71,16 @@ body {
 
 .main {
 	padding: 20px;
+	padding-top: 0;
+	background-color: #fafafa;
 }
 
 @media (min-width: 768px) {
 	.main {
-		padding-right: 40px;
-		padding-left: 40px;
+		padding-right: 26px;
+		padding-left: 26px;
 	}
 }
-
-.main .page-header {
-	margin-top: 0;
-}
-
-
-/*
- * Placeholder dashboard ideas
- */
-
-.placeholders {
-	margin-bottom: 30px;
-	text-align: center;
-}
-
-.placeholders h4 {
-	margin-bottom: 0;
-}
-
-.placeholder {
-	margin-bottom: 20px;
-}
-
-.placeholder img {
-	display: inline-block;
-	border-radius: 50%;
-}
-
 
 /**
  * @author ChenGuop
@@ -585,7 +563,7 @@ body {
 }
 /*基础设置-组织结构*/
 .menu-second >li> a.organiz-structure{
-	background: url(../img/icon/left-mean/basic-settings/jcsz_zzjg1.png) no-repeat 35px 8px;
+	background: url(./img/icon/left-mean/basic-settings/jcsz_zzjg1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.organiz-structure:hover,.menu-second >li.active> a.organiz-structure{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_zzjg2.png) no-repeat 35px 8px #1a2327;
@@ -604,6 +582,19 @@ body {
 .menu-second >li> a.account-manage:hover,.menu-second >li.active> a.account-manage{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_zhgl2.png) no-repeat 35px 8px #1a2327;
 }
-
-
+/*PAGE-HEADER*/
+.main .page-header {
+	position: relative;
+	height: 66px;
+	line-height: 66px;
+	margin-top: 0;
+	margin-left: -26px;
+	margin-bottom: 26px;
+	padding-left: 30px ;
+	margin-right: -40px;
+	vertical-align: middle;
+	font-size: 14px;
+	font-weight: bold;
+	background:#fff;
+}
 
