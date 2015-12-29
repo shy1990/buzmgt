@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -122,10 +121,12 @@
 								<ul class="menu-second">
 									<li class="active"><a href="team" class="regionalism">区域划分</a></li>
 									<li><a href="" class="organiz-structure">组织结构</a></li>
-									<li><a href="purviewSetting" class="permis-setting">权限设置</a></li>
 									<li><a href="" class="account-manage">账号管理</a></li>
+									<li><a href="/role/roleList" class="permis-setting">权限设置</a></li>
 								</ul>
 							</li>
+							<li><a href="/role/roleList" class="permis-setting">权限设置</a></li>
+							<li><a href="/res/menuList" class="permis-setting">菜单设置</a></li>
 						</ul>
 					</div>
 					<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
