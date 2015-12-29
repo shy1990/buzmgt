@@ -27,7 +27,7 @@
 					<div style="margin-top: 30px;margin-bottom: 30px;">
 						<span><strong style="font-family: '微软雅黑';font-size:larger;margin-left: 20px;">团队成员</strong></span>
 						<span style="margin-left:50px ;"><button class="btn btn-default" type="button">中国</button></span>
-						<span style="margin-left:50px ;"><a class="btn btn-lg btn-default" data-toggle="modal" data-target="#myModal"  href="/" role="button">+添加成员</a></span>
+						<span style="margin-left:50px ;"><a class="j_team_member_add btn btn-lg btn-default"  href="/toAdd" role="button">+添加成员</a></span>
 						<span style="margin-left:50px ;margin-top: 200px;"><small>共 203 位成员     今日新增0+</small></span>
 					</div>
 					<!--</div>-->

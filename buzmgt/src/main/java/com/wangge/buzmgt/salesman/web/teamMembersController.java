@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.sys.salesman;
+package com.wangge.buzmgt.salesman.web;
 
 import java.util.List;
 
@@ -33,10 +33,10 @@ public class teamMembersController {
 		return "salesman/salesman_list";
 	}
 	
-	@RequestMapping("/add")
+	@RequestMapping("/toAdd")
 	public String toAddTeamMembers(String add , Model model){
 		model.addAttribute("new", add);
-		return "salesman/salesman_list";
+		return "salesman/team_member_add";
 	}
 	
 }
