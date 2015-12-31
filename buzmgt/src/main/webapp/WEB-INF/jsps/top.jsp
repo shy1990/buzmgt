@@ -5,10 +5,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>top</title>
-<link rel="stylesheet" type="text/css" href="../static/css/index.css" />
+<link rel="stylesheet" type="text/css" href="static/css/index.css" />
 <script type="text/javascript"
-	src="../static/js/jquery/jquery-2.1.4.min.js"></script>
-<script src="../static/js/index.js" type="text/javascript" charset="utf-8"></script>
+	src="static/js/jquery/jquery-2.1.4.min.js"></script>
+<script src="static/js/index.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -23,7 +23,7 @@
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand logo " href="#"><img
-					src="../static/img/logo.png" /></a>
+					src="static/img/logo.png" /></a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse ">
 				<div class="pull-left msg-alert">

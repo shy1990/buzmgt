@@ -10,14 +10,14 @@
 		<title>团队成员添加</title>
 		<!-- Bootstrap -->
 		<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="static/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="static/css/index.css" />
+		<link rel="stylesheet" type="text/css" href="static/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="static/yw-team-member/team-member.css" />
 		<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 
 	<body>
-		<div class="content main">
+		<div id="j_page_mian" class="content main">
 			<h4 class="page-header"><i class="icon team-member-add-icon"></i>添加成员</h1>
 			<div class="row">
 		    	<div class="col-md-12">
