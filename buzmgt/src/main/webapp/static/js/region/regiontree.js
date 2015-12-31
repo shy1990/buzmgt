@@ -1,3 +1,8 @@
+	var map = new BMap.Map("allmap");    // 创建Map实例
+	map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+	map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+	map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 var rMenu;
 /**
  * 设置zTree树
@@ -19,8 +24,8 @@ var setting = {
 			next : dropNext
 		},
 		enable : true,
-//		showRemoveBtn : showRemoveBtn,
-//		showRenameBtn : showRenameBtn
+		showRemoveBtn : showRemoveBtn,
+		showRenameBtn : showRenameBtn
 	},
 	data : {
 		simpleData : {
@@ -30,9 +35,9 @@ var setting = {
 	view : {
 		expandSpeed : "",
 		addHoverDom : addHoverDom,
-		//removeHoverDom : removeHoverDom,
+		removeHoverDom : removeHoverDom,
 		fontCss : {'font-weight': "bolder"}
-	// addDiyDom : addDiyDom
+		//addDiyDom : addDiyDom
 	},
 	callback : {
 		beforeExpand : beforeExpand,
@@ -126,7 +131,7 @@ function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus,
 function ajaxGetNodes(treeNode, reloadType) {
 	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 	if (reloadType == "refresh") {
-		treeNode.icon = "zTree/css/zTreeStyle/img/loading.gif";
+		treeNode.icon = "static/zTree/css/zTreeStyle/img/loading.gif";
 		zTree.updateNode(treeNode);
 	}
 	zTree.reAsyncChildNodes(treeNode, reloadType, true);
@@ -170,8 +175,27 @@ function beforeEditName(treeId, treeNode) {
 function beforeRemove(treeId, treeNode) {
 	
 	if (confirm("确认删除 节点 -- " + treeNode.name + " 吗？")) {
-		
-		return true;
+		var flag=true;
+		$.ajax({
+			async : false, // 是否异步
+			cache : false, // 是否使用缓存
+			type : 'post', // 请求方式,post
+			data : {
+				id : treeNode.id,
+			},
+			dataType : "text", // 数据传输格式
+			url : "region/deleteRegionbyId", // 请求链接
+			success : function(data) {
+				if(data==='true'){
+					alert("删除成功");
+					flag=true;
+				}else{
+					alert("有子节点不能删除");
+					flag=false;
+				}
+			}
+		});
+		return flag;
 	} else {
 		return false;
 	}
@@ -181,39 +205,7 @@ function beforeRemove(treeId, treeNode) {
 
 function zTreeOnRemove(event, treeId, treeNode) {
 	
-	$.ajax({
-		async : true, // 是否异步
-		cache : false, // 是否使用缓存
-		type : 'post', // 请求方式,post
-		data : {
-			id : treeNode.id,
-		},
-		dataType : "text", // 数据传输格式
-		url : "area/exsitManager", // 请求链接
-		success : function(data) {
-			if(data != 'no'){
-				$.ajax({
-					async : true, // 是否异步
-					cache : false, // 是否使用缓存
-					type : 'post', // 请求方式,post
-					data : {
-						id : treeNode.id,
-					},
-					dataType : "text", // 数据传输格式
-					url : "area/deleteArea", // 请求链接
-					/*success : function(data) {
-						if(data == 'no'){
-							alert("不能删除此区域");
-						}
-					}*/
-				});
-			}else{
-				alert("不能删除此区域");
-			}
-		}
-	});
-
-	
+	return true;
 }
 
 /**
@@ -251,13 +243,13 @@ function zTreeOnRename(event, treeId, treeNode, isCancel) {
 		cache : false, // 是否使用缓存
 		type : 'post', // 请求方式,post
 		data : {
-			id : treeNode.id,
+			 id :treeNode.id,
+			pid : treeNode.pId,
 			name : treeNode.name,
 		},
 		dataType : "text", // 数据传输格式
-		url : "area/editArea" // 请求链接
+		url : "region/editRegion"
 	});
-
 }
 /**
  * 功能：设置是否显示删除按钮。[setting.edit.enable = true 时生效]
@@ -293,15 +285,60 @@ function showRenameBtn(treeId, treeNode) {
  */
 var newCount = 0;
 function addHoverDom(treeId, treeNode) {
-	if (treeNode.parentNode && treeNode.parentNode.id!=1) return;
-	var aObj = $("#" + treeNode.tId + "_a");
-	if ($("#diyBtn_"+treeNode.id).length>0) return;
-	var editStr = "<span class='demoIcon' id='diyBtn_" +treeNode.id+ "' title='"+treeNode.name+"' onfocus='this.blur();'><img src="+'/static/img/region/tianjia2.png'+" class='button icon03' id='diyBtn_" +treeNode.id+ "' title='"+treeNode.name+"' onfocus='this.blur();'></span>";
-	aObj.append(editStr);
-	var btn = $("#diyBtn_"+treeNode.id);
-	if (btn) btn.bind("click", function(){alert("diy Button for " + treeNode.name);});
-
-
+	var sObj = $("#" + treeNode.tId + "_span");
+	
+	/******************添加区域 start***************************************/
+	if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+	var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+	+ "' title='添加区域' onfocus='this.blur();'></span>";
+	sObj.after(addStr);
+	var btn = $("#addBtn_"+treeNode.tId);
+	if (btn) btn.bind("click", function(){
+		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+		$.ajax({
+			async : true, // 是否异步
+			cache : false, // 是否使用缓存
+			type : 'post', // 请求方式,post
+			data : {
+				pid : treeNode.id,
+				name : "新自定义区域"
+			},
+			dataType : "text", // 数据传输格式
+			url : "region/addRegion", // 请求链接
+			error : function() {
+				alert('访问服务器出错');
+			},	
+			success : function(data) {
+				ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
+				if(ztreeNodes.regiontype === 'false'){
+					alert("所添加节点超出级别");
+					return false;
+				}
+				var zTree = $.fn.zTree.getZTreeObj(treeId);
+				zTree.addNodes(treeNode, {
+					id : (ztreeNodes.id),
+					pId : ztreeNodes.pId,
+					name : ztreeNodes.name
+				});
+				return false;
+			}
+		});
+		return false;
+	});
+	/******************添加区域 end***************************************/
+	
+	if (treeNode.editNameFlag || $("#mapBtn_"+treeNode.tId).length>0) return;
+	var mapStr = "<span class='button map' id='mapBtn_" + treeNode.tId
+	+ "' title='绘制子区域地图' onfocus='this.blur();'></span>";
+	sObj.after(mapStr);
+	var btn = $("#mapBtn_"+treeNode.tId);
+	if (btn) btn.bind("click", function(){
+				$("#regiontree").hide();
+				$("#regionmap").show();
+				
+	});
+	
+	
 }
 
 /**
@@ -316,6 +353,7 @@ function addHoverDom(treeId, treeNode) {
 function removeHoverDom(treeId, treeNode) {
 	$("#diyBtn_" + treeNode.id).unbind().remove();
 	$("#addBtn_" + treeNode.tId).unbind().remove();
+	$("#mapBtn_" + treeNode.tId).unbind().remove();
 	$("#diyBtn_space_" +treeNode.id).unbind().remove();
 
 };
@@ -439,18 +477,9 @@ function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
 			pid : treeNodes[0].pId,
 		},
 		dataType : "text", // 数据传输格式
-		url : "area/dragArea" // 请求链接
+		url : "region/dragRegion" // 请求链接
 	});
 }
-/*
- * function beforeDrop(treeId, treeNodes, targetNode, moveType, isCopy) {
- * className = (className === "dark" ? "":"dark"); return true; } function
- * onDrag(event, treeId, treeNodes) { className = (className === "dark" ?
- * "":"dark"); } function onDrop(event, treeId, treeNodes, targetNode, moveType,
- * isCopy) { className = (className === "dark" ? "":"dark"); } function
- * onExpand(event, treeId, treeNode) { if (treeNode === autoExpandNode) {
- * className = (className === "dark" ? "":"dark"); } }
- */
 
 // 初始化方法
 function onloadZTree() {
@@ -465,7 +494,6 @@ function onloadZTree() {
 			alert('访问服务器出错');
 		},
 		success : function(data) {
-			alert(data);
 			ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
 			zNodes = zNodes.concat(ztreeNodes);
 			$.fn.zTree.init($("#treeDemo"), setting, zNodes);

@@ -306,11 +306,14 @@
     <![endif]-->
 			<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
 			<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-			<script src="static/js/jquery/jquery-1.11.3.min.js"></script>
 			<!-- Include all compiled plugins (below), or include individual files as needed -->
+			<script src="static/js/jquery/jquery.min.js"></script>
 			<script src="static/bootstrap/js/bootstrap.min.js"></script>
-			<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+			<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+			<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+			<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
 			<script src="static/js/index.js" type="text/javascript" charset="utf-8"></script>
+			
 		</body>
 
 </html>

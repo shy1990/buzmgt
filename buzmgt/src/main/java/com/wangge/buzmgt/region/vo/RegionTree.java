@@ -18,6 +18,7 @@ public class RegionTree {
 	private String iconClose;
 	private String name;//节点名字
 	
+	private String regiontype;//节点类型
 	
 	private boolean open;//默认打开
 
@@ -87,6 +88,14 @@ public class RegionTree {
 		this.iconClose = iconClose;
 	}
 
+	public String getRegiontype() {
+		return regiontype;
+	}
+
+	public void setRegiontype(String regiontype) {
+		this.regiontype = regiontype;
+	}
+	
 	
 	
 }	

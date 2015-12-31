@@ -178,7 +178,7 @@
     background-position: -74px 0;
 }
 .ztree li span.button.center_open {
-    background-position: -119px -277px;
+    background-position: -120px -277px;
 }
 .ztree li span.button.center_close {
     background-position: -119px -123px;
@@ -202,16 +202,16 @@
     background-position: -56px 0;
 }
 .ztree li span.button.center_docu {
-    background-position: -55px -42px;
+    background-position: -56px -42px;
 }
 .ztree li span.button.bottom_docu {
-    background-position: -55px -85px;
+    background-position: -56px -85px;
 }
 .ztree li span.button.noline_docu {
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
 }
 .ztree li span.button.ico_open {
-    background-position: -110px -16px;
+    background-position: -233px -115px;
     margin-right: 2px;
     vertical-align: top;
 }
@@ -221,17 +221,29 @@
     vertical-align: top;
 }
 .ztree li span.button.ico_docu {
-    background-position: -110px -32px;
+    background-position: -234px -115px;
     margin-right: 2px;
     vertical-align: top;
 }
 .ztree li span.button.edit {
-    background-position: -110px -48px;
+    background-position: -270px -22px;
     margin-right: 2px;
     vertical-align: top;
 }
+.ztree li span.button.add {
+    background-position: -272px -4px;
+    margin-right: 2px;
+    vertical-align: top;
+}
+
+.ztree li span.button.map {
+    background-position: -272px -4px;
+    margin-right: 2px;
+    vertical-align: top;
+}
+
 .ztree li span.button.remove {
-    background-position: -110px -64px;
+    background-position: -270px -41px;
     margin-right: 2px;
     vertical-align: top;
 }
