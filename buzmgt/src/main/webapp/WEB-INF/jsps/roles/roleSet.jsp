@@ -1,34 +1,30 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-%>
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<base href="<%=basePath%>" />
-<meta charset="UTF-8">
 <title>权限设置</title>
 <!-- Bootstrap -->
-<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/index.css" />
+<link rel="stylesheet" type="text/css" href="../static/css/index.css" />
 <!--div 滚动条-->
-<link rel="stylesheet" type="text/css" href="static/js/jquery/scroller/jquery.mCustomScrollbar.css" />
-<link rel="stylesheet" type="text/css" href="static/purview-setting/purview-setting.css" />
-<script src="static/js/jquery/jquery-1.11.3.min.js" ></script>
+<link rel="stylesheet" type="text/css" href="../static/js/jquery/scroller/jquery.mCustomScrollbar.css" />
+<link rel="stylesheet" type="text/css" href="../static/purview-setting/purview-setting.css" />
+<script src="../static/js/jquery/jquery-1.11.3.min.js" ></script>
 </head>
 
 <body>
+	<%@ include file="../top_menu.jsp"%>
 	<div id="main" class="content main">
 		<h4 class="page-header">
 			<i class="icon pur-setting-icon"></i> 权限设置
 		</h4>
 		<!-- 		row -->
 		<div class="row">
+			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
+				<%@include file="../left_menu.jsp"%>
+			</div>
 			<div class="col-md-12">
 				<div class="box border blue">
 					<div class="row">
@@ -94,18 +90,18 @@
 															<label for="recipient-name"
 																class="col-md-3 control-label">角色名称</label>
 															<div class="col-md-9 ">
-																<input type="text" placeholder="请填写角色名称" name ="name" class="form-control" id="recipient-name">
+																<input type="text" placeholder="请填写角色名称" name ="name" id="name" class="form-control">
 															</div>
 														</div>
 														<div class="form-group">
 															<label for="message-text" class="col-md-3 control-label">备注说明</label>
 															<div class="col-md-9">
-																<textarea class="form-control" rows="6"
-																	placeholder="请填写备注说明"  name="description"  id="message-text"></textarea>
+																<textarea class="form-control" rows="3"
+																	placeholder="请填写备注说明"  name="description"  id="description"></textarea>
 															</div>
 														</div>
 														<div class="modal-footer">
-															<div class="col-md-3 col-md-offset-8"><input type="submit" value="确定" class="btn col-xs-12 btn-danger "/></div>
+															<div class="col-md-3 col-md-offset-8"><input type="reset" value="确定" onclick="addRole()" class="btn col-xs-12 btn-danger "/></div>
 														</div>
 													</form>
 												</div>
@@ -128,11 +124,22 @@
 	<script src="../static/js/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write("<script src='../static/js/jquery.min.js'>\x3C/script>");</script>
 	<script src="../static/js/script.js"></script>
-	<script src="static/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../static/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+	/*	新增角色*/
+	function addRole() {
+		var url = "role/addRole?name=" + $("#name").val()+"&description="+$("#description").val();
+		$.post(url, function(data) {
+			if (data === 'suc') {
+				alert("添加成功");
+				location.reload();
+			}else{
+				alert("添加失败!");
+			}
+		});
+	}
 		/* 查看 */
 		function selRole(roleId,roleName) {
-			alert(111);
 			var url = "role/selByRole?id="+roleId+"&name="+ roleName;
 			window.location = encodeURI(url);
 		}
@@ -144,7 +151,7 @@
 					alert("删除成功!");
 					location.reload();
 				}else{
-					alert("删除失败!");
+					alert("删除失败!,请先移除该角色下的所有人员");
 				}
 			});
 		}
@@ -153,5 +160,7 @@
 			var url = "role/auth?rId="+roleId;
 			window.location = encodeURI(url);
 		}
+	
+		
 	</script>
 </html>

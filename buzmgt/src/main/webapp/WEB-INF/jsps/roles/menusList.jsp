@@ -1,22 +1,21 @@
-﻿<%@ page language="java" import="java.util.*,com.wangge.buzmgt.sys.service.*" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="net.sf.json.JSONArray"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-%>
+
 <html>
 <head>
 <title>菜单管理</title>
-<link rel='stylesheet' type='text/css' href='../static/bootstrap/css/bootstrap.css'>
 <script  src='../static/js/jquery/jquery.min.js'></script>
 <script  src='../static/bootstrap/js/bootstrap.js'></script>
 
 </head>
 <body>
+<div>
+<%@ include file="../top_menu.jsp"%>
+</div>
+<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
+<%@include file="../left_menu.jsp"%>
+</div>
 <div>
  <table id="table_report" class="table table-striped table-bordered table-hover table-condensed" style="font-size: 10px;">
 		<span style="font-family:华文中宋; color:red;">&nbsp菜单管理&nbsp</span>
@@ -59,12 +58,6 @@
                 </tr>
       </table>
 </div>
-<div>
-
-</div>
-	<td style="vertical-align:top;"><a class="btn btn-small btn-success" onclick="show();">添加菜单</a></td>
-	<div id="pic" style="border: 1;position: absolute;width: 200;height: 200; background:#00FF99;visibility: hidden"></div>
-							</div>
 								<a class="j_create_role btn btn-danger " data-toggle="modal"
 										data-target="#exampleModal" data-whatever="@mdo"><i
 										class="icon-add"></i>添加菜单</a>
@@ -83,28 +76,17 @@
 													</h4>
 												</div>
 												<div class="modal-body">
-													<form action='role/addRole' method='post'>
+													<form action="addMenu" method="post">
 													 <div class="form-group">
 												    	<label for="inputPassword" class="col-sm-3 control-label">父菜单 </label>
 												    	<div class="input-group col-sm-9 ">
 												    		<span class="input-group-addon"><i class="member-icon member-role-icon"></i></span>
-												      		<select class="form-control"  name="parentid">
-															      <option value="0">请选择</option> 
-																	  <%		
-														 		 		if(null!=request.getAttribute("menuList")){
-														 		 		String jsonString= request.getAttribute("menuList").toString();
-																 		JSONArray jsonArr=JSONArray.fromObject(jsonString);
-																 		
-																 		for(int i=0;i<jsonArr.size();i++){
-																 			JSONArray arr=JSONArray.fromObject(jsonArr.get(i));
-																 				String id=arr.get(0).toString();
-																 				String name=arr.get(1).toString();
-															 		%> 
-												 					  <option value="<%=id%>"><%=name%></option> 
-																	 	<%
-															 				
-															 		}
-															 				}%>
+												      		<select class="form-control"  name="parentid" id="parentid">
+															     <c:forEach items="${menus}" var="u">  
+															        <option value="${u.id }" <c:if test="${user.user_id==u.id}"><c:out value="selected"/></c:if>>  
+															            ${u.name}  
+															        </option>  
+    															</c:forEach> 	
 															</select>	
 												    	  </div>
 							 					    	</div>
@@ -112,17 +94,17 @@
 															<label for="recipient-name"
 																class="col-md-3 control-label">菜单名称</label>
 															<div class="col-md-9 ">
-																<input type="text" placeholder="请填写菜单名称" name ="name" class="form-control" id="recipient-name">
+																<input type="text" placeholder="请填写菜单名称" name ="name" id="name" class="form-control" id="recipient-name">
 															</div>
 														</div>
 														<div class="form-group">
 															<label for="message-text" class="col-md-3 control-label">菜单URL</label>
 															<div class="col-md-9">
-																<input type="text" placeholder="请填写菜单的URL地址" name ="name" class="form-control" id="recipient-name">
+																<input type="text" placeholder="请填写菜单的URL地址" name ="url" id="url" class="form-control" id="recipient-name">
 															</div>
 														</div>
 														<div class="modal-footer">
-															<div class="col-md-3 col-md-offset-8"><input type="submit" value="确定" class="btn col-xs-12 btn-danger "/></div>
+															<div class="col-md-3 col-md-offset-8"><input type="reset" value="确定" onclick="addMenu()" class="btn col-xs-12 btn-danger "/></div>
 														</div>
 													</form>
 												</div>
@@ -131,8 +113,6 @@
 									</div>
 
 </body>
-<!-- JQUERY -->
-		
 		
 		<!-- 引入 -->
 		<script src="../static/js/jquery/jquery.min.js"></script>
@@ -140,50 +120,7 @@
 		<script src="../static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="../static/js/script.js"></script>
 		<script type="text/javascript">
-			function selectAllMenus(){
-				 $.ajax({
-			           type:"POST",  
-			           url:'getAllMenus',
-			       		dataType:"json",
-			           success:function(data){
-			        		$.each(data , function(i,menu){
-								$("#pid").append("<option value='"+menu.id+"'>"+menu.name+"</option>");
-							});	
-			           },  
-			       });
-			}
-			function show(){
-				var x=event.clientX;
-				var y=event.clientY;
-				document.getElementById("pic").style.top=y+50;
-				document.getElementById("pic").style.left=x;
-				document.getElementById("pic").style.visibility="visible";
-				var formDiv="<form action='addMenu' method='post'>";
-				formDiv+="父菜单: <select name='parentid' id='pid' onclick='selectAllMenus()'><option value='0'>请选择</option></select><br>";
-				formDiv+="菜单名称: <input type='text' name='name' id='name' /><br>";
-				formDiv+="菜单URL: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type='text' name='url' id='url' /><br><br>";	 
-	       		formDiv+="<input type='submit' value='提交' oncheck='hide()'/>  <input type='reset' value='取消' onclick='hide()'/>  </form>";	 
-				document.getElementById("pic").innerHTML=formDiv;
-			}
-			
-			function hide(){
-				
-				document.getElementById("pic").style.visibility="hidden";
-			}
-			
-			function addCheck() {
-				var url = "addMenu?name=" + $("#name").val()+"&url="+$("#url").val()+"&pid="+$("#pid").val();
-				$.post(url, function(data) {
-					if (data === 'suc') {
-						alert("添加成功");
-						location.reload();
-					}else{
-						alert("添加失败,请检查角色是否重复添加!");
-					}
-				});
-			}
-			
-			/* 删除 角色*/
+			/* 删除 菜单*/
 			function removeMenu(id) {
 				var url = "removeMenu?id=" + id;
 				$.post(url, function(data) {
@@ -195,6 +132,18 @@
 					}
 				});
 			}
+			function addMenu() {
+				var url = "addMenu?name=" + $("#name").val()+"&url="+$("#url").val()+"&parentid="+$("#parentid").val();
+				$.post(url, function(data) {
+					if (data === 'suc') {
+						alert("添加成功");
+						location.reload();
+					}else{
+						alert("添加失败!");
+					}
+				});
+			}
+			
 	</script>
 		</script>
 </html>

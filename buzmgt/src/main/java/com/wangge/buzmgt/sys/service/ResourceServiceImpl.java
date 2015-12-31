@@ -60,17 +60,17 @@ public class ResourceServiceImpl implements ResourceService {
 		return menus;
 	}
 	//单个转
-	private Menu resource2MenuByOne(Resource r) {
-		Menu menu=new Menu(r.getId(),r.getName(), r.getUrl());
-		if (!r.getChildren().isEmpty()) {
-			menu.setChildren(resource2Menu(r.getChildren()));
-		}  
-		if(r.getParent()!=null){
-			menu.setParentId(r.getParent().getId());
-		}
-		
-		return menu;
-	}
+//	private Menu resource2MenuByOne(Resource r) {
+//		Menu menu=new Menu(r.getId(),r.getName(), r.getUrl());
+//		if (!r.getChildren().isEmpty()) {
+//			menu.setChildren(resource2Menu(r.getChildren()));
+//		}  
+//		if(r.getParent()!=null){
+//			menu.setParentId(r.getParent().getId());
+//		}
+//		
+//		return menu;
+//	}
 	@Override
 	public Set<Menu> getAllMenus() {
 		List<Resource> list = resourceRepository.findAll();
@@ -107,8 +107,8 @@ public class ResourceServiceImpl implements ResourceService {
 				
 		for (Menu menu : allMenus) {
 			//先遍历出第1级菜单   			menu.getParentId()!=null && menu.getParentId()==0
-			if(	menu.getParentId()!=null && menu.getParentId()==0){
-//				System.out.println(menu.getId()+ menu.getName()+ menu.getUrl()+"%%%111");
+			if(	menu.getParentId()!=null && menu.getParentId()==1){
+				System.out.println(menu.getId()+ menu.getName()+ menu.getUrl()+"%%%111");
 				Menu currentMenu = new Menu(menu.getId(), menu.getName(), menu.getUrl());
 //				currentMenu.setChildren(menu.getChildren());
 				menus.add(currentMenu);
@@ -152,7 +152,7 @@ public class ResourceServiceImpl implements ResourceService {
 		Set<Menu> allMenus = this.getAllMenus();
 		List<Menu> menus = this.loadMenuInfos(allMenus);
 		for (Menu menu : menus) {
-//			System.out.println(menu.getName()+"***222");  
+			System.out.println(menu.getName()+"***222");  
 			//
 			TreeData treeData = new TreeData();
 			NodeData nodeData = new NodeData();
@@ -174,7 +174,7 @@ public class ResourceServiceImpl implements ResourceService {
 		
 		
 		for (Menu menu : menus) {
-//			System.out.println(menu.getName()+"^^^333");
+			System.out.println(menu.getName()+"^^^333");
 			TreeData child = new TreeData();
 			NodeData childNode = new NodeData();
 			childNode.setTitle(menu.getName());

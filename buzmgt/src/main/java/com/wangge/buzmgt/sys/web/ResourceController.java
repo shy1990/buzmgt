@@ -56,8 +56,6 @@ public class ResourceController extends BaseController {
 		model.addAttribute("totalPage", (int) Math.ceil(mlist.size()/Double.parseDouble(String.valueOf(pageSize))));
 		model.addAttribute("currentPage", page);
 		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), 10, mlist.size(), 15));
-		
-		request.setAttribute("menuList", com.alibaba.fastjson.JSONArray.toJSONString(mlist, true));
 		return "roles/menusList";
 	}
 	

@@ -68,7 +68,7 @@ public class RoleController extends BaseController {
 		model.addAttribute("currentPage", page);
 		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), 10, list.getContent().size(), 15));
 //		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(1, 1, list.getContent().size(), 15));
-		return "purview-setting/purivew_setting";
+		return "roles/roleSet";
 	}
 	@RequestMapping(value = "/selByRole", method = RequestMethod.GET)
 	public String selByRoleId(Long id,String name,Model model){
@@ -81,6 +81,7 @@ public class RoleController extends BaseController {
 	 * 新增角色
 	 */
 	@RequestMapping(value="/addRole" ,method = RequestMethod.POST)
+	@ResponseBody
 	public String addRole(HttpServletRequest req){
 		String name = req.getParameter("name");
 		String des = req.getParameter("description");
