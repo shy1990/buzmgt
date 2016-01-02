@@ -32,9 +32,12 @@
 		<link rel="stylesheet" type="text/css" href="static/zTree/css/icon.css" />
 		<link rel="stylesheet" type="text/css" href="static/zTree/css/main.css" />
 		<link rel="stylesheet" type="text/css" href="static/zTree/css/zTreeStyle/zTreeStyle.css" />
+		
 		<!--加载鼠标绘制工具-->
+	 	<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script> 
 	 	<link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" /> 
 		<!--加载检索信息窗口-->
+		<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
 		<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
 <!-- 	<div align="center" > -->
 <!-- 		sdfsf<ul id="treeDemo" class="ztree" >dfdfdf</ul> -->
@@ -75,13 +78,14 @@
 									</div>
 								</div>
 					</div>
-				</div>
-				<div id="regionmap" style="display:none;">
-					<div id="allmap" ></div>
+					
+					<div id="regionmap" style="">
+					xcvxcvc<div id="allmap" > sdfsd</div>
+					</div>
 				</div>
 		</div>
 		
-	<script type="text/javascript">
+<script type="text/javascript">
 	// 百度地图API功能
 	var map = new BMap.Map("allmap");    // 创建Map实例
 	map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
@@ -90,8 +94,6 @@
 	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 	
 	</script>
-		
-
 
 </body>
 </html>
