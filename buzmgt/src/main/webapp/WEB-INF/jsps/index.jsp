@@ -295,7 +295,8 @@
 					</div>
 				</div>
 			</div>
-
+			
+			
 			<!-- Bootstrap core JavaScript
     ================================================== -->
 			<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -310,10 +311,13 @@
 			<script src="static/js/jquery/jquery.min.js"></script>
 			<script src="static/bootstrap/js/bootstrap.min.js"></script>
 			<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
-			<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+			<!--加载鼠标绘制工具-->
+		 	<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script> 
+		 	<link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" /> 
+			<!--加载检索信息窗口-->
 			<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+			<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
 			<script src="static/js/index.js" type="text/javascript" charset="utf-8"></script>
 			
 		</body>
-
 </html>

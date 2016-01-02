@@ -11,11 +11,13 @@ $(function() {
 		event.preventDefault();
 		var $href = $(this).attr("href");
 		console.info($href);
+		alert(1111);
 		if ($href != '' && $href != null) {
 			$("#main").load($href+" #main", {
 				test : "sssssssssssssss"
 			}, function() {
 				if($href=="/region/initRegion"){
+					alert(2222);
 					$.getScript("/static/zTree/js/jquery.ztree.all-3.5.js");
 					$.getScript("/static/js/region/regiontree.js");
 					$.getScript("http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT");

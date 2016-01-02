@@ -182,6 +182,10 @@ public class RegionController {
 	}
 	
 	
+	@RequestMapping("/initRegionMap")
+	public String initRegionMap(){
+		return "region/region_map";
+	}
 	
 	
 	/**
