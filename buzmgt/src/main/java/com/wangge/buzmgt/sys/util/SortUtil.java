@@ -12,9 +12,9 @@ public class SortUtil {
         Sort sort = null;
         //根据下单时间降序排序
         if ("role".equals(sortType)) {
-            sort = new Sort(Direction.DESC, "id");
+            sort = new Sort(Direction.ASC, "id");
         }else if("res".equals(sortType)){
-        	 sort = new Sort(Direction.DESC, "id");
+        	 sort = new Sort(Direction.ASC, "createTime");
         }
         return new PageRequest(pageNumber - 1, pagzSize, sort);
     }

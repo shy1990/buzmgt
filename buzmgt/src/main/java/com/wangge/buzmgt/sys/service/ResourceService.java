@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.wangge.buzmgt.sys.entity.Resource;
@@ -76,7 +79,7 @@ public interface ResourceService {
 	 */
 	List<Menu> getMenusByUsername(String username);
 	/**
-	 * 获取角色菜单
+	 * 获取角色对应的菜单
 	 * @param username
 	 * @return
 	 */
@@ -93,6 +96,16 @@ public interface ResourceService {
 	Set<Menu> getAllMenus();
 	/**
 	 * 
+	 * @Description: 菜单列表分页
+	 * @param @return   
+	 * @return Set<Menu>  
+	 * @throws
+	 * @author changjun
+	 * @date 2015年12月22日
+	 */
+	Page<Resource> getMenusByPage(Pageable pageRequest);
+	/**
+	 * 
 	 * @Description: 增加资源
 	 * @param @param res
 	 * @param @return   
@@ -101,7 +114,7 @@ public interface ResourceService {
 	 * @author changjun
 	 * @date 2015年12月22日
 	 */
-	public boolean saveRes(Resource res);
+	public void saveRes(Resource res);
 	/**
 	 * 
 	 * @Description: id查找
@@ -144,7 +157,7 @@ public interface ResourceService {
 	 * @author changjun
 	 * @date 2015年12月28日
 	 */
-	public boolean delResource(Long id);
+	public void delResource(Long id);
 	/**
 	 * 
 	 * @Description: 保存角色对应的权限菜单

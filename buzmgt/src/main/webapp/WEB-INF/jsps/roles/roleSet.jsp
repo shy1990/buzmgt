@@ -6,12 +6,18 @@
 <html lang="zh-CN">
 <head>
 <title>权限设置</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Bootstrap -->
+<link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../static/css/common.css" />
 <link rel="stylesheet" type="text/css" href="../static/css/index.css" />
 <!--div 滚动条-->
-<link rel="stylesheet" type="text/css" href="../static/js/jquery/scroller/jquery.mCustomScrollbar.css" />
-<link rel="stylesheet" type="text/css" href="../static/purview-setting/purview-setting.css" />
-<script src="../static/js/jquery/jquery-1.11.3.min.js" ></script>
+<link rel="stylesheet" type="text/css"
+	href="../static/js/jquery/scroller/jquery.mCustomScrollbar.css" />
+<script src="../static/js/jquery/jquery-1.11.3.min.js"
+	type="text/javascript" charset="utf-8"></script>
 </head>
 
 <body>
@@ -25,38 +31,44 @@
 			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
 				<%@include file="../left_menu.jsp"%>
 			</div>
-			<div class="col-md-12">
-				<div class="box border blue">
+			
+				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 padd-0">
+				<!-- page-main -->
+				<div id="j_page_main" class="content main">
+					<h4 class="page-header">
+						<i class="icon pur-setting-icon"></i> 角色管理
+					</h4>
+					<!-- start:row -->
 					<div class="row">
-						<div class="col-xs-4 col-md-5 re-padd-right">
-							<div class="role">
-								<div class="role-title">
-									<i class="title-icon"></i>角色
-								</div>
-								<div class="role-list">
-								<table id="table_report" class="table table-striped table-bordered table-hover table-condensed" style="font-size: 10px;">
-									<tbody>
-									<c:choose>
-										<c:when test="${not empty roles}">
-										<c:forEach var="role" items="${roles}" varStatus="s">
-											<tr class="am-active">
-												<td width="5%" class="center">${s.index+1}</td>
-												<td width="20%">${role.name}</td>
-												<td style="width:10px;" ><a href="javascript:selRole(${role.id},'${role.name}');" class="query-text">查看</a></td>
-												<td style="width:10px;"><a href="javascript:delRole(${role.id});" class="delete-text">删除</a></td>
-												<td style="width:10px;"><a href="javascript:editRole2Menus(${role.id});" class=" delete-text">菜单权限</a></td>
-											</tr>
-										</c:forEach>
-										</c:when>
-										<c:otherwise>
-											<tr>
-											<td colspan="100">没有相关数据</td>
-											</tr>
-										</c:otherwise>
-									</c:choose>
-									</tbody>
-								</table>
-				<table class="page" cellpadding="0" cellspacing="5">
+						<!-- start:col -->
+						<div class="col-md-12">
+								<!-- start： 列表 -->
+						<div>
+						
+						<table id="table_report" class="table table-striped table-bordered table-hover table-condensed" style="font-size: 10px;">
+							<tbody>
+							<c:choose>
+								<c:when test="${not empty roles}">
+								<c:forEach var="role" items="${roles}" varStatus="s">
+									<tr class="am-active">
+										<td width="5%" class="center">${s.index+1}</td>
+										<td width="20%">${role.name}</td>
+										<td style="width:10px;" ><a href="javascript:selRole(${role.id},'${role.name}');" class="query-text">查看</a></td>
+										<td style="width:10px;"><a href="javascript:delRole(${role.id});" class="delete-text">删除</a></td>
+										<td style="width:10px;"><a href="javascript:editRole2Menus(${role.id});" class=" delete-text">菜单权限</a></td>
+									</tr>
+								</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<tr>
+									<td colspan="100">没有相关数据</td>
+									</tr>
+								</c:otherwise>
+							</c:choose>
+							</tbody>
+						</table>
+						
+						<table class="page" cellpadding="0" cellspacing="5">
 			                <tr>                    
 			                    <td>
 			                    <div  id="pageNav" class="scott" align="center">
@@ -66,7 +78,7 @@
 			                    </td>
 			                    <td></td>
 			                </tr>
-			      </table>
+			 		     </table>
 									<a class="j_create_role btn btn-danger " data-toggle="modal"
 										data-target="#exampleModal" data-whatever="@mdo"><i
 										class="icon-add"></i>创建角色</a>
@@ -128,7 +140,7 @@
 	<script type="text/javascript">
 	/*	新增角色*/
 	function addRole() {
-		var url = "role/addRole?name=" + $("#name").val()+"&description="+$("#description").val();
+		var url = "addRole?name=" + $("#name").val()+"&description="+$("#description").val();
 		$.post(url, function(data) {
 			if (data === 'suc') {
 				alert("添加成功");
@@ -140,24 +152,26 @@
 	}
 		/* 查看 */
 		function selRole(roleId,roleName) {
-			var url = "role/selByRole?id="+roleId+"&name="+ roleName;
+			var url = "selByRole?id="+roleId+"&name="+ roleName;
 			window.location = encodeURI(url);
 		}
 		/* 删除 角色*/
 		function delRole(id) {
-			var url = "role/delRole?id=" + id;
-			$.post(url, function(data) {
-				if (data === 'suc') {
-					alert("删除成功!");
-					location.reload();
-				}else{
-					alert("删除失败!,请先移除该角色下的所有人员");
-				}
-			});
+			if(confirm("确定要删除该角色？")){
+				var url = "delRole?id=" + id;
+				$.post(url, function(data) {
+					if (data === 'suc') {
+						alert("删除成功!");
+						location.reload();
+					}else{
+						alert("删除失败!,请先移除该角色下的所有人员");
+					}
+				});
+			}
 		}
 		/*授权菜单	*/
 		function editRole2Menus(roleId) {
-			var url = "role/auth?rId="+roleId;
+			var url = "auth?rId="+roleId;
 			window.location = encodeURI(url);
 		}
 	
