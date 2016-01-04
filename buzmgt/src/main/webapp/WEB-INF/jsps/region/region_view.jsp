@@ -40,7 +40,7 @@
 <!-- 		sdfsf<ul id="treeDemo" class="ztree" >dfdfdf</ul> -->
 <!-- 	</div> -->
 			
-			<div id="main" >
+			<div id="j_page_main" >
 				<h4 class="page-header-region">区域划分        <button type="button" class="btn btn-warning">绘制地图</button></h4>  
 				<div class="row">
 							<div class="col-md-12">

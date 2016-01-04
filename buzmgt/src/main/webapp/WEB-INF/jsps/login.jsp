@@ -84,7 +84,7 @@
 	<!-- JAVASCRIPTS -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!-- JQUERY -->
-	<script src="static/CloudAdmin/js/jquery.min.js"></script>
+	<script src="static/CloudAdmin/js/jquery/jquery-2.0.3.min.js"></script>
 	<!-- JQUERY UI-->
 	<script src="static/CloudAdmin/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
 	<!-- BOOTSTRAP -->
@@ -96,7 +96,7 @@
 	<!-- BACKSTRETCH -->
 	<script type="text/javascript" src="static/CloudAdmin/js/backstretch/jquery.backstretch.min.js"></script>
 	<!-- CUSTOM SCRIPT -->
-	<script src="static/js/script.js"></script>
+	<script src="static/CloudAdmin/js/script.js"></script>
 	<script>
 		jQuery(document).ready(function() {		
 			App.setPage("login_bg");  //Set current page

@@ -194,8 +194,10 @@
 				location.reload();
 			} else {
 				alert("添加失败!");
+
 			}
 		});
 	}
+
 </script>
 </html>

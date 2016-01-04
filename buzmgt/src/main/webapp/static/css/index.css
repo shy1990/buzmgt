@@ -9,10 +9,9 @@ body {
 	padding-top: 50px;
 	font-family: simsun;
 }
-a:hover,a:focus,button,button:hover;button:focus{
+a:hover,a:focus,button,button:hover;button:focus,button:active{
 	outline: none;
-	border-style: normal;
-	
+	-moz-outline: none;
 }
 
 /*
@@ -77,37 +76,9 @@ a:hover,a:focus,button,button:hover;button:focus{
 
 @media (min-width: 768px) {
 	.main {
-		padding-right: 40px;
-		padding-left: 40px;
+		padding-right: 26px;
+		padding-left: 26px;
 	}
-}
-.main .page-header {
-	margin-top: 0;
-}
-.main .page-header-region {
-	margin-top: 0;
-}
-
-/*
- * Placeholder dashboard ideas
- */
-
-.placeholders {
-	margin-bottom: 30px;
-	text-align: center;
-}
-
-.placeholders h4 {
-	margin-bottom: 0;
-}
-
-.placeholder {
-	margin-bottom: 20px;
-}
-
-.placeholder img {
-	display: inline-block;
-	border-radius: 50%;
 }
 
 /**
@@ -621,8 +592,12 @@ a:hover,a:focus,button,button:hover;button:focus{
 	padding-left: 30px ;
 	margin-right: -40px;
 	vertical-align: middle;
-	font-size: 14px;
+	font-size: 16px;
 	font-weight: bold;
 	background:#fff;
+}
+.padd-0{
+	padding-left:0;
+	padding-right: 0; 
 }
 
