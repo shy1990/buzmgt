@@ -9,6 +9,11 @@ body {
 	padding-top: 50px;
 	font-family: simsun;
 }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> refs/heads/baozhen
 /*
  * Global add-ons
  */
@@ -79,7 +84,9 @@ body {
 .main .page-header {
 	margin-top: 0;
 }
-
+.main .page-header-region {
+	margin-top: 0;
+}
 
 /*
  * Placeholder dashboard ideas
@@ -604,4 +611,6 @@ body {
 .menu-second >li> a.account-manage:hover,.menu-second >li.active> a.account-manage{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_zhgl2.png) no-repeat 35px 8px #1a2327;
 }
+
+
 

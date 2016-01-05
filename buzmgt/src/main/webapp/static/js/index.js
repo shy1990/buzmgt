@@ -12,7 +12,11 @@ $(function() {
 		var $href = $(this).attr("href");
 		console.info($href);
 		if ($href != '' && $href != null) {
+<<<<<<< HEAD
 			$("#main").load($href+" #j_page_main", {
+=======
+			$("#main").load($href+"#main", {
+>>>>>>> refs/heads/baozhen
 				test : "sssssssssssssss"
 			}, function() {
 				if($href=="region/initRegion"){
