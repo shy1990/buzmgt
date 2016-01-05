@@ -36,6 +36,7 @@
 					<!-- CALENDAR -->
 					<div class="row">
 						<div class="col-md-12 index-bg">
+							<iframe src="" ></iframe>
 							<img alt="背景图片"  src="static/img/index-bg.jpg">
 							<div class="index-calender" style="margin-left:50px;">
 								<div id="date">
@@ -334,6 +335,7 @@
 						</div>
 					</div>
 					<!-- /CALENDAR -->
+					<iframe id="iframepage" onLoad="iFrameHeight()" scrolling="no" width="100%" src="http://www.3j1688.com/special_160105/index.html"></iframe>
 			</div>
 		</div>
 	</div>
@@ -352,7 +354,6 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="static/js/index.js" type="text/javascript" charset="utf-8"></script>
-
 </body>
 
 </html>
