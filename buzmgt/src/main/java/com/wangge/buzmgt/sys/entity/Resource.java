@@ -2,6 +2,7 @@ package com.wangge.buzmgt.sys.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +21,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -61,14 +64,19 @@ public class Resource implements Serializable {
 	private String permission;//权限字符串
 	private String url;
 	private int priority;
-
-	@ManyToMany
-	@JoinTable(name = "sys_resources_roles",joinColumns=@JoinColumn(name="resource_id"),inverseJoinColumns=@JoinColumn(name="role_id"))
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createTime;
+//	@ManyToMany
+//	@JoinTable(name = "sys_resources_roles",joinColumns=@JoinColumn(name="resource_id"),inverseJoinColumns=@JoinColumn(name="role_id"))
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,	CascadeType.MERGE}, mappedBy = "resource")
 	private Set<Role> roles = new HashSet<Role>();
 
-	@OneToMany(mappedBy = "parent", fetch=FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
-	private Collection<Resource> children = new HashSet<Resource>();
+//	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,	CascadeType.MERGE}, mappedBy = "menus")
+//	private Set<RoleEntity> roles;
 	
+	@OneToMany(mappedBy="parent",cascade ={CascadeType.PERSIST})
+	private Collection<Resource> children = new HashSet<Resource>();
+
 	@ManyToOne
 	@JoinColumn(name = "parent_id")
 	private Resource parent;
@@ -76,12 +84,13 @@ public class Resource implements Serializable {
 	public Resource() {
 	}
 
-	public Resource(String name,ResourceType type, String url, int priority) {
+	public Resource(String name,ResourceType type, String url, int priority,Date creareTime) {
 		super();
 		this.name = name;
 		this.url = url;
 		this.priority = priority;
 		this.type=type;
+		this.createTime = createTime;
 	}
 
 	public Long getId() {
@@ -150,6 +159,14 @@ public class Resource implements Serializable {
 
 	public String getPermission() {
 		return permission;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	public void setPermission(String permission) {

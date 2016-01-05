@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.sys.entity.Resource;
@@ -45,6 +47,39 @@ public class UserServiceImpl implements UserService {
 	public Collection<String> getPermissionsByUsername(String username) {
 		Collection<Resource> permissions = resourceRepository.findByRolesUsersUsername(username);
 		return permissions.stream().map(Resource::getPermission).collect(Collectors.toSet());
+	}
+	///////////////			权限
+	@Override
+	public Page<Role> getAllRoles(Pageable pageRequest) {
+		return roleRepository.findAll(pageRequest);
+	}
+
+	@Override
+	public List<User> getUserByRoles(Long id) {
+		
+		return userRepository.findByRoles(roleRepository.findOne(id));
+	}
+
+	@Override
+	public void saveRole(Role role) {
+		roleRepository.save(role);
+	}
+
+	@Override
+	public void delRole(Long id) {
+		roleRepository.delete(id);
+	}
+
+	@Override
+	public Role getRoleById(Long id) {
+		// TODO Auto-generated method stub
+		return roleRepository.findOne(id);
+	}
+
+	@Override
+	public List<Role> findAll() {
+		// TODO Auto-generated method stub
+		return roleRepository.findAll();
 	}
 
 }

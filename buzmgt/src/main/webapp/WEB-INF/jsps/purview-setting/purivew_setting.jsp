@@ -246,7 +246,6 @@
 						</div>
 					</div>
 					<!-- 		/row -->
-
 				</div>
 				<!-- row end -->
 			</div>
