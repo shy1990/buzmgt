@@ -5,7 +5,7 @@
 		var regionSetting = {
 			async : {
 				enable : true,
-				url : "",
+				url : "/region/getRegionById",
 				autoParam : [ "id" ],
 		        dataFilter: filter
 			},

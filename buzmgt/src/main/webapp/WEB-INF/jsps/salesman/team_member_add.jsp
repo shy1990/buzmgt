@@ -14,12 +14,11 @@
 		<link rel="stylesheet" type="text/css" href="../static/css/index.css" />
 		 <link rel="stylesheet" type="text/css" href="../static/zTree/css/zTreeStyle/zTreeStyle.css" /> 
 		<link rel="stylesheet" type="text/css" href="../static/yw-team-member/team-member.css" />
-		 <script type="text/javascript" src="../static/zTree/js/jquery.ztree.all-3.5.min.js"></script> 
+<!-- 		 <script type="text/javascript" src="../static/zTree/js/jquery.ztree.all-3.5.min.js"></script>  -->
 		 <style type="text/css">
 			.ztree{margin-top: 34px;border: 1px solid #ccc;background: #FFF;width:100%;overflow-y:scroll;overflow-x:auto;}
 			.menuContent{width: 100% ;padding-right: 61px;display:none; position: absolute;z-index:200;}
 		</style>
-		<script src="../static/yw-team-member/team-tree.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 
 	<body>
@@ -130,7 +129,9 @@
 	<!-- ---------------------------------------------------------------------------------------------------------------------- -->
 		<div id="main" class="content main">
 			
-		</div>		
+		</div>	<script src="../static/js/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+   				<script src="../static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
 				<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+				<script src="../static/yw-team-member/team-tree.js" type="text/javascript" charset="utf-8"></script>
 	</body>
 </html>
