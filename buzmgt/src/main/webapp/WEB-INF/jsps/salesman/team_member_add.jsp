@@ -14,7 +14,6 @@
 		<link rel="stylesheet" type="text/css" href="../static/css/index.css" />
 		 <link rel="stylesheet" type="text/css" href="../static/zTree/css/zTreeStyle/zTreeStyle.css" /> 
 		<link rel="stylesheet" type="text/css" href="../static/yw-team-member/team-member.css" />
-		<script src="../static/js/jquery/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
 		 <script type="text/javascript" src="../static/zTree/js/jquery.ztree.all-3.5.min.js"></script> 
 		 <style type="text/css">
 			.ztree{margin-top: 34px;border: 1px solid #ccc;background: #FFF;width:100%;overflow-y:scroll;overflow-x:auto;}
@@ -94,7 +93,7 @@
 								    	<div class="input-group col-sm-9">
 								    		<span class="input-group-addon"><i class="member-icon member-job-icon"></i></span>
 								      		<!--<input type="text" class="form-control" id="inputPassword" placeholder="">-->
-								      		<select id="region" class="form-control" name="regionId" onclick="showRegionTree();">
+								      		<select id="region" class="form-control" name="regionId">
 											    <option  value="">请选择</option>
 											</select>
 											<div id="regionMenuContent"  class="menuContent">
