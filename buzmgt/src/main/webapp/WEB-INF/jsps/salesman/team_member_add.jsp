@@ -12,8 +12,14 @@
 		<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="static/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="static/css/index.css" />
+		 <link rel="stylesheet" type="text/css" href="static/zTree/css/zTreeStyle/zTreeStyle.css" /> 
 		<link rel="stylesheet" type="text/css" href="static/yw-team-member/team-member.css" />
-		<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="static/js/jquery/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+		 <script type="text/javascript" src="static/zTree/js/jquery.ztree.all-3.5.min.js"></script> 
+		 <style type="text/css">
+			.ztree{margin-top: 34px;border: 1px solid #ccc;background: #FFF;width:100%;overflow-y:scroll;overflow-x:auto;}
+			.menuContent{width: 100% ;padding-right: 61px;display:none; position: absolute;z-index:200;}
+		</style>
 	</head>
 
 	<body>
@@ -26,7 +32,7 @@
 			  			<div class="box-body">
 			  				<!-- -->
 			  				<div class="member-from col-md-6 col-md-offset-2 col-sm-10">
-			  					<form class="member-from-box form-horizontal" action="/addTeamMember" >
+			  					<form class="member-from-box form-horizontal" action="/salesman/addTeamMember">
 			  					  <div class="form-group">
 								    	<label class="col-sm-3 control-label">用户名:</label>
 								    	<div class="input-group col-sm-9">
@@ -38,36 +44,27 @@
 								    	<label class="col-sm-3 control-label">姓名:</label>
 								    	<div class="input-group col-sm-9">
 										    <span class="input-group-addon" id="basic-addon1"><i class="member-icon member-name-icon"></i></span>
-										    <input type="text" class="form-control" name = "truname" placeholder="请填写个人名称">
+										    <input type="text" class="form-control" name = "trueName" placeholder="请填写个人名称">
 										</div>
 								    </div>
 								    <div class="form-group">
 								    	<label for="inputPassword" class="col-sm-3 control-label">职务:</label>
-								    	<div class="input-group col-sm-9 ">
+								    	<div class="input-group col-sm-9">
 								    		<span class="input-group-addon"><i class="member-icon member-job-icon"></i></span>
 								      		<!--<input type="text" class="form-control" id="inputPassword" placeholder="">-->
-								      		<select class="form-control" name="job">
-											    <option selected="selected" value="">请选择</option>
-											    <option value="">大区经理</option>
-											    <option value="">财务</option>
-											    <option value="">业务1</option>
-											    <option value="">业务2</option>
-											    <option value="">业务3</option>
-											</select>	
-								    	</div>
+								      		<select id="organization" class="form-control" name="organizationId" >
+											    <option  value="">请选择</option>
+											</select>
+									    </div>
+									    
 								 	</div>
 								    <div class="form-group">
 								    	<label for="inputPassword" class="col-sm-3 control-label">角色权限:</label>
 								    	<div class="input-group col-sm-9 ">
 								    		<span class="input-group-addon"><i class="member-icon member-role-icon"></i></span>
 								      		<!--<input type="text" class="form-control" id="inputPassword" placeholder="">-->
-								      		<select class="form-control" name="job">
+								      		<select id="role" class="form-control" name="roleId">
 											    <option selected="selected" value="">请选择</option>
-											    <option value="">大区经理</option>
-											    <option value="">财务</option>
-											    <option value="">业务1</option>
-											    <option value="">业务2</option>
-											    <option value="">业务3</option>
 											</select>	
 								    	</div>
 								 	</div>
@@ -86,56 +83,19 @@
 										</div>
 								    </div>
 								    <div class="form-group">
-								    	<label class="col-sm-3 col-xs-12 control-label">负责区域:</label>
-								    	<div class="input-group col-sm-3 col-xs-4 ">
-										    <span class="input-group-addon" id="basic-addon1"><i class="member-icon member-map-icon"></i></span>
-										    <select class="form-control" name="job">
-										    	<div class="">
-												    <option value="">大区经理</option>
-												    <option value="">财务</option>
-												    <option value="">业务1</option>
-												    <option value="">业务2</option>
-												    <option value="">业务3</option>
-												    <option selected="selected" value="">请选择</option>
-										    	</div>
+								        <label for="inputPassword" class="col-sm-3 control-label">负责区域:</label>
+								    	<div class="input-group col-sm-9">
+								    		<span class="input-group-addon"><i class="member-icon member-job-icon"></i></span>
+								      		<!--<input type="text" class="form-control" id="inputPassword" placeholder="">-->
+								      		<select id="region" class="form-control" name="regionId" onclick="showRegionTree(this.id)">
+											    <option  value="">请选择</option>
 											</select>
-										</div>
-								    	<div class="col-sm-3 col-xs-4 ">
-								    		<select class="form-control" name="job">
-											    <option selected="selected" value="">请选择</option>
-											    <option value="">大区经理</option>
-											    <option value="">财务</option>
-											    <option value="">业务1</option>
-											    <option value="">业务2</option>
-											    <option value="">业务3</option>
-											</select>
-										</div>
-								    	<div class="col-sm-3 col-xs-4">
-								    		<select class="form-control" name="job">
-											    <option selected="selected" value="">请选择</option>
-											    <option value="">大区经理</option>
-											    <option value="">财务</option>
-											    <option value="">业务1</option>
-											    <option value="">业务2</option>
-											    <option value="">业务3</option>
-											</select>
-										</div>
-								    </div>
-								 	<div class="form-group">
-								    	<div class="input-group col-sm-9 col-sm-offset-3  ">
-								    		<!--负责区域 territory-->
-								    		<div class="j_territory territory box border default col-sm-12">
-								    			<label><input type="checkbox" name="district"value="all" /><span class="j_district_all district">全部区域</span></label>
-								    			<label><input type="checkbox" name="district"value="wz" /><span class="j_district district">乌镇</span></label>
-								    			<label><input type="checkbox" name="district"value="wtz" /><span class="j_district district">梧桐镇</span></label>
-								    			<label><input type="checkbox" name="district"value="btz" /><span class="j_district district">宝塔镇</span></label>
-								    			<label><input type="checkbox" name="district"value="btz" /><span class="j_district district">大宝泥鳅镇</span></label>
-								    			<label><input type="checkbox" name="district"value="btz" /><span class="j_district district">大宝泥鳅镇</span></label>
-								    			<label><input type="checkbox" name="district"value="btz" /><span class="j_district district">泥潭镇</span></label>
-								    			<label><input type="checkbox" name="district"value="btz" /><span class="j_district district">乌鸦镇</span></label>
-								    		</div>
-								    		<!--/territory-->
-										</div>
+											<div id="regionMenuContent"  class="menuContent">
+												 
+												   <ul id="regionTree" class="ztree"></ul>
+										    </div>
+										    <input type="hidden" id="towns" name="regionPid">	
+									    </div>
 								    </div>
 								 	<div class="form-group">
 								    	<label class="col-sm-3 control-label">ID编号:</label>
@@ -158,7 +118,7 @@
 		    	</div>
 			</div>
 		</div>		
-		
 		<script src="static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+		<script src="static/yw-team-member/team-tree.js" type="text/javascript" charset="utf-8"></script>
 	</body>
 </html>

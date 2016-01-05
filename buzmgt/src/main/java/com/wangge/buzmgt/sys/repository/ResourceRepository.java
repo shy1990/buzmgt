@@ -11,5 +11,8 @@ import com.wangge.buzmgt.sys.entity.Resource.ResourceType;
 public interface ResourceRepository extends JpaRepository<Resource, Long>{
 	List<Resource> findByRolesUsersUsernameAndType(String username,ResourceType type);
 	List<Resource> findByRolesUsersUsername(String username);
+	List<Resource> findByRolesId(Long id);
 	
+	List<Resource> findByParentId(Long id);
+	Resource findByName(String name);
 }

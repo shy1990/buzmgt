@@ -12,7 +12,7 @@
 		<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="static/css/index.css" />
 		<link rel="stylesheet" type="text/css" href="static/purview-setting/purview-setting.css" />
-		<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="static/js/jquery/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 
 	<body>
@@ -89,7 +89,7 @@
 								<!--二级菜单添加menu-second-box-->
 								<a class="menu-second-box management" href="" data-toggle="dropdown">业务管理<span class="pull-right down-icon"></span></a>
 								<ul class="menu-second">
-									<li class="active"><a class="team" href="new">团队成员</a></li>
+									<li class="active"><a class="team" href="/salesman/salesManList">团队成员</a></li>
 									<li><a class="street-settings">扫街设置</a></li>
 									<li><a href="" class="client-exploit">客户开发</a></li>
 									<li><a href="" class="yw-examine">业务考核</a></li>
@@ -121,10 +121,12 @@
 								<ul class="menu-second">
 									<li class="active"><a href="team" class="regionalism">区域划分</a></li>
 									<li><a href="" class="organiz-structure">组织结构</a></li>
-									<li><a href="purviewSetting" class="permis-setting">权限设置</a></li>
 									<li><a href="" class="account-manage">账号管理</a></li>
+									<li><a href="/role/roleList" class="permis-setting">权限设置</a></li>
 								</ul>
 							</li>
+							<li><a href="/role/roleList" class="permis-setting">权限设置</a></li>
+							<li><a href="/res/menuList" class="permis-setting">菜单设置</a></li>
 						</ul>
 					</div>
 					<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
@@ -293,7 +295,6 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- Bootstrap core JavaScript
     ================================================== -->
 			<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

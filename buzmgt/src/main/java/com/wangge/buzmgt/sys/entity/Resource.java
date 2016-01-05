@@ -62,13 +62,17 @@ public class Resource implements Serializable {
 	private String url;
 	private int priority;
 
-	@ManyToMany
-	@JoinTable(name = "sys_resources_roles",joinColumns=@JoinColumn(name="resource_id"),inverseJoinColumns=@JoinColumn(name="role_id"))
+//	@ManyToMany
+//	@JoinTable(name = "sys_resources_roles",joinColumns=@JoinColumn(name="resource_id"),inverseJoinColumns=@JoinColumn(name="role_id"))
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,	CascadeType.MERGE}, mappedBy = "resource")
 	private Set<Role> roles = new HashSet<Role>();
 
-	@OneToMany(mappedBy = "parent", fetch=FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
-	private Collection<Resource> children = new HashSet<Resource>();
+//	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,	CascadeType.MERGE}, mappedBy = "menus")
+//	private Set<RoleEntity> roles;
 	
+	@OneToMany(mappedBy="parent",cascade ={CascadeType.PERSIST})
+	private Collection<Resource> children = new HashSet<Resource>();
+
 	@ManyToOne
 	@JoinColumn(name = "parent_id")
 	private Resource parent;

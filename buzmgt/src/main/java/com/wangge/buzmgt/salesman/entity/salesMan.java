@@ -4,10 +4,13 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -15,6 +18,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
@@ -29,68 +33,85 @@ import com.wangge.buzmgt.sys.entity.User;
  */
 @Entity
 @Table(name = "SYS_SALESMAN")
-public class Salesman implements Serializable {
+public class salesMan implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public static enum SalesmanStatus {
+		SAOJIE(1), KAIFA(2), WEIHU(3);
+		
+		private Integer num;
+		
+		 SalesmanStatus(Integer num) {
+			this.num = num;
+		}
+
+		public Integer getNum() {
+			return num;
+		}
+	}
+	
 	@Id
 	@GeneratedValue(generator = "foreign")
 	@GenericGenerator(name = "foreign", strategy = "foreign", parameters = {
-			@Parameter(name = "property", value = "user") })
+	@Parameter(name = "property", value = "user") })
 	@Column(name = "user_id")
 	private String id;
 	
 	private String simId;
 	
-	private SalesmanStatus status = SalesmanStatus.saojie;
+    @Enumerated(EnumType.ORDINAL)
+	private SalesmanStatus salesmanStatus = SalesmanStatus.SAOJIE;
 	
 	private String truename;
-	private String jobName;
+	
+	private String jobNum;
 	
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
 	private Region region;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	private String towns;
 
-	public Salesman() {
+	public salesMan() {
 		super();
 	}
-	
-	
 	
 	public String getTruename() {
 		return truename;
 	}
 
-
-
 	public void setTruename(String truename) {
 		this.truename = truename;
 	}
 
-
-
-	public String getJobName() {
-		return jobName;
+	public String getJobNum() {
+		return jobNum;
 	}
 
 
 
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
+	public void setJobNum(String jobNum) {
+		this.jobNum = jobNum;
 	}
 
 
 
-	public SalesmanStatus getStatus() {
-		return status;
+	public SalesmanStatus getSalesmanStatus() {
+		return salesmanStatus;
 	}
 
-	public void setStatus(SalesmanStatus status) {
-		this.status = status;
+
+
+	public void setSalesmanStatus(SalesmanStatus salesmanStatus) {
+		this.salesmanStatus = salesmanStatus;
 	}
+
+
 
 	public Region getRegion() {
 		return region;
@@ -122,6 +143,18 @@ public class Salesman implements Serializable {
 
 	public void setSimId(String simId) {
 		this.simId = simId;
+	}
+
+
+
+	public String getTowns() {
+		return towns;
+	}
+
+
+
+	public void setTowns(String towns) {
+		this.towns = towns;
 	}
 	
 
