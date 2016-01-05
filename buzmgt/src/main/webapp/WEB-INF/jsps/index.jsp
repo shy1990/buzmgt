@@ -33,11 +33,11 @@
 				<%@include file="left_menu.jsp"%>
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
-				<h4 class="page-header">
 					<!-- CALENDAR -->
 					<div class="row">
-						<div class="col-md-12">
-							<div style="width:620px;margin:40px auto 0 auto;">
+						<div class="col-md-12 index-bg">
+							<img alt="背景图片"  src="static/img/index-bg.jpg">
+							<div class="index-calender" style="margin-left:50px;">
 								<div id="date">
 									<p>公历
 									<select onchange="changeCld()" id="sy"><option>1900</option>

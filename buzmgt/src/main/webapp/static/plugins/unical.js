@@ -556,7 +556,7 @@ function mOvr(v) {
 		if (show == 0) {
 			dStyle.left = (x + offsetx - (width/2)) + "px";
 			dStyle.top = (y + offsety) + "px";
-   			dStyle.visibility = "visible";
+   			dStyle.display = "block";
    			show = 1;
 		}
 	}
@@ -564,7 +564,7 @@ function mOvr(v) {
 
 function mOut() {
 	if ( cnt >= 1 ) { sw = 0 }
-	if ( sw == 0 ) { show = 0; dStyle.visibility = "hidden";}
+	if ( sw == 0 ) { show = 0; dStyle.display = "none";}
 	else cnt++;
 }
 
@@ -581,6 +581,7 @@ function mEvn(e) {
 		// changed by hmisty 2005/07/23
       		dStyle.left = (x + offsetx-(width/2)) + "px";
       		dStyle.top = (y + offsety) + "px";
+      		console.info(dStyle.left+":"+dStyle.top);
 	}
 	else {
      		dStyle.left = (e.pageX + offsetx-(width/2)) + "px";
