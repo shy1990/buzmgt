@@ -1,25 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
+
 <head>
-<base href="<%=basePath%>" />
-<meta charset="UTF-8">
-<title>权限设置</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/index.css" />
 <!--div 滚动条-->
-<link rel="stylesheet" type="text/css" href="static/js/jquery/scroller/jquery.mCustomScrollbar.css" />
-<link rel="stylesheet" type="text/css" href="static/purview-setting/purview-setting.css" />
-<script src="static/js/jquery/jquery-1.11.3.min.js" ></script>
+<link rel="stylesheet" type="text/css"
+	href="static/js/jquery/scroller/jquery.mCustomScrollbar.css" />
+<script src="static/js/jquery/jquery-1.11.3.min.js"
+	type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css"
+	href="static/purview-setting/purview-setting.css" />
+<title>权限设置</title>
 </head>
 
 <body>
@@ -37,7 +35,6 @@
 					</h4>
 					<!-- 		row -->
 					<div class="row">
-<<<<<<< HEAD
 						<div class="col-md-12">
 							<div class="box border blue">
 								<div class="row">
@@ -109,6 +106,7 @@
 																<div class="col-md-3 col-md-offset-8">
 																	<button type="button" class="btn col-xs-12 btn-danger ">确定</button>
 																</div>
+<<<<<<< HEAD
 =======
 						<div class="col-xs-4 col-md-5 re-padd-right">
 							<div class="role">
@@ -177,10 +175,12 @@
 =======
 >>>>>>> refs/heads/baozhen
 >>>>>>> refs/heads/ChenGuop
+=======
+>>>>>>> refs/heads/ChenGuop
 															</div>
 														</div>
-<<<<<<< HEAD
 													</div>
+<<<<<<< HEAD
 =======
 														<div class="form-group">
 															<label for="message-text" class="col-md-3 control-label">备注说明</label>
@@ -200,13 +200,18 @@
 =======
 >>>>>>> refs/heads/baozhen
 >>>>>>> refs/heads/ChenGuop
+=======
+>>>>>>> refs/heads/ChenGuop
 												</div>
 											</div>
 										</div>
 									</div>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> refs/heads/ChenGuop
 									<div class="col-xs-8 col-md-7 re-padd-left">
 										<div class="setting">
 											<div class="setting-title">
@@ -334,8 +339,11 @@
 											</div>
 										</div>
 									</div>
+<<<<<<< HEAD
 =======
 >>>>>>> refs/heads/baozhen
+>>>>>>> refs/heads/ChenGuop
+=======
 >>>>>>> refs/heads/ChenGuop
 								</div>
 
@@ -343,11 +351,11 @@
 						</div>
 					</div>
 					<!-- 		/row -->
-
 				</div>
 				<!-- row end -->
 			</div>
 		</div>
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -362,7 +370,14 @@
 	<script src="../static/js/jquery.min.js"></script>
 	<script type="text/javascript">window.jQuery || document.write("<script src='../static/js/jquery.min.js'>\x3C/script>");</script>
 	<script src="../static/js/script.js"></script>
+=======
+	</div>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="static/js/jquery/jquery-1.11.3.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+>>>>>>> refs/heads/ChenGuop
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
+<<<<<<< HEAD
 	<script type="text/javascript">
 		/* 查看 */
 		function selRole(roleId,roleName) {
@@ -391,5 +406,15 @@
 <<<<<<< HEAD
 </html>
 =======
+</html>
+>>>>>>> refs/heads/ChenGuop
+=======
+	<script
+		src="static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js"
+		type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript"
+		src="static/purview-setting/purview-setting.js"></script>
+</body>
+
 </html>
 >>>>>>> refs/heads/ChenGuop

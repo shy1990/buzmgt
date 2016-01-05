@@ -17,7 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 
 
 
+
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,6 +50,8 @@ import com.wangge.buzmgt.sys.vo.TreeData;
 @RequestMapping(value = "/role")
 public class RoleController extends BaseController {
 	
+	private static final Logger LOG = Logger.getLogger(RoleController.class);
+	
 	@Autowired
 	private UserService us;
 	@Autowired
@@ -68,19 +73,19 @@ public class RoleController extends BaseController {
 	public String roleList(Integer page, Model model){
 		page = page== null ? 1 : page<1 ? 1 : page;
 		int pageSize = 10;
-		PageRequest pageRequest = SortUtil.buildPageRequest(page, pageSize,"role");
-		Page<Role> list = us.getAllRoles(pageRequest);
+		PageRequest pageRequest = SortUtil.buildPageRequest(page,pageSize ,"role");
 		
+		Page<Role> list = us.getAllRoles(pageRequest);
+		List<Role> rlist = us.findAll();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		model.addAttribute("roles", list.getContent());
 		model.addAttribute("page", pd);
-		model.addAttribute("totalCount", list.getContent().size());
-		model.addAttribute("totalPage", list.getTotalPages());
+		model.addAttribute("totalCount", rlist.size());
+		model.addAttribute("totalPage", (int) Math.ceil(rlist.size()/Double.parseDouble(String.valueOf(pageSize))));
 		model.addAttribute("currentPage", page);
-		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), 10, list.getContent().size(), 15));
-//		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(1, 1, list.getContent().size(), 15));
-		return "purview-setting/purivew_setting";
+		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), pageSize, rlist.size(), 15));
+		return "roles/roleSet";
 	}
 	@RequestMapping(value = "/selByRole", method = RequestMethod.GET)
 	public String selByRoleId(Long id,String name,Model model){
@@ -93,23 +98,32 @@ public class RoleController extends BaseController {
 	 * 新增角色
 	 */
 	@RequestMapping(value="/addRole" ,method = RequestMethod.POST)
+	@ResponseBody
 	public String addRole(HttpServletRequest req){
 		String name = req.getParameter("name");
 		String des = req.getParameter("description");
 		System.out.println(name+"==="+des);
 		Role role = new Role(name);
 		role.setDescription(des);
-		if(us.saveRole(role)){
+		try {
+			us.saveRole(role);
 			return "suc";
+		} catch (Exception e) {
+			LOG.error(e);
+			e.printStackTrace();
 		}
-		return "error";
+		return "";
 	}
 	
 	@RequestMapping(value="/delRole" ,method = RequestMethod.POST)
 	@ResponseBody
 	public String delRole(Long id){
-		if(us.delRole(id)){
+		try {
+			us.delRole(id);
 			return "suc";
+		} catch (Exception e) {
+			LOG.error(e);
+			e.printStackTrace();
 		}
 		return "";
 	}
@@ -159,18 +173,20 @@ public class RoleController extends BaseController {
 	@RequestMapping(value = "/saveRoleResource", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> saveRoleResource(Model model,Long roleId,String menuIds) {
-		boolean resultStatus = true;
+		boolean resultStatus = false;
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		
-		//需要注意的是jsTree如果一个节点下所有子节点都被选中，则只会返回这个父节点的ID，下面的子节点ID不会返回
+		//注:jsTree如果一个节点下所有子节点都被选中，则只会返回这个父节点的ID，下面的子节点ID不会返回
 		String[] mIds = menuIds.split(",");
-//		System.out.println(roleId+"&&&"+menuIds);
-		resultStatus = rs.saveRoleResource(roleId,mIds);
-//		if(resultStatus){
-//			//角色权限改变，重新更新资源和角色关系
-//			webSecurityMetadataSource.reloadResource();
-//		}
-		
+		LOG.info("RID==="+roleId+"MenuId==="+menuIds);
+		try {
+			resultStatus = rs.saveRoleResource(roleId,mIds);
+			resMap.put("resultStatus", resultStatus);
+			return resMap;
+		} catch (Exception e) {
+			LOG.error(e);
+			e.printStackTrace();
+		}
 		resMap.put("resultStatus", resultStatus);
 		return resMap;
 		

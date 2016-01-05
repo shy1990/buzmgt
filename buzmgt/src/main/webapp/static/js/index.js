@@ -6,5 +6,7 @@ $(function() {
 	})
 	$('a.menu-second-box').click(function() {
 		$(this).siblings('ul.menu-second').show();
+
 	});
+
 })

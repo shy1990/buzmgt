@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.sys.entity.Resource;
@@ -17,6 +21,7 @@ import com.wangge.buzmgt.sys.entity.Resource.ResourceType;
 import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.repository.ResourceRepository;
 import com.wangge.buzmgt.sys.repository.RoleRepository;
+import com.wangge.buzmgt.sys.util.SortUtil;
 import com.wangge.buzmgt.sys.vo.NodeData;
 import com.wangge.buzmgt.sys.vo.TreeData;
 
@@ -35,7 +40,8 @@ public class ResourceServiceImpl implements ResourceService {
 
 	@Override
 	public List<Menu> getMenusByUsername(String username) {
-		List<Resource> resources = resourceRepository.findByRolesUsersUsernameAndType(username, ResourceType.MENU);
+		Sort s=new Sort(Direction.ASC, "createTime");
+		List<Resource> resources = resourceRepository.findByRolesUsersUsernameAndType(username, ResourceType.MENU,s);
 		return resource2Menu(resources).stream().collect(Collectors.toList());
 	}
 
@@ -60,32 +66,27 @@ public class ResourceServiceImpl implements ResourceService {
 		return menus;
 	}
 	//单个转
-	private Menu resource2MenuByOne(Resource r) {
-		Menu menu=new Menu(r.getId(),r.getName(), r.getUrl());
-		if (!r.getChildren().isEmpty()) {
-			menu.setChildren(resource2Menu(r.getChildren()));
-		}  
-		if(r.getParent()!=null){
-			menu.setParentId(r.getParent().getId());
-		}
-		
-		return menu;
-	}
+//	private Menu resource2MenuByOne(Resource r) {
+//		Menu menu=new Menu(r.getId(),r.getName(), r.getUrl());
+//		if (!r.getChildren().isEmpty()) {
+//			menu.setChildren(resource2Menu(r.getChildren()));
+//		}  
+//		if(r.getParent()!=null){
+//			menu.setParentId(r.getParent().getId());
+//		}
+//		
+//		return menu;
+//	}
 	@Override
 	public Set<Menu> getAllMenus() {
-		List<Resource> list = resourceRepository.findAll();
+		Sort s=new Sort(Direction.ASC, "createTime");
+		List<Resource> list = resourceRepository.findAll(s);
 		return resource2Menu(list);
 	}
 
 	@Override
-	public boolean saveRes(Resource res) {
-		try {
-			resourceRepository.save(res);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+	public void saveRes(Resource res) {
+		resourceRepository.save(res);
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class ResourceServiceImpl implements ResourceService {
 				
 		for (Menu menu : allMenus) {
 			//先遍历出第1级菜单   			menu.getParentId()!=null && menu.getParentId()==0
-			if(	menu.getParentId()!=null && menu.getParentId()==0){
+			if(	menu.getParentId()!=null && menu.getParentId()==1){
 //				System.out.println(menu.getId()+ menu.getName()+ menu.getUrl()+"%%%111");
 				Menu currentMenu = new Menu(menu.getId(), menu.getName(), menu.getUrl());
 //				currentMenu.setChildren(menu.getChildren());
@@ -125,7 +126,7 @@ public class ResourceServiceImpl implements ResourceService {
 		for (Menu menu : allMenus) {
 			//如果是当前菜单的子菜单
 			if( menu.getParentId() == currentMenu.getId()){
-				System.out.println(menu.getId()+ menu.getName()+ menu.getUrl()+"%%%110");
+//				System.out.println(menu.getId()+ menu.getName()+ menu.getUrl()+"%%%110");
 				Menu childMenu = new Menu(menu.getId(), menu.getName(),menu.getUrl());
 				currentMenu.addChild(childMenu);
 				//递归
@@ -228,14 +229,14 @@ public class ResourceServiceImpl implements ResourceService {
 	
 	@Override
 	@Transactional
-	public boolean delResource(Long id) {
-		try {
-			resourceRepository.delete(id);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+	public void delResource(Long id) {
+		resourceRepository.delete(id);
+	}
+
+	@Override
+	public Page<Resource> getMenusByPage(Pageable pageRequest) {
+		return  resourceRepository.findAll(pageRequest);
+		
 	}
 	
 }

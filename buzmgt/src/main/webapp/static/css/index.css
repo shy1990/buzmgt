@@ -9,6 +9,14 @@ body {
 	padding-top: 50px;
 	font-family: simsun;
 }
+a:hover,a:focus,button,button:hover;button:focus,button:active{
+	outline: none;
+	-moz-outline: none;
+}
+
+/*
+ * Global add-ons
+ */
 
 .sub-header {
 	padding-bottom: 10px;
@@ -68,40 +76,10 @@ body {
 
 @media (min-width: 768px) {
 	.main {
-		padding-right: 40px;
-		padding-left: 40px;
+		padding-right: 26px;
+		padding-left: 26px;
 	}
 }
-
-.main .page-header {
-	margin-top: 0;
-}
-.main .page-header-region {
-	margin-top: 0;
-}
-
-/*
- * Placeholder dashboard ideas
- */
-
-.placeholders {
-	margin-bottom: 30px;
-	text-align: center;
-}
-
-.placeholders h4 {
-	margin-bottom: 0;
-}
-
-.placeholder {
-	margin-bottom: 20px;
-}
-
-.placeholder img {
-	display: inline-block;
-	border-radius: 50%;
-}
-
 
 /**
  * @author ChenGuop
@@ -347,7 +325,7 @@ body {
 }
 
 /*
- * 宸︿晶鑿滃崟鏍�
+ * 左侧菜单栏
  */
 
 /* Sidebar navigation */
@@ -380,14 +358,14 @@ body {
 	color: #fff;
 	background-color: #1a2327;
 }
-/*鎺у埗鍙�*/
+/*控制台*/
 .menu .console {
     background: url(../img/icon/left-mean/kzt1.png) no-repeat 20px 10px #222D32;
 }
 .console:hover,.menu li.active .console{
 	background:  url(../img/icon/left-mean/kzt2.png) no-repeat 20px 10px ;
 }
-/*浜岀骇鑿滃崟鏍峰紡*/
+/*二级菜单样式*/
 .menu-second{
 	display: none;
 	width: 100%;
@@ -422,7 +400,7 @@ body {
 	background: url(../img/icon/left-mean/khgl1.png)no-repeat 20px 10px #263237 ;
 }
 
-/*涓嬫媺鑿滃崟涓夎鏍峰紡*/
+/*下拉菜单三角样式*/
 .down-icon{
 	display: block;
 	width: 8px;
@@ -439,49 +417,49 @@ body {
 	background: url(../img/icon/left-mean/down-active.png) no-repeat;
 }
 
-/*涓�绾ц彍鍗曞浘鏍囪缃�*/
+/*一级菜单图标设置*/
 .menu .management{
 	background:  url(../img/icon/left-mean/ywgl1.png) no-repeat 20px 10px #222D32;
 }
 .menu .management:hover,.menu li.active .management{
 	background:  url(../img/icon/left-mean/ywgl2.png) no-repeat 20px 10px;
 }
-/*---瀹㈡埛绠＄悊 client management---*/
+/*---客户管理 client management---*/
 .menu .cli-manage{
 	background:  url(../img/icon/left-mean/khgl1.png) no-repeat 20px 10px #222D32;
 }
 .menu .cli-manage:hover,.menu li.active .cli-manage{
 	background:  url(../img/icon/left-mean/khgl2.png) no-repeat 20px 10px ;
 }
-/*--浜у搧閿�閲�----*/
+/*--产品销量----*/
 .menu .product-sales {
 	background:  url(../img/icon/left-mean/cpxl1.png) no-repeat 20px 10px #222D32;
 }
-.menu .product-sales:hover, .menu li.active .product-sales{/*娌℃湁涓嬫媺妗嗙殑涓�绾ц彍鍗�*/
+.menu .product-sales:hover, .menu li.active .product-sales{/*没有下拉框的一级菜单*/
 	background:  url(../img/icon/left-mean/cpxl2.png) no-repeat 20px 10px;
 }
-/*搴撳瓨*/
+/*库存*/
 .menu .inventory{
 	background:  url(../img/icon/left-mean/kc1.png) no-repeat 20px 10px #222D32;
 }
 .menu .inventory:hover,.menu li.active .inventory{
 	background:  url(../img/icon/left-mean/kc2.png) no-repeat 20px 10px ;
 }
-/*娲诲姩閫氱煡*/
+/*活动通知*/
 .menu .active-note{
 	background:  url(../img/icon/left-mean/hdtz1.png) no-repeat 20px 10px #222D32;
 }
 .menu .active-note:hover,.menu li.active .active-note{
 	background:  url(../img/icon/left-mean/hdtz2.png) no-repeat 20px 10px ;
 }
-/*缁熻*/
+/*统计*/
 .menu .statistics{
 	background:  url(../img/icon/left-mean/tj1.png) no-repeat 20px 10px #222D32;
 }
 .menu .statistics:hover,.menu li.active .statistics{
 	background:  url(../img/icon/left-mean/tj2.png) no-repeat 20px 10px ;
 }
-/*鍩虹璁剧疆*/
+/*基础设置*/
 .menu .basic-settings{
 	background:  url(../img/icon/left-mean/jcsz1.png) no-repeat 20px 10px #222D32;
 }
@@ -489,36 +467,36 @@ body {
 	background:  url(../img/icon/left-mean/jcsz2.png) no-repeat 20px 10px;
 }
 
-/*浜岀骇鑿滃崟鍥炬爣璁剧疆.menu-second >li>a*/
-/*鍥㈤槦鎴愬憳*/
+/*二级菜单图标设置.menu-second >li>a*/
+/*团队成员*/
 .menu-second >li> a.team{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_tdcy1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.team:hover,.menu-second >li.active> a.team{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_tdcy2.png) no-repeat 35px 8px #1a2327;
 }
-/*鎵璁剧疆*/
+/*扫街设置*/
 .menu-second >li> a.street-settings{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_cjsz1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.street-settings:hover,.menu-second >li.active> a.street-settings{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_cjsz2.png) no-repeat 35px 8px #1a2327;
 }
-/*瀹㈡埛寮�鍙�*/
+/*客户开发*/
 .menu-second >li> a.client-exploit{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_khkf1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.client-exploit:hover,.menu-second >li.active> a.client-exploit{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_khkf2.png) no-repeat 35px 8px #1a2327;
 }
-/*涓氬姟鑰冩牳*/
+/*业务考核*/
 .menu-second >li> a.yw-examine{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_ywkh1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.yw-examine:hover,.menu-second >li.active> a.yw-examine{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_ywkh2.png) no-repeat 35px 8px #1a2327;
 }
-/*浠诲姟*/
+/*任务*/
 .menu-second >li> a.mission{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_rw1.png) no-repeat 35px 8px;
 }
@@ -526,83 +504,100 @@ body {
 	background: url(../img/icon/left-mean/ywmanage/ywgl_rw2.png) no-repeat 35px 8px #1a2327;
 }
 
-/*鍟嗗鍒嗗竷*/
+/*商家分布*/
 .menu-second >li> a.merchants-distribution{
 	background: url(../img/icon/left-mean/khmanage/khgl_sjfb1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.merchants-distribution:hover,.menu-second >li.active> a.merchants-distribution{
 	background: url(../img/icon/left-mean/khmanage/khgl_sjfb2.png) no-repeat 35px 8px #1a2327;
 }
-/*娲昏穬搴�*/
+/*活跃度*/
 .menu-second >li> a.liveness{
 	background: url(../img/icon/left-mean/khmanage/khgl_hykh1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.liveness:hover,.menu-second >li.active> a.liveness{
 	background: url(../img/icon/left-mean/khmanage/khgl_hykh2.png) no-repeat 35px 8px #1a2327;
 }
-/*娌夌Н瀹㈡埛*/
+/*沉积客户*/
 .menu-second >li> a.deposit-customer{
 	background: url(../img/icon/left-mean/khmanage/khgl_cjkh1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.deposit-customer:hover,.menu-second >li.active> a.deposit-customer{
 	background: url(../img/icon/left-mean/khmanage/khgl_cjkh2.png) no-repeat 35px 8px #1a2327;
 }
-/*浜屾鎻愯揣*/
+/*二次提货*/
 .menu-second >li> a.second-pick-goods{
 	background: url(../img/icon/left-mean/khmanage/khgl_ecth1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.second-pick-goods:hover,.menu-second >li.active> a.second-pick-goods{
 	background: url(../img/icon/left-mean/khmanage/khgl_ecth2.png) no-repeat 35px 8px #1a2327;
 }
-/*鍏宠仈鏌ヨ*/
+/*关联查询*/
 .menu-second >li> a.correlated-subquery{
 	background: url(../img/icon/left-mean/khmanage/khgl_glkh1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.correlated-subquery:hover,.menu-second >li.active> a.correlated-subquery{
 	background: url(../img/icon/left-mean/khmanage/khgl_glkh2.png) no-repeat 35px 8px #1a2327;
 }
-/*缁熻-鍟嗗鍒嗘瀽*/
+/*统计-商家分析*/
 .menu-second >li> a.business-analysis{
 	background: url(../img/icon/left-mean/statistics/tj_sjfx1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.business-analysis:hover,.menu-second >li.active> a.business-analysis{
 	background: url(../img/icon/left-mean/statistics/tj_sjfx2.png) no-repeat 35px 8px #1a2327;
 }
-/*缁熻-浜у搧鍒嗘瀽*/
+/*统计-产品分析*/
 .menu-second >li> a.product-analysis{
 	background: url(../img/icon/left-mean/statistics/tj_cpfx1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.product-analysis:hover,.menu-second >li.active> a.product-analysis{
 	background: url(../img/icon/left-mean/statistics/tj_cpfx2.png) no-repeat 35px 8px #1a2327;
 }
-/*鍩虹璁剧疆-鍖哄煙鍒掑垎*/
+/*基础设置-区域划分*/
 .menu-second >li> a.regionalism{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_qyhf1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.regionalism:hover,.menu-second >li.active> a.regionalism{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_qyhf2.png) no-repeat 35px 8px #1a2327;
 }
-/*鍩虹璁剧疆-缁勭粐缁撴瀯*/
+/*基础设置-组织结构*/
 .menu-second >li> a.organiz-structure{
-	background: url(../img/icon/left-mean/basic-settings/jcsz_zzjg1.png) no-repeat 35px 8px;
+	background: url(./img/icon/left-mean/basic-settings/jcsz_zzjg1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.organiz-structure:hover,.menu-second >li.active> a.organiz-structure{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_zzjg2.png) no-repeat 35px 8px #1a2327;
 }
-/*鍩虹璁剧疆-鏉冮檺璁剧疆*/
+/*基础设置-权限设置*/
 .menu-second >li> a.permis-setting{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_qxsz1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.permis-setting:hover,.menu-second >li.active> a.permis-setting{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_qxsz2.png) no-repeat 35px 8px #1a2327;
 }
-/*鍩虹璁剧疆-璐﹀彿绠＄悊*/
+/*基础设置-账号管理*/
 .menu-second >li> a.account-manage{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_zhgl1.png) no-repeat 35px 8px;
 }
 .menu-second >li> a.account-manage:hover,.menu-second >li.active> a.account-manage{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_zhgl2.png) no-repeat 35px 8px #1a2327;
 }
-
-
+/*PAGE-HEADER*/
+.main .page-header {
+	position: relative;
+	height: 66px;
+	line-height: 66px;
+	margin-top: 0;
+	margin-left: -26px;
+	margin-bottom: 26px;
+	padding-left: 30px ;
+	margin-right: -40px;
+	vertical-align: middle;
+	font-size: 16px;
+	font-weight: bold;
+	background:#fff;
+}
+.padd-0{
+	padding-left:0;
+	padding-right: 0; 
+}
 

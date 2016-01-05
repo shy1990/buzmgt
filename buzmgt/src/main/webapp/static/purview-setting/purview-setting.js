@@ -9,7 +9,6 @@ $(function(){
 		$(this).parent('label').siblings('label').find('i').removeClass('visible-icon').addClass('visible-no-icon');
 	})
 	$('.role-list .query-icon').on('click',function(){
-		alert();
 		window.location.href='/character';
 	});
 	
