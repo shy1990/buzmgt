@@ -65,7 +65,7 @@
 								      		<!--<input type="text" class="form-control" id="inputPassword" placeholder="">-->
 								      		<select id="role" class="form-control" name="roleId">
 											    <option selected="selected" value="">请选择</option>
-											</select>	
+											</select>
 								    	</div>
 								 	</div>
 								    <div class="form-group">
