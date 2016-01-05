@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <html>
 <head>
 <meta charset="utf-8">
@@ -89,6 +88,58 @@
 									data-target="#exampleModal" data-whatever="@mdo"><i
 									class="icon-add"></i>添加菜单</a>
 								<!-- start： 弹窗 -->
+									<div class="add-role modal fade " id="exampleModal" tabindex="-1"
+								role="dialog" aria-labelledby="exampleModalLabel">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+											<h4 class="modal-title" id="exampleModalLabel">
+												<i class="icon-add"></i>添加菜单
+											</h4>
+										</div>
+										<div class="modal-body">
+											<form action="addMenu" method="post" class="form-horizontal">
+												<div class="form-group">
+														<label for="inputPassword" class="col-sm-3 control-label">父菜单
+														</label>
+														<div class="col-sm-9 ">
+															<select class="form-control" name="parentid" id="parentid">
+																<c:forEach items="${menus}" var="u">
+																	<option value="${u.id }"
+																		<c:if test="${user.user_id==u.id}"><c:out value="selected"/></c:if>>
+																		${u.name}</option>
+																</c:forEach>
+															</select>
+														</div>
+													</div>
+													<div class="form-group">
+														<label for="recipient-name" class="col-md-3 control-label">菜单名称</label>
+														<div class="col-md-9">
+															<input type="text" placeholder="请填写菜单名称" name="name" id="name"
+																class="form-control" id="recipient-name">
+														</div>
+													</div>
+													<div class="form-group">
+														<label for="message-text" class="col-md-3 control-label">菜单URL</label>
+														<div class="col-md-9">
+															<input type="text" placeholder="请填写菜单的URL地址" name="url" id="url"
+																class="form-control" id="recipient-name">
+														</div>
+													</div>
+											</form>
+										</div>
+										<div class="modal-footer">
+											<div class="col-md-3 col-md-offset-8">
+												<button type="button"  onclick="addMenu()" class="btn col-xs-12 btn-danger ">确定</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 								<div class="add-role modal fade " id="exampleModal" tabindex="-1"
 									role="dialog" aria-labelledby="exampleModalLabel">
 									<div class="modal-dialog" role="document">
@@ -121,7 +172,7 @@
 													</div>
 													<div class="form-group">
 														<label for="recipient-name" class="col-md-3 control-label">菜单名称</label>
-														<div class="col-md-9 ">
+														<div class="col-md-9">
 															<input type="text" placeholder="请填写菜单名称" name="name" id="name"
 																class="form-control" id="recipient-name">
 														</div>
@@ -133,13 +184,13 @@
 																class="form-control" id="recipient-name">
 														</div>
 													</div>
+												</form>
 													<div class="modal-footer">
 														<div class="col-md-3 col-md-offset-8">
 															<input type="reset" value="确定" onclick="addMenu()"
 																class="btn col-xs-12 btn-danger " />
 														</div>
 													</div>
-												</form>
 											</div>
 										</div>
 									</div>
@@ -169,7 +220,6 @@
 <script type="text/javascript">
 	window.jQuery|| document.write("<script src='../static/js/jquery/jquery.min.js'>\x3C/script>");
 </script>
-		<script src="../static/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	/* 删除 菜单*/
 	function removeMenu(id) {

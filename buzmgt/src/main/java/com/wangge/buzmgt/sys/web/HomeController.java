@@ -38,7 +38,7 @@ public class HomeController {
 		}
 //		model.addAttribute("menus", menus);
 //		return "left_menu";
-		return "roles/index";
+		return "index";
 	}
 
 	@Autowired
