@@ -2,333 +2,327 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Insert title here</title>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-		<!-- <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
-       
-       
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>业务管理后台项目</title>
+    <meta name="keywords" content="bootstrap响应式后台">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <base target="_blank">
 </head>
-<body>
-	<div id="main">
-        <link rel="stylesheet" href="static/css/salesman_list.css" type="text/css"/>
-        <script src="static/js/jquery/jquery-2.1.4.min.js"></script>
-		<script src="static/js/salesman_list.js"></script>
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-xs-12 col-md-12">
-					<!--<table>-->
-					<!--<td><img src="img/ salesman.jpg"  class="img-circle"/></td>
-				    			<td><img src="img/ salesman.jpg"  class="img-circle"/></td>-->
-					<!--<div  class="row">-->
-					<div style="margin-top: 30px;margin-bottom: 30px;">
-						<span><strong style="font-family: '微软雅黑';font-size:larger;margin-left: 20px;">团队成员</strong></span>
-						<span style="margin-left:50px ;"><button class="btn btn-default" type="button">中国</button></span>
-						<span style="margin-left:50px ;"><a class="j_team_member_add btn btn-lg btn-default"  href="/salesman/toAdd" role="button">+添加成员</a></span>
-						<span style="margin-left:50px ;margin-top: 200px;"><small>共 203 位成员     今日新增0+</small></span>
-					</div>
-					<!--</div>-->
-					<!--</table>-->
-				</div>
-			</div>
-			<div class="row">
-				<!-- <div class="col-sm-8">-->
-				<!--<div class="row">-->
-				<div class="col-xs-6 col-md-8">
-					<table class="table table-striped table-hover ">
-						<tr class="active">
-							<td>
-								<img src="static/img/salesman.jpg" class="img-circle" />
-							</td>
-							<td>
-								<!--<tr>
-                              			<td>张明哲 (区域经理)</td>
-                              		</tr>
-                              		<tr>
-                              			<td>山东省滨州市邹城县</td>
-                              		</tr>-->
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>张明哲 (区域经理)</td>
-									</tr>
-									<tr>
-										<td>山东省滨州市邹城县</td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>提货量：263</td>
-										<td style="font-family: '微软雅黑';color: #419641;"><span class="thl"></span>10%</td>
-									</tr>
-									<tr>
-										<td>活跃度：4.5分</td>
-										<td style="font-family: '微软雅黑';color: #419641;"><span class="hyd">12%</span></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>业务指标：85%</td>
-										<td><span style="background-color: #419641;margin-left: 10px;">扫街完成</span></td>
-									</tr>
-									<tr>
-										<td><span style="width: 20px;background-color: #419641;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>
-											<a class="btn btn-default" href="#" role="button"> <i class="glyphicon glyphicon-pencil"></i> 查看</a>
-										</td>
-										<td>
-											<a class="btn btn-default" href="#" role="button"><i class="glyphicon glyphicon-pencil"></i> 编辑</a>
-										</td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<img src="static/img/salesman.jpg" class="img-circle" />
-							</td>
-						</tr>
-						<tr class="success">
-							<td>
-								<img src="static/img/salesman.jpg" class="img-circle" />
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>张明哲 (区域经理)</td>
-									</tr>
-									<tr>
-										<td>山东省滨州市邹城县</td>
-									</tr>
-								</table>
-								<!--<img src="img/ salesman.jpg"  class="img-circle"/>-->
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<!--<td>
-                              					<ul class="list-inline">
-	                              					<li>提货量：263</li>
-	                              					<li style="font-family: '微软雅黑';color: #419641;">10%</li>
-                              				    </ul>
-                              				</td>-->
-										<td>提货量：263</td>
-										<td style="font-family: '微软雅黑';color: #419641;"><span class="thl"></span>10%</td>
-									</tr>
-									<tr>
-										<!--<td> 
-                              					<ul class="list-inline">
-												  <li>活跃度：4.5分</li>
-												  <li style="font-family: '微软雅黑';color: #419641;">12%</li>
-												</ul>
-                              				</td>-->
-										<td>活跃度：4.5分</td>
-										<td style="font-family: '微软雅黑';color: #419641;"><span class="hyd">12%</span></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>业务指标：85%</td>
-										<td><span style="background-color: #419641;margin-left: 10px;">扫街完成</span></td>
-									</tr>
-									<tr>
-										<td><span style="width: 20px;background-color: #419641;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>
-											<a class="btn btn-default" href="#" role="button"> <i class="glyphicon glyphicon-pencil"></i> 查看</a>
-										</td>
-										<td>
-											<a class="btn btn-default" href="#" role="button"><i class="glyphicon glyphicon-pencil"></i> 编辑</a>
-										</td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<img src="static/img/salesman.jpg" class="img-circle" />
-							</td>
-						</tr>
-						<tr class="warning">
-							<td>
-								<img src="static/img/salesman.jpg" class="img-circle" />
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>张明哲 (区域经理)</td>
-									</tr>
-									<tr>
-										<td>山东省滨州市邹城县</td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>提货量：263</td>
-										<td style="font-family: '微软雅黑';color: #419641;"><span class="thl"></span>10%</td>
-									</tr>
-									<tr>
-										<td>活跃度：4.5分</td>
-										<td style="font-family: '微软雅黑';color: #419641;"><span class="hyd">12%</span></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>业务指标：85%</td>
-										<td><span style="background-color: #419641;margin-left: 10px;">扫街完成</span></td>
-									</tr>
-									<tr>
-										<td><span style="width: 20px;background-color: #419641;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>
-											<a class="btn btn-default" href="#" role="button"> <i class="glyphicon glyphicon-pencil"></i> 查看</a>
-										</td>
-										<td>
-											<a class="btn btn-default" href="#" role="button"><i class="glyphicon glyphicon-pencil"></i> 编辑</a>
-										</td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<img src="static/img/salesman.jpg" class="img-circle" />
-							</td>
-						</tr>
-						<tr class="danger">
-							<td>
-								<img src="static/img/salesman.jpg" class="img-circle" />
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>张明哲 (区域经理)</td>
-									</tr>
-									<tr>
-										<td>山东省滨州市邹城县</td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>提货量：263</td>
-										<td style="font-family: '微软雅黑';color: #419641;"><span class="thl"></span>10%</td>
-									</tr>
-									<tr>
-										<td>活跃度：4.5分</td>
-										<td style="font-family: '微软雅黑';color: #419641;"><span class="hyd">12%</span></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>业务指标：85%</td>
-										<td><span style="background-color: #419641;margin-left: 10px;">扫街完成</span></td>
-									</tr>
-									<tr>
-										<td><span style="width: 20px;background-color: #419641;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>
-											<a class="btn btn-default" href="#" role="button"> <i class="glyphicon glyphicon-pencil"></i> 查看</a>
-										</td>
-										<td>
-											<a class="btn btn-default" href="#" role="button"><i class="glyphicon glyphicon-pencil"></i> 编辑</a>
-										</td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<img src="static/img/salesman.jpg" class="img-circle" />
-							</td>
-						</tr>
-						<tr class="info">
-							<td>
-								<img src="static/img/salesman.jpg" class="img-circle" />
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>张明哲 (区域经理)</td>
-									</tr>
-									<tr>
-										<td>山东省滨州市邹城县</td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>提货量：263</td>
-										<td style="font-family: '微软雅黑';color: #419641;"><span class="thl"></span>10%</td>
-									</tr>
-									<tr>
-										<td>活跃度：4.5分</td>
-										<td style="font-family: '微软雅黑';color: #419641;"><span class="hyd">12%</span></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>业务指标：85%</td>
-										<td><span style="background-color: #419641;margin-left: 10px;">扫街完成</span></td>
-									</tr>
-									<tr>
-										<td><span style="width: 20px;background-color: #419641;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<table style="margin-top: 5px;">
-									<tr>
-										<td>
-											<a class="btn btn-default" href="#" role="button"> <i class="glyphicon glyphicon-pencil"></i> 查看</a>
-										</td>
-										<td>
-											<a class="btn btn-default" href="#" role="button"><i class="glyphicon glyphicon-pencil"></i> 编辑</a>
-										</td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<img src="static/img/salesman.jpg" class="img-circle" />
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="col-xs-6 col-md-4">
-					wahahahahah
-				</div>
-				<!--</div>-->
-			</div>
-		</div>
-	</div>
-</body>
+
+<body class="gray-bg">
+
+    <div class="wrapper wrapper-content animated fadeInUp">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>扫街列表</h5>
+                        <div class="ibox-tools">
+                            <a href="projects.html" class="btn btn-primary btn-xs">添加扫街</a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="project-list">
+
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                    	<td class="project-people">
+                                            <a href="projects.html"><img alt="image" class="img-circle" src="img/a.jpg"></a>
+                                        </td>
+                                         <td class="project-title">
+                                            <a href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
+                                            <br/>
+                                            <span>山东省济南市天桥区</span>
+                                        </td>
+                                        <td class="project-status">
+                                            <span class="status-ing">扫街中</span>
+                                        </td>
+                                        <td class="project-title">
+                                            <span class="l-h">大桥镇：<strong class="shop-num">20家</strong></span>
+                                            <br/>
+                                            <span>小桥镇：<strong class="shop-num">10家</strong></span>
+                                        </td>
+                                        <td class="project-completion">
+                                        	<div>
+                                                <span class="completion-ing">当前进度： 48%</span>
+                                                <span class="time-down"> 倒计时：2天</span>
+                                            </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 48%;" class="progress-bar"></div>
+                                                </div>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a href="projects.html#" class="btn btn-white btn-sm"><span class="folder"></span> 查看 </a>
+                                            <div class="btn-group">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    	<td class="project-people">
+                                            <a href="projects.html"><img alt="image" class="img-circle" src="img/a.jpg"></a>
+                                        </td>
+                                         <td class="project-title">
+                                            <a href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
+                                            <br/>
+                                            <span>山东省济南市天桥区</span>
+                                        </td>
+                                        <td class="project-status">
+                                            <span class="status-finish">扫街完成</span>
+                                        </td>
+                                        <td class="project-title">
+                                            <span class="l-h">大桥镇：<strong class="shop-num">20家</strong></span>
+                                            <br/>
+                                            <span>小桥镇：<strong class="shop-num">10家</strong></span>
+                                        </td>
+                                        <td class="project-completion">
+                                        	<div>
+                                                <span class="completion-ing">当前进度： 100%</span>
+                                                <span class="time-finish"> 通过</span>
+                                            </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 100%;" class="progress-finish"></div>
+                                                </div>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a href="projects.html#" class="btn btn-white btn-sm"><i class="folder"></i> 查看 </a>
+                                            <div class="btn-group">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    	<td class="project-people">
+                                            <a href="projects.html"><img alt="image" class="img-circle" src="img/a.jpg"></a>
+                                        </td>
+                                         <td class="project-title">
+                                            <a href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
+                                            <br/>
+                                            <span>山东省济南市天桥区</span>
+                                        </td>
+                                        <td class="project-status">
+                                            <span class="status-ing">扫街中</span>
+                                        </td>
+                                        <td class="project-title">
+                                            <span class="l-h">大桥镇：<strong class="shop-num">20家</strong></span>
+                                            <br/>
+                                            <span>小桥镇：<strong class="shop-num">10家</strong></span>
+                                        </td>
+                                        <td class="project-completion">
+                                        	<div>
+                                                <span class="completion-ing">当前进度： 48%</span>
+                                                <span class="time-down"> 倒计时：2天</span>
+                                            </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 48%;" class="progress-bar"></div>
+                                                </div>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a href="projects.html#" class="btn btn-white btn-sm"><i class="folder"></i> 查看 </a>
+                                            <div class="btn-group">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    	<td class="project-people">
+                                            <a href="projects.html"><img alt="image" class="img-circle" src="img/a.jpg"></a>
+                                        </td>
+                                         <td class="project-title">
+                                            <a href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
+                                            <br/>
+                                            <span>山东省济南市天桥区</span>
+                                        </td>
+                                        <td class="project-status">
+                                            <span class="status-finish">扫街完成</span>
+                                        </td>
+                                        <td class="project-title">
+                                            <span class="l-h">大桥镇：<strong class="shop-num">20家</strong></span>
+                                            <br/>
+                                            <span>小桥镇：<strong class="shop-num">10家</strong></span>
+                                        </td>
+                                        <td class="project-completion">
+                                        	<div>
+                                                <span class="completion-ing">当前进度： 100%</span>
+                                                <span class="time-finish"> 通过</span>
+                                            </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 100%;" class="progress-finish"></div>
+                                                </div>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a href="projects.html#" class="btn btn-white btn-sm"><i class="folder"></i> 查看 </a>
+                                            <div class="btn-group">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    	<td class="project-people">
+                                            <a href="projects.html"><img alt="image" class="img-circle" src="img/a.jpg"></a>
+                                        </td>
+                                         <td class="project-title">
+                                            <a href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
+                                            <br/>
+                                            <span>山东省济南市天桥区</span>
+                                        </td>
+                                        <td class="project-status">
+                                            <span class="status-ing">扫街中</span>
+                                        </td>
+                                        <td class="project-title">
+                                            <span class="l-h">大桥镇：<strong class="shop-num">20家</strong></span>
+                                            <br/>
+                                            <span>小桥镇：<strong class="shop-num">10家</strong></span>
+                                        </td>
+                                        <td class="project-completion">
+                                        	<div>
+                                                <span class="completion-ing">当前进度： 48%</span>
+                                                <span class="time-down"> 倒计时：2天</span>
+                                            </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 48%;" class="progress-bar"></div>
+                                                </div>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a href="projects.html#" class="btn btn-white btn-sm"><i class="folder"></i> 查看 </a>
+                                            <div class="btn-group">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    	<td class="project-people">
+                                            <a href="projects.html"><img alt="image" class="img-circle" src="img/a.jpg"></a>
+                                        </td>
+                                         <td class="project-title">
+                                            <a href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
+                                            <br/>
+                                            <span>山东省济南市天桥区</span>
+                                        </td>
+                                        <td class="project-status">
+                                            <span class="status-finish">扫街完成</span>
+                                        </td>
+                                        <td class="project-title">
+                                            <span class="l-h">大桥镇：<strong class="shop-num">20家</strong></span>
+                                            <br/>
+                                            <span>小桥镇：<strong class="shop-num">10家</strong></span>
+                                        </td>
+                                        <td class="project-completion">
+                                        	<div>
+                                                <span class="completion-ing">当前进度： 100%</span>
+                                                <span class="time-finish"> 通过</span>
+                                            </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 100%;" class="progress-finish"></div>
+                                                </div>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a href="projects.html#" class="btn btn-white btn-sm"><i class="folder"></i> 查看 </a>
+                                            <div class="btn-group">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    	<td class="project-people">
+                                            <a href="projects.html"><img alt="image" class="img-circle" src="img/a.jpg"></a>
+                                        </td>
+                                         <td class="project-title">
+                                            <a href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
+                                            <br/>
+                                            <span>山东省济南市天桥区</span>
+                                        </td>
+                                        <td class="project-status">
+                                            <span class="status-ing">扫街中</span>
+                                        </td>
+                                        <td class="project-title">
+                                            <span class="l-h">大桥镇：<strong class="shop-num">20家</strong></span>
+                                            <br/>
+                                            <span>小桥镇：<strong class="shop-num">10家</strong></span>
+                                        </td>
+                                        <td class="project-completion">
+                                        	<div>
+                                                <span class="completion-ing">当前进度： 48%</span>
+                                                <span class="time-down"> 倒计时：2天</span>
+                                            </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 48%;" class="progress-bar"></div>
+                                                </div>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a href="projects.html#" class="btn btn-white btn-sm"><i class="folder"></i> 查看 </a>
+                                            <div class="btn-group">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    	<td class="project-people">
+                                            <a href="projects.html"><img alt="image" class="img-circle" src="img/a.jpg"></a>
+                                        </td>
+                                         <td class="project-title">
+                                            <a href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
+                                            <br/>
+                                            <span>山东省济南市天桥区</span>
+                                        </td>
+                                        <td class="project-status">
+                                            <span class="status-finish">扫街完成</span>
+                                        </td>
+                                        <td class="project-title">
+                                            <span class="l-h">大桥镇：<strong class="shop-num">20家</strong></span>
+                                            <br/>
+                                            <span>小桥镇：<strong class="shop-num">10家</strong></span>
+                                        </td>
+                                        <td class="project-completion">
+                                        	<div>
+                                                <span class="completion-ing">当前进度： 100%</span>
+                                                <span class="time-finish"> 通过</span>
+                                            </div>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: 100%;" class="progress-finish"></div>
+                                                </div>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a href="projects.html#" class="btn btn-white btn-sm"><i class="folder"></i> 查看 </a>
+                                            <div class="btn-group">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div style="text-align: center;">
+                                <ul class="pagination">
+								  <li><a href="#">&laquo;</a></li>
+								  <li><a href="#">1</a></li>
+								  <li><a href="#">2</a></li>
+								  <li><a href="#">3</a></li>
+								  <li><a href="#">4</a></li>
+								  <li><a href="#">5</a></li>
+								  <li><a href="#">&raquo;</a></li>
+								</ul>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <!-- <div class="col-sm-3">
+                <div class="ibox">
+                	<div class="ibox-content">
+	                       <div class="m-b-sm">
+	                            <img alt="image" class="img-rounded" src="img/u83.png">
+	                       </div>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+      </div>
+    <script src="satic/js/jquery.min.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <!--<script>
+       $(document).ready(function(){$("#loading-example-btn").click(function(){btn=$(this);simpleLoad(btn,true);simpleLoad(btn,false)})});function simpleLoad(btn,state){if(state){btn.children().addClass("fa-spin");btn.contents().last().replaceWith(" Loading")}else{setTimeout(function(){btn.children().removeClass("fa-spin");btn.contents().last().replaceWith(" Refresh")},2000)}};
+    </script>-->
+    </body>
 </html>
