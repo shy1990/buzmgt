@@ -85,7 +85,7 @@ public class RoleController extends BaseController {
 		model.addAttribute("totalPage", (int) Math.ceil(rlist.size()/Double.parseDouble(String.valueOf(pageSize))));
 		model.addAttribute("currentPage", page);
 		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), pageSize, rlist.size(), 15));
-		return "roles/roleSet";
+		return "roles/roleList";
 	}
 	@RequestMapping(value = "/selByRole", method = RequestMethod.GET)
 	public String selByRoleId(Long id,String name,Model model){
