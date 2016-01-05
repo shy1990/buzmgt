@@ -119,11 +119,11 @@
 		src="static/calender/fullcalendar/fullcalendar.min.js"></script>
 	<script src="static/calender/script.js"></script>
 	<script>
-		jQuery(document).ready(function() {		
-			App.setPage("calendar");  //Set current page
+		jQuery(document).ready(function() {
+			App.setPage("calendar"); //Set current page
 			App.init(); //Initialise plugins and elements
 		});
-		</script>
+	</script>
 
 </body>
 
