@@ -5,7 +5,7 @@
 		var regionSetting = {
 			async : {
 				enable : true,
-				url : "",
+				url : "/region/getRegionById",
 				autoParam : [ "id" ],
 		        dataFilter: filter
 			},
@@ -215,7 +215,6 @@
 						alert('访问服务器出错');
 					},
 					success : function(data) {
-						alert(data);
 						ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
 						// zNodes = zNodes.concat(ztreeNodes);
 						$.fn.zTree.init($("#regionTree"), regionSetting, ztreeNodes);

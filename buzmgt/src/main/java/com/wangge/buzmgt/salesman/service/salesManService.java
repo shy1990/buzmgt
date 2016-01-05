@@ -11,4 +11,6 @@ public interface salesManService {
 
 	List<User> findByReginId(String regionId);
 
+  List<salesMan> getSalesmanList();
+
 }

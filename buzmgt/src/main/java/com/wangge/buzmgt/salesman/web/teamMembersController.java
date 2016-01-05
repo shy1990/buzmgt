@@ -78,7 +78,7 @@ public class teamMembersController {
 		Organization o = organizationService.getOrganById(Long.parseLong(organizationId));
 		User u = new User();
 		if("服务站经理".equals(o.getName())){
-			u.setId(createUerId(regionPid,o));
+			u.setId(createUerId(regionPid,o,regionPid));
 			u.setOrganization(o);
 			u.addRole(roleService.getRoleById(roleId));
 			u.setPassword("123456");
@@ -91,7 +91,7 @@ public class teamMembersController {
 			salesManService.addSalesman(salesman);
 			return null;
 		}else{
-			u.setId(createUerId(regionId,o));
+			u.setId(createUerId(regionId,o,regionPid));
 			u.setOrganization(o);
 			u.addRole(roleService.getRoleById(roleId));
 			u.setPassword("123456");
@@ -108,13 +108,20 @@ public class teamMembersController {
 	}
 	
 	
-	private String  createUerId(String regionId,Organization o){
+	
+	public List<salesMan> getSalesManList(){
+	  List<salesMan> list = salesManService.getSalesmanList();
+	  return null;
+	}
+	
+	
+	private String  createUerId(String regionId,Organization o,String regionPid){
 		String[] num = {"A","B","C","D","E","F"} ;
 		SimpleDateFormat formatter = new SimpleDateFormat("MMdd");
 		String time = formatter.format(new Date());
 		String userId = "";
 		if("服务站经理".equals(o.getName())){
-			List<User> uList = salesManService.findByReginId(regionId);
+			List<User> uList = salesManService.findByReginId(regionPid);
 			if(uList.size() > 0){
 				for(int i=0;i<uList.size();i++){
 					System.out.println("<<======>>"+uList.get(i));
