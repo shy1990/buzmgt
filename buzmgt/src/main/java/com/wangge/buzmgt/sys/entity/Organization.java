@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
@@ -26,6 +28,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  */
 @Entity
 @Table(name = "sys_organization")
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Organization implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -41,7 +44,7 @@ public class Organization implements Serializable {
 	@JoinColumn(name = "parent_id")
 	private Organization parent;
 
-	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private Set<Organization> children = new HashSet<Organization>();
 
 	public Organization() {
@@ -81,6 +84,14 @@ public class Organization implements Serializable {
 
 	public void setParent(Organization parent) {
 		this.parent = parent;
+	}
+
+	public Set<Organization> getChildren() {
+		return children;
+	}
+
+	public void setChildren(Set<Organization> children) {
+		this.children = children;
 	}
 
 }

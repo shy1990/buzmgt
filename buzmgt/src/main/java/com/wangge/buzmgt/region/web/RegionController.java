@@ -11,8 +11,12 @@ import java.util.List;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +30,9 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.util.RegionUtil;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.sys.service.UserService;
+import com.wangge.buzmgt.sys.vo.RegionVo;
 
 @Controller
 @RequestMapping(value = "/region")
@@ -34,6 +41,8 @@ public class RegionController {
 			.getLogger(RegionController.class);
 	@Autowired
 	private RegionService regionService;
+	@Resource
+	private UserService userService;
 	
 	private static final String ONELEAVE="0";
 	
@@ -285,5 +294,20 @@ public class RegionController {
 	
 
 	
+	@RequestMapping(value="/getRegionById",method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<List<RegionVo>> getRegionById(String id,HttpServletRequest request){
+		String regionId = "0";
+		if(id != null && !"".equals(id)){
+			regionId = id;
+		}else{
+			Subject subject = SecurityUtils.getSubject();
+			User user=(User) subject.getPrincipal();
+			user = userService.getById(user.getId());
+			regionId = String.valueOf(user.getOrganization().getId());
+		}
+		   List<RegionVo> regionList = regionService.getRegionByPid(regionId);
+		return new ResponseEntity<List<RegionVo>>(regionList,HttpStatus.OK);
+	}
 	
 }

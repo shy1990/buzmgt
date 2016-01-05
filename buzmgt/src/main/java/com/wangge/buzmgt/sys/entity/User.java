@@ -19,9 +19,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "sys_user")
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +34,7 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	@Column(name = "user_id")
-	private Long id;
+	private String id;
 
 	private String username;
 	@JsonIgnore
@@ -81,11 +83,12 @@ public class User implements Serializable {
 		this.status = status;
 	}
 
-	public Long getId() {
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

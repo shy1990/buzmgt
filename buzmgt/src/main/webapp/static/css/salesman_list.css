@@ -1,0 +1,38 @@
+        <style type="text/css">
+			.col-xs-6,.col-md-4{
+		    		border: 1px solid #000;
+		    		background-color: #555555;
+		    	}
+		    .col-xs-6 ,.col-md-8{
+		    	    float: left;
+		    	    border: 1px solid #000000;
+		    	    background-color: #2AABD2;
+		    	    padding-left: 0px;
+		    	    padding-right: 0;
+		    }
+		    .img-circle{
+		    	width:50px;height:50px;
+		    }
+	    	.icon-bar{
+	    		width: 10px;height: 10px;
+	    	}
+	    	.icon{
+	    		width: 10px;height: 10px;
+	    	} 
+		    .thl{
+		    	margin-left: 15px;;
+		    }
+		    .hyd{
+		    	margin-left: 15px;
+		    }
+		    .col-xs-12 ,.col-md-12{
+		    	border: 1px solid #000;
+		    	background-color: #FFFFFF;
+		    }
+		    .btn,.btn-default{
+		    	border:1px solid#D5D5D5;
+		    }
+		    .form-control{
+				width: 70%;
+			}
+		</style>

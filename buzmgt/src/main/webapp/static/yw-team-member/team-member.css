@@ -11,6 +11,21 @@
 	/*width: 90%;*/
 	padding-left:  0;
 	padding-right:  0;
+	padding-right:  0;
+}
+
+.form-control{
+	outline: auto;
+}
+
+
+/*表单图标*/
+.member-icon {
+	position: relative;
+	display: inline-block;
+	top: 1px;
+	width: 20px;
+	height: 20px;
 }
 
 /*表单图标*/
