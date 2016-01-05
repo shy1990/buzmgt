@@ -144,5 +144,13 @@ public class BuzmgtApplicationTests {
 		
 	}
 	
+	@Test
+	public  void test(){
+	  
+	 User user  = userService.getById("1");
+	 System.out.println("================="+user.getId()+">>>>>"+user.getUsername());
+	 
+	}
+	
 
 }

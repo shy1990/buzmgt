@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public User getById(String id) {
 		
-		return userRepository.findOne(Long.parseLong(id));
+		return userRepository.findUserById(id);
 	}
 	public List<Role> findAll() {
 		// TODO Auto-generated method stub

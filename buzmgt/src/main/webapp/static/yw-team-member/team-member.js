@@ -44,7 +44,7 @@ function getOrgan(){
 		   if (result) {
 			   var organ = $("#organization"); ;
 			   organ.empty();  
-			 //  organ.append("<option value = '' selected='selected'>请选择</option>");
+			   organ.append("<option value = '' selected='selected'>请选择</option>");
                for(var i=0;i<result.length;i++){
             	   organ.append("<option value = '"+result[i].id+"'>"+result[i].name+"</option>");
 				}

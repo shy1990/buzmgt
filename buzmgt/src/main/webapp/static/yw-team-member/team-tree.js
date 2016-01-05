@@ -5,7 +5,7 @@
 		var regionSetting = {
 			async : {
 				enable : true,
-				url : "/region/getRegionById",
+				url : "",
 				autoParam : [ "id" ],
 		        dataFilter: filter
 			},
@@ -170,7 +170,35 @@
 				return result.join(" ");
 		}
 
-		function showRegionTree() {
+//		function showRegionTree1111() {
+//				var ztreeNodes;
+//				var regionObj = $("#region");
+//				var cityOffset = $("#region").offset();
+//				$.ajax({
+//					async : true, // 是否异步
+//					cache : false, // 是否使用缓存
+//					type : 'post', // 请求方式,post
+//					dataType : "text", // 数据传输格式
+//					url : "/region/getRegionById", // 请求链接
+//					data :{
+//						id : $("#region").val()
+//					},
+//					error : function() {
+//						alert('访问服务器出错');
+//					},
+//					success : function(data) {
+//						
+//						ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
+//						// zNodes = zNodes.concat(ztreeNodes);
+//						$.fn.zTree.init($("#regionTree"), regionSetting, ztreeNodes);
+//						$("#regionMenuContent").slideDown("fast");
+//					}
+//				});
+//				
+//				$("body").bind("mousedown", onBodyDown);
+//			
+//		}
+		 $("#region").click(function(){
 				var ztreeNodes;
 				var regionObj = $("#region");
 				var cityOffset = $("#region").offset();
@@ -187,6 +215,7 @@
 						alert('访问服务器出错');
 					},
 					success : function(data) {
+						alert(data);
 						ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
 						// zNodes = zNodes.concat(ztreeNodes);
 						$.fn.zTree.init($("#regionTree"), regionSetting, ztreeNodes);
@@ -195,8 +224,8 @@
 				});
 				
 				$("body").bind("mousedown", onBodyDown);
-			
-		}
+		 });
+		
 		function hideRegionMenu() {
 			$("#regionMenuContent").fadeOut("fast");
 			$("body").unbind("mousedown", onBodyDown);

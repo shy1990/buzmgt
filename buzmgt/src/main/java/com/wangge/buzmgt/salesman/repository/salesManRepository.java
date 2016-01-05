@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.wangge.buzmgt.salesman.entity.salesMan;
 import com.wangge.buzmgt.sys.entity.User;
 
-public interface salesManRepository extends JpaRepository<salesMan, Long>{
+public interface salesManRepository extends JpaRepository<salesMan, String>{
 
 	List<User> findByRegionId(String regionId);
 
