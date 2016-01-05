@@ -119,7 +119,7 @@
 							<li>
 								<a href="" class="menu-second-box basic-settings" data-toggle="dropdown">基础设置<span class="pull-right down-icon"></span></a>
 								<ul class="menu-second">
-									<li class="active"><a href="team" class="regionalism">区域划分</a></li>
+									<li class="active"><a href="region/initRegion" class="regionalism">区域划分</a></li>
 									<li><a href="" class="organiz-structure">组织结构</a></li>
 									<li><a href="" class="account-manage">账号管理</a></li>
 									<li><a href="/role/roleList" class="permis-setting">权限设置</a></li>

@@ -89,8 +89,6 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height: 100%;overflow: hidd
 			</div>
 				<!-- 创建区域  modalend -->
 
-
-
 		</div>
 				</div>
 </body>
