@@ -1,0 +1,98 @@
+.team-member-add-icon{
+	top: 5px;
+	background: url(../img/icon/team-member/add/tjcy.png) no-repeat;
+}
+.member-add-icon{
+	top: 4px;
+	background: url(../img/icon/team-member/add/tj.png) no-repeat;
+}
+/*添加成员表单定位*/
+.member-from{
+	/*width: 90%;*/
+	padding-left:  0;
+	padding-right:  0;
+}
+
+/*表单图标*/
+.member-icon {
+	position: relative;
+	display: inline-block;
+	top: 1px;
+	width: 20px;
+	height: 20px;
+}
+.member-name-icon{
+	background: url(../img/icon/team-member/add/xm.png) no-repeat;
+}
+/*输入框组 span 图标定位  span.input-group-addon*/
+.member-from-box span.input-group-addon{
+	padding: 0 5px;
+}
+/*输入框组 input 定位  input.input-group*/
+.member-from-box .input-group{
+	float: left;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.member-from-box .form-group{
+	margin-bottom: 38px;
+}
+
+.member-job-icon{
+	background: url(../img/icon/team-member/add/zw.png) no-repeat;
+}
+.member-role-icon{
+	background: url(../img/icon/team-member/add/jsqx.png) no-repeat;
+}
+.job-number-icon{
+	background: url(../img/icon/team-member/add/gh.png) no-repeat;
+}
+.member-phone-icon{
+	background: url(../img/icon/team-member/add/dh.png) no-repeat;
+}
+.member-id-icon{
+	background: url(../img/icon/team-member/add/idbh.png) no-repeat;
+}
+.member-map-icon{
+	background: url(../img/icon/team-member/add/fzqu.png) no-repeat;
+}
+/*负责区域*/
+.territory{
+	padding: 15px;
+	margin-bottom: 0;
+}
+.territory >label>input {
+	display: none;
+}
+.district{
+	float: left;
+	cursor: pointer;
+	padding: 2px 10px;
+	font-size: 12px;
+	font-weight: 300;
+	border: 2px solid #CCC;
+}
+.district:hover{
+	border: 2px solid #3F95D2;
+}
+.district.active{
+	border: 2px solid #3F95D2;
+	background: url(../img/icon/team-member/add/qdxz.png) no-repeat bottom right;
+}
+@media (max-width:500px ) {
+	.member-from-box .col-xs-4{
+		width: 100%;
+		margin-bottom: 10px;
+	}
+}
+.member-from-box button{
+	font-size: 16px;
+	font-weight: bold;
+	/*padding-top: 15px;*/
+	/*padding-bottom: 15px;*/
+}
+
+
+
+
+

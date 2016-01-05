@@ -9,8 +9,6 @@ body {
 	padding-top: 50px;
 	font-family: simsun;
 }
-
-
 /*
  * Global add-ons
  */
@@ -67,6 +65,8 @@ body {
 
 .main {
 	padding: 20px;
+	padding-top: 0;
+	background-color: #fafafa;
 }
 
 @media (min-width: 768px) {
@@ -79,6 +79,7 @@ body {
 .main .page-header {
 	margin-top: 0;
 }
+
 .main .page-header-region {
 	margin-top: 0;
 }
@@ -606,6 +607,4 @@ body {
 .menu-second >li> a.account-manage:hover,.menu-second >li.active> a.account-manage{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_zhgl2.png) no-repeat 35px 8px #1a2327;
 }
-
-
 

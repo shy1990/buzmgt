@@ -6,6 +6,12 @@ import java.util.Collection;
 import java.util.List;
 
 
+
+
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,9 +51,7 @@ public class RegionController {
 	@RequestMapping("/initRegion")
 	public String initRegion(String test,Model model){
 		return "region/region_view";
-	}
-	
-	
+	}	
 	/**
 	 * 
 	* @Title: findOneRegion 
@@ -181,11 +185,61 @@ public class RegionController {
 		return true;
 	}
 	
-	
+	/**
+	 * 
+	* @Title: initRegionMap 
+	* @Description: 初始化地图页面
+	* @param @param regionName
+	* @param @param parentid
+	* @param @param model
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
 	@RequestMapping("/initRegionMap")
-	public String initRegionMap(){
+	public String initRegionMap(String regionName,String parentid,Model model){
+		model.addAttribute("regionName", regionName);
+		model.addAttribute("parentid", parentid);
+		
+		Region region = regionService.findListRegionbyid(parentid);
+		List<Region> listRegion =new ArrayList<Region>();
+		for(Region reg:region.getChildren()){
+			listRegion.add(reg);
+		}
+ 		model.addAttribute("jsonData", listRegion);
 		return "region/region_map";
 	}
+	
+	/**
+	 * 
+	* @Title: addPoints 
+	* @Description: 添加地图轮廓
+	* @param @param points
+	* @param @param parentid
+	* @param @param name
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
+	@RequestMapping(value = "/addPoints", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean addPoints(String  points,String parentid,String name) {
+		JSONArray jsonArr = JSONArray .fromObject(points);
+		StringBuffer pointbuf=new StringBuffer();
+		for(int i=0;i<jsonArr.size();i++){
+			JSONObject jsonObject = JSONObject .fromObject(jsonArr.get(i));
+			pointbuf.append(jsonObject.get("lng")).append("-").append(jsonObject.get("lat")).append("=");
+		}
+		Region region=regionService.findListRegionbyid(parentid);
+		Long maxid=getMaxId(parentid);
+		Region entity=new Region(String.valueOf(maxid+1),name,RegionUtil.getTYpe(region));
+		entity.setCoordinates(pointbuf.toString());
+		entity.setParent(regionService.findListRegionbyid(parentid));
+		regionService.saveRegion(entity);
+		return true;
+		
+	}
+	
 	
 	
 	/**

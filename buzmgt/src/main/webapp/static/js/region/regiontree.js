@@ -327,16 +327,11 @@ function addHoverDom(treeId, treeNode) {
 	+ "' title='绘制子区域地图' onfocus='this.blur();'></span>";
 	sObj.after(mapStr);
 	var btn = $("#mapBtn_"+treeNode.tId);
-	if (btn) btn.bind("click", function(event){
-		$("#main").load("/region/initRegionMap"+"#allmap", {
-			test : "sssssssssssssss"
-		}, function() {
-				$.getScript("/static/js/region/regiontree.js");
-				$.getScript("http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT");
-				$.getScript("http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js");
-				$.getScript("http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js");
-		});
+	if (btn) btn.bind("click", function(){
+		window.location.href='/region/initRegionMap?regionName='+treeNode.name+"&parentid="+treeNode.id;
+				
 	});
+	
 	
 }
 

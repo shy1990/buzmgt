@@ -23,6 +23,40 @@ public class TestController {
 		model.addAttribute("test", test);
 		return " ";
 	}
+	/**
+	 * 权限设置页面跳转
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/purviewSetting")
+	public String purviewSetting(String test,Model model){
+		return "purview-setting/purivew_setting";
+	}
+
+	/**
+	 * 角色查看
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/character")
+	public String character(String test,Model model){
+		model.addAttribute("test", test);
+		return "purview-setting/character";
+	}
+	/**
+	 * 团队成员添加
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/team_member_add")
+	public String teamMemberAdd(String test,Model model){
+		model.addAttribute("test", test);
+		return "team-member/team_member_add";
+	}
+	
 	
 	@RequestMapping("/menu")
 	@ResponseBody
