@@ -20,6 +20,7 @@
 			.ztree{margin-top: 34px;border: 1px solid #ccc;background: #FFF;width:100%;overflow-y:scroll;overflow-x:auto;}
 			.menuContent{width: 100% ;padding-right: 61px;display:none; position: absolute;z-index:200;}
 		</style>
+		<script src="../static/yw-team-member/team-tree.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 
 	<body>
@@ -93,7 +94,7 @@
 								    	<div class="input-group col-sm-9">
 								    		<span class="input-group-addon"><i class="member-icon member-job-icon"></i></span>
 								      		<!--<input type="text" class="form-control" id="inputPassword" placeholder="">-->
-								      		<select id="region" class="form-control" name="regionId">
+								      		<select id="region" class="form-control" name="regionId" onclick="showRegionTree();">
 											    <option  value="">请选择</option>
 											</select>
 											<div id="regionMenuContent"  class="menuContent">
@@ -131,7 +132,6 @@
 		<div id="main" class="content main">
 			
 		</div>		
-		<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../static/yw-team-member/team-tree.js" type="text/javascript" charset="utf-8"></script>
+				<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
 	</body>
 </html>
