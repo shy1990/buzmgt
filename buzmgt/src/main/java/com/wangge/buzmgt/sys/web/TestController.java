@@ -57,7 +57,17 @@ public class TestController {
 		model.addAttribute("test", test);
 		return "team-member/team_member_add";
 	}
-	
+	/**
+	 * 团队成员列表
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/team_member_list")
+	public String teamMemberList(String test,Model model){
+		model.addAttribute("test", test);
+		return "team-member/teamMemberList";
+	}
 	
 	@RequestMapping("/menu")
 	@ResponseBody
