@@ -21,8 +21,6 @@
 <script type="text/javascript" src="static/plugins/unical.js"></script>
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-
-
 </head>
 
 <body onload="initial();">

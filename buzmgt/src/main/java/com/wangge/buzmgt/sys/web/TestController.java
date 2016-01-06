@@ -25,6 +25,11 @@ public class TestController {
 		List<Menu> menus = resourceService.getMenusByUsername(getCurrentUser().getUsername());
 		return menus;
 	}
+	@RequestMapping("/test")
+  public String test(String test,Model model){
+    model.addAttribute("test", test);
+    return "test";
+  }
 
 	private User getCurrentUser() {
 		return (User)SecurityUtils.getSubject().getPrincipal();

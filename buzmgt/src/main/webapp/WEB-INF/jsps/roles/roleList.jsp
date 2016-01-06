@@ -13,7 +13,6 @@
 <!-- Bootstrap -->
 <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="../static/css/index.css" />
 <link rel="stylesheet" type="text/css"
 	href="../static/purview-setting/purview-setting.css" />
 <!--div 滚动条-->
@@ -24,14 +23,6 @@
 </head>
 
 <body>
-	<%@ include file="../top_menu.jsp"%>
-	<div class="container-fluid">
-		<div id="" class="row">
-			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
-				<%@include file="../left_menu.jsp"%>
-			</div>
-			<div
-				class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 padd-0">
 				<!-- page-main -->
 				<div id="j_page_main" class="content main">
 					<h4 class="page-header">
@@ -133,16 +124,11 @@
 					</div>
 					<!-- end:row -->
 				</div>
-			</div>
-		</div>
-	</div>
-
 </body>
-<script src="../static/js/jquery.min.js"></script>
+<script  src='../static/bootstrap/js/bootstrap.js'></script>
 <script type="text/javascript">
 	window.jQuery|| document.write("<script src='../static/js/jquery.min.js'>\x3C/script>");
 </script>
-<script src="../static/js/script.js"></script>
 <script type="text/javascript">
 	/*	新增角色*/
 	function addRole() {

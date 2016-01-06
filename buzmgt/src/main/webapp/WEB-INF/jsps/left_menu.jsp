@@ -20,7 +20,7 @@
 								<a class="console" href="${menu.url}">${menu.name} </a>
 							</c:when>
 							<c:otherwise>
-							<a class="menu-second-box management"href="" data-toggle="dropdown">${menu.name}
+							<a class="menu-second-box management" href="" data-toggle="dropdown">${menu.name}
 							<span class="pull-right down-icon"></span></a>
 							</c:otherwise>
 							</c:choose>		
@@ -32,7 +32,7 @@
 									<a class="team" href="${sub.url }">${sub.name }</a>
 									</c:when>
 									<c:otherwise>
-									<li> <a class="team" href="javascript:void(0);">${sub.name }</a> </li>
+									<li> <a class="team" href="">${sub.name }</a> </li>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>

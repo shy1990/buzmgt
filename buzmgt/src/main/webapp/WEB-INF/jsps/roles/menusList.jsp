@@ -10,25 +10,15 @@
 <!-- Bootstrap -->
 <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="../static/css/index.css" />
 <!--div 滚动条-->
 <link rel="stylesheet" type="text/css"
 	href="../static/js/jquery/scroller/jquery.mCustomScrollbar.css" />
 <script src="../static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script  src='../static/js/index.js'></script>
+<script  src='../static/bootstrap/js/bootstrap.js'></script>
 <title>菜单管理</title>
-
 </head>
 <body>
-	<%@ include file="../top_menu.jsp"%>
-	<div class="container-fluid">
-		<div id="" class="row">
-			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
-				<%@include file="../left_menu.jsp"%>
-			</div>
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 padd-0">
-				<!-- page-main -->
 				<div id="j_page_main" class="content main">
 					<h4 class="page-header">
 						<i class="icon pur-setting-icon"></i> 菜单管理
@@ -201,10 +191,6 @@
 					</div>
 					<!-- end:row -->
 				</div>
-			</div>
-		</div>
-	</div>
-
 
 </body>
 

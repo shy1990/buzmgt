@@ -611,7 +611,7 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 	font-weight: bold;
 	background:#fff;
 }
-.padd-0{
+.clear-padd{
 	padding-left:0;
 	padding-right: 0; 
 }
