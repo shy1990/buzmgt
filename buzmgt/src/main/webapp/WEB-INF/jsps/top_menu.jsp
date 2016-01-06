@@ -54,11 +54,11 @@
 					<li role="presentation" class="dropdown marg-r-40"><a
 						class="user-icon-box" data-toggle="dropdown" href="#"
 						role="button" aria-haspopup="true" aria-expanded="false">
-							我叫李小龙<span class="caret"></span>
+							${sessionScope.username}<span class="caret"></span>
 					</a>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 							<li><a class="user upd-icon" href="">账户设置</a></li>
-							<li><a class="user logout-icon" href="">退出登录</a></li>
+							<li><a class="user logout-icon" href="logout">退出登录</a></li>
 						</ul></li>
 				</ul>
 				<form class="navbar-form navbar-right">

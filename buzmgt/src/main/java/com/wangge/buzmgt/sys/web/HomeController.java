@@ -27,7 +27,11 @@ public class HomeController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(HttpServletRequest req) {
+	  if(req.getSession().getAttribute("menus")!=null){
+	    return "index";
+	  }
 		String username =  ((User) SecurityUtils.getSubject().getPrincipal()).getUsername();
+		req.getSession().setAttribute("username", username);
 		LOG.info("loginer====="+username);
 		if("root".equals(username)){
 			Set<Menu> menus = resourceService.getAllMenus();

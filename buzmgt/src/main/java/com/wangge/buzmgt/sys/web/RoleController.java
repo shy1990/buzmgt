@@ -87,6 +87,18 @@ public class RoleController extends BaseController {
 		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), pageSize, rlist.size(), 15));
 		return "roles/roleList";
 	}
+	/**
+	 * 
+	 * @Description: 根据角色查询角色下的人员
+	 * @param @param id
+	 * @param @param name
+	 * @param @param model
+	 * @param @return   
+	 * @return String  
+	 * @throws
+	 * @author changjun
+	 * @date 2016年1月6日
+	 */
 	@RequestMapping(value = "/selByRole", method = RequestMethod.GET)
 	public String selByRoleId(Long id,String name,Model model){
 		List<User> list =  us.getUserByRoles(id);
@@ -114,7 +126,16 @@ public class RoleController extends BaseController {
 		}
 		return "";
 	}
-	
+	/**
+	 * 
+	 * @Description: 删除角色
+	 * @param @param id
+	 * @param @return   
+	 * @return String  
+	 * @throws
+	 * @author changjun
+	 * @date 2016年1月6日
+	 */
 	@RequestMapping(value="/delRole" ,method = RequestMethod.POST)
 	@ResponseBody
 	public String delRole(Long id){
@@ -178,7 +199,6 @@ public class RoleController extends BaseController {
 		
 		//注:jsTree如果一个节点下所有子节点都被选中，则只会返回这个父节点的ID，下面的子节点ID不会返回
 		String[] mIds = menuIds.split(",");
-		LOG.info("RID==="+roleId+"MenuId==="+menuIds);
 		try {
 			resultStatus = rs.saveRoleResource(roleId,mIds);
 			resMap.put("resultStatus", resultStatus);

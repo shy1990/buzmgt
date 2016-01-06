@@ -36,7 +36,6 @@
 					<!-- CALENDAR -->
 					<div class="row">
 						<div class="col-md-12 index-bg">
-							<iframe src="" ></iframe>
 							<img alt="背景图片"  src="static/img/index-bg.jpg">
 							<div class="index-calender" style="margin-left:50px;">
 								<div id="date">
@@ -335,7 +334,6 @@
 						</div>
 					</div>
 					<!-- /CALENDAR -->
-					<iframe id="iframepage" onLoad="iFrameHeight()" scrolling="no" width="100%" src="http://www.3j1688.com/special_160105/index.html"></iframe>
 			</div>
 		</div>
 	</div>

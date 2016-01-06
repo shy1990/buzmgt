@@ -84,7 +84,7 @@ public class Resource implements Serializable {
 	public Resource() {
 	}
 
-	public Resource(String name,ResourceType type, String url, int priority,Date creareTime) {
+	public Resource(String name,ResourceType type, String url, int priority, Date createTime) {
 		super();
 		this.name = name;
 		this.url = url;
