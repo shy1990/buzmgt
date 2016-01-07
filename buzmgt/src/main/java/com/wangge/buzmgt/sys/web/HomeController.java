@@ -27,6 +27,9 @@ public class HomeController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(HttpServletRequest req) {
+	  if(req.getSession().getAttribute("menus")!=null){
+	    return "home";
+	  }
 		String username =  ((User) SecurityUtils.getSubject().getPrincipal()).getUsername();
 		LOG.info("loginer====="+username);
 		if("root".equals(username)){
@@ -38,7 +41,7 @@ public class HomeController {
 		}
 //		model.addAttribute("menus", menus);
 //		return "left_menu";
-		return "index";
+		return "home";
 	}
 
 	@Autowired

@@ -18,11 +18,6 @@ public class TestController {
 	@Autowired
 	private ResourceService resourceService;
 	
-	@RequestMapping("/test")
-	public String test(String test,Model model){
-		model.addAttribute("test", test);
-		return " ";
-	}
 	/**
 	 * 权限设置页面跳转
 	 * @param test
@@ -73,6 +68,16 @@ public class TestController {
 	public List<Menu> menu(){
 		List<Menu> menus = resourceService.getMenusByUsername(getCurrentUser().getUsername());
 		return menus;
+	}
+	@RequestMapping("/test")
+  public String test(String test,Model model){
+    model.addAttribute("test", test);
+    return "test";
+  }
+	@RequestMapping("/index")
+	public String index(String test,Model model){
+	  model.addAttribute("test", test);
+	  return "index";
 	}
 
 	private User getCurrentUser() {
