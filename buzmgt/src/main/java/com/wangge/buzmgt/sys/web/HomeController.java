@@ -31,6 +31,7 @@ public class HomeController {
 	    return "home";
 	  }
 		String username =  ((User) SecurityUtils.getSubject().getPrincipal()).getUsername();
+		req.getSession().setAttribute("username", username);
 		LOG.info("loginer====="+username);
 		if("root".equals(username)){
 			Set<Menu> menus = resourceService.getAllMenus();
