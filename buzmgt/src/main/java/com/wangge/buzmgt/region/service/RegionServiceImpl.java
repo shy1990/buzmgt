@@ -76,7 +76,7 @@ public class RegionServiceImpl implements RegionService {
 			RegionVo vo = new RegionVo();
 			if(r.getChildren().size() > 0){
 				vo.setIsParent("true");
-				vo.setIcon("static/zTree/css/zTreeStyle/img/diy/10.png");
+				vo.setIcon("../static/zTree/css/zTreeStyle/img/diy/10.png");
 			}
 			vo.setOpen("false");
 			vo.setId(r.getId());

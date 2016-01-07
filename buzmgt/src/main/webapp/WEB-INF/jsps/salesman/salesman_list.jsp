@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
 
@@ -70,16 +70,16 @@
 									<div class="col-sm-7 col-md-5">
 										<!--菜单栏-->
 										<ul class="nav nav-tabs">
-											<li class="active"><a href="#box_tab1" data-toggle="tab"><i
+											<li class="active"><a title="扫街中" name="salesmanStatus" href="#box_tab3" onclick="getList(this.title,this.name);" data-toggle="tab"><i
 													class="fa fa-circle-o"></i> <span
 													class="hidden-inline-mobile">扫街中</span></a></li>
-											<li><a href="#box_tab2" data-toggle="tab"><i
+											<li><a title="考核中" name="salesmanStatus" href="#box_tab1" onclick="getList(this.title,this.name);" data-toggle="tab"><i
 													class="fa fa-laptop"></i> <span
 													class="hidden-inline-mobile">考核中</span></a></li>
-											<li><a href="#box_tab3" data-toggle="tab"><i
+											<li><a title="开发中" name="salesmanStatus" href="#box_tab1" onclick="getList(this.title,this.name);" data-toggle="tab"><i
 													class="fa fa-calendar-o"></i> <span
 													class="hidden-inline-mobile">开发中</span></a></li>
-											<li><a href="#box_tab4" data-toggle="tab"><i
+											<li><a title="已转正" name="salesmanStatus" href="#box_tab1" onclick="getList(this.title,this.name);" data-toggle="tab"><i
 													class="fa fa-calendar-o"></i> <span
 													class="hidden-inline-mobile">已转正</span></a></li>
 										</ul>
@@ -90,8 +90,8 @@
 										<div class="form-group title-form">
 											<div class="input-group ">
 												<input type="text" class="form-control"
-													placeholder="请输入名称或工号"> <span
-													class="input-group-addon"><i class="icon icon-finds"></i></span>
+													id = "param" placeholder="请输入名称或工号"> <span
+													class="input-group-addon" id="goSearch" onclick="getList(this.value,this.id)"><i class="icon icon-finds"></i></span>
 											</div>
 										</div>
 									</div>
@@ -117,17 +117,18 @@
 											<div class="ibox">
 												<div class="ibox-content">
 													<div class="project-list">
-														<table class="table table-hover">
-															<tbody>
+														<table  class="table table-hover">
+															<tbody id="salemanlist">
+															<c:forEach var="salesman" items="${list.content}" varStatus="s">
 																<tr>
 																	<td class="project-people"><a href="projects.html"><img
 																			alt="image" class="img-circle"
 																			src="../static/img/team-member/a.jpg"></a></td>
 																	<td class="project-title"><a
-																		href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
-																		<br /> <span>山东省济南市天桥区</span></td>
+																		href="project_detail.html"><strong>${salesman.truename}</strong>(${salesman.user.organization.name})</a>
+																		<br /> <span>${salesman.region.name}</span></td>
 																	<td class="project-status"><span
-																		class="status-ing">扫街中</span></td>
+																		class="status-ing">${salesman.salesmanStatus.name}</span></td>
 																	<td class="project-title"><span class="l-h">大桥镇：<strong
 																			class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
 																			class="shop-num">10家</strong></span></td>
@@ -145,201 +146,29 @@
 																			class="folder"></span> 查看 </a>
 																		<div class="btn-group"></div></td>
 																</tr>
-																<tr>
-																	<td class="project-people"><a href="projects.html"><img
-																			alt="image" class="img-circle"
-																			src="../static/img/team-member/a.jpg"></a></td>
-																	<td class="project-title"><a
-																		href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
-																		<br /> <span>山东省济南市天桥区</span></td>
-																	<td class="project-status"><span
-																		class="status-finish">扫街完成</span></td>
-																	<td class="project-title"><span class="l-h">大桥镇：<strong
-																			class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
-																			class="shop-num">10家</strong></span></td>
-																	<td class="project-completion">
-																		<div>
-																			<span class="completion-ing">当前进度： 100%</span> <span
-																				class="time-finish"> 通过</span>
-																		</div>
-																		<div class="progress progress-mini">
-																			<div style="width: 100%;" class="progress-finish"></div>
-																		</div>
-																	</td>
-																	<td class="project-actions"><a
-																		href="projects.html#" class="btn btn-white btn-sm"><i
-																			class="folder"></i> 查看 </a>
-																		<div class="btn-group"></div></td>
-																</tr>
-																<tr>
-																	<td class="project-people"><a href="projects.html"><img
-																			alt="image" class="img-circle"
-																			src="../static/img/team-member/a.jpg"></a></td>
-																	<td class="project-title"><a
-																		href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
-																		<br /> <span>山东省济南市天桥区</span></td>
-																	<td class="project-status"><span
-																		class="status-ing">扫街中</span></td>
-																	<td class="project-title"><span class="l-h">大桥镇：<strong
-																			class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
-																			class="shop-num">10家</strong></span></td>
-																	<td class="project-completion">
-																		<div>
-																			<span class="completion-ing">当前进度： 48%</span> <span
-																				class="time-down"> 倒计时：2天</span>
-																		</div>
-																		<div class="progress progress-mini">
-																			<div style="width: 48%;" class="progress-bar"></div>
-																		</div>
-																	</td>
-																	<td class="project-actions"><a
-																		href="projects.html#" class="btn btn-white btn-sm"><i
-																			class="folder"></i> 查看 </a>
-																		<div class="btn-group"></div></td>
-																</tr>
-																<tr>
-																	<td class="project-people"><a href="projects.html"><img
-																			alt="image" class="img-circle"
-																			src="../static/img/team-member/a.jpg"></a></td>
-																	<td class="project-title"><a
-																		href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
-																		<br /> <span>山东省济南市天桥区</span></td>
-																	<td class="project-status"><span
-																		class="status-finish">扫街完成</span></td>
-																	<td class="project-title"><span class="l-h">大桥镇：<strong
-																			class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
-																			class="shop-num">10家</strong></span></td>
-																	<td class="project-completion">
-																		<div>
-																			<span class="completion-ing">当前进度： 100%</span> <span
-																				class="time-finish"> 通过</span>
-																		</div>
-																		<div class="progress progress-mini">
-																			<div style="width: 100%;" class="progress-finish"></div>
-																		</div>
-																	</td>
-																	<td class="project-actions"><a
-																		href="projects.html#" class="btn btn-white btn-sm"><i
-																			class="folder"></i> 查看 </a>
-																		<div class="btn-group"></div></td>
-																</tr>
-																<tr>
-																	<td class="project-people"><a href="projects.html"><img
-																			alt="image" class="img-circle"
-																			src="../static/img/team-member/a.jpg"></a></td>
-																	<td class="project-title"><a
-																		href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
-																		<br /> <span>山东省济南市天桥区</span></td>
-																	<td class="project-status"><span
-																		class="status-ing">扫街中</span></td>
-																	<td class="project-title"><span class="l-h">大桥镇：<strong
-																			class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
-																			class="shop-num">10家</strong></span></td>
-																	<td class="project-completion">
-																		<div>
-																			<span class="completion-ing">当前进度： 48%</span> <span
-																				class="time-down"> 倒计时：2天</span>
-																		</div>
-																		<div class="progress progress-mini">
-																			<div style="width: 48%;" class="progress-bar"></div>
-																		</div>
-																	</td>
-																	<td class="project-actions"><a
-																		href="projects.html#" class="btn btn-white btn-sm"><i
-																			class="folder"></i> 查看 </a>
-																		<div class="btn-group"></div></td>
-																</tr>
-																<tr>
-																	<td class="project-people"><a href="projects.html"><img
-																			alt="image" class="img-circle"
-																			src="../static/img/team-member/a.jpg"></a></td>
-																	<td class="project-title"><a
-																		href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
-																		<br /> <span>山东省济南市天桥区</span></td>
-																	<td class="project-status"><span
-																		class="status-finish">扫街完成</span></td>
-																	<td class="project-title"><span class="l-h">大桥镇：<strong
-																			class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
-																			class="shop-num">10家</strong></span></td>
-																	<td class="project-completion">
-																		<div>
-																			<span class="completion-ing">当前进度： 100%</span> <span
-																				class="time-finish"> 通过</span>
-																		</div>
-																		<div class="progress progress-mini">
-																			<div style="width: 100%;" class="progress-finish"></div>
-																		</div>
-																	</td>
-																	<td class="project-actions"><a
-																		href="projects.html#" class="btn btn-white btn-sm"><i
-																			class="folder"></i> 查看 </a>
-																		<div class="btn-group"></div></td>
-																</tr>
-																<tr>
-																	<td class="project-people"><a href="projects.html"><img
-																			alt="image" class="img-circle"
-																			src="../static/img/team-member/a.jpg"></a></td>
-																	<td class="project-title"><a
-																		href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
-																		<br /> <span>山东省济南市天桥区</span></td>
-																	<td class="project-status"><span
-																		class="status-ing">扫街中</span></td>
-																	<td class="project-title"><span class="l-h">大桥镇：<strong
-																			class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
-																			class="shop-num">10家</strong></span></td>
-																	<td class="project-completion">
-																		<div>
-																			<span class="completion-ing">当前进度： 48%</span> <span
-																				class="time-down"> 倒计时：2天</span>
-																		</div>
-																		<div class="progress progress-mini">
-																			<div style="width: 48%;" class="progress-bar"></div>
-																		</div>
-																	</td>
-																	<td class="project-actions"><a
-																		href="projects.html#" class="btn btn-white btn-sm"><i
-																			class="folder"></i> 查看 </a>
-																		<div class="btn-group"></div></td>
-																</tr>
-																<tr>
-																	<td class="project-people"><a href="projects.html"><img
-																			alt="image" class="img-circle"
-																			src="../static/img/team-member/a.jpg"></a></td>
-																	<td class="project-title"><a
-																		href="project_detail.html"><strong>张哲铭</strong>(区域经理)</a>
-																		<br /> <span>山东省济南市天桥区</span></td>
-																	<td class="project-status"><span
-																		class="status-finish">扫街完成</span></td>
-																	<td class="project-title"><span class="l-h">大桥镇：<strong
-																			class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
-																			class="shop-num">10家</strong></span></td>
-																	<td class="project-completion">
-																		<div>
-																			<span class="completion-ing">当前进度： 100%</span> <span
-																				class="time-finish"> 通过</span>
-																		</div>
-																		<div class="progress progress-mini">
-																			<div style="width: 100%;" class="progress-finish"></div>
-																		</div>
-																	</td>
-																	<td class="project-actions"><a
-																		href="projects.html#" class="btn btn-white btn-sm"><i
-																			class="folder"></i> 查看 </a>
-																		<div class="btn-group"></div></td>
-																</tr>
+															 </c:forEach>
 															</tbody>
 														</table>
+														<c:if test="${not empty list.content}">
 														<div style="text-align: center;">
 															<ul class="pagination">
-																<li><a href="#">&laquo;</a></li>
-																<li><a href="#">1</a></li>
-																<li><a href="#">2</a></li>
-																<li><a href="#">3</a></li>
-																<li><a href="#">4</a></li>
-																<li><a href="#">5</a></li>
-																<li><a href="#">&raquo;</a></li>
+															  <li><a href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+															    <c:forEach var="s" begin="1" end="${list.totalPages}" step="1">
+																 <li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																</c:forEach>
+																<li><a href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li> 
 															</ul>
 														</div>
+														</c:if>
+														<c:if test="${empty list.content}">
+														<div style="text-align: center;">
+															<ul class="pagination">
+															  <tr>
+															      <td colspan="100">没有相关数据</td>
+															  </tr>
+															</ul>
+														</div>
+														</c:if>
 													</div>
 												</div>
 											</div>
@@ -348,36 +177,7 @@
 										</div>
 										<!--/box-list-->
 									</div>
-									<!--考核中-->
-									<div class="tab-pane fade" id="box_tab2">
-										<p>Content #2</p>
-										<p>There were flying cantaloupes, rainbows and songs of
-											happiness near by, I mean I was a little frightened by the
-											flying fruit but I'll take this any day over prison inmates.
-											I skipped closer and closer to the festivities and when I
-											arrived I seen all my friends I had went to high school with
-											there were holding hands and singing Kumbayah around the camp
-											ice.. Yes It was a giant block of ice situated on three wood
-											logs.</p>
-									</div>
-									<!--开发中-->
-									<div class="tab-pane fade" id="box_tab3">
-										<div class="alert alert-info">
-											<strong>Hello!</strong> I'm a cool tabbed box.
-										</div>
-										<p>Content #3</p>
-										<p>The onion ring senses that the caper of your caper is
-											swiped the fox.</p>
-									</div>
-									<!--已转正-->
-									<div class="tab-pane fade" id="box_tab4">
-										<div class="alert alert-info">
-											<strong>Hello!</strong> I'm a cool tabbed box.
-										</div>
-										<p>Content #3</p>
-										<p>The onion ring senses that the caper of your caper is
-											swiped the fox.</p>
-									</div>
+									
 								</div>
 								<!--/列表内容-->
 							</div>
@@ -406,6 +206,7 @@
 	</div>
 	<script src="../satic/js/jquery.min.js"></script>
 	<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script> 
 	<!--<script>
        $(document).ready(function(){$("#loading-example-btn").click(function(){btn=$(this);simpleLoad(btn,true);simpleLoad(btn,false)})});function simpleLoad(btn,state){if(state){btn.children().addClass("fa-spin");btn.contents().last().replaceWith(" Loading")}else{setTimeout(function(){btn.children().removeClass("fa-spin");btn.contents().last().replaceWith(" Refresh")},2000)}};
     </script>-->

@@ -20,8 +20,8 @@ public class managerServiceImpl implements managerService {
 	}
 	@Override
 	public List<manager> findByReginId(String regionId) {
-		managerRepository.findByRegionId(regionId);
-		return null;
+		
+		return managerRepository.findByRegionId(regionId);
 	}
 
 }

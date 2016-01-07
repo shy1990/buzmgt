@@ -9,6 +9,6 @@ import com.wangge.buzmgt.sys.entity.User;
 
 public interface managerRepository extends JpaRepository<manager, String> {
 
-	List<User> findByRegionId(String regionId);
+	List<manager> findByRegionId(String regionId);
 
 }
