@@ -214,13 +214,6 @@
 				</td>
 				
 			</tr>
-			<tr class="even">
-				<td>
-					<input name="allChkbox" id="allChkbox" type="checkbox" onclick="selectAllNode(this);" />
-					全选/取消
-				</td>
-				
-			</tr>
 			<tr class="even">				
 				<td>										
 					<div id="menuTree"></div>

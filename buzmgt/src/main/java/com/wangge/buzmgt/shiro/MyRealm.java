@@ -52,6 +52,7 @@ public class MyRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 		User user = (User) principals.fromRealm(getName()).iterator().next();
+		LOG.info("USER===="+user.getRoles());
 		if (user.getUsername().equals("root")) {
 			// 超级管理员
 			authorizationInfo.addRole("admin");

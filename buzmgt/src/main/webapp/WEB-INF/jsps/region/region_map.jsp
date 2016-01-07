@@ -46,11 +46,11 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height: 100%;overflow: hidd
 </style>
 </head>
 <body >
-		<%@ include file="../top.jsp"%>
+		<%@ include file="../top_menu.jsp"%>
 			<div class="container-fluid">
 				<div   class="row">
 					<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
-						<%@include file="../left.jsp"%>
+						<%@include file="../left_menu.jsp"%>
 			        </div>
 					<div id="allmap">
 					</div>

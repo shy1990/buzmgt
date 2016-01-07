@@ -1,6 +1,7 @@
 package com.wangge.buzmgt;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -42,7 +43,7 @@ public class BuzmgtApplication extends SpringBootServletInitializer {
 				roleRepository.save(role);
 			});
 			//test module
-			Resource m = new Resource("业务管理",ResourceType.MENU,null,0);
+			Resource m = new Resource("业务管理",ResourceType.MENU,null,0,new Date());
 			m.addRole(roleRepository.findOne(1L));
 			moduleRepository.save(m);
 			

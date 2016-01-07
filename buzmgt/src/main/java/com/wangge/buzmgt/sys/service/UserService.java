@@ -31,7 +31,7 @@ public interface UserService {
 	public Collection<String> getPermissionsByUsername(String username);
 	/**
 	 * 
-	 * @Description: 获取权限列表
+	 * @Description: 获取权限列表(分页)
 	 * @param @return   
 	 * @return List<Role>  
 	 * @throws
@@ -39,6 +39,16 @@ public interface UserService {
 	 * @date 2015年12月19日
 	 */
 	public Page<Role> getAllRoles(Pageable pageRequest);
+	/**
+	 * 
+	 * @Description: 总查询
+	 * @param @return   
+	 * @return List<Role>  
+	 * @throws
+	 * @author changjun
+	 * @date 2016年1月2日
+	 */
+	List<Role> findAll();
 	/**
 	 * 
 	 * @Description: 获取该权限下的所有用户
@@ -60,7 +70,7 @@ public interface UserService {
 	 * @author changjun
 	 * @date 2015年12月22日
 	 */
-	public boolean  saveRole(Role role);
+	public void  saveRole(Role role);
 	/**
 	 * 
 	 * @Description: 删除
@@ -71,7 +81,7 @@ public interface UserService {
 	 * @author changjun
 	 * @date 2015年12月22日
 	 */
-	public boolean delRole(Long id);
+	public void delRole(Long id);
 	/**
 	 * 
 	 * @Description: 通过id查询

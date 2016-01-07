@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.sys.web;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,26 +9,35 @@ import javax.servlet.http.HttpServletRequest;
 //import net.sf.json.JSONArray;
 
 
+
+
+
+
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
 import com.wangge.buzmgt.sys.base.BaseController;
 import com.wangge.buzmgt.sys.entity.Resource;
-import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.service.ResourceService;
 import com.wangge.buzmgt.sys.service.ResourceService.Menu;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.util.PageData;
 import com.wangge.buzmgt.sys.util.PageNavUtil;
+import com.wangge.buzmgt.sys.util.SortUtil;
 
 @Controller
 @RequestMapping(value = "/res")
 public class ResourceController extends BaseController {
+	
+	private static final Logger LOG = Logger.getLogger(ResourceController.class);
 	@Autowired
 	private ResourceService res;
 	@Autowired
@@ -45,19 +55,20 @@ public class ResourceController extends BaseController {
 	public String menuList(Integer page, Model model,HttpServletRequest request){
 		page = page== null ? 1 : page<1 ? 1 : page;
 		int pageSize = 10;
-//		PageRequest pageRequest = SortUtil.buildPageRequest(page, pageSize,"res");
-//		Page<Role> list = us.getAllRoles(pageRequest);
-		Set<Menu> mlist = res.getAllMenus(); 
+		PageRequest pageRequest = SortUtil.buildPageRequest(page, pageSize,"res");
+		Page<Resource> mlist = res.getMenusByPage(pageRequest) ;
+		Set<Menu> menuList =     res.getAllMenus();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		model.addAttribute("menus", mlist);
+		//下拉列表
+		model.addAttribute("menuList", menuList);
+		//分页用
+		model.addAttribute("menus", mlist.getContent());
 		model.addAttribute("page", pd);
-		model.addAttribute("totalCount", mlist.size());
-		model.addAttribute("totalPage", (int) Math.ceil(mlist.size()/Double.parseDouble(String.valueOf(pageSize))));
+		model.addAttribute("totalCount", menuList.size());
+		model.addAttribute("totalPage", (int) Math.ceil(menuList.size()/Double.parseDouble(String.valueOf(pageSize))));
 		model.addAttribute("currentPage", page);
-		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), 10, mlist.size(), 15));
-		
-		request.setAttribute("menuList", com.alibaba.fastjson.JSONArray.toJSONString(mlist, true));
+		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), pageSize,menuList.size(), 15));
 		return "roles/menusList";
 	}
 	
@@ -70,16 +81,14 @@ public class ResourceController extends BaseController {
 		String name = req.getParameter("name");
 		String url = req.getParameter("url");
 		String pid = req.getParameter("parentid");
-
-		System.out.println(name+":"+url+":"+pid);
-		Resource r = new Resource(name, Resource.ResourceType.MENU, url, 1);
-		Role roleEntity = us.getRoleById(32768L);
-		Set<Role> roles = new HashSet<Role>();
-		roles.add(roleEntity);
-		r.setRoles(roles);
+		Resource r = new Resource(name, Resource.ResourceType.MENU, url, 1,new Date());
 		r.setParent(res.getResourceById(Long.parseLong(pid)));
-		if(res.saveRes(r)){
+		try {
+			res.saveRes(r);
 			return "suc";
+		} catch (Exception e) {
+			LOG.error(e);
+			e.printStackTrace();
 		}
 		return "";
 	}
@@ -96,9 +105,13 @@ public class ResourceController extends BaseController {
 	@RequestMapping(value="/removeMenu" ,method = RequestMethod.POST)
 	@ResponseBody
 	public String removeMenu(Long id){
-		if(res.delResource(id)){
+		try {
+			res.delResource(id);
 			return "suc";
+		} catch (Exception e) {
+			LOG.error(e);
+			e.printStackTrace();
 		}
-		return "";
+		return "err";
 	}
 }

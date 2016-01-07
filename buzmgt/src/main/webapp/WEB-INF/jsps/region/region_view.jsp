@@ -36,15 +36,15 @@
 </style>
 </head>
 <body >
-		<%@ include file="../top.jsp"%>
+		<%@ include file="../top_menu.jsp"%>
 			<div class="container-fluid">
 				<div   class="row">
 					<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
-						<%@include file="../left.jsp"%>
+						<%@include file="../left_menu.jsp"%>
 			        </div>
 			        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
 				        <div id="j_page_main" class="content main">
-							<h4 class="page-header-region">区域划分        <button type="button" class="btn btn-warning">绘制地图</button></h4>  
+							<h4 class="page-header-region">区域划分 </h4>  
 							<div class="row">
 										<div class="col-md-12">
 											<div class="box border orange">

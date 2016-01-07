@@ -63,26 +63,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean saveRole(Role role) {
-		try {
-			roleRepository.save(role);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		return false;
+	public void saveRole(Role role) {
+		roleRepository.save(role);
 	}
 
 	@Override
-	public boolean delRole(Long id) {
-		try {
-			roleRepository.delete(id);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-		}
-		return false;
+	public void delRole(Long id) {
+		roleRepository.delete(id);
 	}
 
 	@Override
@@ -91,11 +78,14 @@ public class UserServiceImpl implements UserService {
 		return roleRepository.findOne(id);
 	}
 
-	@Override
 	@Transactional
 	public User getById(String id) {
 		
 		return userRepository.findOne(Long.parseLong(id));
+	}
+	public List<Role> findAll() {
+		// TODO Auto-generated method stub
+		return roleRepository.findAll();
 	}
 
 }
