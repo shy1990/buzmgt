@@ -22,7 +22,19 @@
 	background: url(../img/region/quyuhuafen.png) no-repeat 25px 22px #fff;
 }
 
-
+.icon{
+	display: inline-block;
+	position: relative;
+	z-index: 100;
+	width: 20px;
+	height: 20px;
+	margin-right: 5px;
+}
+.region-setting-icon{
+	display: inline-block;
+	top: 5px;
+	background: url(../img/icon/purview-setting/ddqx.png) no-repeat;
+}
 
 .box.border.blue {
     border: 1px solid #576ea7;

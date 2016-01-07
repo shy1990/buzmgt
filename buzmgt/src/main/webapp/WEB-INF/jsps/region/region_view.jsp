@@ -17,14 +17,14 @@
 
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/index.css" />
+<link rel="stylesheet" type="text/css" href="../static/css/common.css" />
 
 <!-- 树型结构 -->
 <link rel="stylesheet" type="text/css" href="static/zTree/css/icon.css" />
 <link rel="stylesheet" type="text/css" href="static/zTree/css/main.css" />
 <link rel="stylesheet" type="text/css" href="static/zTree/css/zTreeStyle/zTreeStyle.css" />
 <link rel="stylesheet" type="text/css" href="static/css/region/purview-region-setting.css" />
-
+<link rel="stylesheet" type="text/css" href="static/purview-setting/purview-setting.css" />
 <link rel="stylesheet" type="text/css" href="static/bootstrap/css/bootstrap-dialog.css" />
 <link rel="stylesheet" type="text/css" href="static/bootstrap/css/jquery-confirm.min.css" />
 
@@ -37,7 +37,7 @@
 </head>
 <body >
 				        <div id="j_page_main" class="content main">
-							<h4 class="page-header-region">区域划分 </h4>  
+							<h4 class="page-header-region"><i class="icon region-setting-icon"></i>区域划分 </h4>  
 							<div class="row">
 										<div class="col-md-12">
 											<div class="box border orange">
@@ -56,14 +56,11 @@
 										</div>
 							</div>
 						</div>
-						<div id="allmap">
-						
-						</div>
 	<!-- Bootstrap -->
 	<script src="static/js/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="static/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
    <script src="static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
-<!--    <script type="text/javascript" src="static/bootstrap/js/bootstrap-dialog.js"></script> -->
+   <script type="text/javascript" src="static/bootstrap/js/bootstrap-dialog.js"></script>
     <script type="text/javascript" src="static/bootstrap/js/jquery-confirm.min.js"></script>
    <script src="static/js/region/regiontree.js" type="text/javascript" charset="utf-8"></script>
    

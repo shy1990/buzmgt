@@ -19,22 +19,19 @@
 
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/index.css" />
+<link rel="stylesheet" type="text/css" href="../static/css/common.css" />
 <script src="static/js/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="static/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
 <!--加载鼠标绘制工具-->
-<!-- 	<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>  -->
-	<script type="text/javascript" src="static/js/region/drawingManager_min.js"></script> 
-<!-- 	<link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />  -->
-	<link rel="stylesheet" type="text/css" href="static/css/region/drawingManager_min.css" />	
+<script type="text/javascript" src="static/js/region/drawingManager_min.js"></script> 
+<link rel="stylesheet" type="text/css" href="static/css/region/drawingManager_min.css" />	
 <!--加载检索信息窗口-->
 <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
 <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
-<link rel="stylesheet" type="text/css" href="static/css/region/purview-region-setting.css" />
 
-
+<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="static/bootstrap/js/bootstrap-dialog.js"></script>
 <link rel="stylesheet" type="text/css" href="static/bootstrap/css/bootstrap-dialog.css" />
 <style>
@@ -42,16 +39,10 @@
 	padding: 20px;
 	color: red;
 }
-body, html,#allmap,.container-fluid,.row{width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidden;margin:0;font-family:"微软雅黑";}
 </style>
 </head>
 <body >
-		<%@ include file="../top_menu.jsp"%>
-			<div class="container-fluid">
-				<div   class="row">
-					<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
-						<%@include file="../left_menu.jsp"%>
-			        </div>
 					<div id="allmap">
 					</div>
 
@@ -92,9 +83,6 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height: 100%;overflow: hidd
 				</div>
 			</div>
 				<!-- 创建区域  modalend -->
-
-		</div>
-				</div>
 </body>
 <script type="text/javascript">
 		/* 定位到区,以选择的区为中心点 */
@@ -239,7 +227,6 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height: 100%;overflow: hidd
 	 		    dataType:'json',  */   
 	 		    success:function(data) {
 	 		    	$('#exampleModal').modal('hide');
-	 		    	alert(data)
 	 		    	BootstrapDialog.alert('保存区域成功');
 	 		        location.reload();
 	 		        return;
