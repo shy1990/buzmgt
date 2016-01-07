@@ -22,7 +22,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand logo " href="#"><img
+				<a class="navbar-brand logo " href="/"><img
 					src="../static/img/logo.png" /></a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse ">

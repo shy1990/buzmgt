@@ -30,6 +30,11 @@ public class TestController {
     model.addAttribute("test", test);
     return "test";
   }
+	@RequestMapping("/index")
+	public String index(String test,Model model){
+	  model.addAttribute("test", test);
+	  return "index";
+	}
 
 	private User getCurrentUser() {
 		return (User)SecurityUtils.getSubject().getPrincipal();

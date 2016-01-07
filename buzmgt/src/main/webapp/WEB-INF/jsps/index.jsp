@@ -24,16 +24,8 @@
 </head>
 
 <body onload="initial();">
-	<%@ include file="top_menu.jsp"%>
-	<div class="container-fluid">
-		<div id="" class="row">
-			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
-				<%@include file="left_menu.jsp"%>
-			</div>
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
 					<!-- CALENDAR -->
-					<div class="row">
-						<div class="col-md-12 index-bg">
+						<div class="main index-bg">
 							<img alt="背景图片"  src="static/img/index-bg.jpg">
 							<div class="index-calender" style="margin-left:50px;">
 								<div id="date">
@@ -329,12 +321,9 @@
 										</tr>
 									</table>
 								</div>
-						</div>
+								</div>
 					</div>
 					<!-- /CALENDAR -->
-			</div>
-		</div>
-	</div>
 
 	<!-- Bootstrap core JavaScript
     ================================================== -->
