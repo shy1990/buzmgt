@@ -211,7 +211,7 @@
     BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_SUCCESS] = 'Success';
     BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_WARNING] = 'Warning';
     BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DANGER] = 'Danger';
-    BootstrapDialog.DEFAULT_TEXTS['OK'] = 'OK';
+    BootstrapDialog.DEFAULT_TEXTS['OK'] = '确定';
     BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = 'Cancel';
     BootstrapDialog.DEFAULT_TEXTS['CONFIRM'] = 'Confirmation';
     BootstrapDialog.SIZE_NORMAL = 'size-normal';
@@ -1224,6 +1224,7 @@
             message: options.message,
             closable: options.closable,
             draggable: options.draggable,
+            size:BootstrapDialog.SIZE_SMALL,
             data: {
                 callback: options.callback
             },
@@ -1274,7 +1275,7 @@
         }
 
         return new BootstrapDialog({
-            type: options.type,
+            type: BootstrapDialog.TYPE_DANGER,
             title: options.title,
             message: options.message,
             closable: options.closable,

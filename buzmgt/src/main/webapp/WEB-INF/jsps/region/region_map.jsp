@@ -105,9 +105,9 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height: 100%;overflow: hidd
 		}
 		%>
 	 var map = new BMap.Map("allmap");
-	if("山东省"=="<%=areaname%>"){
-		map.centerAndZoom(new BMap.Point(117.010765,36.704194), 14);
-	}else{
+<%-- 	if("山东省"=="<%=areaname%>"){ --%>
+// 		map.centerAndZoom(new BMap.Point(117.010765,36.704194), 14);
+// 	}else{
 		var name ="<%=areaname%>";
 		
 		var bdary = new BMap.Boundary();
@@ -170,7 +170,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height: 100%;overflow: hidd
 		 			}
 		 		}
 		 		}%>
-	}
+// 	}
 	
 	
 	
@@ -239,15 +239,19 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height: 100%;overflow: hidd
 	 		    dataType:'json',  */   
 	 		    success:function(data) {
 	 		    	$('#exampleModal').modal('hide');
-	 		        if(data==='true' ){   
-	 		        	alert("保存区域成功");
-	 		        	location.reload();
-	 		           return;
-	 		        }    
+	 		    	alert(data)
+	 		    	BootstrapDialog.alert('保存区域成功');
+	 		        location.reload();
+	 		        return;
+// 	 		        if(data==='true'){
+// 	 		        	BootstrapDialog.alert('保存区域成功');
+// 	 		        	location.reload();
+// 	 		           return;
+// 	 		        }    
 	 		     },    
 	 		     error : function() {    
 	 		          // view("异常！");
-	 		          alert("异常！");    
+	 		         BootstrapDialog.alert('请求异常!');
 	 		     }    
 	 		});   
 	   }

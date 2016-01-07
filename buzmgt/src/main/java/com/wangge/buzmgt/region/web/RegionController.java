@@ -207,8 +207,6 @@ public class RegionController {
 	 */
 	@RequestMapping("/initRegionMap")
 	public String initRegionMap(String regionName,String parentid,Model model){
-		model.addAttribute("regionName", regionName);
-		model.addAttribute("parentid", parentid);
 		
 		Region region = regionService.findListRegionbyid(parentid);
 		List<Region> listRegion =new ArrayList<Region>();
@@ -216,6 +214,8 @@ public class RegionController {
 			listRegion.add(reg);
 		}
  		model.addAttribute("jsonData", listRegion);
+ 		model.addAttribute("regionName", regionName);
+    model.addAttribute("parentid", parentid);
 		return "region/region_map";
 	}
 	

@@ -90,7 +90,7 @@ function beforeExpand(treeId, treeNode) {
 		ajaxGetNodes(treeNode, "refresh");
 		return true;
 	} else {
-		alert("Loading...");
+		 BootstrapDialog.alert("Loading...");
 		return false;
 	}
 }
@@ -119,7 +119,8 @@ function onAsyncSuccess(event, treeId, treeNode, msg) {
 function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus,
 		errorThrown) {
 	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-	alert("Error ! 异步获取数据异常");
+	//alert("Error ! 异步获取数据异常");
+	BootstrapDialog.alert("Error ! 异步获取数据异常");
 	treeNode.icon = "";
 	zTree.updateNode(treeNode);
 }
@@ -168,9 +169,9 @@ function beforeEditName(treeId, treeNode) {
  * @return
  */
 function beforeRemove(treeId, treeNode) {
-	
+
 	if (confirm("确认删除 节点 -- " + treeNode.name + " 吗？")) {
-		var flag=true;
+		var flag = true;
 		$.ajax({
 			async : false, // 是否异步
 			cache : false, // 是否使用缓存
@@ -181,12 +182,12 @@ function beforeRemove(treeId, treeNode) {
 			dataType : "text", // 数据传输格式
 			url : "region/deleteRegionbyId", // 请求链接
 			success : function(data) {
-				if(data==='true'){
-					alert("删除成功");
-					flag=true;
-				}else{
-					alert("有子节点不能删除");
-					flag=false;
+				if (data === 'true') {
+					BootstrapDialog.alert("删除成功");
+					flag = true;
+				} else {
+					BootstrapDialog.alert("有子节点不能删除");
+					flag = false;
 				}
 			}
 		});
@@ -194,7 +195,6 @@ function beforeRemove(treeId, treeNode) {
 	} else {
 		return false;
 	}
-	
 
 }
 
@@ -215,7 +215,7 @@ function zTreeOnRemove(event, treeId, treeNode) {
 function beforeRename(treeId, treeNode, newName, isCancel) {
 	className = (className === "dark" ? "" : "dark");
 	if (newName.length == 0) {
-		alert("节点名称不能为空.");
+		BootstrapDialog.alert("节点名称不能为空");
 		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 		setTimeout(function() {
 			zTree.editName(treeNode)
@@ -286,7 +286,7 @@ function addHoverDom(treeId, treeNode) {
 	if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
 	var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
 	+ "' title='添加区域' onfocus='this.blur();'></span>";
-	sObj.after(addStr);
+	//sObj.after(addStr);
 	var btn = $("#addBtn_"+treeNode.tId);
 	if (btn) btn.bind("click", function(){
 		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
@@ -301,12 +301,12 @@ function addHoverDom(treeId, treeNode) {
 			dataType : "text", // 数据传输格式
 			url : "region/addRegion", // 请求链接
 			error : function() {
-				alert('访问服务器出错');
+				BootstrapDialog.alert("访问服务器出错");
 			},	
 			success : function(data) {
 				ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
 				if(ztreeNodes.regiontype === 'false'){
-					alert("所添加节点超出级别");
+					BootstrapDialog.alert("所添加节点超出级别");
 					return false;
 				}
 				var zTree = $.fn.zTree.getZTreeObj(treeId);
@@ -328,11 +328,10 @@ function addHoverDom(treeId, treeNode) {
 	sObj.after(mapStr);
 	var btn = $("#mapBtn_"+treeNode.tId);
 	if (btn) btn.bind("click", function(){
+		
 		window.location.href='/region/initRegionMap?regionName='+treeNode.name+"&parentid="+treeNode.id;
 				
 	});
-	
-	
 }
 
 /**
@@ -485,7 +484,7 @@ function onloadZTree() {
 		dataType : "text", // 数据传输格式
 		url : "region/findOneRegion", // 请求链接
 		error : function() {
-			alert('访问服务器出错');
+			BootstrapDialog.alert("访问服务器出错");
 		},
 		success : function(data) {
 			ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
@@ -495,6 +494,24 @@ function onloadZTree() {
 		}
 	});
 }
+
+//function confirm(){
+//	var flag=true;
+//	if(flag===true){
+//		$.confirm({
+//			title: 'Confirm!',
+//			content: 'Simple confirm!',
+//			confirm: function(){
+//				flag=true;
+//				return flag;
+//			},
+//			cancel: function(){
+//				flag=false;
+//				return flag;
+//			}
+//		});
+//	}
+//}
 
 $(document).ready(function() {
 	onloadZTree();

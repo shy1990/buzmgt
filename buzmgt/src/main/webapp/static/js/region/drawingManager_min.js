@@ -511,7 +511,6 @@ BMAP_DRAWING_RETURN = "return";(function() {
 	};
 	
 	d.prototype._bindReturn= function() {
-		alert(1111);
 		javascript:history.back(-1);
 	};
 	
