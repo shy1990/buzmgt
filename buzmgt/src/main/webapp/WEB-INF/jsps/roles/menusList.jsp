@@ -98,7 +98,7 @@
 														</label>
 														<div class="col-sm-9 ">
 															<select class="form-control" name="parentid" id="parentid">
-																<c:forEach items="${menus}" var="u">
+																<c:forEach items="${menuList}" var="u">
 																	<option value="${u.id }"
 																		<c:if test="${user.user_id==u.id}"><c:out value="selected"/></c:if>>
 																		${u.name}</option>

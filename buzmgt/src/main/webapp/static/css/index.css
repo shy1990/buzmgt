@@ -376,6 +376,13 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 	position: absolute;
 	top:130px;
 	right: 30px;
+	opacity: 0.6;
+	filter: alpha(opacity=57);
+}
+@media (max-width: 1200px) {
+	.index-calender{
+		display: none;
+	}
 }
 .console:hover,.menu li.active .console{
 	background:  url(../img/icon/left-mean/kzt2.png) no-repeat 20px 10px ;

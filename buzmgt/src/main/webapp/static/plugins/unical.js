@@ -581,7 +581,6 @@ function mEvn(e) {
 		// changed by hmisty 2005/07/23
       		dStyle.left = (x + offsetx-(width/2)) + "px";
       		dStyle.top = (y + offsety) + "px";
-      		console.info(dStyle.left+":"+dStyle.top);
 	}
 	else {
      		dStyle.left = (e.pageX + offsetx-(width/2)) + "px";

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -16,6 +17,13 @@
 		<script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
+		<%@ include file="../top_menu.jsp"%>
+		<div class="container-fluid">
+		<div id="" class="row">
+		<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
+			<%@include file="../left_menu.jsp"%>
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 padd-0">
 		<div id="main" class="content main">
 			<div class="row">
 			    <div class="col-md-12">
@@ -75,6 +83,7 @@
 					<!-- /alert html -->
 				</div>
 			</div>
+			</div>
 		</div>
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
@@ -90,16 +99,15 @@
 		<script type="text/javascript">
 			/* 取消匹配 */
 			function removeUser(userId){
-				var flag = false;
-					if(confirm("如若取消此配置,该人员将失去角色对应的权限!")){
-						flag = true;
-					}
-				if(flag){
-					top.jzts();
-					var url = "role/removeUser?id="+userId;
-					$.get(url,function(data){
-						top.jzts();
-						document.location.reload();
+				if(confirm("确定要移除该人员？")){
+					var url = "delRole?id=" + id;
+					$.post(url, function(data) {
+						if (data === 'suc') {
+							alert("删除成功!");
+							location.reload();
+						}else{
+							alert("删除失败!,请先移除该角色下的所有人员");
+						}
 					});
 				}
 			}

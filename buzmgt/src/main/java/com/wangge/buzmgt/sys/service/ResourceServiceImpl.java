@@ -50,7 +50,16 @@ public class ResourceServiceImpl implements ResourceService {
 		return resource2Menu(resources).stream().collect(Collectors.toList());
 	}
 
-	
+	/**
+	 * 
+	 * @Description: TODO
+	 * @param @param resources
+	 * @param @return   
+	 * @return Set<Menu>  
+	 * @throws
+	 * @author changjun
+	 * @date 2016年1月6日
+	 */
 	private Set<Menu> resource2Menu(Collection<Resource> resources) {
 		Set<Menu> menus=new HashSet<Menu>();
 		resources.forEach(r->{
@@ -61,7 +70,7 @@ public class ResourceServiceImpl implements ResourceService {
 			if(r.getParent()!=null){
 				menu.setParentId(r.getParent().getId());
 			}
-				menus.add(menu);
+		    menus.add(menu);
 		});
 		return menus;
 	}
@@ -101,7 +110,16 @@ public class ResourceServiceImpl implements ResourceService {
 	
 	//   菜单树
 	
-	
+	/**
+	 * 
+	 * @Description: TODO
+	 * @param @param allMenus
+	 * @param @return   
+	 * @return List<Menu>  
+	 * @throws
+	 * @author changjun
+	 * @date 2016年1月6日
+	 */
 	public List<Menu> loadMenuInfos(Set<Menu> allMenus){
 		
 		List<Menu> menus = new ArrayList<Menu>();
@@ -120,7 +138,16 @@ public class ResourceServiceImpl implements ResourceService {
 		return menus;		
 		
 	}
-	
+	/**
+	 * 
+	 * @Description: TODO
+	 * @param @param currentMenu
+	 * @param @param allMenus   
+	 * @return void  
+	 * @throws
+	 * @author changjun
+	 * @date 2016年1月6日
+	 */
 	private void loadChildMenus(Menu currentMenu,Set<Menu> allMenus){
 		
 		for (Menu menu : allMenus) {
@@ -144,7 +171,9 @@ public class ResourceServiceImpl implements ResourceService {
 				
 	}
 	
-	
+	/**
+	 * 
+	 */
 	public List<TreeData> getTreeData(){
 		
 		List<TreeData> treeDatas = new ArrayList<TreeData>();
@@ -170,7 +199,16 @@ public class ResourceServiceImpl implements ResourceService {
 		
 		
 	}
-	
+	/**
+	 * 
+	 * @Description: TODO
+	 * @param @param treeData
+	 * @param @param menus   
+	 * @return void  
+	 * @throws
+	 * @author changjun
+	 * @date 2016年1月6日
+	 */
 	private void loadTreeChild(TreeData treeData,Set<Menu> menus){
 		
 		

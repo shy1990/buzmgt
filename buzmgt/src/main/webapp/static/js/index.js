@@ -45,3 +45,5 @@ try{
 window.clearInterval(timer1);
 
 }
+
+

@@ -18,5 +18,4 @@ public interface RoleService {
 	public List<RoleVo> findAll();
 
 	public Role getRoleById(String roleId);
-
 }
