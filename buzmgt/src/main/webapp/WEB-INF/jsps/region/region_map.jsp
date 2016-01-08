@@ -30,10 +30,9 @@
 <!--加载检索信息窗口-->
 <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
 <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
-
-<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="static/bootstrap/js/bootstrap-dialog.js"></script>
+<link rel="stylesheet" type="text/css" href="static/css/region/purview-region-setting.css" />
 <link rel="stylesheet" type="text/css" href="static/bootstrap/css/bootstrap-dialog.css" />
+<script type="text/javascript" src="static/bootstrap/js/bootstrap-dialog.js"></script>
 <style>
 .top-titile{
 	padding: 20px;
@@ -84,7 +83,10 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 			</div>
 				<!-- 创建区域  modalend -->
 </body>
+<script src="static/js/jquery/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
+
+
 		/* 定位到区,以选择的区为中心点 */
 	<%String areaname = request.getAttribute("regionName").toString();
 		String parentid = null;
@@ -227,14 +229,11 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	 		    dataType:'json',  */   
 	 		    success:function(data) {
 	 		    	$('#exampleModal').modal('hide');
-	 		    	BootstrapDialog.alert('保存区域成功');
-	 		        location.reload();
-	 		        return;
-// 	 		        if(data==='true'){
-// 	 		        	BootstrapDialog.alert('保存区域成功');
-// 	 		        	location.reload();
-// 	 		           return;
-// 	 		        }    
+	 		        if(data===true){
+	 		        	BootstrapDialog.alert('保存区域成功');
+	 		        	location.reload();
+	 		           return;
+	 		        }    
 	 		     },    
 	 		     error : function() {    
 	 		          // view("异常！");
@@ -252,7 +251,4 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	 }
    
 </script>
-
-			
-
 </html>

@@ -142,7 +142,7 @@ function ajaxGetNodes(treeNode, reloadType) {
  * @return
  */
 function zTreeOnClick(event, treeId, treeNode) {
-	 document.getElementById("iframepage").src = "area/right?id=" +	 treeNode.id;
+//	 document.getElementById("iframepage").src = "area/right?id=" +	 treeNode.id;
 }
 
 

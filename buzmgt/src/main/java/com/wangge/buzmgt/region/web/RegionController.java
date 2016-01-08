@@ -213,6 +213,9 @@ public class RegionController {
 		for(Region reg:region.getChildren()){
 			listRegion.add(reg);
 		}
+		if(null!=region.getCoordinates()){
+		  model.addAttribute("coordinates", region.getCoordinates());
+		}
  		model.addAttribute("jsonData", listRegion);
  		model.addAttribute("regionName", regionName);
     model.addAttribute("parentid", parentid);
