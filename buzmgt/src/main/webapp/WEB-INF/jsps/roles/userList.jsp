@@ -77,6 +77,8 @@
 				</div>
 			</div>
 			</div>
+			<%@include file="/static/js/alert/alert.html" %>
+	
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -95,10 +97,10 @@
 					var url = "delRole?id=" + id;
 					$.post(url, function(data) {
 						if (data === 'suc') {
-							alert("删除成功!");
+							myAlert("删除成功!");
 							location.reload();
 						}else{
-							alert("删除失败!,请先移除该角色下的所有人员");
+							myAlert("删除失败!,请先移除该角色下的所有人员");
 						}
 					});
 				}

@@ -653,5 +653,14 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 	padding-right: 0; 
 }
 
+.myalert{
+	display: none;
+	width: 500px;
+	position: fixed;
+	top:100px;
+	left: 50%;
+	margin-left: -250px;
+}
+
 
 
