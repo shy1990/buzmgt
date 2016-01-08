@@ -57,7 +57,7 @@
     $('#menu').mousedown(function(e){
         if (window.event) {
             if (event.button == 2) {
-                alert('请不要点击鼠标右键！'); 
+//                 alert('请不要点击鼠标右键！'); 
                 return false;
             }
         }
