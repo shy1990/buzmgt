@@ -39,7 +39,7 @@
 	color: #5c5c5c;
 	background: #FAFAFA;
 }
-.character table tr td>a:hover{
+.character table tr td>a{
 	color: #A0B66F;
 }
 /* --/table style*/

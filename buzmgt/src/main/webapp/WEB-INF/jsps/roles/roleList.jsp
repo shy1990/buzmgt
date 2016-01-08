@@ -125,6 +125,8 @@
 		</div>
 		<!-- end:row -->
 	</div>
+	<%@include file="/static/js/alert/alert.html" %>
+	
 </body>
 <script src='../static/bootstrap/js/bootstrap.js'></script>
 <script type="text/javascript">
@@ -139,10 +141,10 @@
 				+ $("#description").val();
 		$.post(url, function(data) {
 			if (data === 'suc') {
-				alert("添加成功");
+				myAlert("添加成功");
 				location.reload();
 			} else {
-				alert("添加失败!");
+				myAlert("添加失败!");
 			}
 		});
 	}
@@ -157,10 +159,10 @@
 			var url = "delRole?id=" + id;
 			$.post(url, function(data) {
 				if (data === 'suc') {
-					alert("删除成功!");
+					myAlert("删除成功!");
 					location.reload();
 				} else {
-					alert("删除失败!,请先移除该角色下的所有人员");
+					myAlert("删除失败!,请先移除该角色下的所有人员");
 				}
 			});
 		}

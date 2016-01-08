@@ -131,7 +131,7 @@
 																		</div>
 																	</td>
 																	<td class="project-actions"><a
-																		href="projects.html#" class="btn btn-white btn-sm"><span
+																		href="projects.html#" class="btn btn-white btn-sm sr-only"><span
 																			class="folder"></span> 查看 </a>
 																		<div class="btn-group"></div></td>
 																</tr>
@@ -189,9 +189,10 @@
             </div>-->
 		</div>
 	</div>
-	<script src="../satic/js/jquery.min.js"></script>
-	<script src="../static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script> 
+	<%@include file="/static/js/alert/alert.html" %>
+	<script src="/satic/js/jquery.min.js"></script>
+	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script> 
 	<!--<script>
        $(document).ready(function(){$("#loading-example-btn").click(function(){btn=$(this);simpleLoad(btn,true);simpleLoad(btn,false)})});function simpleLoad(btn,state){if(state){btn.children().addClass("fa-spin");btn.contents().last().replaceWith(" Loading")}else{setTimeout(function(){btn.children().removeClass("fa-spin");btn.contents().last().replaceWith(" Refresh")},2000)}};
     </script>-->

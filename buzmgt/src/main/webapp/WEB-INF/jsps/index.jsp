@@ -11,11 +11,8 @@
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <title>控制台</title>
 <!-- Bootstrap -->
-<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link type="text/css" href="static/plugins/css/unical.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="static/css/index.css" />
-<link rel="stylesheet" type="text/css"
-	href="static/purview-setting/purview-setting.css" />
 <script type="text/javascript" src="static/plugins/unical.js"></script>
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>

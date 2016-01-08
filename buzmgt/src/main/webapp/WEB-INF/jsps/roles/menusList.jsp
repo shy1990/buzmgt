@@ -190,7 +190,7 @@
 		</div>
 		<!-- end:row -->
 	</div>
-
+	<%@include file="/static/js/alert/alert.html" %>
 </body>
 
 <!-- 引入 -->
@@ -214,10 +214,10 @@
 			var url = "removeMenu?id=" + id;
 			$.post(url, function(data) {
 				if (data === 'suc') {
-					alert("删除成功!");
+					myAlert("删除成功!");
 					location.reload();
 				} else {
-					alert("请先移除相关角色下该菜单的权限!");
+					myAlert("请先移除相关角色下该菜单的权限!");
 				}
 			});
 		}
@@ -227,10 +227,10 @@
 				+ $("#url").val() + "&parentid=" + $("#parentid").val();
 		$.post(url, function(data) {
 			if (data === 'suc') {
-				alert("添加成功");
+				myAlert("添加成功");
 				location.reload();
 			} else {
-				alert("添加失败!");
+				myAlert("添加失败!");
 
 			}
 		});
