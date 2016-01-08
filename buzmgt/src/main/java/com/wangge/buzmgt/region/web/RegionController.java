@@ -213,12 +213,16 @@ public class RegionController {
 		for(Region reg:region.getChildren()){
 			listRegion.add(reg);
 		}
+		String name=regionName;
+		String pcoordinates=null;
 		if(null!=region.getCoordinates()){
-		  model.addAttribute("coordinates", region.getCoordinates());
+		  name=region.getParent().getName();
+		  pcoordinates=region.getCoordinates();
 		}
  		model.addAttribute("jsonData", listRegion);
- 		model.addAttribute("regionName", regionName);
+ 		model.addAttribute("regionName", name);
     model.addAttribute("parentid", parentid);
+    model.addAttribute("pcoordinates",pcoordinates);
 		return "region/region_map";
 	}
 	
