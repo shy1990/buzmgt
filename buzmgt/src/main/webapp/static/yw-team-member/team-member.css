@@ -21,7 +21,7 @@
 }
 
 .form-control{
-	outline: auto;
+	outline: none;
 }
 
 
@@ -140,7 +140,7 @@
 }
 /*添加成员按钮*/
 .member-add-btn{
-	margin-left: 0px;
+	margin-left: 10px;
 }
 /*small 文本内容*/
 .header-text{

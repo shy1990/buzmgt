@@ -30,16 +30,17 @@
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 clear-padd">
 					<!-- CALENDAR -->
-					<div class="row">
-						<div class="col-md-12 index-bg">
 							<iframe src="/index" id="iframepage" name="iframepage" frameBorder=0 scrolling=no width="100%" onLoad="reinitIframeEND();"  ></iframe>
-						</div>
-					</div>
 					<!-- /CALENDAR -->
 			</div>
 		</div>
 	</div>
-
+	<div class="myalert">
+		<div class="alert alert-warning alert-dismissible fade in" role="alert">
+      		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+      		<strong id="msg">Holy guacamole!</strong> Best check yo self, you're not looking too good.
+    	</div>
+	</div>
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

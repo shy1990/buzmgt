@@ -11,26 +11,19 @@
 <meta name="keywords" content="bootstrap响应式后台">
 <meta name="description" content="">
 
-<link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="../static/yw-team-member/team-memberAdd.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="../static/yw-team-member/team-member.css" />
+<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/yw-team-member/team-memberAdd.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/static/yw-team-member/team-member.css" />
 </head>
 
-<body class="">
-	<%@ include file="../top_menu.jsp"%>
-	<div class="container-fluid">
-		<div id="" class="row">
-			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
-				<%@include file="../left_menu.jsp"%>
-			</div>
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
-				<h4 class="team-member-header page-header ">
-					<div class="row">
-						<div class="col-sm-4 col-md-3 ">
+<body>
+			<div class="conter main">
+				<h4 class="team-member-header page-header">
 							<i class="icon team-member-list-icon"></i>团队成员
 							<!--区域选择按钮-->
-							<div class="btn-group">
+							<!-- 隐藏区域选择按钮 -->
+							<div class="btn-group sr-only" >
 								<button type="button" class="btn btn-default ">
 									<i class="icon province-icon"></i>山东省
 								</button>
@@ -47,21 +40,17 @@
 									<li role="separator" class="divider"></li>
 									<li><a href="#">Separated link</a></li>
 								</ul>
-							</div>
-							<!--/区域选择按钮-->
 						</div>
-						<div class="col-sm-6">
-							<a href="/salesman/toAdd" class="btn btn-warning member-add-btn" type="button">
+							<!--/区域选择按钮-->
+							<a href="/salesman/toAdd" class="btn btn-warning " type="button">
 								<i class="icon icon-add"></i>添加成员
 							</a>
+						<div class="col-sm-6 sr-only">
 							<small class="header-text">共<span class="text-red">203</span>位成员
 							</small> <small class="header-text">今日新增<span class="text-red">
 									0 +</span></small>
 						</div>
-					</div>
 				</h4>
-				<div class="row">
-					<div class="col-md-12">
 						<!--box-->
 						<div class="team-member-body box border red">
 							<!--title-->
@@ -184,11 +173,7 @@
 							<!--/box-body-->
 						</div>
 						<!--/box-->
-					</div>
-				</div>
 			</div>
-		</div>
-	</div>
 
 	<div class="wrapper wrapper-content animated fadeInUp">
 		<div class="row">

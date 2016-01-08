@@ -9,11 +9,10 @@
 		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 		<title>团队成员添加</title>
 		<!-- Bootstrap -->
-		<link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="../static/css/common.css" />
-		<link rel="stylesheet" type="text/css" href="../static/css/index.css" />
-		 <link rel="stylesheet" type="text/css" href="../static/zTree/css/zTreeStyle/zTreeStyle.css" /> 
-		<link rel="stylesheet" type="text/css" href="../static/yw-team-member/team-member.css" />
+		<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+		 <link rel="stylesheet" type="text/css" href="/static/zTree/css/zTreeStyle/zTreeStyle.css" /> 
+		<link rel="stylesheet" type="text/css" href="/static/yw-team-member/team-member.css" />
 <!-- 		 <script type="text/javascript" src="../static/zTree/js/jquery.ztree.all-3.5.min.js"></script>  -->
 		 <style type="text/css">
 			.ztree{margin-top: 34px;border: 1px solid #ccc;background: #FFF;width:100%;overflow-y:scroll;overflow-x:auto;}
@@ -22,14 +21,11 @@
 	</head>
 
 	<body>
-	    <%@ include file="../top_menu.jsp"%>
-	<div class="container-fluid">
-		<div id="" class="row">
-			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
-				<%@include file="../left_menu.jsp"%>
-			</div>
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
-				<h4 class="page-header"><i class="icon team-member-add-icon"></i>添加成员</h1>
+		<div class="main">
+				<h4 class="page-header"><i class="icon team-member-add-icon"></i>添加成员
+					<a href="/salesman/salesManList" class="btn btn-warning member-add-btn" type="button">
+								<i class="icon glyphicon glyphicon-share-alt"></i> 返回列表 </a>
+				</h4>
 			<div class="row">
 		    	<div class="col-md-12">
 			  		<div class="member-add-box box border orange">
@@ -117,22 +113,17 @@
 								</form>
 			  				</div>
 			  				<!--/ -->
-			  				
 			  			</div>
 					</div>
 		    	</div>
 			</div>
 					<!-- /CALENDAR -->
 			</div>
-		</div>
-	</div>
 	<!-- ---------------------------------------------------------------------------------------------------------------------- -->
-		<div id="main" class="content main">
-			
-		</div>	<script src="../static/js/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-   				<script src="../static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
-				<script src="../static/yw-team-member/team-memberAdd.js" type="text/javascript" charset="utf-8"></script>
-			    <script src="../static/yw-team-member/team-memberForm.js" type="text/javascript" charset="utf-8"></script> 
-				<script src="../static/yw-team-member/team-tree.js" type="text/javascript" charset="utf-8"></script>
+				<script src="/static/js/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+   				<script src="/static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+				<script src="/static/yw-team-member/team-memberAdd.js" type="text/javascript" charset="utf-8"></script>
+			    <script src="/static/yw-team-member/team-memberForm.js" type="text/javascript" charset="utf-8"></script> 
+				<script src="/static/yw-team-member/team-tree.js" type="text/javascript" charset="utf-8"></script>
 	</body>
 </html>
