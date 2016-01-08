@@ -105,5 +105,16 @@ public interface UserService {
 	* @date 
 	 */
 	public User getById(String string);
+	/**
+	 * @return 
+	 * 
+	* @Title: addUser 
+	* @Description: TODO(添加一条数据user) 
+	* @param @param u    设定文件 
+	* @return void    返回类型 
+	* @author SongBaozhen
+	* @throws
+	 */
+  public User addUser(User u);
 	
 }

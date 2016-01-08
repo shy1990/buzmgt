@@ -2,6 +2,7 @@ package com.wangge.buzmgt.manager.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,6 +37,8 @@ public class manager implements Serializable {
     private String truename;
 	
 	private String jobNum;
+	
+	private String mobile;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "region_id")
@@ -85,7 +88,14 @@ public class manager implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
+  public String getMobile() {
+    return mobile;
+  }
+
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
+  }
 	
 	
 }

@@ -38,7 +38,17 @@ public class UserServiceImpl implements UserService {
 	public Optional<User> getByUsername(String username) {
 		return Optional.of(userRepository.findByUsername(username));
 	}
+	
 
+  /*@Override
+  public Boolean getByUsername(String username) {
+    User u = userRepository.findByUsername(username);
+    if(u != null){
+      return true;
+    }
+    return false;
+  }
+*/
 	@Override
 	public Collection<String> getRolesByUsername(String username) {
 		List<Role> roles = roleRepository.findByUsersUsername(username);
@@ -81,11 +91,19 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public User getById(String id) {
 		
-		return userRepository.findOne(Long.parseLong(id));
+		return userRepository.findUserById(id);
 	}
+	
 	public List<Role> findAll() {
-		// TODO Auto-generated method stub
 		return roleRepository.findAll();
 	}
+   /**
+    * 
+    */
+  @Override
+  @Transactional
+  public User addUser(User u) {
+    return userRepository.save(u);
+  }
 
 }
