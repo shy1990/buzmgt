@@ -94,26 +94,58 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 			parentid = request.getAttribute("parentid").toString();
 		}
 		%>
-	 var map = new BMap.Map("allmap");
-<%-- 	if("山东省"=="<%=areaname%>"){ --%>
-// 		map.centerAndZoom(new BMap.Point(117.010765,36.704194), 14);
-// 	}else{
+	 	var map = new BMap.Map("allmap");
 		var name ="<%=areaname%>";
 		
-		var bdary = new BMap.Boundary();
-		
-		bdary.get(name, function(rs){ //获取行政区域
-		var count = rs.boundaries.length; //行政区域的点有多少个
-
-		for(var i = 0; i < count; i++){
-		var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
-		ply.setStrokeWeight(3);
-		map.addOverlay(ply); //添加覆盖物
-		map.setViewport(ply.getPath()); //调整视野 
-		} 
-		map.centerAndZoom(name, 12);
-		map.enableScrollWheelZoom(true); 
-		}); 
+		<%
+		if(null!=request.getAttribute("pcoordinates")){%>
+		  	map.centerAndZoom(name, 12);
+			map.enableScrollWheelZoom(true); 
+			<%
+			String pcoordinates=request.getAttribute("pcoordinates").toString();
+			String[] listCoordinates=pcoordinates.split("=");
+			 %> 
+			 			var polygon = new BMap.Polygon([
+			 	<%
+							for(int x=0;x<listCoordinates.length;x++){
+								String points=listCoordinates[x];
+								double lng=Double.parseDouble(points.split("-")[0]);//经度 
+				 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
+				 %>				
+				 		  		<%
+				 		  			if(x==listCoordinates.length-1){%>
+				 		  			new BMap.Point(<%=lng%>,<%=lat%>)
+				 		  			<%}else{%>
+				 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
+				 		  			<%}
+				 		  		%>
+				 
+				 
+				 <%
+							}%>
+							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
+			 				map.addOverlay(polygon); 	
+//			 				polygon.addEventListener('click',function(e) {
+//			 				   var  point=JSON.stringify(e.pixel);
+//								  alert(point);
+	<%-- 								  alert(<%=coordinates%>); --%>
+//							});
+							<%
+		}else{%>
+			var bdary = new BMap.Boundary();
+			bdary.get(name, function(rs){ //获取行政区域
+			var count = rs.boundaries.length; //行政区域的点有多少个
+	
+			for(var i = 0; i < count; i++){
+			var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+			ply.setStrokeWeight(3);
+			map.addOverlay(ply); //添加覆盖物
+			map.setViewport(ply.getPath()); //调整视野 
+			} 
+			map.centerAndZoom(name, 12);
+			map.enableScrollWheelZoom(true); 
+			}); 
+		<%}%>
 		
 		
 		
@@ -231,7 +263,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	 		    	$('#exampleModal').modal('hide');
 	 		        if(data===true){
 	 		        	BootstrapDialog.alert('保存区域成功');
-	 		        	location.reload();
+	 		        	setTimeout(location.reload(),5000)
 	 		           return;
 	 		        }    
 	 		     },    
