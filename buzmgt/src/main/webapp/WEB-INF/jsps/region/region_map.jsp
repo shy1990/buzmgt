@@ -265,7 +265,9 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	 		    	$('#exampleModal').modal('hide');
 	 		        if(data===true){
 	 		        	BootstrapDialog.alert('保存区域成功');
-	 		        	setTimeout(location.reload(),5000)
+	 		        	setTimeout(function(){
+	 		        		location.reload()
+	 		        		},4000);
 	 		           return;
 	 		        }    
 	 		     },    
