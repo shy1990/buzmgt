@@ -29,8 +29,7 @@
 			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
 				<%@include file="left_menu.jsp"%>
 			</div>
-			<div
-				class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 clear-padd">
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 clear-padd" style="overflow-y: auto;">
 				<!-- CALENDAR -->
 				<iframe src="/index" id="iframepage" name="iframepage" frameBorder=0
 					scrolling=no width="100%" onLoad="reinitIframeEND();"></iframe>
@@ -61,7 +60,5 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="static/js/index.js" type="text/javascript" charset="utf-8"></script>
-
 </body>
-
 </html>

@@ -1,12 +1,15 @@
 $(function() {
-	$('#left-menu a').click(function() {
-		$(this).parent('li').addClass('active');
+	//二级菜单栏
+	$('.menu-second>li>a').click(function(){
+		$(this).parent('li').addClass('active'); 		
 		$(this).parent('li').siblings().removeClass('active');
-		$(this).parent('li').siblings().find('.menu-second').hide();
 	})
-	$('a.menu-second-box').click(function() {
-		$(this).siblings('ul.menu-second').show();
-	});
+	//一级菜单栏
+	$('.menu>li>a').click(function(){
+		$(this).parent('li').toggleClass('active'); 		
+		$(this).parent('li').siblings().removeClass('active');
+	})
+	//菜单a href 加载在iframe
 	$("#left-menu ul li a").click(function(event) {
 		event.preventDefault();
 		var url=$(this).attr("href");
