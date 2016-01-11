@@ -20,11 +20,10 @@ body{
 	position: relative;
 	min-height: 66px;
 	line-height: 66px;
+	padding-left: 26px ;
 	margin-top: 0;
-	margin-left: -30px;
-	margin-bottom: 0;
-	padding-left: 30px ;
-	margin-right: -30px;
+	margin-left: -26px;
+	margin-right: -26px;
 	margin-bottom: 20px;
 	vertical-align: middle;
 	font-size: 16px;
@@ -129,8 +128,16 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: url(../img/icon/team-member/list/zzjg.png) no-repeat;
 	top: 5px;
 }
-
-
+/* 错误信息提示 */
+.msg-error{
+	display: none;
+	font-size: 12px;
+	font-weight: 300;
+}
+/* 显示错误信息 */
+.has-error .msg-error{
+	display: block;
+}
 
 
 

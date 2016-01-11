@@ -10,7 +10,7 @@
 	src="../static/js/jquery/jquery-2.1.4.min.js"></script>
 </head>
 <body>
-	<nav class="navbar navbar-inverse navbar-fixed-top">
+	<nav id="top_menu" class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="row">
 			<div class="navbar-header col-sm-3 col-md-2">

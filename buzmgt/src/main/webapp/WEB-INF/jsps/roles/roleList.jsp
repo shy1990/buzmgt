@@ -95,11 +95,12 @@
 							<div class="modal-body">
 								<form class="form-horizontal">
 									<div class="form-group">
-										<label for="recipient-name" class="col-md-3 control-label">角色名称</label>
+										<label for="name" class="col-md-3 control-label">角色名称</label>
 										<div class="col-md-9 ">
 											<input type="text" placeholder="请填写角色名称" class="form-control"
 												name="name" id="name">
 										</div>
+										<label class="pull-right col-md-3 control-label msg-error" id="nameError">请填写角色名称</label>
 									</div>
 									<div class="form-group">
 										<label for="message-text" class="col-md-3 control-label">备注说明</label>
@@ -112,7 +113,7 @@
 							</div>
 							<div class="modal-footer">
 								<div class="col-md-3 col-md-offset-8">
-									<button type="button" onclick="addRole()"
+									<button type="submit" onclick="addRole()"
 										class="btn col-xs-12 btn-danger ">确定</button>
 								</div>
 							</div>
@@ -126,9 +127,9 @@
 		<!-- end:row -->
 	</div>
 	<%@include file="/static/js/alert/alert.html" %>
-	
 </body>
-<script src='../static/bootstrap/js/bootstrap.js'></script>
+<script src='/static/bootstrap/js/bootstrap.js'></script>
+<script src='/static/js/common.js'></script>
 <script type="text/javascript">
 	window.jQuery
 			|| document
@@ -137,12 +138,18 @@
 <script type="text/javascript">
 	/*	新增角色*/
 	function addRole() {
+		var $_name=$('#name');
+		if($_name.val()==null||$_name.val()==""){
+			$_name.parents('.form-group').addClass('has-error');
+			return false;
+		}
 		var url = "addRole?name=" + $("#name").val() + "&description="
 				+ $("#description").val();
 		$.post(url, function(data) {
 			if (data === 'suc') {
+				$('#exampleModal').modal('hide');
 				myAlert("添加成功");
-				location.reload();
+				setTimeout(function(){ location.reload() },3000);
 			} else {
 				myAlert("添加失败!");
 			}
@@ -160,7 +167,7 @@
 			$.post(url, function(data) {
 				if (data === 'suc') {
 					myAlert("删除成功!");
-					location.reload();
+					setTimeout(function(){ location.reload() },2000);
 				} else {
 					myAlert("删除失败!,请先移除该角色下的所有人员");
 				}

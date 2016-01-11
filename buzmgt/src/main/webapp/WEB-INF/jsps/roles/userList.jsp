@@ -98,7 +98,7 @@
 					$.post(url, function(data) {
 						if (data === 'suc') {
 							myAlert("删除成功!");
-							location.reload();
+							setTimeout(function(){ location.reload() },2000);
 						}else{
 							myAlert("删除失败!,请先移除该角色下的所有人员");
 						}

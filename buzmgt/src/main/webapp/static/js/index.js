@@ -23,7 +23,7 @@ $(function() {
 
 });
 
-var timer1 = window.setInterval("reinitIframe()", 500); //定时开始
+//var timer1 = window.setInterval("reinitIframe()", 500); //定时开始
 function reinitIframe(){
 var iframe = document.getElementById("iframepage");
 try{
@@ -37,14 +37,16 @@ try{
 
 function reinitIframeEND(){
 var iframe = document.getElementById("iframepage");
-try{
-    var bHeight = iframe.contentWindow.document.body.scrollHeight;
-    var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
-    var height = Math.max(bHeight, dHeight);
-    iframe.height = height;
-}catch (ex){}
-// 停止定时
-window.clearInterval(timer1);
+var topMenu = document.getElementById("top_menu");
+var leftMenuHeight = $('#left-menu').outerHeight();
+var $_topMenuHeight=$(topMenu).outerHeight();
+    var bHeight = iframe.contentWindow.document.body.clientHeight;
+//        var bHeight = document.body.clientHeight;
+//var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+//    var height = Math.max(bHeight, dHeight);
+//    iframe.height = height-$_topMenuHeight;
+    iframe.height = leftMenuHeight-5;
+    console.info(leftMenuHeight);
 
 }
 

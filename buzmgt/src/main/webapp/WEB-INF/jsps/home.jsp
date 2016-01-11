@@ -32,7 +32,7 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 clear-padd" style="overflow-y: auto;">
 				<!-- CALENDAR -->
 				<iframe src="/index" id="iframepage" name="iframepage" frameBorder=0
-					scrolling=no width="100%" onLoad="reinitIframeEND();"></iframe>
+					scrolling="auto" width="100%" onLoad="reinitIframeEND();"></iframe>
 				<!-- /CALENDAR -->
 			</div>
 		</div>
@@ -59,6 +59,6 @@
 	<script src="static/js/jquery/jquery-1.11.3.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
-	<script src="static/js/index.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/static/js/index.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
