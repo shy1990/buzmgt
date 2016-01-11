@@ -66,6 +66,8 @@ public class Resource implements Serializable {
 	private int priority;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
+	@Column(name = "menu_icon")
+	private String icon; //图标
 //	@ManyToMany
 //	@JoinTable(name = "sys_resources_roles",joinColumns=@JoinColumn(name="resource_id"),inverseJoinColumns=@JoinColumn(name="role_id"))
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,	CascadeType.MERGE}, mappedBy = "resource")
@@ -84,7 +86,7 @@ public class Resource implements Serializable {
 	public Resource() {
 	}
 
-	public Resource(String name,ResourceType type, String url, int priority,Date creareTime) {
+	public Resource(String name,ResourceType type, String url, int priority,Date createTime) {
 		super();
 		this.name = name;
 		this.url = url;
@@ -93,7 +95,15 @@ public class Resource implements Serializable {
 		this.createTime = createTime;
 	}
 
-	public Long getId() {
+	public String getIcon() {
+    return icon;
+  }
+
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
+
+  public Long getId() {
 		return id;
 	}
 

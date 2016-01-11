@@ -27,7 +27,6 @@
 								<thead>
 									<th width="20%" class="center">序号</th>
 									<th width="20%" class="center" >匹配人员</th>
-									<th width="20%" class="center" >操作</th>
 								</thead>
 								<tbody>
 									<c:choose>
@@ -36,7 +35,6 @@
 												<tr>
 													<td width="20%" class="center">${s.index+1}</td>
 													<td width="20%">${user.username}</td>
-													<td style="width:10px;"><a href="javascript:removeUser(${user.id})" data-toggle="modal"  data-target="#gridSystemModal" data-whatever="@mdo">取消配置</a></td>
 												</tr>
 											</c:forEach>
 										</c:when>
@@ -89,7 +87,7 @@
 		<!-- CUSTOM SCRIPT -->
 		<script src="../static/js/script.js"></script>
 		<script type="text/javascript">
-			/* 取消匹配 */
+			/* 取消匹配 
 			function removeUser(userId){
 				if(confirm("确定要移除该人员？")){
 					var url = "delRole?id=" + id;
@@ -103,6 +101,7 @@
 					});
 				}
 			}
+			*/
 		</script>
 	</body>
 

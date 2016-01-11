@@ -45,7 +45,7 @@
 						<thead>
 							<th width="80">序号</th>
 							<th>角色</th>
-							<th colspan="3">操作</th>
+							<th colspan="3"  style="text-align:center">操作</th>
 						</thead>
 						<tbody>
 							<c:choose>
@@ -135,6 +135,10 @@
 <script type="text/javascript">
 	/*	新增角色*/
 	function addRole() {
+		if(document.getElementById("name").value == ""){
+				alert("角色名称不能为空!");
+			return;
+		}
 		var url = "addRole?name=" + $("#name").val() + "&description="
 				+ $("#description").val();
 		$.post(url, function(data) {
