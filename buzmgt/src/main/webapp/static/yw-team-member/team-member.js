@@ -45,9 +45,9 @@ $(function(){
 //	});
 	
 	//getList(param)
-	var status = ${Status != null ? Status : "扫街中"};
+	var status = $("#status").val();
 	/*if(status == null ||  "".equals(status)){
 		status = "扫街中";
 	}*/
-	$("li a[title = '"+status+"']").attr("calss","active");		
+	$(" li[title = '"+status+"']").addClass('active');
 });

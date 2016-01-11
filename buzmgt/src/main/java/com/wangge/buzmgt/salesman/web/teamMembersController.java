@@ -65,10 +65,10 @@ public class teamMembersController {
 	
 	@RequestMapping("/salesManList")
 	public String toTeamMembers(String salesManList, String Status, Model model,salesMan salesman){
-	  int pageNum = 0; //Status = Status != null ? Status : "扫街中";
+	  int pageNum = 0;
 	  Page<salesMan> list = salesManService.getSalesmanList(salesman,pageNum);
     model.addAttribute("list", list);
-    //model.addAttribute("Status", Status);
+    model.addAttribute("Status", "扫街中");
 		model.addAttribute("salesManList", salesManList);
 		return "salesman/salesman_list";
 	}
@@ -93,6 +93,7 @@ public class teamMembersController {
 			salesman.setRegion(regionService.getRegionById(regionPid.trim()));
 			salesman.setSalesmanStatus(SalesmanStatus.SAOJIE);
 			salesman.setTowns(regionId);
+			salesman.setRegdate(new Date());
 			salesman.setUser(u);
 			salesManService.addSalesman(salesman);
 			return "redirect:/salesman/salesManList";
@@ -103,6 +104,7 @@ public class teamMembersController {
 			m.setJobNum(salesman.getJobNum());
 			m.setTruename(salesman.getTruename());
 			m.setMobile(salesman.getMobile());
+			m.setRegdate(new Date());
 			m.setRegion(regionService.getRegionById(regionId.trim()));
 			m.setUser(u);
 			managerService.addManager(m);
