@@ -5,7 +5,7 @@ function checkUsername(){
 		return false;
 	}
 	if(userName.length<5 || userName.length>20){
-		myAlert("会员名的长度不正确,正确的长度为5-20位字符");
+		alert("会员名的长度不正确,正确的长度为5-20位字符");
 		document.getElementById("username").focus();
 		return false;
 	}
@@ -19,9 +19,9 @@ function checkUsername(){
 		},
 		success : function(result){
 		   if (result) {
-			   myAlert("用户名已存在！");              
+			   alert("用户名已存在！");              
 			}else {
-				myAlert("数据加载异常！");
+				alert("数据加载异常！");
 			};
 	   }
 	});
@@ -76,7 +76,7 @@ function checkName(){
 		return false;
 	}
 	if(trueName.length<5 || trueName.length>20){
-		myAlert("会员名的长度不正确,正确的长度为5-20位字符");
+		alert("会员名的长度不正确,正确的长度为5-20位字符");
 		document.redForm.truename.focus();
 		return false;
 	}

@@ -30,8 +30,8 @@
 	<div id="j_page_main" class="content main">
 		<h4 class="page-header">
 			<i class="icon pur-setting-icon"></i>权限设置 <a
-				class="j_create_role btn btn-danger marg-lef-10" data-toggle="modal"
-				data-target="#exampleModal" data-whatever="@mdo"><i
+				class="btn btn-danger marg-lef-10" data-toggle="modal"
+				data-target=".j_create_role" data-whatever="@mdo"><i
 				class="icon-add"></i>创建角色</a>
 		</h4>
 		<!-- start:row -->
@@ -75,11 +75,11 @@
 				</div>
 				<div id="pageNav" class="scott" align="center">
 					<font color="#88af3f">共${totalCount} 条数据， 共${totalPage} 页</font>
-					<div>${pageNav}</div>
+					<div class="page-link" >${pageNav}</div>
 				</div>
 				<!-- end 列表 -->
 				<!-- start： 弹窗 -->
-				<div class="add-role modal fade " id="exampleModal" tabindex="-1"
+				<div class="j_create_role add-role modal fade " id="exampleModal" tabindex="-1"
 					role="dialog" aria-labelledby="exampleModalLabel">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">

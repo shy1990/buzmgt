@@ -43,7 +43,7 @@
 				aria-label="Close">
 				<span aria-hidden="true">×</span>
 			</button>
-			<h4 id="msg">sdfsdfsdfjdklsdjlk</h4>
+			<h4 id="msg"></h4>
 		</div>
 	</div>
 	<!-- Bootstrap core JavaScript

@@ -33,7 +33,7 @@
 					<div class="row">
 						<div class="col-md-4 col-md-offset-4">
 							<div id="logo">
-								<a href="index.html"><img src="static/CloudAdmin/img/logo/logo.png" height="40" alt="logo name" /></a>
+								<a href="index.html"><img src="static/img/login-logo.png"  alt="logo name" /></a>
 							</div>
 						</div>
 					</div>
