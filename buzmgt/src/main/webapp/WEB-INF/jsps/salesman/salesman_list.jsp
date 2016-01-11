@@ -65,36 +65,24 @@
 						<div class="row">
 							<div class="col-sm-8 col-md-5">
 								<!--菜单栏-->
-								<ul class="nav nav-tabs">
-									<li class="active"><a title="扫街中" name="salesmanStatus"
-										href="#box_tab3" onclick="getList(this.title,this.name);"
+								<ul class="nav nav-tabs"><input id = "status" type="hidden" value="${Status}">
+									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
+										href="" onclick="getList(this.title,this.name);"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
 											class="hidden-inline-mobile">扫街中</span></a></li>
-									<li><a title="考核中" name="salesmanStatus" href="#box_tab1"
+									<li title="考核中"><a title="考核中" name="salesmanStatus" href=""
 										onclick="getList(this.title,this.name);" data-toggle="tab"><i
 											class="fa fa-laptop"></i> <span class="hidden-inline-mobile">考核中</span></a></li>
-									<li><a title="开发中" name="salesmanStatus" href="#box_tab1"
+									<li title="开发中"><a title="开发中" name="salesmanStatus" href=""
 										onclick="getList(this.title,this.name);" data-toggle="tab"><i
 											class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">开发中</span></a></li>
-									<li><a title="已转正" name="salesmanStatus" href="#box_tab1"
+									<li title="已转正"><a title="已转正" name="salesmanStatus" href=""
 										onclick="getList(this.title,this.name);" data-toggle="tab"><i
 											class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">已转正</span></a></li>
 								</ul>
-								<!--/菜单栏-->
-							</div>
-							<div
-								class="col-sm-4 col-md-3 col-lg-2 col-md-offset-4 col-lg-offset-5">
-								<div class="form-group title-form">
-									<div class="input-group ">
-										<input type="text" class="form-control" id="param"
-											placeholder="请输入名称或工号"> <span
-											class="input-group-addon" id="goSearch"
-											onclick="getList(this.value,this.id)"><i
-											class="icon icon-finds"></i></span>
-									</div>
-								</div>
+
 							</div>
 						</div>
 						<!--<div class="title-form input-group ">
@@ -230,7 +218,6 @@
 		</div>
 	</div>
 	<%@include file="/static/js/alert/alert.html"%>
-	<script src="/satic/js/jquery.min.js"></script>
 	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/static/yw-team-member/team-member.js"
 		type="text/javascript" charset="utf-8"></script>
