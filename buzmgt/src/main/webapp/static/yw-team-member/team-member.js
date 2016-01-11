@@ -1,3 +1,21 @@
+
+
+function getPageList(num){
+	
+	window.location.href="/salesman/getSalesManList?page="+num
+}
+
+function getList(param,name){
+    if(name == "goSearch"){
+    	var value = $("#param").val();
+    	window.location.href="/salesman/getSalesManList?truename="+value+"&jobNum="+value
+    }else if(name == "salesmanStatus"){
+    	window.location.href="/salesman/getSalesManList?Status="+param
+    }
+}
+
+
+
 $(function(){
 //	$(':checked').click();
 //	/**
@@ -25,31 +43,11 @@ $(function(){
 //		});
 //		//$('.j_district').click();//反选
 //	});
-	var param;
-	//getList(param)
-			
-});
-
-function getPageList(num){
 	
-	window.location.href="/salesman/getSalesManList?page="+num
-}
-
-function getList(param,name){
-    if(name == "goSearch"){
-    	var value = $("#param").val();
-    	window.location.href="/salesman/getSalesManList?truename="+value+"&jobNum="+value
-    }else if(name == "salesmanStatus"){
-    	window.location.href="/salesman/getSalesManList?Status="+param
-    }
-}
-
-
-$(".j_team_member_add").click(function(event) {
-	event.preventDefault();
-	var $href = $(this).attr("href");
-	console.info($href);
-	if ($href != '' && $href != null) {
-		$("#main").load($href);
-	}
+	//getList(param)
+	var status = ${Status != null ? Status : "扫街中"};
+	/*if(status == null ||  "".equals(status)){
+		status = "扫街中";
+	}*/
+	$("li a[title = '"+status+"']").attr("calss","active");		
 });

@@ -64,10 +64,11 @@ public class teamMembersController {
 	private UserService userService;
 	
 	@RequestMapping("/salesManList")
-	public String toTeamMembers(String salesManList , Model model,salesMan salesman){
-	  int pageNum = 0;
+	public String toTeamMembers(String salesManList, String Status, Model model,salesMan salesman){
+	  int pageNum = 0; //Status = Status != null ? Status : "扫街中";
 	  Page<salesMan> list = salesManService.getSalesmanList(salesman,pageNum);
     model.addAttribute("list", list);
+    //model.addAttribute("Status", Status);
 		model.addAttribute("salesManList", salesManList);
 		return "salesman/salesman_list";
 	}
@@ -129,6 +130,7 @@ public class teamMembersController {
     	  }
 	  Page<salesMan> list = salesManService.getSalesmanList(salesman,pageNum);
 	  model.addAttribute("list", list);
+	  model.addAttribute("Status", Status);
 	  return "salesman/salesman_list";
 	}
 	

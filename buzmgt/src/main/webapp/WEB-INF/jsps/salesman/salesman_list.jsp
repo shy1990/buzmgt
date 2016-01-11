@@ -59,7 +59,7 @@
 									<div class="col-sm-7 col-md-5">
 										<!--菜单栏-->
 										<ul class="nav nav-tabs">
-											<li class="active"><a title="扫街中" name="salesmanStatus" href="#box_tab3" onclick="getList(this.title,this.name);" data-toggle="tab"><i
+											<li><a title="扫街中" name="salesmanStatus" href="#box_tab3" onclick="getList(this.title,this.name);" data-toggle="tab"><i
 													class="fa fa-circle-o"></i> <span
 													class="hidden-inline-mobile">扫街中</span></a></li>
 											<li><a title="考核中" name="salesmanStatus" href="#box_tab1" onclick="getList(this.title,this.name);" data-toggle="tab"><i

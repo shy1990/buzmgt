@@ -10,4 +10,6 @@ public interface managerService {
 
 	List<manager> findByReginId(String regionId);
 
+  manager getById(String id);
+
 }
