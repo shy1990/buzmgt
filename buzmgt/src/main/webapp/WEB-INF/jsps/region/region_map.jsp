@@ -32,6 +32,8 @@
 <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
 <link rel="stylesheet" type="text/css" href="static/css/region/purview-region-setting.css" />
 <link rel="stylesheet" type="text/css" href="static/bootstrap/css/bootstrap-dialog.css" />
+<link rel="stylesheet" type="text/css" href="static/css/alert.css" />
+<script type="text/javascript" src="static/js/alert.js"></script>
 <script type="text/javascript" src="static/bootstrap/js/bootstrap-dialog.js"></script>
 <style>
 .top-titile{
@@ -263,7 +265,9 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	 		    	$('#exampleModal').modal('hide');
 	 		        if(data===true){
 	 		        	BootstrapDialog.alert('保存区域成功');
-	 		        	setTimeout(location.reload(),5000)
+	 		        	setTimeout(function(){
+	 		        		location.reload()
+	 		        		},4000);
 	 		           return;
 	 		        }    
 	 		     },    

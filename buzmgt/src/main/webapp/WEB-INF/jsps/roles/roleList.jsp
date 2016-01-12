@@ -30,8 +30,8 @@
 	<div id="j_page_main" class="content main">
 		<h4 class="page-header">
 			<i class="icon pur-setting-icon"></i>权限设置 <a
-				class="j_create_role btn btn-danger marg-lef-10" data-toggle="modal"
-				data-target="#exampleModal" data-whatever="@mdo"><i
+				class="btn btn-danger marg-lef-10" data-toggle="modal"
+				data-target=".j_create_role" data-whatever="@mdo"><i
 				class="icon-add"></i>创建角色</a>
 		</h4>
 		<!-- start:row -->
@@ -75,11 +75,11 @@
 				</div>
 				<div id="pageNav" class="scott" align="center">
 					<font color="#88af3f">共${totalCount} 条数据， 共${totalPage} 页</font>
-					<div>${pageNav}</div>
+					<div class="page-link" >${pageNav}</div>
 				</div>
 				<!-- end 列表 -->
 				<!-- start： 弹窗 -->
-				<div class="add-role modal fade " id="exampleModal" tabindex="-1"
+				<div class="j_create_role add-role modal fade " id="exampleModal" tabindex="-1"
 					role="dialog" aria-labelledby="exampleModalLabel">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
@@ -95,11 +95,12 @@
 							<div class="modal-body">
 								<form class="form-horizontal">
 									<div class="form-group">
-										<label for="recipient-name" class="col-md-3 control-label">角色名称</label>
+										<label for="name" class="col-md-3 control-label">角色名称</label>
 										<div class="col-md-9 ">
 											<input type="text" placeholder="请填写角色名称" class="form-control"
 												name="name" id="name">
 										</div>
+										<label class="pull-right col-md-3 control-label msg-error" id="nameError">请填写角色名称</label>
 									</div>
 									<div class="form-group">
 										<label for="message-text" class="col-md-3 control-label">备注说明</label>
@@ -112,7 +113,7 @@
 							</div>
 							<div class="modal-footer">
 								<div class="col-md-3 col-md-offset-8">
-									<button type="button" onclick="addRole()"
+									<button type="submit" onclick="addRole()"
 										class="btn col-xs-12 btn-danger ">确定</button>
 								</div>
 							</div>
@@ -125,8 +126,10 @@
 		</div>
 		<!-- end:row -->
 	</div>
+	<%@include file="/static/js/alert/alert.html" %>
 </body>
-<script src='../static/bootstrap/js/bootstrap.js'></script>
+<script src='/static/bootstrap/js/bootstrap.js'></script>
+<script src='/static/js/common.js'></script>
 <script type="text/javascript">
 	window.jQuery
 			|| document
@@ -135,18 +138,20 @@
 <script type="text/javascript">
 	/*	新增角色*/
 	function addRole() {
-		if(document.getElementById("name").value == ""){
-				alert("角色名称不能为空!");
-			return;
+		var $_name=$('#name');
+		if($_name.val()==null||$_name.val()==""){
+			$_name.parents('.form-group').addClass('has-error');
+			return false;
 		}
 		var url = "addRole?name=" + $("#name").val() + "&description="
 				+ $("#description").val();
 		$.post(url, function(data) {
 			if (data === 'suc') {
-				alert("添加成功");
-				location.reload();
+				$('#exampleModal').modal('hide');
+				myAlert("添加成功");
+				setTimeout(function(){ location.reload() },3000);
 			} else {
-				alert("添加失败!");
+				myAlert("添加失败!");
 			}
 		});
 	}
@@ -161,10 +166,10 @@
 			var url = "delRole?id=" + id;
 			$.post(url, function(data) {
 				if (data === 'suc') {
-					alert("删除成功!");
-					location.reload();
+					myAlert("删除成功!");
+					setTimeout(function(){ location.reload() },2000);
 				} else {
-					alert("删除失败!,请先移除该角色下的所有人员");
+					myAlert("删除失败!,请先移除该角色下的所有人员");
 				}
 			});
 		}

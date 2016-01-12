@@ -8,10 +8,9 @@
 <link rel="stylesheet" type="text/css" href="../static/css/index.css" />
 <script type="text/javascript"
 	src="../static/js/jquery/jquery-2.1.4.min.js"></script>
-<script src="../static/js/index.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-	<nav class="navbar navbar-inverse navbar-fixed-top">
+	<nav id="top_menu" class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="row">
 			<div class="navbar-header col-sm-3 col-md-2">
@@ -26,7 +25,7 @@
 					src="../static/img/logo.png" /></a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse ">
-				<div class="pull-left msg-alert">
+				<div style="display: none;" class="pull-left msg-alert">
 					<p>
 						<span class="msg-head"><i class="msg-alert-icon"></i>消息提醒</span> <span
 							class="msg-content">李雅静申请山东省滨州市邹平县扫街审核</span>
@@ -65,7 +64,7 @@
 				<form class="navbar-form navbar-right">
 					<div class="search-box">
 						<input class="search-input" type="text" class="form-control"
-							placeholder="Search..."> <i class="search-icon"></i>
+							placeholder="Search..."> <a class="search-icon" type="submit"></a>
 					</div>
 				</form>
 			</div>

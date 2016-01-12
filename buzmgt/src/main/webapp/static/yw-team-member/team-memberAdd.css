@@ -1001,30 +1001,12 @@ body.rtls .stat-percent {
 	margin-left: 20px;
 	background:url(../img/team-member/tianjia1.png) no-repeat;
 }
-.box-title {
-	height: 29px;
-	background:url(../img/team-member/queding-bug2.png) repeat-x;
-	color: #FFFFFF;
-	padding: 3px 12px;
-	border-top-left-radius: 7px;
-	border-top-right-radius: 7px;
-}
-.row {
-	margin: 0 auto;
-	width: 95%;
-}
 .saojie-add-icon{
 	top: 4px;
 	background:url(../img/team-member/tianxie.png) no-repeat;
 	padding: 3px 20px;
 }
 
-.box-body {
-	border-left: 1px solid #d9534f;
-	border-right: 1px solid #d9534f;
-	border-top: 1px solid #d9534f;
-	padding-top: 36px;
-}
 /*娣诲姞鎴愬憳琛ㄥ崟瀹氫綅*/
 .member-from{
 	/*width: 90%;*/

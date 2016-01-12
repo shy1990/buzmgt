@@ -27,6 +27,8 @@
 <link rel="stylesheet" type="text/css" href="static/purview-setting/purview-setting.css" />
 <link rel="stylesheet" type="text/css" href="static/bootstrap/css/bootstrap-dialog.css" />
 <link rel="stylesheet" type="text/css" href="static/bootstrap/css/jquery-confirm.min.css" />
+<link rel="stylesheet" type="text/css" href="static/css/alert.css" />
+<script type="text/javascript" src="static/js/alert.js"></script>
 
 <style>
 .top-titile{

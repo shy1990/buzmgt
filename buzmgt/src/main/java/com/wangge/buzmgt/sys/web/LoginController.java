@@ -3,6 +3,7 @@ package com.wangge.buzmgt.sys.web;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -28,13 +29,16 @@ public class LoginController {
 		String exceptionClassName = (String) req.getAttribute("shiroLoginFailure");
 		String error = null;
 		if (UnknownAccountException.class.getName().equals(exceptionClassName)) {
-			error = "用户名/密码错误";
+			error = "账户不存在";
 		} else if (IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
 			error = "用户名/密码错误";
 		} else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
 			error = "您的账号被锁定";
-		} else if (exceptionClassName != null) {
-			error = "其他错误：" + exceptionClassName;
+		} else if (AuthenticationException.class.getName().equals(exceptionClassName)){
+		  error ="认证错误!";
+		}else if(exceptionClassName != null) {
+		  error ="认证错误!";
+			System.out.println("其他错误：" + exceptionClassName);
 		}
 		model.addAttribute("error", error);
 		return "login";

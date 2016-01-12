@@ -11,4 +11,6 @@ public interface managerRepository extends JpaRepository<manager, String> {
 
 	List<manager> findByRegionId(String regionId);
 
+  manager findById(String id);
+
 }

@@ -41,16 +41,6 @@
 	color: #FFF;
 	background: #5e87b0;
 }
-.role-region-title{
-	position: relative;
-	padding: 10px 0 10px 46px;
-	border-radius: 4px 0 0 0;
-	border-right: 1px solid #f4b252;
-	font-size: 14px;
-	font-weight: bold;
-	color: #FFF;
-	background: #f4b252;
-}
 .title-icon{
 	position: absolute;
 	top: 10px;

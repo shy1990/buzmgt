@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.manager.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -47,6 +50,8 @@ public class manager implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User user;
+	@Temporal(TemporalType.DATE)
+	private Date regdate;
 
 	public String getId() {
 		return id;
@@ -95,6 +100,14 @@ public class manager implements Serializable {
 
   public void setMobile(String mobile) {
     this.mobile = mobile;
+  }
+
+  public Date getRegdate() {
+    return regdate;
+  }
+
+  public void setRegdate(Date regdate) {
+    this.regdate = regdate;
   }
 	
 	

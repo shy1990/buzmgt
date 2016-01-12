@@ -24,6 +24,11 @@
 	outline: none;
 }
 
+@media (max-width: 1200px){
+	.hidden-inline-mobile {
+	    display: none !important;
+	}
+}
 
 /*表单图标*/
 .member-icon {
@@ -264,7 +269,7 @@ ul, ol {
     border-image: none;
     cursor: default;
 }
-.box-title{
+.team-member-body .box-title{
 	padding-bottom: 0;
 	padding-top: 10px;
 }
@@ -300,3 +305,174 @@ ul, ol {
 .team-member-body .tab-content{
 	background: #FFF;
 }
+/*区域*/
+.member-district .box-body{
+	padding: 10px;
+}
+/*组织结构*/
+.structure{
+	padding: 5px 10px 8px;
+	border-radius: 5px;
+	background: #5D87AF;
+	color: #FFF;
+	font-weight: bold;
+}
+/*-----tree view*/
+.tree {
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-left: 9px;
+    position: relative;
+}
+.tree:before,.tree-folder:before{
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.tree:before {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #67B2DD;
+    border-image: none;
+    border-style: dotted;
+    border-width: 0 0 0 1px;
+    bottom: 16px;
+    content: "";
+    display: inline-block;
+    left: 0;
+    position: absolute;
+    top: -20px;
+    z-index: 1;
+}
+.tree .tree-item, .tree .tree-folder {
+    border: 1px solid #FFFFFF;
+}
+.tree .tree-folder, .tree .tree-item {
+    position: relative;
+}
+.tree .tree-folder {
+    cursor: pointer;
+    min-height: 20px;
+    width: auto;
+}
+.tree .tree-folder:before, .tree .tree-item:before {
+    border-top: 1px dotted #67B2DD;
+    content: "";
+    display: inline-block;
+    height: 0;
+    left: -13px;
+    position: absolute;
+    top: 14px;
+    width: 18px;
+    z-index: 1;
+}
+.tree .tree-folder .tree-folder-content:before {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #67B2DD;
+    border-image: none;
+    border-style: dotted;
+    border-width: 0 0 0 1px;
+    bottom: 16px;
+    content: "";
+    display: inline-block;
+    left: -14px;
+    position: absolute;
+    top: -14px;
+    z-index: 1;
+}
+.tree .tree-item, .tree .tree-folder .tree-folder-header {
+    -moz-box-sizing: content-box;
+    margin: 0;
+    padding: 5px;
+}
+.tree .tree-folder .tree-folder-header {
+    border-radius: 0 0 0 0;
+}
+.tree .tree-folder .tree-folder-header {
+    height: 100%;
+    line-height: 20px;
+    position: relative;
+}
+.tree .tree-folder .tree-folder-header > [class*="fa-"]:first-child {
+    margin: -2px 0 0 -2px;
+}
+.tree .tree-folder .tree-folder-header > [class*="fa-"]:first-child, .tree .tree-item > [class*="fa-"]:first-child {
+    display: inline-block;
+    position: relative;
+    top: -1px;
+    z-index: 2;
+}
+.fa {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.tree .tree-folder .tree-folder-header .tree-folder-name {
+    margin-left: 2px;
+}
+.tree .tree-folder .tree-folder-header .tree-folder-name, .tree .tree-item .tree-item-name {
+    display: inline;
+    z-index: 2;
+}
+.tree .tree-folder .tree-folder-content {
+    margin-left: 23px;
+    position: relative;
+}
+.tree .tree-selected {
+    background-color: rgba(98, 168, 209, 0.1);
+    color: #6398B0;
+}
+.tree .tree-folder, .tree .tree-item {
+    position: relative;
+}
+.tree .tree-item {
+    cursor: pointer;
+    height: 100%;
+    line-height: 20px;
+    position: relative;
+}
+.tree .tree-item > [class*="fa-"]:first-child {
+    -moz-box-sizing: content-box;
+    background-color: #FAFAFA;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #e6e6e6;
+    font-size: 11px;
+    height: 13px;
+    line-height: 13px;
+    text-align: center;
+    width: 13px;
+}
+.tree .tree-item > [class*="fa-"]:first-child {
+    margin-top: -1px;
+}
+.tree .tree-folder .tree-folder-header > [class*="fa-"]:first-child, .tree .tree-item > [class*="fa-"]:first-child {
+    display: inline-block;
+    position: relative;
+    top: -1px;
+    z-index: 2;
+}
+.tree .tree-item .tree-item-name {
+    margin-left: 3px;
+}
+.tree .tree-folder .tree-folder-header .tree-folder-name, .tree .tree-item .tree-item-name {
+    display: inline;
+    z-index: 2;
+}
+.tree .tree-loading {
+    margin-left: 36px;
+}
+.tree .fa-spin {
+    height: auto;
+}
+/*-----tree view*/

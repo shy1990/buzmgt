@@ -54,11 +54,12 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 		z-index: 1000;
 		display: block;
 		padding: 20px;
+		margin-top: -1px;
 		overflow-x: hidden;
 		overflow-y: auto;
 		/* Scrollable contents if viewport is shorter than content. */
 		background-color: #1e282d;
-		border-right: 1px solid #eee;
+		border: none;
 		color: #83A0AD;
 	}
 }
@@ -120,7 +121,7 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 	margin: 5px 0;
 	height: 22px;
 	padding: 0 10px;
-	background: inherit;
+	background: #3893C7;
 	border: 1px solid #FFF;
 	border-radius: 20px;
 	-moz-border-radius: 20px;
@@ -136,7 +137,7 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 	font-size: 11px;
 	border: none;
 	outline: none;
-	background: inherit;
+	background: #3893C7;
 }
 
 .search-input:focus {
@@ -368,7 +369,7 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 .nav-sidebar> li{
 	border-bottom: 1px solid #1a2327;
 }
-.nav-sidebar > li > a {
+.nav-sidebar > li > a{
 	padding-right: 20px;
 	padding-left: 50px;
 	color: #83A0AD;
@@ -395,6 +396,10 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 	text-align: left;
 }
 .index-bg{
+	padding: 0;
+/* 	background:url(/static/img/index-bg.jpg); */
+	background-size: 100%;
+	background-attachment:fixed;
 	position: relative;
 	padding-right: 0;
 }
@@ -424,6 +429,10 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 	list-style-type: none;
 	padding-left: 0;
 }
+/*显示二级菜单*/
+.menu>li.active>.menu-second{
+	display: block;
+} 
 .menu-second >li{
 	display: block;
 	width: 100%;
@@ -431,7 +440,8 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 	border-bottom: none;
 	border-top: 1px solid #1a2327;
 }
-.menu-second >li.active>a,.menu-second >li>a:hover{
+.menu-second >li.active>a,
+.menu-second >li>a:hover{
 	color: #FFF;
 	background: #1a2327;
 }
@@ -636,13 +646,14 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 /*PAGE-HEADER*/
 .main .page-header {
 	position: relative;
-	height: 66px;
+	min-height: 66px;
 	line-height: 66px;
 	margin-top: 0;
 	margin-left: -30px;
 	margin-bottom: 0;
 	padding-left: 30px ;
 	margin-right: -30px;
+	margin-bottom: 20px;
 	vertical-align: middle;
 	font-size: 16px;
 	font-weight: bold;
@@ -651,6 +662,20 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 .clear-padd{
 	padding-left:0;
 	padding-right: 0; 
+}
+a,a:hover,a:focus,button,button:hover,button:focus,button:active{
+	outline: 0;
+	-moz-outline:none;
+	text-decoration: none;
+	outline: medium none !important;
+}
+.myalert{
+	display: none;
+	width: 500px;
+	position: fixed;
+	top:100px;
+	left: 50%;
+	margin-left: -250px;
 }
 
 

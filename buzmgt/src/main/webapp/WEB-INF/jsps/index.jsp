@@ -11,14 +11,11 @@
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <title>控制台</title>
 <!-- Bootstrap -->
-<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link type="text/css" href="static/plugins/css/unical.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="static/css/index.css" />
-<link rel="stylesheet" type="text/css"
-	href="static/purview-setting/purview-setting.css" />
-<script type="text/javascript" src="static/plugins/unical.js"></script>
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="static/plugins/unical.js"></script>
 </head>
 <body onload="initial();" style="padding: 0">
 					<!-- CALENDAR -->
@@ -321,21 +318,5 @@
 								</div>
 					</div>
 					<!-- /CALENDAR -->
-
-	<!-- Bootstrap core JavaScript
-    ================================================== -->
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-	<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="static/js/jquery/jquery-1.11.3.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="static/bootstrap/js/bootstrap.min.js"></script>
-	<script src="static/js/index.js" type="text/javascript" charset="utf-8"></script>
-</body>
 
 </html>

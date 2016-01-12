@@ -9,8 +9,11 @@ import java.util.List;
 
 
 
+
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.manager.entity.manager;
+import com.wangge.buzmgt.manager.service.managerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
@@ -43,6 +48,8 @@ public class RegionController {
 	private RegionService regionService;
 	@Resource
 	private UserService userService;
+	@Resource
+	private managerService managerService;
 	
 	private static final String ONELEAVE="0";
 	
@@ -299,7 +306,16 @@ public class RegionController {
 		return maxid;
 	}
 	
-
+  /**
+   * 
+  * @Title: getRegionById 
+  * @Description: TODO(根据用户区域id获取下级区域) 
+  * @param @param id
+  * @param @param request
+  * @param @return    设定文件 
+  * @return ResponseEntity<List<RegionVo>>    返回类型 
+  * @throws
+   */
 	
 	@RequestMapping(value="/getRegionById",method = RequestMethod.POST)
 	@ResponseBody
@@ -310,8 +326,8 @@ public class RegionController {
 		}else{
 			Subject subject = SecurityUtils.getSubject();
 			User user=(User) subject.getPrincipal();
-			user = userService.getById(user.getId());
-			regionId = String.valueOf(user.getOrganization().getId());
+			manager manager = managerService.getById(user.getId());
+			regionId = String.valueOf(manager.getRegion().getId());
 		}
 		   List<RegionVo> regionList = regionService.getRegionByPid(regionId);
 		return new ResponseEntity<List<RegionVo>>(regionList,HttpStatus.OK);

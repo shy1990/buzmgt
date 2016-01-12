@@ -12,7 +12,8 @@
 <title>控制台</title>
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link type="text/css" href="static/plugins/css/unical.css" rel="stylesheet" />
+<link type="text/css" href="static/plugins/css/unical.css"
+	rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
 <link rel="stylesheet" type="text/css" href="static/css/index.css" />
 <link rel="stylesheet" type="text/css"
@@ -28,18 +29,22 @@
 			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
 				<%@include file="left_menu.jsp"%>
 			</div>
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 clear-padd">
-					<!-- CALENDAR -->
-							<iframe src="/index" id="iframepage" name="iframepage" frameBorder=0 scrolling=no width="100%" onLoad="reinitIframeEND();"  ></iframe>
-					<!-- /CALENDAR -->
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 clear-padd" style="overflow-y: auto;">
+				<!-- CALENDAR -->
+				<iframe src="/index" id="iframepage" name="iframepage" frameBorder=0
+					scrolling="auto" width="100%" onLoad="reinitIframeEND();"></iframe>
+				<!-- /CALENDAR -->
 			</div>
 		</div>
 	</div>
 	<div class="myalert">
-		<div class="alert alert-warning alert-dismissible fade in" role="alert">
-      		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-      		<strong id="msg">Holy guacamole!</strong> Best check yo self, you're not looking too good.
-    	</div>
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" 
+				aria-label="Close">
+				<span aria-hidden="true">×</span>
+			</button>
+			<h4 id="msg"></h4>
+		</div>
 	</div>
 	<!-- Bootstrap core JavaScript
     ================================================== -->
@@ -54,8 +59,6 @@
 	<script src="static/js/jquery/jquery-1.11.3.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
-	<script src="static/js/index.js" type="text/javascript" charset="utf-8"></script>
-
+	<script src="/static/js/index.js" type="text/javascript" charset="utf-8"></script>
 </body>
-
 </html>

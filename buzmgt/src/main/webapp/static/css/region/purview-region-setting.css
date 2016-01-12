@@ -15,7 +15,7 @@
 	line-height: 66px;
 	margin-top: 0;
 	margin-left: -26px;
-	padding-left: 50px ;
+	padding-left: 26px ;
 	margin-right: -40px;
 	font-size: 14px;
 	font-weight: bold;
@@ -71,7 +71,7 @@
 }
 .role-region-title{
 	position: relative;
-	padding: 10px 0 10px 46px;
+	padding: 10px 0 10px 20px;
 	border-radius: 4px 0 0 0;
 	border-right: 1px solid #F4B252;
 	font-size: 14px;

@@ -19,7 +19,7 @@ function checkUsername(){
 		},
 		success : function(result){
 		   if (result) {
-               alert("用户名已存在！");              
+			   alert("用户名已存在！");              
 			}else {
 				alert("数据加载异常！");
 			};
