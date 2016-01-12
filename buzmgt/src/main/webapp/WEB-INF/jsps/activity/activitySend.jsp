@@ -23,6 +23,8 @@
 	type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="../static/plugins/ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="../static/plugins/ckeditor/config.js"></script>
+<script src='static/js/common.js'></script>
+
 </head>
 <body>
 	<div class=" col-md-12 "

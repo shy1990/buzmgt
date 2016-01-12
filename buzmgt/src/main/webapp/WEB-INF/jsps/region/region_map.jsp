@@ -86,6 +86,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 				<!-- 创建区域  modalend -->
 </body>
 <script src="static/js/jquery/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src='static/js/common.js' charset="utf-8"></script>
 <script type="text/javascript">
 
 

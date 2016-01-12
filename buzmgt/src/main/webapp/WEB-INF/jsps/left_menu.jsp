@@ -17,10 +17,11 @@
 						<li id="lm${menu.id }">
 							<c:choose>
 							<c:when test="${not empty menu.url}">
-								<a class="console" href="${menu.url}">${menu.name} </a>
+								<a href="${menu.url}"><i class="${menu.icon} menu-icon"></i>${menu.name} </a>
 							</c:when>
 							<c:otherwise>
-							<a class="menu-second-box management" href="" data-toggle="dropdown">${menu.name}
+							<a class="menu-second-box" href="" data-toggle="dropdown">
+							<i class="${menu.icon} menu-icon"></i>${menu.name}
 							<span class="pull-right down-icon"></span></a>
 							</c:otherwise>
 							</c:choose>		
@@ -29,10 +30,10 @@
 								<c:choose>
 									<c:when test="${not empty sub.url}">
 									<li id="z${sub.id }">
-									<a class="team" href="${sub.url }">${sub.name }</a>
+									<a href="${sub.url }"><i class="${sub.icon } menu-icon"></i>${sub.name }</a>
 									</c:when>
 									<c:otherwise>
-									<li> <a class="team" href="">${sub.name }</a> </li>
+									<li> <a href=""><i class="${sub.icon } menu-icon"></i>${sub.name }</a></li>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>

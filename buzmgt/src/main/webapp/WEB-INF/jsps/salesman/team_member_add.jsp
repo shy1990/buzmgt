@@ -17,6 +17,7 @@
 	href="/static/yw-team-member/team-member.css" />
 <script src="/static/js/jquery/jquery.min.js" type="text/javascript"
 		charset="utf-8"></script>
+<script src='/static/js/common.js'></script>
 <!-- 		 <script type="text/javascript" src="../static/zTree/js/jquery.ztree.all-3.5.min.js"></script>  -->
 <style type="text/css">
 .ztree {

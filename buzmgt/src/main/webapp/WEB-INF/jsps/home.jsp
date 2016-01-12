@@ -32,7 +32,8 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 clear-padd" style="overflow-y: auto;">
 				<!-- CALENDAR -->
 				<iframe src="/index" id="iframepage" name="iframepage" frameBorder=0
-					scrolling="auto" width="100%" onLoad="reinitIframeEND();"></iframe>
+					scrolling="auto" width="100%" onLoad="reinitIframeEND();">
+				</iframe>
 				<!-- /CALENDAR -->
 			</div>
 		</div>

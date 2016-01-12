@@ -226,6 +226,7 @@
 	<script type="text/javascript"
 		src="/static/CloudAdmin/js/fuelux-tree/fuelux.tree.min.js"></script>
 	<script src="/static/CloudAdmin/js/script.js"></script>
+	<script src='/static/js/common.js'></script>
 	<script>
 		jQuery(document).ready(function() {
 			App.setPage("treeview"); //Set current page

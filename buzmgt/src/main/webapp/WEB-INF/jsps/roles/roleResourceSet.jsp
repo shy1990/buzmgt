@@ -239,6 +239,7 @@
 
 		</form>
 	</div>
+	<script src='/static/js/common.js'></script>
 	
 </body>
 </html>
