@@ -11,7 +11,7 @@ import com.wangge.buzmgt.sys.vo.RegionVo;
 public interface RegionService {
 	
 	
-	public List<RegionTree> findTreeRegion(String id) ;
+	public List<RegionTree> findTreeRegionById(String id) ;
 	
 	
 	public Region findListRegionbyid(String id);
@@ -24,4 +24,9 @@ public interface RegionService {
 	public List<RegionVo> getRegionByPid(String id);
 
 	public Region getRegionById(String regionId);
+
+
+  public List<RegionTree> findTreeRegion(String id, String returnId);
+
+
 }

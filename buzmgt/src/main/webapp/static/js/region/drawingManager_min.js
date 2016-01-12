@@ -510,9 +510,9 @@ BMAP_DRAWING_RETURN = "return";(function() {
 		h.addEventListener("mousedown", m)
 	};
 	
-	d.prototype._bindReturn= function() {
+	/*d.prototype._bindReturn= function() {
 		javascript:history.back(-1);
-	};
+	};*/
 	
 	d.prototype._calculate = function(j, i) {
 		var h = {

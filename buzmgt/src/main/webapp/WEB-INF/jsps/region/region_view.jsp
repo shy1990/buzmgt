@@ -49,7 +49,7 @@
 															<div class="role-region-title"><i class="title-icon"></i>区域结构</div>
 															<div class="role-list">
 																<div style="width: 100%;height: 32px; border-right: 1px solid rgb(221, 221, 221);"></div>
-																	<ul id="treeDemo" class="ztree" ></ul>
+																	<ul id="treeDemo" class="ztree" ></ul><input id="returnId" type="hidden" value="${returnId}"/>
 															</div>
 														</div>
 													</div>

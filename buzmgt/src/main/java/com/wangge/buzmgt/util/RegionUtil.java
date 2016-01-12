@@ -26,7 +26,7 @@ public class RegionUtil {
 		RegionTree regionTree=new RegionTree();
 		regionTree.setId(region.getId());
 		regionTree.setName(region.getName());
-		regionTree.setOpen(true);
+		regionTree.setOpen("true");
 		if (!region.getChildren().isEmpty() && region.getChildren().size() > 0) {
 			regionTree.setIsParent("true");
 		} else {

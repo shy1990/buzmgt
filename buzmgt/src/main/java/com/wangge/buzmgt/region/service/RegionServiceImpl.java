@@ -2,7 +2,9 @@ package com.wangge.buzmgt.region.service;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -23,11 +25,13 @@ public class RegionServiceImpl implements RegionService {
 	private RegionRepository regionRepository;
 	
 	@Override
-	public List<RegionTree> findTreeRegion(String id) {
+	public List<RegionTree> findTreeRegionById(String id) {
 		List<RegionTree> listRegionTree = new ArrayList<RegionTree>();
 		for (Region region : regionRepository.findOne(id).getChildren()) {
 			listRegionTree.add(RegionUtil.getRegionTree(region));
+			
 		}
+		
 		return listRegionTree;
 	}
 	@Override
@@ -75,8 +79,28 @@ public class RegionServiceImpl implements RegionService {
 		regionRepository.delete(region);
 		
 	}
+	
+  @Override
+  public List<RegionTree> findTreeRegion(String id, String returnId) {
+    List<RegionTree> listRegionTree = new ArrayList<RegionTree>();
+   Collection<Region> children = regionRepository.findOne(id).getChildren();
+   
+  
+    return createTree(listRegionTree, children, returnId);
+  }
+  
+  private List<RegionTree> createTree(List<RegionTree> listRegionTree, Collection<Region> children, String id){
+    
+    for(Region region : children){
+      listRegionTree.add(RegionUtil.getRegionTree(region));
+      if(id != null && !"".equals(id)){
+        if(region.getId().equals(regionRepository.findOne(id).getParent().getId())){
+           createTree(listRegionTree, region.getChildren(),id);
+         }
+      }
+     
+    }
+    return listRegionTree;
+  }
 
-	
-	
-	
 }

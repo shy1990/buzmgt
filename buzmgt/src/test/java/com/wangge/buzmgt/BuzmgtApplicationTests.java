@@ -22,6 +22,7 @@ import com.wangge.buzmgt.manager.service.managerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.salesman.entity.salesMan;
 import com.wangge.buzmgt.salesman.entity.salesMan.SalesmanStatus;
 import com.wangge.buzmgt.salesman.service.salesManService;
@@ -33,6 +34,7 @@ import com.wangge.buzmgt.sys.repository.UserRepository;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.OrganizationVo;
+import com.wangge.buzmgt.util.RegionUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BuzmgtApplication.class)
@@ -186,6 +188,34 @@ public class BuzmgtApplicationTests {
 	public void test2(){
 	  System.out.println("============="+SalesmanStatus.SAOJIE);
 	}
+	@Test
+	public void testRegion(){
+	      String id  = null;
+	      Collection<Region> children = regionRepostory.findOne("0").getChildren();
+	       List<RegionTree> listRegionTree = new ArrayList<RegionTree>();
+	       listRegionTree =createTree(listRegionTree,children, id);
+	    
+	       
+	      for(RegionTree r : listRegionTree){
+	        System.out.println("======================"+r.getName());
+	      }
+	      
+	}
 	
-
+  private List<RegionTree> createTree(List<RegionTree> listRegionTree, Collection<Region> children, String id){
+	
+	  for(Region region : children){
+      listRegionTree.add(RegionUtil.getRegionTree(region));
+    if(id != null && !"".equals(id)){
+      if(region.getId().equals(regionRepostory.findOne(id).getParent().getId())){
+        // children = region.getChildren();
+         createTree(listRegionTree, region.getChildren(),id);
+       }
+    }
+     
+    }
+	  return listRegionTree;
+	}
+	
+	
 }
