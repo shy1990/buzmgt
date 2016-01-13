@@ -688,43 +688,43 @@ a:focus .kucun{
 .menu-second .active .shangjiafenbu,
 .menu-second a:hover .shangjiafenbu,
 .menu-second a:focus .shangjiafenbu{
-	background: url(../img/icon/left-mean/ywmanage/khgl_sjfb2.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_sjfb2.png) no-repeat;
 }
 /* 活跃度 */
 .huoyuedu{
-	background: url(../img/icon/left-mean/ywmanage/khgl_hykh1.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_hykh1.png) no-repeat;
 }
 .menu-second .active .huoyuedu,
 .menu-second a:hover .huoyuedu,
 .menu-second a:focus .huoyuedu{
-	background: url(../img/icon/left-mean/ywmanage/khgl_hykh2.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_hykh2.png) no-repeat;
 }
 /* 沉积商家 */
 .chenjishangjia{
-	background: url(../img/icon/left-mean/ywmanage/khgl_cjkh1.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_cjkh1.png) no-repeat;
 }
 .menu-second .active .chenjishangjia,
 .menu-second a:hover .chenjishangjia,
 .menu-second a:focus .chenjishangjia{
-	background: url(../img/icon/left-mean/ywmanage/khgl_cjkh2.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_cjkh2.png) no-repeat;
 }
 /* 二次提货 */
 .ercitihuo{
-	background: url(../img/icon/left-mean/ywmanage/khgl_ecth1.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_ecth1.png) no-repeat;
 }
 .menu-second .active .ercitihuo,
 .menu-second a:hover .ercitihuo,
 .menu-second a:focus .ercitihuo{
-	background: url(../img/icon/left-mean/ywmanage/khgl_ecth2.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_ecth2.png) no-repeat;
 }
 /* 关联审核 */
 .guanlianshenhe{
-	background: url(../img/icon/left-mean/ywmanage/khgl_glkh1.png.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_glkh1.png.png) no-repeat;
 }
 .menu-second .active .guanlianshenhe,
 .menu-second a:hover .guanlianshenhe,
 .menu-second a:focus .guanlianshenhe{
-	background: url(../img/icon/left-mean/ywmanage/khgl_glkh2.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_glkh2.png) no-repeat;
 }
 /* ===========end 客户管理=============== */
 /*============start 统计================*/
