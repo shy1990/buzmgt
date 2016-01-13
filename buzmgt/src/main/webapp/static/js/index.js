@@ -8,6 +8,9 @@ $(function() {
 	$('.menu>li>a').click(function(){
 		$(this).parent('li').toggleClass('active'); 		
 		$(this).parent('li').siblings().removeClass('active');
+		$(this).siblings('ul').find('li').removeClass('active');
+		console.info($(this).siblings('ul'))//.find('li').removeClass('active');
+		
 	})
 	//菜单a href 加载在iframe
 	$("#left-menu ul li a").click(function(event) {
