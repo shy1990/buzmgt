@@ -66,8 +66,9 @@
 										<span class="input-group-addon" id="basic-addon1"><i
 											class="member-icon member-name-icon"></i></span> <input type="text"
 											class="form-control" id="username" name="username"
-											placeholder="请填写用户名" onblur="checkUsername()" />
+											placeholder="请填写5-20位字符的用户名" onblur="checkUsername()" />
 									</div>
+									<label class="pull-right col-md-6 control-label msg-error">请填写用户名,5-20位字符</label>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">姓名:</label>
@@ -75,8 +76,9 @@
 										<span class="input-group-addon" id="basic-addon1"><i
 											class="member-icon member-name-icon" onblur="checkName()"></i></span>
 										<input type="text" class="form-control" id="truename"
-											name="truename" placeholder="请填写个人名称">
+											name="truename" placeholder="请填写个人真实姓名">
 									</div>
+									<label class="pull-right col-md-6 control-label msg-error">请填写个人真实姓名</label>
 								</div>
 								<div class="form-group">
 									<label for="inputPassword" class="col-sm-3 control-label">职务:</label>
@@ -89,7 +91,7 @@
 											<option value="">请选择</option>
 										</select>
 									</div>
-
+									<label class="pull-right col-md-6 control-label msg-error">请选择职务</label>
 								</div>
 								<div class="form-group">
 									<label for="inputPassword" class="col-sm-3 control-label">角色权限:</label>
@@ -101,6 +103,7 @@
 											<option selected="selected" value="">请选择</option>
 										</select>
 									</div>
+									<label class="pull-right col-md-6 control-label msg-error">请选择角色权限</label>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">工号:</label>
@@ -110,6 +113,7 @@
 											class="form-control" id="jobNum" name="jobNum"
 											placeholder="请填写个人共工号" onblur="checkJobNum()">
 									</div>
+									<label class="pull-right col-md-3 control-label msg-error">请填写个人共工号</label>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">电话:</label>
@@ -119,6 +123,7 @@
 											class="form-control" id="mobile" name="mobile"
 											placeholder="请填写电话号码" onblur="checkMobile()">
 									</div>
+									<label class="pull-right col-md-3 control-label msg-error">请填写个人电话</label>
 								</div>
 								<div class="form-group">
 									<label for="inputPassword" class="col-sm-3 control-label">负责区域:</label>
@@ -134,6 +139,7 @@
 										</div>
 										<input type="hidden" id="towns" name="regionPid">
 									</div>
+									<label class="pull-right col-md-3 control-label msg-error">请选择负责区域</label>
 								</div>
 								<!-- <div class="form-group">
 								    	<label class="col-sm-3 control-label">ID编号:</label>
@@ -144,7 +150,7 @@
 								    </div> -->
 								<div class="form-group">
 									<div class="input-group col-sm-9 col-sm-offset-4">
-										<button class="btn btn-warning col-sm-3 ">确定保存</button>
+										<button class="btn btn-warning col-sm-3 " type="submit">确定保存</button>
 									</div>
 								</div>
 							</form>

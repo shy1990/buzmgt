@@ -115,8 +115,9 @@ public class teamMembersController {
 	}
 	
 	
-	@RequestMapping(value = "/getSalesManList")
-	public  String  getSalesManList(Model model,salesMan salesman, String Status,String page, HttpServletRequest requet){
+	@RequestMapping(value = "/getSalesManList",method=RequestMethod.GET)
+	@ResponseBody
+	public  Page<salesMan>  getSalesManList(Model model,salesMan salesman, String Status,String page, HttpServletRequest requet){
 	      String name = Status != null ? Status : "扫街中";
 	      int pageNum = Integer.parseInt(page != null ? page : "0");
     	  if(SalesmanStatus.SAOJIE.getName().equals(name) ){
@@ -133,7 +134,7 @@ public class teamMembersController {
 	  Page<salesMan> list = salesManService.getSalesmanList(salesman,pageNum);
 	  model.addAttribute("list", list);
 	  model.addAttribute("Status", Status);
-	  return "salesman/salesman_list";
+	  return list;
 	}
 	
 	

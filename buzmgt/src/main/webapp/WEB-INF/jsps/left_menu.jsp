@@ -20,7 +20,7 @@
 								<a href="${menu.url}"><i class="${menu.icon} menu-icon"></i>${menu.name} </a>
 							</c:when>
 							<c:otherwise>
-							<a class="menu-second-box" href="" data-toggle="dropdown">
+							<a class="menu-second-box" href="" >
 							<i class="${menu.icon} menu-icon"></i>${menu.name}
 							<span class="pull-right down-icon"></span></a>
 							</c:otherwise>

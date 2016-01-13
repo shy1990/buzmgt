@@ -1,5 +1,5 @@
 $(function(){
-	$('.form-group input').focus(function(){
+	$('.form-group input,.form-group .form-control').focus(function(){
 		$(this).parents('.form-group').removeClass('has-error');
 	});
 });

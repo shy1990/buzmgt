@@ -116,5 +116,17 @@ public interface UserService {
 	* @throws
 	 */
   public User addUser(User u);
+  
+  /**
+   * @return 
+   * 
+  * @Title: existUsername 
+  * @Description: TODO(判断用户名是否存在) 
+  * @param @param existUsername    
+  * @return Boolean    返回类型 
+  * @author SongBaozhen
+  * @throws
+   */
+  public  Boolean existUsername(String username);
 	
 }

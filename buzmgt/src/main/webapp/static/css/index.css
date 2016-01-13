@@ -408,8 +408,8 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 	position: absolute;
 	top:130px;
 	right: 30px;
-	opacity: 0.6;
-	filter: alpha(opacity=57);
+/* 	opacity: 0.6; */
+/* 	filter: alpha(opacity=57); */
 }
 @media (max-width: 1200px) {
 	.index-calender{

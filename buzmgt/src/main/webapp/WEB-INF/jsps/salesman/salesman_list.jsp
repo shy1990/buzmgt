@@ -82,7 +82,19 @@
 											class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">已转正</span></a></li>
 								</ul>
-
+								<!--/菜单栏-->
+							</div>
+							<div
+								class="col-sm-4 col-md-3 col-lg-2 col-md-offset-4 col-lg-offset-5">
+								<div class="form-group title-form">
+									<div class="input-group ">
+										<input type="text" class="form-control" id="param"
+											placeholder="请输入名称或工号"> <span
+											class="input-group-addon" id="goSearch"
+											onclick="getList(this.value,this.id)"><i
+											class="icon icon-finds"></i></span>
+									</div>
+								</div>
 							</div>
 						</div>
 						<!--<div class="title-form input-group ">
