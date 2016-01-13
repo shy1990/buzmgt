@@ -153,14 +153,61 @@
 												<c:if test="${not empty list.content}">
 													<div style="text-align: center;">
 														<ul class="pagination">
-															<li><a
-																href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
-															<c:forEach var="s" begin="1" end="${list.totalPages}"
-																step="1">
-																<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
-															</c:forEach>
-															<li><a
-																href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
+															<li><a href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+															<!-- 1.total<=7 -->
+															<c:if test="${list.totalPages<=7 }">
+																<c:forEach var="s" begin="1" end="${list.totalPages}" step="1">	
+																	<c:choose>
+																		<c:when test="${list.number == s-1 }">
+																			<li class="active"><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:when>
+																		<c:otherwise>
+																			<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:otherwise>
+																	</c:choose>
+																</c:forEach>
+															</c:if>
+															<c:if test="${list.totalPages>7 && list.number<4 }">
+																<c:forEach var="s" begin="1" end="6" step="1">	
+																	<c:choose>
+																		<c:when test="${list.number == s-1 }">
+																			<li class="active"><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:when>
+																		<c:otherwise>
+																			<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:otherwise>
+																	</c:choose>
+																</c:forEach>
+																<li><a href="javascript:void(0)">...</a></li>
+															</c:if>
+															<c:if test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number>=3 }">
+																<li><a href="javascript:void(0)">...</a></li>
+																<c:forEach var="s" begin="${list.number-2 }" end="${list.number+2 }" step="1">	
+																	<c:choose>
+																		<c:when test="${list.number == s-1 }">
+																			<li class="active"><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:when>
+																		<c:otherwise>
+																			<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:otherwise>
+																	</c:choose>
+																</c:forEach>
+																<li><a href="javascript:void(0)">...</a></li>
+															</c:if>
+															<c:if test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number<3 }">
+																<li><a href="javascript:void(0)">...</a></li>
+																<c:forEach var="s" begin="${list.totalPages-6 }" end="${list.totalPages }" step="1">	
+																	<c:choose>
+																		<c:when test="${list.number == s-1 }">
+																			<li class="active"><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:when>
+																		<c:otherwise>
+																			<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:otherwise>
+																	</c:choose>
+																</c:forEach>
+															</c:if>
+															<li><a href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
 														</ul>
 													</div>
 												</c:if>
