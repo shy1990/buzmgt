@@ -102,8 +102,6 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 		
 		<%
 		if(null!=request.getAttribute("pcoordinates")){%>
-		  	map.centerAndZoom(name, 12);
-			map.enableScrollWheelZoom(true); 
 			<%
 			String pcoordinates=request.getAttribute("pcoordinates").toString();
 			String[] listCoordinates=pcoordinates.split("=");
@@ -122,12 +120,17 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 				 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
 				 		  			<%}
 				 		  		%>
-				 
-				 
 				 <%
 							}%>
 							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
-			 				map.addOverlay(polygon); 	
+			 				map.addOverlay(polygon);
+							<%
+								String jlng=listCoordinates[0].split("-")[0];
+								String jlat=listCoordinates[0].split("-")[1];
+							
+							%>
+			 				map.centerAndZoom(new BMap.Point(<%=jlng%>, <%=jlat%>), 12);
+			 				map.enableScrollWheelZoom(true); 
 //			 				polygon.addEventListener('click',function(e) {
 //			 				   var  point=JSON.stringify(e.pixel);
 //								  alert(point);
