@@ -12,7 +12,7 @@ $(function() {
 					saojieMan.empty();
 					saojieMan.append("<option value='' selected='selected'>待扫街人员</option>");
                     for(var i=0;i<obj.length;i++){
-                    	saojieMan.append("<option value = '"+obj[i].id+"' name='salesmanId'>"+obj[i].truename+"</option>");
+                    	saojieMan.append("<option value = '"+obj[i].id+"'>"+obj[i].truename+"</option>");
 					}
 				}else {
 //					alert(obj.length);
@@ -49,7 +49,7 @@ function queryTown(){
 		   strtown ='';
             strtown+='<option value = "" selected="selected">请选择</option>';
         for(var i=0;i<obj.length;i++){
-        	strtown+="<option value = '"+obj[i].id+"' name='regionId'>"+obj[i].name+"</option>";
+        	strtown+="<option value = '"+obj[i].id+"'>"+obj[i].name+"</option>";
 		}
 	}else {
 			//alert(obj.length);
@@ -96,7 +96,7 @@ function AddOrder(btType) {
 		var strApp = '<div class="col-sm-6 col-xs-4 p-n" id="selOrder' + intLen + '">\
 			  <div class="input-group col-sm-8 col-xs-4 ">\
 			      <span class="input-group-btn" id="basic-addon1"><i class="order-icon saojie-number-icon" name="order">' + order + '</i></span>\
-				  <select class="form-control" name="town" id="town">\
+				  <select class="form-control" name="region.id" id="town">\
 				  ' + strtown + '\
 					</select>\
 				</div>\

@@ -72,7 +72,7 @@ public class SaojieController {
 	
 	@RequestMapping(value = "/saveSaojie",method = RequestMethod.POST)
 	@ResponseBody
-	public String saveSaojie(Saojie saojie,@RequestParam String regionId,@RequestParam String salesmanId){
+	public String saveSaojie(Saojie saojie){
 	  System.out.println(saojie);
 	  saojieService.saveSaojie(saojie);
 	  return "ok";
