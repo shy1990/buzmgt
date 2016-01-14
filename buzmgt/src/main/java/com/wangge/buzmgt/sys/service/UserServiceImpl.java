@@ -40,15 +40,14 @@ public class UserServiceImpl implements UserService {
 	}
 	
 
-  /*@Override
-  public Boolean getByUsername(String username) {
+  @Override
+  public Boolean existUsername(String username) {
     User u = userRepository.findByUsername(username);
     if(u != null){
       return true;
     }
     return false;
   }
-*/
 	@Override
 	public Collection<String> getRolesByUsername(String username) {
 		List<Role> roles = roleRepository.findByUsersUsername(username);

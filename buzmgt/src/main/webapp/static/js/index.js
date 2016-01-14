@@ -8,6 +8,7 @@ $(function() {
 	$('.menu>li>a').click(function(){
 		$(this).parent('li').toggleClass('active'); 		
 		$(this).parent('li').siblings().removeClass('active');
+		$(this).siblings('ul').find('li').removeClass('active');
 	})
 	//菜单a href 加载在iframe
 	$("#left-menu ul li a").click(function(event) {
@@ -43,8 +44,6 @@ var leftMenuHeight = $('#left-menu').outerHeight();//
 var $_topMenuHeight=$(topMenu).outerHeight();
     var bHeight = iframe.contentWindow.document.body.clientHeight;
     iframe.height = leftMenuHeight-5;
-    console.info(leftMenuHeight);
-
 }
 window.document.onkeydown = disableRefresh;
 function disableRefresh(evt){
@@ -52,7 +51,6 @@ evt = (evt) ? evt : window.event
 if (evt.keyCode) {
    if(evt.keyCode == 116){
 	 evt.preventDefault();//阻止系统刷新。
-     console.info(document.getElementById('iframepage'));//.contentWindow.location.reload(true);
      var src=  document.getElementById('iframepage').src;
      document.getElementById('iframepage').src=src;
    }

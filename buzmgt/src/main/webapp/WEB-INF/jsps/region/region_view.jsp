@@ -27,10 +27,6 @@
 <link rel="stylesheet" type="text/css" href="static/purview-setting/purview-setting.css" />
 <link rel="stylesheet" type="text/css" href="static/bootstrap/css/bootstrap-dialog.css" />
 <link rel="stylesheet" type="text/css" href="static/bootstrap/css/jquery-confirm.min.css" />
-<link rel="stylesheet" type="text/css" href="static/css/alert.css" />
-<script type="text/javascript" src="static/js/alert.js"></script>
-<script src='static/js/common.js'></script>
-
 <style>
 .top-titile{
 	padding: 20px;
@@ -61,6 +57,7 @@
 						</div>
 	<!-- Bootstrap -->
 	<script src="static/js/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src='static/js/common.js'></script>
 	<script src="static/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
    <script src="static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
 <!--    <script src="static/js/jquery/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script> -->

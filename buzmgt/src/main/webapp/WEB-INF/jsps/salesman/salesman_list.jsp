@@ -63,7 +63,7 @@
 					<!--title-->
 					<div class="box-title">
 						<div class="row">
-							<div class="col-sm-8 col-md-5">
+							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<ul class="nav nav-tabs"><input id = "status" type="hidden" value="${Status}">
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
@@ -82,7 +82,19 @@
 											class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">已转正</span></a></li>
 								</ul>
-
+								<!--/菜单栏-->
+							</div>
+							<div
+								class="col-sm-4 col-md-3 col-md-offset-3 ">
+								<div class="form-group title-form">
+									<div class="input-group ">
+										<input type="text" class="form-control" id="param"
+											placeholder="请输入名称或工号"> <span
+											class="input-group-addon" id="goSearch"
+											onclick="getList(this.value,this.id)"><i
+											class="icon icon-finds"></i></span>
+									</div>
+								</div>
 							</div>
 						</div>
 						<!--<div class="title-form input-group ">
@@ -141,14 +153,61 @@
 												<c:if test="${not empty list.content}">
 													<div style="text-align: center;">
 														<ul class="pagination">
-															<li><a
-																href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
-															<c:forEach var="s" begin="1" end="${list.totalPages}"
-																step="1">
-																<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
-															</c:forEach>
-															<li><a
-																href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
+															<li><a href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+															<!-- 1.total<=7 -->
+															<c:if test="${list.totalPages<=7 }">
+																<c:forEach var="s" begin="1" end="${list.totalPages}" step="1">	
+																	<c:choose>
+																		<c:when test="${list.number == s-1 }">
+																			<li class="active"><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:when>
+																		<c:otherwise>
+																			<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:otherwise>
+																	</c:choose>
+																</c:forEach>
+															</c:if>
+															<c:if test="${list.totalPages>7 && list.number<4 }">
+																<c:forEach var="s" begin="1" end="6" step="1">	
+																	<c:choose>
+																		<c:when test="${list.number == s-1 }">
+																			<li class="active"><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:when>
+																		<c:otherwise>
+																			<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:otherwise>
+																	</c:choose>
+																</c:forEach>
+																<li><a href="javascript:void(0)">...</a></li>
+															</c:if>
+															<c:if test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number>=3 }">
+																<li><a href="javascript:void(0)">...</a></li>
+																<c:forEach var="s" begin="${list.number-2 }" end="${list.number+2 }" step="1">	
+																	<c:choose>
+																		<c:when test="${list.number == s-1 }">
+																			<li class="active"><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:when>
+																		<c:otherwise>
+																			<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:otherwise>
+																	</c:choose>
+																</c:forEach>
+																<li><a href="javascript:void(0)">...</a></li>
+															</c:if>
+															<c:if test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number<3 }">
+																<li><a href="javascript:void(0)">...</a></li>
+																<c:forEach var="s" begin="${list.totalPages-6 }" end="${list.totalPages }" step="1">	
+																	<c:choose>
+																		<c:when test="${list.number == s-1 }">
+																			<li class="active"><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:when>
+																		<c:otherwise>
+																			<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		</c:otherwise>
+																	</c:choose>
+																</c:forEach>
+															</c:if>
+															<li><a href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
 														</ul>
 													</div>
 												</c:if>

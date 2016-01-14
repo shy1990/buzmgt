@@ -115,7 +115,7 @@ public class teamMembersController {
 	}
 	
 	
-	@RequestMapping(value = "/getSalesManList")
+	@RequestMapping(value = "/getSalesManList",method=RequestMethod.GET)
 	public  String  getSalesManList(Model model,salesMan salesman, String Status,String page, HttpServletRequest requet){
 	      String name = Status != null ? Status : "扫街中";
 	      int pageNum = Integer.parseInt(page != null ? page : "0");
