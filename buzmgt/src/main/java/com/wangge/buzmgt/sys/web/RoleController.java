@@ -84,7 +84,7 @@ public class RoleController extends BaseController {
 		model.addAttribute("totalCount", rlist.size());
 		model.addAttribute("totalPage", (int) Math.ceil(rlist.size()/Double.parseDouble(String.valueOf(pageSize))));
 		model.addAttribute("currentPage", page);
-		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), pageSize, rlist.size(), 0));
+		model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), pageSize, rlist.size(), 10));
 		return "roles/roleList";
 	}
 	/**
