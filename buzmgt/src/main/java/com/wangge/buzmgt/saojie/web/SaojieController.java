@@ -74,6 +74,7 @@ public class SaojieController {
 	@ResponseBody
 	public String saveSaojie(Saojie saojie){
 	  System.out.println(saojie);
+	  System.out.println(saojie.getSalesman().getRegion());
 	  saojieService.saveSaojie(saojie);
 	  return "ok";
 	}
