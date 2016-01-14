@@ -63,7 +63,7 @@
 					<!--title-->
 					<div class="box-title">
 						<div class="row">
-							<div class="col-sm-8 col-md-5">
+							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<ul class="nav nav-tabs"><input id = "status" type="hidden" value="${Status}">
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
@@ -85,7 +85,7 @@
 								<!--/菜单栏-->
 							</div>
 							<div
-								class="col-sm-4 col-md-3 col-lg-2 col-md-offset-4 col-lg-offset-5">
+								class="col-sm-4 col-md-3 col-md-offset-3 ">
 								<div class="form-group title-form">
 									<div class="input-group ">
 										<input type="text" class="form-control" id="param"

@@ -915,7 +915,7 @@ dd.project-people {
 	background:url(../img/team-member/sjwc.png) no-repeat;
 }
 .project-completion {
-	width: 44.5%;
+	min-width: 200px;
 }
 .project-completion .completion-ing{
 	padding: .3em 2em;
@@ -1076,5 +1076,9 @@ body.rtls .stat-percent {
 }
 
 /*娣诲姞鎵缁撴潫*/
+/* 表格响应解决ie兼容y轴滚动条 */
+.table-responsive{
+	overflow-y: hidden; 
+}
 
 

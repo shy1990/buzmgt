@@ -24,7 +24,7 @@
     padding: 0 0 0 63px;
 }
 .ztree li ul.line {
-    background: rgba(0, 0, 0, 0) url("./img/line_conn.gif") repeat-y scroll 0 0;
+    background: rgba(0, 0, 0, 0) url("./img/line_conn.png") repeat-y scroll -1px 0;
 }
 .ztree li a {
     background-color: transparent;
