@@ -79,7 +79,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-
 	@Transactional
 	public User getById(String id) {
 		

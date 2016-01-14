@@ -28,4 +28,18 @@ public class salesManServiceImpl implements salesManService {
 	public List<User> findByReginId(String regionId) {
 		
 		return salesManRepository.findByRegionId(regionId);
-	}}
+	}
+
+
+  @Override
+  public List<salesMan> gainSaojieMan() {
+    return salesManRepository.gainSaojieMan();
+  }
+
+
+  @Override
+  public salesMan findById(String id) {
+    return salesManRepository.findById(id);
+  }
+  
+}

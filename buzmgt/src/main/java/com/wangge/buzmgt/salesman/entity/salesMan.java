@@ -67,7 +67,7 @@ public class salesMan implements Serializable {
 	private String jobNum;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "region_id")
 	private Region region;
 
