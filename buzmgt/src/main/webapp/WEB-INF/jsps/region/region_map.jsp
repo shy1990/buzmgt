@@ -45,7 +45,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 </head>
 <body >
 					<div id="allmap">
-					</div><input id="regionId" type="hidden" value="${parentid}"/>
+					</div>
 
 			<!-- 创建区域  modal start -->
 			<div class="add-region modal fade " id="exampleModal" tabindex="-1"
@@ -291,8 +291,8 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	 }
 	 
 	  $("a[title='返回']").click(function(){
-		var id = $("#regionId").val();
-		URL='/region/returnRegionTreeById?id='+id;
+		//var id = $("#regionId").val();
+		URL='/region/initRegion';
 		 location.replace(URL)   
 
 		
