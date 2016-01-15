@@ -16,6 +16,7 @@ import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.entity.salesMan;
 import com.wangge.buzmgt.salesman.service.salesManService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 
 /**
@@ -70,12 +71,34 @@ public class SaojieController {
     return list;
 	}
 	
+	/** 
+	  * saveSaojie:(添加扫街保存). <br/> 
+	  * 
+	  * @author peter 
+	  * @param saojie
+	  * @return 
+	  * @since JDK 1.8 
+	  */  
 	@RequestMapping(value = "/saveSaojie",method = RequestMethod.POST)
 	@ResponseBody
-	public String saveSaojie(Saojie saojie){
-	  System.out.println(saojie);
-	  System.out.println(saojie.getSalesman().getRegion());
-	  saojieService.saveSaojie(saojie);
+	public String saveSaojie(Saojie saojie,String value,@RequestParam String num){
+	  String regionId=saojie.getRegion().getId();
+	  String[] strArray = regionId.split(",");
+	  String[] strValue = value.split(",");
+	  String[] strOrder = num.split(",");
+	  System.out.println(strArray.length);
+	  for(int i=0; i<strArray.length;i++){
+	    Saojie sj = new Saojie();
+	    sj.setStatus(SaojieStatus.PENDING);
+	    sj.setBeginTime(saojie.getBeginTime());
+	    sj.setExpiredTime(saojie.getExpiredTime());
+	    sj.setOrder(Integer.valueOf(strOrder[i]));
+	    sj.setMinValue(Integer.valueOf(strValue[i]));
+	    Region region = regionService.getRegionById(strArray[i]);
+	    sj.setRegion(region);
+	    sj.setSalesman(saojie.getSalesman());
+	    saojieService.saveSaojie(sj);
+	  }
 	  return "ok";
 	}
 	

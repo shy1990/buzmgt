@@ -53,13 +53,14 @@
 													onchange="queryTown()">
 													<option selected="selected" value="">待扫街人员</option>
 												</select>
+												<!-- <input type="hidden" class="form-control" id="pid" value="" name="pid"/> -->
 											</div>
 										</div>
 
 										<div class="form-group">
 											<label class="col-sm-3 col-xs-12 control-label">顺序:</label>
 											<div class="col-sm-9" style="padding: 0;" id="pid">
-												<div class="col-sm-6 col-xs-4" id="btType">
+												<div class="col-sm-6 col-xs-4 p-t" id="btType">
 													<button id="btn" class="btn btn-white btn-w-m" text="点击"
 														type="button" onclick="AddOrder(btType)"></button>
 												</div>

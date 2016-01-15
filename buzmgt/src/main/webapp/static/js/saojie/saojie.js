@@ -95,7 +95,7 @@ function AddOrder(btType) {
 		//					}
 		var strApp = '<div class="col-sm-6 col-xs-4 p-n" id="selOrder' + intLen + '">\
 			  <div class="input-group col-sm-8 col-xs-4 ">\
-			      <span class="input-group-btn" id="basic-addon1"><i class="order-icon saojie-number-icon" name="order">' + order + '</i></span>\
+		<span class="input-group-btn" id="basic-addon1"><i class="order-icon saojie-number-icon"><input type="hidden" name="num" value="' + intLen + '"/>' + order + '</i></span>\
 				  <select class="form-control" name="region.id" id="town">\
 				  ' + strtown + '\
 					</select>\
@@ -103,7 +103,7 @@ function AddOrder(btType) {
 				<div class="col-sm-4 clear-padd-l">\
 					<div class="input-group clear-padd-l">\
 						<span class="input-group-addon" id="basic-addon1"><i class="member-icon member-value-icon"></i></span>\
-						<input type="text" name="minValue" class="form-control" placeholder="指标(家)" id="minValue' + intNewApp + '">\
+						<input type="text" name="value" class="form-control" placeholder="指标(家)" id="minValue' + intNewApp + '">\
 					</div>\
 					<span class="del-order glyphicon glyphicon-remove" onclick="delNode(selOrder' + intLen + ',' + order + ')"></span>\
 				</div>\

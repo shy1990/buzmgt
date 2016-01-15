@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -63,11 +64,10 @@ public class Saojie implements Serializable {
 	@JoinColumn(name = "PARENT_ID")
 	private Saojie parent;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
 	private salesMan salesman;
