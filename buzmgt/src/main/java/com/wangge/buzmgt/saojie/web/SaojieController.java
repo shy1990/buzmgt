@@ -42,6 +42,7 @@ public class SaojieController {
 	
 	@RequestMapping("/saojieList")
 	public String toTeamMembers(String saojieList, Model model){
+	  
 		model.addAttribute("saojieList", saojieList);
 		return "saojie/saojie_list";
 	}
