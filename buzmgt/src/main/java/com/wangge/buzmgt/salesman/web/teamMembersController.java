@@ -13,6 +13,8 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -78,9 +80,10 @@ public class teamMembersController {
 		model.addAttribute("add", add);
 		return "salesman/team_member_add";
 	}
-	@RequestMapping(value = "/addTeamMember")
-	public String addTeamMembers(salesMan salesman,String username,String regionId,String organizationId,String roleId,String regionPid ,HttpServletRequest request){
-		Organization o = organizationService.getOrganById(Long.parseLong(organizationId));
+	@RequestMapping(value = "/addTeamMember",method = RequestMethod.POST)
+	public String addTeamMembers(salesMan salesman,String username,String regionId,String organizationId,String roleId,String regionPid ,Model model){
+	  if(!userService.existUsername(username)){
+	  Organization o = organizationService.getOrganById(Long.parseLong(organizationId));
 		User u = new User();
 		u.setOrganization(o);
     u.addRole(roleService.getRoleById(roleId));
@@ -88,15 +91,21 @@ public class teamMembersController {
     u.setUsername(username);
     u.setStatus(UserStatus.NORMAL);
 		if("服务站经理".equals(o.getName())){
-			u.setId(createUerId(regionPid.trim(),o));
-			u = userService.addUser(u);
-			salesman.setRegion(regionService.getRegionById(regionPid.trim()));
+			
+			if(!"".equals(regionPid)){
+			  salesman.setRegion(regionService.getRegionById(regionPid.trim()));
+			  salesman.setTowns(regionId);
+			  u.setId(createUerId(regionPid.trim(),o));
+			}
+			u.setId(createUerId(regionId.trim(),o));
+      u = userService.addUser(u);
+			salesman.setRegion(regionService.getRegionById(regionId.trim()));
 			salesman.setSalesmanStatus(SalesmanStatus.SAOJIE);
-			salesman.setTowns(regionId);
 			salesman.setRegdate(new Date());
 			salesman.setUser(u);
 			salesManService.addSalesman(salesman);
-			return "redirect:/salesman/salesManList";
+		//	return "redirect:/salesman/salesManList";
+			
 		}else{
 			u.setId(createUerId(regionId.trim(),o));
 			u = userService.addUser(u);
@@ -109,9 +118,14 @@ public class teamMembersController {
 			m.setUser(u);
 			managerService.addManager(m);
 		//	return Redirect("/User/Edit");"salesman/salesman_list";
-			return "redirect:/salesman/salesManList";
+			
 		}
-		
+		  return "redirect:/salesman/salesManList";
+	  }else{
+	    model.addAttribute("userName", username);
+	    model.addAttribute("salesman", salesman);
+	    return "salesman/team_member_add";
+	  }
 	}
 	
 	

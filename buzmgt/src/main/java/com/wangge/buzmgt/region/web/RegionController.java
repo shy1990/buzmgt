@@ -80,10 +80,10 @@ public class RegionController {
 	
 	@RequestMapping(value = "/findOneRegion", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<List<RegionTree>> findOneRegion(String returnId) {
+	public ResponseEntity<List<RegionTree>> findOneRegion() {
 		 List<RegionTree> listTreeVo =new ArrayList<RegionTree>();
 		
-		  listTreeVo=regionService.findTreeRegion(ONELEAVE,returnId);
+		  listTreeVo=regionService.findTreeRegion(ONELEAVE);
 		return new ResponseEntity<List<RegionTree>>(listTreeVo,HttpStatus.OK);
 	}
 	
@@ -103,7 +103,7 @@ public class RegionController {
 	public ResponseEntity<List<RegionTree>> findRegionByid(String id) {
 		 List<RegionTree> listTreeVo =new ArrayList<RegionTree>();
 		
-		  listTreeVo=regionService.findTreeRegionById(id);
+		  listTreeVo=regionService.findTreeRegion(id);
 		return new ResponseEntity<List<RegionTree>>(listTreeVo,HttpStatus.OK);
 	}
 	
@@ -331,12 +331,6 @@ public class RegionController {
 		}
 		   List<RegionVo> regionList = regionService.getRegionByPid(regionId);
 		return new ResponseEntity<List<RegionVo>>(regionList,HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/returnRegionTreeById")
-	public  String returnRegionTreeById(String id, Model model){
-	  model.addAttribute("returnId", id);
-	  return "region/region_view";
 	}
 	
 }
