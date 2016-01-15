@@ -24,6 +24,7 @@ import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.entity.salesMan;
 import com.wangge.buzmgt.salesman.entity.salesMan.SalesmanStatus;
 import com.wangge.buzmgt.salesman.service.salesManService;
+import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
@@ -32,6 +33,7 @@ import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.ResourceService;
 import com.wangge.buzmgt.sys.service.ResourceService.Menu;
 import com.wangge.buzmgt.sys.service.RoleService;
+import com.wangge.buzmgt.sys.util.Page;
 
 /**
  * 
@@ -56,7 +58,10 @@ public class teamMembersController {
 	private managerService managerService;
 	
 	@RequestMapping("/salesManList")
-	public String toTeamMembers(String salesManList , Model model){
+	public String toTeamMembers(String salesManList , Model model,Saojie saojie){
+	  int pageNum = 0;
+    Page<salesMan> list = salesManService.getSalesmanList(saojie,pageNum);
+    model.addAttribute("list", list);
 		model.addAttribute("salesManList", salesManList);
 		return "salesman/salesman_list";
 	}
