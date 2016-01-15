@@ -70,6 +70,16 @@ public class SaojieController {
     return list;
 	}
 	
+	
+	
+	@RequestMapping(value = "/getRegionName",method = RequestMethod.POST)
+  @ResponseBody
+  public String  getRegionName(String id){
+    salesMan sm = salesManService.findById(id);
+    String  regionName=sm.getRegion().getName();
+    return regionName;
+  }
+	
 	@RequestMapping(value = "/saveSaojie",method = RequestMethod.POST)
 	@ResponseBody
 	public String saveSaojie(Saojie saojie){

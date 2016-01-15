@@ -67,7 +67,7 @@ public class Region implements Serializable {
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
 	private Collection<Region> children;
-
+	
 	public String getId() {
 		return id;
 	}
@@ -138,4 +138,5 @@ public class Region implements Serializable {
 		this.children = children;
 	}
 
+	
 }

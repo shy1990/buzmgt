@@ -43,20 +43,40 @@ function queryTown(){
 	dataType:"JSON",
 	success : function(obj){
 	   if (obj) {
-//			var town = $("#town");
-//			alert(town);
-//            town.empty();
+		   var map = new BMap.Map("allmap");    // 创建Map实例
+		   var regionName;
 		   strtown ='';
             strtown+='<option value = "" selected="selected">请选择</option>';
-        for(var i=0;i<obj.length;i++){
-        	strtown+="<option value = '"+obj[i].id+"'>"+obj[i].name+"</option>";
-		}
-    	// 百度地图API功能
-		var map = new BMap.Map("allmap");    // 创建Map实例
-		map.centerAndZoom("济南市", 11);  // 初始化地图,设置中心点坐标和地图级别
-		map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-		map.setCurrentCity("济南市");          // 设置地图显示的城市 此项是必须设置的
-		map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+	        for(var i=0;i<obj.length;i++){
+	        	strtown+="<option value = '"+obj[i].id+"'>"+obj[i].name+"</option>";
+	        	if(null!=obj[i].coordinates){
+	        		 var points=new Array()
+	        		for(var j=0;j<obj[i].coordinates.split("=").length;j++){
+	        			var lng=obj[i].coordinates.split("=")[j].split("-")[0];
+	        			var lat=obj[i].coordinates.split("=")[j].split("-")[1];
+	        			points[j]=new BMap.Point(lng,lat);
+	        		}
+	        		
+	        		var polygon = new BMap.Polygon({strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
+	        		polygon.setStrokeColor("blue");
+	        		polygon.setPath(points);
+	        		polygon.setStrokeWeight(2);
+	        		polygon.setFillColor("red");
+	        		polygon.setStrokeOpacity(0.5);
+	        		map.addOverlay(polygon);   //增加多边形
+	        	}
+			}
+	        $.ajax({
+	 		   type:"post",
+	 		   url:"/saojie/getRegionName",
+	 		   data: {"id":userId},
+	 		   success : function(obj){
+	 			   map.centerAndZoom(obj, 11);  // 初始化地图,设置中心点坐标和地图级别
+	 			   map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+	 			   map.setCurrentCity(obj);          // 设置地图显示的城市 此项是必须设置的
+	 			   map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+	 		   }
+	 	   });	
 	}else {
 			//alert(obj.length);
 			//for(var i=0;i<obj.length;i++){
@@ -66,7 +86,6 @@ function queryTown(){
 		};
  }
 });
-			
 }
 
 function AddOrder(btType) {
