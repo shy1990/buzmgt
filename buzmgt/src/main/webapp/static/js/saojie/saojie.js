@@ -188,4 +188,19 @@ $(function() {
 function toSubmit(){
 	form.submit();
 }
+
+/*扫街列表*/
+function getAllSaojieList(){
+	
+	window.location.href="/saojie/saojieList";
+}
+
+function getSaojieList(param,name){
+    if(name == "goSearch"){
+    	var value = $("#param").val();
+    	window.location.href="/saojie/getSaojieList?truename="+value+"&jobNum="+value
+    }else if(name == "status"){
+    	window.location.href="/saojie/getSaojieList?Status="+param
+    }
+}
 			

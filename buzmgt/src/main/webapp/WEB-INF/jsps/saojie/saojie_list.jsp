@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8">
@@ -69,13 +69,13 @@
 									<div class="col-sm-7 col-md-5">
 										<!--菜单栏-->
 										<ul class="nav nav-tabs">
-											<li class="active"><a href="#box_tab1" data-toggle="tab"><i
+											<li class="active"><a title="全部" name="status" onclick="getAllSaojieList();" href="#box_tab1" data-toggle="tab"><i
 													class="fa fa-circle-o"></i> <span
 													class="hidden-inline-mobile">全部</span></a></li>
-											<li><a href="#box_tab2" data-toggle="tab"><i
+											<li><a title="扫街中" name="status" onclick="getSaojieList(this.title,this.name);" href="#box_tab2" data-toggle="tab"><i
 													class="fa fa-laptop"></i> <span
 													class="hidden-inline-mobile">扫街中</span></a></li>
-											<li><a href="#box_tab3" data-toggle="tab"><i
+											<li><a title="已完成" name="status" onclick="getSaojieList(this.title,this.name);" href="#box_tab3" data-toggle="tab"><i
 													class="fa fa-calendar-o"></i> <span
 													class="hidden-inline-mobile">已完成</span></a></li>
 										</ul>
@@ -86,8 +86,8 @@
 										<div class="form-group title-form">
 											<div class="input-group ">
 												<input type="text" class="form-control"
-													placeholder="请输入名称或工号"> <span
-													class="input-group-addon"><i class="icon icon-finds"></i></span>
+													placeholder="请输入名称或工号" id = "param"> <span
+													class="input-group-addon" id="goSearch" onclick="getSaojieList(this.value,this.id);"><i class="icon icon-finds"></i></span>
 											</div>
 										</div>
 									</div>
