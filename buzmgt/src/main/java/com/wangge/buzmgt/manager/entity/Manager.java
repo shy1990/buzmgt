@@ -23,7 +23,7 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.entity.User;
 @Entity
 @Table(name = "SYS_MANAGER")
-public class manager implements Serializable {
+public class Manager implements Serializable {
 	
 	/**
 	* @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
