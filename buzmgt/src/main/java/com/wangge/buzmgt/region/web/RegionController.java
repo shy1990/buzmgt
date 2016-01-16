@@ -29,8 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangge.buzmgt.manager.entity.manager;
-import com.wangge.buzmgt.manager.service.managerService;
+import com.wangge.buzmgt.manager.entity.Manager;
+import com.wangge.buzmgt.manager.service.ManagerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
@@ -49,7 +49,7 @@ public class RegionController {
 	@Resource
 	private UserService userService;
 	@Resource
-	private managerService managerService;
+	private ManagerService managerService;
 	
 	private static final String ONELEAVE="0";
 	
@@ -326,7 +326,7 @@ public class RegionController {
 		}else{
 			Subject subject = SecurityUtils.getSubject();
 			User user=(User) subject.getPrincipal();
-			manager manager = managerService.getById(user.getId());
+			Manager manager = managerService.getById(user.getId());
 			regionId = String.valueOf(manager.getRegion().getId());
 		}
 		   List<RegionVo> regionList = regionService.getRegionByPid(regionId);

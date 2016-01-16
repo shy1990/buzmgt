@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wangge.buzmgt.manager.entity.manager;
-import com.wangge.buzmgt.manager.service.managerService;
+import com.wangge.buzmgt.manager.entity.Manager;
+import com.wangge.buzmgt.manager.service.ManagerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.salesman.entity.salesMan;
-import com.wangge.buzmgt.salesman.entity.salesMan.SalesmanStatus;
-import com.wangge.buzmgt.salesman.service.salesManService;
+import com.wangge.buzmgt.salesman.entity.SalesMan;
+import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
+import com.wangge.buzmgt.salesman.service.SalesManService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
@@ -50,7 +50,7 @@ import com.wangge.buzmgt.sys.service.UserService;
  */
 @Controller
 @RequestMapping(value = "/salesman")
-public class teamMembersController {
+public class TeamMembersController {
 	private static final Pageable Pageable = null;
   @Resource
 	private OrganizationService organizationService;
@@ -59,29 +59,66 @@ public class teamMembersController {
 	@Resource
 	private RegionService regionService;
 	@Resource
-	private salesManService salesManService;
+	private SalesManService salesManService;
 	@Resource
-	private managerService managerService;
+	private ManagerService managerService;
 	@Resource
 	private UserService userService;
 	
+	/**
+	 * 
+	* @Title: toTeamMembers 
+	* @Description: TODO(跳转到业务员列表) 
+	* @param @param salesManList
+	* @param @param Status
+	* @param @param model
+	* @param @param salesman
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
+	
 	@RequestMapping("/salesManList")
-	public String toTeamMembers(String salesManList, String Status, Model model,salesMan salesman){
+	public String toTeamMembers(String salesManList, String Status, Model model,SalesMan salesman){
 	  int pageNum = 0;
-	  Page<salesMan> list = salesManService.getSalesmanList(salesman,pageNum);
+	  Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum);
     model.addAttribute("list", list);
     model.addAttribute("Status", "扫街中");
 		model.addAttribute("salesManList", salesManList);
 		return "salesman/salesman_list";
 	}
-	
+	/**
+	 * 
+	* @Title: toAddTeamMembers 
+	* @Description: TODO(跳转到添加团队成员页面) 
+	* @param @param add
+	* @param @param model
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
 	@RequestMapping("/toAdd")
 	public String toAddTeamMembers(String add , Model model){
 		model.addAttribute("add", add);
 		return "salesman/team_member_add";
 	}
+	/**
+	 * 
+	* @Title: addTeamMembers 
+	* @Description: TODO(添加团队成员) 
+	* @param @param salesman
+	* @param @param username
+	* @param @param regionId
+	* @param @param organizationId
+	* @param @param roleId
+	* @param @param regionPid
+	* @param @param model
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
 	@RequestMapping(value = "/addTeamMember",method = RequestMethod.POST)
-	public String addTeamMembers(salesMan salesman,String username,String regionId,String organizationId,String roleId,String regionPid ,Model model){
+	public String addTeamMembers(SalesMan salesman,String username,String regionId,String organizationId,String roleId,String regionPid ,Model model){
 	  if(!userService.existUsername(username)){
 	  Organization o = organizationService.getOrganById(Long.parseLong(organizationId));
 		User u = new User();
@@ -109,7 +146,7 @@ public class teamMembersController {
 		}else{
 			u.setId(createUerId(regionId.trim(),o));
 			u = userService.addUser(u);
-			manager m = new manager();
+			Manager m = new Manager();
 			m.setJobNum(salesman.getJobNum());
 			m.setTruename(salesman.getTruename());
 			m.setMobile(salesman.getMobile());
@@ -128,9 +165,21 @@ public class teamMembersController {
 	  }
 	}
 	
-	
+	/**
+	 * 
+	* @Title: getSalesManList 
+	* @Description: TODO(获取业务员列表) 
+	* @param @param model
+	* @param @param salesman
+	* @param @param Status
+	* @param @param page
+	* @param @param requet
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
 	@RequestMapping(value = "/getSalesManList",method=RequestMethod.GET)
-	public  String  getSalesManList(Model model,salesMan salesman, String Status,String page, HttpServletRequest requet){
+	public  String  getSalesManList(Model model,SalesMan salesman, String Status,String page, HttpServletRequest requet){
 	      String name = Status != null ? Status : "扫街中";
 	      int pageNum = Integer.parseInt(page != null ? page : "0");
     	  if(SalesmanStatus.SAOJIE.getName().equals(name) ){
@@ -144,13 +193,27 @@ public class teamMembersController {
     	  }else if(SalesmanStatus.SHENHE.getName().equals(name)){
     	    salesman.setSalesmanStatus(SalesmanStatus.SHENHE);
     	  }
-	  Page<salesMan> list = salesManService.getSalesmanList(salesman,pageNum);
+	  Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum);
 	  model.addAttribute("list", list);
 	  model.addAttribute("Status", Status);
 	  return "salesman/salesman_list";
 	}
 	
-	
+	@RequestMapping("/salesmanInfo")
+  public String salesmanInfo(String userId){
+	  salesManService.findByUserId(userId);
+    return null;
+  }	
+	/**
+	 * 
+	* @Title: createUerId 
+	* @Description: TODO(创建userId) 
+	* @param @param id
+	* @param @param o
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
 	private String  createUerId(String id,Organization o){
 		String[] num = {"A","B","C","D","E","F"} ;
 		SimpleDateFormat formatter = new SimpleDateFormat("MMdd");
