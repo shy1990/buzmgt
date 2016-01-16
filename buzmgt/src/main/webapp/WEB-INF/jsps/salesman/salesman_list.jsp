@@ -50,11 +50,9 @@
 			<a href="/salesman/toAdd" class="btn btn-warning " type="button">
 				<i class="icon icon-add"></i>添加成员
 			</a>
-			<div class="col-sm-6 sr-only">
-				<small class="header-text">共<span class="text-red">203</span>位成员
-				</small> <small class="header-text">今日新增<span class="text-red">
+				<small class="header-text">共<span class="text-red">${list.totalElements}</span>位成员
+				</small> <small class="header-text sr-only">今日新增<span class="text-red">
 						0 +</span></small>
-			</div>
 		</h4>
 		<div class="row">
 			<div class="col-md-9">
