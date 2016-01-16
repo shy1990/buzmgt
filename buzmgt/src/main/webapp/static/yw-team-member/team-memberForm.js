@@ -68,6 +68,7 @@ function checkForm(){
 		errorMsgShow($("#mobile"));
 		return false;
 	}
+	
 	if (regionId == null || regionId.trim() == "") {
 		errorMsgShow($("#region"));
 		return false;
@@ -78,7 +79,7 @@ function checkForm(){
 }
 function checkName(){
 	var trueName = $("#trueName").val()
-	if (trueName == null || trim(trueName) == "") {
+	if (trueName == null || trueName.trim() == "") {
 		errorMsgShow();
 		return false;
 	}
@@ -92,17 +93,29 @@ function checkName(){
 
 
 function checkJobNum(){
+	var $jobNum = $("#jobNum");
 	var jobNum = $("#jobNum").val();
-	if (jobNum == null || trim(jobNum) == "") {
+	if (jobNum == null || jobNum.trim() == "") {
+		
+		errorMsgShow($jobNum,"工号不能为空！");
 		return false;
 	}
 	
 }
 
 function checkMobile(){
+	var $mobile = $("#mobile");
 	var mobile = $("#mobile").val();
-	if (mobile == null || trim(mobile) == "") {
+	if (mobile == null || mobile.trim() == "") {
+		errorMsgShow($mobile,"手机号码不能为空！");
 		return false;
+	}else{
+		var reg = /^1[3|4|5|7|8|9]\d{9}$/;
+		if(!reg.test(mobile)){
+			errorMsgShow($mobile,"手机号码的格式不正确");
+			//form.mobile.focus();
+			return false;
+		}
 	}
 }
 

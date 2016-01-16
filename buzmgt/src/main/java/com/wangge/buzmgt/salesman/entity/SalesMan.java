@@ -43,7 +43,7 @@ import com.wangge.buzmgt.sys.entity.User;
 @Table(name = "SYS_SALESMAN")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class salesMan implements Serializable {
+public class SalesMan implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static enum SalesmanStatus {
@@ -91,7 +91,7 @@ public class salesMan implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date regdate;
 
-	public salesMan() {
+	public SalesMan() {
 		super();
 	}
 	
