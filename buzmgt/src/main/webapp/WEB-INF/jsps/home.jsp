@@ -22,6 +22,7 @@
 	type="text/javascript" charset="utf-8"></script>
 </head>
 
+
 <body>
 	<%@ include file="top_menu.jsp"%>
 	<div class="container-fluid">
