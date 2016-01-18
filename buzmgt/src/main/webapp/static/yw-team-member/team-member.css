@@ -555,6 +555,13 @@ a.link-export:focus{
 	border-radius: 3px;
 	
 }
+.date-month .form-control{
+	display: inline-block;
+	width: 200px;
+}
+
+
+
 .icon-month{
 	padding: 3px 18px 17px 2px;
 	background: url(../img/icon/team-member/det/date.png) no-repeat;
