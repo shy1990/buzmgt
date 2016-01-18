@@ -80,16 +80,6 @@
 									<span class=""><i class="icon-down"></i></span>
 							</div>
 
-							<div
-								class="input-group date form_date_start "
-								data-date="" data-date-format="yyyy-mm"
-								data-link-field="order_search_start_time"
-								data-link-format="yyyy-mm">
-								<input id="start-time-input" class="form-control input-sm	"
-									size="16" type="text" value="" readonly> <span
-									class="input-group-addon"><span
-									class="glyphicon glyphicon-remove glyphicon-calendar "></span></span>
-							</div>
 							<!--end /月份-->
 							<!--按钮组-->
 							<div class="head-button">
