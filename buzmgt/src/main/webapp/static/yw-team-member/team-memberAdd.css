@@ -34,46 +34,6 @@ a:focus {
 	outline: 0
 }
 
-.dropdown-menu {
-	border: medium none;
-	display: none;
-	float: left;
-	font-size: 12px;
-	left: 0;
-	list-style: none outside none;
-	padding: 0;
-	position: absolute;
-	text-shadow: none;
-	top: 100%;
-	z-index: 1000;
-	border-radius: 0;
-	box-shadow: 0 0 3px rgba(86, 96, 117, .3);
-}
-.dropdown-menu>li>a {
-	border-radius: 3px;
-	color: inherit;
-	line-height: 25px;
-	margin: 4px;
-	text-align: left;
-	font-weight: 400
-}
-.dropdown-menu>li>a.font-bold {
-	font-weight: 600
-}
-.dropdown-menu li {
-	display: block
-}
-.dropdown-menu li:last-child {
-	margin-right: 0
-}
-.dropdown-menu li a {
-	padding: 3px 20px;
-	min-height: 0
-}
-.dropdown-menu li a div {
-	white-space: normal
-}
-
 .navbar-form-custom .form-control {
 	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
 	border: medium none;
@@ -460,7 +420,6 @@ body {
 /*ibox鐩稿叧*/
 .ibox {
 	clear: both;
-	margin-bottom: 25px;
 	margin-top: 0;
 	padding: 0
 }
@@ -497,7 +456,6 @@ body {
 .ibox-content {
 	background-color: #fff;
 	color: inherit;
-	padding: 15px 20px 20px;
 	border-color: #e7eaec;
 	-webkit-border-image: none;
 	-o-border-image: none;
@@ -545,10 +503,7 @@ body {
 .ibox-tools a.btn-primary {
 	color: #fff
 }
-.ibox-tools .dropdown-menu>li>a {
-	padding: 4px 10px;
-	font-size: 12px
-}
+
 .ibox .open>.dropdown-menu {
 	left: auto;
 	right: 0
