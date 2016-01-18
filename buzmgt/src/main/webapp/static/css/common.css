@@ -46,8 +46,11 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
     margin-bottom: 25px;
     padding: 0px;
 }
+.box.border.pink {
+    border: 1px solid #DA4F82;
+}
 .box.border.blue {
-    border: 1px solid #576ea7;
+    border: 1px solid #348EC0;
 }
 .box.border.gray {
     border: 1px solid #5E5E5E;
@@ -64,8 +67,33 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .box.border.default{
     border: 1px solid #CCC;
 }
+/*阶段box */
+.box.border.yellow{
+    border: 1px solid #D29337;
+}
+.yellow .box-title{
+	background: #EFAD4D;
+	border-bottom: #D29337;
+}
+/*紫色*/
+.box.border.violet{
+    border: 1px solid #498CA2;
+}
+.violet .box-title{
+	background: #A795CE;
+	border-bottom: #498CA2;
+}
+/*青绿色*/
+.box.border.cyan{
+    border: 1px solid #71AFC4;
+}
+.cyan .box-title{
+	background: #71AFC4;
+	border-bottom: #71AFC4;
+}
 
 .box-title{
+	position: relative;
 	min-height: 38px;
 	padding: 5px 20px  10px;
 	color: #FFF;
@@ -94,6 +122,10 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 		padding: 15px 26px;
 	}
 }
+.pink .box-title{
+	background: #D55383 ;
+	border-bottom: #DA4F82;
+}
 .gray .box-title{
 	background: #555;
 	border-bottom: #5E5E5E;
@@ -109,6 +141,10 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .orange .box-title{
 	background: #EFAD4D;
 	border-bottom: #D8993C;
+}
+.blue .box-title{
+	background: #3894C7;
+	border-bottom: #348EC0;
 }
 .icon{
 	display: inline-block;
@@ -138,6 +174,71 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .has-error .msg-error{
 	display: block;
 }
+/*公司列表*/
+.icon-comp-list{
+	background: url(../img/icon/team-member/det/Shape.png) no-repeat;
+	top: 5px;
+}
+/*业务详情*/
+.icon-ywdet{
+	background: url(../img/icon/team-member/det/bfjl.png) no-repeat;
+	top: 5px;
+}
+.icon-add{
+	margin-top: -5px;
+	margin-left: -5px;
+	margin-bottom: -5px;
+	background: url(../img/icon/team-member/list/tjcy_tb.png) no-repeat;
+}
+.icon-list{
+	background: url(../img/icon/saojie/det/liebiao.png) no-repeat;
+	top: 5px;
+}
+.icon-map{
+	background: url(../img/icon/saojie/det/zuobiao.png)no-repeat;
+	top: 5px;
+}
+.icon-time{
+	background: url(../img/icon/team-member/det/d.png) no-repeat;
+	top: 5px;
+}
+/*进度条*/
+.progress{
+	overflow:visible ;
+	background: #D5D5D5;
+}
+.progress-bar{
+	position: relative;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+.progress.progress-sm{
+	height: 10px;
+	border-radius: 10px;
+	position: relative;
+}
+/*btn*/
+.btn-visit,
+.btn-visit:hover,
+.btn-visit:focus{
+	background: #3993C7;
+	color: #FFF;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

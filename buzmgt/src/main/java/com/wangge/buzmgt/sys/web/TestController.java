@@ -46,10 +46,9 @@ public class TestController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("/team_member_add")
+	@RequestMapping("/team_saojie_det")
 	public String teamMemberAdd(String test,Model model){
-		model.addAttribute("test", test);
-		return "team-member/team_member_add";
+		return "salesman/saojie_det";
 	}
 	/**
 	 * 团队成员列表
@@ -57,10 +56,9 @@ public class TestController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("/team_member_list")
+	@RequestMapping("/team_member_det")
 	public String teamMemberList(String test,Model model){
-		model.addAttribute("test", test);
-		return "team-member/teamMemberList";
+		return "salesman/saleman_det";
 	}
 	
 	@RequestMapping("/menu")
