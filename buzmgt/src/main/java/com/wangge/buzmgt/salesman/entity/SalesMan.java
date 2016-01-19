@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.salesman.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,9 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -39,7 +43,7 @@ import com.wangge.buzmgt.sys.entity.User;
 @Table(name = "SYS_SALESMAN")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class salesMan implements Serializable {
+public class SalesMan implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static enum SalesmanStatus {
@@ -73,7 +77,7 @@ public class salesMan implements Serializable {
 	private String jobNum;
 	
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
 	private Region region;
 
@@ -84,8 +88,10 @@ public class salesMan implements Serializable {
 	private String towns;
 	
 	private String mobile;
+	@Temporal(TemporalType.DATE)
+	private Date regdate;
 
-	public salesMan() {
+	public SalesMan() {
 		super();
 	}
 	
@@ -172,6 +178,13 @@ public class salesMan implements Serializable {
   public void setMobile(String mobile) {
     this.mobile = mobile;
   }
-	
+
+  public Date getRegdate() {
+    return regdate;
+  }
+
+  public void setRegdate(Date regdate) {
+    this.regdate = regdate;
+  }
 
 }

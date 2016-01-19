@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.salesman.entity.salesMan;
-import com.wangge.buzmgt.salesman.entity.salesMan.SalesmanStatus;
-import com.wangge.buzmgt.salesman.service.salesManService;
+import com.wangge.buzmgt.salesman.entity.SalesMan;
+import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
+import com.wangge.buzmgt.salesman.service.SalesManService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.service.SaojieService;
@@ -37,7 +37,7 @@ import com.wangge.buzmgt.saojie.service.SaojieService;
 @RequestMapping(value = "/saojie")
 public class SaojieController {
   @Resource
-  private salesManService salesManService;
+  private SalesManService salesManService;
   @Resource
   private RegionService regionService;
   @Resource
@@ -74,8 +74,8 @@ public class SaojieController {
 	
 	@RequestMapping(value = "/gainSaojieMan",method = RequestMethod.POST)
 	@ResponseBody
-	public List<salesMan> gainSaojieMan(){
-	  List<salesMan> salesman = salesManService.gainSaojieMan();
+	public List<SalesMan> gainSaojieMan(){
+	  List<SalesMan> salesman = salesManService.gainSaojieMan();
 	  return salesman;
 	}
 	
@@ -83,7 +83,7 @@ public class SaojieController {
 	@ResponseBody
 	public List<Region> gainSaojieTown(String id){
 	  System.out.println(id);
-	  salesMan sm = salesManService.findById(id);
+	  SalesMan sm = salesManService.findByUserId(id);
 	  List<Region> list = null;
 	  if(sm != null && !"".equals(sm)){
 	    list = regionService.findByRegion(sm.getRegion().getId());
