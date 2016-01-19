@@ -3,6 +3,7 @@ package com.wangge.buzmgt.saojie.web;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.entity.salesMan;
+import com.wangge.buzmgt.salesman.entity.salesMan.SalesmanStatus;
 import com.wangge.buzmgt.salesman.service.salesManService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
@@ -42,13 +44,27 @@ public class SaojieController {
   private SaojieService saojieService;
 	
 	@RequestMapping("/saojieList")
-	public String toTeamMembers(String saojieList, Model model,Saojie saojie){
+	public String saojieList(String saojieList, Model model,Saojie saojie){
 	  int pageNum = 0;
     Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
     model.addAttribute("list", list);
 		model.addAttribute("saojieList", saojieList);
 		return "saojie/saojie_list";
 	}
+	
+	@RequestMapping(value = "/getSaojieList")
+  public  String  getSaojieList(Model model,Saojie saojie, String saojieStatus,String page, HttpServletRequest requet){
+        int pageNum = Integer.parseInt(page != null ? page : "0");
+        if(SaojieStatus.PENDING.getName().equals(saojieStatus) ){
+          saojie.setStatus(SaojieStatus.PENDING);
+        }else if(SaojieStatus.AGREE.getName().equals(saojieStatus)){
+          saojie.setStatus(SaojieStatus.AGREE);
+        }
+    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
+    model.addAttribute("list", list);
+    model.addAttribute("saojieStatus",saojieStatus);
+    return "saojie/saojie_list";
+  }
 	
 	@RequestMapping("/toAdd")
   public String toAddTeamMembers(String add , Model model){

@@ -72,7 +72,7 @@ function AddOrder(btType) {
 	}
 	var intLen = $("div[id^='selOrder']").length;
 	if (intLen == "undefined") intLen = 1;
-	if (intLen <= 20) {
+	if (intLen <= 30) {
 		intLen++;
 		var intNewApp;
 		if (intLen != 1) {
@@ -105,16 +105,18 @@ function AddOrder(btType) {
 						<span class="input-group-addon" id="basic-addon1"><i class="member-icon member-value-icon"></i></span>\
 						<input type="text" name="value" class="form-control" placeholder="指标(家)" id="minValue' + intNewApp + '">\
 					</div>\
-					<span class="del-order glyphicon glyphicon-remove" onclick="delNode(selOrder' + intLen + ',' + order + ')"></span>\
+					<span id="delNode' + intLen + '" class="del-order glyphicon glyphicon-remove" onclick="delNode(selOrder' + intLen + ',' + order + ')"></span>\
 				</div>\
 			</div>';
 		$(btType).before(strApp);
 	}
-	if ($("div[id^='selOrder']").length == 20) $("#btn").hide();
+	var options = document.getElementById("town").options.length;
+	if ($("div[id^='selOrder']").length == options-1) $("#btn").hide();
 }
 
 function delNode(selOrder,order) {
 	var intLen = $("div[id^='selOrder']").length;
+	var options = document.getElementById("town").options.length;
 	if(intLen === order){
 		if (selOrder != null && selOrder != ''){
 			selOrder.parentNode.removeChild(selOrder);
@@ -122,9 +124,13 @@ function delNode(selOrder,order) {
 	}else{
 		alert("请先删除序号最大项!");
 	}
+	if(intLen <= options-1){
+		$("#btn").show();
+	}
 }
 
 $(function() {
+	
 				$('#starttime').datetimepicker({
 					language: 'zh-CN',
 					showMeridian: true,
@@ -198,9 +204,13 @@ function getAllSaojieList(){
 function getSaojieList(param,name){
     if(name == "goSearch"){
     	var value = $("#param").val();
-    	window.location.href="/saojie/getSaojieList?truename="+value+"&jobNum="+value
+    	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value;
     }else if(name == "status"){
-    	window.location.href="/saojie/getSaojieList?Status="+param
+    	window.location.href="/saojie/getSaojieList?saojieStatus="+param;
     }
 }
-			
+
+function getPageList(num){
+	
+	window.location.href="/saojie/getSaojieList?page="+num;
+}
