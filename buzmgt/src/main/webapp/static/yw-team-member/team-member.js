@@ -15,11 +15,12 @@ function getList(param,name){
 }
 
 
-
+var myDate = new Date();
+var tody = changeDateToString(myDate);
 $(function(){
     $(".form_datetime").datetimepicker({
         format: "yyyy年mm月",
-        endDate : new Date(),
+        endDate : tody,
 		language : 'zh-CN',
 		weekStart : 1,
 		todayBtn : 1,
