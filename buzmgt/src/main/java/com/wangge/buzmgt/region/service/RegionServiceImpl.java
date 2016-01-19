@@ -4,6 +4,8 @@ package com.wangge.buzmgt.region.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +65,7 @@ public class RegionServiceImpl implements RegionService {
 		return listRegionTree;
 	}
 	@Override
+	@Transactional
 	public List<RegionVo> getRegionByPid(String id) {
 		
 		List<RegionVo> voList = new ArrayList<RegionVo>();
@@ -73,7 +76,7 @@ public class RegionServiceImpl implements RegionService {
 			RegionVo vo = new RegionVo();
 			if(r.getChildren().size() > 0){
 				vo.setIsParent("true");
-				vo.setIcon("static/zTree/css/zTreeStyle/img/diy/10.png");
+				vo.setIcon("../static/zTree/css/zTreeStyle/img/diy/10.png");
 			}
 			vo.setOpen("false");
 			vo.setId(r.getId());

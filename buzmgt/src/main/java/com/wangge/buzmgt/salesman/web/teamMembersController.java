@@ -65,6 +65,9 @@ public class teamMembersController {
 	
 	@RequestMapping("/salesManList")
 	public String toTeamMembers(String salesManList , Model model,salesMan salesman){
+	  int pageNum = 0;
+	  Page<salesMan> list = salesManService.getSalesmanList(salesman,pageNum);
+    model.addAttribute("list", list);
 		model.addAttribute("salesManList", salesManList);
 		return "salesman/salesman_list";
 	}

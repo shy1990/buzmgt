@@ -1,4 +1,3 @@
-		
 		/**
 		 * 设置zTree树
 		 */
@@ -9,9 +8,9 @@
 				autoParam : [ "id" ],
 		        dataFilter: filter
 			},
-			check: {
+			/*check: {
 				enable: true
-			},
+			},*/
 			data : {
 				simpleData : {
 					enable : true
@@ -197,6 +196,8 @@
 				$("body").bind("mousedown", onBodyDown);
 			
 		}
+
+		
 		function hideRegionMenu() {
 			$("#regionMenuContent").fadeOut("fast");
 			$("body").unbind("mousedown", onBodyDown);

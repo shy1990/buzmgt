@@ -2,6 +2,7 @@ package com.wangge.buzmgt.salesman.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +18,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.sys.entity.Organization;
@@ -33,21 +37,23 @@ import com.wangge.buzmgt.sys.entity.User;
  */
 @Entity
 @Table(name = "SYS_SALESMAN")
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class salesMan implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static enum SalesmanStatus {
-		SAOJIE(1), KAIFA(2), WEIHU(3);
+		SAOJIE("扫街中"), KAIFA("开发中"), WEIHU("维护中"),ZHUANZHENG("已转正"),SHENHE("考核中");
 		
-		private Integer num;
-		
-		 SalesmanStatus(Integer num) {
-			this.num = num;
-		}
+		private String name;
 
-		public Integer getNum() {
-			return num;
-		}
+		SalesmanStatus(String name) {
+      this.name = name;
+    }
+
+    public String getName() {
+      return name;
+    }
 	}
 	
 	@Id
@@ -76,6 +82,8 @@ public class salesMan implements Serializable {
 	private User user;
 	
 	private String towns;
+	
+	private String mobile;
 
 	public salesMan() {
 		super();
@@ -156,6 +164,14 @@ public class salesMan implements Serializable {
 	public void setTowns(String towns) {
 		this.towns = towns;
 	}
+
+  public String getMobile() {
+    return mobile;
+  }
+
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
+  }
 	
 
 }
