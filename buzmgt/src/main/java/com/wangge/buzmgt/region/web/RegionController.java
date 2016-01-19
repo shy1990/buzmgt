@@ -23,10 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.manager.entity.Manager;
+import com.wangge.buzmgt.manager.service.ManagerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
-import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.util.RegionUtil;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
@@ -320,6 +321,7 @@ public class RegionController {
 			Subject subject = SecurityUtils.getSubject();
 			User user=(User) subject.getPrincipal();
 			com.wangge.buzmgt.teammember.entity.Manager manager = managerService.getById(user.getId());
+			Manager manager = managerService.getById(user.getId());
 			regionId = String.valueOf(manager.getRegion().getId());
 		}
 		   List<RegionVo> regionList = regionService.getRegionByPid(regionId);

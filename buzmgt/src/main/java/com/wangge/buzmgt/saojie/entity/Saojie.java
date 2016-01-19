@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -32,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.salesman.entity.SalesMan;
 
 @Entity
 @Table(name = "SYS_SAOJIE")
@@ -41,7 +42,7 @@ public class Saojie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum SaojieStatus {
-		PENDING("进行中"), COMMIT("提交审核"), AGREE("通过");
+		PENDING("扫街中"), COMMIT("提交审核"), AGREE("已完成");
 
 		private String name;
 
@@ -63,11 +64,10 @@ public class Saojie implements Serializable {
 	@JoinColumn(name = "PARENT_ID")
 	private Saojie parent;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
 	private SalesMan salesman;
