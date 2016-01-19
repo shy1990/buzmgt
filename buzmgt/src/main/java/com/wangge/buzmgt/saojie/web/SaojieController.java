@@ -50,7 +50,7 @@ public class SaojieController {
     model.addAttribute("list", list);
 		model.addAttribute("saojieList", saojieList);
 		return "saojie/saojie_list";
-	}
+	} 
 	
 	@RequestMapping(value = "/getSaojieList")
   public  String  getSaojieList(Model model,Saojie saojie, String saojieStatus,String page, HttpServletRequest requet){
