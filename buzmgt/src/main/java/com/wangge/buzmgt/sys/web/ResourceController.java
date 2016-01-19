@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ import com.wangge.buzmgt.sys.entity.Resource;
 import com.wangge.buzmgt.sys.service.ResourceService;
 import com.wangge.buzmgt.sys.service.ResourceService.Menu;
 import com.wangge.buzmgt.sys.service.UserService;
+import com.wangge.buzmgt.sys.util.Chinese2English;
 import com.wangge.buzmgt.sys.util.PageData;
 import com.wangge.buzmgt.sys.util.PageNavUtil;
 import com.wangge.buzmgt.sys.util.SortUtil;
@@ -82,6 +84,7 @@ public class ResourceController extends BaseController {
 		String url = req.getParameter("url");
 		String pid = req.getParameter("parentid");
 		Resource r = new Resource(name, Resource.ResourceType.MENU, url, 1,new Date());
+		r.setIcon(Chinese2English.converterToSpell(name));
 		r.setParent(res.getResourceById(Long.parseLong(pid)));
 		try {
 			res.saveRes(r);

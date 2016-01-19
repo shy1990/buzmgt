@@ -36,7 +36,7 @@ public class Region implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static enum RegionType {
-		COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇");
+		COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他");
 		private String name;
 
 		RegionType(String name) {
@@ -67,7 +67,7 @@ public class Region implements Serializable {
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
 	private Collection<Region> children;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -138,5 +138,4 @@ public class Region implements Serializable {
 		this.children = children;
 	}
 
-	
 }

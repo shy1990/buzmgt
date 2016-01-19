@@ -32,7 +32,7 @@ public class User implements Serializable {
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+//	@GeneratedValue(strategy = GenerationType.TABLE)
 	@Column(name = "user_id")
 	private String id;
 

@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.salesman.entity.salesMan;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Entity
 @Table(name = "SYS_SAOJIE")
@@ -70,7 +70,7 @@ public class Saojie implements Serializable {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
-	private salesMan salesman;
+	private SalesMan salesman;
 
 	private String name;
 
@@ -127,11 +127,11 @@ public class Saojie implements Serializable {
 		this.region = region;
 	}
 
-	public salesMan getSalesman() {
+	public SalesMan getSalesman() {
 		return salesman;
 	}
 
-	public void setSalesman(salesMan salesman) {
+	public void setSalesman(SalesMan salesman) {
 		this.salesman = salesman;
 	}
 

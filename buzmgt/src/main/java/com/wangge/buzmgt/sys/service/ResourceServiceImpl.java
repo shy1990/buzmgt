@@ -55,6 +55,7 @@ public class ResourceServiceImpl implements ResourceService {
 		Set<Menu> menus=new HashSet<Menu>();
 		resources.forEach(r->{
 			Menu menu=new Menu(r.getId(),r.getName(), r.getUrl());
+			menu.setIcon(r.getIcon());
 			if (!r.getChildren().isEmpty()) {
 				menu.setChildren(resource2Menu(r.getChildren()));
 			}  
