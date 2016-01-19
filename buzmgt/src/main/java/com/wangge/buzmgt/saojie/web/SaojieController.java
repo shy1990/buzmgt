@@ -1,4 +1,4 @@
-/*package com.wangge.buzmgt.saojie.web;
+package com.wangge.buzmgt.saojie.web;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.region.entity.Region;
@@ -17,7 +18,7 @@ import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 
-*//**
+/**
  * 
   * ClassName: SaojieController <br/> 
   * Function: TODO ADD FUNCTION. <br/> 
@@ -27,7 +28,7 @@ import com.wangge.buzmgt.teammember.service.SalesManService;
   * @author peter
   * @version
   * @since JDK 1.8
- *//*
+ */
 @Controller
 @RequestMapping(value = "/saojie")
 public class SaojieController {
@@ -57,7 +58,7 @@ public class SaojieController {
 	  return salesman;
 	}
 	
-	@RequestMapping(value = "/gainSaojieTown",method = RequestMethod.POST)
+	/*@RequestMapping(value = "/gainSaojieTown",method = RequestMethod.POST)
 	@ResponseBody
 	public List<Region> gainSaojieTown(String id){
 	  System.out.println(id);
@@ -67,7 +68,7 @@ public class SaojieController {
 	    list = regionService.findByRegion(sm.getRegion().getId());
 	  }
     return list;
-	}
+	}*/
 	
 	
 	
@@ -89,4 +90,3 @@ public class SaojieController {
 	}
 	
 }
-*/
