@@ -58,6 +58,12 @@ public class RegionServiceImpl implements RegionService {
 		
 		return regionRepository.findById(regionId);
 	}
+	
+  @Override
+  public List<Region> findByRegion(String regionId) {
+    System.out.println(regionId);
+    return regionRepository.findByParentId(regionId);
+  }
 
 	@Override
 	public Region findListRegionbyid(String id) {
