@@ -1,11 +1,10 @@
-package com.wangge.buzmgt.manager.repository;
+package com.wangge.buzmgt.teammember.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.wangge.buzmgt.manager.entity.Manager;
-import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.Manager;
 
 public interface ManagerRepository extends JpaRepository<Manager, String> {
 

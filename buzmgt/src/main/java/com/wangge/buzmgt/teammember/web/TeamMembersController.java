@@ -1,44 +1,32 @@
-package com.wangge.buzmgt.salesman.web;
+package com.wangge.buzmgt.teammember.web;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.Response;
 
-import org.apache.shiro.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.wangge.buzmgt.manager.entity.Manager;
-import com.wangge.buzmgt.manager.service.ManagerService;
-import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.salesman.entity.SalesMan;
-import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
-import com.wangge.buzmgt.salesman.service.SalesManService;
 import com.wangge.buzmgt.sys.entity.Organization;
-import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.entity.User.UserStatus;
 import com.wangge.buzmgt.sys.service.OrganizationService;
-import com.wangge.buzmgt.sys.service.ResourceService;
-import com.wangge.buzmgt.sys.service.ResourceService.Menu;
 import com.wangge.buzmgt.sys.service.RoleService;
 import com.wangge.buzmgt.sys.service.UserService;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesMan.SalesmanStatus;
+import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 
 /**
  * 
@@ -49,7 +37,7 @@ import com.wangge.buzmgt.sys.service.UserService;
 *
  */
 @Controller
-@RequestMapping(value = "/salesman")
+@RequestMapping(value = "/teammember")
 public class TeamMembersController {
 	private static final Pageable Pageable = null;
   @Resource
@@ -85,7 +73,7 @@ public class TeamMembersController {
     model.addAttribute("list", list);
     model.addAttribute("Status", "扫街中");
 		model.addAttribute("salesManList", salesManList);
-		return "salesman/salesman_list";
+		return "teammember/salesman_list";
 	}
 	/**
 	 * 
@@ -100,7 +88,7 @@ public class TeamMembersController {
 	@RequestMapping("/toAdd")
 	public String toAddTeamMembers(String add , Model model){
 		model.addAttribute("add", add);
-		return "salesman/team_member_add";
+		return "teammember/team_member_add";
 	}
 	/**
 	 * 
@@ -157,11 +145,11 @@ public class TeamMembersController {
 		//	return Redirect("/User/Edit");"salesman/salesman_list";
 			
 		}
-		  return "redirect:/salesman/salesManList";
+		  return "redirect:/teammember/salesManList";
 	  }else{
 	    model.addAttribute("userName", username);
 	    model.addAttribute("salesman", salesman);
-	    return "salesman/team_member_add";
+	    return "teammember/team_member_add";
 	  }
 	}
 	
@@ -196,14 +184,15 @@ public class TeamMembersController {
 	  Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum);
 	  model.addAttribute("list", list);
 	  model.addAttribute("Status", Status);
-	  return "salesman/salesman_list";
+	  return "teammember/salesman_list";
+	}
+	@RequestMapping(value = "/toSalesManInfo", method = RequestMethod.GET)
+	public String getSalesManInfo(String userId, Model model){
+	     SalesMan salesMan  =  salesManService.getSalesmanByUserId(userId);
+	     model.addAttribute("salesMan", salesMan);
+	  return "teammember/saojie_det";
 	}
 	
-	@RequestMapping("/salesmanInfo")
-  public String salesmanInfo(String userId){
-	  salesManService.findByUserId(userId);
-    return null;
-  }	
 	/**
 	 * 
 	* @Title: createUerId 

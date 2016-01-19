@@ -18,15 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.wangge.buzmgt.manager.entity.Manager;
-import com.wangge.buzmgt.manager.service.ManagerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
-import com.wangge.buzmgt.salesman.entity.SalesMan;
-import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
-import com.wangge.buzmgt.salesman.service.SalesManService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.repository.OrganizationRepository;
@@ -266,7 +261,7 @@ public class BuzmgtApplicationTests {
 }
   @Test
   public void testSalesman(){
-     SalesMan  s = salesManService.findByUserId("C37010501060");
+     SalesMan  s = salesManService.findById("C37010501060");
     System.out.println("================="+s.getTruename());
     System.out.println("================="+s.getId());
     System.out.println("================="+s.getMobile()); 

@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.manager.service;
+package com.wangge.buzmgt.teammember.service;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.wangge.buzmgt.manager.entity.Manager;
-import com.wangge.buzmgt.manager.repository.ManagerRepository;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.repository.ManagerRepository;
 
 @Service
 public class ManagerServiceImpl implements ManagerService {

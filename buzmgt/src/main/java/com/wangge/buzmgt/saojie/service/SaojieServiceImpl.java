@@ -18,10 +18,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.salesman.entity.SalesMan;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Service
 public class SaojieServiceImpl implements SaojieService {

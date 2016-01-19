@@ -1,8 +1,8 @@
-package com.wangge.buzmgt.manager.service;
+package com.wangge.buzmgt.teammember.service;
 
 import java.util.List;
 
-import com.wangge.buzmgt.manager.entity.Manager;
+import com.wangge.buzmgt.teammember.entity.Manager;
 
 public interface ManagerService {
 

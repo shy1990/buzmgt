@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.salesman.entity.SalesMan;
-import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
-import com.wangge.buzmgt.salesman.service.SalesManService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.service.SaojieService;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 
 /**
  * 
@@ -83,7 +82,7 @@ public class SaojieController {
 	@ResponseBody
 	public List<Region> gainSaojieTown(String id){
 	  System.out.println(id);
-	  SalesMan sm = salesManService.findByUserId(id);
+	  SalesMan sm = salesManService.findById(id);
 	  List<Region> list = null;
 	  if(sm != null && !"".equals(sm)){
 	    list = regionService.findByRegion(sm.getRegion().getId());

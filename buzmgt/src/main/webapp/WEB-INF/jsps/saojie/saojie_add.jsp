@@ -134,4 +134,8 @@
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> refs/heads/jiabin

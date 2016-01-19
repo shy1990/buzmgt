@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.manager.entity;
+package com.wangge.buzmgt.teammember.entity;
 
 import java.io.Serializable;
 import java.util.Date;
