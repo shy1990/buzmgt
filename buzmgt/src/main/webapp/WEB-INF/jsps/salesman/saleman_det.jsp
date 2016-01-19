@@ -54,7 +54,7 @@
 						<!--列表头部-->
 						<div class="det-head">
 							<!--区域选择按钮-->
-							<div class="btn-group btn-group-sm">
+							<div class="btn-group btn-group-sm my_btn_group">
 								<button type="button" class="btn btn-default ">
 									<i class="icon province-icon"></i>山东省
 								</button>
@@ -280,6 +280,7 @@
 		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="/static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+		<script src="/static/js/dateutil.js"></script>
 		<script src="static/yw-team-member/team-member.js"
 			type="text/javascript" charset="utf-8"></script>
 </body>
