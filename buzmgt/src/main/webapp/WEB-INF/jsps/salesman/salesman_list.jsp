@@ -51,7 +51,7 @@
 				<i class="icon icon-add"></i>添加成员
 			</a>
 				<small class="header-text">共<span class="text-red">${list.totalElements}</span>位成员
-				</small> <small class="header-text sr-only">今日新增<span class="text-red">
+				</small> <small style="display: none" class="header-text sr-only">今日新增<span class="text-red">
 						0 +</span></small>
 		</h4>
 		<div class="row">

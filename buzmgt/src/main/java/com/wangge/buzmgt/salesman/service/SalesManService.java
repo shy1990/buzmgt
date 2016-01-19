@@ -17,5 +17,7 @@ public interface SalesManService {
   Page<SalesMan> getSalesmanList(SalesMan salesman,int pageNum);
 
   SalesMan findByUserId(String userId);
+
+  List<SalesMan> gainSaojieMan();
   
 }
