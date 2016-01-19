@@ -74,7 +74,7 @@ public class SaojieController {
 	@RequestMapping(value = "/getRegionName",method = RequestMethod.POST)
   @ResponseBody
   public String  getRegionName(String id){
-	  SalesMan sm = salesManService.findById(id);
+    SalesMan sm = salesManService.findById(id);
     String  regionName=sm.getRegion().getName();
     return regionName;
   }
