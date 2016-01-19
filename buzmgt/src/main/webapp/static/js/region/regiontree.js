@@ -32,7 +32,7 @@ var setting = {
 		addHoverDom : addHoverDom,
 		removeHoverDom : removeHoverDom,
 		fontCss : {'font-weight': "bolder"}
-	// addDiyDom : addDiyDom
+		//addDiyDom : addDiyDom
 	},
 	callback : {
 		beforeExpand : beforeExpand,
@@ -90,7 +90,7 @@ function beforeExpand(treeId, treeNode) {
 		ajaxGetNodes(treeNode, "refresh");
 		return true;
 	} else {
-		alert("Loading...");
+		 BootstrapDialog.alert("Loading...");
 		return false;
 	}
 }
@@ -119,14 +119,15 @@ function onAsyncSuccess(event, treeId, treeNode, msg) {
 function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus,
 		errorThrown) {
 	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-	alert("Error ! 异步获取数据异常");
+	//alert("Error ! 异步获取数据异常");
+	BootstrapDialog.alert("Error ! 异步获取数据异常");
 	treeNode.icon = "";
 	zTree.updateNode(treeNode);
 }
 function ajaxGetNodes(treeNode, reloadType) {
 	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 	if (reloadType == "refresh") {
-		treeNode.icon = "zTree/css/zTreeStyle/img/loading.gif";
+		treeNode.icon = "static/zTree/css/zTreeStyle/img/loading.gif";
 		zTree.updateNode(treeNode);
 	}
 	zTree.reAsyncChildNodes(treeNode, reloadType, true);
@@ -141,7 +142,7 @@ function ajaxGetNodes(treeNode, reloadType) {
  * @return
  */
 function zTreeOnClick(event, treeId, treeNode) {
-	 document.getElementById("iframepage").src = "area/right?id=" +	 treeNode.id;
+//	 document.getElementById("iframepage").src = "area/right?id=" +	 treeNode.id;
 }
 
 
@@ -168,52 +169,38 @@ function beforeEditName(treeId, treeNode) {
  * @return
  */
 function beforeRemove(treeId, treeNode) {
-	
+
 	if (confirm("确认删除 节点 -- " + treeNode.name + " 吗？")) {
-		
-		return true;
+		var flag = true;
+		$.ajax({
+			async : false, // 是否异步
+			cache : false, // 是否使用缓存
+			type : 'post', // 请求方式,post
+			data : {
+				id : treeNode.id,
+			},
+			dataType : "text", // 数据传输格式
+			url : "region/deleteRegionbyId", // 请求链接
+			success : function(data) {
+				if (data === 'true') {
+					BootstrapDialog.alert("删除成功");
+					flag = true;
+				} else {
+					BootstrapDialog.alert("有子节点不能删除");
+					flag = false;
+				}
+			}
+		});
+		return flag;
 	} else {
 		return false;
 	}
-	
 
 }
 
 function zTreeOnRemove(event, treeId, treeNode) {
 	
-	$.ajax({
-		async : true, // 是否异步
-		cache : false, // 是否使用缓存
-		type : 'post', // 请求方式,post
-		data : {
-			id : treeNode.id,
-		},
-		dataType : "text", // 数据传输格式
-		url : "area/exsitManager", // 请求链接
-		success : function(data) {
-			if(data != 'no'){
-				$.ajax({
-					async : true, // 是否异步
-					cache : false, // 是否使用缓存
-					type : 'post', // 请求方式,post
-					data : {
-						id : treeNode.id,
-					},
-					dataType : "text", // 数据传输格式
-					url : "area/deleteArea", // 请求链接
-					/*success : function(data) {
-						if(data == 'no'){
-							alert("不能删除此区域");
-						}
-					}*/
-				});
-			}else{
-				alert("不能删除此区域");
-			}
-		}
-	});
-
-	
+	return true;
 }
 
 /**
@@ -228,7 +215,7 @@ function zTreeOnRemove(event, treeId, treeNode) {
 function beforeRename(treeId, treeNode, newName, isCancel) {
 	className = (className === "dark" ? "" : "dark");
 	if (newName.length == 0) {
-		alert("节点名称不能为空.");
+		BootstrapDialog.alert("节点名称不能为空");
 		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 		setTimeout(function() {
 			zTree.editName(treeNode)
@@ -251,13 +238,13 @@ function zTreeOnRename(event, treeId, treeNode, isCancel) {
 		cache : false, // 是否使用缓存
 		type : 'post', // 请求方式,post
 		data : {
-			id : treeNode.id,
+			 id :treeNode.id,
+			pid : treeNode.pId,
 			name : treeNode.name,
 		},
 		dataType : "text", // 数据传输格式
-		url : "area/editArea" // 请求链接
+		url : "region/editRegion"
 	});
-
 }
 /**
  * 功能：设置是否显示删除按钮。[setting.edit.enable = true 时生效]
@@ -293,70 +280,59 @@ function showRenameBtn(treeId, treeNode) {
  */
 var newCount = 0;
 function addHoverDom(treeId, treeNode) {
-	var sObj = $("#" + treeNode.tId + "_a");
-	if ($("#diyBtn_"+treeNode.id).length>0) return;
-	/*
-	 * if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
-	 * return;
-	 */
-	var addStr = "<span class='button add' id='addBtn_"
-			+ treeNode.tId
-			+ "' title='add node' onfocus='this.blur();'></span>";
-	var selStr = "<select class='selDemo ' name='selDemo' id='diyBtn_"
-			+ treeNode.id
-			+ "'><option value=1>1</option><option value=2>2</option></select>";
-	sObj.after(selStr);
-	sObj.after(addStr);
-	var btnAdd = $("#addBtn_" + treeNode.tId);
-	var btnSelect = $("#diyBtn_" + treeNode.id);
-	if (btnSelect)
-/*		btnSelect.bind("change", function() {
-			console.info("=========================>>"+$("#diyBtn_"+treeNode.id).val());
-			$.ajax({
-				async : true, // 是否异步
-				cache : false, // 是否使用缓存
-				type : 'post', // 请求方式,post
-				data : {
-					type : $("#diyBtn_"+treeNode.id).val(),
-					areaid : treeNode.id
-				},
-				dataType : "text", // 数据传输格式
-				url : "area/addArea" // 请求链接
-			});
-		});*/
-	if (btnAdd)
-		btnAdd.bind("click", function() {
-
-			$.ajax({
-				async : true, // 是否异步
-				cache : false, // 是否使用缓存
-				type : 'post', // 请求方式,post
-				data : {
-					type : $("#diyBtn_"+treeNode.id).val(),
-					areaid : treeNode.id,
-					name : "new node" + (newCount + 1)
-				},
-				dataType : "text", // 数据传输格式
-				url : "area/addArea", // 请求链接
-				error : function() {
-					alert('访问服务器出错');
-				},	
-				success : function(data) {
-					newCount++;
-					ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
-					// zNodes = zNodes.concat(ztreeNodes);
-					var zTree = $.fn.zTree.getZTreeObj(treeId);
-					zTree.addNodes(treeNode, {
-						id : (ztreeNodes.id),
-						pId : ztreeNodes.pId,
-						name : ztreeNodes.name
-					});
+	var sObj = $("#" + treeNode.tId + "_span");
+	
+	/******************添加区域 start***************************************/
+	if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+	var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+	+ "' title='添加区域' onfocus='this.blur();'></span>";
+	//sObj.after(addStr);
+	var btn = $("#addBtn_"+treeNode.tId);
+	if (btn) btn.bind("click", function(){
+		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+		$.ajax({
+			async : true, // 是否异步
+			cache : false, // 是否使用缓存
+			type : 'post', // 请求方式,post
+			data : {
+				pid : treeNode.id,
+				name : "新自定义区域"
+			},
+			dataType : "text", // 数据传输格式
+			url : "region/addRegion", // 请求链接
+			error : function() {
+				BootstrapDialog.alert("访问服务器出错");
+			},	
+			success : function(data) {
+				ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
+				if(ztreeNodes.regiontype === 'false'){
+					BootstrapDialog.alert("所添加节点超出级别");
 					return false;
 				}
-			});
-
+				var zTree = $.fn.zTree.getZTreeObj(treeId);
+				zTree.addNodes(treeNode, {
+					id : (ztreeNodes.id),
+					pId : ztreeNodes.pId,
+					name : ztreeNodes.name
+				});
+				return false;
+			}
 		});
-};
+		return false;
+	});
+	/******************添加区域 end***************************************/
+	
+	if (treeNode.editNameFlag || $("#mapBtn_"+treeNode.tId).length>0) return;
+	var mapStr = "<span class='button map' id='mapBtn_" + treeNode.tId
+	+ "' title='绘制子区域地图' onfocus='this.blur();'></span>";
+	sObj.after(mapStr);
+	var btn = $("#mapBtn_"+treeNode.tId);
+	if (btn) btn.bind("click", function(){
+		
+		window.location.href='/region/initRegionMap?regionName='+treeNode.name+"&parentid="+treeNode.id;
+				
+	});
+}
 
 /**
  * 功能：用于当鼠标移出节点时，隐藏用户自定义控件，显示隐藏状态同 zTree 内部的编辑、删除按钮
@@ -370,6 +346,7 @@ function addHoverDom(treeId, treeNode) {
 function removeHoverDom(treeId, treeNode) {
 	$("#diyBtn_" + treeNode.id).unbind().remove();
 	$("#addBtn_" + treeNode.tId).unbind().remove();
+	$("#mapBtn_" + treeNode.tId).unbind().remove();
 	$("#diyBtn_space_" +treeNode.id).unbind().remove();
 
 };
@@ -493,18 +470,9 @@ function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
 			pid : treeNodes[0].pId,
 		},
 		dataType : "text", // 数据传输格式
-		url : "area/dragArea" // 请求链接
+		url : "region/dragRegion" // 请求链接
 	});
 }
-/*
- * function beforeDrop(treeId, treeNodes, targetNode, moveType, isCopy) {
- * className = (className === "dark" ? "":"dark"); return true; } function
- * onDrag(event, treeId, treeNodes) { className = (className === "dark" ?
- * "":"dark"); } function onDrop(event, treeId, treeNodes, targetNode, moveType,
- * isCopy) { className = (className === "dark" ? "":"dark"); } function
- * onExpand(event, treeId, treeNode) { if (treeNode === autoExpandNode) {
- * className = (className === "dark" ? "":"dark"); } }
- */
 
 // 初始化方法
 function onloadZTree() {
@@ -515,11 +483,13 @@ function onloadZTree() {
 		type : 'post', // 请求方式,post
 		dataType : "text", // 数据传输格式
 		url : "region/findOneRegion", // 请求链接
+		data : {
+			returnId : $("#returnId").val()
+		},
 		error : function() {
-			alert('访问服务器出错');
+			BootstrapDialog.alert("访问服务器出错");
 		},
 		success : function(data) {
-			alert(data);
 			ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
 			zNodes = zNodes.concat(ztreeNodes);
 			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
@@ -527,6 +497,24 @@ function onloadZTree() {
 		}
 	});
 }
+
+//function confirm(){
+//	var flag=true;
+//	if(flag===true){
+//		$.confirm({
+//			title: 'Confirm!',
+//			content: 'Simple confirm!',
+//			confirm: function(){
+//				flag=true;
+//				return flag;
+//			},
+//			cancel: function(){
+//				flag=false;
+//				return flag;
+//			}
+//		});
+//	}
+//}
 
 $(document).ready(function() {
 	onloadZTree();

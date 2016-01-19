@@ -24,15 +24,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.salesman.entity.salesMan;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Entity
 @Table(name = "SYS_SAOJIE")
@@ -41,7 +38,7 @@ public class Saojie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum SaojieStatus {
-		PENDING("进行中"), COMMIT("提交审核"), AGREE("通过");
+		PENDING("扫街中"), COMMIT("提交审核"), AGREE("已完成");
 
 		private String name;
 
@@ -63,14 +60,13 @@ public class Saojie implements Serializable {
 	@JoinColumn(name = "PARENT_ID")
 	private Saojie parent;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
-	private salesMan salesman;
+	private SalesMan salesman;
 
 	private String name;
 
@@ -127,11 +123,11 @@ public class Saojie implements Serializable {
 		this.region = region;
 	}
 
-	public salesMan getSalesman() {
+	public SalesMan getSalesman() {
 		return salesman;
 	}
 
-	public void setSalesman(salesMan salesman) {
+	public void setSalesman(SalesMan salesman) {
 		this.salesman = salesman;
 	}
 

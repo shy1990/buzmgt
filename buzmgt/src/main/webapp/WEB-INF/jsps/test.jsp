@@ -5,7 +5,7 @@
 <title>业务管理</title>
 </head>
 <body>
-	<div id="j_page_main">
+	<div id="main">
 		<div id="ditu" style="height:400px">fuck </div>
 		<div id="ditu2" style="height:400px">hello word</div>
 		<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>

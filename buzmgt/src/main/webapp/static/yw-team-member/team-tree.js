@@ -1,4 +1,3 @@
-		
 		/**
 		 * 设置zTree树
 		 */
@@ -9,9 +8,9 @@
 				autoParam : [ "id" ],
 		        dataFilter: filter
 			},
-			check: {
+			/*check: {
 				enable: true
-			},
+			},*/
 			data : {
 				simpleData : {
 					enable : true
@@ -128,8 +127,7 @@
 				    }
 				
 				 
-				 if(v.contains(nodes[i].id) && name.contains(nodes[i].name)){
-					 
+				 if(contains(v,nodes[i].id) && contains(name,nodes[i].name)){
 					 v = distinct(v,nodes[i].id);
 						
 						name = distinct(name,nodes[i].name);
@@ -197,6 +195,8 @@
 				$("body").bind("mousedown", onBodyDown);
 			
 		}
+
+		
 		function hideRegionMenu() {
 			$("#regionMenuContent").fadeOut("fast");
 			$("body").unbind("mousedown", onBodyDown);
@@ -206,4 +206,11 @@
 			if (!(event.target.id == "menuBtn" || event.target.id == "region" || event.target.id == "regionMenuContent" || $(event.target).parents("#regionMenuContent").length>0)) {
 				hideRegionMenu();
 			}
+		}
+		//
+		function contains(a, obj) {
+			if(a.indexOf(obj)<0){
+				return false;
+			}
+			return true;
 		}

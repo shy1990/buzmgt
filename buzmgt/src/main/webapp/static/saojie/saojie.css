@@ -1,4 +1,4 @@
-/* 扫街添加页面css开始 */
+/* 鎵娣诲姞椤甸潰css寮�濮� */
 .member-add-icon{
 	top: 4px;
 	background: url(../img/saojie/tianxie.png) no-repeat;
@@ -19,7 +19,7 @@
 	clear: both;
 }
 
-/*表单图标*/
+/*琛ㄥ崟鍥炬爣*/
 .member-icon {
 	position: relative;
 	display: inline-block;
@@ -34,14 +34,20 @@
 	width: 30px;
 	height: 30px;
 }
+.p-t{
+	padding-top: 5px;
+}
+a.order-icon:hover{
+	color: #FFF;
+}
 .member-name-icon{
 	background:url(../img/saojie/xingming.png) no-repeat;
 }
-/*输入框组 span 图标定位  span.input-group-addon*/
+/*杈撳叆妗嗙粍 span 鍥炬爣瀹氫綅  span.input-group-addon*/
 .member-from-box span.input-group-addon{
 	padding: 0 5px;
 }
-/*输入框组 input 定位  input.input-group*/
+/*杈撳叆妗嗙粍 input 瀹氫綅  input.input-group*/
 .member-from-box .input-group{
 	float: left;
 	padding-left: 15px;
@@ -67,7 +73,7 @@
 .saojie-map-icon{
 	background:url(../img/saojie/quyu.png) no-repeat;
 }
-/*负责区域*/
+/*璐熻矗鍖哄煙*/
 .territory{
 	padding: 15px;
 	margin-bottom: 0;
@@ -181,9 +187,9 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	cursor: hand;
 	cursor: pointer;
 }
-/* 扫街添加页面结束 */
+/* 鎵娣诲姞椤甸潰缁撴潫 */
 
-/* 扫街设置列表 */
+/* 鎵璁剧疆鍒楄〃 */
 .navbar-form-custom .form-control {
 	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
 	border: medium none;
@@ -193,7 +199,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	z-index: 2000
 }
 
-/*btn模块*/
+/*btn妯″潡*/
 .btn-primary.btn-outline {
 	color: #1ab394
 }
@@ -590,7 +596,7 @@ body {
 }
 
 
-/*ibox相关*/
+/*ibox鐩稿叧*/
 .ibox {
 	clear: both;
 	margin-bottom: 25px;
@@ -1102,7 +1108,7 @@ body.rtls .stat-percent {
 	float: left
 }
 
-/* 扫街设置列表外部 */
+/* 鎵璁剧疆鍒楄〃澶栭儴 */
 .team-member-list-icon{
 	top: 3px;
 	background: url(../img/icon/team-member/list/tdcy.png) no-repeat;
@@ -1119,15 +1125,15 @@ body.rtls .stat-percent {
 	margin-bottom: -5px;
 	background: url(../img/icon/team-member/list/tjcy_tb.png) no-repeat;
 }
-/*区域选中按钮*/
+/*鍖哄煙閫変腑鎸夐挳*/
 .team-member-header .btn-group{
 	margin-left: 15px;
 }
-/*添加扫街按钮*/
+/*娣诲姞鎵鎸夐挳*/
 .member-add-btn{
 	margin-left: 0px;
 }
-/*small 文本内容*/
+/*small 鏂囨湰鍐呭*/
 .header-text{
 	position: relative;
 	top: 8px;
@@ -1183,10 +1189,10 @@ ul, ol {
     border-radius: 5px 0px 0px;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
     /*margin-right: 15px;*/
-    margin-left: 15px;/*左侧边距 ，因为左浮动 */
+    margin-left: 15px;/*宸︿晶杈硅窛 锛屽洜涓哄乏娴姩 */
     border-top: 1px solid #D0D0D0;
 }
-/*a左侧棱块*/
+/*a宸︿晶妫卞潡*/
 .box .nav-tabs > li > a::before {
     content: "";
     position: absolute;
@@ -1201,7 +1207,7 @@ ul, ol {
     transform: skew(170deg);
     border-radius: 5px 0px 0px;
 }
-/*a右侧棱块*/
+/*a鍙充晶妫卞潡*/
 .box .nav-tabs > li > a::after {
     content: "";
     position: absolute;
@@ -1227,7 +1233,7 @@ ul, ol {
     display: block;
     padding: 10px 15px;
 }
-/*选中样式 active*/
+/*閫変腑鏍峰紡 active*/
 .box .nav-tabs > li.active a, 
 .box .nav-tabs > li.active a::after, 
 .box .nav-tabs > li.active a::before {

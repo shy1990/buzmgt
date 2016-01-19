@@ -43,40 +43,14 @@ function queryTown(){
 	dataType:"JSON",
 	success : function(obj){
 	   if (obj) {
-		   var map = new BMap.Map("allmap");    // 创建Map实例
-		   var regionName;
+//			var town = $("#town");
+//			alert(town);
+//            town.empty();
 		   strtown ='';
             strtown+='<option value = "" selected="selected">请选择</option>';
-	        for(var i=0;i<obj.length;i++){
-	        	strtown+="<option value = '"+obj[i].id+"'>"+obj[i].name+"</option>";
-	        	if(null!=obj[i].coordinates){
-	        		 var points=new Array()
-	        		for(var j=0;j<obj[i].coordinates.split("=").length;j++){
-	        			var lng=obj[i].coordinates.split("=")[j].split("-")[0];
-	        			var lat=obj[i].coordinates.split("=")[j].split("-")[1];
-	        			points[j]=new BMap.Point(lng,lat);
-	        		}
-	        		
-	        		var polygon = new BMap.Polygon({strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
-	        		polygon.setStrokeColor("blue");
-	        		polygon.setPath(points);
-	        		polygon.setStrokeWeight(2);
-	        		polygon.setFillColor("red");
-	        		polygon.setStrokeOpacity(0.5);
-	        		map.addOverlay(polygon);   //增加多边形
-	        	}
-			}
-	        $.ajax({
-	 		   type:"post",
-	 		   url:"/saojie/getRegionName",
-	 		   data: {"id":userId},
-	 		   success : function(obj){
-	 			   map.centerAndZoom(obj, 11);  // 初始化地图,设置中心点坐标和地图级别
-	 			   map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-	 			   map.setCurrentCity(obj);          // 设置地图显示的城市 此项是必须设置的
-	 			   map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-	 		   }
-	 	   });	
+        for(var i=0;i<obj.length;i++){
+        	strtown+="<option value = '"+obj[i].id+"'>"+obj[i].name+"</option>";
+		}
 	}else {
 			//alert(obj.length);
 			//for(var i=0;i<obj.length;i++){
@@ -86,6 +60,7 @@ function queryTown(){
 		};
  }
 });
+			
 }
 
 function AddOrder(btType) {
@@ -97,7 +72,7 @@ function AddOrder(btType) {
 	}
 	var intLen = $("div[id^='selOrder']").length;
 	if (intLen == "undefined") intLen = 1;
-	if (intLen <= 20) {
+	if (intLen <= 30) {
 		intLen++;
 		var intNewApp;
 		if (intLen != 1) {
@@ -120,7 +95,7 @@ function AddOrder(btType) {
 		//					}
 		var strApp = '<div class="col-sm-6 col-xs-4 p-n" id="selOrder' + intLen + '">\
 			  <div class="input-group col-sm-8 col-xs-4 ">\
-			      <span class="input-group-btn" id="basic-addon1"><i class="order-icon saojie-number-icon" name="order">' + order + '</i></span>\
+		<span class="input-group-btn" id="basic-addon1"><i class="order-icon saojie-number-icon"><input type="hidden" name="num" value="' + intLen + '"/>' + order + '</i></span>\
 				  <select class="form-control" name="region.id" id="town">\
 				  ' + strtown + '\
 					</select>\
@@ -128,18 +103,20 @@ function AddOrder(btType) {
 				<div class="col-sm-4 clear-padd-l">\
 					<div class="input-group clear-padd-l">\
 						<span class="input-group-addon" id="basic-addon1"><i class="member-icon member-value-icon"></i></span>\
-						<input type="text" name="minValue" class="form-control" placeholder="指标(家)" id="minValue' + intNewApp + '">\
+						<input type="text" name="value" class="form-control" placeholder="指标(家)" id="minValue' + intNewApp + '">\
 					</div>\
-					<span class="del-order glyphicon glyphicon-remove" onclick="delNode(selOrder' + intLen + ',' + order + ')"></span>\
+					<span id="delNode' + intLen + '" class="del-order glyphicon glyphicon-remove" onclick="delNode(selOrder' + intLen + ',' + order + ')"></span>\
 				</div>\
 			</div>';
 		$(btType).before(strApp);
 	}
-	if ($("div[id^='selOrder']").length == 20) $("#btn").hide();
+	var options = document.getElementById("town").options.length;
+	if ($("div[id^='selOrder']").length == options-1) $("#btn").hide();
 }
 
 function delNode(selOrder,order) {
 	var intLen = $("div[id^='selOrder']").length;
+	var options = document.getElementById("town").options.length;
 	if(intLen === order){
 		if (selOrder != null && selOrder != ''){
 			selOrder.parentNode.removeChild(selOrder);
@@ -147,9 +124,13 @@ function delNode(selOrder,order) {
 	}else{
 		alert("请先删除序号最大项!");
 	}
+	if(intLen <= options-1){
+		$("#btn").show();
+	}
 }
 
 $(function() {
+	
 				$('#starttime').datetimepicker({
 					language: 'zh-CN',
 					showMeridian: true,
@@ -213,4 +194,23 @@ $(function() {
 function toSubmit(){
 	form.submit();
 }
-			
+
+/*扫街列表*/
+function getAllSaojieList(){
+	
+	window.location.href="/saojie/saojieList";
+}
+
+function getSaojieList(param,name){
+    if(name == "goSearch"){
+    	var value = $("#param").val();
+    	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value;
+    }else if(name == "status"){
+    	window.location.href="/saojie/getSaojieList?saojieStatus="+param;
+    }
+}
+
+function getPageList(num){
+	
+	window.location.href="/saojie/getSaojieList?page="+num;
+}

@@ -155,8 +155,10 @@
 	    	
 	    	if(responseText.resultStatus==true){
 	    		alert("保存成功");
+	    		var url = "roleList";
+	    		window.location = encodeURI(url);
 	    	}else{
-	    		alert("保存失败");
+	    		alert("保存失败,请至少选定一个节点");
 	    	}
 	    	
 	    }
@@ -237,6 +239,7 @@
 
 		</form>
 	</div>
+	<script src='/static/js/common.js'></script>
 	
 </body>
 </html>
