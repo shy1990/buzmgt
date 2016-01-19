@@ -58,7 +58,7 @@ public class SaojieController {
 	  return salesman;
 	}
 	
-	/*@RequestMapping(value = "/gainSaojieTown",method = RequestMethod.POST)
+	@RequestMapping(value = "/gainSaojieTown",method = RequestMethod.POST)
 	@ResponseBody
 	public List<Region> gainSaojieTown(String id){
 	  System.out.println(id);
@@ -68,7 +68,7 @@ public class SaojieController {
 	    list = regionService.findByRegion(sm.getRegion().getId());
 	  }
     return list;
-	}*/
+	}
 	
 	
 	

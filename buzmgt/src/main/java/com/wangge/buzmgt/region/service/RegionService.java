@@ -25,6 +25,6 @@ public interface RegionService {
 
 	public Region getRegionById(String regionId);
 
-
+	public List<Region> findByRegion(String regionId);
 
 }

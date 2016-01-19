@@ -76,5 +76,10 @@ public class RegionServiceImpl implements RegionService {
 		
 	}
 	
+	public List<Region> findByRegion(String regionId) {
+    return regionRepository.findByParentId(regionId);
+  }
+
+	
  
 }
