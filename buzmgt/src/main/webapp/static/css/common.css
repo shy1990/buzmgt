@@ -202,6 +202,10 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: url(../img/icon/team-member/det/d.png) no-repeat;
 	top: 5px;
 }
+.icon-saojie-set{
+	background: url(../img/icon/saojie/set/sjsz.png) no-repeat;
+	top: 5px;
+}
 /*进度条*/
 .progress{
 	overflow:visible ;
@@ -225,14 +229,29 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	color: #FFF;
 }
 
-
-
-
-
-
-
-
-
+.align-right{
+	text-align: right;
+}
+/*虚线*/
+.hr{
+	margin: 15px -20px;
+	border-top: 1px dashed #D4D4D4;
+}
+/*实线*/
+.hr-solid{
+	margin: 15px -20px;
+	border-top: 1px solid #DBDBDB;
+}
+.marg-b-10{
+	margin-bottom: 10px;
+}
+/*不同状态文字颜色*/
+.text-danger{
+	color: #DE433E;
+}
+.text-primary{
+	color: #3894C7;
+}
 
 
 

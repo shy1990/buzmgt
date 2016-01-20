@@ -48,7 +48,17 @@ public class TestController {
 	 */
 	@RequestMapping("/team_saojie_det")
 	public String teamMemberAdd(String test,Model model){
-		return "salesman/saojie_det";
+		return "saojie/saojie_det";
+	}
+	/**
+	 * 团队成员添加
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/saojie_set")
+	public String saojieSet(String test,Model model){
+	  return "saojie/saojie_set";
 	}
 	/**
 	 * 团队成员列表
