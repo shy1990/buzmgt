@@ -5,19 +5,19 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.wangge.buzmgt.salesman.entity.salesMan;
+import com.wangge.buzmgt.salesman.entity.SalesMan;
 import com.wangge.buzmgt.sys.entity.User;
 
 public interface salesManService {
 
-	void addSalesman(salesMan salesman);
+	void addSalesman(SalesMan salesman);
 
 	List<User> findByReginId(String regionId);
 	
-	List<salesMan> gainSaojieMan();
+	List<SalesMan> gainSaojieMan();
 	
-	salesMan findById(String id);
+	SalesMan findById(String id);
 
-  Page<salesMan> getSalesmanList(salesMan salesman,int pageNum);
+  Page<SalesMan> getSalesmanList(SalesMan salesman,int pageNum);
   
 }

@@ -22,8 +22,8 @@ import com.wangge.buzmgt.manager.service.managerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.salesman.entity.salesMan;
-import com.wangge.buzmgt.salesman.entity.salesMan.SalesmanStatus;
+import com.wangge.buzmgt.salesman.entity.SalesMan;
+import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
 import com.wangge.buzmgt.salesman.service.salesManService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Role;
@@ -161,20 +161,20 @@ public class BuzmgtApplicationTests {
 	  int page = 0;
 	  Region r = new Region();
     r.setId("370105");
-	  salesMan a = new salesMan();
+	  SalesMan a = new SalesMan();
 	 
 	// a.setSalesmanStatus(SalesmanStatus.SAOJIE);
 	  //a.setTruename("王五");
 	 //  a.setRegion(r);
 	 // a.setJobNum("2016010602");
-	  Page<salesMan> user  = salesManService.getSalesmanList(a,page);
+	  Page<SalesMan> user  = salesManService.getSalesmanList(a,page);
 	  
 	  System.out.println("======================"+user.getNumber());
 	  System.out.println("========================="+user.getSize());
 	  System.out.println("========================="+user.getTotalPages());
 	  System.out.println("========================="+user.getTotalPages()*user.getSize());
 	  
-	  for( salesMan s : user.getContent()){
+	  for( SalesMan s : user.getContent()){
 	    System.out.println("==========name==="+s.getTruename());
 	  /* System.out.println("==========org==="+s.getUser().getOrganization().getName());
 	     System.out.println("==========reg==="+s.getRegion().getName());

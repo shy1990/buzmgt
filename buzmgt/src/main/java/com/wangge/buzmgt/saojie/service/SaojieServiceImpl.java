@@ -18,7 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.salesman.entity.salesMan;
+import com.wangge.buzmgt.salesman.entity.SalesMan;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
@@ -44,8 +44,8 @@ public class SaojieServiceImpl implements SaojieService {
         List<Predicate> predicates = new ArrayList<Predicate>();
 
         if (saojie.getSalesman() != null) {
-          Join<Saojie, salesMan> salesmanJoin = root.join(root.getModel()
-              .getSingularAttribute("salesman", salesMan.class), JoinType.LEFT);
+          Join<Saojie, SalesMan> salesmanJoin = root.join(root.getModel()
+              .getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
           Predicate p1 = cb.like(salesmanJoin.get("truename").as(String.class),
               "%" + saojie.getSalesman().getTruename() + "%");
           Predicate p2 = cb.equal(salesmanJoin.get("jobNum").as(String.class),
@@ -73,5 +73,15 @@ public class SaojieServiceImpl implements SaojieService {
 
     }, new PageRequest(pageNum, 2));
 
+  }
+
+  @Override
+  public List<Saojie> findBysalesman(SalesMan salesman) {
+    return saojieRepository.findBysalesmanOrderByOrderAsc(salesman);
+  }
+
+  @Override
+  public Saojie findByregion(Region region) {
+    return saojieRepository.findByregion(region);
   }
 }

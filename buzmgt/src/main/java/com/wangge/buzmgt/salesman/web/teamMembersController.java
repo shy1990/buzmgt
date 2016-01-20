@@ -25,8 +25,8 @@ import com.wangge.buzmgt.manager.entity.manager;
 import com.wangge.buzmgt.manager.service.managerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.salesman.entity.salesMan;
-import com.wangge.buzmgt.salesman.entity.salesMan.SalesmanStatus;
+import com.wangge.buzmgt.salesman.entity.SalesMan;
+import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
 import com.wangge.buzmgt.salesman.service.salesManService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Role;
@@ -64,9 +64,9 @@ public class teamMembersController {
 	private UserService userService;
 	
 	@RequestMapping("/salesManList")
-	public String toTeamMembers(String salesManList , Model model,salesMan salesman){
+	public String toTeamMembers(String salesManList , Model model,SalesMan salesman){
 	  int pageNum = 0;
-	  Page<salesMan> list = salesManService.getSalesmanList(salesman,pageNum);
+	  Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum);
     model.addAttribute("list", list);
 		model.addAttribute("salesManList", salesManList);
 		return "salesman/salesman_list";
@@ -78,7 +78,7 @@ public class teamMembersController {
 		return "salesman/team_member_add";
 	}
 	@RequestMapping(value = "/addTeamMember")
-	public String addTeamMembers(salesMan salesman,String username,String regionId,String organizationId,String roleId,String regionPid ,HttpServletRequest request){
+	public String addTeamMembers(SalesMan salesman,String username,String regionId,String organizationId,String roleId,String regionPid ,HttpServletRequest request){
 		Organization o = organizationService.getOrganById(Long.parseLong(organizationId));
 		User u = new User();
 		u.setOrganization(o);
@@ -113,7 +113,7 @@ public class teamMembersController {
 	
 	
 	@RequestMapping(value = "/getSalesManList")
-	public  String  getSalesManList(Model model,salesMan salesman, String Status,String page, HttpServletRequest requet){
+	public  String  getSalesManList(Model model,SalesMan salesman, String Status,String page, HttpServletRequest requet){
 	      String name = Status != null ? Status : "扫街中";
 	      int pageNum = Integer.parseInt(page != null ? page : "0");
     	  if(SalesmanStatus.SAOJIE.getName().equals(name) ){
@@ -127,7 +127,7 @@ public class teamMembersController {
     	  }else if(SalesmanStatus.SHENHE.getName().equals(name)){
     	    salesman.setSalesmanStatus(SalesmanStatus.SHENHE);
     	  }
-	  Page<salesMan> list = salesManService.getSalesmanList(salesman,pageNum);
+	  Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum);
 	  model.addAttribute("list", list);
 	  return "salesman/salesman_list";
 	}

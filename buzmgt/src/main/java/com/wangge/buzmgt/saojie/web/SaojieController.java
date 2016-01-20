@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.salesman.entity.salesMan;
-import com.wangge.buzmgt.salesman.entity.salesMan.SalesmanStatus;
+import com.wangge.buzmgt.salesman.entity.SalesMan;
+import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
 import com.wangge.buzmgt.salesman.service.salesManService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
@@ -52,6 +53,19 @@ public class SaojieController {
 		return "saojie/saojie_list";
 	}
 	
+	/**
+	 * 
+	  * getSaojieList:(扫街列表(条件)). <br/> 
+	  * 
+	  * @author peter 
+	  * @param model
+	  * @param saojie
+	  * @param saojieStatus
+	  * @param page
+	  * @param requet
+	  * @return 
+	  * @since JDK 1.8
+	 */
 	@RequestMapping(value = "/getSaojieList")
   public  String  getSaojieList(Model model,Saojie saojie, String saojieStatus,String page, HttpServletRequest requet){
         int pageNum = Integer.parseInt(page != null ? page : "0");
@@ -72,18 +86,35 @@ public class SaojieController {
     return "saojie/saojie_add";
   }
 	
+	/**
+	 * 
+	  * gainSaojieMan:(获得待扫街人). <br/> 
+	  * 
+	  * @author peter 
+	  * @return 
+	  * @since JDK 1.8
+	 */
 	@RequestMapping(value = "/gainSaojieMan",method = RequestMethod.POST)
 	@ResponseBody
-	public List<salesMan> gainSaojieMan(){
-	  List<salesMan> salesman = salesManService.gainSaojieMan();
+	public List<SalesMan> gainSaojieMan(){
+	  List<SalesMan> salesman = salesManService.gainSaojieMan();
 	  return salesman;
 	}
 	
+	/**
+	 * 
+	  * gainSaojieTown:(获得扫街地区). <br/> 
+	  * 
+	  * @author peter 
+	  * @param id
+	  * @return 
+	  * @since JDK 1.8
+	 */
 	@RequestMapping(value = "/gainSaojieTown",method = RequestMethod.POST)
 	@ResponseBody
 	public List<Region> gainSaojieTown(String id){
 	  System.out.println(id);
-	  salesMan sm = salesManService.findById(id);
+	  SalesMan sm = salesManService.findById(id);
 	  List<Region> list = null;
 	  if(sm != null && !"".equals(sm)){
 	    list = regionService.findByRegion(sm.getRegion().getId());
@@ -122,4 +153,22 @@ public class SaojieController {
 	  return "ok";
 	}
 	
+	@RequestMapping("/toSaojieInstall")
+	public String toSaojieInstall(@PathVariable("userId") SalesMan salesman,Model model){
+	  List<Saojie> list = saojieService.findBysalesman(salesman);
+	  model.addAttribute("list",list);
+	  return "saojie/saojie_install";
+	}
+
+	@RequestMapping("/auditPass")
+  public String auditPass(@PathVariable("regionId") Region region,String description,Model model){
+    Saojie saojie = saojieService.findByregion(region);
+    return "saojie/saojie_install";
+  }
+	
+	@RequestMapping("/changeOrder")
+	public String changeOrder(){
+	  
+	  return "saojie/saojie_install";
+	}
 }

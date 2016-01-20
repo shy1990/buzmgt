@@ -170,7 +170,8 @@
 																<td class="project-actions"><a
 																	href="projects.html#" class="btn btn-white btn-sm"><span
 																		class="folder"></span> 查看 </a>
-																	<div class="btn-group"></div></td>
+																	<a href="/saojie/toSaojieInstall?userId='+${saojie.salesman.id }+'" class="btn btn-white btn-sm"><span
+																		class="folder"></span> 设置 </a></td>
 															</tr>
 														</c:forEach>
 													</tbody>

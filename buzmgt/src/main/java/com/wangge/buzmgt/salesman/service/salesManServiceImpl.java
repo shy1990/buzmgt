@@ -19,8 +19,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.salesman.entity.salesMan;
-import com.wangge.buzmgt.salesman.entity.salesMan.SalesmanStatus;
+import com.wangge.buzmgt.salesman.entity.SalesMan;
+import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
 import com.wangge.buzmgt.salesman.repository.salesManRepository;
 import com.wangge.buzmgt.sys.entity.User;
 
@@ -36,7 +36,7 @@ public class salesManServiceImpl implements salesManService {
 	* @see com.wangge.buzmgt.salesman.service.salesManService#addSalesman(com.wangge.buzmgt.salesman.entity.salesMan)
 	 */
 	@Override
-	public void addSalesman(salesMan salesman) {
+	public void addSalesman(SalesMan salesman) {
 		
 		salesManRepository.save(salesman);
 	}
@@ -56,13 +56,13 @@ public class salesManServiceImpl implements salesManService {
 	}
 
   @Override
-  public List<salesMan> gainSaojieMan() {
+  public List<SalesMan> gainSaojieMan() {
     return salesManRepository.gainSaojieMan();
   }
 
 
   @Override
-  public salesMan findById(String id) {
+  public SalesMan findById(String id) {
     return salesManRepository.findById(id);
   }
   
@@ -74,12 +74,12 @@ public class salesManServiceImpl implements salesManService {
    */
   @Override
   @Transactional
-  public Page<salesMan> getSalesmanList(salesMan salesMan, int pageNum) {
+  public Page<SalesMan> getSalesmanList(SalesMan salesMan, int pageNum) {
     
          // salesManRepository.findAll(new PageRequest(0, 20,new Sort(Sort.Direction.DESC)));
-    return   salesManRepository.findAll(new Specification<salesMan> () {  
+    return   salesManRepository.findAll(new Specification<SalesMan> () {  
       
-      public Predicate toPredicate(Root<salesMan> root,  
+      public Predicate toPredicate(Root<SalesMan> root,  
         CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<Predicate>();
         /*************第一种写法*************/
@@ -102,7 +102,7 @@ public class salesManServiceImpl implements salesManService {
          }
        
         if(salesMan.getRegion() != null){
-          Join<salesMan, Region> regionJoin =   root.join(root.getModel().getSingularAttribute("region",Region.class) , JoinType.LEFT);
+          Join<SalesMan, Region> regionJoin =   root.join(root.getModel().getSingularAttribute("region",Region.class) , JoinType.LEFT);
           predicates.add(cb.equal(regionJoin.get("id").as(String.class), salesMan.getRegion().getId()));
         }
         return cb.and(predicates.toArray(new Predicate[predicates.size()]));
