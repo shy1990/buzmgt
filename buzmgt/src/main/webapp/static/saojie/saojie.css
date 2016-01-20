@@ -11,10 +11,6 @@
 	padding-left:  0;
 	padding-right:  0;
 }
-
-.form-control{
-	outline: auto;
-}
 .clear {
 	clear: both;
 }
@@ -1257,7 +1253,6 @@ ul, ol {
 }
 .box-title{
 	padding-bottom: 0;
-	padding-top: 10px;
 }
 /*title-form*/
 .title-form{
@@ -1291,3 +1286,11 @@ ul, ol {
 .team-member-body .tab-content{
 	background: #FFF;
 }
+
+.icon-saojie-add{
+    top: 5px;
+    background: url(../img/icon/team-member/add/tjcy.png) no-repeat;
+}
+
+
+

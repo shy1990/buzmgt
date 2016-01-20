@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,6 +19,7 @@
 <script type="text/javascript">
 	$(function() {
 		var status = $("#addClass").val();
+		console.info(status);
 		if (status != null && status != '') {
 			$("li[title = '" + status + "']").addClass("active");
 		} else {
@@ -27,19 +29,13 @@
 </script>
 </head>
 <body>
-	<%@ include file="../top_menu.jsp"%>
-	<div class="container-fluid">
-		<div id="" class="row">
-			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
-				<%@include file="../left_menu.jsp"%>
-			</div>
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+			<div class="main">
 				<h4 class="team-member-header page-header ">
 					<div class="row">
-						<div class="col-sm-4 col-md-3 ">
+						<div class="col-sm-12">
 							<i class="icon team-member-list-icon"></i>扫街设置
 							<!--区域选择按钮-->
-							<div class="btn-group">
+							<div class="btn-group sr-only">
 								<button type="button" class="btn btn-default ">
 									<i class="icon province-icon"></i>山东省
 								</button>
@@ -58,8 +54,6 @@
 								</ul>
 							</div>
 							<!--/区域选择按钮-->
-						</div>
-						<div class="col-sm-6">
 							<button class="btn btn-warning member-add-btn" type="button"
 								onclick="javascript:window.location.href='/saojie/toAdd'">
 								<i class="icon icon-add"></i>添加扫街
@@ -67,6 +61,7 @@
 							<small class="header-text">共<span class="text-red">203</span>个区域
 							</small>
 							<!-- <small class="header-text">今日新增<span class="text-red"> 0 +</span></small> -->
+						
 						</div>
 					</div>
 				</h4>
@@ -131,14 +126,24 @@
 											<div class="project-list">
 												<table class="table table-hover">
 													<tbody>
+													<c:if test="${empty list.content}">
+													<div style="text-align: center;">
+														<ul class="pagination">
+															<tr>
+																<td colspan="100">没有相关数据</td>
+															</tr>
+														</ul>
+													</div>
+													</c:if>
+													<c:if test="${not empty list.content}">
 														<c:forEach var="saojie" items="${list.content}"
 															varStatus="s">
 															<tr>
-																<td class="project-people"><a href="projects.html"><img
+																<td class="project-people"><a href=""><img
 																		alt="image" class="img-circle"
 																		src="../static/img/saojie/a.jpg"></a></td>
 																<td class="project-title"><a
-																	href="project_detail.html"><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
+																	href=""><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
 																	<br /> <span>${saojie.salesman.region.name}</span></td>
 																<c:if test="${saojie.status == 'PENDING' }">
 																	<td class="project-status"><span
@@ -175,30 +180,80 @@
 														</c:forEach>
 													</tbody>
 												</table>
-												<c:if test="${not empty list.content}">
-													<div style="text-align: center;">
-														<ul class="pagination">
-															<li><a
-																href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
-															<c:forEach var="s" begin="1" end="${list.totalPages}"
-																step="1">
-																<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
-															</c:forEach>
-															<li><a
-																href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
-														</ul>
-													</div>
-												</c:if>
-												<c:if test="${empty list.content}">
-													<div style="text-align: center;">
-														<ul class="pagination">
-															<tr>
-																<td colspan="100">没有相关数据</td>
-															</tr>
-														</ul>
-													</div>
 												</c:if>
 											</div>
+											<c:if test="${not empty list.content}">
+												<div style="text-align: center;padding-bottom: 20px" >
+													<ul class="pagination box-page-ul">
+														<li><a
+															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+														<!-- 1.total<=7 -->
+														<c:if test="${list.totalPages<=7 }">
+															<c:forEach var="s" begin="1" end="${list.totalPages}"
+																step="1">
+																<c:choose>
+																	<c:when test="${list.number == s-1 }">
+																		<li class="active"><a
+																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:when>
+																	<c:otherwise>
+																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:otherwise>
+																</c:choose>
+															</c:forEach>
+														</c:if>
+														<c:if test="${list.totalPages>7 && list.number<4 }">
+															<c:forEach var="s" begin="1" end="6" step="1">
+																<c:choose>
+																	<c:when test="${list.number == s-1 }">
+																		<li class="active"><a
+																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:when>
+																	<c:otherwise>
+																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:otherwise>
+																</c:choose>
+															</c:forEach>
+															<li><a href="javascript:void(0)">...</a></li>
+														</c:if>
+														<c:if
+															test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number>=3 }">
+															<li><a href="javascript:void(0)">...</a></li>
+															<c:forEach var="s" begin="${list.number-2 }"
+																end="${list.number+2 }" step="1">
+																<c:choose>
+																	<c:when test="${list.number == s-1 }">
+																		<li class="active"><a
+																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:when>
+																	<c:otherwise>
+																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:otherwise>
+																</c:choose>
+															</c:forEach>
+															<li><a href="javascript:void(0)">...</a></li>
+														</c:if>
+														<c:if
+															test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number<3 }">
+															<li><a href="javascript:void(0)">...</a></li>
+															<c:forEach var="s" begin="${list.totalPages-6 }"
+																end="${list.totalPages }" step="1">
+																<c:choose>
+																	<c:when test="${list.number == s-1 }">
+																		<li class="active"><a
+																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:when>
+																	<c:otherwise>
+																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:otherwise>
+																</c:choose>
+															</c:forEach>
+														</c:if>
+														<li><a
+															href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
+													</ul>
+												</div>
+											</c:if>
 										</div>
 										<!--/box-list-->
 									</div>
@@ -213,8 +268,6 @@
 				</div>
 				<!-- /CALENDAR -->
 			</div>
-		</div>
-	</div>
 	<!-- Bootstrap core JavaScript================================================== -->
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -227,8 +280,7 @@
 	<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../static/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../static/yw-team-member/team-member.js"
-		type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="/static/js/common.js"></script>
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
 </body>

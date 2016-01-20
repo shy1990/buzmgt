@@ -24,12 +24,16 @@
 
 	<div class="main">
 		<h4 class="page-header">
-			<i class="icon team-member-add-icon"></i>添加扫街
+			<i class="icon icon-saojie-add"></i>添加扫街
+			<button class="btn btn-warning member-add-btn" type="button"
+				onclick="javascript:window.location.href='/saojie/saojieList'">
+				<i class="icon glyphicon glyphicon-share-alt"></i>返回列表
+				
+			</button>
 		</h4>
-
 		<div class="row">
 			<div class="col-md-12">
-				<div class="member-add-box box border red">
+				<div class="member-add-box box border orange">
 					<div class="box-title">
 						<i class="icon member-add-icon"></i>添加
 					</div>
