@@ -1067,6 +1067,9 @@ dd.project-people {
 	background:url(../img/saojie/tg.png) no-repeat;
 	color: #FFFFFF;
 }
+.project-list{
+	padding-bottom: 30px;
+}
 .project-list table tr td {
 	border-top: none;
 	border-bottom: 1px solid #e7eaec;
