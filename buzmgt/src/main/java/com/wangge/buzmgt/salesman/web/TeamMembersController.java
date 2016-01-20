@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.Response;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -85,6 +86,13 @@ public class TeamMembersController {
     model.addAttribute("list", list);
     model.addAttribute("Status", "扫街中");
 		model.addAttribute("salesManList", salesManList);
+	  Subject subject = SecurityUtils.getSubject();
+		 User user=(User) subject.getPrincipal();
+     Manager manager = managerService.getById(user.getId());
+     if(null!=manager.getRegion().getCoordinates()){
+       model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
+     }
+     model.addAttribute("regionName", manager.getRegion().getName());
 		return "salesman/salesman_list";
 	}
 	/**
