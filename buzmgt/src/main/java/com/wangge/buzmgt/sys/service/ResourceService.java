@@ -24,9 +24,15 @@ public interface ResourceService {
 		private String name;
 		public String url;
 		private Long parentId;
+		private String icon;
 		
-		
-		public Set<Menu> children=new HashSet<Menu>();
+		public String getIcon() {
+      return icon;
+    }
+    public void setIcon(String icon) {
+      this.icon = icon;
+    }
+    public Set<Menu> children=new HashSet<Menu>();
 		
 		public Menu(Long id,String name, String url) {
 			super();

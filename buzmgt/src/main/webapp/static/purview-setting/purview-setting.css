@@ -1,6 +1,9 @@
 .box.border.blue {
     border: 1px solid #576ea7;
 }
+.box.border.orange {
+    border: 1px solid #f4b252;
+}
 .box.border {
     border-radius: 5px;
 }
@@ -52,10 +55,12 @@
 /*角色列表 */
 .role-list{
 	min-height: 500px;
+	height:auto !important; 
 	background: #FFF;
 	padding: 0px 0 20px 20px;
 	padding-right: 0;
 	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
 	/*border-right: 1px solid rgb(221, 221, 221);*/
 }
 .role-list .nav-tabs{
@@ -142,6 +147,11 @@
 	display: inline-block;
 	top: 5px;
 	background: url(../img/icon/purview-setting/ddqx.png) no-repeat;
+}
+.region-setting-icon{
+	display: inline-block;
+	top: 5px;
+	background: url(../img/region/quyuhuafen.png) no-repeat;
 }
 .query-icon{
 	display: none;

@@ -3,6 +3,7 @@ package com.wangge.buzmgt;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -17,22 +18,23 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.wangge.buzmgt.manager.entity.manager;
-import com.wangge.buzmgt.manager.service.managerService;
+import com.wangge.buzmgt.manager.entity.Manager;
+import com.wangge.buzmgt.manager.service.ManagerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.salesman.entity.SalesMan;
 import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
-import com.wangge.buzmgt.salesman.service.salesManService;
+import com.wangge.buzmgt.salesman.service.SalesManService;
 import com.wangge.buzmgt.sys.entity.Organization;
-import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.repository.OrganizationRepository;
 import com.wangge.buzmgt.sys.repository.UserRepository;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.OrganizationVo;
+import com.wangge.buzmgt.util.RegionUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BuzmgtApplication.class)
@@ -51,9 +53,9 @@ public class BuzmgtApplicationTests {
 	@Resource
 	private OrganizationRepository OrganRepository;
 	@Resource
-	private managerService managerService;
+	private ManagerService managerService;
     @Resource
-	private salesManService salesManService;
+	private SalesManService salesManService;
 	@Test
 	@Transactional
 	public void contextLoads() {
@@ -122,7 +124,7 @@ public class BuzmgtApplicationTests {
 				}
 			}
 		}else{
-			List<manager> uList = managerService.findByReginId(regionId);
+			List<Manager> uList = managerService.findByReginId(regionId);
 			if(uList.size() > 0){
 				for(int i=0;i<uList.size();i++){
 					System.out.println("<<======>>"+uList.get(i));
@@ -186,6 +188,84 @@ public class BuzmgtApplicationTests {
 	public void test2(){
 	  System.out.println("============="+SalesmanStatus.SAOJIE);
 	}
+	@Test
+	public void testRegion(){
+	      String id  = "370105";
+	      Collection<Region> children = regionRepostory.findOne("0").getChildren();
+	       List<RegionTree> listRegionTree = new ArrayList<RegionTree>();
+	      // Region r = regionRepostory.findOne(id);
+	       String ptree = "0,1,370000,370004,370100";
+	       String[] strArr=ptree.split(",");//把字符串分割成一个数组  
+	       listRegionTree =createTree(listRegionTree,children, strArr);
+	       
+	       
+	      for(RegionTree r : listRegionTree){
+	        System.out.println("======================"+r.getName());
+	      }
+	      
+	}
 	
-
+  private List<RegionTree> createTree(List<RegionTree> listRegionTree, Collection<Region> children, String[] strArr){
+  
+    //Region r = regionRepostory.findOne(id);
+    
+    //   strArr.sort();//排序  
+ /*for ( var i in strArr) {
+   if (strArr[i] != tempStr) {
+     result.push(strArr[i]);
+   } else {
+     continue;
+   }
+ }*/
+	for(Region region : children){
+      listRegionTree.add(RegionUtil.getRegionTree(region));
+    if(strArr != null && strArr.length > 0 ){
+      /*for ( int i = 0;i< strArr.length; i++) {
+        if(!strArr[i].equals("0")){
+          Region r = regionRepostory.findOne(strArr[i]);
+          System.out.println("=================="+strArr[i]);
+          if (r.getParent().getId().equals(region.getId()) ) {
+            createTree(listRegionTree, region.getChildren(),strArr);
+          } else {
+            continue;
+          }
+        }
+      if(ptree.contains(region.getId())){
+        // children = region.getChildren();
+         createTree(listRegionTree, region.getChildren(),id);
+       }
+    }*/
+      createTree(listRegionTree, creteChildTree(region, strArr),strArr);
+      }
+     
+    }
+	  return listRegionTree;
+	}
+  
+  private  Collection<Region> creteChildTree(Region region,String[] strArr){
+    Collection<Region> children = new HashSet<Region>();
+    for ( int i = 0;i< strArr.length; i++) {
+     // if(!strArr[i].equals("0")){
+       // Region r = regionRepostory.findOne(strArr[i]);
+        if (strArr[i].equals(region.getId()) ) {
+          //creteChildTree(region.get,strArr);
+          System.out.println("=================="+strArr[i]);
+          System.out.println("==================>>>"+region.getId());
+          children  = region.getChildren();
+        } else {
+          continue;
+        }
+     }
+  // }
+    return children;
+}
+  @Test
+  public void testSalesman(){
+     SalesMan  s = salesManService.findByUserId("C37010501060");
+    System.out.println("================="+s.getTruename());
+    System.out.println("================="+s.getId());
+    System.out.println("================="+s.getMobile()); 
+    System.out.println("================="+s.getSalesmanStatus()); 
+    
+  }
 }
