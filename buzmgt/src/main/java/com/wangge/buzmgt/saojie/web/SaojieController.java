@@ -91,6 +91,15 @@ public class SaojieController {
     return list;
 	}
 	
+	
+	
+	@RequestMapping(value = "/getRegionName",method = RequestMethod.POST)
+  @ResponseBody
+  public String getRegionName(String id){
+	  SalesMan sm = salesManService.findByUserId(id);
+	  
+	  return sm.getRegion().getName();
+	}
 	/** 
 	  * saveSaojie:(添加扫街保存). <br/> 
 	  * 

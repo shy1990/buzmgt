@@ -485,23 +485,127 @@ ul, ol {
 	color: #70afc4;
 	font-size: 12px;
 }
+
+/* ------------扫街 ----------*/
 .saojie-bar-on{
 	background: #a8bc7b;		
 }
 .saojie-status-on{
-	background: url(../img/icon/team-member/list/sjz.png) no-repeat;
+	background: url(../img/icon/team-member/list/sjz.png) 0 0 no-repeat;
 }
 .saojie-status-over{
-	background: url(../img/icon/team-member/list/sjwc.png) no-repeat;
+	background: url(../img/icon/team-member/list/sjwc.png) 0 0 no-repeat;
 }
-.icon-edit{
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	background: url(../img/icon/team-member/list/bianji.png) no-repeat;
+/* -------考核=--------- */
+/* 第一阶段 */
+.kaohe-bar-one{
+	background: #D35383;
 }
-/* ------------end team list----------  */
+.kaohe-status-one-on{
+	background: url(../img/icon/team-member/list/yjdkh.png) no-repeat 0 0 #D35383;
+}
+.kaohe-status-one-over{
+	background: url(../img/icon/team-member/list/yjdwc.png) no-repeat 0 0 #D35383;
+}
+/* 第二阶段 */
+.kaohe-bar-tow{
+	background: #EFAD4D;
+}
+.kaohe-status-tow-on{
+	background: url(../img/icon/team-member/list/ejdkh.png) no-repeat 0 0 #EFAD4D;
+}
+.kaohe-status-tow-over{
+	background: url(../img/icon/team-member/list/ejdwc.png) no-repeat 0 0 #EFAD4D;
+}
+/* 第三阶段 */
+.kaohe-bar-three{
+	background: #A596CD;
+}
+.kaohe-status-three-on{
+	background: url(../img/icon/team-member/list/sjdkh.png) no-repeat 0 0 #A596CD;
+}
+.kaohe-status-three-over{
+	background: url(../img/icon/team-member/list/sjdwc.png) no-repeat 0 0 #A596CD;
+}
+/* --------开发中------- */
+.kaifa-bar{
+	background: #D95350;
+}
+.kaifa-status-on{
+	background: url(../img/icon/team-member/list/kfz.png) no-repeat 0 0 #D95350;
+}
+.kaifa-status-over{
+	background: url(../img/icon/team-member/list/kfwc.png) no-repeat 0 0 #D95350;
+}
+/* -------已转正------ */
+.zhuanzheng-over-bar{
+	background: #71AFC4;
+}
+.zhuanzheng-status-over{
+	background: url(../img/icon/team-member/list/yzz.png) no-repeat 0 0 #71AFC4;
+}
 
+.icon-edit{
+	padding: 3px 18px 17px 2px;
+	background: url(../img/icon/team-member/list/bianji.png) 0 0 no-repeat;
+}
+.shop-num-d {
+    color: #70afc4;
+    padding: .5em;
+}
+.project-list .project-completion{
+	padding-top: 30px;	
+}
+/* 状态 */
+.status-ing{
+	float: right;
+	width: 76px;
+	padding-left: 25px;
+	padding-right: 10px;
+	height: 20px;
+	line-height: 20px;
+	color: #FFF;
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+}
+/* 编辑按钮 */
+.saojie-edit{
+	padding: 0;
+	margin: 0;
+	min-width: 100px;
+}
+.saojie-edit .divider{
+	margin: 0;
+}
+.saojie-edit >li >a:last-child{
+	border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.saojie-edit >li >a:FIRST-CHILD{
+	border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.saojie-edit>li>a{
+	color: #4d4d4d;
+}
+/* 分页 */
+.box-page-ul>li>a,.box-page-ul.>li>span{
+	color: #D9544F;
+}
+.box-page-ul >.active>a,
+.box-page-ul >.active>a:focus, 
+.box-page-ul >.active>a:hover, 
+.box-page-ul >.active>span, 
+.box-page-ul >.active>span:focus,
+.box-page-ul >.active>span:hover{
+	background: #D9544F;
+	border-color: #CC5D58; 
+}
+
+/* ------------end team list----------  */
+.project-list{
+	padding-bottom: 30px;
+}
 
 
 /* --------start team_member_det-------- */
@@ -538,10 +642,6 @@ a.link-export:focus{
 	color: #3B92C7;
 	border-bottom: 1px solid #3B92C7;
 }
-.my_btn_group .btn{
-	background-color: #EEE; 
-}
-
 .head-button .btn.active,
 .head-button .btn:hover,
 .head-button .btn:focus{
@@ -559,14 +659,6 @@ a.link-export:focus{
 	border-radius: 3px;
 	
 }
-.date-month .form-control{
-	display: inline-block;
-	width: 200px;
-	cursor: pointer;
-}
-
-
-
 .icon-month{
 	padding: 3px 18px 17px 2px;
 	background: url(../img/icon/team-member/det/date.png) no-repeat;

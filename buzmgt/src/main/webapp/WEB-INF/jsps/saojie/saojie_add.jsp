@@ -25,12 +25,16 @@
 
 	<div class="main">
 		<h4 class="page-header">
-			<i class="icon team-member-add-icon"></i>添加扫街
+			<i class="icon icon-saojie-add"></i>添加扫街
+			<button class="btn btn-warning member-add-btn" type="button"
+				onclick="javascript:window.location.href='/saojie/saojieList'">
+				<i class="icon glyphicon glyphicon-share-alt"></i>返回列表
+				
+			</button>
 		</h4>
-
 		<div class="row">
 			<div class="col-md-12">
-				<div class="member-add-box box border red">
+				<div class="member-add-box box border orange">
 					<div class="box-title">
 						<i class="icon member-add-icon"></i>添加
 					</div>
@@ -134,13 +138,13 @@
 		charset="UTF-8"></script>
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
-		<script type="text/javascript">
-		// 百度地图API功能
-		var map = new BMap.Map("allmap");    // 创建Map实例
-		map.centerAndZoom("济南", 11);  // 初始化地图,设置中心点坐标和地图级别
-		map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-		map.setCurrentCity("济南");          // 设置地图显示的城市 此项是必须设置的
-		map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-	</script>sss
+	<script type="text/javascript">
+			// 百度地图API功能
+			var map = new BMap.Map("allmap");    // 创建Map实例
+			map.centerAndZoom("济南", 11);  // 初始化地图,设置中心点坐标和地图级别
+			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+			map.setCurrentCity("济南");          // 设置地图显示的城市 此项是必须设置的
+			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+		</script>
 </body>
 </html>
