@@ -67,7 +67,11 @@
 	width: 100%;
 }
 
-
+/**/
+.kaohe-week .input-group-addon{
+	padding-left: 6px;
+	padding-right: 6px;
+}
 
 
 

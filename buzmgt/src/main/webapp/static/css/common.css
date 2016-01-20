@@ -252,6 +252,10 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .text-primary{
 	color: #3894C7;
 }
+/*新图标实现方式*/
+.ico{
+	padding: 2px 18px 18px 2px;
+}
 
 
 
