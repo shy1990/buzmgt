@@ -1,5 +1,6 @@
 body{
 	background: #fafafa;
+	font-family: simsun;
 }
 /* <main>*/
 .main {
@@ -102,13 +103,6 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	font-size: 12px;
 	font-weight: bold;
 }
-.box-title >h4{
-	font-size: 14px;
-	font-weight: bold;
-	line-height: 20px;
-	margin: 5px 0;
-}
-
 .box-body:before,
 .box-body:after{
 	display: table;
@@ -187,7 +181,8 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	top: 5px;
 }
 /*业务详情*/
-.icon-ywdet{
+.icon-ywdet,
+.icon-khxq{
 	background: url(../img/icon/team-member/det/bfjl.png) no-repeat;
 	top: 5px;
 }
@@ -228,6 +223,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	border-radius: 10px;
 	position: relative;
 }
+
 /*btn*/
 .btn-visit,
 .btn-visit:hover,
@@ -235,6 +231,13 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: #3993C7;
 	color: #FFF;
 }
+.btn-blue,
+.btn-blue:hover,
+.btn-blue:focus{
+	background: #3993C7;
+	color: #FFF;
+}
+
 
 .align-right{
 	text-align: right;
@@ -243,11 +246,13 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .hr{
 	margin: 15px -20px;
 	border-top: 1px dashed #D4D4D4;
+	clear: both;
 }
 /*实线*/
 .hr-solid{
+	clear: both;
 	margin: 15px -20px;
-	border-top: 1px solid #DBDBDB;
+	border-top: 2px solid #DBDBDB;
 }
 .marg-b-10{
 	margin-bottom: 10px;
@@ -262,14 +267,15 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .text-primary{
 	color: #3894C7;
 }
+
 /*新图标实现方式*/
 .ico{
-	padding: 2px 18px 18px 2px;
+	padding: 2px 18px 2px 2px;
+	margin-right: 5px;
+	position: relative;
+	top:-1px;
+	
 }
-
-
-
-
 
 
 

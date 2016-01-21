@@ -50,6 +50,10 @@ public class TestController {
 	public String teamMemberAdd(String test,Model model){
 		return "saojie/saojie_det";
 	}
+	@RequestMapping("/kaohe_det")
+	public String kaoheDet(String test,Model model){
+	  return "kaohe/kaohe_det";
+	}
 	/**
 	 * 团队成员添加
 	 * @param test

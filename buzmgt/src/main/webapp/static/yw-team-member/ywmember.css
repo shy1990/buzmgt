@@ -30,7 +30,7 @@
 .stage>span{
 	padding: 2px 15px 4px;
 	width: 130px;
-	font-size: 11px;
+	font-size: 12px;
 	color: #FFF;
 	background: url(../img/icon/team-member/det/status-stage.png) no-repeat;
 }
@@ -41,6 +41,11 @@
 	color: #585858;
 	line-height: 22px;
 }
+/*考核进度条*/
+.bar-kaohe{
+	background: #D55383;
+}
+
 /*拜访*/
 .visit{
 }
