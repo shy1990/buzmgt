@@ -870,7 +870,12 @@ dd.project-people {
 	background:url(../img/team-member/sjwc.png) no-repeat;
 }
 .project-completion {
-	min-width: 200px;
+	min-width: 300px;
+}
+@media (min-width:1000px ) {
+	.project-completion {
+		width: 40%;
+	}
 }
 .project-completion .completion-ing{
 	padding: .3em 2em;
@@ -1035,5 +1040,13 @@ body.rtls .stat-percent {
 .table-responsive{
 	overflow-y: hidden; 
 }
+
+
+
+
+
+
+
+
 
 

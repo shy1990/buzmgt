@@ -558,11 +558,12 @@ ul, ol {
 }
 /* 状态 */
 .status-ing{
+	position: relative;
+	top:0;
 	float: right;
 	width: 76px;
 	padding-left: 25px;
 	padding-right: 10px;
-	height: 20px;
 	line-height: 20px;
 	color: #FFF;
 	border-top-right-radius: 2px;
@@ -818,8 +819,13 @@ a.link-export:focus{
 .num-progress{
 	min-width: 240px;
 }
-
-
+/* 重新定义btn-default */
+.btn-default,
+.btn-default:hover,
+.btn-default:focus{
+	background: #DDD;
+	color: #606060;
+}
 
 
 

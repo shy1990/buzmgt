@@ -30,24 +30,9 @@
 		<h4 class="team-member-header page-header">
 			<i class="icon team-member-list-icon"></i>团队成员
 			<!--区域选择按钮-->
-			<!-- 隐藏区域选择按钮 -->
-			<div class="btn-group">
-				<button type="button" class="btn btn-default " onclick="getRegion(${regionId});">
+				<button type="button" class="btn btn-default" onclick="getRegion(${regionId});">
 					<i class="icon province-icon"></i>${regionName}
 				</button>
-<!-- 				<button type="button" class="btn btn-default dropdown-toggle" -->
-<!-- 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
-<!-- 					 <span class="sr-only">Toggle -->
-<!-- 						Dropdown</span> -->
-<!-- 				</button> -->
-				<ul class="dropdown-menu">
-					<li><a href="#">Action</a></li>
-					<li><a href="#">Another action</a></li>
-					<li><a href="#">Something else here</a></li>
-					<li role="separator" class="divider"></li>
-					<li><a href="#">Separated link</a></li>
-				</ul>
-			</div>
 			<!--/区域选择按钮-->
 			<a href="/salesman/toAdd" class="btn btn-warning " type="button">
 				<i class="icon icon-add"></i>添加成员
@@ -134,13 +119,10 @@
 																		class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
 																		class="shop-num-d">10家</strong></span></td>
 																<td class="project-completion col-md-5 col-sm-2">
-																	<div>
-																		<span class="completion-ing">当前进度： 88%</span> 
-																		<span class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
-																	</div>
+																	<span class="completion-ing">当前进度： 88%</span> 
+																	<span class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
 																	<div class="progress progress-mini">
-																		<div style="width: 88%;"
-																			class="progress-bar saojie-bar-on"></div>
+																		<div style="width: 88%;" class="progress-bar saojie-bar-on"></div>
 																	</div>
 																</td>
 																<td class="project-actions"><a
@@ -393,8 +375,7 @@
 			 				setTimeout(
 			 						function(){
 			 							  heatmapOverlay.show();
-			 						}
-			 						,3000)
+			 						},3000);
 //			 				polygon.addEventListener('click',function(e) {
 //			 				   var  point=JSON.stringify(e.pixel);
 //								  alert(point);
