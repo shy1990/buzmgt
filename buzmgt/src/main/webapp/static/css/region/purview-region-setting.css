@@ -36,6 +36,13 @@
 	background: url(../img/icon/purview-setting/ddqx.png) no-repeat;
 }
 
+.region-switch-icon{
+	display: inline-block;
+	top: 5px;
+	background: url(../img/icon/purview-setting/huafen.png) no-repeat;
+}
+
+
 .box.border.blue {
     border: 1px solid #576ea7;
 }

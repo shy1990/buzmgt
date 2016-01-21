@@ -93,6 +93,7 @@ public class TeamMembersController {
        model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
      }
      model.addAttribute("regionName", manager.getRegion().getName());
+     model.addAttribute("regionId", manager.getRegion().getId());
 		return "salesman/salesman_list";
 	}
 	/**
@@ -187,7 +188,7 @@ public class TeamMembersController {
 	* @throws
 	 */
 	@RequestMapping(value = "/getSalesManList",method=RequestMethod.GET)
-	public  String  getSalesManList(Model model,SalesMan salesman, String Status,String page, HttpServletRequest requet){
+	public  String  getSalesManList(Model model,SalesMan salesman, String Status,String page,String regionid,String regionName, HttpServletRequest requet){
 	      String name = Status != null ? Status : "扫街中";
 	      int pageNum = Integer.parseInt(page != null ? page : "0");
     	  if(SalesmanStatus.SAOJIE.getName().equals(name) ){
@@ -201,9 +202,32 @@ public class TeamMembersController {
     	  }else if(SalesmanStatus.SHENHE.getName().equals(name)){
     	    salesman.setSalesmanStatus(SalesmanStatus.SHENHE);
     	  }
+    	  Region region=new Region();
+    	  if(null!=regionid){
+    	    region =regionService.getRegionById(regionid);
+    	    salesman.setRegion(region);
+    	    if(null!=region.getCoordinates()){
+    	      model.addAttribute("pcoordinates", region.getCoordinates());
+    	    }
+    	    model.addAttribute("regionName", region.getName());
+    	    model.addAttribute("regionId", region.getId());
+    	  }
+    	 if(null!=regionName){
+    	   region =regionService.findByNameLike(regionName);
+         salesman.setRegion(region);
+         if(null!=region.getCoordinates()){
+           model.addAttribute("pcoordinates", region.getCoordinates());
+         }
+         model.addAttribute("regionName", region.getName());
+         model.addAttribute("regionId", region.getId());
+    	 }
+    	
 	  Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum);
 	  model.addAttribute("list", list);
 	  model.addAttribute("Status", Status);
+//	  Subject subject = SecurityUtils.getSubject();
+//    User user=(User) subject.getPrincipal();
+//    Manager manager = managerService.getById(user.getId());
 	  return "salesman/salesman_list";
 	}
 	

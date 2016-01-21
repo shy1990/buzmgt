@@ -332,5 +332,26 @@ public class RegionController {
 		   List<RegionVo> regionList = regionService.getRegionByPid(regionId);
 		return new ResponseEntity<List<RegionVo>>(regionList,HttpStatus.OK);
 	}
+	 
 	
+	  
+	  @RequestMapping(value="/getPersonalRegion",method = RequestMethod.GET)
+	  public String  getPersonalRegion(String id,HttpServletRequest request){
+	    
+	    
+	    return "region/region_personal";
+	  }
+	  
+	  
+	  @RequestMapping(value = "/findOnePersonalRegion", method = RequestMethod.POST)
+	  @ResponseBody
+	  public ResponseEntity<List<RegionTree>> findOnePersonalRegion() {
+	     List<RegionTree> listTreeVo =new ArrayList<RegionTree>();
+	      Subject subject = SecurityUtils.getSubject();
+	      RegionTree regionTree=new RegionTree();
+	      User user=(User) subject.getPrincipal();
+	      Manager manager = managerService.getById(user.getId());
+	      listTreeVo.add(RegionUtil.getRegionTree(manager.getRegion()));
+	    return new ResponseEntity<List<RegionTree>>(listTreeVo,HttpStatus.OK);
+	  }
 }
