@@ -31,7 +31,7 @@ public class Chinese2English {
         }  
         return pinyinName;  
     } 
-   public static void main(String agr[]){
+  /* public static void main(String agr[]){
      System.out.println(converterToSpell("客户管理"));
-   }
+   }*/
 }

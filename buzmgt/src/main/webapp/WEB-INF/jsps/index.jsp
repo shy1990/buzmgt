@@ -15,6 +15,7 @@
 <link rel="stylesheet" type="text/css" href="static/css/index.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script src='/static/js/common.js'></script>
 <script type="text/javascript" src="static/plugins/unical.js"></script>
 </head>
 <body onload="initial();" style="padding: 0">

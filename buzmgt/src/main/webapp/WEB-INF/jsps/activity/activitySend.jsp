@@ -25,6 +25,7 @@
 	type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="../static/plugins/ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="../static/plugins/ckeditor/config.js"></script>
+<<<<<<< HEAD
 <script type="text/javascript"  src="../static/plugins/uploadPreview.js" ></script>
 <script type="text/javascript" src="../static/plugins/ajaxfileupload.js"></script>
 

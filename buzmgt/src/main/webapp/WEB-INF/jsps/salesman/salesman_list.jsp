@@ -21,6 +21,8 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css"
 	href="/static/CloudAdmin/js/fuelux-tree/fuelux.min.css" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+ <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
 </head>
 
 <body>
@@ -50,11 +52,9 @@
 			<a href="/salesman/toAdd" class="btn btn-warning " type="button">
 				<i class="icon icon-add"></i>添加成员
 			</a>
-			<div class="col-sm-6 sr-only">
-				<small class="header-text">共<span class="text-red">203</span>位成员
-				</small> <small class="header-text">今日新增<span class="text-red">
+				<small class="header-text">共<span class="text-red">${list.totalElements}</span>位成员
+				</small> <small style="display: none" class="header-text sr-only">今日新增<span class="text-red">
 						0 +</span></small>
-			</div>
 		</h4>
 		<div class="row">
 			<div class="col-md-9">
@@ -63,26 +63,41 @@
 					<!--title-->
 					<div class="box-title">
 						<div class="row">
-							<div class="col-sm-8 col-md-5">
+							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
-								<ul class="nav nav-tabs"><input id = "status" type="hidden" value="${Status}">
+								<ul class="nav nav-tabs">
+									<input id="status" type="hidden" value="${Status}">
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name);"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
 											class="hidden-inline-mobile">扫街中</span></a></li>
-									<li title="考核中"><a title="考核中" name="salesmanStatus" href=""
-										onclick="getList(this.title,this.name);" data-toggle="tab"><i
-											class="fa fa-laptop"></i> <span class="hidden-inline-mobile">考核中</span></a></li>
-									<li title="开发中"><a title="开发中" name="salesmanStatus" href=""
-										onclick="getList(this.title,this.name);" data-toggle="tab"><i
-											class="fa fa-calendar-o"></i> <span
+									<li title="考核中"><a title="考核中" name="salesmanStatus"
+										href="" onclick="getList(this.title,this.name);"
+										data-toggle="tab"><i class="fa fa-laptop"></i> <span
+											class="hidden-inline-mobile">考核中</span></a></li>
+									<li title="开发中"><a title="开发中" name="salesmanStatus"
+										href="" onclick="getList(this.title,this.name);"
+										data-toggle="tab"><i class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">开发中</span></a></li>
-									<li title="已转正"><a title="已转正" name="salesmanStatus" href=""
-										onclick="getList(this.title,this.name);" data-toggle="tab"><i
-											class="fa fa-calendar-o"></i> <span
+									<li title="已转正"><a title="已转正" name="salesmanStatus"
+										href="" onclick="getList(this.title,this.name);"
+										data-toggle="tab"><i class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">已转正</span></a></li>
 								</ul>
-
+								<!--/菜单栏-->
+							</div>
+							<div class="col-sm-4 col-md-3 col-md-offset-3 ">
+								<div class="form-group title-form">
+									<form action="/salesman/getSalesManList">
+									<div class="input-group ">
+										<input type="text" class="form-control" name="truename" id="param"
+											placeholder="请输入名称或工号"> <a type="sumbit"
+											class="input-group-addon" id="goSearch"
+											onclick="getList(this.value,this.id)"><i
+											class="icon icon-finds"></i></a>
+									</div>
+									</form>
+								</div>
 							</div>
 						</div>
 						<!--<div class="title-form input-group ">
@@ -110,58 +125,128 @@
 														<c:forEach var="salesman" items="${list.content}"
 															varStatus="s">
 															<tr>
-																<td class="project-people"><a href="projects.html"><img
+																<td class="project-people"><a href=""><img
 																		alt="image" class="img-circle"
 																		src="../static/img/team-member/a.jpg"></a></td>
-																<td class="project-title"><a
-																	href="project_detail.html"><strong>${salesman.truename}</strong>(${salesman.user.organization.name})</a>
+																<td class="project-title"><a href=""><strong>${salesman.truename}</strong>(${salesman.user.organization.name})</a>
 																	<br /> <span>${salesman.region.name}</span></td>
-																<td class="project-status"><span class="status-ing">${salesman.salesmanStatus.name}</span></td>
 																<td class="project-title"><span class="l-h">大桥镇：<strong
 																		class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
-																		class="shop-num">10家</strong></span></td>
-																<td class="project-completion">
+																		class="shop-num-d">10家</strong></span></td>
+																<td class="project-completion col-md-5 col-sm-2">
 																	<div>
-																		<span class="completion-ing">当前进度： 48%</span> <span
-																			class="time-down"> 倒计时：2天</span>
+																		<span class="completion-ing">当前进度： 88%</span> 
+																		<span class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
 																	</div>
 																	<div class="progress progress-mini">
-																		<div style="width: 48%;" class="progress-bar"></div>
+																		<div style="width: 88%;"
+																			class="progress-bar saojie-bar-on"></div>
 																	</div>
 																</td>
 																<td class="project-actions"><a
-																	href="projects.html#"
-																	class="btn btn-white btn-sm sr-only"><span
+																	href="projects.html#" class="btn btn-white btn-sm "><span
 																		class="folder"></span> 查看 </a>
-																	<div class="btn-group"></div></td>
+																	<!-- Single button -->
+																	<div class="btn-group">
+																		<button type="button"
+																			class="btn btn-white btn-sm dropdown-toggle"
+																			data-toggle="dropdown" aria-haspopup="true"
+																			aria-expanded="false">
+																			<i class="icon-edit"></i> 编辑 <span class="caret"></span>
+																		</button>
+																		<ul class="dropdown-menu saojie-edit">
+																			<li><a href="#">扫街设置</a></li>
+																			<li role="separator" class="divider"></li>
+																			<li><a href="#">冻结账户</a></li>
+																		</ul>
+																	</div>
+																</td>
 															</tr>
 														</c:forEach>
 													</tbody>
 												</table>
-												<c:if test="${not empty list.content}">
-													<div style="text-align: center;">
-														<ul class="pagination">
-															<li><a
-																href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+											</div>
+											<c:if test="${not empty list.content}">
+												<div style="text-align: center;padding-bottom: 20px" >
+													<ul class="pagination box-page-ul">
+														<li><a
+															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+														<!-- 1.total<=7 -->
+														<c:if test="${list.totalPages<=7 }">
 															<c:forEach var="s" begin="1" end="${list.totalPages}"
 																step="1">
-																<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																<c:choose>
+																	<c:when test="${list.number == s-1 }">
+																		<li class="active"><a
+																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:when>
+																	<c:otherwise>
+																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:otherwise>
+																</c:choose>
 															</c:forEach>
-															<li><a
-																href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
-														</ul>
-													</div>
-												</c:if>
-												<c:if test="${empty list.content}">
-													<div style="text-align: center;">
-														<ul class="pagination">
-															<tr>
-																<td colspan="100">没有相关数据</td>
-															</tr>
-														</ul>
-													</div>
-												</c:if>
-											</div>
+														</c:if>
+														<c:if test="${list.totalPages>7 && list.number<4 }">
+															<c:forEach var="s" begin="1" end="6" step="1">
+																<c:choose>
+																	<c:when test="${list.number == s-1 }">
+																		<li class="active"><a
+																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:when>
+																	<c:otherwise>
+																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:otherwise>
+																</c:choose>
+															</c:forEach>
+															<li><a href="javascript:void(0)">...</a></li>
+														</c:if>
+														<c:if
+															test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number>=3 }">
+															<li><a href="javascript:void(0)">...</a></li>
+															<c:forEach var="s" begin="${list.number-2 }"
+																end="${list.number+2 }" step="1">
+																<c:choose>
+																	<c:when test="${list.number == s-1 }">
+																		<li class="active"><a
+																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:when>
+																	<c:otherwise>
+																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:otherwise>
+																</c:choose>
+															</c:forEach>
+															<li><a href="javascript:void(0)">...</a></li>
+														</c:if>
+														<c:if
+															test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number<3 }">
+															<li><a href="javascript:void(0)">...</a></li>
+															<c:forEach var="s" begin="${list.totalPages-6 }"
+																end="${list.totalPages }" step="1">
+																<c:choose>
+																	<c:when test="${list.number == s-1 }">
+																		<li class="active"><a
+																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:when>
+																	<c:otherwise>
+																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																	</c:otherwise>
+																</c:choose>
+															</c:forEach>
+														</c:if>
+														<li><a
+															href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
+													</ul>
+												</div>
+											</c:if>
+											<c:if test="${empty list.content}">
+												<div style="text-align: center;">
+													<ul class="pagination">
+														<tr>
+															<td colspan="100">没有相关数据</td>
+														</tr>
+													</ul>
+												</div>
+											</c:if>
 										</div>
 									</div>
 
@@ -185,15 +270,18 @@
 						<i class="icon icon-district"></i>区域
 					</div>
 					<div class="box-body">
-						<!--地图-->
-						<img width="100%" src="/static/img/team-map.png" />
-						<!--/地图-->
-						<!--组织结构-->
-						<div class="structure col-xs-12">
-							<i class="icon icon-structure"></i> 组织结构
+						<div style="height: 290px" id="allmap">
 						</div>
-						<!--tree view-->
-						<div id="tree3" class="tree"></div>
+						<div align="center"><a href="/salesman/showMap"><font color="#0099ff" size="3">查看完整地图</font></a></div>
+<!-- 						地图 -->
+<!-- 						<img width="100%" src="/static/img/team-map.png" /> -->
+<!-- 						/地图 -->
+<!-- 						组织结构 -->
+<!-- 						<div class="structure col-xs-12"> -->
+<!-- 							<i class="icon icon-structure"></i> 组织结构 -->
+<!-- 						</div> -->
+<!-- 						tree view -->
+<!-- 						<div id="tree3" class="tree"></div> -->
 						<!--/组织结构-->
 					</div>
 				</div>
@@ -226,6 +314,7 @@
 	<script type="text/javascript"
 		src="/static/CloudAdmin/js/fuelux-tree/fuelux.tree.min.js"></script>
 	<script src="/static/CloudAdmin/js/script.js"></script>
+	<script src='/static/js/common.js'></script>
 	<script>
 		jQuery(document).ready(function() {
 			App.setPage("treeview"); //Set current page
@@ -235,5 +324,98 @@
 	<!--<script>
        $(document).ready(function(){$("#loading-example-btn").click(function(){btn=$(this);simpleLoad(btn,true);simpleLoad(btn,false)})});function simpleLoad(btn,state){if(state){btn.children().addClass("fa-spin");btn.contents().last().replaceWith(" Loading")}else{setTimeout(function(){btn.children().removeClass("fa-spin");btn.contents().last().replaceWith(" Refresh")},2000)}};
     </script>-->
+      <script type="text/javascript">
+	<%String areaname = request.getAttribute("regionName").toString();
+		String parentid = null;
+		if (null != request.getAttribute("parentid")) {
+			parentid = request.getAttribute("parentid").toString();
+		}
+		%>
+	 	var map = new BMap.Map("allmap");
+		<%
+		if(null!=request.getAttribute("pcoordinates")){%>
+			<%
+			String pcoordinates=request.getAttribute("pcoordinates").toString();
+			String[] listCoordinates=pcoordinates.split("=");
+			 %> 
+			 			var polygon = new BMap.Polygon([
+			 	<%
+							for(int x=0;x<listCoordinates.length;x++){
+								String points=listCoordinates[x];
+								double lng=Double.parseDouble(points.split("-")[0]);//经度 
+				 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
+				 %>				
+				 		  		<%
+				 		  			if(x==listCoordinates.length-1){%>
+				 		  			new BMap.Point(<%=lng%>,<%=lat%>)
+				 		  			<%}else{%>
+				 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
+				 		  			<%}
+				 		  		%>
+				 <%
+							}%>
+							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
+			 				map.addOverlay(polygon);
+							<%
+								String jlng=listCoordinates[1].split("-")[0];
+								String jlat=listCoordinates[1].split("-")[1];
+							
+							%>
+							 var point = new BMap.Point(<%=jlng%>,<%=jlat%>);
+							 map.centerAndZoom(point, 8);    
+			 				//map.centerAndZoom(name, 8);
+			 				map.enableScrollWheelZoom(true); 
+			 				
+			 				
+			 				 var points =[
+			 				   <%
+			 				  for(int y=0;y<listCoordinates.length;y++){
+									String points=listCoordinates[y];
+									double lng=Double.parseDouble(points.split("-")[0]);//经度 
+					 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
+			 				   %>          
+					 		  		
+			 					
+				 		  		<%
+ 				 		  			if(y==listCoordinates.length-1){%> 
+				 		  		 		{"lng":<%=lng%>,"lat":<%=lat%>,"count":50}
+				 		  			<%}else{%>
+				 		  				{"lng":<%=lng%>,"lat":<%=lat%>,"count":50},
+				 		  			<%}
+				 		  		%> 
+					 		  	 <%
+									}%>
+			 				              ];
+
+			 				heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
+			 				map.addOverlay(heatmapOverlay);
+			 				heatmapOverlay.setDataSet({data:points,max:100});
+			 				setTimeout(
+			 						function(){
+			 							  heatmapOverlay.show();
+			 						}
+			 						,3000)
+//			 				polygon.addEventListener('click',function(e) {
+//			 				   var  point=JSON.stringify(e.pixel);
+//								  alert(point);
+	<%-- 								  alert(<%=coordinates%>); --%>
+//							});
+							<%
+		}else{%>
+			var bdary = new BMap.Boundary();
+			bdary.get('<%=areaname%>', function(rs){ //获取行政区域
+			var count = rs.boundaries.length; //行政区域的点有多少个
+	
+			for(var i = 0; i < count; i++){
+			var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+			ply.setStrokeWeight(3);
+			map.addOverlay(ply); //添加覆盖物
+			map.setViewport(ply.getPath()); //调整视野 
+			} 
+			map.centerAndZoom('<%=areaname%>', 12);
+			map.enableScrollWheelZoom(true); 
+			}); 
+		<%}%>
+		</script>
 </body>
 </html>

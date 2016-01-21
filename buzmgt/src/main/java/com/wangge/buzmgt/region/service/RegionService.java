@@ -21,7 +21,10 @@ public interface RegionService {
 	
 	public void delete(Region region);
 
+
 	public List<RegionVo> getRegionByPid(String id);
 
 	public Region getRegionById(String regionId);
+
+	public List<Region> findByRegion(String regionId);
 }

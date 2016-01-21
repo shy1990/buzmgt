@@ -24,12 +24,12 @@ public class RegionServiceImpl implements RegionService {
 	
 	@Override
 	public List<RegionTree> findTreeRegion(String id) {
-		List<RegionTree> listRegionTree = new ArrayList<RegionTree>();
-		for (Region region : regionRepository.findOne(id).getChildren()) {
-			listRegionTree.add(RegionUtil.getRegionTree(region));
-		}
-		return listRegionTree;
-	}
+    List<RegionTree> listRegionTree = new ArrayList<RegionTree>();
+    for (Region region : regionRepository.findOne(id).getChildren()) {
+      listRegionTree.add(RegionUtil.getRegionTree(region));
+    }
+    return listRegionTree;
+  }
 	@Override
 	@Transactional
 	public List<RegionVo> getRegionByPid(String id) {
@@ -58,6 +58,12 @@ public class RegionServiceImpl implements RegionService {
 		
 		return regionRepository.findById(regionId);
 	}
+	
+  @Override
+  public List<Region> findByRegion(String regionId) {
+    System.out.println(regionId);
+    return regionRepository.findByParentId(regionId);
+  }
 
 	@Override
 	public Region findListRegionbyid(String id) {
@@ -75,8 +81,6 @@ public class RegionServiceImpl implements RegionService {
 		regionRepository.delete(region);
 		
 	}
-
 	
-	
-	
+ 
 }

@@ -20,7 +20,7 @@ public class RegionTree {
 	
 	private String regiontype;//节点类型
 	
-	private boolean open;//默认打开
+	private String open;//默认打开
 
 	public String getId() {
 		return id;
@@ -56,15 +56,15 @@ public class RegionTree {
 	}
 
 
-	public boolean isOpen() {
-		return open;
-	}
+	public String getOpen() {
+    return open;
+  }
 
-	public void setOpen(boolean open) {
-		this.open = open;
-	}
+  public void setOpen(String open) {
+    this.open = open;
+  }
 
-	public String getIsParent() {
+  public String getIsParent() {
 		return isParent;
 	}
 

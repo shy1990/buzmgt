@@ -46,22 +46,35 @@ public class TestController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("/team_member_add")
+	@RequestMapping("/team_saojie_det")
 	public String teamMemberAdd(String test,Model model){
-		model.addAttribute("test", test);
-		return "team-member/team_member_add";
+		return "saojie/saojie_det";
 	}
+	/**
+	 * 团队成员添加
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/saojie_set")
+	public String saojieSet(String test,Model model){
+	  return "saojie/saojie_set";
+	}
+  @RequestMapping("/saojie_upd")
+  public String saojieUpd(String test,Model model){
+    return "saojie/saojie_upd";
+  }	
 	/**
 	 * 团队成员列表
 	 * @param test
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("/team_member_list")
+	@RequestMapping("/team_member_det")
 	public String teamMemberList(String test,Model model){
-		model.addAttribute("test", test);
-		return "team-member/teamMemberList";
+		return "salesman/saleman_det";
 	}
+
 	
 	@RequestMapping("/menu")
 	@ResponseBody

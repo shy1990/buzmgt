@@ -86,6 +86,7 @@
 		<!-- JQUERY UI-->
 		<!-- BOOTSTRAP -->
 		<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+		<script src='/static/js/common.js'></script>
 		<!-- CUSTOM SCRIPT -->
 		<script src="../static/js/script.js"></script>
 		<script type="text/javascript">

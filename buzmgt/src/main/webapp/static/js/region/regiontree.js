@@ -483,6 +483,9 @@ function onloadZTree() {
 		type : 'post', // 请求方式,post
 		dataType : "text", // 数据传输格式
 		url : "region/findOneRegion", // 请求链接
+		data : {
+			returnId : $("#returnId").val()
+		},
 		error : function() {
 			BootstrapDialog.alert("访问服务器出错");
 		},

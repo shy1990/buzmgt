@@ -5,17 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
-
-
-
-
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -29,15 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangge.buzmgt.manager.entity.manager;
-import com.wangge.buzmgt.manager.service.managerService;
+import com.wangge.buzmgt.manager.entity.Manager;
+import com.wangge.buzmgt.manager.service.ManagerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
-import com.wangge.buzmgt.util.RegionUtil;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.RegionVo;
+import com.wangge.buzmgt.util.RegionUtil;
 
 @Controller
 @RequestMapping(value = "/region")
@@ -49,7 +43,7 @@ public class RegionController {
 	@Resource
 	private UserService userService;
 	@Resource
-	private managerService managerService;
+	private ManagerService managerService;
 	
 	private static final String ONELEAVE="0";
 	
@@ -326,7 +320,7 @@ public class RegionController {
 		}else{
 			Subject subject = SecurityUtils.getSubject();
 			User user=(User) subject.getPrincipal();
-			manager manager = managerService.getById(user.getId());
+			Manager manager = managerService.getById(user.getId());
 			regionId = String.valueOf(manager.getRegion().getId());
 		}
 		   List<RegionVo> regionList = regionService.getRegionByPid(regionId);

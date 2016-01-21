@@ -151,7 +151,7 @@
 <script type="text/javascript">
 	window.jQuery
 			|| document
-					.write("<script src='../static/js/jquery/jquery.min.js'>\x3C/script>");
+					.write("<script src='/static/js/jquery/jquery.min.js'>\x3C/script>");
 </script>
 <script type="text/javascript">
 	/* 删除 菜单*/
@@ -176,11 +176,6 @@
 			$_name.parents('.form-group').addClass('has-error');
 			return false;
 		}
-		var $_urk=$("#url");
-		if($_urk.val()==null||$_urk.val()==""){
-			$_urk.parents('.form-group').addClass('has-error');
-			return false;
-		}
 		var $_prentid=$("#parentid");
 		if($_prentid.val()==null||$_prentid.val()==""){
 			$_prentid.parents('.form-group').addClass('has-error');
@@ -191,7 +186,6 @@
 		$.post(url, function(data) {
 			if (data === 'suc') {
 				$('#menu_modal').modal('hide');
-				alert
 				myAlert("添加成功");
 				setTimeout(function(){ location.reload() },2000);
 			} else {
@@ -199,5 +193,6 @@
 			}
 		});
 	}
+
 </script>
 </html>

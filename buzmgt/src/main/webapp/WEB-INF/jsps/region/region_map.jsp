@@ -86,6 +86,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 				<!-- 创建区域  modalend -->
 </body>
 <script src="static/js/jquery/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src='static/js/common.js' charset="utf-8"></script>
 <script type="text/javascript">
 
 
@@ -101,8 +102,6 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 		
 		<%
 		if(null!=request.getAttribute("pcoordinates")){%>
-		  	map.centerAndZoom(name, 12);
-			map.enableScrollWheelZoom(true); 
 			<%
 			String pcoordinates=request.getAttribute("pcoordinates").toString();
 			String[] listCoordinates=pcoordinates.split("=");
@@ -121,12 +120,17 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 				 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
 				 		  			<%}
 				 		  		%>
-				 
-				 
 				 <%
 							}%>
 							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
-			 				map.addOverlay(polygon); 	
+			 				map.addOverlay(polygon);
+							<%
+								String jlng=listCoordinates[0].split("-")[0];
+								String jlat=listCoordinates[0].split("-")[1];
+							
+							%>
+			 				map.centerAndZoom(new BMap.Point(<%=jlng%>, <%=jlat%>), 12);
+			 				map.enableScrollWheelZoom(true); 
 //			 				polygon.addEventListener('click',function(e) {
 //			 				   var  point=JSON.stringify(e.pixel);
 //								  alert(point);
@@ -285,6 +289,14 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	        }
 	        overlays.length = 0  
 	 }
+	 
+	  $("a[title='返回']").click(function(){
+		//var id = $("#regionId").val();
+		URL='/region/initRegion';
+		 location.replace(URL)   
+
+		
+	 }) 
    
 </script>
 </html>

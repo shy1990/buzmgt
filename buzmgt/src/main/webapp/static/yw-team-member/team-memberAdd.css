@@ -34,46 +34,6 @@ a:focus {
 	outline: 0
 }
 
-.dropdown-menu {
-	border: medium none;
-	display: none;
-	float: left;
-	font-size: 12px;
-	left: 0;
-	list-style: none outside none;
-	padding: 0;
-	position: absolute;
-	text-shadow: none;
-	top: 100%;
-	z-index: 1000;
-	border-radius: 0;
-	box-shadow: 0 0 3px rgba(86, 96, 117, .3);
-}
-.dropdown-menu>li>a {
-	border-radius: 3px;
-	color: inherit;
-	line-height: 25px;
-	margin: 4px;
-	text-align: left;
-	font-weight: 400
-}
-.dropdown-menu>li>a.font-bold {
-	font-weight: 600
-}
-.dropdown-menu li {
-	display: block
-}
-.dropdown-menu li:last-child {
-	margin-right: 0
-}
-.dropdown-menu li a {
-	padding: 3px 20px;
-	min-height: 0
-}
-.dropdown-menu li a div {
-	white-space: normal
-}
-
 .navbar-form-custom .form-control {
 	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
 	border: medium none;
@@ -402,31 +362,6 @@ fieldset[disabled] .btn-white:hover {
 	color: #8B91A0
 }
 
-.pagination>.active>a,
-.pagination>.active>a:focus,
-.pagination>.active>a:hover,
-.pagination>.active>span,
-.pagination>.active>span:focus,
-.pagination>.active>span:hover {
-	background-color: #f4f4f4;
-	border-color: #DDD;
-	color: inherit;
-	cursor: default;
-	z-index: 2
-}
-.pagination>li>a,
-.pagination>li>span {
-	background-color: #FFF;
-	border: 1px solid #DDD;
-	color: inherit;
-	float: left;
-	line-height: 1.42857;
-	margin-left: -1px;
-	padding: 4px 10px;
-	position: relative;
-	text-decoration: none
-}
-
 
 
 .img-circle {
@@ -485,7 +420,6 @@ body {
 /*ibox鐩稿叧*/
 .ibox {
 	clear: both;
-	margin-bottom: 25px;
 	margin-top: 0;
 	padding: 0
 }
@@ -522,7 +456,6 @@ body {
 .ibox-content {
 	background-color: #fff;
 	color: inherit;
-	padding: 15px 20px 20px;
 	border-color: #e7eaec;
 	-webkit-border-image: none;
 	-o-border-image: none;
@@ -570,10 +503,7 @@ body {
 .ibox-tools a.btn-primary {
 	color: #fff
 }
-.ibox-tools .dropdown-menu>li>a {
-	padding: 4px 10px;
-	font-size: 12px
-}
+
 .ibox .open>.dropdown-menu {
 	left: auto;
 	right: 0
@@ -940,7 +870,7 @@ dd.project-people {
 	background:url(../img/team-member/sjwc.png) no-repeat;
 }
 .project-completion {
-	width: 44.5%;
+	min-width: 200px;
 }
 .project-completion .completion-ing{
 	padding: .3em 2em;
@@ -1101,5 +1031,9 @@ body.rtls .stat-percent {
 }
 
 /*娣诲姞鎵缁撴潫*/
+/* 表格响应解决ie兼容y轴滚动条 */
+.table-responsive{
+	overflow-y: hidden; 
+}
 
 

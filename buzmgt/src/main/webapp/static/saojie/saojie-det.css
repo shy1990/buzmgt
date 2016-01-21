@@ -1,0 +1,158 @@
+/*扫街明细*/
+.saojie-det-body .box-title{
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.det-msg{
+	display: inline-block;
+	height: 30px;
+	vertical-align: middle;
+	color: #FFF;
+	font-size: 12px;
+	font-weight: bold;
+	margin: 8px 0 0 10px;
+}
+.num{
+	font-size: 15px;
+	margin: 0 5px;
+}
+/*标题分页*/
+.title-page{
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+}
+
+/*标题按钮*/
+.title-btn{
+	display: inline-block;
+	height: 100%;
+	padding: 5px 10px 0 10px;
+	margin-right: -3px;
+}
+.title-btn:last-child{
+	padding-right: 20px;
+  margin-right: 0;
+}
+.title-btn,
+.title-btn:hover,
+.title-btn:focus{
+	color: #FFF;
+}
+.title-btn:hover,
+.title-btn:focus,
+.active.title-btn{
+	background: #3088BA;
+}
+
+/*地图*/
+.saojie-map{
+	text-align: center;
+}
+.body-map{
+	width: 100%;
+	overflow: hidden;
+}
+.body-map img{
+	width: 100%;
+	height: auto;
+}
+/*审核通过按钮*/
+.btn-approve,
+.btn-approve:hover,
+.btn-approve:focus{
+	background: #3BA2DC;
+	border-color: #3285B7;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	color: #FFF;
+	font-size: 14px;
+	font-weight: bold;
+}
+/*列表*/
+.saojie-list{
+	display: none;
+	margin: -10px -20px;
+}
+/*列表行*/
+.list-tr{
+	vertical-align: middle;
+	position: relative;
+	padding: 15px 20px 10px;
+	border-bottom: 1px solid #D4D4D4;
+}
+.list-conter{
+	min-height: 96px;
+}
+.list-conter>h4{
+	color: #595959;
+	font-weight: bold;
+}
+.list-conter>p{
+	color: #585858;
+}
+
+img.shop-img{
+	width: 142px;
+	position: absolute;
+	
+}
+.col-img{
+	min-width: 150px;
+}
+.list-conter{
+	display: inline-block;
+	width: 100%;
+	padding-left:150px ;
+}
+.bar-stage{
+	background: #3894C7;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
