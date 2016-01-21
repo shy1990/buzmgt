@@ -153,6 +153,11 @@
 	top: 5px;
 	background: url(../img/region/quyuhuafen.png) no-repeat;
 }
+.region-switch-icon{
+	display: inline-block;
+	top: 5px;
+	background: url(../img/region/huafen.png) no-repeat;
+}
 .query-icon{
 	display: none;
 	cursor: pointer;

@@ -31,15 +31,15 @@
 			<i class="icon team-member-list-icon"></i>团队成员
 			<!--区域选择按钮-->
 			<!-- 隐藏区域选择按钮 -->
-			<div class="btn-group sr-only">
-				<button type="button" class="btn btn-default ">
-					<i class="icon province-icon"></i>山东省
+			<div class="btn-group">
+				<button type="button" class="btn btn-default " onclick="getRegion(${regionId});">
+					<i class="icon province-icon"></i>${regionName}
 				</button>
-				<button type="button" class="btn btn-default dropdown-toggle"
-					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<span class="caret"></span> <span class="sr-only">Toggle
-						Dropdown</span>
-				</button>
+<!-- 				<button type="button" class="btn btn-default dropdown-toggle" -->
+<!-- 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
+<!-- 					 <span class="sr-only">Toggle -->
+<!-- 						Dropdown</span> -->
+<!-- 				</button> -->
 				<ul class="dropdown-menu">
 					<li><a href="#">Action</a></li>
 					<li><a href="#">Another action</a></li>
@@ -345,7 +345,7 @@
 								double lng=Double.parseDouble(points.split("-")[0]);//经度 
 				 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
 				 %>				
-				 		  		<%
+	<%
 				 		  			if(x==listCoordinates.length-1){%>
 				 		  			new BMap.Point(<%=lng%>,<%=lat%>)
 				 		  			<%}else{%>
@@ -416,6 +416,13 @@
 			map.enableScrollWheelZoom(true); 
 			}); 
 		<%}%>
+		
+		
+		/*区域 */
+		function getRegion(id){
+			window.location.href='/region/getPersonalRegion?id='+id;
+		}
+		
 		</script>
 </body>
 </html>

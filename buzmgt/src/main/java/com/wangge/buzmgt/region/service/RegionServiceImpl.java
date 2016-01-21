@@ -81,6 +81,10 @@ public class RegionServiceImpl implements RegionService {
 		regionRepository.delete(region);
 		
 	}
+  @Override
+  public Region findByNameLike(String regionName) {
+    return regionRepository.findByNameLike(regionName);
+  }
 	
- 
+	
 }

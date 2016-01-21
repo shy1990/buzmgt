@@ -16,6 +16,7 @@ public interface RegionService {
 	
 	public Region findListRegionbyid(String id);
 	
+	public Region findByNameLike(String reigonName);
 	
 	public void saveRegion(Region region); 
 	
