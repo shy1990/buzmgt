@@ -60,6 +60,10 @@ public class TestController {
 	public String saojieSet(String test,Model model){
 	  return "saojie/saojie_set";
 	}
+  @RequestMapping("/saojie_upd")
+  public String saojieUpd(String test,Model model){
+    return "saojie/saojie_upd";
+  }	
 	/**
 	 * 团队成员列表
 	 * @param test
@@ -70,6 +74,7 @@ public class TestController {
 	public String teamMemberList(String test,Model model){
 		return "salesman/saleman_det";
 	}
+
 	
 	@RequestMapping("/menu")
 	@ResponseBody

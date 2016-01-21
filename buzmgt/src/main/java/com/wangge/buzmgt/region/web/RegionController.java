@@ -5,17 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
-
-
-
-
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -34,10 +28,10 @@ import com.wangge.buzmgt.manager.service.ManagerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
-import com.wangge.buzmgt.util.RegionUtil;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.RegionVo;
+import com.wangge.buzmgt.util.RegionUtil;
 
 @Controller
 @RequestMapping(value = "/region")

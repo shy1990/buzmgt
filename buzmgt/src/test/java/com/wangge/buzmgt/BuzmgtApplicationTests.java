@@ -1,11 +1,11 @@
 package com.wangge.buzmgt;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -13,10 +13,10 @@ import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.wangge.buzmgt.manager.entity.Manager;
 import com.wangge.buzmgt.manager.service.ManagerService;
@@ -28,7 +28,6 @@ import com.wangge.buzmgt.salesman.entity.SalesMan;
 import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
 import com.wangge.buzmgt.salesman.service.SalesManService;
 import com.wangge.buzmgt.sys.entity.Organization;
-import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.repository.OrganizationRepository;
 import com.wangge.buzmgt.sys.repository.UserRepository;

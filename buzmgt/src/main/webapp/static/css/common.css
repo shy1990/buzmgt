@@ -102,6 +102,13 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	font-size: 12px;
 	font-weight: bold;
 }
+.box-title >h4{
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 20px;
+	margin: 5px 0;
+}
+
 .box-body:before,
 .box-body:after{
 	display: table;
@@ -245,12 +252,19 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .marg-b-10{
 	margin-bottom: 10px;
 }
+.marg-b-20{
+	margin-bottom: 20px;
+}
 /*不同状态文字颜色*/
 .text-danger{
 	color: #DE433E;
 }
 .text-primary{
 	color: #3894C7;
+}
+/*新图标实现方式*/
+.ico{
+	padding: 2px 18px 18px 2px;
 }
 
 
