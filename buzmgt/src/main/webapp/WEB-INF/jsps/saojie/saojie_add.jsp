@@ -18,23 +18,23 @@
 	href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" />
 <script src="../static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
 </head>
 
 <body>
 
 	<div class="main">
 		<h4 class="page-header">
-			<i class="icon icon-saojie-add"></i>添加扫街
-			<button class="btn btn-warning member-add-btn" type="button"
-				onclick="javascript:window.location.href='/saojie/saojieList'">
-				<i class="icon glyphicon glyphicon-share-alt"></i>返回列表
-				
-			</button>
+			<i class="icon team-member-add-icon"></i>添加扫街
+			<a href="/saojie/saojieList" class="btn btn-warning member-add-btn"
+				type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
+				返回列表
+			</a>
 		</h4>
+
 		<div class="row">
 			<div class="col-md-12">
-				<div class="member-add-box box border orange">
+				<div class="member-add-box box border red">
 					<div class="box-title">
 						<i class="icon member-add-icon"></i>添加
 					</div>
@@ -67,7 +67,7 @@
 											<div class="col-sm-9" style="padding: 0;" id="pid">
 												<div class="col-sm-6 col-xs-4 p-t" id="btType">
 													<button id="btn" class="btn btn-white btn-w-m" text="点击"
-														type="button" onclick="AddOrder(btType)"></button>
+														type="button" onclick="AddOrder(btType)"><img alt="添加" src="../static/img/saojie/tianjia2.png"></button>
 												</div>
 											</div>
 										</div>
@@ -139,12 +139,12 @@
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
 	<script type="text/javascript">
-			// 百度地图API功能
-			var map = new BMap.Map("allmap");    // 创建Map实例
-			map.centerAndZoom("济南", 11);  // 初始化地图,设置中心点坐标和地图级别
-			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-			map.setCurrentCity("济南");          // 设置地图显示的城市 此项是必须设置的
-			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-		</script>
+		// 百度地图API功能
+		var map = new BMap.Map("allmap");    // 创建Map实例
+		map.centerAndZoom("济南", 11);  // 初始化地图,设置中心点坐标和地图级别
+		map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+		map.setCurrentCity("济南");          // 设置地图显示的城市 此项是必须设置的
+		map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+	</script>
 </body>
 </html>

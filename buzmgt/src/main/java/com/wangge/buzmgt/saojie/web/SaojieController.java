@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,8 +52,21 @@ public class SaojieController {
     model.addAttribute("list", list);
 		model.addAttribute("saojieList", saojieList);
 		return "saojie/saojie_list";
-	}
+	} 
 	
+	/**
+	 * 
+	  * getSaojieList:(扫街列表(条件)). <br/> 
+	  * 
+	  * @author peter 
+	  * @param model
+	  * @param saojie
+	  * @param saojieStatus
+	  * @param page
+	  * @param requet
+	  * @return 
+	  * @since JDK 1.8
+	 */
 	@RequestMapping(value = "/getSaojieList")
   public  String  getSaojieList(Model model,Saojie saojie, String saojieStatus,String page, HttpServletRequest requet){
         int pageNum = Integer.parseInt(page != null ? page : "0");
@@ -72,6 +87,14 @@ public class SaojieController {
     return "saojie/saojie_add";
   }
 	
+	/**
+	 * 
+	  * gainSaojieMan:(获得待扫街人). <br/> 
+	  * 
+	  * @author peter 
+	  * @return 
+	  * @since JDK 1.8
+	 */
 	@RequestMapping(value = "/gainSaojieMan",method = RequestMethod.POST)
 	@ResponseBody
 	public List<SalesMan> gainSaojieMan(){
@@ -79,6 +102,15 @@ public class SaojieController {
 	  return salesman;
 	}
 	
+	/**
+	 * 
+	  * gainSaojieTown:(获得扫街地区). <br/> 
+	  * 
+	  * @author peter 
+	  * @param id
+	  * @return 
+	  * @since JDK 1.8
+	 */
 	@RequestMapping(value = "/gainSaojieTown",method = RequestMethod.POST)
 	@ResponseBody
 	public List<Region> gainSaojieTown(String id){
@@ -91,15 +123,6 @@ public class SaojieController {
     return list;
 	}
 	
-	
-	
-	@RequestMapping(value = "/getRegionName",method = RequestMethod.POST)
-  @ResponseBody
-  public String getRegionName(String id){
-	  SalesMan sm = salesManService.findByUserId(id);
-	  
-	  return sm.getRegion().getName();
-	}
 	/** 
 	  * saveSaojie:(添加扫街保存). <br/> 
 	  * 
@@ -109,7 +132,6 @@ public class SaojieController {
 	  * @since JDK 1.8 
 	  */  
 	@RequestMapping(value = "/saveSaojie",method = RequestMethod.POST)
-	@ResponseBody
 	public String saveSaojie(Saojie saojie,String value,@RequestParam String num){
 	  String regionId=saojie.getRegion().getId();
 	  String[] strArray = regionId.split(",");
@@ -128,7 +150,62 @@ public class SaojieController {
 	    sj.setSalesman(saojie.getSalesman());
 	    saojieService.saveSaojie(sj);
 	  }
-	  return "ok";
+	  return "redirect:/saojie/saojie_list";
 	}
 	
+	@RequestMapping("/toSaojieInstall")
+	public String toSaojieInstall(@RequestParam("id") String id,Model model){
+	  SalesMan salesman = salesManService.findByUserId(id.trim());
+	  List<Saojie> list=null;
+	  if(salesman != null && !"".equals(salesman)){
+	     list = saojieService.findBysalesman(salesman);
+	  }
+	  model.addAttribute("list",list);
+	  model.addAttribute("salesman",salesman);
+	  return "saojie/saojie_set";
+	}
+
+	@RequestMapping("/auditPass")
+	@ResponseBody
+  public String auditPass(String saojieId,String description,Model model){
+    Saojie saojie = saojieService.findById(saojieId);
+    saojie.setStatus(SaojieStatus.AGREE);
+    saojie.setDescription(description);
+    saojieService.saveSaojie(saojie);
+    return "ok";
+  }
+	
+	/**
+	 * 
+	  * changeOrder:(这里用一句话描述这个方法的作用). <br/> 
+	  * TODO 上移使用到<br/> 
+	  * @author Administrator 
+	  * @param id
+	  * @param ordernum
+	  * @return 
+	  * @since JDK 1.8
+	 */
+	@RequestMapping("/changeOrder")
+	@ResponseBody
+	public String changeOrder(String id,int ordernum,String userId,int flag){
+	    //下边数据移动到上边，处理上面数据
+	  Saojie saojie = null;
+	  if(flag == -1){
+	    saojie = saojieService.changeOrder(ordernum+1,userId);
+	    saojie.setOrder(ordernum);
+	  }else{
+	    saojie = saojieService.changeOrder(ordernum,userId);
+	    saojie.setOrder(ordernum+1);
+	  }
+	  saojieService.saveSaojie(saojie);
+	  Saojie sj = saojieService.findById(id);//当前行id
+	  if(flag == -1){
+	    sj.setOrder(ordernum+1);
+	  }else{
+	    sj.setOrder(ordernum);
+	  }
+	  saojieService.saveSaojie(sj);
+	  return "ok";
+	}
 }
+
