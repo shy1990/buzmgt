@@ -35,24 +35,9 @@
 						<div class="col-sm-12">
 							<i class="icon team-member-list-icon"></i>扫街设置
 							<!--区域选择按钮-->
-							<div class="btn-group sr-only">
-								<button type="button" class="btn btn-default ">
-									<i class="icon province-icon"></i>山东省
-								</button>
-								<button type="button" class="btn btn-default dropdown-toggle"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">
-									<span class="caret"></span> <span class="sr-only">Toggle
-										Dropdown</span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="#">Action</a></li>
-									<li><a href="#">Another action</a></li>
-									<li><a href="#">Something else here</a></li>
-									<li role="separator" class="divider"></li>
-									<li><a href="#">Separated link</a></li>
-								</ul>
-							</div>
+							<button type="button" class="btn btn-default" onclick="getRegion(${regionId});">
+								<i class="icon province-icon"></i>${regionName}
+							</button>
 							<!--/区域选择按钮-->
 							<button class="btn btn-warning member-add-btn" type="button"
 								onclick="javascript:window.location.href='/saojie/toAdd'">
@@ -286,5 +271,11 @@
 	<script type="text/javascript" src="/static/js/common.js"></script>
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
+	<script type="text/javascript">
+		/*区域 */
+		function getRegion(id){
+			window.location.href='/region/getPersonalRegion?id='+id+"&flag=saojie";
+		}
+	</script>
 </body>
 </html>

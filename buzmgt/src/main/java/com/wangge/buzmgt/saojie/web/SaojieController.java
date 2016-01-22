@@ -5,6 +5,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.manager.entity.Manager;
+import com.wangge.buzmgt.manager.service.ManagerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.entity.SalesMan;
@@ -23,6 +27,7 @@ import com.wangge.buzmgt.salesman.service.SalesManService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.service.SaojieService;
+import com.wangge.buzmgt.sys.entity.User;
 
 /**
  * 
@@ -44,13 +49,23 @@ public class SaojieController {
   private RegionService regionService;
   @Resource
   private SaojieService saojieService;
-	
+  @Resource
+  private ManagerService managerService;
 	@RequestMapping("/saojieList")
 	public String saojieList(String saojieList, Model model,Saojie saojie){
 	  int pageNum = 0;
     Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
     model.addAttribute("list", list);
 		model.addAttribute("saojieList", saojieList);
+		 Subject subject = SecurityUtils.getSubject();
+     User user=(User) subject.getPrincipal();
+     Manager manager = managerService.getById(user.getId());
+     if(null!=manager.getRegion().getCoordinates()){
+       model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
+     }
+     model.addAttribute("regionName", manager.getRegion().getName());
+     model.addAttribute("regionId", manager.getRegion().getId());
+		
 		return "saojie/saojie_list";
 	} 
 	
@@ -68,13 +83,33 @@ public class SaojieController {
 	  * @since JDK 1.8
 	 */
 	@RequestMapping(value = "/getSaojieList")
-  public  String  getSaojieList(Model model,Saojie saojie, String saojieStatus,String page, HttpServletRequest requet){
+  public  String  getSaojieList(Model model,Saojie saojie,String regionid,String regionName, String saojieStatus,String page, HttpServletRequest requet){
         int pageNum = Integer.parseInt(page != null ? page : "0");
         if(SaojieStatus.PENDING.getName().equals(saojieStatus) ){
           saojie.setStatus(SaojieStatus.PENDING);
         }else if(SaojieStatus.AGREE.getName().equals(saojieStatus)){
           saojie.setStatus(SaojieStatus.AGREE);
         }
+        Region region=new Region();
+        if(null!=regionid){
+          region =regionService.getRegionById(regionid);
+          saojie.setRegion(region);
+          if(null!=region.getCoordinates()){
+            model.addAttribute("pcoordinates", region.getCoordinates());
+          }
+          model.addAttribute("regionName", region.getName());
+          model.addAttribute("regionId", region.getId());
+        }
+       if(null!=regionName){
+         region =regionService.findByNameLike(regionName);
+         saojie.setRegion(region);
+         if(null!=region.getCoordinates()){
+           model.addAttribute("pcoordinates", region.getCoordinates());
+         }
+         model.addAttribute("regionName", region.getName());
+         model.addAttribute("regionId", region.getId());
+       }
+        
     Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
     model.addAttribute("list", list);
     model.addAttribute("saojieStatus",saojieStatus);
@@ -150,6 +185,7 @@ public class SaojieController {
 	    sj.setSalesman(saojie.getSalesman());
 	    saojieService.saveSaojie(sj);
 	  }
+	  
 	  return "redirect:/saojie/saojie_list";
 	}
 	

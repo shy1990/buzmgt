@@ -130,7 +130,13 @@ function ajaxGetNodes(treeNode, reloadType) {
  */
 function zTreeOnClick(event, treeId, treeNode) {
 //	 document.getElementById("iframepage").src = "area/right?id=" +	 treeNode.id;
-	window.location.href='/salesman/getSalesManList?regionid='+treeNode.id;
+	var flag=$("#flag").val();
+	if(null===flag||""===flag){
+		window.location.href='/salesman/getSalesManList?regionid='+treeNode.id;
+	}else{
+		window.location.href='/saojie/getSaojieList?regionid='+treeNode.id;
+	}
+
 }
 
 
@@ -492,5 +498,13 @@ $(document).ready(function() {
 
 function findRegionByName(){
 	var regionName=$("#regionName").val();
-	window.location.href='/salesman/getSalesManList?regionName='+regionName;
+	var flag=$("#flag").val();
+	if(null===flag||""===flag){
+		window.location.href='/salesman/getSalesManList?regionName='+regionName;
+	}else{
+		window.location.href='/saojie/getSaojieList?regionName='+regionName;
+	}
+	
 }
+
+

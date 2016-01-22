@@ -313,7 +313,7 @@ public class RegionController {
 	
 	@RequestMapping(value="/getRegionById",method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<List<RegionVo>> getRegionById(String id,HttpServletRequest request){
+	public ResponseEntity<List<RegionVo>> getRegionById(String id){
 		String regionId = "0";
 		if(id != null && !"".equals(id)){
 			regionId = id;
@@ -327,22 +327,37 @@ public class RegionController {
 		return new ResponseEntity<List<RegionVo>>(regionList,HttpStatus.OK);
 	}
 	 
-	
+	  /**
+	   * 
+	    * getPersonalRegion:初始化所属区域树页面. <br/> 
+	    * 
+	    * @author jiabin 
+	    * @param id
+	    * @param flag
+	    * @param request
+	    * @return 
+	    * @since JDK 1.8
+	   */
 	  
 	  @RequestMapping(value="/getPersonalRegion",method = RequestMethod.GET)
-	  public String  getPersonalRegion(String id,HttpServletRequest request){
-	    
-	    
+	  public String  getPersonalRegion(String id,String flag,Model model){
+	    model.addAttribute("flag", flag);
 	    return "region/region_personal";
 	  }
 	  
-	  
+	  /**
+	   * 
+	    * findOnePersonalRegion:(这里用一句话描述这个方法的作用). <br/> 
+	    * 
+	    * @author jiabin 
+	    * @return 
+	    * @since JDK 1.8
+	   */
 	  @RequestMapping(value = "/findOnePersonalRegion", method = RequestMethod.POST)
 	  @ResponseBody
 	  public ResponseEntity<List<RegionTree>> findOnePersonalRegion() {
 	     List<RegionTree> listTreeVo =new ArrayList<RegionTree>();
 	      Subject subject = SecurityUtils.getSubject();
-	      RegionTree regionTree=new RegionTree();
 	      User user=(User) subject.getPrincipal();
 	      Manager manager = managerService.getById(user.getId());
 	      listTreeVo.add(RegionUtil.getRegionTree(manager.getRegion()));
