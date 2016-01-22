@@ -17,4 +17,8 @@ public interface SaojieService {
   List<Saojie> findBysalesman(SalesMan salesman);
   
   Saojie findByregion(Region region);
+  
+  Saojie findById(String id);
+  
+  Saojie changeOrder(int ordernum,String userId);
 }

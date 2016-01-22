@@ -25,6 +25,10 @@
 	<div class="main">
 		<h4 class="page-header">
 			<i class="icon team-member-add-icon"></i>添加扫街
+			<a href="/saojie/saojieList" class="btn btn-warning member-add-btn"
+				type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
+				返回列表
+			</a>
 		</h4>
 
 		<div class="row">

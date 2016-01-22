@@ -84,4 +84,15 @@ public class SaojieServiceImpl implements SaojieService {
   public Saojie findByregion(Region region) {
     return saojieRepository.findByregion(region);
   }
+
+  @Override
+  public Saojie findById(String id) {
+    return saojieRepository.findOne(Long.parseLong(id));
+  }
+
+  @Override
+  public Saojie changeOrder(int ordernum, String userId) {
+    return saojieRepository.changeOrder(ordernum,userId);
+  }
+  
 }
