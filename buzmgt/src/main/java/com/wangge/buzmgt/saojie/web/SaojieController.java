@@ -132,7 +132,6 @@ public class SaojieController {
 	  * @since JDK 1.8 
 	  */  
 	@RequestMapping(value = "/saveSaojie",method = RequestMethod.POST)
-	@ResponseBody
 	public String saveSaojie(Saojie saojie,String value,@RequestParam String num){
 	  String regionId=saojie.getRegion().getId();
 	  String[] strArray = regionId.split(",");
@@ -209,3 +208,4 @@ public class SaojieController {
 	  return "ok";
 	}
 }
+
