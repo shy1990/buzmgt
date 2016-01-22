@@ -49,69 +49,78 @@
 						
 						</div>
 					</div>
-				</h4>
-				<div class="row">
-					<div class="col-md-12">
-						<!--box-->
-						<div class="team-member-body box border red">
-							<!--title-->
-							<div class="box-title">
-								<div class="row">
-									<div class="col-sm-7 col-md-5">
-										<!--菜单栏-->
-										<input type="hidden" name="" value="${saojieStatus }"
-											id="addClass" />
-										<ul class="nav nav-tabs">
-											<li title="全部"><a title="全部" name="status"
-												onclick="getAllSaojieList();" href="#box_tab1"
-												data-toggle="tab"><i class="fa fa-circle-o"></i> <span
-													class="hidden-inline-mobile">全部</span></a></li>
-											<li title="扫街中"><a title="扫街中" name="status"
-												onclick="getSaojieList(this.title,this.name);"
-												href="#box_tab1" data-toggle="tab"><i
-													class="fa fa-laptop"></i> <span
-													class="hidden-inline-mobile">扫街中</span></a></li>
-											<li title="已完成"><a title="已完成" name="status"
-												onclick="getSaojieList(this.title,this.name);"
-												href="#box_tab1" data-toggle="tab"><i
-													class="fa fa-calendar-o"></i> <span
-													class="hidden-inline-mobile">已完成</span></a></li>
-										</ul>
-										<!--/菜单栏-->
-									</div>
-									<div
-										class="col-sm-4 col-md-3 col-lg-2 col-md-offset-4 col-lg-offset-5">
-										<div class="form-group title-form">
-											<div class="input-group ">
-												<input type="text" class="form-control"
-													placeholder="请输入名称或工号" id="param"> <span
-													class="input-group-addon" id="goSearch"
-													onclick="getSaojieList(this.value,this.id);"><i
-													class="icon icon-finds"></i></span>
-											</div>
-										</div>
+					<!--/区域选择按钮-->
+					<button class="btn btn-warning member-add-btn" type="button"
+						onclick="javascript:window.location.href='/saojie/toAdd'">
+						<i class="icon icon-add"></i>添加扫街
+					</button>
+					<small class="header-text">共<span class="text-red">203</span>个区域
+					</small>
+					<!-- <small class="header-text">今日新增<span class="text-red"> 0 +</span></small> -->
+
+				</div>
+			</div>
+		</h4>
+		<div class="row">
+			<div class="col-md-9">
+				<!--box-->
+				<div class="team-member-body box border red">
+					<!--title-->
+					<div class="box-title">
+						<div class="row">
+							<div class="col-sm-7 col-md-5">
+								<!--菜单栏-->
+								<input type="hidden" name="" value="${saojieStatus }"
+									id="addClass" />
+								<ul class="nav nav-tabs">
+									<li title="全部"><a title="全部" name="status"
+										onclick="getAllSaojieList();" href="#box_tab1"
+										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
+											class="hidden-inline-mobile">全部</span></a></li>
+									<li title="扫街中"><a title="扫街中" name="status"
+										onclick="getSaojieList(this.title,this.name);"
+										href="#box_tab1" data-toggle="tab"><i class="fa fa-laptop"></i>
+											<span class="hidden-inline-mobile">扫街中</span></a></li>
+									<li title="已完成"><a title="已完成" name="status"
+										onclick="getSaojieList(this.title,this.name);"
+										href="#box_tab1" data-toggle="tab"><i
+											class="fa fa-calendar-o"></i> <span
+											class="hidden-inline-mobile">已完成</span></a></li>
+								</ul>
+								<!--/菜单栏-->
+							</div>
+							<div
+								class="col-sm-4 col-md-3 col-lg-2 col-md-offset-4 col-lg-offset-5">
+								<div class="form-group title-form">
+									<div class="input-group ">
+										<input type="text" class="form-control" placeholder="请输入名称或工号"
+											id="param"> <span class="input-group-addon"
+											id="goSearch" onclick="getSaojieList(this.value,this.id);"><i
+											class="icon icon-finds"></i></span>
 									</div>
 								</div>
-								<!--<div class="title-form input-group ">
+							</div>
+						</div>
+						<!--<div class="title-form input-group ">
 								<input class="form-control input-sm" type="text" name="" id="" value="" />
 								<span class=""><i class="icon icon-finds"></i></span>
 							</div>-->
-								<!--from-->
-								<!--<h4 style="text-align: right;"><i class="fa fa-columns"></i><span class="hidden-inline-mobile">Tabs on Color Header</span></h4>-->
-							</div>
-							<!--title-->
-							<!--box-body-->
-							<div class="box-body">
-								<!--列表内容-->
-								<div class="tab-content">
-									<!--全部-->
-									<div class="tab-pane fade in active" id="box_tab1">
-										<!--box-list-->
-										<div class="box-list">
-											<div class="project-list">
-												<table class="table table-hover">
-													<tbody>
-													<c:if test="${empty list.content}">
+						<!--from-->
+						<!--<h4 style="text-align: right;"><i class="fa fa-columns"></i><span class="hidden-inline-mobile">Tabs on Color Header</span></h4>-->
+					</div>
+					<!--title-->
+					<!--box-body-->
+					<div class="box-body">
+						<!--列表内容-->
+						<div class="tab-content">
+							<!--全部-->
+							<div class="tab-pane fade in active" id="box_tab1">
+								<!--box-list-->
+								<div class="box-list">
+									<div class="project-list">
+										<table class="table table-hover">
+											<tbody>
+												<c:if test="${empty list.content}">
 													<div style="text-align: center;">
 														<ul class="pagination">
 															<tr>
@@ -119,143 +128,166 @@
 															</tr>
 														</ul>
 													</div>
-													</c:if>
-													<c:if test="${not empty list.content}">
-														<c:forEach var="saojie" items="${list.content}"
-															varStatus="s">
-															<tr>
-																<td class="project-people"><a href=""><img
-																		alt="image" class="img-circle"
-																		src="../static/img/saojie/a.jpg"></a></td>
-																<td class="project-title"><a
-																	href=""><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
-																	<br /> <span>${saojie.salesman.region.name}</span></td>
-																<c:if test="${saojie.status == 'PENDING' }">
-																	<td class="project-status"><span
-																		class="status-ing">${saojie.status.name}</span></td>
-																</c:if>
-																<c:if test="${saojie.status == 'AGREE' }">
-																	<td class="project-status"><span
-																		class="status-finish">扫街完成</span></td>
-																</c:if>
-																<td class="project-title"><span class="l-h">${saojie.region.name}：<strong
-																		class="shop-num">${saojie.minValue}家</strong></span></td>
-																<td class="project-completion">
-																	<div>
-																		<span class="completion-ing">当前进度： 48%</span> <span
-																			class="time-down"> 倒计时：2天</span>
-																	</div>
-																	<div class="progress progress-mini">
-																		<div style="width: 48%;" class="progress-bar"></div>
-																	</div>
-																	<!-- 100%的用这个 -->
-																	<!-- <div>
+												</c:if>
+												<c:if test="${not empty list.content}">
+													<c:forEach var="saojie" items="${list.content}"
+														varStatus="s">
+														<tr>
+															<td class="project-people"><a href=""><img
+																	alt="image" class="img-circle"
+																	src="../static/img/saojie/a.jpg"></a></td>
+															<td class="project-title"><a href=""><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
+																<br /> <span>${saojie.salesman.region.name}</span></td>
+															<c:if test="${saojie.status == 'PENDING' }">
+																<td class="project-status"><span class="status-ing">${saojie.status.name}</span></td>
+															</c:if>
+															<c:if test="${saojie.status == 'AGREE' }">
+																<td class="project-status"><span
+																	class="status-finish">扫街完成</span></td>
+															</c:if>
+															<td class="project-title"><span class="l-h">${saojie.region.name}：<strong
+																	class="shop-num">${saojie.minValue}家</strong></span></td>
+															<td class="project-completion">
+																<div>
+																	<span class="completion-ing">当前进度： 48%</span> <span
+																		class="time-down"> 倒计时：2天</span>
+																</div>
+																<div class="progress progress-mini">
+																	<div style="width: 48%;" class="progress-bar"></div>
+																</div> <!-- 100%的用这个 --> <!-- <div>
 																		<span class="completion-ing">当前进度： 100%</span> <span
 																			class="time-finish"> 通过</span>
 																	</div>
 																	<div class="progress progress-mini">
                                                     					<div style="width: 100%;" class="progress-finish"></div>
                                                 					</div>-->
-																</td>
-																<td class="project-actions"><a
-																	href="projects.html#" class="btn btn-white btn-sm"><span
-																		class="folder"></span> 查看 </a>
-																	<div class="btn-group"></div>
-																	<a href="/saojie/toSaojieInstall?id=+${saojie.salesman.id }+" class="btn btn-white btn-sm"><span
-																		class="folder"></span> 设置 </a>
-																</td>
-															</tr>
-														</c:forEach>
-													</tbody>
-												</table>
-												</c:if>
-											</div>
-											<c:if test="${not empty list.content}">
-												<div style="text-align: center;padding-bottom: 20px" >
-													<ul class="pagination box-page-ul">
-														<li><a
-															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
-														<!-- 1.total<=7 -->
-														<c:if test="${list.totalPages<=7 }">
-															<c:forEach var="s" begin="1" end="${list.totalPages}"
-																step="1">
-																<c:choose>
-																	<c:when test="${list.number == s-1 }">
-																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
-																	</c:when>
-																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
-																	</c:otherwise>
-																</c:choose>
-															</c:forEach>
-														</c:if>
-														<c:if test="${list.totalPages>7 && list.number<4 }">
-															<c:forEach var="s" begin="1" end="6" step="1">
-																<c:choose>
-																	<c:when test="${list.number == s-1 }">
-																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
-																	</c:when>
-																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
-																	</c:otherwise>
-																</c:choose>
-															</c:forEach>
-															<li><a href="javascript:void(0)">...</a></li>
-														</c:if>
-														<c:if
-															test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number>=3 }">
-															<li><a href="javascript:void(0)">...</a></li>
-															<c:forEach var="s" begin="${list.number-2 }"
-																end="${list.number+2 }" step="1">
-																<c:choose>
-																	<c:when test="${list.number == s-1 }">
-																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
-																	</c:when>
-																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
-																	</c:otherwise>
-																</c:choose>
-															</c:forEach>
-															<li><a href="javascript:void(0)">...</a></li>
-														</c:if>
-														<c:if
-															test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number<3 }">
-															<li><a href="javascript:void(0)">...</a></li>
-															<c:forEach var="s" begin="${list.totalPages-6 }"
-																end="${list.totalPages }" step="1">
-																<c:choose>
-																	<c:when test="${list.number == s-1 }">
-																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
-																	</c:when>
-																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
-																	</c:otherwise>
-																</c:choose>
-															</c:forEach>
-														</c:if>
-														<li><a
-															href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
-													</ul>
-												</div>
-											</c:if>
-										</div>
-										<!--/box-list-->
+															</td>
+															<td class="project-actions"><a href="projects.html#"
+																class="btn btn-white btn-sm"><span class="folder"></span>
+																	查看 </a>
+																<div class="btn-group"></div> <a
+																href="/saojie/toSaojieInstall?id=+${saojie.salesman.id }+"
+																class="btn btn-white btn-sm"><span class="folder"></span>
+																	设置 </a></td>
+														</tr>
+													</c:forEach>
+											</tbody>
+										</table>
+										</c:if>
 									</div>
-									<!--扫街中-->
+									<c:if test="${not empty list.content}">
+										<div style="text-align: center; padding-bottom: 20px">
+											<ul class="pagination box-page-ul">
+												<li><a
+													href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+												<!-- 1.total<=7 -->
+												<c:if test="${list.totalPages<=7 }">
+													<c:forEach var="s" begin="1" end="${list.totalPages}"
+														step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+												</c:if>
+												<c:if test="${list.totalPages>7 && list.number<4 }">
+													<c:forEach var="s" begin="1" end="6" step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<li><a href="javascript:void(0)">...</a></li>
+												</c:if>
+												<c:if
+													test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number>=3 }">
+													<li><a href="javascript:void(0)">...</a></li>
+													<c:forEach var="s" begin="${list.number-2 }"
+														end="${list.number+2 }" step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<li><a href="javascript:void(0)">...</a></li>
+												</c:if>
+												<c:if
+													test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number<3 }">
+													<li><a href="javascript:void(0)">...</a></li>
+													<c:forEach var="s" begin="${list.totalPages-6 }"
+														end="${list.totalPages }" step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+												</c:if>
+												<li><a
+													href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
+											</ul>
+										</div>
+									</c:if>
 								</div>
-								<!--/列表内容-->
+								<!--/box-list-->
 							</div>
-							<!--/box-body-->
+							<!--扫街中-->
 						</div>
-						<!--/box-->
+						<!--/列表内容-->
+					</div>
+					<!--/box-body-->
+				</div>
+				<!--/box-->
+			</div>
+			<!-- end col-sm-9 -->
+			<div class="col-md-3 ">
+				<!--box-->
+				<div class="member-district box border gray">
+					<!--title-->
+					<div class="box-title">
+						<i class="icon icon-district"></i>区域
+					</div>
+					<div class="box-body">
+						<div style="height: 290px" id="allmap"></div>
+						<div align="center">
+							<a href="/salesman/showMap"><font color="#0099ff" size="3">查看完整地图</font></a>
+						</div>
+						<!-- 						地图 -->
+						<!-- 						<img width="100%" src="/static/img/saojieap.png" /> -->
+						<!-- 						/地图 -->
+						<!-- 						组织结构 -->
+						<!-- 						<div class="structure col-xs-12"> -->
+						<!-- 							<i class="icon icon-structure"></i> 组织结构 -->
+						<!-- 						</div> -->
+						<!-- 						tree view -->
+						<!-- 						<div id="tree3" class="tree"></div> -->
+						<!--/组织结构-->
 					</div>
 				</div>
-				<!-- /CALENDAR -->
 			</div>
+
+		</div>
+		<!-- /CALENDAR -->
+	</div>
 	<!-- Bootstrap core JavaScript================================================== -->
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
