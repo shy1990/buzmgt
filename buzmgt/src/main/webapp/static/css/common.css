@@ -187,9 +187,6 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	top: 5px;
 }
 .icon-add{
-	margin-top: -5px;
-	margin-left: -5px;
-	margin-bottom: -5px;
 	background: url(../img/icon/team-member/list/tjcy_tb.png) no-repeat;
 }
 .icon-list{
