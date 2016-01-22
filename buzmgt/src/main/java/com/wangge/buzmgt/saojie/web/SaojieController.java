@@ -162,6 +162,8 @@ public class SaojieController {
 	  }
 	  model.addAttribute("list",list);
 	  model.addAttribute("salesman",salesman);
+	  model.addAttribute("areaname",salesman.getRegion().getName());
+	  model.addAttribute("regionData",regionService.findByRegion(salesman.getRegion().getId()));
 	  return "saojie/saojie_set";
 	}
 
@@ -207,5 +209,12 @@ public class SaojieController {
 	  saojieService.saveSaojie(sj);
 	  return "ok";
 	}
+	@RequestMapping(value = "/getRegionName",method = RequestMethod.POST)
+  @ResponseBody
+  public String getRegionName(String id){
+    SalesMan sm = salesManService.findByUserId(id);
+    String  regionName=sm.getRegion().getName();
+    return regionName;
+  }
 }
 

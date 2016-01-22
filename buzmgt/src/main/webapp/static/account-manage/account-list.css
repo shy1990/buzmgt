@@ -1,0 +1,61 @@
+.ico-account-manage{
+	background: url(../img/icon/account-manage/zhgl.png) no-repeat;
+}
+.btn-default,
+.btn-default:hover,
+.btn-default:focus{
+	border: 1px solid #DDD;
+	background: #FFF;
+	color: #6D6D6D;
+	font-weight: bold;
+}
+.ico-province{
+	background: url(../img/icon/team-member/list/qyxz_tb.png) no-repeat;
+}
+.icon-role{
+	background: url(../img/icon/team-member/add/zw.png) no-repeat;
+}
+.ico-upd{
+	background: url(../img/icon/account-manage/xiugai1.png) no-repeat;
+}
+.ico-upd:hover{
+	background: url(../img/icon/account-manage/xiugai2.png) no-repeat;
+}
+.ico-delete{
+	background: url(../img/icon/account-manage/shanchu1.png) no-repeat;
+}
+.ico-delete:hover{
+	background: url(../img/icon/account-manage/shanchu2.png) no-repeat;
+}
+.account-list table{
+	border-bottom: 1px solid #DDD;
+	border-left: 1px solid #DDD;
+	border-right: 1px solid #DDD;
+}
+
+.account-list table tr th,
+.account-list table tr td{
+	padding-left:26px ;
+	
+}
+.account-list table tr th{
+	background: #555555;
+	color: #FFF;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
