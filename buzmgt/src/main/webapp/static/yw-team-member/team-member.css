@@ -643,6 +643,25 @@ a.link-export:focus{
 	color: #3B92C7;
 	border-bottom: 1px solid #3B92C7;
 }
+<<<<<<< HEAD
+.head-button .btn.active,
+.head-button .btn:hover,
+.head-button .btn:focus{
+	background: #3B92C7;
+	color: #fff;
+	border-color: #3B92C7;
+}
+/*月份下拉样式*/
+.date-month{
+	display: inline;
+	position: relative;
+	margin-left: 20px;
+	padding-top: 2px;
+	padding-left: 2px;
+	border-radius: 3px;
+	
+}
+=======
 .my_btn_group .btn{
 	background-color: #EEE; 
 }
@@ -672,6 +691,7 @@ a.link-export:focus{
 
 
 
+>>>>>>> refs/remotes/origin/jiabin
 .icon-month{
 	padding: 3px 18px 17px 2px;
 	background: url(../img/icon/team-member/det/date.png) no-repeat;

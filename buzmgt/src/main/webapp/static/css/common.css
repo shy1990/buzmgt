@@ -68,7 +68,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .box.border.default{
     border: 1px solid #CCC;
 }
-/*阶段box */
+/*闃舵box */
 .box.border.yellow{
     border: 1px solid #D29337;
 }
@@ -76,7 +76,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: #EFAD4D;
 	border-bottom: #D29337;
 }
-/*紫色*/
+/*绱壊*/
 .box.border.violet{
     border: 1px solid #498CA2;
 }
@@ -84,7 +84,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: #A795CE;
 	border-bottom: #498CA2;
 }
-/*青绿色*/
+/*闈掔豢鑹�*/
 .box.border.cyan{
     border: 1px solid #71AFC4;
 }
@@ -155,34 +155,33 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	height: 20px;
 	margin-right: 5px;
 }
-/*区域icon*/
+/*鍖哄煙icon*/
 .icon-district{
 	background: url(../img/icon/team-member/list/quyu.png) no-repeat;
 	top: 5px;
 }
-/*组织结构*/
+/*缁勭粐缁撴瀯*/
 .icon-structure{
 	background: url(../img/icon/team-member/list/zzjg.png) no-repeat;
 	top: 5px;
 }
-/* 错误信息提示 */
+/* 閿欒淇℃伅鎻愮ず */
 .msg-error{
 	display: none;
 	font-size: 12px;
 	font-weight: 300;
 }
-/* 显示错误信息 */
+/* 鏄剧ず閿欒淇℃伅 */
 .has-error .msg-error{
 	display: block;
 }
-/*公司列表*/
+/*鍏徃鍒楄〃*/
 .icon-comp-list{
 	background: url(../img/icon/team-member/det/Shape.png) no-repeat;
 	top: 5px;
 }
-/*业务详情*/
-.icon-ywdet,
-.icon-khxq{
+/*涓氬姟璇︽儏*/
+.icon-ywdet{
 	background: url(../img/icon/team-member/det/bfjl.png) no-repeat;
 	top: 5px;
 }
@@ -205,7 +204,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: url(../img/icon/saojie/set/sjsz.png) no-repeat;
 	top: 5px;
 }
-/*进度条*/
+/*杩涘害鏉�*/
 .progress{
 	overflow:visible ;
 	background: #D5D5D5;

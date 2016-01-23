@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Date;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,15 +24,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.salesman.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Entity
 @Table(name = "SYS_SAOJIE")
@@ -96,6 +92,8 @@ public class Saojie implements Serializable {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
 	@OrderBy("saojie_order")
 	private Collection<Saojie> children;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "saojie")
+	private Collection<SaojieData> saojiedata;
 
 	public Saojie() {
 		super();
@@ -199,4 +197,12 @@ public class Saojie implements Serializable {
 		this.children = children;
 	}
 
+  public Collection<SaojieData> getSaojiedata() {
+    return saojiedata;
+  }
+
+  public void setSaojiedata(Collection<SaojieData> saojiedata) {
+    this.saojiedata = saojiedata;
+  }
+	
 }

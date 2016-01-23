@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangge.buzmgt.manager.entity.Manager;
-import com.wangge.buzmgt.manager.service.ManagerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.RegionVo;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.util.RegionUtil;
 
 @Controller
@@ -313,18 +313,19 @@ public class RegionController {
 	
 	@RequestMapping(value="/getRegionById",method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<List<RegionVo>> getRegionById(String id){
+	public ResponseEntity<List<RegionTree>> getRegionById(String id,HttpServletRequest request){
 		String regionId = "0";
 		if(id != null && !"".equals(id)){
 			regionId = id;
 		}else{
 			Subject subject = SecurityUtils.getSubject();
 			User user=(User) subject.getPrincipal();
-			Manager manager = managerService.getById(user.getId());
-			regionId = String.valueOf(manager.getRegion().getId());
+			com.wangge.buzmgt.teammember.entity.Manager manager = managerService.getById(user.getId());
+			Manager manager1 = managerService.getById(user.getId());
+			regionId = String.valueOf(manager1.getRegion().getId());
 		}
-		   List<RegionVo> regionList = regionService.getRegionByPid(regionId);
-		return new ResponseEntity<List<RegionVo>>(regionList,HttpStatus.OK);
+		   List<RegionTree> regionList = regionService.getRegionByPid(regionId);
+		return new ResponseEntity<List<RegionTree>>(regionList,HttpStatus.OK);
 	}
 	 
 	  /**
