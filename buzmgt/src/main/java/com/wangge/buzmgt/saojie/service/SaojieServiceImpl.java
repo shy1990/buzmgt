@@ -18,10 +18,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.salesman.entity.SalesMan;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
+import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
+import com.wangge.buzmgt.sys.vo.SaojieDataVo;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Service
 public class SaojieServiceImpl implements SaojieService {
@@ -100,4 +102,49 @@ public class SaojieServiceImpl implements SaojieService {
     return saojieRepository.getRegionCount();
   }
   
+  @Override
+  @Transactional
+  public SaojieDataVo getsaojieDataList(String userId,String regionId) {
+    int a = 0;
+    SaojieDataVo sdv = new SaojieDataVo();
+     List<Saojie> list = saojieRepository.findAll(new Specification<Saojie>() {
+      public Predicate toPredicate(Root<Saojie> root, CriteriaQuery<?> query,
+          CriteriaBuilder cb) {
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        
+        if (userId != null && !"".equals(userId)) {
+          Join<Saojie, SalesMan> salesManJoin = root.join(root.getModel()
+              .getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
+          predicates.add(cb.equal(salesManJoin.get("id").as(String.class), userId));
+        }
+
+        if (regionId != null && !"".equals(regionId)) {
+          Join<Saojie, Region> regionJoin = root.join(root.getModel()
+              .getSingularAttribute("region", Region.class), JoinType.LEFT);
+          predicates.add(cb.equal(regionJoin.get("id").as(String.class), regionId));
+        }
+        return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+      }
+
+    });
+   for(Saojie s : list){
+     if(s.getSaojiedata() != null ){
+        for(SaojieData data  : s.getSaojiedata()){
+          sdv.getList().add(data);
+        }
+     }
+     a += s.getMinValue();
+   }
+      sdv.addPercent(sdv.getList().size(),a);
+    return sdv;
+   
+  }
+
+ /* @Override
+  public List<SaojieData> getsaojieDataList(String userId) {
+   Saojie s = saojieRepository.findBySalesmanUserId(userId);
+    return null;
+  }*/
 }
+  
+  

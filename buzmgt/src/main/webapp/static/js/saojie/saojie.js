@@ -141,6 +141,7 @@ function AddOrder(btType) {
 
 function delNode(selOrder,order) {
 	var intLen = $("div[id^='selOrder']").length;
+	var options = document.getElementById("town").options.length;
 	if(intLen === order){
 		if (selOrder != null && selOrder != ''){
 			selOrder.parentNode.removeChild(selOrder);
@@ -148,6 +149,9 @@ function delNode(selOrder,order) {
 	}else{
 		alert("请先删除序号最大项!");
 	}
+	if(intLen <= options-1){
+		 			$("#btn").show();
+		 		}
 }
 
 $(function() {

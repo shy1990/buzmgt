@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.salesman.entity.SalesMan;
 import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 public interface SaojieRepository extends JpaRepository<Saojie, Long>{
   
@@ -24,4 +24,5 @@ public interface SaojieRepository extends JpaRepository<Saojie, Long>{
   Saojie changeOrder(int ordernum, String userId);
   @Query("select count(*) from Saojie")
   int getRegionCount();
+  List<Saojie> findAll(Specification<Saojie> specification);
 }
