@@ -295,6 +295,7 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../static/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/static/js/common.js"></script>
+	<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
 	<script type="text/javascript">

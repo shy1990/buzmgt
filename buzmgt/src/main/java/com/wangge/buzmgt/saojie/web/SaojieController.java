@@ -55,6 +55,8 @@ public class SaojieController {
 	public String saojieList(String saojieList, Model model,Saojie saojie){
 	  int pageNum = 0;
     Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
+    int count = saojieService.getRegionCount();
+    model.addAttribute("count",count);
     model.addAttribute("list", list);
 		model.addAttribute("saojieList", saojieList);
 		 Subject subject = SecurityUtils.getSubject();
@@ -113,6 +115,8 @@ public class SaojieController {
     Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
     model.addAttribute("list", list);
     model.addAttribute("saojieStatus",saojieStatus);
+    int count = saojieService.getRegionCount();
+    model.addAttribute("count",count);
     return "saojie/saojie_list";
   }
 	
@@ -253,4 +257,3 @@ public class SaojieController {
     return regionName;
   }
 }
-
