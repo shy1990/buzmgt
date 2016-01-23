@@ -103,7 +103,7 @@
 					<div class="box-body">
 						<!--ywmamber-body-->
 						<div class="ywmamber-body">
-							<img width="80" src="static/img/user-head.png" alt="..."
+							<img width="80" src="../static/img/user-head.png" alt="..."
 								class="img-circle">
 							<div class="msg-text">
 								<h4>${salesMan.truename}</h4>
