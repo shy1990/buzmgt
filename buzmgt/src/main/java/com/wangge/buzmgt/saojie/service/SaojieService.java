@@ -21,4 +21,6 @@ public interface SaojieService {
   Saojie findById(String id);
   
   Saojie changeOrder(int ordernum,String userId);
+  
+  int getRegionCount();
 }

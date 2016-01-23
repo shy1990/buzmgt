@@ -94,5 +94,10 @@ public class SaojieServiceImpl implements SaojieService {
   public Saojie changeOrder(int ordernum, String userId) {
     return saojieRepository.changeOrder(ordernum,userId);
   }
+
+  @Override
+  public int getRegionCount() {
+    return saojieRepository.getRegionCount();
+  }
   
 }

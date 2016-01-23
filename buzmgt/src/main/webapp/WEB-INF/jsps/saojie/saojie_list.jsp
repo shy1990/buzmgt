@@ -64,7 +64,7 @@
 								onclick="javascript:window.location.href='/saojie/toAdd'">
 								<i class="icon icon-add"></i>添加扫街
 							</button>
-							<small class="header-text">共<span class="text-red">203</span>个区域
+							<small class="header-text">共<span class="text-red">${count }</span>个区域
 							</small>
 							<!-- <small class="header-text">今日新增<span class="text-red"> 0 +</span></small> -->
 						</div>

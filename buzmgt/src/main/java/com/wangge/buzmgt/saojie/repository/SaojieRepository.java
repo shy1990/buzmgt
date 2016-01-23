@@ -22,4 +22,7 @@ public interface SaojieRepository extends JpaRepository<Saojie, Long>{
   
   @Query("select s from Saojie s where s.order=?1 and s.salesman.id=?2")
   Saojie changeOrder(int ordernum, String userId);
+  
+  @Query("select count(*) from Saojie")
+  int getRegionCount();
 }

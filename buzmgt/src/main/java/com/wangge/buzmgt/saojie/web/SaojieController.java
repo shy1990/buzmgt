@@ -49,6 +49,8 @@ public class SaojieController {
 	public String saojieList(String saojieList, Model model,Saojie saojie){
 	  int pageNum = 0;
     Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
+    int count = saojieService.getRegionCount();
+    model.addAttribute("count",count);
     model.addAttribute("list", list);
 		model.addAttribute("saojieList", saojieList);
 		return "saojie/saojie_list";
@@ -78,6 +80,8 @@ public class SaojieController {
     Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
     model.addAttribute("list", list);
     model.addAttribute("saojieStatus",saojieStatus);
+    int count = saojieService.getRegionCount();
+    model.addAttribute("count",count);
     return "saojie/saojie_list";
   }
 	
@@ -190,7 +194,7 @@ public class SaojieController {
 	public String changeOrder(String id,int ordernum,String userId,int flag){
 	    //下边数据移动到上边，处理上面数据
 	  Saojie saojie = null;
-	  if(flag == -1){
+	  if(flag == -1){//下移时改变下一行的序号
 	    saojie = saojieService.changeOrder(ordernum+1,userId);
 	    saojie.setOrder(ordernum);
 	  }else{
@@ -199,7 +203,7 @@ public class SaojieController {
 	  }
 	  saojieService.saveSaojie(saojie);
 	  Saojie sj = saojieService.findById(id);//当前行id
-	  if(flag == -1){
+	  if(flag == -1){//下移时改变当前行序号
 	    sj.setOrder(ordernum+1);
 	  }else{
 	    sj.setOrder(ordernum);
