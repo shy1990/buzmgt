@@ -68,6 +68,7 @@
 					<div class="box-body">
 						<div style="width: 100%; height: 32px; border-right: 1px solid rgb(221, 221, 221);"></div>
 									<ul id="treeDemo" class="ztree"></ul>
+									<input type="hidden" id="flag" name="flag" value="${flag}">
 								</div>
 					</div>
 				</div>
