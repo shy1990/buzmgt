@@ -313,7 +313,7 @@ public class RegionController {
 	
 	@RequestMapping(value="/getRegionById",method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<List<RegionVo>> getRegionById(String id,HttpServletRequest request){
+	public ResponseEntity<List<RegionTree>> getRegionById(String id,HttpServletRequest request){
 		String regionId = "0";
 		if(id != null && !"".equals(id)){
 			regionId = id;
@@ -324,8 +324,8 @@ public class RegionController {
 			Manager manager1 = managerService.getById(user.getId());
 			regionId = String.valueOf(manager1.getRegion().getId());
 		}
-		   List<RegionVo> regionList = regionService.getRegionByPid(regionId);
-		return new ResponseEntity<List<RegionVo>>(regionList,HttpStatus.OK);
+		   List<RegionTree> regionList = regionService.getRegionByPid(regionId);
+		return new ResponseEntity<List<RegionTree>>(regionList,HttpStatus.OK);
 	}
 	
 }

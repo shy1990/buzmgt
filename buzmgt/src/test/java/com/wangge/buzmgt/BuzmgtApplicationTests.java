@@ -1,10 +1,12 @@
 package com.wangge.buzmgt;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +24,9 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
+import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.entity.SaojieData;
+import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.repository.OrganizationRepository;
@@ -29,6 +34,7 @@ import com.wangge.buzmgt.sys.repository.UserRepository;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.OrganizationVo;
+import com.wangge.buzmgt.sys.vo.SaojieDataVo;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesMan.SalesmanStatus;
@@ -54,8 +60,10 @@ public class BuzmgtApplicationTests {
 	private OrganizationRepository OrganRepository;
 	@Resource
 	private ManagerService managerService;
-    @Resource
+   @Resource
 	private SalesManService salesManService;
+   @Resource
+  private SaojieService saojieService;
 	@Test
 	@Transactional
 	public void contextLoads() {
@@ -261,11 +269,51 @@ public class BuzmgtApplicationTests {
 }
   @Test
   public void testSalesman(){
+    List<Region> regonList  = new ArrayList<Region>();
+    List<String>  ids = new ArrayList<String>();
      SalesMan  s = salesManService.findById("C37010501060");
-    System.out.println("================="+s.getTruename());
-    System.out.println("================="+s.getId());
-    System.out.println("================="+s.getMobile()); 
-    System.out.println("================="+s.getSalesmanStatus()); 
+     if(s.getTowns() != null && !"".equals(s.getTowns())){
+      
+       String[]  towns = s.getTowns().split(" ");
+       
+       for(int i = 0;i<towns.length;i++){
+        
+        ids.add(towns[i]);
+       }
+     //  regonList = regionService.getListByIds(ids);
+        
+     }else{
+        regonList = regionService.findByRegion(s.getRegion().getId()) ;
+     }
+      for(Region r : regonList){
+        System.out.println("========================="+r.getName());
+      }
+  }
+  @Test
+  public void testSaojieData(){
+    SaojieDataVo sList =  saojieService.getsaojieDataList("B37090301220","37090305");
+     if(sList != null){
+       for(SaojieData d : sList.getList()){
+         System.out.println("========================"+d.getName());
+       }
+       System.out.println(">>>>>>>>>>>>>>>>>>>>>>>"+sList.getPercent());
+       System.out.println(">>>>>>>>>>>>>>>>>>>>>>>"+sList.getShopNum());
+       System.out.println(">>>>>>>>>>>>>>>>>>>>>>>"+sList.getTaskNum());
+     }
+     
+  }
+  @Test
+  public void testAAA(){
+    int i = 0;
     
+    int x = 0;
+    double baiy = i * 1.0;
+    double baiz = x * 1.0;
+    System.out.println("@@@" + baiy / baiz);
+    NumberFormat nf = NumberFormat.getPercentInstance();
+    nf.setMinimumFractionDigits(3);
+    String x1 = nf.format(baiy / baiz);
+    System.out.println("++++++++++++++++++++++++++++++++++++++"+x1);
+
   }
 }

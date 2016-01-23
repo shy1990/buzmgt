@@ -92,6 +92,8 @@ public class Saojie implements Serializable {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
 	@OrderBy("saojie_order")
 	private Collection<Saojie> children;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "saojie")
+	private Collection<SaojieData> saojiedata;
 
 	public Saojie() {
 		super();
@@ -195,4 +197,12 @@ public class Saojie implements Serializable {
 		this.children = children;
 	}
 
+  public Collection<SaojieData> getSaojiedata() {
+    return saojiedata;
+  }
+
+  public void setSaojiedata(Collection<SaojieData> saojiedata) {
+    this.saojiedata = saojiedata;
+  }
+	
 }

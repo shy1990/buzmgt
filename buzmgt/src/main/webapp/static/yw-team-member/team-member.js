@@ -1,8 +1,6 @@
 
-
 function getPageList(num){
 	
-<<<<<<< HEAD
 	window.location.href="/teammember/getSalesManList?page="+num
 }
 
@@ -15,11 +13,11 @@ function getList(param,name){
     }
 }
 
-function toSalesManInfo(){
-	
-	window.location.href="/teammember/toSalesManInfo?userId="+$("#id").val();
+function toSalesManInfo(id){
+	window.location.href="/teammember/toSalesManInfo?userId="+id;
 }
 
+    
 $(function(){
 //	$(':checked').click();
 //	/**
@@ -47,27 +45,23 @@ $(function(){
 //		});
 //		//$('.j_district').click();//反选
 //	});
-	
-=======
-	window.location.href="/salesman/getSalesManList?page="+num
-}
 
-function getList(param,name){
-    if(name == "goSearch"){
-    	var value = $("#param").val();
-    	window.location.href="/salesman/getSalesManList?truename="+value+"&jobNum="+value
-    }else if(name == "salesmanStatus"){
-    	window.location.href="/salesman/getSalesManList?Status="+param
-    }
-}
 
+
+	//getList(param)
+	var status = $("#status").val();
+	/*if(status == null ||  "".equals(status)){
+		status = "扫街中";
+	}*/
+	$(" li[title = '"+status+"']").addClass('active');
+});
 
 var myDate = new Date();
 var tody = changeDateToString(myDate);
 $(function(){
     $(".form_datetime").datetimepicker({
         format: "yyyy年mm月",
-        endDate : tody,
+        endDate : new Date(),
 		language : 'zh-CN',
 		weekStart : 1,
 		todayBtn : 1,
@@ -77,12 +71,5 @@ $(function(){
 		minView : 3,
 		pickerPosition : "bottom-left",
 		forceParse : 0
-    });
->>>>>>> refs/remotes/origin/jiabin
-	//getList(param)
-	var status = $("#status").val();
-	/*if(status == null ||  "".equals(status)){
-		status = "扫街中";
-	}*/
-	$(" li[title = '"+status+"']").addClass('active');
-});
+    })
+})

@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.teammember.web;
 
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -9,19 +10,28 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.entity.SaojieData;
+import com.wangge.buzmgt.saojie.service.SaojieDataService;
+import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.entity.User.UserStatus;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.RoleService;
 import com.wangge.buzmgt.sys.service.UserService;
+import com.wangge.buzmgt.sys.vo.SaojieDataVo;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesMan.SalesmanStatus;
@@ -52,6 +62,10 @@ public class TeamMembersController {
 	private ManagerService managerService;
 	@Resource
 	private UserService userService;
+	@Resource
+	private SaojieService saojieService;
+	@Resource
+	private SaojieDataService saojieDataService;
 	
 	/**
 	 * 
@@ -121,10 +135,11 @@ public class TeamMembersController {
 			  salesman.setRegion(regionService.getRegionById(regionPid.trim()));
 			  salesman.setTowns(regionId);
 			  u.setId(createUerId(regionPid.trim(),o));
+			}else{
+			  u.setId(createUerId(regionId.trim(),o));
+			  salesman.setRegion(regionService.getRegionById(regionId.trim()));
 			}
-			u.setId(createUerId(regionId.trim(),o));
       u = userService.addUser(u);
-			salesman.setRegion(regionService.getRegionById(regionId.trim()));
 			salesman.setSalesmanStatus(SalesmanStatus.SAOJIE);
 			salesman.setRegdate(new Date());
 			salesman.setUser(u);
@@ -189,8 +204,18 @@ public class TeamMembersController {
 	@RequestMapping(value = "/toSalesManInfo", method = RequestMethod.GET)
 	public String getSalesManInfo(String userId, Model model){
 	     SalesMan salesMan  =  salesManService.getSalesmanByUserId(userId);
+	     List<Region> rList = regionService.getListByIds(salesMan);
 	     model.addAttribute("salesMan", salesMan);
+	     model.addAttribute("rList", rList);
 	  return "teammember/saojie_det";
+	}
+	
+	@RequestMapping(value = "/getSaojiedataList", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<SaojieDataVo> getSojieDtaList(String userId, String regionId){
+	  SaojieDataVo list  = saojieService.getsaojieDataList(userId, regionId);
+	 
+	  return new ResponseEntity<SaojieDataVo>(list,HttpStatus.OK);
 	}
 	
 	/**
