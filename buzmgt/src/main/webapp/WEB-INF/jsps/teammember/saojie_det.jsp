@@ -18,8 +18,9 @@
 	href="/static/saojie/saojie-det.css" />
 <link rel="stylesheet" type="text/css"
 	href="/static/yw-team-member/ywmember.css" />
-<script src="/static/js/jquery/jquery-1.11.3.min.js"
+<script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
 </head>
 
 <body>
@@ -64,7 +65,10 @@
 						<div class="saojie-map ">
 							<!--地图位置-->
 							<div style="height: 600px;" class="body-map">
-								<img src="static/img/saojie-map.png" />
+								<!--地图位置-->
+								<div style="height: 600px;" class="body-map" id="allmap">
+<!-- 									<img src="static/img/saojie-map.png" /> -->
+								</div>
 							</div>
 							<button class="btn btn-approve col-sm-2 col-sm-offset-5">审核通过</button>
 						</div>

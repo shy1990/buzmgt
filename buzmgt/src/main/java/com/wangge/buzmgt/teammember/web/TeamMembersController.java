@@ -242,6 +242,8 @@ public class TeamMembersController {
        List<Region> rList = regionService.getListByIds(salesMan);
        model.addAttribute("salesMan", salesMan);
        model.addAttribute("rList", rList);
+       SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(userId, salesMan.getRegion().getId());
+       model.addAttribute("saojiedatalist", "saojiedatalist");
     return "teammember/saojie_det";
   }
   
