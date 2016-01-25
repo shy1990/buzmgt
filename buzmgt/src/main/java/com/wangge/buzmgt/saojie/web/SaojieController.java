@@ -54,7 +54,7 @@ public class SaojieController {
     model.addAttribute("list", list);
 		model.addAttribute("saojieList", saojieList);
 		return "saojie/saojie_list";
-	} 
+	}
 	
 	/**
 	 * 

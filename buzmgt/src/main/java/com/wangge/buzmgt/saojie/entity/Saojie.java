@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.saojie.entity;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -24,6 +25,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -96,6 +98,10 @@ public class Saojie implements Serializable {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
 	@OrderBy("saojie_order")
 	private Collection<Saojie> children;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "saojie")
+  private Collection<SaojieData> saojiedata;
+	@Transient
+	private String percent;
 
 	public Saojie() {
 		super();
@@ -198,5 +204,23 @@ public class Saojie implements Serializable {
 	public void setChildren(Collection<Saojie> children) {
 		this.children = children;
 	}
-
+	
+  public String getPercent() {
+    return percent;
+  }
+  public void setPercent(String percent) {
+    this.percent = addPercent() == null ? "10%" : percent;
+  }
+  
+  public  String addPercent(){
+    Double baiy = (double) this.saojiedata.size();
+    Double baiz = (double) this.getMinValue();
+    if(baiy > 0 && baiz > 0){
+      NumberFormat nf = NumberFormat.getPercentInstance();
+    return  this.percent = nf.format(baiy / baiz);
+    }else{
+     return  this.percent = "0%";
+    }
+  }
+	
 }

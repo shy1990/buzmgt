@@ -152,7 +152,7 @@
 																		class="shop-num">${saojie.minValue}家</strong></span></td>
 																<td class="project-completion">
 																	<div>
-																		<span class="completion-ing">当前进度： 48%</span> <span
+																		<span class="completion-ing">当前进度：${saojie.percent }</span> <span
 																			class="time-down"> 倒计时：2天</span>
 																	</div>
 																	<div class="progress progress-mini">
