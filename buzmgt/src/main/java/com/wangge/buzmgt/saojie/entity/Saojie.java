@@ -103,6 +103,16 @@ public class Saojie implements Serializable {
 	@Transient
 	private String percent;
 
+	public void addPercent(double baiy, double baiz) {
+    if(baiy > 0 && baiz > 0){
+      NumberFormat nf = NumberFormat.getPercentInstance();
+      this.percent = nf.format(baiy / baiz);
+    }else{
+      this.percent = "0%";
+    }
+   
+  }
+	
 	public Saojie() {
 		super();
 	}
@@ -204,23 +214,21 @@ public class Saojie implements Serializable {
 	public void setChildren(Collection<Saojie> children) {
 		this.children = children;
 	}
-	
+
+  public Collection<SaojieData> getSaojiedata() {
+    return saojiedata;
+  }
+
+  public void setSaojiedata(Collection<SaojieData> saojiedata) {
+    this.saojiedata = saojiedata;
+  }
+
   public String getPercent() {
     return percent;
   }
+
   public void setPercent(String percent) {
-    this.percent = addPercent() == null ? "10%" : percent;
-  }
-  
-  public  String addPercent(){
-    Double baiy = (double) this.saojiedata.size();
-    Double baiz = (double) this.getMinValue();
-    if(baiy > 0 && baiz > 0){
-      NumberFormat nf = NumberFormat.getPercentInstance();
-    return  this.percent = nf.format(baiy / baiz);
-    }else{
-     return  this.percent = "0%";
-    }
+    this.percent = percent;
   }
 	
 }
