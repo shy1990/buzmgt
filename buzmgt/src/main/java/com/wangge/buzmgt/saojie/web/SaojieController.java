@@ -19,6 +19,7 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
+import com.wangge.buzmgt.saojie.entity.SaojiePage;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
@@ -51,7 +52,7 @@ public class SaojieController {
 	@RequestMapping("/saojieList")
 	public String saojieList(String saojieList, Model model,Saojie saojie){
 	  int pageNum = 0;
-    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
+    SaojiePage list = saojieService.getSaojieList(saojie,pageNum);
     int count = saojieService.getRegionCount();
     model.addAttribute("count",count);
     model.addAttribute("list", list);
@@ -109,7 +110,7 @@ public class SaojieController {
          model.addAttribute("regionId", region.getId());
        }
         
-    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
+    SaojiePage list = saojieService.getSaojieList(saojie,pageNum);
     model.addAttribute("list", list);
     model.addAttribute("saojieStatus",saojieStatus);
     int count = saojieService.getRegionCount();

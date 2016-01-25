@@ -72,10 +72,5 @@ $(function(){
 		pickerPosition : "bottom-left",
 		forceParse : 0
     });
-	//getList(param)
-	var status = $("#status").val();
-	/*if(status == null ||  "".equals(status)){
-		status = "扫街中";
-	}*/
-	$(" li[title = '"+status+"']").addClass('active');
+	
 });

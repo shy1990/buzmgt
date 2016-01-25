@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.entity.SaojiePage;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
@@ -38,8 +39,11 @@ public class SaojieServiceImpl implements SaojieService {
 
   @Override
   @Transactional
-  public Page<Saojie> getSaojieList(Saojie saojie, int pageNum) {
-    return saojieRepository.findAll(new Specification<Saojie>() {
+  public SaojiePage getSaojieList(Saojie saojie, int pageNum) {
+    
+    
+    
+    Page<Saojie>  page = saojieRepository.findAll(new Specification<Saojie>() {
 
       public Predicate toPredicate(Root<Saojie> root, CriteriaQuery<?> query,
           CriteriaBuilder cb) {
@@ -74,7 +78,24 @@ public class SaojieServiceImpl implements SaojieService {
       }
 
     }, new PageRequest(pageNum, 2));
-
+    
+    return  buildSaojiePage(page);
+  }
+  
+  
+  
+  private SaojiePage  buildSaojiePage(Page<Saojie> pageSojie){
+    SaojiePage sj = new SaojiePage();
+    List<Saojie> list = new ArrayList<Saojie>();
+     for(Saojie saojie : pageSojie.getContent()){
+       saojie.addPercent(saojie.getSaojiedata().size(), saojie.getMinValue());
+       list.add(saojie);
+     }
+     sj.setContent(list);
+     sj.setTotalSize(pageSojie.getSize());
+     sj.setNumber(pageSojie.getNumber());
+     sj.setTotalPages(pageSojie.getTotalPages());
+    return sj;
   }
 
   @Override
