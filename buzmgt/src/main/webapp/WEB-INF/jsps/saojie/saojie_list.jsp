@@ -162,9 +162,9 @@
 																	设置 </a></td>
 														</tr>
 													</c:forEach>
+												</c:if>
 											</tbody>
 										</table>
-										</c:if>
 									</div>
 									<c:if test="${not empty list.content}">
 										<div style="text-align: center; padding-bottom: 20px">
