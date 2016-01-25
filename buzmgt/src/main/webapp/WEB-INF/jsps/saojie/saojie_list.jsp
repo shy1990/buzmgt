@@ -51,10 +51,7 @@
 						
 						</div>
 					</div>
-
-				</div>
-			</div>
-		</h4>
+				</h4>
 		<div class="row">
 			<div class="col-md-9">
 				<!--box-->
@@ -64,7 +61,7 @@
 						<div class="row">
 							<div class="col-sm-7 col-md-5">
 								<!--菜单栏-->
-								<input type="hidden" name="" value="${saojieStatus }"
+								<input type="hidden" name="" value="${saojieStatus}"
 									id="addClass" />
 								<ul class="nav nav-tabs">
 									<li title="全部"><a title="全部" name="status"
@@ -72,11 +69,11 @@
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
 											class="hidden-inline-mobile">全部</span></a></li>
 									<li title="扫街中"><a title="扫街中" name="status"
-										onclick="getSaojieList(this.title,this.name);"
+										onclick="getSaojieList(this.title,this.name,${regionId});"
 										href="#box_tab1" data-toggle="tab"><i class="fa fa-laptop"></i>
 											<span class="hidden-inline-mobile">扫街中</span></a></li>
 									<li title="已完成"><a title="已完成" name="status"
-										onclick="getSaojieList(this.title,this.name);"
+										onclick="getSaojieList(this.title,this.name,${regionId});"
 										href="#box_tab1" data-toggle="tab"><i
 											class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">已完成</span></a></li>

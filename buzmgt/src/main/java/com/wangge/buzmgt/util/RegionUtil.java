@@ -13,6 +13,7 @@ public class RegionUtil {
 	private static final String FIRELEV="县";
 	private static final String SIXLEV="镇";
 	private static final String OTHER="其他";
+	private static final String COUNTRY="国";
 	/**
 	 * 
 	* @Title: getRegionTree 
@@ -48,11 +49,15 @@ public class RegionUtil {
 			imgUrl = "/static/img/region/zhen.png";
 		} else if (region.getType().getName().equals(OTHER)) {
 			regionTree.setRegiontype("false");
+		}else if(region.getType().getName().equals(COUNTRY)){
+		  imgUrl="/static/img/region/zhongguo.png";
 		}
 		regionTree.setIconOpen(imgUrl);
 		regionTree.setIconClose(imgUrl);
 		regionTree.setIcon(imgUrl);
-		regionTree.setpId(region.getParent().getId());
+		if(null!=region.getParent()){
+	    regionTree.setpId(region.getParent().getId());
+		}
 		
 		return regionTree;
 	}

@@ -52,6 +52,7 @@
 								<!--菜单栏-->
 								<ul class="nav nav-tabs">
 									<input id="status" type="hidden" value="${Status}">
+									<input id="regionId" type="hidden" value="${regionId}">
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name);"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
