@@ -4,12 +4,12 @@ function getPageList(num){
 	window.location.href="/teammember/getSalesManList?page="+num
 }
 
-function getList(param,name){
+function getList(param,name,regionId){
     if(name == "goSearch"){
     	var value = $("#param").val();
-    	window.location.href="/teammember/getSalesManList?truename="+value+"&jobNum="+value
+    	window.location.href="/teammember/getSalesManList?truename="+value+"&jobNum="+value+"&regionid="+regionId
     }else if(name == "salesmanStatus"){
-    	window.location.href="/teammember/getSalesManList?Status="+param
+    	window.location.href="/teammember/getSalesManList?Status="+param+"&regionid="+regionId
     }
 }
 

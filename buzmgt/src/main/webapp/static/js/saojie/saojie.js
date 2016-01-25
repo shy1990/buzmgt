@@ -1,29 +1,29 @@
-$(function() {
-		var value = document.getElementById("saojieMan").value;
-   	     if(value == null || value == ""){
-   	     	$.ajax({
-			type:"post",
-			url:"/saojie/gainSaojieMan",
-			//data:formValue,
-			dataType:"JSON",
-			success : function(obj){
-				if (obj) {
-					var saojieMan = $("#saojieMan");
-					saojieMan.empty();
-					saojieMan.append("<option value='' selected='selected'>待扫街人员</option>");
-                    for(var i=0;i<obj.length;i++){
-                    	saojieMan.append("<option value = '"+obj[i].id+"'>"+obj[i].truename+"</option>");
-					}
-				}else {
-//					alert(obj.length);
-//					for(var i=0;i<obj.length;i++){
-//						alert(obj[i].name);
+//$(function() {
+//		var value = document.getElementById("saojieMan").value;
+//   	     if(value == null || value == ""){
+//   	     	$.ajax({
+//			type:"post",
+//			url:"/saojie/gainSaojieMan",
+//			//data:formValue,
+//			dataType:"JSON",
+//			success : function(obj){
+//				if (obj) {
+//					var saojieMan = $("#saojieMan");
+//					saojieMan.empty();
+//					saojieMan.append("<option value='' selected='selected'>待扫街人员</option>");
+//                    for(var i=0;i<obj.length;i++){
+//                    	saojieMan.append("<option value = '"+obj[i].id+"'>"+obj[i].truename+"</option>");
 //					}
-				};
-		 }
-		});
-   	     }
-});
+//				}else {
+////					alert(obj.length);
+////					for(var i=0;i<obj.length;i++){
+////						alert(obj[i].name);
+////					}
+//				};
+//		 }
+//		});
+//   	     }
+//});
 
 var strtown;
 function queryTown(){
@@ -225,12 +225,12 @@ function getAllSaojieList(){
 	window.location.href="/saojie/saojieList";
 }
 
-function getSaojieList(param,name){
+function getSaojieList(param,name,regionId){
     if(name == "goSearch"){
     	var value = $("#param").val();
-    	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value;
+    	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value+"&regionid="+regionId;
     }else if(name == "status"){
-    	window.location.href="/saojie/getSaojieList?saojieStatus="+param;
+    	window.location.href="/saojie/getSaojieList?saojieStatus="+param+"&regionid="+regionId;
     }
 }
 
