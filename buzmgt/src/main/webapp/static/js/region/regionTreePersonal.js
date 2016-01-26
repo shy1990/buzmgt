@@ -131,8 +131,9 @@ function ajaxGetNodes(treeNode, reloadType) {
 function zTreeOnClick(event, treeId, treeNode) {
 //	 document.getElementById("iframepage").src = "area/right?id=" +	 treeNode.id;
 	var flag=$("#flag").val();
+	alert(flag);
 	if(null===flag||""===flag){
-		window.location.href='/salesman/getSalesManList?regionid='+treeNode.id;
+		window.location.href='/teammember/getSalesManList?regionId='+treeNode.id;
 	}else{
 		window.location.href='/saojie/getSaojieList?regionid='+treeNode.id;
 	}

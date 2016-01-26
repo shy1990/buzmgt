@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.saojie.web;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -114,7 +115,7 @@ public class SaojieController {
     model.addAttribute("saojieStatus",saojieStatus);
     int count = saojieService.getRegionCount();
     model.addAttribute("count",count);
-    return "saojie/saojie_list";
+    return   "saojie/saojie_list";
   }
 	
 	@RequestMapping("/toAdd")
@@ -187,7 +188,7 @@ public class SaojieController {
 	    saojieService.saveSaojie(sj);
 	  }
 	  
-	  return "redirect:/saojie/saojie_list";
+	  return "redirect:/saojie/saojieList";
 	}
 	
 	@RequestMapping("/toSaojieInstall")
