@@ -78,13 +78,14 @@ public class TeamMembersController {
   @RequestMapping("/salesManList")
   public String toTeamMembers(String salesManList, String Status, Model model,SalesMan salesman){
     int pageNum = 0;
+   
     Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum);
     model.addAttribute("list", list);
     model.addAttribute("Status", "扫街中");
     model.addAttribute("salesManList", salesManList);
     Subject subject = SecurityUtils.getSubject();
-     User user=(User) subject.getPrincipal();
-     Manager manager = managerService.getById(user.getId());
+    User user=(User) subject.getPrincipal();
+    Manager manager = managerService.getById(user.getId());
      if(null!=manager.getRegion().getCoordinates()){
        model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
      }
@@ -92,6 +93,7 @@ public class TeamMembersController {
      model.addAttribute("regionId", manager.getRegion().getId());
     return "teammember/salesman_list";
   }
+  
   /**
    * 
   * @Title: toAddTeamMembers 

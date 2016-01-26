@@ -97,7 +97,7 @@ public  class SalesManServiceImpl implements SalesManService {
         return cb.and(predicates.toArray(new Predicate[predicates.size()]));
       }  
         
-     }, new PageRequest(pageNum, 2));
+     }, new PageRequest(pageNum, 10));
   
   }
 

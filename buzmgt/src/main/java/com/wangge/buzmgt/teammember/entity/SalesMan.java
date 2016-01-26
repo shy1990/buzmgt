@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.teammember.entity;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -17,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -90,6 +92,19 @@ public class SalesMan implements Serializable {
 	private String mobile;
 	@Temporal(TemporalType.DATE)
 	private Date regdate;
+	
+	@Transient
+	private String percent;
+	  
+	public void addPercent(double baiy, double baiz) {
+	     if(baiy > 0 && baiz > 0){
+	       NumberFormat nf = NumberFormat.getPercentInstance();
+	       this.percent = nf.format(baiy / baiz);
+	     }else{
+	       this.percent = "0%";
+	     }
+	    
+	   }
 
 	public SalesMan() {
 		super();
@@ -187,4 +202,12 @@ public class SalesMan implements Serializable {
     this.regdate = regdate;
   }
 
+  public String getPercent() {
+    return percent;
+  }
+
+  public void setPercent(String percent) {
+    this.percent = percent;
+  }
+  
 }
