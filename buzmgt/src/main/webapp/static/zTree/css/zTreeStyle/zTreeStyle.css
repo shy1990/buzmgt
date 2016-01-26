@@ -172,10 +172,10 @@
     background-position: -92px -207px;
 }
 .ztree li span.button.roots_open {
-    background-position: -92px 0;
+    background-position: -194px -165px;
 }
 .ztree li span.button.roots_close {
-    background-position: -74px 0;
+    background-position: -119px 0;
 }
 .ztree li span.button.center_open {
     background-position: -120px -277px;

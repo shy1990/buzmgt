@@ -27,9 +27,11 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public List<RegionTree> findTreeRegion(String id) {
     List<RegionTree> listRegionTree = new ArrayList<RegionTree>();
+    long start=System.currentTimeMillis();
     for (Region region : regionRepository.findOne(id).getChildren()) {
       listRegionTree.add(RegionUtil.getRegionTree(region));
     }
+    System.out.println(System.currentTimeMillis()-start);
     return listRegionTree;
   }
 	@Override

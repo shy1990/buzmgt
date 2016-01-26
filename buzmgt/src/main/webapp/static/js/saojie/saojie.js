@@ -1,29 +1,29 @@
-//$(function() {
-//		var value = document.getElementById("saojieMan").value;
-//   	     if(value == null || value == ""){
-//   	     	$.ajax({
-//			type:"post",
-//			url:"/saojie/gainSaojieMan",
-//			//data:formValue,
-//			dataType:"JSON",
-//			success : function(obj){
-//				if (obj) {
-//					var saojieMan = $("#saojieMan");
-//					saojieMan.empty();
-//					saojieMan.append("<option value='' selected='selected'>待扫街人员</option>");
-//                    for(var i=0;i<obj.length;i++){
-//                    	saojieMan.append("<option value = '"+obj[i].id+"'>"+obj[i].truename+"</option>");
+$(function() {
+		var value = document.getElementById("saojieMan").value;
+   	     if(value == null || value == ""){
+   	     	$.ajax({
+			type:"post",
+			url:"/saojie/gainSaojieMan",
+			//data:formValue,
+			dataType:"JSON",
+			success : function(obj){
+				if (obj) {
+					var saojieMan = $("#saojieMan");
+					saojieMan.empty();
+					saojieMan.append("<option value='' selected='selected'>待扫街人员</option>");
+                    for(var i=0;i<obj.length;i++){
+                    	saojieMan.append("<option value = '"+obj[i].id+"'>"+obj[i].truename+"</option>");
+					}
+				}else {
+//					alert(obj.length);
+//					for(var i=0;i<obj.length;i++){
+//						alert(obj[i].name);
 //					}
-//				}else {
-////					alert(obj.length);
-////					for(var i=0;i<obj.length;i++){
-////						alert(obj[i].name);
-////					}
-//				};
-//		 }
-//		});
-//   	     }
-//});
+				};
+		 }
+		});
+   	     }
+});
 
 var strtown;
 function queryTown(){
