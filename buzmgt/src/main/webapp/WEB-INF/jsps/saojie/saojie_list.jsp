@@ -55,7 +55,7 @@
 		<div class="row">
 			<div class="col-md-9">
 				<!--box-->
-				<div class="team-member-body box border red">
+				<div class="team-member-body box border blue">
 					<!--title-->
 					<div class="box-title">
 						<div class="row">

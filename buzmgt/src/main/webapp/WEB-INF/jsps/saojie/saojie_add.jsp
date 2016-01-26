@@ -34,7 +34,7 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<div class="member-add-box box border red">
+				<div class="member-add-box box border blue">
 					<div class="box-title">
 						<i class="icon member-add-icon"></i>添加
 					</div>
