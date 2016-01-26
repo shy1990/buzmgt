@@ -30,12 +30,10 @@
 		<h4 class="team-member-header page-header">
 			<i class="icon team-member-list-icon"></i>团队成员
 			<!--区域选择按钮-->
-				<button type="button" class="btn btn-default" onclick="getRegion(${regionId});">
-					<i class="icon province-icon"></i>${regionName}
-				</button>
+			<div class="area-choose">选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;" onclick="getRegion(${regionId});">切换</a> </div>
 			<!--/区域选择按钮-->
-			<a href="/teammember/toAdd" class="btn btn-warning " type="button">
-				<i class="icon icon-add"></i>添加成员
+			<a href="/teammember/toAdd" class="btn btn-blue" type="button">
+				<i class="ico icon-add"></i>添加成员
 			</a>
 				<small class="header-text">共<span class="text-red">${list.totalElements}</span>位成员
 				</small> <small style="display: none" class="header-text sr-only">今日新增<span class="text-red">
@@ -44,7 +42,7 @@
 		<div class="row">
 			<div class="col-md-9">
 				<!--box-->
-				<div class="team-member-body box border red">
+				<div class="team-member-body box border blue">
 					<!--title-->
 					<div class="box-title">
 						<div class="row">
@@ -66,7 +64,7 @@
 											class="hidden-inline-mobile">开发中</span></a></li>
 									<li title="已转正"><a title="已转正" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name,${regionId});"
-										data-toggle="tab"><i class="fa fa-calendar-o"></i> <span
+										data-toggle="tab"><i class="fa fa-check"></i> <span
 											class="hidden-inline-mobile">已转正</span></a></li>
 								</ul>
 								<!--/菜单栏-->
