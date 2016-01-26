@@ -14,6 +14,8 @@
 <link rel="stylesheet" type="text/css" href="../static/css/common.css" />
 <link rel="stylesheet" type="text/css"
 	href="../static/saojie/saojie.css" />
+<link href="/static/CloudAdmin/font-awesome/css/font-awesome.css"
+	rel="stylesheet">
 <script src="../static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
@@ -35,13 +37,11 @@
 				<h4 class="team-member-header page-header ">
 					<div class="row">
 						<div class="col-sm-12">
-							<i class="icon team-member-list-icon"></i>扫街设置
+							<i class="icon icon-saojie-list"></i>扫街设置
 							<!--区域选择按钮-->
-							<button type="button" class="btn btn-default" onclick="getRegion(${regionId});">
-								<i class="icon province-icon"></i>${regionName}
-							</button>
+							<div class="area-choose">选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;" onclick="getRegion(${regionId});">切换</a> </div>
 							<!--/区域选择按钮-->
-							<button class="btn btn-warning member-add-btn" type="button"
+							<button class="btn btn-blue member-add-btn" type="button"
 								onclick="javascript:window.location.href='/saojie/toAdd'">
 								<i class="icon icon-add"></i>添加扫街
 							</button>
@@ -59,7 +59,8 @@
 					<!--title-->
 					<div class="box-title">
 						<div class="row">
-							<div class="col-sm-7 col-md-5">
+							
+							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<input type="hidden" name="" value="${saojieStatus}"
 									id="addClass" />
@@ -80,15 +81,17 @@
 								</ul>
 								<!--/菜单栏-->
 							</div>
-							<div
-								class="col-sm-4 col-md-3 col-lg-2 col-md-offset-4 col-lg-offset-5">
+							<div class="col-sm-4 col-md-3 col-md-offset-3 ">
 								<div class="form-group title-form">
+									<form action="/salesman/getSalesManList">
 									<div class="input-group ">
-										<input type="text" class="form-control" placeholder="请输入名称或工号"
-											id="param"> <span class="input-group-addon"
-											id="goSearch" onclick="getSaojieList(this.value,this.id);"><i
-											class="icon icon-finds"></i></span>
+										<input type="text" class="form-control" name="truename" id="param"
+											placeholder="请输入名称或工号"> <a type="sumbit"
+											class="input-group-addon" id="goSearch"
+											onclick="getList(this.value,this.id)"><i
+											class="icon icon-finds"></i></a>
 									</div>
+									</form>
 								</div>
 							</div>
 						</div>
