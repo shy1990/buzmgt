@@ -155,7 +155,7 @@ public class SaojieController {
 	    sj.setSalesman(saojie.getSalesman());
 	    saojieService.saveSaojie(sj);
 	  }
-	  return "redirect:/saojie/saojie_list";
+	  return "redirect:/saojie/saojieList";
 	}
 	
 	@RequestMapping("/toSaojieInstall")
