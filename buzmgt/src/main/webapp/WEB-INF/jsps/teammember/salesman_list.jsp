@@ -160,10 +160,10 @@
 																<c:choose>
 																	<c:when test="${list.number == s-1 }">
 																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
@@ -173,10 +173,10 @@
 																<c:choose>
 																	<c:when test="${list.number == s-1 }">
 																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
@@ -190,10 +190,10 @@
 																<c:choose>
 																	<c:when test="${list.number == s-1 }">
 																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
@@ -207,16 +207,16 @@
 																<c:choose>
 																	<c:when test="${list.number == s-1 }">
 																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
 														</c:if>
 														<li><a
-															href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
+															href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}','${regionId}')">&raquo;</a></li>
 													</ul>
 												</div>
 											</c:if>
