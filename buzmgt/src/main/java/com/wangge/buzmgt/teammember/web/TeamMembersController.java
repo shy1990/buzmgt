@@ -187,7 +187,7 @@ public class TeamMembersController {
   * @throws
    */
   @RequestMapping(value = "/getSalesManList",method=RequestMethod.GET)
-  public  String  getSalesManList(Model model,SalesMan salesman, String Status,String page,String regionid,String regionName, HttpServletRequest requet){
+  public  String  getSalesManList(Model model,SalesMan salesman, String Status,String page,String regionId,String regionName, HttpServletRequest requet){
         String name = Status != null ? Status : "扫街中";
         int pageNum = Integer.parseInt(page != null ? page : "0");
         if(SalesmanStatus.SAOJIE.getName().equals(name) ){
@@ -202,8 +202,8 @@ public class TeamMembersController {
           salesman.setSalesmanStatus(SalesmanStatus.SHENHE);
         }
         Region region=new Region();
-        if(null!=regionid){
-          region =regionService.getRegionById(regionid);
+        if(null!=regionId){
+          region =regionService.getRegionById(regionId);
           salesman.setRegion(region);
           if(null!=region.getCoordinates()){
             model.addAttribute("pcoordinates", region.getCoordinates());

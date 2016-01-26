@@ -65,7 +65,7 @@ public class Region implements Serializable {
 	@JoinColumn(name = "PARENT_ID")
 	private Region parent;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
 	private Collection<Region> children;
 
 	public String getId() {

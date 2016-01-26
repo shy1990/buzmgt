@@ -1,7 +1,7 @@
 
-function getPageList(num){
-	
-	window.location.href="/teammember/getSalesManList?page="+num
+function getPageList(num,regionId){
+	alert(regionId);
+	window.location.href="/teammember/getSalesManList?page="+num+"&regionId="+regionId
 }
 
 function getList(param,name,regionId){
