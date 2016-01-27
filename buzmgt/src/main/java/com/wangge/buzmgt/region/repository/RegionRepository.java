@@ -17,5 +17,7 @@ public interface RegionRepository extends JpaRepository<Region, String> {
 
  // public List<String> findAll(Iterator<String> ids);
 
+  public List<Region> findAll(Iterator<String> string);
+
 
 }

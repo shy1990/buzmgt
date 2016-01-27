@@ -15,13 +15,18 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.repository.SaojieRepository;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesMan.SalesmanStatus;
+import com.wangge.buzmgt.teammember.entity.SalesManInfo;
+import com.wangge.buzmgt.teammember.entity.SalesManVo;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 
 @Service
@@ -29,6 +34,8 @@ public  class SalesManServiceImpl implements SalesManService {
 
 	@Resource
 	private SalesManRepository salesManRepository;
+	@Resource
+	private SaojieRepository SaojieRepository;
 	/*
 	* <p>Title: addSalesman</p> 
 	* <p>Description: 添加一条业务员数据</p> 
@@ -97,9 +104,10 @@ public  class SalesManServiceImpl implements SalesManService {
         return cb.and(predicates.toArray(new Predicate[predicates.size()]));
       }  
         
-     }, new PageRequest(pageNum, 10));
+     }, new PageRequest(pageNum, 10,new Sort(Sort.Direction.DESC)));
   
   }
+  
 
   @Override
   public SalesMan getSalesmanByUserId(String userId) {

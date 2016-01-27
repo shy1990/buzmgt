@@ -93,19 +93,6 @@ public class SalesMan implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date regdate;
 	
-	@Transient
-	private String percent;
-	  
-	public void addPercent(double baiy, double baiz) {
-	     if(baiy > 0 && baiz > 0){
-	       NumberFormat nf = NumberFormat.getPercentInstance();
-	       this.percent = nf.format(baiy / baiz);
-	     }else{
-	       this.percent = "0%";
-	     }
-	    
-	   }
-
 	public SalesMan() {
 		super();
 	}
@@ -202,12 +189,5 @@ public class SalesMan implements Serializable {
     this.regdate = regdate;
   }
 
-  public String getPercent() {
-    return percent;
-  }
-
-  public void setPercent(String percent) {
-    this.percent = percent;
-  }
   
 }

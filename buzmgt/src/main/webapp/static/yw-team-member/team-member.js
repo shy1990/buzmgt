@@ -46,15 +46,50 @@ $(function(){
 //		//$('.j_district').click();//反选
 //	});
 
-
+	getList()
 
 	//getList(param)
-	var status = $("#status").val();
+	//var status = $("#status").val();
 	/*if(status == null ||  "".equals(status)){
 		status = "扫街中";
 	}*/
-	$(" li[title = '"+status+"']").addClass('active');
+	//$(" li[title = '"+status+"']").addClass('active');
 });
+
+function getList(){
+	/*var userId = $("#userId").html();
+	var regionId = $("#regionId").val();*/
+	$.ajax({
+		type:"post",
+		url:"/teammember/getSalesManList",
+		//data:formValue,
+		dataType:"JSON",
+		data :{
+			"page" : userId,
+			"jobNum" : regionId,
+			"truename" : regionId,
+			"Status" : regionId
+			
+		},
+		success : function(result){
+		   if (result) {
+			   alert(result.number);
+			  /* var saojiedata = $("#saojiedata");  
+			   saojiedata.empty();  
+			   for(var i = 0;i<result.list.length;i++){
+				   saojiedata.append("<div  class='list-tr'>"+
+							"<img class='shop-img' src='"+result.list[i].imageUrl+"' />"+
+							"<div style='display: inline-block;' class='list-conter'>"+
+								"<h4>"+result.list[i].name+"</h4>"+
+								"<p>"+result.list[i].discription+"</p>"+
+								"<span class='pull-right'>"+result.list[i].saojieDate+"</span>"+
+							"</div>"+
+						"</div>     ");
+			   }
+			  */
+			}
+		}
+	});
 
 var myDate = new Date();
 var tody = changeDateToString(myDate);
