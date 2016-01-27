@@ -187,7 +187,7 @@ public class SaojieController {
 	    saojieService.saveSaojie(sj);
 	  }
 	  
-	  return "redirect:/saojie/saojie_list";
+	  return "redirect:/saojie/saojieList";
 	}
 	
 	@RequestMapping("/toSaojieInstall")

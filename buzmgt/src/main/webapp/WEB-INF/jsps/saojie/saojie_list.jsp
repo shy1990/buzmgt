@@ -299,7 +299,10 @@
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
 	<script type="text/javascript">
-		<%String areaname = request.getAttribute("regionName").toString();
+		<%String areaname = null;
+	    if (null != request.getAttribute("regionName")) {
+	      areaname = request.getAttribute("regionName").toString();
+	    }
 		String parentid = null;
 		if (null != request.getAttribute("parentid")) {
 			parentid = request.getAttribute("parentid").toString();
