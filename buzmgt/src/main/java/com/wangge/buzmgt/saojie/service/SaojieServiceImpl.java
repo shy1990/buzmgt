@@ -101,9 +101,11 @@ public class SaojieServiceImpl implements SaojieService {
         String hql = "select t.* from SYS_SAOJIE t where t.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
         Query q = em.createNativeQuery(hql,Saojie.class);  
-        q.setFirstResult(0);  
+       int count=q.getResultList().size();
+        q.setFirstResult(pageNum* 7);
         q.setMaxResults(7);
-        Page<Saojie> page = new PageImpl<Saojie>(q.getResultList(),new PageRequest(0,7),q.getFirstResult());   
+        
+        Page<Saojie> page = new PageImpl<Saojie>(q.getResultList(),new PageRequest(pageNum,7),count);   
         return page;  
 }
   
