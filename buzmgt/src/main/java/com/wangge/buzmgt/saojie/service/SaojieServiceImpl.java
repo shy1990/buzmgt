@@ -99,7 +99,7 @@ public class SaojieServiceImpl implements SaojieService {
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
     
         String hql = "select t.* from SYS_SAOJIE t where t.region_id in"
-            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
+            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
         Query q = em.createNativeQuery(hql,Saojie.class);  
        int count=q.getResultList().size();
         q.setFirstResult(pageNum* 7);
