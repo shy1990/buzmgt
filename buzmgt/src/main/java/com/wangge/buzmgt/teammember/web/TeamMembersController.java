@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
@@ -78,13 +79,14 @@ public class TeamMembersController {
   @RequestMapping("/salesManList")
   public String toTeamMembers(String salesManList, String Status, Model model,SalesMan salesman){
     int pageNum = 0;
-    Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum);
+    Subject subject = SecurityUtils.getSubject();
+    User user=(User) subject.getPrincipal();
+    Manager manager = managerService.getById(user.getId());
+    Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum,manager.getRegion().getName(),null);
     model.addAttribute("list", list);
     model.addAttribute("Status", "扫街中");
     model.addAttribute("salesManList", salesManList);
-    Subject subject = SecurityUtils.getSubject();
-     User user=(User) subject.getPrincipal();
-     Manager manager = managerService.getById(user.getId());
+    
      if(null!=manager.getRegion().getCoordinates()){
        model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
      }
@@ -92,6 +94,7 @@ public class TeamMembersController {
      model.addAttribute("regionId", manager.getRegion().getId());
     return "teammember/salesman_list";
   }
+  
   /**
    * 
   * @Title: toAddTeamMembers 
@@ -220,13 +223,13 @@ public class TeamMembersController {
          model.addAttribute("regionName", region.getName());
          model.addAttribute("regionId", region.getId());
        }
-      
-    Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum);
+       StringBuilder jpql = new StringBuilder();
+       if((salesman.getTruename()!=null && !"".equals(salesman.getTruename())) || (salesman.getJobNum()!= null && !"".equals(salesman.getJobNum()))){
+         jpql.append("t.truename = ?1 or t.job_num = ?1");
+       }
+    Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum,region.getName(),jpql.toString());
     model.addAttribute("list", list);
     model.addAttribute("Status", Status);
-//    Subject subject = SecurityUtils.getSubject();
-//    User user=(User) subject.getPrincipal();
-//    Manager manager = managerService.getById(user.getId());
     return "teammember/salesman_list";
   }
   

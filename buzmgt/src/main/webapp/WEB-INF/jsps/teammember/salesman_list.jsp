@@ -76,7 +76,7 @@
 										<input type="text" class="form-control" name="truename" id="param"
 											placeholder="请输入名称或工号"> <a type="sumbit"
 											class="input-group-addon" id="goSearch"
-											onclick="getList(this.value,this.id)"><i
+											onclick="getList(this.value,this.id,${regionId})"><i
 											class="icon icon-finds"></i></a>
 									</div>
 									</form>
