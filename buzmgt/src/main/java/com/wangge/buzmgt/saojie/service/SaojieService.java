@@ -26,4 +26,6 @@ public interface SaojieService {
   
   int getRegionCount();
   SaojieDataVo getsaojieDataList(String userId, String regionId);
+  
+  int getOrderNumById(String id);
 }

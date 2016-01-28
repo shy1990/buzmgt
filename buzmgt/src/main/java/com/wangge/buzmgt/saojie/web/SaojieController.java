@@ -1,6 +1,6 @@
 package com.wangge.buzmgt.saojie.web;
 
-import java.lang.ProcessBuilder.Redirect;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -158,6 +158,14 @@ public class SaojieController {
 	  if(sm != null && !"".equals(sm)){
 	    list = regionService.findByRegion(sm.getRegion().getId());
 	  }
+	  Iterator<Region> regIter = list.iterator();
+	  while(regIter.hasNext()){
+	    Region region = regIter.next();
+	    Saojie saojie = saojieService.findByregion(region);
+	    if(saojie != null && region.getId().equals(saojie.getRegion().getId())){
+        regIter.remove();
+      }
+	  }
     return list;
 	}
 	
@@ -189,7 +197,7 @@ public class SaojieController {
 	    saojieService.saveSaojie(sj);
 	  }
 	  
-	  return "redirect:/saojie/saojie_list";
+	  return "redirect:/saojie/saojieList";
 	}
 	
 	@RequestMapping("/toSaojieInstall")
@@ -254,5 +262,13 @@ public class SaojieController {
     SalesMan sm = salesManService.findByUserId(id);
     String  regionName=sm.getRegion().getName();
     return regionName;
+  }
+	
+	@RequestMapping(value = "/getOrderNum",method = RequestMethod.POST)
+  @ResponseBody
+  public String getOrderNum(String id){
+    int orderNum = saojieService.getOrderNumById(id);
+    String order = String.valueOf(orderNum);
+    return order;
   }
 }

@@ -98,9 +98,19 @@ public class SaojieServiceImpl implements SaojieService {
   @Override
   @Transactional
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
-    
-        String hql = "select t.* from SYS_SAOJIE t where t.region_id in"
-            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
+        String hql = "select t.* from SYS_SAOJIE t ";
+        if(saojie.getSalesman() != null){
+         String serHql = "left join sys_salesman s on t.user_id = s.user_id where s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
+         hql += ""+serHql+" and t.region_id in"
+             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
+        }else{
+          hql += "where t.region_id in"
+              + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
+        }
+        if(saojie.getStatus() != null){
+          hql += " and t.saojie_status='"+saojie.getStatus().ordinal()+"'";
+        }
+        System.out.println("hql:"+hql);
         Query q = em.createNativeQuery(hql,Saojie.class);  
        int count=q.getResultList().size();
         q.setFirstResult(pageNum* 7);
@@ -172,6 +182,12 @@ public class SaojieServiceImpl implements SaojieService {
       sdv.addPercent(sdv.getList().size(),a);
     return sdv;
    
+  }
+
+  @Override
+  public int getOrderNumById(String id) {
+    int order = saojieRepository.getOrderNumById(id);
+    return order;
   }
 
  /* @Override
