@@ -29,8 +29,6 @@ import com.wangge.buzmgt.saojie.repository.SaojieRepository;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesMan.SalesmanStatus;
-import com.wangge.buzmgt.teammember.entity.SalesManInfo;
-import com.wangge.buzmgt.teammember.entity.SalesManVo;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 
 @Service
