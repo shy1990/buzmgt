@@ -13,7 +13,7 @@ public interface SaojieService {
 
   void saveSaojie(Saojie saojie);
 
-  Page<Saojie> getSaojieList(Saojie saojie,int pageNum);
+  Page<Saojie> getSaojieList(Saojie saojie,int pageNum,String regionName);
   
   List<Saojie> findBysalesman(SalesMan salesman);
   

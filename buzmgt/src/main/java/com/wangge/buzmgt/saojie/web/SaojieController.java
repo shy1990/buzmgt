@@ -52,17 +52,17 @@ public class SaojieController {
 	@RequestMapping("/saojieList")
 	public String saojieList(String saojieList, Model model,Saojie saojie){
 	  int pageNum = 0;
-    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
+	  Subject subject = SecurityUtils.getSubject();
+    User user=(User) subject.getPrincipal();
+    Manager manager = managerService.getById(user.getId());
+    if(null!=manager.getRegion().getCoordinates()){
+      model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
+    }
+    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,manager.getRegion().getName());
     int count = saojieService.getRegionCount();
     model.addAttribute("count",count);
     model.addAttribute("list", list);
 		model.addAttribute("saojieList", saojieList);
-		 Subject subject = SecurityUtils.getSubject();
-     User user=(User) subject.getPrincipal();
-     Manager manager = managerService.getById(user.getId());
-     if(null!=manager.getRegion().getCoordinates()){
-       model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
-     }
      model.addAttribute("regionName", manager.getRegion().getName());
      model.addAttribute("regionId", manager.getRegion().getId());
 		
@@ -110,12 +110,12 @@ public class SaojieController {
          model.addAttribute("regionId", region.getId());
        }
         
-    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
+    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,region.getName());
     model.addAttribute("list", list);
     model.addAttribute("saojieStatus",saojieStatus);
     int count = saojieService.getRegionCount();
     model.addAttribute("count",count);
-    return "saojie/saojie_list";
+    return   "saojie/saojie_list";
   }
 	
 	@RequestMapping("/toAdd")
@@ -265,8 +265,9 @@ public class SaojieController {
 	
 	@RequestMapping(value = "/getOrderNum",method = RequestMethod.POST)
   @ResponseBody
-  public int getOrderNum(String id){
+  public String getOrderNum(String id){
     int orderNum = saojieService.getOrderNumById(id);
-    return orderNum;
+    String order = String.valueOf(orderNum);
+    return order;
   }
 }

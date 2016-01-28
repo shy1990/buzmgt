@@ -245,7 +245,7 @@ function getSaojieList(param,name,regionId){
     }
 }
 
-function getPageList(num){
+function getPageList(num,regionId){
 	
-	window.location.href="/saojie/getSaojieList?page="+num;
+	window.location.href="/saojie/getSaojieList?page="+num+"&regionid="+regionId;
 }
