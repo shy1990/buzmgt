@@ -171,7 +171,7 @@
 										<div style="text-align: center; padding-bottom: 20px">
 											<ul class="pagination box-page-ul">
 												<li><a
-													href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}','${regionId}')">&laquo;</a></li>
+													href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">&laquo;</a></li>
 												<!-- 1.total<=7 -->
 												<c:if test="${list.totalPages<=7 }">
 													<c:forEach var="s" begin="1" end="${list.totalPages}"
@@ -179,10 +179,10 @@
 														<c:choose>
 															<c:when test="${list.number == s-1 }">
 																<li class="active"><a
-																	href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:when>
 															<c:otherwise>
-																<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																<li><a href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:otherwise>
 														</c:choose>
 													</c:forEach>
@@ -192,10 +192,10 @@
 														<c:choose>
 															<c:when test="${list.number == s-1 }">
 																<li class="active"><a
-																	href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:when>
 															<c:otherwise>
-																<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																<li><a href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:otherwise>
 														</c:choose>
 													</c:forEach>
@@ -209,10 +209,10 @@
 														<c:choose>
 															<c:when test="${list.number == s-1 }">
 																<li class="active"><a
-																	href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:when>
 															<c:otherwise>
-																<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																<li><a href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:otherwise>
 														</c:choose>
 													</c:forEach>
@@ -226,16 +226,16 @@
 														<c:choose>
 															<c:when test="${list.number == s-1 }">
 																<li class="active"><a
-																	href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:when>
 															<c:otherwise>
-																<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																<li><a href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:otherwise>
 														</c:choose>
 													</c:forEach>
 												</c:if>
 												<li><a
-													href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}','${regionId}')">&raquo;</a></li>
+													href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">&raquo;</a></li>
 											</ul>
 										</div>
 									</c:if>
