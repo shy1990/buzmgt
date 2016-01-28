@@ -1,11 +1,9 @@
 
 function getPageList(num,regionId){
-	alert(regionId);
 	window.location.href="/teammember/getSalesManList?page="+num+"&regionId="+regionId
 }
 
 function getList(param,name,regionId){
-	alert(regionId);
     if(name == "goSearch"){
     	var value = $("#param").val();
     	window.location.href="/teammember/getSalesManList?truename="+value+"&jobNum="+value+"&regionId="+regionId
