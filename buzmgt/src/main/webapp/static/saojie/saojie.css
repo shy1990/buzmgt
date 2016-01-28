@@ -518,33 +518,6 @@ fieldset[disabled] .btn-white:hover {
 	color: #8B91A0
 }
 
-.pagination>.active>a,
-.pagination>.active>a:focus,
-.pagination>.active>a:hover,
-.pagination>.active>span,
-.pagination>.active>span:focus,
-.pagination>.active>span:hover {
-	background-color: #f4f4f4;
-	border-color: #DDD;
-	color: inherit;
-	cursor: default;
-	z-index: 2
-}
-.pagination>li>a,
-.pagination>li>span {
-	background-color: #FFF;
-	border: 1px solid #DDD;
-	color: inherit;
-	float: left;
-	line-height: 1.42857;
-	margin-left: -1px;
-	padding: 4px 10px;
-	position: relative;
-	text-decoration: none
-}
-
-
-
 .img-circle {
 	border-radius: 50%
 }
@@ -1290,4 +1263,18 @@ ul, ol {
 }
 .team-member-body .tab-content{
 	background: #FFF;
+}
+
+/* 鍒嗛〉 */
+.box-page-ul>li>a,.box-page-ul.>li>span{
+/* 	color: #D9544F; */
+}
+.box-page-ul >.active>a,
+.box-page-ul >.active>a:focus, 
+.box-page-ul >.active>a:hover, 
+.box-page-ul >.active>span, 
+.box-page-ul >.active>span:focus,
+.box-page-ul >.active>span:hover{
+	background: #3894C7;
+	border-color: #3894C7; 
 }

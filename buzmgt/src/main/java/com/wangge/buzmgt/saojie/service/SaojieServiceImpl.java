@@ -140,6 +140,11 @@ public class SaojieServiceImpl implements SaojieService {
    
   }
 
+  @Override
+  public int getOrderNumById(String id) {
+    return saojieRepository.getOrderNumById(id);
+  }
+
  /* @Override
   public List<SaojieData> getsaojieDataList(String userId) {
    Saojie s = saojieRepository.findBySalesmanUserId(userId);
