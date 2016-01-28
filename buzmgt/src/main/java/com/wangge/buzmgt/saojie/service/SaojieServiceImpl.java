@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.entity.SaojiePage;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
@@ -120,8 +121,6 @@ public class SaojieServiceImpl implements SaojieService {
 }
   
   
-  
-
   @Override
   public List<Saojie> findBysalesman(SalesMan salesman) {
     return saojieRepository.findBysalesmanOrderByOrderAsc(salesman);
