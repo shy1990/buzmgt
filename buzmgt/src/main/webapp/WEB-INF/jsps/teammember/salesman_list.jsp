@@ -305,7 +305,10 @@
        $(document).ready(function(){$("#loading-example-btn").click(function(){btn=$(this);simpleLoad(btn,true);simpleLoad(btn,false)})});function simpleLoad(btn,state){if(state){btn.children().addClass("fa-spin");btn.contents().last().replaceWith(" Loading")}else{setTimeout(function(){btn.children().removeClass("fa-spin");btn.contents().last().replaceWith(" Refresh")},2000)}};
     </script>-->
       <script type="text/javascript">
-	<%String areaname = request.getAttribute("regionName").toString();
+	<%String areaname = null;
+	  if (null != request.getAttribute("regionName")) {
+	    areaname = request.getAttribute("regionName").toString();
+	  }
 		String parentid = null;
 		if (null != request.getAttribute("parentid")) {
 			parentid = request.getAttribute("parentid").toString();

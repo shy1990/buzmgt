@@ -45,7 +45,7 @@
 								onclick="javascript:window.location.href='/saojie/toAdd'">
 								<i class="icon icon-add"></i>添加扫街
 							</button>
-							<small class="header-text">共<span class="text-red">203</span>个区域
+							<small class="header-text">共<span class="text-red">${count }</span>个区域
 							</small>
 							<!-- <small class="header-text">今日新增<span class="text-red"> 0 +</span></small> -->
 						
@@ -83,16 +83,14 @@
 							</div>
 							<div class="col-sm-4 col-md-3 col-md-offset-3 ">
 								<div class="form-group title-form">
-									<form action="/salesman/getSalesManList">
-									<div class="input-group ">
-										<input type="text" class="form-control" name="truename" id="param"
-											placeholder="请输入名称或工号"> <a type="sumbit"
-											class="input-group-addon" id="goSearch"
-											onclick="getList(this.value,this.id)"><i
-											class="icon icon-finds"></i></a>
-									</div>
-									</form>
-								</div>
+											<div class="input-group ">
+												<input type="text" class="form-control"
+													placeholder="请输入名称或工号" id="param"> <span
+													class="input-group-addon" id="goSearch"
+													onclick="getSaojieList(this.value,this.id,${regionId});"><i
+													class="icon icon-finds"></i></span>
+											</div>
+										</div>
 							</div>
 						</div>
 						<!--<div class="title-form input-group ">
@@ -299,7 +297,10 @@
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
 	<script type="text/javascript">
-		<%String areaname = request.getAttribute("regionName").toString();
+		<%String areaname = null;
+	    if (null != request.getAttribute("regionName")) {
+	      areaname = request.getAttribute("regionName").toString();
+	    }
 		String parentid = null;
 		if (null != request.getAttribute("parentid")) {
 			parentid = request.getAttribute("parentid").toString();
