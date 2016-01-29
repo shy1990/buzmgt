@@ -137,13 +137,11 @@
 .team-member-header .btn-group{
 	margin-left: 15px;
 }
-/*添加成员按钮*/
-.member-add-btn{
-	margin-left: 10px;
-}
+
 /*small 文本内容*/
 .header-text{
 	position: relative;
+	top: 8px;
 	height: 20px;
 	line-height: 20px;
 	margin-left: 15px;

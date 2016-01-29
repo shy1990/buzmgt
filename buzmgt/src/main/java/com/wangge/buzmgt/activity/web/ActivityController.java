@@ -64,6 +64,7 @@ public class ActivityController {
   @RequestMapping(value="/upload")
   @ResponseBody
   public String addUser( @RequestParam MultipartFile[] myfiles, HttpServletRequest request){
+
     
      // String realPath = "D:/upload/";
         String realPath = "http://imagetest.3j168.cn/uploadfile/";

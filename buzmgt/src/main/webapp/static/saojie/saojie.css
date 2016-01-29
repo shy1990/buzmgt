@@ -154,12 +154,10 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 } */
 .box-map{
 	min-height: 622px;
-	padding: 26px 50px;
 	background: #FFF;
 	border-radius: 5px;
 	padding-top: 36px;
 	border: 1px solid red;
-	margin: 0px 20px 30px 70px;
 }
 .saojie-phone{
 	width: 8%;
@@ -1026,10 +1024,10 @@ dd.project-people {
 	background:url(../img/saojie/sjwc.png) no-repeat;
 }
 .project-completion {
-	width: 30%;
+	min-width: 200px;
 }
 .project-completion .completion-ing{
-	padding: .3em 2em;
+	padding: .3em 0 .3em 2em;
 	background:url(../img/saojie/ywzb.png) no-repeat;
 }
 .time-down {
