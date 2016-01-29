@@ -33,9 +33,7 @@ function queryTown(){
 		for(var l=1;l<=intLen;l++){
 			var selOrder=$("div[id='selOrder"+ l +"']");
 			var order=selOrder[0];
-			 console.info(order);
 			order.parentNode.removeChild(order);
-//			orderNum="";
 		}
 	}
 	var userId = document.getElementById("saojieMan").value;
