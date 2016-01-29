@@ -295,7 +295,10 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .icon-saojie-add{
 	background-image: url(../img/saojie/saojie-add.png); 
 }
-
+/*添加成员按钮*/
+.member-add-btn{
+	margin-left: 20px;
+}
 
 
 

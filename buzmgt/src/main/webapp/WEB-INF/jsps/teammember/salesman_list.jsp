@@ -244,7 +244,7 @@
 			</div>
 			<div class="col-md-3 ">
 				<!--box-->
-				<div class="member-district box border gray">
+				<div class="member-district box border red">
 					<!--title-->
 					<div class="box-title">
 						<i class="icon icon-district"></i>区域
