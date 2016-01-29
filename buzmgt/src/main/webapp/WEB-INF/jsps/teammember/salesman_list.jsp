@@ -30,12 +30,10 @@
 		<h4 class="team-member-header page-header">
 			<i class="icon team-member-list-icon"></i>团队成员
 			<!--区域选择按钮-->
-				<button type="button" class="btn btn-default" onclick="getRegion(${regionId});">
-					<i class="icon province-icon"></i>${regionName}
-				</button>
+			<div class="area-choose">选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;" onclick="getRegion(${regionId});">切换</a> </div>
 			<!--/区域选择按钮-->
-			<a href="/teammember/toAdd" class="btn btn-warning " type="button">
-				<i class="icon icon-add"></i>添加成员
+			<a href="/teammember/toAdd" class="btn btn-blue" type="button">
+				<i class="ico icon-add"></i>添加成员
 			</a>
 				<small class="header-text">共<span class="text-red">${list.totalElements}</span>位成员
 				</small> <small style="display: none" class="header-text sr-only">今日新增<span class="text-red">
@@ -44,29 +42,29 @@
 		<div class="row">
 			<div class="col-md-9">
 				<!--box-->
-				<div class="team-member-body box border red">
+				<div class="team-member-body box border blue">
 					<!--title-->
 					<div class="box-title">
 						<div class="row">
 							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<ul class="nav nav-tabs">
-									<input id="status" type="hidden" value="${Status}">
+									<input id="status" type="hidden" value="${Status},">
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,${regionId});"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
 											class="hidden-inline-mobile">扫街中</span></a></li>
 									<li title="考核中"><a title="考核中" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,${regionId});"
 										data-toggle="tab"><i class="fa fa-laptop"></i> <span
 											class="hidden-inline-mobile">考核中</span></a></li>
 									<li title="开发中"><a title="开发中" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,${regionId});"
 										data-toggle="tab"><i class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">开发中</span></a></li>
 									<li title="已转正"><a title="已转正" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
-										data-toggle="tab"><i class="fa fa-calendar-o"></i> <span
+										href="" onclick="getList(this.title,this.name,${regionId});"
+										data-toggle="tab"><i class="fa fa-check"></i> <span
 											class="hidden-inline-mobile">已转正</span></a></li>
 								</ul>
 								<!--/菜单栏-->
@@ -78,7 +76,7 @@
 										<input type="text" class="form-control" name="truename" id="param"
 											placeholder="请输入名称或工号"> <a type="sumbit"
 											class="input-group-addon" id="goSearch"
-											onclick="getList(this.value,this.id)"><i
+											onclick="getList(this.value,this.id,${regionId})"><i
 											class="icon icon-finds"></i></a>
 									</div>
 									</form>
@@ -118,7 +116,7 @@
 																<td class="project-title"><span class="l-h">大桥镇：<strong
 																		class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
 																		class="shop-num-d">10家</strong></span></td>
-																<td class="project-completion col-md-5 col-sm-2">
+																<td class="project-completion">
 																	<span class="completion-ing">当前进度： 88%</span> 
 																	<span class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
 																	<div class="progress progress-mini">
@@ -152,7 +150,7 @@
 												<div style="text-align: center;padding-bottom: 20px" >
 													<ul class="pagination box-page-ul">
 														<li><a
-															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}','${regionId}')">&laquo;</a></li>
 														<!-- 1.total<=7 -->
 														<c:if test="${list.totalPages<=7 }">
 															<c:forEach var="s" begin="1" end="${list.totalPages}"
@@ -160,10 +158,10 @@
 																<c:choose>
 																	<c:when test="${list.number == s-1 }">
 																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
@@ -173,10 +171,10 @@
 																<c:choose>
 																	<c:when test="${list.number == s-1 }">
 																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
@@ -190,10 +188,10 @@
 																<c:choose>
 																	<c:when test="${list.number == s-1 }">
 																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
@@ -207,16 +205,16 @@
 																<c:choose>
 																	<c:when test="${list.number == s-1 }">
 																		<li class="active"><a
-																			href="javascript:getPageList('${s-1}')">${s}</a></li>
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
+																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
 														</c:if>
 														<li><a
-															href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
+															href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}','${regionId}')">&raquo;</a></li>
 													</ul>
 												</div>
 											</c:if>
@@ -246,7 +244,7 @@
 			</div>
 			<div class="col-md-3 ">
 				<!--box-->
-				<div class="member-district box border gray">
+				<div class="member-district box border red">
 					<!--title-->
 					<div class="box-title">
 						<i class="icon icon-district"></i>区域
@@ -307,7 +305,10 @@
        $(document).ready(function(){$("#loading-example-btn").click(function(){btn=$(this);simpleLoad(btn,true);simpleLoad(btn,false)})});function simpleLoad(btn,state){if(state){btn.children().addClass("fa-spin");btn.contents().last().replaceWith(" Loading")}else{setTimeout(function(){btn.children().removeClass("fa-spin");btn.contents().last().replaceWith(" Refresh")},2000)}};
     </script>-->
       <script type="text/javascript">
-	<%String areaname = request.getAttribute("regionName").toString();
+	<%String areaname = null;
+	  if (null != request.getAttribute("regionName")) {
+	    areaname = request.getAttribute("regionName").toString();
+	  }
 		String parentid = null;
 		if (null != request.getAttribute("parentid")) {
 			parentid = request.getAttribute("parentid").toString();

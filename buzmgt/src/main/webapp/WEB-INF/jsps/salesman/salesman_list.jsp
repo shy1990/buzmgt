@@ -44,7 +44,7 @@
 		<div class="row">
 			<div class="col-md-9">
 				<!--box-->
-				<div class="team-member-body box border red">
+				<div class="team-member-body box border blue">
 					<!--title-->
 					<div class="box-title">
 						<div class="row">
@@ -53,19 +53,19 @@
 								<ul class="nav nav-tabs">
 									<input id="status" type="hidden" value="${Status}">
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,'${regionId}');"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
 											class="hidden-inline-mobile">扫街中</span></a></li>
 									<li title="考核中"><a title="考核中" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,'${regionId}');"
 										data-toggle="tab"><i class="fa fa-laptop"></i> <span
 											class="hidden-inline-mobile">考核中</span></a></li>
 									<li title="开发中"><a title="开发中" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,'${regionId}');"
 										data-toggle="tab"><i class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">开发中</span></a></li>
 									<li title="已转正"><a title="已转正" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,'${regionId}');"
 										data-toggle="tab"><i class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">已转正</span></a></li>
 								</ul>

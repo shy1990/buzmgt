@@ -15,16 +15,17 @@
 		<link rel="stylesheet" type="text/css" href="static/saojie/saojie-det.css" />
 		<link rel="stylesheet" type="text/css" href="static/yw-team-member/ywmember.css" />
 		<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
 	</head>
 
 	<body>
 		<div class="content main">
 			<h4 class="team-member-header page-header ">
-				<div class="row">
-					<div class="col-sm-12">
-						<i class="icon icon-ywdet"></i>扫街明细
-					</div>
-				</div>
+				<i class="icon icon-ywdet"></i>扫街明细
+				<a href="/saojie/saojieList" class="btn btn-blue member-add-btn"
+				type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
+				返回列表
+			</a>
 			</h4>
 			<div class="row">
 				<div class="col-md-9">
@@ -64,8 +65,8 @@
 							<!--地图-->
 							<div class="saojie-map ">
 								<!--地图位置-->
-								<div style="height: 600px;" class="body-map">
-									<img src="static/img/saojie-map.png" />
+								<div style="height: 600px;" class="body-map" id="allmap">
+<!-- 									<img src="static/img/saojie-map.png" /> -->
 								</div>
 								<button class="btn btn-approve col-sm-2 col-sm-offset-5">审核通过</button>
 							</div>
@@ -192,6 +193,15 @@
 			<!-- Include all compiled plugins (below), or include individual files as needed -->
 			<script src="static/bootstrap/js/bootstrap.min.js"></script>
 			<script src="static/saojie/saojie-det.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript">
+			// 百度地图API功能
+			var map = new BMap.Map("allmap");    // 创建Map实例
+			map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+			map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+			map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+		</script>
+			
 	</body>
 
 </html>

@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.teammember.entity;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -17,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -77,7 +79,7 @@ public class SalesMan implements Serializable {
 	private String jobNum;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "region_id")
 	private Region region;
 
@@ -90,7 +92,7 @@ public class SalesMan implements Serializable {
 	private String mobile;
 	@Temporal(TemporalType.DATE)
 	private Date regdate;
-
+	
 	public SalesMan() {
 		super();
 	}
@@ -187,4 +189,5 @@ public class SalesMan implements Serializable {
     this.regdate = regdate;
   }
 
+  
 }

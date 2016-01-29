@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.saojie.web;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -19,6 +20,7 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
+import com.wangge.buzmgt.saojie.entity.SaojiePage;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
@@ -51,17 +53,17 @@ public class SaojieController {
 	@RequestMapping("/saojieList")
 	public String saojieList(String saojieList, Model model,Saojie saojie){
 	  int pageNum = 0;
-    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
+	  Subject subject = SecurityUtils.getSubject();
+    User user=(User) subject.getPrincipal();
+    Manager manager = managerService.getById(user.getId());
+    if(null!=manager.getRegion().getCoordinates()){
+      model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
+    }
+    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,manager.getRegion().getName());
     int count = saojieService.getRegionCount();
     model.addAttribute("count",count);
     model.addAttribute("list", list);
 		model.addAttribute("saojieList", saojieList);
-		 Subject subject = SecurityUtils.getSubject();
-     User user=(User) subject.getPrincipal();
-     Manager manager = managerService.getById(user.getId());
-     if(null!=manager.getRegion().getCoordinates()){
-       model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
-     }
      model.addAttribute("regionName", manager.getRegion().getName());
      model.addAttribute("regionId", manager.getRegion().getId());
 		
@@ -108,13 +110,17 @@ public class SaojieController {
          model.addAttribute("regionName", region.getName());
          model.addAttribute("regionId", region.getId());
        }
+       if(null != saojie.getSalesman()){
+         model.addAttribute("truename",saojie.getSalesman().getTruename());
+         model.addAttribute("jobNum",saojie.getSalesman().getJobNum());
+       }
         
-    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum);
+    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,region.getName());
     model.addAttribute("list", list);
     model.addAttribute("saojieStatus",saojieStatus);
     int count = saojieService.getRegionCount();
     model.addAttribute("count",count);
-    return "saojie/saojie_list";
+    return   "saojie/saojie_list";
   }
 	
 	@RequestMapping("/toAdd")
@@ -156,6 +162,14 @@ public class SaojieController {
 	  if(sm != null && !"".equals(sm)){
 	    list = regionService.findByRegion(sm.getRegion().getId());
 	  }
+	  Iterator<Region> regIter = list.iterator();
+	  while(regIter.hasNext()){
+	    Region region = regIter.next();
+	    Saojie saojie = saojieService.findByregion(region);
+	    if(saojie != null && region.getId().equals(saojie.getRegion().getId())){
+        regIter.remove();
+      }
+	  }
     return list;
 	}
 	
@@ -187,7 +201,7 @@ public class SaojieController {
 	    saojieService.saveSaojie(sj);
 	  }
 	  
-	  return "redirect:/saojie/saojie_list";
+	  return "redirect:/saojie/saojieList";
 	}
 	
 	@RequestMapping("/toSaojieInstall")
@@ -252,5 +266,13 @@ public class SaojieController {
     SalesMan sm = salesManService.findByUserId(id);
     String  regionName=sm.getRegion().getName();
     return regionName;
+  }
+	
+	@RequestMapping(value = "/getOrderNum",method = RequestMethod.POST)
+  @ResponseBody
+  public String getOrderNum(String id){
+    int orderNum = saojieService.getOrderNumById(id);
+    String order = String.valueOf(orderNum);
+    return order;
   }
 }

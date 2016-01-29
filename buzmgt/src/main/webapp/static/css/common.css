@@ -22,6 +22,7 @@ body{
 	min-height: 66px;
 	line-height: 66px;
 	padding-left: 26px ;
+	padding-bottom: 0;
 	margin-top: 0;
 	margin-left: -26px;
 	margin-right: -26px;
@@ -30,6 +31,7 @@ body{
 	font-size: 16px;
 	font-weight: bold;
 	background:#fff;
+	color: #5D5D5D;
 }
 a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	outline: 0;
@@ -272,6 +274,45 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	position: relative;
 	top:-1px;
 }
+/* 区域切换 */
+.area-choose{
+	display: inline-block;
+	margin-left: 30px;
+	margin-right: 20px;
+	font-size: 14px;
+}
+.area-choose>span{
+	font-weight: 400;
+}
+.are-line{
+	font-size: 12px;
+	font-weight: 400;
+}
+.icon-saojie-list{
+	background-image: url(../img/icon/saojie/saojieshehzi.png);
+	top: 5px; 
+}
+.icon-saojie-add{
+	background-image: url(../img/saojie/saojie-add.png); 
+}
+/*添加成员按钮*/
+.member-add-btn{
+	margin-left: 20px;
+}
+.saojie-add-box .box-body{
+	padding-top: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

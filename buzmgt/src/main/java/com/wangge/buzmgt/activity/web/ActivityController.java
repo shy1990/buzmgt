@@ -64,8 +64,10 @@ public class ActivityController {
   @RequestMapping(value="/upload")
   @ResponseBody
   public String addUser( @RequestParam MultipartFile[] myfiles, HttpServletRequest request){
-      String realPath = "/var/sanji/images/uploadfile/activityImg/";
-//      String realPath = "D:/upload/";
+
+    
+     // String realPath = "D:/upload/";
+        String realPath = "http://imagetest.3j168.cn/uploadfile/";
       String filename = UUID.randomUUID().toString() + ".jpg";// 构建文件名称
       
       String path = UploadUtil.saveFile(realPath, filename,myfiles[0]);
@@ -88,7 +90,8 @@ public class ActivityController {
     String mobiles = ad.selSalesmanByRegion(region);
     System.out.println(mobiles);
     try {
-      HttpUtil.sendPost("http://192.168.2.146:8082/v1/push/pushActivi", "msg={\"title\":\""+title+"\",\"content\":\""+content+"\",\"img\":\""+img+"\"}&mobiles="+mobiles+"");
+    //  HttpUtil.sendPost("http://192.168.2.146:8082/v1/push/pushActivi", "msg={\"title\":\""+title+"\",\"content\":\""+content+"\",\"img\":\""+img+"\"}&mobiles="+mobiles+"");
+      HttpUtil.sendPost("http://115.28.92.73:28503/v1/push/pushActivi", "msg={\"title\":\""+title+"\",\"content\":\""+content+"\",\"img\":\""+img+"\"}&mobiles="+mobiles+"");
       return "suc";  
     } catch (Exception e) {
       e.printStackTrace();

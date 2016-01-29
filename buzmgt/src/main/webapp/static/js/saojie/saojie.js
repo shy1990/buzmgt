@@ -26,13 +26,16 @@ $(function() {
 });
 
 var strtown;
+var orderNum="";
 function queryTown(){
 	var intLen = $("div[id^='selOrder']").length;
 	if (intLen > 0 ){
 		for(var l=1;l<=intLen;l++){
 			var selOrder=$("div[id='selOrder"+ l +"']");
 			var order=selOrder[0];
+			 console.info(order);
 			order.parentNode.removeChild(order);
+//			orderNum="";
 		}
 	}
 	var userId = document.getElementById("saojieMan").value;
@@ -50,7 +53,7 @@ function queryTown(){
 	        for(var i=0;i<obj.length;i++){
 	        	strtown+="<option value = '"+obj[i].id+"'>"+obj[i].name+"</option>";
 	        	if(null!=obj[i].coordinates){
-	        		 var points=new Array()
+	        		 var points=new Array();
 	        		for(var j=0;j<obj[i].coordinates.split("=").length;j++){
 	        			var lng=obj[i].coordinates.split("=")[j].split("-")[0];
 	        			var lat=obj[i].coordinates.split("=")[j].split("-")[1];
@@ -77,6 +80,14 @@ function queryTown(){
 	 			   map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 	 		   }
 	 	   });	
+	        $.ajax({
+		 		   type:"post",
+		 		   url:"/saojie/getOrderNum",
+		 		   data: {"id":userId},
+		 		   success : function(obj){
+		 			  orderNum=obj;
+		 		   }
+		 	   });	
 	}else {
 			//alert(obj.length);
 			//for(var i=0;i<obj.length;i++){
@@ -99,6 +110,7 @@ function AddOrder(btType) {
 	if (intLen == "undefined") intLen = 1;
 	if (intLen <= 30) {
 		intLen++;
+		orderNum++;
 		var intNewApp;
 		if (intLen != 1) {
 			var intAppId = $("div[id^='selOrder']:last").attr("id");
@@ -107,30 +119,30 @@ function AddOrder(btType) {
 		} else {
 			intNewApp = 1;
 		}
-		var order;
-		if (intLen < 10) {
-			order = "0" + intLen;
+		var order="";
+		if (orderNum < 10) {
+			order = "0" + orderNum;
 		} else {
-			order = intLen;
+			order = orderNum;
 		}
 		//					var arrName;
 		//					if (1 == 1) {
 		//						arrName = ["序号", "地区", "指标"];
 		//						alert(arrName);
 		//					}
-		var strApp = '<div class="col-sm-6 col-xs-4 p-n" id="selOrder' + intLen + '">\
-			  <div class="input-group col-sm-8 col-xs-4 ">\
-		<span class="input-group-btn" id="basic-addon1"><i class="order-icon saojie-number-icon"><input type="hidden" name="num" value="' + intLen + '"/>' + order + '</i></span>\
+		var strApp = '<div class="col-sm-6 p-n" id="selOrder' + orderNum + '">\
+			  	<div class="input-group col-sm-6 ">\
+				  <span class="input-group-btn" id="basic-addon1"><span class="order-icon saojie-number-icon"><input type="hidden" name="num" value="' + orderNum + '"/>' + order + '</span></span>\
 				  <select class="form-control" name="region.id" id="town">\
 				  ' + strtown + '\
 					</select>\
 				</div>\
-				<div class="col-sm-4 clear-padd-l">\
+				<div class="col-sm-6 clear-padd-l">\
 					<div class="input-group clear-padd-l">\
 						<span class="input-group-addon" id="basic-addon1"><i class="member-icon member-value-icon"></i></span>\
 						<input type="text" name="value" class="form-control" placeholder="指标(家)" id="minValue' + intNewApp + '">\
 					</div>\
-					<span id="delNode' + intLen + '" class="del-order glyphicon glyphicon-remove" onclick="delNode(selOrder' + intLen + ',' + order + ')"></span>\
+					<span id="delNode' + orderNum + '" class="del-order glyphicon glyphicon-remove" onclick="delNode(selOrder' + orderNum + ',' + intLen + ')"></span>\
 				</div>\
 			</div>';
 		$(btType).before(strApp);
@@ -145,6 +157,7 @@ function delNode(selOrder,order) {
 	if(intLen === order){
 		if (selOrder != null && selOrder != ''){
 			selOrder.parentNode.removeChild(selOrder);
+			orderNum--;
 		}
 	}else{
 		alert("请先删除序号最大项!");
@@ -225,16 +238,16 @@ function getAllSaojieList(){
 	window.location.href="/saojie/saojieList";
 }
 
-function getSaojieList(param,name){
+function getSaojieList(param,name,regionId){
     if(name == "goSearch"){
     	var value = $("#param").val();
-    	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value;
+    	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value+"&regionid="+regionId;
     }else if(name == "status"){
-    	window.location.href="/saojie/getSaojieList?saojieStatus="+param;
+    	window.location.href="/saojie/getSaojieList?saojieStatus="+param+"&regionid="+regionId;
     }
 }
 
-function getPageList(num){
+function getPageList(num,regionId,name,job,statu){
 	
-	window.location.href="/saojie/getSaojieList?page="+num;
+	window.location.href="/saojie/getSaojieList?page="+num+"&regionid="+regionId+"&salesman.jobNum="+job+"&salesman.truename="+name+"&saojieStatus="+statu;
 }

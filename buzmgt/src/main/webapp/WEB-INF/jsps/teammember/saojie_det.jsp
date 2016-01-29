@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" import="java.util.*,com.wangge.buzmgt.sys.vo.*,com.wangge.buzmgt.saojie.entity.*" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -18,18 +18,19 @@
 	href="/static/saojie/saojie-det.css" />
 <link rel="stylesheet" type="text/css"
 	href="/static/yw-team-member/ywmember.css" />
-<script src="/static/js/jquery/jquery-1.11.3.min.js"
+<script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
 </head>
 
 <body>
 	<div class="content main">
 		<h4 class="team-member-header page-header ">
-			<div class="row">
-				<div class="col-sm-12">
-					<i class="icon icon-ywdet"></i>扫街明细
-				</div>
-			</div>
+			<i class="icon icon-ywdet"></i>扫街明细
+			<a href="/teammember/salesManList" class="btn btn-blue member-add-btn"
+				type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
+				返回列表
+			</a>
 		</h4>
 		<div class="row">
 			<div class="col-md-9">
@@ -64,7 +65,10 @@
 						<div class="saojie-map ">
 							<!--地图位置-->
 							<div style="height: 600px;" class="body-map">
-								<img src="static/img/saojie-map.png" />
+								<!--地图位置-->
+								<div style="height: 600px;" class="body-map" id="allmap">
+<!-- 									<img src="static/img/saojie-map.png" /> -->
+								</div>
 							</div>
 							<button class="btn btn-approve col-sm-2 col-sm-offset-5">审核通过</button>
 						</div>
@@ -131,7 +135,7 @@
 						<!--拜访任务-->
 						<div class="visit">
 							<button class="col-xs-12 btn btn-visit" href="javascript:;">
-								<i class="icon icon-add"></i>拜访
+								<i class="ico icon-add"></i>拜访
 							</button>
 						</div>
 						<!--拜访任务-->
@@ -173,7 +177,7 @@
     <![endif]-->
 		<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="static/js/jquery/jquery-1.11.3.min.js"></script>
+		<script src="/static/js/jquery/jquery-1.11.3.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/static/bootstrap/js/bootstrap-multiselect.js"></script>
@@ -181,6 +185,79 @@
 			charset="utf-8"></script>
 		<script src="/static/js/common.js" type="text/javascript"
 			charset="utf-8"></script>
+			<script type="text/javascript">
+			 // 百度地图API功能
+			  var map = new BMap.Map("allmap");
+			  <% String areaname=request.getAttribute("areaName").toString();
+			  %>
+			   map.centerAndZoom("<%=areaname%>", 13);
+			   //  map.centerAndZoom("上海",11);   
+			  // 添加带有定位的导航控件
+			  var navigationControl = new BMap.NavigationControl({
+			    // 靠左上角位置
+			    anchor: BMAP_ANCHOR_TOP_LEFT,
+			    // LARGE类型
+			    type: BMAP_NAVIGATION_CONTROL_LARGE,
+			    // 启用显示定位
+			    enableGeolocation: true
+			  });
+			  map.addControl(navigationControl);
+			  
+				
+				var bdary = new BMap.Boundary();
+				
+				bdary.get("<%=areaname%>", function(rs){ //获取行政区域
+				var count = rs.boundaries.length; //行政区域的点有多少个
+
+				for(var i = 0; i < count; i++){
+				var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+				map.addOverlay(ply); //添加覆盖物
+				map.setViewport(ply.getPath()); //调整视野 
+				} 
+				}); 
+			  
+			  
+			  
+			  <%
+			  	SaojieDataVo saojieDataVo=	(SaojieDataVo)request.getAttribute("saojiedatalist");
+			  	if(saojieDataVo.getList().size()>0){
+			  	  	for(SaojieData saojiedata:saojieDataVo.getList()){
+			  		String pointStr=saojiedata.getCoordinate();
+			  		String lag=pointStr.split(",")[0];
+			  		String lat=pointStr.split(",")[1];
+			  		String titile=saojiedata.getName();
+			  		//String truename=store.getTruename();
+			  		String desc=saojiedata.getDiscription();
+			  	%>	
+			  			var opts = {
+			  					width : 250,     // 信息窗口宽度
+			  					height: 80,     // 信息窗口高度
+			  					title : "扫街信息" , // 信息窗口标题
+			  					enableMessage:true//设置允许信息窗发送短息
+			  				   };
+			  			var desc="<%=desc%>";
+			  			var marker = new BMap.Marker(new BMap.Point(<%=lag%>,<%=lat%>));  // 创建标注
+			  			var content ="<%=titile%>";
+			  			map.addOverlay(marker);               // 将标注添加到地图中
+			  			addClickHandler(content,marker);
+			  			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+			  <%	}
+			  	}
+			  %>
+			  
+			  function addClickHandler(content,marker){
+					marker.addEventListener("click",function(e){
+						openInfo(content,e)}
+					);
+				}
+				function openInfo(content,e){
+					var p = e.target;
+					var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+					var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+					map.openInfoWindow(infoWindow,point); //开启信息窗口
+				}
+				
+		</script>
 </body>
 
 </html>

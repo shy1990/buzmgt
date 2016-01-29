@@ -1,15 +1,14 @@
 
-function getPageList(num){
-	
-	window.location.href="/teammember/getSalesManList?page="+num
+function getPageList(num,regionId){
+	window.location.href="/teammember/getSalesManList?page="+num+"&regionId="+regionId
 }
 
-function getList(param,name){
+function getList(param,name,regionId){
     if(name == "goSearch"){
     	var value = $("#param").val();
-    	window.location.href="/teammember/getSalesManList?truename="+value+"&jobNum="+value
+    	window.location.href="/teammember/getSalesManList?truename="+value+"&jobNum="+value+"&regionId="+regionId
     }else if(name == "salesmanStatus"){
-    	window.location.href="/teammember/getSalesManList?Status="+param
+    	window.location.href="/teammember/getSalesManList?Status="+param+"&regionId="+regionId
     }
 }
 
@@ -72,10 +71,5 @@ $(function(){
 		pickerPosition : "bottom-left",
 		forceParse : 0
     });
-	//getList(param)
-	var status = $("#status").val();
-	/*if(status == null ||  "".equals(status)){
-		status = "扫街中";
-	}*/
-	$(" li[title = '"+status+"']").addClass('active');
+	
 });

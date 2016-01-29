@@ -9,7 +9,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-		<title>扫街明细</title>
+		<title>扫街设置</title>
 		<!-- Bootstrap -->
 		<link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="../static/css/common.css" />
@@ -21,15 +21,11 @@
 	<body>
 		<div class="content main">
 			<h4 class="team-member-header page-header ">
-				<div class="row">
-					<div class="col-sm-12">
 						<i class="icon icon-saojie-set"></i> 扫街设置
-						<a href="/saojie/saojieList" class="btn btn-warning member-add-btn"
+						<a href="/saojie/saojieList" class="btn btn-blue member-add-btn"
 							type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
 							返回列表
 						</a>
-					</div>
-				</div>
 			</h4>
 			<div class="row">
 				<div class="col-md-12">
@@ -215,19 +211,21 @@
 	 		 <%		
 	 		 		if(null!=request.getAttribute("salesman")){
 	 		 		List<Region> listRegion=(List<Region>)request.getAttribute("regionData");
-	 		 		  
-			 		for(int i=0;i<listRegion.size();i++){
-			 			
+	 		 		if(listRegion != null && listRegion.size()>0){
+						for(int i=0;i<listRegion.size();i++){
 						String coordinates=listRegion.get(i).getCoordinates();
-			 			String[] listCoordinates=coordinates.split("=");
+						String[] listCoordinates = null;
+						if(null != coordinates){
+						  listCoordinates=coordinates.split("=");
+						}
 			 			
 			 %> 
 			 			var polygon = new BMap.Polygon([
-			 	<%
+			 	<%		if(listCoordinates != null && listCoordinates.length>0){
 							for(int x=0;x<listCoordinates.length;x++){
 								String points=listCoordinates[x];
-								double lng=Double.parseDouble(points.split("-")[0]);//经度 
-				 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
+								  double lng = Double.parseDouble(points.split("-")[0]);//经度 
+								  double lat = Double.parseDouble(points.split("-")[1]);//纬度 
 				 %>				
 				 		  		<%
 				 		  			if(x==listCoordinates.length-1){%>
@@ -239,13 +237,13 @@
 				 
 				 
 				 <%
-							}%>
+							}}%>
 							], {strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
 			 				map.addOverlay(polygon); 	
 							<%
 							 
 			 			}
-			 		}%>
+			 		}}%>
 	 	}
 	</script>
 	</body>

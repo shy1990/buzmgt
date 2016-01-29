@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.saojie.entity;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -23,6 +24,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -94,6 +96,18 @@ public class Saojie implements Serializable {
 	private Collection<Saojie> children;
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "saojie")
 	private Collection<SaojieData> saojiedata;
+	@Transient
+	private String percent;
+	
+	 public void addPercent(double baiy, double baiz) {
+     if(baiy > 0 && baiz > 0){
+       NumberFormat nf = NumberFormat.getPercentInstance();
+       this.percent = nf.format(baiy / baiz);
+     }else{
+       this.percent = "0%";
+     }
+    
+   }
 
 	public Saojie() {
 		super();
@@ -204,5 +218,13 @@ public class Saojie implements Serializable {
   public void setSaojiedata(Collection<SaojieData> saojiedata) {
     this.saojiedata = saojiedata;
   }
-	
+
+  public String getPercent() {
+    return percent;
+  }
+
+  public void setPercent(String percent) {
+    this.percent = percent;
+  }
+  
 }

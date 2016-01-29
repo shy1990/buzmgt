@@ -43,15 +43,15 @@
 <body>
 	<div class="main">
 		<h4 class="page-header">
-			<i class="icon team-member-add-icon"></i>添加成员 <a
-				href="/teammember/salesManList" class="btn btn-warning member-add-btn"
+			<i class="icon team-member-add-icon"></i>添加成员 
+			<a href="/teammember/salesManList" class="btn btn-blue member-add-btn"
 				type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
 				返回列表
 			</a>
 		</h4>
 		<div class="row">
 			<div class="col-md-12">
-				<div class="member-add-box box border orange">
+				<div class="member-add-box box border blue">
 					<div class="box-title">
 						<i class="icon member-add-icon"></i>添加
 					</div>
@@ -151,7 +151,7 @@
 								    </div> -->
 								<div class="form-group">
 									<div class="input-group col-sm-9 col-sm-offset-4">
-										<button class="btn btn-warning col-sm-3 "  type="submit">确定保存</button>
+										<button class="btn btn-blue col-sm-3 "  type="submit">确定保存</button>
 									</div>
 								</div>
 							</form>
