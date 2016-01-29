@@ -25,8 +25,8 @@
 
 	<div class="main">
 		<h4 class="page-header">
-			<i class="icon team-member-add-icon"></i>添加扫街
-			<a href="/saojie/saojieList" class="btn btn-warning member-add-btn"
+			<i class="ico icon-saojie-add"></i>添加扫街
+			<a href="/saojie/saojieList" class="btn btn-blue member-add-btn"
 				type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
 				返回列表
 			</a>
@@ -36,7 +36,7 @@
 			<div class="col-md-12">
 				<div class="member-add-box box border blue">
 					<div class="box-title">
-						<i class="icon member-add-icon"></i>添加
+						<i class="ico member-add-icon"></i>添加
 					</div>
 					<div class="box-body">
 						<!-- -->
@@ -137,6 +137,8 @@
 		src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"
 		charset="UTF-8"></script>
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
+		charset="UTF-8"></script>
+	<script src="../static/js/common.js" type="text/javascript"
 		charset="UTF-8"></script>
 	<script type="text/javascript">
 		// 百度地图API功能

@@ -1,6 +1,5 @@
 /* 闁规鍋夐、婊兦庣拠鎻掝潱濡炪倗鏁诲鐧眘s鐎殿噯鎷峰┑顕嗘嫹 */
 .member-add-icon{
-	top: 4px;
 	background: url(../img/saojie/tianxie.png) no-repeat;
 }
 .p-n {
@@ -13,7 +12,7 @@
 }
 
 .form-control{
-	outline: auto;
+	outline: none;
 }
 .clear {
 	clear: both;
@@ -1104,7 +1103,7 @@ body.rtls .stat-percent {
 }
 /*婵烇綀顕ф慨鐐哄箥椤愩儺鏁庨柟绋款樀閹革拷*/
 .member-add-btn{
-	margin-left: 0px;
+	margin-left: 20px;
 }
 /*small 闁哄倸娲﹀﹢浼村礃閸涱収鍟�*/
 .header-text{
