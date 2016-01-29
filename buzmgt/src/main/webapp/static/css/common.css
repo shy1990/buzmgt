@@ -299,7 +299,9 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .member-add-btn{
 	margin-left: 20px;
 }
-
+.saojie-add-box .box-body{
+	padding-top: 20px;
+}
 
 
 

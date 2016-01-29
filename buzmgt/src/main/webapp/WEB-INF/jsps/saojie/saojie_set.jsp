@@ -21,15 +21,11 @@
 	<body>
 		<div class="content main">
 			<h4 class="team-member-header page-header ">
-				<div class="row">
-					<div class="col-sm-12">
 						<i class="icon icon-saojie-set"></i> 扫街设置
-						<a href="/saojie/saojieList" class="btn btn-warning member-add-btn"
+						<a href="/saojie/saojieList" class="btn btn-blue member-add-btn"
 							type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
 							返回列表
 						</a>
-					</div>
-				</div>
 			</h4>
 			<div class="row">
 				<div class="col-md-12">

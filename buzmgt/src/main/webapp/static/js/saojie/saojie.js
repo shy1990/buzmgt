@@ -26,14 +26,16 @@ $(function() {
 });
 
 var strtown;
-var orderNum;
+var orderNum="";
 function queryTown(){
 	var intLen = $("div[id^='selOrder']").length;
 	if (intLen > 0 ){
 		for(var l=1;l<=intLen;l++){
 			var selOrder=$("div[id='selOrder"+ l +"']");
 			var order=selOrder[0];
+			 console.info(order);
 			order.parentNode.removeChild(order);
+//			orderNum="";
 		}
 	}
 	var userId = document.getElementById("saojieMan").value;
@@ -117,7 +119,7 @@ function AddOrder(btType) {
 		} else {
 			intNewApp = 1;
 		}
-		var order;
+		var order="";
 		if (orderNum < 10) {
 			order = "0" + orderNum;
 		} else {
@@ -128,14 +130,14 @@ function AddOrder(btType) {
 		//						arrName = ["序号", "地区", "指标"];
 		//						alert(arrName);
 		//					}
-		var strApp = '<div class="col-sm-6 col-xs-4 p-n" id="selOrder' + orderNum + '">\
-			  <div class="input-group col-sm-8 col-xs-4 ">\
-		<span class="input-group-btn" id="basic-addon1"><i class="order-icon saojie-number-icon"><input type="hidden" name="num" value="' + orderNum + '"/>' + order + '</i></span>\
+		var strApp = '<div class="col-sm-6 p-n" id="selOrder' + orderNum + '">\
+			  	<div class="input-group col-sm-6 ">\
+				  <span class="input-group-btn" id="basic-addon1"><span class="order-icon saojie-number-icon"><input type="hidden" name="num" value="' + orderNum + '"/>' + order + '</span></span>\
 				  <select class="form-control" name="region.id" id="town">\
 				  ' + strtown + '\
 					</select>\
 				</div>\
-				<div class="col-sm-4 clear-padd-l">\
+				<div class="col-sm-6 clear-padd-l">\
 					<div class="input-group clear-padd-l">\
 						<span class="input-group-addon" id="basic-addon1"><i class="member-icon member-value-icon"></i></span>\
 						<input type="text" name="value" class="form-control" placeholder="指标(家)" id="minValue' + intNewApp + '">\
@@ -155,6 +157,7 @@ function delNode(selOrder,order) {
 	if(intLen === order){
 		if (selOrder != null && selOrder != ''){
 			selOrder.parentNode.removeChild(selOrder);
+			orderNum--;
 		}
 	}else{
 		alert("请先删除序号最大项!");

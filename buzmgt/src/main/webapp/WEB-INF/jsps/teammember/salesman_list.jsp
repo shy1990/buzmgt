@@ -116,7 +116,7 @@
 																<td class="project-title"><span class="l-h">大桥镇：<strong
 																		class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
 																		class="shop-num-d">10家</strong></span></td>
-																<td class="project-completion col-md-5 col-sm-2">
+																<td class="project-completion">
 																	<span class="completion-ing">当前进度： 88%</span> 
 																	<span class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
 																	<div class="progress progress-mini">

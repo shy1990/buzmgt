@@ -18,8 +18,10 @@
 	rel="stylesheet">
 <script src="../static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
- <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
 <script type="text/javascript">
 	$(function() {
 		var status = $("#addClass").val();
@@ -33,25 +35,24 @@
 </script>
 </head>
 <body>
-			<div class="main">
-				<h4 class="team-member-header page-header ">
-					<div class="row">
-						<div class="col-sm-12">
-							<i class="icon icon-saojie-list"></i>扫街设置
-							<!--区域选择按钮-->
-							<div class="area-choose">选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;" onclick="getRegion(${regionId});">切换</a> </div>
-							<!--/区域选择按钮-->
-							<button class="btn btn-blue member-add-btn" type="button"
-								onclick="javascript:window.location.href='/saojie/toAdd'">
-								<i class="icon icon-add"></i>添加扫街
-							</button>
-							<small class="header-text">共<span class="text-red">${count }</span>个区域
-							</small>
-							<!-- <small class="header-text">今日新增<span class="text-red"> 0 +</span></small> -->
-						
-						</div>
-					</div>
-				</h4>
+	<div class="main">
+		<h4 class="team-member-header page-header ">
+			<i class="icon icon-saojie-list"></i>扫街设置
+			<!--区域选择按钮-->
+			<div class="area-choose">
+				选择区域：<span>${regionName}</span> <a class="are-line"
+					href="javascript:;" onclick="getRegion(${regionId});">切换</a>
+			</div>
+			<!--/区域选择按钮-->
+			<button class="btn btn-blue member-add-btn" type="button"
+				onclick="javascript:window.location.href='/saojie/toAdd'">
+				<i class="icon icon-add"></i>添加扫街
+			</button>
+			<small class="header-text">共<span class="text-red">${count }</span>个区域
+			</small>
+			<!-- <small class="header-text">今日新增<span class="text-red"> 0 +</span></small> -->
+
+		</h4>
 		<div class="row">
 			<div class="col-md-9">
 				<!--box-->
@@ -59,7 +60,7 @@
 					<!--title-->
 					<div class="box-title">
 						<div class="row">
-							
+
 							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<input type="hidden" name="" value="${saojieStatus}"
@@ -83,14 +84,14 @@
 							</div>
 							<div class="col-sm-4 col-md-3 col-md-offset-3 ">
 								<div class="form-group title-form">
-											<div class="input-group ">
-												<input type="text" class="form-control"
-													placeholder="请输入名称或工号" id="param"> <span
-													class="input-group-addon" id="goSearch"
-													onclick="getSaojieList(this.value,this.id,${regionId});"><i
-													class="icon icon-finds"></i></span>
-											</div>
-										</div>
+									<div class="input-group ">
+										<input type="text" class="form-control" placeholder="请输入名称或工号"
+											id="param"> <span class="input-group-addon"
+											id="goSearch"
+											onclick="getSaojieList(this.value,this.id,${regionId});"><i
+											class="icon icon-finds"></i></span>
+									</div>
+								</div>
 							</div>
 						</div>
 						<!--<div class="title-form input-group ">
@@ -109,7 +110,7 @@
 							<div class="tab-pane fade in active" id="box_tab1">
 								<!--box-list-->
 								<div class="box-list">
-									<div class="project-list">
+									<div class="project-list table-responsive">
 										<table class="table table-hover">
 											<tbody>
 												<c:if test="${empty list.content}">
@@ -141,11 +142,12 @@
 																	class="shop-num">${saojie.minValue}家</strong></span></td>
 															<td class="project-completion">
 																<div>
-																	<span class="completion-ing">当前进度：${saojie.percent}</span> <span
-																		class="time-down"> 倒计时：2天</span>
+																	<span class="completion-ing">当前进度：${saojie.percent}</span>
+																	<span class="time-down"> 倒计时：2天</span>
 																</div>
 																<div class="progress progress-mini">
-																	<div style="width: ${saojie.percent};" class="progress-bar"></div>
+																	<div style="width: ${saojie.percent};"
+																		class="progress-bar"></div>
 																</div> <!-- 100%的用这个 --> <!-- <div>
 																		<span class="completion-ing">当前进度： 100%</span> <span
 																			class="time-finish"> 通过</span>
@@ -182,7 +184,8 @@
 																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:when>
 															<c:otherwise>
-																<li><a href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:otherwise>
 														</c:choose>
 													</c:forEach>
@@ -195,7 +198,8 @@
 																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:when>
 															<c:otherwise>
-																<li><a href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:otherwise>
 														</c:choose>
 													</c:forEach>
@@ -212,7 +216,8 @@
 																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:when>
 															<c:otherwise>
-																<li><a href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:otherwise>
 														</c:choose>
 													</c:forEach>
@@ -229,7 +234,8 @@
 																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:when>
 															<c:otherwise>
-																<li><a href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
 															</c:otherwise>
 														</c:choose>
 													</c:forEach>
@@ -261,7 +267,7 @@
 					<div class="box-body">
 						<div style="height: 290px" id="allmap"></div>
 						<div align="center">
-<!-- 							<a href="/salesman/showMap"><font color="#0099ff" size="3">查看完整地图</font></a> -->
+							<!-- 							<a href="/salesman/showMap"><font color="#0099ff" size="3">查看完整地图</font></a> -->
 						</div>
 						<!-- 						地图 -->
 						<!-- 						<img width="100%" src="/static/img/saojieap.png" /> -->
@@ -293,49 +299,38 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../static/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/static/js/common.js"></script>
-	<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../static/yw-team-member/team-member.js"
+		type="text/javascript" charset="utf-8"></script>
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
 	<script type="text/javascript">
 		<%String areaname = null;
-	    if (null != request.getAttribute("regionName")) {
-	      areaname = request.getAttribute("regionName").toString();
-	    }
-		String parentid = null;
-		if (null != request.getAttribute("parentid")) {
-			parentid = request.getAttribute("parentid").toString();
-		}
-		%>
+			if (null != request.getAttribute("regionName")) {
+				areaname = request.getAttribute("regionName").toString();
+			}
+			String parentid = null;
+			if (null != request.getAttribute("parentid")) {
+				parentid = request.getAttribute("parentid").toString();
+			}%>
 	 	var map = new BMap.Map("allmap");
-		<%
-		if(null!=request.getAttribute("pcoordinates")){%>
-			<%
-			String pcoordinates=request.getAttribute("pcoordinates").toString();
-			String[] listCoordinates=pcoordinates.split("=");
-			 %> 
+		<%if (null != request.getAttribute("pcoordinates")) {%>
+			<%String pcoordinates = request.getAttribute("pcoordinates").toString();
+				String[] listCoordinates = pcoordinates.split("=");%> 
 			 			var polygon = new BMap.Polygon([
-			 	<%
-							for(int x=0;x<listCoordinates.length;x++){
-								String points=listCoordinates[x];
-								double lng=Double.parseDouble(points.split("-")[0]);//经度 
-				 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
-				 %>				
-	<%
-				 		  			if(x==listCoordinates.length-1){%>
+			 	<%for (int x = 0; x < listCoordinates.length; x++) {
+					String points = listCoordinates[x];
+					double lng = Double.parseDouble(points.split("-")[0]);//经度 
+					double lat = Double.parseDouble(points.split("-")[1]);//纬度%>				
+	<%if (x == listCoordinates.length - 1) {%>
 				 		  			new BMap.Point(<%=lng%>,<%=lat%>)
-				 		  			<%}else{%>
+				 		  			<%} else {%>
 				 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
-				 		  			<%}
-				 		  		%>
-				 <%
-							}%>
+				 		  			<%}%>
+				 <%}%>
 							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
 			 				map.addOverlay(polygon);
-							<%
-								String jlng=listCoordinates[1].split("-")[0];
-								String jlat=listCoordinates[1].split("-")[1];
-							
-							%>
+							<%String jlng = listCoordinates[1].split("-")[0];
+				String jlat = listCoordinates[1].split("-")[1];%>
 							 var point = new BMap.Point(<%=jlng%>,<%=jlat%>);
 							 map.centerAndZoom(point, 8);    
 			 				//map.centerAndZoom(name, 8);
@@ -343,23 +338,18 @@
 			 				
 			 				
 			 				 var points =[
-			 				   <%
-			 				  for(int y=0;y<listCoordinates.length;y++){
-									String points=listCoordinates[y];
-									double lng=Double.parseDouble(points.split("-")[0]);//经度 
-					 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
-			 				   %>          
+			 				   <%for (int y = 0; y < listCoordinates.length; y++) {
+					String points = listCoordinates[y];
+					double lng = Double.parseDouble(points.split("-")[0]);//经度 
+					double lat = Double.parseDouble(points.split("-")[1]);//纬度%>          
 					 		  		
 			 					
-				 		  		<%
-					 		  			if(y==listCoordinates.length-1){%> 
+				 		  		<%if (y == listCoordinates.length - 1) {%> 
 				 		  		 		{"lng":<%=lng%>,"lat":<%=lat%>,"count":50}
-				 		  			<%}else{%>
+				 		  			<%} else {%>
 				 		  				{"lng":<%=lng%>,"lat":<%=lat%>,"count":50},
-				 		  			<%}
-				 		  		%> 
-					 		  	 <%
-									}%>
+				 		  			<%}%> 
+					 		  	 <%}%>
 			 				              ];
 	
 			 				heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
@@ -374,8 +364,7 @@
 	//							  alert(point);
 	<%-- 								  alert(<%=coordinates%>); --%>
 	//						});
-							<%
-		}else{%>
+							<%} else {%>
 			var bdary = new BMap.Boundary();
 			bdary.get('<%=areaname%>', function(rs){ //获取行政区域
 			var count = rs.boundaries.length; //行政区域的点有多少个

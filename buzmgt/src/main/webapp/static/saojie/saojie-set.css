@@ -41,6 +41,7 @@
 .btn-audit,
 .btn-audit:hover,
 .btn-audit:focus{
+	min-width: 84px;
 	background: #3BA2DC;
 	border-color: #3285B7;
 	color: #FFF;
