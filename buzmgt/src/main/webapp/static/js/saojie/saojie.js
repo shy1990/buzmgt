@@ -238,14 +238,13 @@ function getAllSaojieList(){
 function getSaojieList(param,name,regionId){
     if(name == "goSearch"){
     	var value = $("#param").val();
-    	alert(value);
     	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value+"&regionid="+regionId;
     }else if(name == "status"){
     	window.location.href="/saojie/getSaojieList?saojieStatus="+param+"&regionid="+regionId;
     }
 }
 
-function getPageList(num,regionId){
+function getPageList(num,regionId,name,job,statu){
 	
-	window.location.href="/saojie/getSaojieList?page="+num+"&regionid="+regionId;
+	window.location.href="/saojie/getSaojieList?page="+num+"&regionid="+regionId+"&salesman.jobNum="+job+"&salesman.truename="+name+"&saojieStatus="+statu;
 }

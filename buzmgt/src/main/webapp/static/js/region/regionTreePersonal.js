@@ -130,6 +130,7 @@ function ajaxGetNodes(treeNode, reloadType) {
  */
 function zTreeOnClick(event, treeId, treeNode) {
 //	 document.getElementById("iframepage").src = "area/right?id=" +	 treeNode.id;
+	
 	var flag=$("#flag").val();
 	if(null===flag||""===flag){
 		window.location.href='/teammember/getSalesManList?regionId='+treeNode.id;

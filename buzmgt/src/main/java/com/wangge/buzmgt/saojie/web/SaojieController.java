@@ -110,6 +110,10 @@ public class SaojieController {
          model.addAttribute("regionName", region.getName());
          model.addAttribute("regionId", region.getId());
        }
+       if(null != saojie.getSalesman()){
+         model.addAttribute("truename",saojie.getSalesman().getTruename());
+         model.addAttribute("jobNum",saojie.getSalesman().getJobNum());
+       }
         
     Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,region.getName());
     model.addAttribute("list", list);
