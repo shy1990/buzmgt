@@ -49,7 +49,7 @@
 							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<ul class="nav nav-tabs">
-									<input id="status" type="hidden" value="${Status},">
+									<input id="status" type="hidden" value="${Status}">
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name,${regionId});"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
@@ -150,7 +150,7 @@
 												<div style="text-align: center;padding-bottom: 20px" >
 													<ul class="pagination box-page-ul">
 														<li><a
-															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}','${regionId}')">&laquo;</a></li>
 														<!-- 1.total<=7 -->
 														<c:if test="${list.totalPages<=7 }">
 															<c:forEach var="s" begin="1" end="${list.totalPages}"
