@@ -238,7 +238,6 @@ function getAllSaojieList(){
 function getSaojieList(param,name,regionId){
     if(name == "goSearch"){
     	var value = $("#param").val();
-    	alert(value);
     	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value+"&regionid="+regionId;
     }else if(name == "status"){
     	window.location.href="/saojie/getSaojieList?saojieStatus="+param+"&regionid="+regionId;

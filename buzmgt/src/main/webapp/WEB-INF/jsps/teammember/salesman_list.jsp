@@ -150,7 +150,7 @@
 												<div style="text-align: center;padding-bottom: 20px" >
 													<ul class="pagination box-page-ul">
 														<li><a
-															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}','${regionId}')">&laquo;</a></li>
 														<!-- 1.total<=7 -->
 														<c:if test="${list.totalPages<=7 }">
 															<c:forEach var="s" begin="1" end="${list.totalPages}"
