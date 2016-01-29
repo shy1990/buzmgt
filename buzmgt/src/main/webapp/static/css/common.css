@@ -292,7 +292,9 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background-image: url(../img/icon/saojie/saojieshehzi.png);
 	top: 5px; 
 }
-
+.icon-saojie-add{
+	background-image: url(../img/saojie/saojie-add.png); 
+}
 
 
 
