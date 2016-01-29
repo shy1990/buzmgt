@@ -49,7 +49,7 @@
 							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<ul class="nav nav-tabs">
-									<input id="status" type="hidden" value="${Status},">
+									<input id="status" type="hidden" value="${Status}">
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name,${regionId});"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
