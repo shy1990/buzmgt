@@ -64,8 +64,8 @@ public class ActivityController {
   @RequestMapping(value="/upload")
   @ResponseBody
   public String addUser( @RequestParam MultipartFile[] myfiles, HttpServletRequest request){
-    
-      String realPath = "D:/upload/";
+      String realPath = "/var/sanji/images/uploadfile/activityImg/";
+//      String realPath = "D:/upload/";
       String filename = UUID.randomUUID().toString() + ".jpg";// 构建文件名称
       
       String path = UploadUtil.saveFile(realPath, filename,myfiles[0]);

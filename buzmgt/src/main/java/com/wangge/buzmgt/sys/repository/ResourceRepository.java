@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.wangge.buzmgt.sys.entity.Resource;
 import com.wangge.buzmgt.sys.entity.Resource.ResourceType;
-import com.wangge.buzmgt.sys.util.SortUtil;
 
 public interface ResourceRepository extends JpaRepository<Resource, Long>{
 	

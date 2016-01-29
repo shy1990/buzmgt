@@ -1,7 +1,6 @@
 package com.wangge.buzmgt.sys.service;
 
 import java.util.List;
-import java.util.Set;
 
 import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.vo.RoleVo;
@@ -18,5 +17,7 @@ public interface RoleService {
 	public List<RoleVo> findAll();
 
 	public Role getRoleById(String roleId);
+	
+	public Role getRoleByName(String name);
 
 }
