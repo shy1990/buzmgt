@@ -240,7 +240,7 @@ public class TeamMembersController {
   } 
   
   @RequestMapping(value = "/toSalesManInfo", method = RequestMethod.GET)
-  public String getSalesManInfo(String userId, Model model){
+  public String getSalesManInfo(String userId,String flag, Model model){
        SalesMan salesMan  =  salesManService.getSalesmanByUserId(userId);
        List<Region> rList = regionService.getListByIds(salesMan);
        model.addAttribute("salesMan", salesMan);
@@ -248,7 +248,11 @@ public class TeamMembersController {
        SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(userId, "");
        model.addAttribute("saojiedatalist", saojiedatalist);
        model.addAttribute("areaName", salesMan.getRegion().getName());
-    return "teammember/saojie_det";
+       if("saojie".equals(flag)){
+         return "saojie/saojie_det";
+       }else{
+         return "teammember/saojie_det";
+       }
   }
   
   @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.POST)
