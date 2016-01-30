@@ -71,15 +71,15 @@
 							</div>
 							<div class="col-sm-4 col-md-3 col-md-offset-3 ">
 								<div class="form-group title-form">
-									<form action="/salesman/getSalesManList">
+									
 									<div class="input-group ">
 										<input type="text" class="form-control" name="truename" id="param"
-											placeholder="请输入名称或工号"> <a type="sumbit"
+											placeholder="请输入名称或工号" onkeydown="searchForm(event,this.value,${regionId})"> <a type="sumbit"
 											class="input-group-addon" id="goSearch"
 											onclick="getList(this.value,this.id,${regionId})"><i
 											class="icon icon-finds"></i></a>
 									</div>
-									</form>
+									
 								</div>
 							</div>
 						</div>
