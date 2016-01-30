@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.saojie.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -112,11 +113,24 @@ public class SaojieServiceImpl implements SaojieService {
       hql += " and t.saojie_status='"+saojie.getStatus().ordinal()+"'";
     }
     Query q = em.createNativeQuery(hql,Saojie.class);  
-   int count=q.getResultList().size();
+    int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
     q.setMaxResults(7);
+    List<Saojie> list = new ArrayList<Saojie>();
+    for(Object obj: q.getResultList()){
+      Saojie sj = (Saojie)obj;
+      sj.addPercent(sj.getSaojiedata().size(), sj.getMinValue());
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(sj.getBeginTime());
+      long time1 = cal.getTimeInMillis();
+      cal.setTime(sj.getExpiredTime());
+      long time2 = cal.getTimeInMillis();
+      long timing=(time2-time1)/(1000*3600*24);
+      sj.setTiming(Integer.parseInt(String.valueOf(timing)));
+      list.add(sj);
+    }
     
-    Page<Saojie> page = new PageImpl<Saojie>(q.getResultList(),new PageRequest(pageNum,7),count);   
+    Page<Saojie> page = new PageImpl<Saojie>(list,new PageRequest(pageNum,7),count);   
     return page;  
 }
   
