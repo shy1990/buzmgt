@@ -26,16 +26,10 @@ $(function() {
 });
 
 var strtown;
-var orderNum;
 function queryTown(){
 	var intLen = $("div[id^='selOrder']").length;
-	if (intLen > 0 ){
-		for(var l=1;l<=intLen;l++){
-			var selOrder=$("div[id='selOrder"+ l +"']");
-			var order=selOrder[0];
-			order.parentNode.removeChild(order);
-		}
-	}
+	var len = $("#btType");
+	len.prevAll().remove();
 	var userId = document.getElementById("saojieMan").value;
 	$.ajax({
 	type:"post",
@@ -79,13 +73,14 @@ function queryTown(){
 	 		   }
 	 	   });	
 	        $.ajax({
-		 		   type:"post",
-		 		   url:"/saojie/getOrderNum",
-		 		   data: {"id":userId},
-		 		   success : function(obj){
-		 			  orderNum=obj;
-		 		   }
-		 	   });	
+	 		   type:"post",
+	 		   url:"/saojie/getOrderNum",
+	 		   data: {"id":userId},
+	 		   success : function(obj){
+	 			  orderNum=obj;
+	 			 $("#base").val(obj);
+	 		   }
+	 	   });	
 	}else {
 			//alert(obj.length);
 			//for(var i=0;i<obj.length;i++){
@@ -96,7 +91,7 @@ function queryTown(){
  }
 });
 }
-
+var orderNum;
 function AddOrder(btType) {
 	var userId = document.getElementById("saojieMan").value;
 	if (!userId)
@@ -230,15 +225,14 @@ function toSubmit(){
 }
 
 /*扫街列表*/
-function getAllSaojieList(){
+function getAllSaojieList(regionId){
 	
-	window.location.href="/saojie/saojieList";
+	window.location.href="/saojie/getSaojieList?regionid="+regionId;
 }
 
 function getSaojieList(param,name,regionId){
     if(name == "goSearch"){
     	var value = $("#param").val();
-    	alert(value);
     	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value+"&regionid="+regionId;
     }else if(name == "status"){
     	window.location.href="/saojie/getSaojieList?saojieStatus="+param+"&regionid="+regionId;

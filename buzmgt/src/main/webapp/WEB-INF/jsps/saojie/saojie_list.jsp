@@ -66,7 +66,7 @@
 									id="addClass" />
 								<ul class="nav nav-tabs">
 									<li title="全部"><a title="全部" name="status"
-										onclick="getAllSaojieList();" href="#box_tab1"
+										onclick="getAllSaojieList(${regionId});" href="#box_tab1"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
 											class="hidden-inline-mobile">全部</span></a></li>
 									<li title="扫街中"><a title="扫街中" name="status"
@@ -112,15 +112,6 @@
 									<div class="project-list">
 										<table class="table table-hover">
 											<tbody>
-												<c:if test="${empty list.content}">
-													<div style="text-align: center;">
-														<ul class="pagination">
-															<tr>
-																<td colspan="100">没有相关数据</td>
-															</tr>
-														</ul>
-													</div>
-												</c:if>
 												<c:if test="${not empty list.content}">
 													<c:forEach var="saojie" items="${list.content}"
 														varStatus="s">
@@ -142,7 +133,7 @@
 															<td class="project-completion">
 																<div>
 																	<span class="completion-ing">当前进度：${saojie.percent}</span> <span
-																		class="time-down"> 倒计时：2天</span>
+																		class="time-down"> 倒计时：${saojie.timing }天</span>
 																</div>
 																<div class="progress progress-mini">
 																	<div style="width: ${saojie.percent};" class="progress-bar"></div>
@@ -236,6 +227,15 @@
 												</c:if>
 												<li><a
 													href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">&raquo;</a></li>
+											</ul>
+										</div>
+									</c:if>
+									<c:if test="${empty list.content}">
+										<div style="text-align: center;">
+											<ul class="pagination">
+												<tr>
+													<td colspan="100">没有相关数据</td>
+												</tr>
 											</ul>
 										</div>
 									</c:if>

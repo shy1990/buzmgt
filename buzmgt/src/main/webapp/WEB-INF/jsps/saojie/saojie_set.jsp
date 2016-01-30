@@ -71,7 +71,12 @@
 										<td>
 										<input type="hidden" id="orderlist" />
 										<input type="hidden" id="saojieId${saojie.order-1 }" value="${saojie.id }"/>
+										<c:if test="${saojie.order < 10}">
+											<span class="icon-tag-span">0${saojie.order }</span>
+										</c:if>
+										<c:if test="${saojie.order >= 10}">
 											<span class="icon-tag-span">${saojie.order }</span>
+										</c:if>
 											<span class="addreass">${saojie.region.name}</span>
 										</td>
 										<!--箭头-->

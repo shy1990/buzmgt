@@ -69,6 +69,7 @@
 													<button id="btn" class="btn btn-white btn-w-m" text="点击"
 														type="button" onclick="AddOrder(btType)"><img alt="添加" src="../static/img/saojie/tianjia2.png"></button>
 												</div>
+												<input type="hidden" name="" value="" id="base"/>
 											</div>
 										</div>
 										<div class="form-group">
