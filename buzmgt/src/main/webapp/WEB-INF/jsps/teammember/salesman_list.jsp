@@ -49,7 +49,7 @@
 							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<ul class="nav nav-tabs">
-									<input id="status" type="hidden" value="${Status},">
+									<input id="status" type="hidden" value="${Status}">
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name,${regionId});"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
@@ -111,7 +111,7 @@
 																<td class="project-people"><a href=""><img
 																		alt="image" class="img-circle"
 																		src="../static/img/team-member/a.jpg"></a></td>
-																<td class="project-title"><a href="javascript:toSalesManInfo('${salesman.id}');"><strong>${salesman.truename}</strong>(${salesman.user.organization.name})</a>
+																<td class="project-title"><a href="javascript:toSalesManInfo('${salesman.id}','salesman');"><strong>${salesman.truename}</strong>(${salesman.user.organization.name})</a>
 																	<br /> <span>${salesman.region.name}</span></td>
 																<td class="project-title"><span class="l-h">大桥镇：<strong
 																		class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong

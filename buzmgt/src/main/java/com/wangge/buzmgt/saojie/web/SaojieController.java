@@ -270,9 +270,12 @@ public class SaojieController {
 	
 	@RequestMapping(value = "/getOrderNum",method = RequestMethod.POST)
   @ResponseBody
-  public String getOrderNum(String id){
-    int orderNum = saojieService.getOrderNumById(id);
-    String order = String.valueOf(orderNum);
-    return order;
+  public int getOrderNum(@RequestParam("id")SalesMan salesman){
+	  List<Saojie> list = saojieService.findBysalesman(salesman);
+	  int orderNum = 0;
+	  if(list != null && list.size()>0){
+	    orderNum = saojieService.getOrderNumById(salesman.getId());
+	  }
+    return orderNum;
   }
 }

@@ -99,6 +99,10 @@ public class Saojie implements Serializable {
 	@Transient
 	private String percent;
 	
+	//辅助字段
+	@Transient
+	private int timing;
+	
 	 public void addPercent(double baiy, double baiz) {
      if(baiy > 0 && baiz > 0){
        NumberFormat nf = NumberFormat.getPercentInstance();
@@ -225,6 +229,14 @@ public class Saojie implements Serializable {
 
   public void setPercent(String percent) {
     this.percent = percent;
+  }
+
+  public int getTiming() {
+    return timing;
+  }
+
+  public void setTiming(int timing) {
+    this.timing = timing;
   }
   
 }

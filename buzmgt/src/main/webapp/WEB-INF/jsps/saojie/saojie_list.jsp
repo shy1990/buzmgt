@@ -67,7 +67,7 @@
 									id="addClass" />
 								<ul class="nav nav-tabs">
 									<li title="全部"><a title="全部" name="status"
-										onclick="getAllSaojieList();" href="#box_tab1"
+										onclick="getAllSaojieList(${regionId});" href="#box_tab1"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
 											class="hidden-inline-mobile">全部</span></a></li>
 									<li title="扫街中"><a title="扫街中" name="status"
@@ -77,7 +77,7 @@
 									<li title="已完成"><a title="已完成" name="status"
 										onclick="getSaojieList(this.title,this.name,${regionId});"
 										href="#box_tab1" data-toggle="tab"><i
-											class="fa fa-calendar-o"></i> <span
+											class="fa fa-check"></i> <span
 											class="hidden-inline-mobile">已完成</span></a></li>
 								</ul>
 								<!--/菜单栏-->
@@ -113,15 +113,6 @@
 									<div class="project-list table-responsive">
 										<table class="table table-hover">
 											<tbody>
-												<c:if test="${empty list.content}">
-													<div style="text-align: center;">
-														<ul class="pagination">
-															<tr>
-																<td colspan="100">没有相关数据</td>
-															</tr>
-														</ul>
-													</div>
-												</c:if>
 												<c:if test="${not empty list.content}">
 													<c:forEach var="saojie" items="${list.content}"
 														varStatus="s">
@@ -129,7 +120,7 @@
 															<td class="project-people"><a href=""><img
 																	alt="image" class="img-circle"
 																	src="../static/img/saojie/a.jpg"></a></td>
-															<td class="project-title"><a href=""><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
+															<td class="project-title"><a href="javascript:toSalesManInfo('${saojie.salesman.id}','saojie');"><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
 																<br /> <span>${saojie.salesman.region.name}</span></td>
 															<c:if test="${saojie.status == 'PENDING' }">
 																<td class="project-status"><span class="status-ing">${saojie.status.name}</span></td>
@@ -142,8 +133,8 @@
 																	class="shop-num">${saojie.minValue}家</strong></span></td>
 															<td class="project-completion">
 																<div>
-																	<span class="completion-ing">当前进度：${saojie.percent}</span>
-																	<span class="time-down"> 倒计时：2天</span>
+																	<span class="completion-ing">当前进度：${saojie.percent}</span> <span
+																		class="time-down"> 倒计时：${saojie.timing }天</span>
 																</div>
 																<div class="progress progress-mini">
 																	<div style="width: ${saojie.percent};"
@@ -242,6 +233,15 @@
 												</c:if>
 												<li><a
 													href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">&raquo;</a></li>
+											</ul>
+										</div>
+									</c:if>
+									<c:if test="${empty list.content}">
+										<div style="text-align: center;">
+											<ul class="pagination">
+												<tr>
+													<td colspan="100">没有相关数据</td>
+												</tr>
 											</ul>
 										</div>
 									</c:if>

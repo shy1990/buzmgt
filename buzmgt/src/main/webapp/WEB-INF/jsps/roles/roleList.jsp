@@ -30,7 +30,7 @@
 	<div id="j_page_main" class="content main">
 		<h4 class="page-header">
 			<i class="icon pur-setting-icon"></i>权限设置 <a
-				class="btn btn-danger marg-lef-10" data-toggle="modal"
+				class="btn btn-blue marg-lef-10" data-toggle="modal"
 				data-target=".j_create_role" data-whatever="@mdo"><i
 				class="icon-add"></i>创建角色</a>
 		</h4>
