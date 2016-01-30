@@ -77,7 +77,7 @@
 									<li title="已完成"><a title="已完成" name="status"
 										onclick="getSaojieList(this.title,this.name,${regionId});"
 										href="#box_tab1" data-toggle="tab"><i
-											class="fa fa-calendar-o"></i> <span
+											class="fa fa-check"></i> <span
 											class="hidden-inline-mobile">已完成</span></a></li>
 								</ul>
 								<!--/菜单栏-->

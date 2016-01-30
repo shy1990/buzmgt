@@ -45,21 +45,24 @@
 		</h4>
 		<div class="row">
 			<div class="col-md-12">
-				<div class="box border orange">
+				<div class="box border blue">
+				<div class="box-title">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="role">
-								<div class="role-region-title">
 									<i class="title-icon"></i>区域结构
-								</div>
-								<div class="role-list">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="">
+					<div class="role-list">
 									<div
 										style="width: 100%; height: 32px; border-right: 1px solid rgb(221, 221, 221);"></div>
 									<ul id="treeDemo" class="ztree"></ul>
 								</div>
-							</div>
-						</div>
-					</div>
+				</div>
 				</div>
 			</div>
 		</div>

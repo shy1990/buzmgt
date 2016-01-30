@@ -33,9 +33,7 @@ function queryTown(){
 		for(var l=1;l<=intLen;l++){
 			var selOrder=$("div[id='selOrder"+ l +"']");
 			var order=selOrder[0];
-			 console.info(order);
 			order.parentNode.removeChild(order);
-//			orderNum="";
 		}
 	}
 	var userId = document.getElementById("saojieMan").value;
@@ -131,16 +129,16 @@ function AddOrder(btType) {
 		//						alert(arrName);
 		//					}
 		var strApp = '<div class="col-sm-6 p-n" id="selOrder' + orderNum + '">\
-			  	<div class="input-group col-sm-6 ">\
+			  	<div class="input-group col-sm-7 ">\
 				  <span class="input-group-btn" id="basic-addon1"><span class="order-icon saojie-number-icon"><input type="hidden" name="num" value="' + orderNum + '"/>' + order + '</span></span>\
 				  <select class="form-control" name="region.id" id="town">\
 				  ' + strtown + '\
 					</select>\
 				</div>\
-				<div class="col-sm-6 clear-padd-l">\
+				<div class="col-sm-5 clear-padd-l">\
 					<div class="input-group clear-padd-l">\
-						<span class="input-group-addon" id="basic-addon1"><i class="member-icon member-value-icon"></i></span>\
-						<input type="text" name="value" class="form-control" placeholder="指标(家)" id="minValue' + intNewApp + '">\
+						<span class="input-group-addon" id="basic-addon1">指标</span>\
+						<input type="text" name="value" class="form-control" placeholder="家" id="minValue' + intNewApp + '">\
 					</div>\
 					<span id="delNode' + orderNum + '" class="del-order glyphicon glyphicon-remove" onclick="delNode(selOrder' + orderNum + ',' + intLen + ')"></span>\
 				</div>\
