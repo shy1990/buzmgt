@@ -225,7 +225,7 @@ public class TeamMembersController {
        }
        StringBuilder jpql = new StringBuilder();
        if((salesman.getTruename()!=null && !"".equals(salesman.getTruename())) || (salesman.getJobNum()!= null && !"".equals(salesman.getJobNum()))){
-         jpql.append("t.truename = ?1 or t.job_num = ?1");
+         jpql.append("(t.truename like ?1 or t.job_num like ?2)");
        }
     Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum,region.getName(),jpql.toString());
     model.addAttribute("list", list);

@@ -116,15 +116,15 @@ public  class SalesManServiceImpl implements SalesManService {
   public Page<SalesMan> getSalesmanList(SalesMan salesMan, int pageNum, String regionName,String where){
    // String and = "";
     String whereql = where!=null && !"".equals(where.trim()) ? " and "+ where : "" ;
-    String hql = "select t.* from SYS_SALESMAN t where  t.salesman_status = '"+salesMan.getSalesmanStatus().ordinal()+"' "+whereql+" and  t.region_id in "
+    String hql = "select t.* from SYS_SALESMAN t where  t.salesman_status = '"+salesMan.getSalesmanStatus().ordinal()+"' "+"and (t.truename like '%"+2016+"%' or t.job_num like '%"+2016+"%')"+" and  t.region_id in "
         + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
     Query q = em.createNativeQuery(hql,SalesMan.class); 
-    if(salesMan.getTruename()!= null && !"".equals(salesMan.getTruename())){
-      q.setParameter(1, salesMan.getTruename());
-    }
-    if(salesMan.getJobNum() != null && !"".equals(salesMan.getJobNum())){
-      q.setParameter(1, salesMan.getTruename());
-    }
+//    if(salesMan.getTruename()!= null && !"".equals(salesMan.getTruename())){
+//      q.setParameter(1, "%2016%");
+//    }
+//    if(salesMan.getJobNum() != null && !"".equals(salesMan.getJobNum())){
+//      q.setParameter(2, "%2016%");
+//    }
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
     q.setMaxResults(7);
