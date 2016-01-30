@@ -40,7 +40,7 @@ public class User implements Serializable {
 	@JsonIgnore
 	private String password;
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "organization_id")
 	private Organization organization;
 

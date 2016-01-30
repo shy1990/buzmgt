@@ -101,10 +101,14 @@ public class SaojieServiceImpl implements SaojieService {
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
     String hql = "select t.* from SYS_SAOJIE t ";
     if(saojie.getSalesman() != null){
-      
-     String serHql = "left join sys_salesman s on t.user_id = s.user_id where s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
-     hql += ""+serHql+" and t.region_id in"
-         + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
+      if((null!=saojie.getSalesman().getJobNum()&&!"".equals(saojie.getSalesman().getJobNum()))||(null!=saojie.getSalesman().getTruename()&&!"".equals(saojie.getSalesman().getTruename()))){
+        String serHql = "left join sys_salesman s on t.user_id = s.user_id where s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
+        hql += ""+serHql+" and t.region_id in"
+            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
+      }else{
+        hql += "where t.region_id in"
+            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
+      }
     }else{
       hql += "where t.region_id in"
           + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
@@ -116,6 +120,7 @@ public class SaojieServiceImpl implements SaojieService {
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
     q.setMaxResults(7);
+    System.out.println(q.getResultList());
     List<Saojie> list = new ArrayList<Saojie>();
     for(Object obj: q.getResultList()){
       Saojie sj = (Saojie)obj;
