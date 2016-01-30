@@ -26,11 +26,11 @@
 <body>
 	<div class="content main">
 		<h4 class="team-member-header page-header ">
-			<div class="row">
-				<div class="col-sm-12">
-					<i class="icon icon-ywdet"></i>扫街明细
-				</div>
-			</div>
+			<i class="icon icon-ywdet"></i>扫街明细
+			<a href="/teammember/salesManList" class="btn btn-blue member-add-btn"
+				type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
+				返回列表
+			</a>
 		</h4>
 		<div class="row">
 			<div class="col-md-9">
@@ -135,7 +135,7 @@
 						<!--拜访任务-->
 						<div class="visit">
 							<button class="col-xs-12 btn btn-visit" href="javascript:;">
-								<i class="icon icon-add"></i>拜访
+								<i class="ico icon-add"></i>拜访
 							</button>
 						</div>
 						<!--拜访任务-->

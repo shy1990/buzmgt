@@ -1,6 +1,5 @@
 /* 闁规鍋夐、婊兦庣拠鎻掝潱濡炪倗鏁诲鐧眘s鐎殿噯鎷峰┑顕嗘嫹 */
 .member-add-icon{
-	top: 4px;
 	background: url(../img/saojie/tianxie.png) no-repeat;
 }
 .p-n {
@@ -13,7 +12,7 @@
 }
 
 .form-control{
-	outline: auto;
+	outline: none;
 }
 .clear {
 	clear: both;
@@ -155,12 +154,10 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 } */
 .box-map{
 	min-height: 622px;
-	padding: 26px 50px;
 	background: #FFF;
 	border-radius: 5px;
 	padding-top: 36px;
 	border: 1px solid red;
-	margin: 0px 20px 30px 70px;
 }
 .saojie-phone{
 	width: 8%;
@@ -1027,10 +1024,10 @@ dd.project-people {
 	background:url(../img/saojie/sjwc.png) no-repeat;
 }
 .project-completion {
-	width: 30%;
+	min-width: 200px;
 }
 .project-completion .completion-ing{
-	padding: .3em 2em;
+	padding: .3em 0 .3em 2em;
 	background:url(../img/saojie/ywzb.png) no-repeat;
 }
 .time-down {
@@ -1104,7 +1101,7 @@ body.rtls .stat-percent {
 }
 /*婵烇綀顕ф慨鐐哄箥椤愩儺鏁庨柟绋款樀閹革拷*/
 .member-add-btn{
-	margin-left: 0px;
+	margin-left: 20px;
 }
 /*small 闁哄倸娲﹀﹢浼村礃閸涱収鍟�*/
 .header-text{

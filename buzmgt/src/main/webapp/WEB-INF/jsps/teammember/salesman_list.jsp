@@ -116,7 +116,7 @@
 																<td class="project-title"><span class="l-h">大桥镇：<strong
 																		class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
 																		class="shop-num-d">10家</strong></span></td>
-																<td class="project-completion col-md-5 col-sm-2">
+																<td class="project-completion">
 																	<span class="completion-ing">当前进度： 88%</span> 
 																	<span class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
 																	<div class="progress progress-mini">
@@ -150,7 +150,7 @@
 												<div style="text-align: center;padding-bottom: 20px" >
 													<ul class="pagination box-page-ul">
 														<li><a
-															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
+															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}','${regionId}')">&laquo;</a></li>
 														<!-- 1.total<=7 -->
 														<c:if test="${list.totalPages<=7 }">
 															<c:forEach var="s" begin="1" end="${list.totalPages}"
@@ -244,7 +244,7 @@
 			</div>
 			<div class="col-md-3 ">
 				<!--box-->
-				<div class="member-district box border gray">
+				<div class="member-district box border red">
 					<!--title-->
 					<div class="box-title">
 						<i class="icon icon-district"></i>区域

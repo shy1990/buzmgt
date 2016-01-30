@@ -342,7 +342,7 @@ public class RegionController {
 	  
 	  @RequestMapping(value="/getPersonalRegion",method = RequestMethod.GET)
 	  public String  getPersonalRegion(String id,String flag,Model model){
-	    model.addAttribute("flag", flag);
+	    model.addAttribute("flag",flag);
 	    return "region/region_personal";
 	  }
 	  

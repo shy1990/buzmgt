@@ -21,7 +21,7 @@
 .icon-tag-span{
 	position: relative;
 	top: -3px;
-	padding: 6px;
+	padding: 7px 10px ;
 	padding-top: 5px;
 	margin: 0 15px;
 	font-size: 12px;
@@ -41,6 +41,7 @@
 .btn-audit,
 .btn-audit:hover,
 .btn-audit:focus{
+	min-width: 84px;
 	background: #3BA2DC;
 	border-color: #3285B7;
 	color: #FFF;
