@@ -30,6 +30,7 @@ function queryTown(){
 	var intLen = $("div[id^='selOrder']").length;
 	var len = $("#btType");
 	len.prevAll().remove();
+	$("#btn").show();
 	var userId = document.getElementById("saojieMan").value;
 	$.ajax({
 	type:"post",
