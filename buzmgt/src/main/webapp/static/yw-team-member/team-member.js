@@ -4,7 +4,7 @@ function getPageList(num,regionId){
 }
 
 function getList(param,name,regionId){
-    if(name == "goSearch"){
+    if(name == "goSearch" || name == "param"){
     	var value = $("#param").val();
     	window.location.href="/teammember/getSalesManList?truename="+value+"&jobNum="+value+"&regionId="+regionId
     }else if(name == "salesmanStatus"){
@@ -16,6 +16,12 @@ function toSalesManInfo(id,flag){
 	window.location.href="/teammember/toSalesManInfo?userId="+id+"&flag="+flag;
 }
 
+function searchForm(event,value,regionId){
+	if(event.keyCode==13){
+
+		window.location.href="/teammember/getSalesManList?truename="+value+"&jobNum="+value+"&regionId="+regionId
+	}
+}
     
 $(function(){
 //	$(':checked').click();
@@ -54,6 +60,7 @@ $(function(){
 	}*/
 	$(" li[title = '"+status+"']").addClass('active');
 });
+
 
 var myDate = new Date();
 var tody = changeDateToString(myDate);

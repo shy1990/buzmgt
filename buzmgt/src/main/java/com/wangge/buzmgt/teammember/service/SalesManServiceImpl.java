@@ -120,10 +120,10 @@ public  class SalesManServiceImpl implements SalesManService {
         + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
     Query q = em.createNativeQuery(hql,SalesMan.class); 
     if(salesMan.getTruename()!= null && !"".equals(salesMan.getTruename())){
-      q.setParameter(1, salesMan.getTruename());
+      q.setParameter(1, "%"+salesMan.getTruename()+"%");
     }
     if(salesMan.getJobNum() != null && !"".equals(salesMan.getJobNum())){
-      q.setParameter(1, salesMan.getTruename());
+      q.setParameter(2, "%"+salesMan.getJobNum()+"%");
     }
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
