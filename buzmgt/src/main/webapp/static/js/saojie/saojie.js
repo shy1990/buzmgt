@@ -33,6 +33,14 @@ function queryTown(){
 	$("#btn").show();
 	var userId = document.getElementById("saojieMan").value;
 	$.ajax({
+		   type:"post",
+		   url:"/saojie/getOrderNum",
+		   data: {"id":userId},
+		   success : function(obj){
+			  orderNum=obj;
+		   }
+	   });	
+	$.ajax({
 	type:"post",
 	url:"/saojie/gainSaojieTown",
 	data: {"id":userId},
@@ -62,35 +70,21 @@ function queryTown(){
 	        		map.addOverlay(polygon);   //增加多边形
 	        	}
 			}
-	        $.ajax({
-	 		   type:"post",
-	 		   url:"/saojie/getRegionName",
-	 		   data: {"id":userId},
-	 		   success : function(obj){
-	 			   map.centerAndZoom(obj, 11);  // 初始化地图,设置中心点坐标和地图级别
-	 			   map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-	 			   map.setCurrentCity(obj);          // 设置地图显示的城市 此项是必须设置的
-	 			   map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-	 		   }
-	 	   });	
-	        $.ajax({
-	 		   type:"post",
-	 		   url:"/saojie/getOrderNum",
-	 		   data: {"id":userId},
-	 		   success : function(obj){
-	 			  orderNum=obj;
-	 			 $("#base").val(obj);
-	 		   }
-	 	   });	
-	}else {
-			//alert(obj.length);
-			//for(var i=0;i<obj.length;i++){
-			//	alert(obj[i].name);
-			//}
-			
-		};
+	}
  }
 });
+	
+	$.ajax({
+		   type:"post",
+		   url:"/saojie/getRegionName",
+		   data: {"id":userId},
+		   success : function(obj){
+			   map.centerAndZoom(obj, 11);  // 初始化地图,设置中心点坐标和地图级别
+			   map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+			   map.setCurrentCity(obj);          // 设置地图显示的城市 此项是必须设置的
+			   map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+		   }
+	   });	
 }
 var orderNum;
 function AddOrder(btType) {
@@ -226,6 +220,16 @@ function toSubmit(){
 	form.submit();
 }
 
+/*enter键*/
+function check() {
+	var bt = document.getElementById("goSearch");
+	var event = window.event || arguments.callee.caller.arguments[0];
+    if (event.keyCode == 13)
+    {
+        bt.click();
+    }
+}
+
 /*扫街列表*/
 function getAllSaojieList(regionId){
 	
@@ -245,3 +249,4 @@ function getPageList(num,regionId,name,job,statu){
 	
 	window.location.href="/saojie/getSaojieList?page="+num+"&regionid="+regionId+"&salesman.jobNum="+job+"&salesman.truename="+name+"&saojieStatus="+statu;
 }
+
