@@ -21,7 +21,7 @@
 .icon-tag-span{
 	position: relative;
 	top: -3px;
-	padding: 6px;
+	padding: 7px;
 	padding-top: 5px;
 	margin: 0 15px;
 	font-size: 12px;
@@ -41,6 +41,7 @@
 .btn-audit,
 .btn-audit:hover,
 .btn-audit:focus{
+	min-width: 84px;
 	background: #3BA2DC;
 	border-color: #3285B7;
 	color: #FFF;
@@ -143,6 +144,13 @@ tr:first-child .arow-up{
 .map-box{
 	border: 1px solid #d43f3a;
 	margin-bottom: 50px;
+	min-height: 622px;
+	padding: 26px 50px;
+	background: #FFF;
+	border-radius: 5px;
+	padding-top: 36px;
+	border: 1px solid red;
+	margin: 0px 20px 30px 70px;
 }
 
 

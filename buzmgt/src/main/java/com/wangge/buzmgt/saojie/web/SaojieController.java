@@ -1,15 +1,16 @@
 package com.wangge.buzmgt.saojie.web;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,13 +18,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.salesman.entity.SalesMan;
-import com.wangge.buzmgt.salesman.entity.SalesMan.SalesmanStatus;
-import com.wangge.buzmgt.salesman.service.SalesManService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.entity.SaojiePage;
 import com.wangge.buzmgt.saojie.service.SaojieService;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 
 /**
  * 
@@ -45,17 +48,27 @@ public class SaojieController {
   private RegionService regionService;
   @Resource
   private SaojieService saojieService;
-	
+  @Resource
+  private ManagerService managerService;
 	@RequestMapping("/saojieList")
 	public String saojieList(String saojieList, Model model,Saojie saojie){
 	  int pageNum = 0;
-	  SaojiePage list = saojieService.getSaojieList(saojie,pageNum);
+	  Subject subject = SecurityUtils.getSubject();
+    User user=(User) subject.getPrincipal();
+    Manager manager = managerService.getById(user.getId());
+    if(null!=manager.getRegion().getCoordinates()){
+      model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
+    }
+    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,manager.getRegion().getName());
     int count = saojieService.getRegionCount();
     model.addAttribute("count",count);
     model.addAttribute("list", list);
 		model.addAttribute("saojieList", saojieList);
+     model.addAttribute("regionName", manager.getRegion().getName());
+     model.addAttribute("regionId", manager.getRegion().getId());
+		
 		return "saojie/saojie_list";
-	}
+	} 
 	
 	/**
 	 * 
@@ -71,19 +84,43 @@ public class SaojieController {
 	  * @since JDK 1.8
 	 */
 	@RequestMapping(value = "/getSaojieList")
-  public  String  getSaojieList(Model model,Saojie saojie, String saojieStatus,String page, HttpServletRequest requet){
+  public  String  getSaojieList(Model model,Saojie saojie,String regionid,String regionName, String saojieStatus,String page, HttpServletRequest requet){
         int pageNum = Integer.parseInt(page != null ? page : "0");
         if(SaojieStatus.PENDING.getName().equals(saojieStatus) ){
           saojie.setStatus(SaojieStatus.PENDING);
         }else if(SaojieStatus.AGREE.getName().equals(saojieStatus)){
           saojie.setStatus(SaojieStatus.AGREE);
         }
-    SaojiePage list = saojieService.getSaojieList(saojie,pageNum);
+        Region region=new Region();
+        if(null!=regionid){
+          region =regionService.getRegionById(regionid);
+          saojie.setRegion(region);
+          if(null!=region.getCoordinates()){
+            model.addAttribute("pcoordinates", region.getCoordinates());
+          }
+          model.addAttribute("regionName", region.getName());
+          model.addAttribute("regionId", region.getId());
+        }
+       if(null!=regionName){
+         region =regionService.findByNameLike(regionName);
+         saojie.setRegion(region);
+         if(null!=region.getCoordinates()){
+           model.addAttribute("pcoordinates", region.getCoordinates());
+         }
+         model.addAttribute("regionName", region.getName());
+         model.addAttribute("regionId", region.getId());
+       }
+       if(null != saojie.getSalesman()){
+         model.addAttribute("truename",saojie.getSalesman().getTruename());
+         model.addAttribute("jobNum",saojie.getSalesman().getJobNum());
+       }
+        
+    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,region.getName());
     model.addAttribute("list", list);
     model.addAttribute("saojieStatus",saojieStatus);
     int count = saojieService.getRegionCount();
     model.addAttribute("count",count);
-    return "saojie/saojie_list";
+    return   "saojie/saojie_list";
   }
 	
 	@RequestMapping("/toAdd")
@@ -125,6 +162,14 @@ public class SaojieController {
 	  if(sm != null && !"".equals(sm)){
 	    list = regionService.findByRegion(sm.getRegion().getId());
 	  }
+	  Iterator<Region> regIter = list.iterator();
+	  while(regIter.hasNext()){
+	    Region region = regIter.next();
+	    Saojie saojie = saojieService.findByregion(region);
+	    if(saojie != null && region.getId().equals(saojie.getRegion().getId())){
+        regIter.remove();
+      }
+	  }
     return list;
 	}
 	
@@ -155,6 +200,7 @@ public class SaojieController {
 	    sj.setSalesman(saojie.getSalesman());
 	    saojieService.saveSaojie(sj);
 	  }
+	  
 	  return "redirect:/saojie/saojieList";
 	}
 	
@@ -167,6 +213,8 @@ public class SaojieController {
 	  }
 	  model.addAttribute("list",list);
 	  model.addAttribute("salesman",salesman);
+	  model.addAttribute("areaname",salesman.getRegion().getName());
+	  model.addAttribute("regionData",regionService.findByRegion(salesman.getRegion().getId()));
 	  return "saojie/saojie_set";
 	}
 
@@ -195,7 +243,7 @@ public class SaojieController {
 	public String changeOrder(String id,int ordernum,String userId,int flag){
 	    //下边数据移动到上边，处理上面数据
 	  Saojie saojie = null;
-	  if(flag == -1){//下移时改变下一行的序号
+	  if(flag == -1){
 	    saojie = saojieService.changeOrder(ordernum+1,userId);
 	    saojie.setOrder(ordernum);
 	  }else{
@@ -204,7 +252,7 @@ public class SaojieController {
 	  }
 	  saojieService.saveSaojie(saojie);
 	  Saojie sj = saojieService.findById(id);//当前行id
-	  if(flag == -1){//下移时改变当前行序号
+	  if(flag == -1){
 	    sj.setOrder(ordernum+1);
 	  }else{
 	    sj.setOrder(ordernum);
@@ -212,5 +260,22 @@ public class SaojieController {
 	  saojieService.saveSaojie(sj);
 	  return "ok";
 	}
+	@RequestMapping(value = "/getRegionName",method = RequestMethod.POST)
+  @ResponseBody
+  public String getRegionName(String id){
+    SalesMan sm = salesManService.findByUserId(id);
+    String  regionName=sm.getRegion().getName();
+    return regionName;
+  }
+	
+	@RequestMapping(value = "/getOrderNum",method = RequestMethod.POST)
+  @ResponseBody
+  public int getOrderNum(@RequestParam("id")SalesMan salesman){
+	  List<Saojie> list = saojieService.findBysalesman(salesman);
+	  int orderNum = 0;
+	  if(list != null && list.size()>0){
+	    orderNum = saojieService.getOrderNumById(salesman.getId());
+	  }
+    return orderNum;
+  }
 }
-

@@ -30,7 +30,7 @@
 	<div id="j_page_main" class="content main">
 		<h4 class="page-header">
 			<i class="icon pur-setting-icon"></i>权限设置 <a
-				class="btn btn-danger marg-lef-10" data-toggle="modal"
+				class="btn btn-blue marg-lef-10" data-toggle="modal"
 				data-target=".j_create_role" data-whatever="@mdo"><i
 				class="icon-add"></i>创建角色</a>
 		</h4>
@@ -97,8 +97,8 @@
 									<div class="form-group">
 										<label for="name" class="col-md-3 control-label">角色名称</label>
 										<div class="col-md-9 ">
-											<input type="text" placeholder="请填写角色名称" class="form-control"
-												name="name" id="name">
+											<input type="text" placeholder="请填写角色名称" class="form-control" name="name" id="name" onchange="tocheckname()"/>
+											<span id="gradeInfo"></span> 
 										</div>
 										<label class="pull-right col-md-3 control-label msg-error" id="nameError">请填写角色名称</label>
 									</div>
@@ -113,8 +113,7 @@
 							</div>
 							<div class="modal-footer">
 								<div class="col-md-3 col-md-offset-8">
-									<button type="submit" onclick="addRole()"
-										class="btn col-xs-12 btn-danger ">确定</button>
+									<button type="submit" onclick="addRole()" id="bt"	class="btn col-xs-12 btn-danger" disabled >确定</button>
 								</div>
 							</div>
 						</div>
@@ -136,6 +135,26 @@
 					.write("<script src='../static/js/jquery.min.js'>\x3C/script>");
 </script>
 <script type="text/javascript">
+	/*判断角色是否已存在 */
+	function tocheckname(){
+		var name = $('#name').val();
+		var url = "checkByRoleName?name="+name;
+		$.post(url, function(data) {
+			
+			if (data === 'err') {
+				$("#gradeInfo").html("<font color=\"red\">您输入的角色存在！请重新输入！</font>"); 
+				document.getElementById("bt").disabled=true;	
+			} else {
+				$("#gradeInfo").html(""); 
+				document.getElementById("bt").disabled=false;	
+			}
+		});
+		
+	}
+
+
+
+
 	/*	新增角色*/
 	function addRole() {
 		var $_name=$('#name');

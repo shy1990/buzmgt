@@ -5,17 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
-
-
-
-
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -29,15 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangge.buzmgt.manager.entity.Manager;
-import com.wangge.buzmgt.manager.service.ManagerService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
-import com.wangge.buzmgt.util.RegionUtil;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.RegionVo;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.util.RegionUtil;
 
 @Controller
 @RequestMapping(value = "/region")
@@ -319,18 +313,55 @@ public class RegionController {
 	
 	@RequestMapping(value="/getRegionById",method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<List<RegionVo>> getRegionById(String id,HttpServletRequest request){
+	public ResponseEntity<List<RegionTree>> getRegionById(String id,HttpServletRequest request){
 		String regionId = "0";
 		if(id != null && !"".equals(id)){
 			regionId = id;
 		}else{
 			Subject subject = SecurityUtils.getSubject();
 			User user=(User) subject.getPrincipal();
-			Manager manager = managerService.getById(user.getId());
-			regionId = String.valueOf(manager.getRegion().getId());
+			com.wangge.buzmgt.teammember.entity.Manager manager = managerService.getById(user.getId());
+			Manager manager1 = managerService.getById(user.getId());
+			regionId = String.valueOf(manager1.getRegion().getId());
 		}
-		   List<RegionVo> regionList = regionService.getRegionByPid(regionId);
-		return new ResponseEntity<List<RegionVo>>(regionList,HttpStatus.OK);
+		   List<RegionTree> regionList = regionService.getRegionByPid(regionId);
+		return new ResponseEntity<List<RegionTree>>(regionList,HttpStatus.OK);
 	}
-	
+	 
+	  /**
+	   * 
+	    * getPersonalRegion:初始化所属区域树页面. <br/> 
+	    * 
+	    * @author jiabin 
+	    * @param id
+	    * @param flag
+	    * @param request
+	    * @return 
+	    * @since JDK 1.8
+	   */
+	  
+	  @RequestMapping(value="/getPersonalRegion",method = RequestMethod.GET)
+	  public String  getPersonalRegion(String id,String flag,Model model){
+	    model.addAttribute("flag",flag);
+	    return "region/region_personal";
+	  }
+	  
+	  /**
+	   * 
+	    * findOnePersonalRegion:(这里用一句话描述这个方法的作用). <br/> 
+	    * 
+	    * @author jiabin 
+	    * @return 
+	    * @since JDK 1.8
+	   */
+	  @RequestMapping(value = "/findOnePersonalRegion", method = RequestMethod.POST)
+	  @ResponseBody
+	  public ResponseEntity<List<RegionTree>> findOnePersonalRegion() {
+	     List<RegionTree> listTreeVo =new ArrayList<RegionTree>();
+	      Subject subject = SecurityUtils.getSubject();
+	      User user=(User) subject.getPrincipal();
+	      Manager manager = managerService.getById(user.getId());
+	      listTreeVo.add(RegionUtil.getRegionTree(manager.getRegion()));
+	    return new ResponseEntity<List<RegionTree>>(listTreeVo,HttpStatus.OK);
+	  }
 }

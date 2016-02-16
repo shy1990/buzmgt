@@ -21,6 +21,8 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css"
 	href="/static/CloudAdmin/js/fuelux-tree/fuelux.min.css" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+ <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
 </head>
 
 <body>
@@ -28,26 +30,11 @@
 		<h4 class="team-member-header page-header">
 			<i class="icon team-member-list-icon"></i>团队成员
 			<!--区域选择按钮-->
-			<!-- 隐藏区域选择按钮 -->
-			<div class="btn-group sr-only">
-				<button type="button" class="btn btn-default ">
-					<i class="icon province-icon"></i>山东省
+				<button type="button" class="btn btn-default" onclick="getRegion(${regionId});">
+					<i class="icon province-icon"></i>${regionName}
 				</button>
-				<button type="button" class="btn btn-default dropdown-toggle"
-					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<span class="caret"></span> <span class="sr-only">Toggle
-						Dropdown</span>
-				</button>
-				<ul class="dropdown-menu">
-					<li><a href="#">Action</a></li>
-					<li><a href="#">Another action</a></li>
-					<li><a href="#">Something else here</a></li>
-					<li role="separator" class="divider"></li>
-					<li><a href="#">Separated link</a></li>
-				</ul>
-			</div>
 			<!--/区域选择按钮-->
-			<a href="/salesman/toAdd" class="btn btn-warning " type="button">
+			<a href="/teammember/toAdd" class="btn btn-warning " type="button">
 				<i class="icon icon-add"></i>添加成员
 			</a>
 				<small class="header-text">共<span class="text-red">${list.totalElements}</span>位成员
@@ -57,7 +44,7 @@
 		<div class="row">
 			<div class="col-md-9">
 				<!--box-->
-				<div class="team-member-body box border red">
+				<div class="team-member-body box border blue">
 					<!--title-->
 					<div class="box-title">
 						<div class="row">
@@ -66,19 +53,19 @@
 								<ul class="nav nav-tabs">
 									<input id="status" type="hidden" value="${Status}">
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,'${regionId}');"
 										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
 											class="hidden-inline-mobile">扫街中</span></a></li>
 									<li title="考核中"><a title="考核中" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,'${regionId}');"
 										data-toggle="tab"><i class="fa fa-laptop"></i> <span
 											class="hidden-inline-mobile">考核中</span></a></li>
 									<li title="开发中"><a title="开发中" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,'${regionId}');"
 										data-toggle="tab"><i class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">开发中</span></a></li>
 									<li title="已转正"><a title="已转正" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name);"
+										href="" onclick="getList(this.title,this.name,'${regionId}');"
 										data-toggle="tab"><i class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">已转正</span></a></li>
 								</ul>
@@ -132,20 +119,17 @@
 																		class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
 																		class="shop-num-d">10家</strong></span></td>
 																<td class="project-completion col-md-5 col-sm-2">
-																	<div>
-																		<span class="completion-ing">当前进度： 88%</span> 
-																		<span class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
-																	</div>
+																	<span class="completion-ing">当前进度： 88%</span> 
+																	<span class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
 																	<div class="progress progress-mini">
-																		<div style="width: 88%;"
-																			class="progress-bar saojie-bar-on"></div>
+																		<div style="width: 88%;" class="progress-bar saojie-bar-on"></div>
 																	</div>
 																</td>
 																<td class="project-actions"><a
 																	href="projects.html#" class="btn btn-white btn-sm "><span
 																		class="folder"></span> 查看 </a>
 																	<!-- Single button -->
-																	<div class="btn-group">
+																	<div class="btn-group sr-only">
 																		<button type="button"
 																			class="btn btn-white btn-sm dropdown-toggle"
 																			data-toggle="dropdown" aria-haspopup="true"
@@ -268,15 +252,18 @@
 						<i class="icon icon-district"></i>区域
 					</div>
 					<div class="box-body">
-						<!--地图-->
-						<img width="100%" src="/static/img/team-map.png" />
-						<!--/地图-->
-						<!--组织结构-->
-						<div class="structure col-xs-12">
-							<i class="icon icon-structure"></i> 组织结构
+						<div style="height: 290px" id="allmap">
 						</div>
-						<!--tree view-->
-						<div id="tree3" class="tree"></div>
+<!-- 						<div align="center"><a href="/salesman/showMap"><font color="#0099ff" size="3">查看完整地图</font></a></div> -->
+<!-- 						地图 -->
+<!-- 						<img width="100%" src="/static/img/team-map.png" /> -->
+<!-- 						/地图 -->
+<!-- 						组织结构 -->
+<!-- 						<div class="structure col-xs-12"> -->
+<!-- 							<i class="icon icon-structure"></i> 组织结构 -->
+<!-- 						</div> -->
+<!-- 						tree view -->
+<!-- 						<div id="tree3" class="tree"></div> -->
 						<!--/组织结构-->
 					</div>
 				</div>
@@ -319,5 +306,104 @@
 	<!--<script>
        $(document).ready(function(){$("#loading-example-btn").click(function(){btn=$(this);simpleLoad(btn,true);simpleLoad(btn,false)})});function simpleLoad(btn,state){if(state){btn.children().addClass("fa-spin");btn.contents().last().replaceWith(" Loading")}else{setTimeout(function(){btn.children().removeClass("fa-spin");btn.contents().last().replaceWith(" Refresh")},2000)}};
     </script>-->
+      <script type="text/javascript">
+	<%String areaname = request.getAttribute("regionName").toString();
+		String parentid = null;
+		if (null != request.getAttribute("parentid")) {
+			parentid = request.getAttribute("parentid").toString();
+		}
+		%>
+	 	var map = new BMap.Map("allmap");
+		<%
+		if(null!=request.getAttribute("pcoordinates")){%>
+			<%
+			String pcoordinates=request.getAttribute("pcoordinates").toString();
+			String[] listCoordinates=pcoordinates.split("=");
+			 %> 
+			 			var polygon = new BMap.Polygon([
+			 	<%
+							for(int x=0;x<listCoordinates.length;x++){
+								String points=listCoordinates[x];
+								double lng=Double.parseDouble(points.split("-")[0]);//经度 
+				 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
+				 %>				
+	<%
+				 		  			if(x==listCoordinates.length-1){%>
+				 		  			new BMap.Point(<%=lng%>,<%=lat%>)
+				 		  			<%}else{%>
+				 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
+				 		  			<%}
+				 		  		%>
+				 <%
+							}%>
+							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
+			 				map.addOverlay(polygon);
+							<%
+								String jlng=listCoordinates[1].split("-")[0];
+								String jlat=listCoordinates[1].split("-")[1];
+							
+							%>
+							 var point = new BMap.Point(<%=jlng%>,<%=jlat%>);
+							 map.centerAndZoom(point, 8);    
+			 				//map.centerAndZoom(name, 8);
+			 				map.enableScrollWheelZoom(true); 
+			 				
+			 				
+			 				 var points =[
+			 				   <%
+			 				  for(int y=0;y<listCoordinates.length;y++){
+									String points=listCoordinates[y];
+									double lng=Double.parseDouble(points.split("-")[0]);//经度 
+					 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
+			 				   %>          
+					 		  		
+			 					
+				 		  		<%
+ 				 		  			if(y==listCoordinates.length-1){%> 
+				 		  		 		{"lng":<%=lng%>,"lat":<%=lat%>,"count":50}
+				 		  			<%}else{%>
+				 		  				{"lng":<%=lng%>,"lat":<%=lat%>,"count":50},
+				 		  			<%}
+				 		  		%> 
+					 		  	 <%
+									}%>
+			 				              ];
+
+			 				heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
+			 				map.addOverlay(heatmapOverlay);
+			 				heatmapOverlay.setDataSet({data:points,max:100});
+			 				setTimeout(
+			 						function(){
+			 							  heatmapOverlay.show();
+			 						},3000);
+//			 				polygon.addEventListener('click',function(e) {
+//			 				   var  point=JSON.stringify(e.pixel);
+//								  alert(point);
+	<%-- 								  alert(<%=coordinates%>); --%>
+//							});
+							<%
+		}else{%>
+			var bdary = new BMap.Boundary();
+			bdary.get('<%=areaname%>', function(rs){ //获取行政区域
+			var count = rs.boundaries.length; //行政区域的点有多少个
+	
+			for(var i = 0; i < count; i++){
+			var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+			ply.setStrokeWeight(3);
+			map.addOverlay(ply); //添加覆盖物
+			map.setViewport(ply.getPath()); //调整视野 
+			} 
+			map.centerAndZoom('<%=areaname%>', 12);
+			map.enableScrollWheelZoom(true); 
+			}); 
+		<%}%>
+		
+		
+		/*区域 */
+		function getRegion(id){
+			window.location.href='/region/getPersonalRegion?id='+id;
+		}
+		
+		</script>
 </body>
 </html>

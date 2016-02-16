@@ -870,10 +870,10 @@ dd.project-people {
 	background:url(../img/team-member/sjwc.png) no-repeat;
 }
 .project-completion {
-	min-width: 200px;
+	min-width: 220px;
 }
 .project-completion .completion-ing{
-	padding: .3em 2em;
+	padding: .3em 0 .3em 2em;
 	background:url(../img/team-member/ywzb.png) no-repeat;
 }
 .time-down {
@@ -1035,5 +1035,13 @@ body.rtls .stat-percent {
 .table-responsive{
 	overflow-y: hidden; 
 }
+
+
+
+
+
+
+
+
 
 

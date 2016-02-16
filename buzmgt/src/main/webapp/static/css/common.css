@@ -1,5 +1,6 @@
 body{
 	background: #fafafa;
+	font-family: simsun;
 }
 /* <main>*/
 .main {
@@ -21,6 +22,7 @@ body{
 	min-height: 66px;
 	line-height: 66px;
 	padding-left: 26px ;
+	padding-bottom: 0;
 	margin-top: 0;
 	margin-left: -26px;
 	margin-right: -26px;
@@ -29,6 +31,7 @@ body{
 	font-size: 16px;
 	font-weight: bold;
 	background:#fff;
+	color: #5D5D5D;
 }
 a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	outline: 0;
@@ -180,14 +183,12 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	top: 5px;
 }
 /*业务详情*/
-.icon-ywdet{
+.icon-ywdet,
+.icon-khxq{
 	background: url(../img/icon/team-member/det/bfjl.png) no-repeat;
 	top: 5px;
 }
 .icon-add{
-	margin-top: -5px;
-	margin-left: -5px;
-	margin-bottom: -5px;
 	background: url(../img/icon/team-member/list/tjcy_tb.png) no-repeat;
 }
 .icon-list{
@@ -221,6 +222,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	border-radius: 10px;
 	position: relative;
 }
+
 /*btn*/
 .btn-visit,
 .btn-visit:hover,
@@ -228,6 +230,13 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: #3993C7;
 	color: #FFF;
 }
+.btn-blue,
+.btn-blue:hover,
+.btn-blue:focus{
+	background: #3993C7;
+	color: #FFF;
+}
+
 
 .align-right{
 	text-align: right;
@@ -236,14 +245,19 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .hr{
 	margin: 15px -20px;
 	border-top: 1px dashed #D4D4D4;
+	clear: both;
 }
 /*实线*/
 .hr-solid{
+	clear: both;
 	margin: 15px -20px;
-	border-top: 1px solid #DBDBDB;
+	border-top: 2px solid #DBDBDB;
 }
 .marg-b-10{
 	margin-bottom: 10px;
+}
+.marg-b-20{
+	margin-bottom: 20px;
 }
 /*不同状态文字颜色*/
 .text-danger{
@@ -252,6 +266,52 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .text-primary{
 	color: #3894C7;
 }
+
+/*新图标实现方式*/
+.ico{
+	padding: 2px 18px 2px 2px;
+	margin-right: 5px;
+	position: relative;
+	top:-1px;
+}
+/* 区域切换 */
+.area-choose{
+	display: inline-block;
+	margin-left: 30px;
+	margin-right: 20px;
+	font-size: 14px;
+}
+.area-choose>span{
+	font-weight: 400;
+}
+.are-line{
+	font-size: 12px;
+	font-weight: 400;
+}
+.icon-saojie-list{
+	background-image: url(../img/icon/saojie/saojieshehzi.png);
+	top: 5px; 
+}
+.icon-saojie-add{
+	background-image: url(../img/saojie/saojie-add.png); 
+}
+/*添加成员按钮*/
+.member-add-btn{
+	margin-left: 20px;
+}
+.saojie-add-box .box-body{
+	padding-top: 20px;
+}
+.quyujiegou .box-title{
+	padding-top: 10px;
+	
+}
+
+
+
+
+
+
 
 
 

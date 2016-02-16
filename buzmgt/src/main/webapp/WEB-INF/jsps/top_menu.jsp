@@ -61,7 +61,7 @@
 							<li><a class="user logout-icon" href="logout">退出登录</a></li>
 						</ul></li>
 				</ul>
-				<form class="navbar-form navbar-right">
+				<form class="navbar-form navbar-right sr-only">
 					<div class="search-box">
 						<input class="search-input" type="text" class="form-control"
 							placeholder="Search..."> <a class="search-icon" type="submit"></a>

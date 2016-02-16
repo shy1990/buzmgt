@@ -1,0 +1,121 @@
+.kaohe-time{
+	float: right;
+	display: inline-block;
+}
+.kaohe-det-body .box-title{
+	padding-top: 10px;
+}
+.kaohe-det-body .box-title span{
+	font-weight: 400;
+}
+/*图标*/
+.icon-ywmember{
+	background: url(../img/icon/kaohe/rencheng.png) no-repeat;
+}
+/*列表头部*/
+.det-head{
+	position: relative;
+}
+.kaohe-det-body .box-body{
+	padding-top: 20px;
+}
+/*倒计时*/
+.text-time{
+	color: #D55383;
+	font-weight: 400;
+	font-size: 12px;
+}
+/*考核阶段*/
+.kaohe-stage{
+	width: 120px;
+	height: 23px;
+	padding:4px 20px  6px ;
+	background: url(../img/icon/kaohe/biaoqian1.png) no-repeat;
+	color: #FFF;
+}
+/*标签定位*/
+	.tag{
+	position: absolute;
+	z-index: 100;
+	top: -2px;
+	right: -6px;
+	width: 15px;
+	height: 15px;
+	background: #FFF;
+	border: 1px solid #D0D0D0;
+	border-radius: 2px;
+}
+/*进度条上的标签*/
+.icon-tag{
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	line-height: 20px;
+	top: -25px;
+	right: -10px;
+	color: #FFF;
+	font-size: 12px;
+}
+.tag .icon-tag{
+	right: -6px;
+	top: -30px;
+}
+.tag-kaohe{
+	background: url(../img/icon/kaohe/biaoqian2.png) no-repeat;
+}
+/*倒计时*/
+.icon-countdown{
+	background: url(../img/icon/kaohe/daojishi.png) no-repeat;
+}
+.date-month{
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;		
+}
+/*检索区域*/
+.search-box{
+	margin-bottom: 20px;
+}
+/*导出*/
+.link-export{
+	margin-left: 30px;
+	padding-bottom: 3px;
+	font-size: 14px;
+	font-weight: bold;
+}
+a.link-export:hover,
+a.link-export:focus{
+	color: #3B92C7;
+	border-bottom: 1px solid #3B92C7;
+}
+.ico-seach-wiath{
+	background: url(../img/icon/kaohe/jiansuo.png) no-repeat;
+}
+.company-table .table{
+	border: 1px solid #DDD;
+}
+.company-table .table>thead>tr>th{
+	background: #F5F5F5;
+}
+.company-table .table>thead>tr>th,
+.company-table .table>tbody>tr>td{
+	vertical-align: middle;
+	padding: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

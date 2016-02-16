@@ -23,14 +23,19 @@ import com.wangge.buzmgt.sys.repository.UserRepository;
 @SpringBootApplication
 public class BuzmgtApplication extends SpringBootServletInitializer {
 	
+  public static void main(String[] args) {
+    SpringApplication.run(BuzmgtApplication.class, args);
+  }
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(BuzmgtApplication.class);
 	}
 
-	public static void main(String[] args) {
-		SpringApplication.run(BuzmgtApplication.class, args);
-	}
+	
+	
+	
+	
+	
 	//@Bean
 /*	CommandLineRunner init(UserRepository userRepository, RoleRepository roleRepository,OrganizationRepository organizationRepository,ResourceRepository moduleRepository) {
 		return (evt) -> {

@@ -87,7 +87,6 @@ public class UserServiceImpl implements UserService {
 		return roleRepository.findOne(id);
 	}
 
-	@Override
 	@Transactional
 	public User getById(String id) {
 		

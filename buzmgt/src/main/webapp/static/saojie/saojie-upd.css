@@ -1,0 +1,92 @@
+/*图标*/
+.icon-saojie-add{
+	padding: 2px 8px 18px 12px;
+	margin: 0 10px;
+	background: url(../img/icon/saojie/upd/tj.png) no-repeat;
+}
+.icon-add-set{
+	top: 5px;
+	background: url(../img/icon/saojie/upd/tj.png) no-repeat;
+	
+}
+/*设置*/
+.saojie-upd-body .box-title>h4{
+	font-size: 14px;
+	font-weight: bold;
+}
+.saojie-upd-list{
+	padding-left: 0;
+}
+.saojie-upd-list thead{
+	background: #FAFAFA;
+}
+.saojie-upd-list .table-bordered > thead > tr > th,
+.saojie-upd-list .table > tbody > tr > td{
+	border-bottom-width: 1px ;
+	padding-left: 20px;
+	/*vertical-align: middle;*/
+}
+/*考核区域添加按钮*/
+.btn-kaohe-add,
+.btn-kaohe-add:hover,
+.btn-kaohe-add:focus{
+	background: #FFFFFF;
+}
+/*平分tr*/
+.average-tr{
+	width: 50%;
+}
+/*考核指标*/
+.target .form-control{
+	width: 50%;
+}
+/*区域选中*/
+.average-tr .col-sm-4{
+	padding-left: 0;
+	margin-bottom: 10px;
+}
+/*考核周期图标*/
+.icon-kaohe-week{
+	background: url(../img/icon/saojie/upd/khsj.png) no-repeat;
+}
+/*考核开始*/
+.kaohe-week-start .input-group-addon{
+	padding-left: 9px;
+	padding-right: 10px;
+}
+.btn-audit, 
+.btn-audit:hover, 
+.btn-audit:focus {
+    background: #3BA2DC;
+    border-color: #3285B7;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: bold;
+}
+.map-box {
+	width: 100%;
+}
+
+/**/
+.kaohe-week .input-group-addon{
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

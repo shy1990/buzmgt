@@ -1,6 +1,5 @@
-/* 閹殿偉顢滃ǎ璇插妞ょ敻娼癱ss瀵拷婵拷 */
+/* 闁规鍋夐、婊兦庣拠鎻掝潱濡炪倗鏁诲鐧眘s鐎殿噯鎷峰┑顕嗘嫹 */
 .member-add-icon{
-	top: 4px;
 	background: url(../img/saojie/tianxie.png) no-repeat;
 }
 .p-n {
@@ -13,13 +12,13 @@
 }
 
 .form-control{
-	outline: auto;
+	outline: none;
 }
 .clear {
 	clear: both;
 }
 
-/*鐞涖劌宕熼崶鐐垼*/
+/*閻炴稏鍔屽畷鐔煎炊閻愵剛鍨�*/
 .member-icon {
 	position: relative;
 	display: inline-block;
@@ -43,11 +42,11 @@ a.order-icon:hover{
 .member-name-icon{
 	background:url(../img/saojie/xingming.png) no-repeat;
 }
-/*鏉堟挸鍙嗗鍡欑矋 span 閸ョ偓鐖ｇ�规矮缍�  span.input-group-addon*/
+/*閺夊牊鎸搁崣鍡楊浖閸℃瑧鐭� span 闁搞儳鍋撻悥锝囷拷瑙勭煯缂嶏拷  span.input-group-addon*/
 .member-from-box span.input-group-addon{
 	padding: 0 5px;
 }
-/*鏉堟挸鍙嗗鍡欑矋 input 鐎规矮缍�  input.input-group*/
+/*閺夊牊鎸搁崣鍡楊浖閸℃瑧鐭� input 閻庤鐭紞锟�  input.input-group*/
 .member-from-box .input-group{
 	float: left;
 	padding-left: 15px;
@@ -73,7 +72,7 @@ a.order-icon:hover{
 .saojie-map-icon{
 	background:url(../img/saojie/quyu.png) no-repeat;
 }
-/*鐠愮喕鐭楅崠鍝勭厵*/
+/*閻犳劗鍠曢惌妤呭礌閸濆嫮鍘�*/
 .territory{
 	padding: 15px;
 	margin-bottom: 0;
@@ -155,12 +154,10 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 } */
 .box-map{
 	min-height: 622px;
-	padding: 26px 50px;
 	background: #FFF;
 	border-radius: 5px;
 	padding-top: 36px;
 	border: 1px solid red;
-	margin: 0px 20px 30px 70px;
 }
 .saojie-phone{
 	width: 8%;
@@ -187,9 +184,9 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	cursor: hand;
 	cursor: pointer;
 }
-/* 閹殿偉顢滃ǎ璇插妞ょ敻娼扮紒鎾存将 */
+/* 闁规鍋夐、婊兦庣拠鎻掝潱濡炪倗鏁诲鎵磼閹惧瓨灏� */
 
-/* 閹殿偉顢滅拋鍓х枂閸掓銆� */
+/* 闁规鍋夐、婊呮媼閸撗呮瀭闁告帗顨夐妴锟� */
 .navbar-form-custom .form-control {
 	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
 	border: medium none;
@@ -199,7 +196,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	z-index: 2000
 }
 
-/*btn濡�虫健*/
+/*btn婵☆垪锟借櫕鍋�*/
 .btn-primary.btn-outline {
 	color: #1ab394
 }
@@ -518,33 +515,6 @@ fieldset[disabled] .btn-white:hover {
 	color: #8B91A0
 }
 
-.pagination>.active>a,
-.pagination>.active>a:focus,
-.pagination>.active>a:hover,
-.pagination>.active>span,
-.pagination>.active>span:focus,
-.pagination>.active>span:hover {
-	background-color: #f4f4f4;
-	border-color: #DDD;
-	color: inherit;
-	cursor: default;
-	z-index: 2
-}
-.pagination>li>a,
-.pagination>li>span {
-	background-color: #FFF;
-	border: 1px solid #DDD;
-	color: inherit;
-	float: left;
-	line-height: 1.42857;
-	margin-left: -1px;
-	padding: 4px 10px;
-	position: relative;
-	text-decoration: none
-}
-
-
-
 .img-circle {
 	border-radius: 50%
 }
@@ -596,7 +566,7 @@ body {
 }
 
 
-/*ibox閻╃鍙�*/
+/*ibox闁烩晝顭堥崣锟�*/
 .ibox {
 	clear: both;
 	margin-bottom: 25px;
@@ -1054,10 +1024,10 @@ dd.project-people {
 	background:url(../img/saojie/sjwc.png) no-repeat;
 }
 .project-completion {
-	width: 44.5%;
+	min-width: 200px;
 }
 .project-completion .completion-ing{
-	padding: .3em 2em;
+	padding: .3em 0 .3em 2em;
 	background:url(../img/saojie/ywzb.png) no-repeat;
 }
 .time-down {
@@ -1108,7 +1078,7 @@ body.rtls .stat-percent {
 	float: left
 }
 
-/* 閹殿偉顢滅拋鍓х枂閸掓銆冩径鏍劥 */
+/* 闁规鍋夐、婊呮媼閸撗呮瀭闁告帗顨夐妴鍐╁緞閺嶎厼鍔� */
 .team-member-list-icon{
 	top: 3px;
 	background: url(../img/icon/team-member/list/tdcy.png) no-repeat;
@@ -1125,15 +1095,15 @@ body.rtls .stat-percent {
 	margin-bottom: -5px;
 	background: url(../img/icon/team-member/list/tjcy_tb.png) no-repeat;
 }
-/*閸栧搫鐓欓柅澶夎厬閹稿鎸�*/
+/*闁告牕鎼悡娆撴焻婢跺鍘柟绋款樀閹革拷*/
 .team-member-header .btn-group{
 	margin-left: 15px;
 }
-/*濞ｈ濮為幍顐ヮ敎閹稿鎸�*/
+/*婵烇綀顕ф慨鐐哄箥椤愩儺鏁庨柟绋款樀閹革拷*/
 .member-add-btn{
-	margin-left: 0px;
+	margin-left: 20px;
 }
-/*small 閺傚洦婀伴崘鍛啇*/
+/*small 闁哄倸娲﹀﹢浼村礃閸涱収鍟�*/
 .header-text{
 	position: relative;
 	top: 8px;
@@ -1189,10 +1159,10 @@ ul, ol {
     border-radius: 5px 0px 0px;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
     /*margin-right: 15px;*/
-    margin-left: 15px;/*瀹革缚鏅舵潏纭呯獩 閿涘苯娲滄稉鍝勪箯濞搭喖濮� */
+    margin-left: 15px;/*鐎归潻缂氶弲鑸垫綇绾懐鐛� 闁挎稑鑻ú婊勭▔閸濆嫪绠繛鎼枛婵拷 */
     border-top: 1px solid #D0D0D0;
 }
-/*a瀹革缚鏅跺Λ鍗炴健*/
+/*a鐎归潻缂氶弲璺何涢崡鐐村仴*/
 .box .nav-tabs > li > a::before {
     content: "";
     position: absolute;
@@ -1207,7 +1177,7 @@ ul, ol {
     transform: skew(170deg);
     border-radius: 5px 0px 0px;
 }
-/*a閸欏厖鏅跺Λ鍗炴健*/
+/*a闁告瑥鍘栭弲璺何涢崡鐐村仴*/
 .box .nav-tabs > li > a::after {
     content: "";
     position: absolute;
@@ -1233,7 +1203,7 @@ ul, ol {
     display: block;
     padding: 10px 15px;
 }
-/*闁鑵戦弽宄扮础 active*/
+/*闂侇偄顦懙鎴﹀冀瀹勬壆纭� active*/
 .box .nav-tabs > li.active a, 
 .box .nav-tabs > li.active a::after, 
 .box .nav-tabs > li.active a::before {
@@ -1290,4 +1260,18 @@ ul, ol {
 }
 .team-member-body .tab-content{
 	background: #FFF;
+}
+
+/* 鍒嗛〉 */
+.box-page-ul>li>a,.box-page-ul.>li>span{
+/* 	color: #D9544F; */
+}
+.box-page-ul >.active>a,
+.box-page-ul >.active>a:focus, 
+.box-page-ul >.active>a:hover, 
+.box-page-ul >.active>span, 
+.box-page-ul >.active>span:focus,
+.box-page-ul >.active>span:hover{
+	background: #3894C7;
+	border-color: #3894C7; 
 }

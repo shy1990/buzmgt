@@ -26,7 +26,7 @@
 	<div id="j_page_main" class="content main">
 		<h4 class="page-header">
 			<i class="icon pur-setting-icon"></i> 菜单管理 <a
-				class="btn btn-danger marg-lef-10" data-toggle="modal"
+				class="btn btn-blue marg-lef-10" data-toggle="modal"
 				data-target=".j_create_role" data-whatever="@mdo"> <i
 				class="icon-add"></i>添加菜单
 			</a>

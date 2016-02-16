@@ -107,6 +107,31 @@ public class RoleController extends BaseController {
 		return "roles/userList";
 	}
 	/**
+	 * 
+	 * @Description: 判断角色名是否已存在
+	 * @param @param name
+	 * @param @return   
+	 * @return String  
+	 * @throws
+	 * @author changjun
+	 * @date 2016年1月29日
+	 */
+	 @RequestMapping(value="/checkByRoleName" ,method = RequestMethod.POST)
+	 @ResponseBody
+	  public String checkRoleByName(String name){
+	    try {
+	      Role r = roleService.getRoleByName(name);
+	      if(r!=null){
+	        return "err";
+	      }
+	    } catch (Exception e) {
+	      LOG.error(e);
+	      e.printStackTrace();
+	    }
+	    return "";
+	  }
+	
+	/**
 	 * 新增角色
 	 */
 	@RequestMapping(value="/addRole" ,method = RequestMethod.POST)
@@ -114,7 +139,6 @@ public class RoleController extends BaseController {
 	public String addRole(HttpServletRequest req){
 		String name = req.getParameter("name");
 		String des = req.getParameter("description");
-		System.out.println(name+"==="+des);
 		Role role = new Role(name);
 		role.setDescription(des);
 		try {

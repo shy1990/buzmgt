@@ -28,14 +28,18 @@ $(function() {
 var strtown;
 function queryTown(){
 	var intLen = $("div[id^='selOrder']").length;
-	if (intLen > 0 ){
-		for(var l=1;l<=intLen;l++){
-			var selOrder=$("div[id='selOrder"+ l +"']");
-			var order=selOrder[0];
-			order.parentNode.removeChild(order);
-		}
-	}
+	var len = $("#btType");
+	len.prevAll().remove();
+	$("#btn").show();
 	var userId = document.getElementById("saojieMan").value;
+	$.ajax({
+		   type:"post",
+		   url:"/saojie/getOrderNum",
+		   data: {"id":userId},
+		   success : function(obj){
+			  orderNum=obj;
+		   }
+	   });	
 	$.ajax({
 	type:"post",
 	url:"/saojie/gainSaojieTown",
@@ -50,7 +54,7 @@ function queryTown(){
 	        for(var i=0;i<obj.length;i++){
 	        	strtown+="<option value = '"+obj[i].id+"'>"+obj[i].name+"</option>";
 	        	if(null!=obj[i].coordinates){
-	        		 var points=new Array()
+	        		 var points=new Array();
 	        		for(var j=0;j<obj[i].coordinates.split("=").length;j++){
 	        			var lng=obj[i].coordinates.split("=")[j].split("-")[0];
 	        			var lat=obj[i].coordinates.split("=")[j].split("-")[1];
@@ -66,28 +70,23 @@ function queryTown(){
 	        		map.addOverlay(polygon);   //增加多边形
 	        	}
 			}
-	        $.ajax({
-	 		   type:"post",
-	 		   url:"/saojie/getRegionName",
-	 		   data: {"id":userId},
-	 		   success : function(obj){
-	 			   map.centerAndZoom(obj, 11);  // 初始化地图,设置中心点坐标和地图级别
-	 			   map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-	 			   map.setCurrentCity(obj);          // 设置地图显示的城市 此项是必须设置的
-	 			   map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-	 		   }
-	 	   });	
-	}else {
-			//alert(obj.length);
-			//for(var i=0;i<obj.length;i++){
-			//	alert(obj[i].name);
-			//}
-			
-		};
+	}
  }
 });
+	
+	$.ajax({
+		   type:"post",
+		   url:"/saojie/getRegionName",
+		   data: {"id":userId},
+		   success : function(obj){
+			   map.centerAndZoom(obj, 11);  // 初始化地图,设置中心点坐标和地图级别
+			   map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+			   map.setCurrentCity(obj);          // 设置地图显示的城市 此项是必须设置的
+			   map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+		   }
+	   });	
 }
-
+var orderNum;
 function AddOrder(btType) {
 	var userId = document.getElementById("saojieMan").value;
 	if (!userId)
@@ -99,6 +98,7 @@ function AddOrder(btType) {
 	if (intLen == "undefined") intLen = 1;
 	if (intLen <= 30) {
 		intLen++;
+		orderNum++;
 		var intNewApp;
 		if (intLen != 1) {
 			var intAppId = $("div[id^='selOrder']:last").attr("id");
@@ -107,30 +107,30 @@ function AddOrder(btType) {
 		} else {
 			intNewApp = 1;
 		}
-		var order;
-		if (intLen < 10) {
-			order = "0" + intLen;
+		var order="";
+		if (orderNum < 10) {
+			order = "0" + orderNum;
 		} else {
-			order = intLen;
+			order = orderNum;
 		}
 		//					var arrName;
 		//					if (1 == 1) {
 		//						arrName = ["序号", "地区", "指标"];
 		//						alert(arrName);
 		//					}
-		var strApp = '<div class="col-sm-6 col-xs-4 p-n" id="selOrder' + intLen + '">\
-			  <div class="input-group col-sm-8 col-xs-4 ">\
-		<span class="input-group-btn" id="basic-addon1"><i class="order-icon saojie-number-icon"><input type="hidden" name="num" value="' + intLen + '"/>' + order + '</i></span>\
+		var strApp = '<div class="col-sm-6 p-n" id="selOrder' + orderNum + '">\
+			  	<div class="input-group col-sm-7 ">\
+				  <span class="input-group-btn" id="basic-addon1"><span class="order-icon saojie-number-icon"><input type="hidden" name="num" value="' + orderNum + '"/>' + order + '</span></span>\
 				  <select class="form-control" name="region.id" id="town">\
 				  ' + strtown + '\
 					</select>\
 				</div>\
-				<div class="col-sm-4 clear-padd-l">\
+				<div class="col-sm-5 clear-padd-l">\
 					<div class="input-group clear-padd-l">\
-						<span class="input-group-addon" id="basic-addon1"><i class="member-icon member-value-icon"></i></span>\
-						<input type="text" name="value" class="form-control" placeholder="指标(家)" id="minValue' + intNewApp + '">\
+						<span class="input-group-addon" id="basic-addon1">指标</span>\
+						<input type="text" name="value" class="form-control" placeholder="家" id="minValue' + intNewApp + '">\
 					</div>\
-					<span id="delNode' + intLen + '" class="del-order glyphicon glyphicon-remove" onclick="delNode(selOrder' + intLen + ',' + order + ')"></span>\
+					<span id="delNode' + orderNum + '" class="del-order glyphicon glyphicon-remove" onclick="delNode(selOrder' + orderNum + ',' + intLen + ')"></span>\
 				</div>\
 			</div>';
 		$(btType).before(strApp);
@@ -141,13 +141,18 @@ function AddOrder(btType) {
 
 function delNode(selOrder,order) {
 	var intLen = $("div[id^='selOrder']").length;
+	var options = document.getElementById("town").options.length;
 	if(intLen === order){
 		if (selOrder != null && selOrder != ''){
 			selOrder.parentNode.removeChild(selOrder);
+			orderNum--;
 		}
 	}else{
 		alert("请先删除序号最大项!");
 	}
+	if(intLen <= options-1){
+		 			$("#btn").show();
+		 		}
 }
 
 $(function() {
@@ -215,22 +220,33 @@ function toSubmit(){
 	form.submit();
 }
 
-/*扫街列表*/
-function getAllSaojieList(){
-	
-	window.location.href="/saojie/saojieList";
-}
-
-function getSaojieList(param,name){
-    if(name == "goSearch"){
-    	var value = $("#param").val();
-    	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value;
-    }else if(name == "status"){
-    	window.location.href="/saojie/getSaojieList?saojieStatus="+param;
+/*enter键*/
+function check() {
+	var bt = document.getElementById("goSearch");
+	var event = window.event || arguments.callee.caller.arguments[0];
+    if (event.keyCode == 13)
+    {
+        bt.click();
     }
 }
 
-function getPageList(num){
+/*扫街列表*/
+function getAllSaojieList(regionId){
 	
-	window.location.href="/saojie/getSaojieList?page="+num;
+	window.location.href="/saojie/getSaojieList?regionid="+regionId;
 }
+
+function getSaojieList(param,name,regionId){
+    if(name == "goSearch"){
+    	var value = $("#param").val();
+    	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value+"&regionid="+regionId;
+    }else if(name == "status"){
+    	window.location.href="/saojie/getSaojieList?saojieStatus="+param+"&regionid="+regionId;
+    }
+}
+
+function getPageList(num,regionId,name,job,statu){
+	
+	window.location.href="/saojie/getSaojieList?page="+num+"&regionid="+regionId+"&salesman.jobNum="+job+"&salesman.truename="+name+"&saojieStatus="+statu;
+}
+

@@ -2,6 +2,7 @@ package com.wangge.buzmgt.region.service;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.vo.RegionTree;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.util.RegionUtil;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.vo.OrganizationVo;
@@ -25,30 +27,34 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public List<RegionTree> findTreeRegion(String id) {
     List<RegionTree> listRegionTree = new ArrayList<RegionTree>();
+    long start=System.currentTimeMillis();
     for (Region region : regionRepository.findOne(id).getChildren()) {
       listRegionTree.add(RegionUtil.getRegionTree(region));
     }
+    System.out.println(System.currentTimeMillis()-start);
     return listRegionTree;
   }
 	@Override
 	@Transactional
-	public List<RegionVo> getRegionByPid(String id) {
+	public List<RegionTree> getRegionByPid(String id) {
 		
-		List<RegionVo> voList = new ArrayList<RegionVo>();
+		List<RegionTree> voList = new ArrayList<RegionTree>();
 		
 		List< Region> list = regionRepository.findByParentId(id);
 		
 		for(Region r : list){
-			RegionVo vo = new RegionVo();
+		/*	RegionVo vo = new RegionVo();
 			if(r.getChildren().size() > 0){
 				vo.setIsParent("true");
-				vo.setIcon("../static/zTree/css/zTreeStyle/img/diy/10.png");
+				//vo.setIcon("../static/zTree/css/zTreeStyle/img/diy/10.png");
 			}
+			
 			vo.setOpen("false");
 			vo.setId(r.getId());
 			vo.setPid(r.getParent().getId());
 			vo.setName(r.getName());
-			voList.add(vo);
+			voList.add(vo);*/
+		  voList.add(RegionUtil.getRegionTree(r));
 		}
 		     
 		return voList;
@@ -58,12 +64,6 @@ public class RegionServiceImpl implements RegionService {
 		
 		return regionRepository.findById(regionId);
 	}
-	
-  @Override
-  public List<Region> findByRegion(String regionId) {
-    System.out.println(regionId);
-    return regionRepository.findByParentId(regionId);
-  }
 
 	@Override
 	public Region findListRegionbyid(String id) {
@@ -81,6 +81,35 @@ public class RegionServiceImpl implements RegionService {
 		regionRepository.delete(region);
 		
 	}
+  @Override
+  public Region findByNameLike(String regionName) {
+    return regionRepository.findByNameLike(regionName);
+  }
 	
+	public List<Region> findByRegion(String regionId) {
+    return regionRepository.findByParentId(regionId);
+  }
+	
+  public List<Region> getListByIds(SalesMan  salesman) {
+    
+    List<Region> regonList  = new ArrayList<Region>();
+    List<String>  ids = new ArrayList<String>();
+     if(salesman.getTowns() != null && !"".equals(salesman.getTowns())){
+      
+       String[]  towns = salesman.getTowns().split(" ");
+       
+       for(int i = 0;i<towns.length;i++){
+        
+        ids.add(towns[i]);
+       }
+       regonList =  regionRepository.findAll(ids);
+        
+     }else{
+        regonList = regionRepository.findByParentId(salesman.getRegion().getId()) ;
+     }
+    return regonList;
+  }
+
+
  
 }

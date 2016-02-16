@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.salesman.entity.SalesMan;
 import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 public interface SaojieRepository extends JpaRepository<Saojie, Long>{
   
@@ -22,7 +22,9 @@ public interface SaojieRepository extends JpaRepository<Saojie, Long>{
   
   @Query("select s from Saojie s where s.order=?1 and s.salesman.id=?2")
   Saojie changeOrder(int ordernum, String userId);
-  
   @Query("select count(*) from Saojie")
   int getRegionCount();
+  List<Saojie> findAll(Specification<Saojie> specification);
+  @Query("select max(s.order) from Saojie s where s.salesman.id=?1")
+  int getOrderNumById(String id);
 }

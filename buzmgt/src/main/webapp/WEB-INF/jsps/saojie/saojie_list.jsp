@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -13,11 +14,18 @@
 <link rel="stylesheet" type="text/css" href="../static/css/common.css" />
 <link rel="stylesheet" type="text/css"
 	href="../static/saojie/saojie.css" />
+<link href="/static/CloudAdmin/font-awesome/css/font-awesome.css"
+	rel="stylesheet">
 <script src="../static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
 <script type="text/javascript">
 	$(function() {
 		var status = $("#addClass").val();
+		console.info(status);
 		if (status != null && status != '') {
 			$("li[title = '" + status + "']").addClass("active");
 		} else {
@@ -27,194 +35,256 @@
 </script>
 </head>
 <body>
-	<%@ include file="../top_menu.jsp"%>
-	<div class="container-fluid">
-		<div id="" class="row">
-			<div id="left-menu" class="col-sm-3 col-md-2 sidebar">
-				<%@include file="../left_menu.jsp"%>
+	<div class="main">
+		<h4 class="team-member-header page-header ">
+			<i class="icon icon-saojie-list"></i>扫街设置
+			<!--区域选择按钮-->
+			<div class="area-choose">
+				选择区域：<span>${regionName}</span> <a class="are-line"
+					href="javascript:;" onclick="getRegion(${regionId});">切换</a>
 			</div>
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
-				<h4 class="team-member-header page-header ">
-					<div class="row">
-						<div class="col-sm-4 col-md-3 ">
-							<i class="icon team-member-list-icon"></i>扫街设置
-							<!--区域选择按钮-->
-							<div class="btn-group">
-								<button type="button" class="btn btn-default ">
-									<i class="icon province-icon"></i>山东省
-								</button>
-								<button type="button" class="btn btn-default dropdown-toggle"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">
-									<span class="caret"></span> <span class="sr-only">Toggle
-										Dropdown</span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="#">Action</a></li>
-									<li><a href="#">Another action</a></li>
-									<li><a href="#">Something else here</a></li>
-									<li role="separator" class="divider"></li>
-									<li><a href="#">Separated link</a></li>
+			<!--/区域选择按钮-->
+			<button class="btn btn-blue member-add-btn" type="button"
+				onclick="javascript:window.location.href='/saojie/toAdd'">
+				<i class="icon icon-add"></i>添加扫街
+			</button>
+			<small class="header-text">共<span class="text-red">${count }</span>个区域
+			</small>
+			<!-- <small class="header-text">今日新增<span class="text-red"> 0 +</span></small> -->
+
+		</h4>
+		<div class="row">
+			<div class="col-md-9">
+				<!--box-->
+				<div class="team-member-body box border blue">
+					<!--title-->
+					<div class="box-title">
+						<div class="row">
+
+							<div class="col-sm-8 col-md-6">
+								<!--菜单栏-->
+								<input type="hidden" name="" value="${saojieStatus}"
+									id="addClass" />
+								<ul class="nav nav-tabs">
+									<li title="全部"><a title="全部" name="status"
+										onclick="getAllSaojieList(${regionId});" href="#box_tab1"
+										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
+											class="hidden-inline-mobile">全部</span></a></li>
+									<li title="扫街中"><a title="扫街中" name="status"
+										onclick="getSaojieList(this.title,this.name,${regionId});"
+										href="#box_tab1" data-toggle="tab"><i class="fa fa-laptop"></i>
+											<span class="hidden-inline-mobile">扫街中</span></a></li>
+									<li title="已完成"><a title="已完成" name="status"
+										onclick="getSaojieList(this.title,this.name,${regionId});"
+										href="#box_tab1" data-toggle="tab"><i
+											class="fa fa-check"></i> <span
+											class="hidden-inline-mobile">已完成</span></a></li>
 								</ul>
+								<!--/菜单栏-->
 							</div>
-							<!--/区域选择按钮-->
-						</div>
-						<div class="col-sm-6">
-							<button class="btn btn-warning member-add-btn" type="button"
-								onclick="javascript:window.location.href='/saojie/toAdd'">
-								<i class="icon icon-add"></i>添加扫街
-							</button>
-							<small class="header-text">共<span class="text-red">${count }</span>个区域
-							</small>
-							<!-- <small class="header-text">今日新增<span class="text-red"> 0 +</span></small> -->
-						</div>
-					</div>
-				</h4>
-				<div class="row">
-					<div class="col-md-12">
-						<!--box-->
-						<div class="team-member-body box border red">
-							<!--title-->
-							<div class="box-title">
-								<div class="row">
-									<div class="col-sm-7 col-md-5">
-										<!--菜单栏-->
-										<input type="hidden" name="" value="${saojieStatus }"
-											id="addClass" />
-										<ul class="nav nav-tabs">
-											<li title="全部"><a title="全部" name="status"
-												onclick="getAllSaojieList();" href="#box_tab1"
-												data-toggle="tab"><i class="fa fa-circle-o"></i> <span
-													class="hidden-inline-mobile">全部</span></a></li>
-											<li title="扫街中"><a title="扫街中" name="status"
-												onclick="getSaojieList(this.title,this.name);"
-												href="#box_tab1" data-toggle="tab"><i
-													class="fa fa-laptop"></i> <span
-													class="hidden-inline-mobile">扫街中</span></a></li>
-											<li title="已完成"><a title="已完成" name="status"
-												onclick="getSaojieList(this.title,this.name);"
-												href="#box_tab1" data-toggle="tab"><i
-													class="fa fa-calendar-o"></i> <span
-													class="hidden-inline-mobile">已完成</span></a></li>
-										</ul>
-										<!--/菜单栏-->
-									</div>
-									<div
-										class="col-sm-4 col-md-3 col-lg-2 col-md-offset-4 col-lg-offset-5">
-										<div class="form-group title-form">
-											<div class="input-group ">
-												<input type="text" class="form-control"
-													placeholder="请输入名称或工号" id="param"> <span
-													class="input-group-addon" id="goSearch"
-													onclick="getSaojieList(this.value,this.id);"><i
-													class="icon icon-finds"></i></span>
-											</div>
-										</div>
+							<div class="col-sm-4 col-md-3 col-md-offset-3 ">
+								<div class="form-group title-form">
+									<div class="input-group ">
+										<input type="text" class="form-control" placeholder="请输入名称或工号"
+											id="param" onkeypress="return check()"> <span class="input-group-addon"
+											id="goSearch"
+											onclick="getSaojieList(this.value,this.id,${regionId});"><i
+											class="icon icon-finds"></i></span>
 									</div>
 								</div>
-								<!--<div class="title-form input-group ">
+							</div>
+						</div>
+						<!--<div class="title-form input-group ">
 								<input class="form-control input-sm" type="text" name="" id="" value="" />
 								<span class=""><i class="icon icon-finds"></i></span>
 							</div>-->
-								<!--from-->
-								<!--<h4 style="text-align: right;"><i class="fa fa-columns"></i><span class="hidden-inline-mobile">Tabs on Color Header</span></h4>-->
-							</div>
-							<!--title-->
-							<!--box-body-->
-							<div class="box-body">
-								<!--列表内容-->
-								<div class="tab-content">
-									<!--全部-->
-									<div class="tab-pane fade in active" id="box_tab1">
-										<!--box-list-->
-										<div class="box-list">
-											<div class="project-list">
-												<table class="table table-hover">
-													<tbody>
-														<c:forEach var="saojie" items="${list.content}"
-															varStatus="s">
-															<tr>
-																<td class="project-people"><a href="projects.html"><img
-																		alt="image" class="img-circle"
-																		src="../static/img/saojie/a.jpg"></a></td>
-																<td class="project-title"><a
-																	href="project_detail.html"><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
-																	<br /> <span>${saojie.salesman.region.name}</span></td>
-																<c:if test="${saojie.status == 'PENDING' }">
-																	<td class="project-status"><span
-																		class="status-ing">${saojie.status.name}</span></td>
-																</c:if>
-																<c:if test="${saojie.status == 'AGREE' }">
-																	<td class="project-status"><span
-																		class="status-finish">扫街完成</span></td>
-																</c:if>
-																<td class="project-title"><span class="l-h">${saojie.region.name}：<strong
-																		class="shop-num">${saojie.minValue}家</strong></span></td>
-																<td class="project-completion">
-																	<div>
-																		<span class="completion-ing">当前进度：${saojie.percent }</span> <span
-																			class="time-down"> 倒计时：2天</span>
-																	</div>
-																	<div class="progress progress-mini">
-																		<div style="width: 48%;" class="progress-bar"></div>
-																	</div>
-																	<!-- 100%的用这个 -->
-																	<!-- <div>
+						<!--from-->
+						<!--<h4 style="text-align: right;"><i class="fa fa-columns"></i><span class="hidden-inline-mobile">Tabs on Color Header</span></h4>-->
+					</div>
+					<!--title-->
+					<!--box-body-->
+					<div class="box-body">
+						<!--列表内容-->
+						<div class="tab-content">
+							<!--全部-->
+							<div class="tab-pane fade in active" id="box_tab1">
+								<!--box-list-->
+								<div class="box-list">
+									<div class="project-list table-responsive">
+										<table class="table table-hover">
+											<tbody>
+												<c:if test="${not empty list.content}">
+													<c:forEach var="saojie" items="${list.content}"
+														varStatus="s">
+														<tr>
+															<td class="project-people"><a href=""><img
+																	alt="image" class="img-circle"
+																	src="../static/img/saojie/a.jpg"></a></td>
+															<td class="project-title"><a href="javascript:toSalesManInfo('${saojie.salesman.id}','saojie');"><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
+																<br /> <span>${saojie.salesman.region.name}</span></td>
+															<c:if test="${saojie.status == 'PENDING' }">
+																<td class="project-status"><span class="status-ing">${saojie.status.name}</span></td>
+															</c:if>
+															<c:if test="${saojie.status == 'AGREE' }">
+																<td class="project-status"><span
+																	class="status-finish">扫街完成</span></td>
+															</c:if>
+															<td class="project-title"><span class="l-h">${saojie.region.name}：<strong
+																	class="shop-num">${saojie.minValue}家</strong></span></td>
+															<td class="project-completion">
+																<div>
+																	<span class="completion-ing">当前进度：${saojie.percent}</span> <span
+																		class="time-down"> 倒计时：${saojie.timing }天</span>
+																</div>
+																<div class="progress progress-mini">
+																	<div style="width: ${saojie.percent};"
+																		class="progress-bar"></div>
+																</div> <!-- 100%的用这个 --> <!-- <div>
 																		<span class="completion-ing">当前进度： 100%</span> <span
 																			class="time-finish"> 通过</span>
 																	</div>
 																	<div class="progress progress-mini">
                                                     					<div style="width: 100%;" class="progress-finish"></div>
                                                 					</div>-->
-																</td>
-																<td class="project-actions"><a
-																	href="projects.html#" class="btn btn-white btn-sm"><span
-																		class="folder"></span> 查看 </a>
-																	<a href="/saojie/toSaojieInstall?id=+${saojie.salesman.id }+" class="btn btn-white btn-sm"><span
-																		class="folder"></span> 设置 </a></td>
-															</tr>
-														</c:forEach>
-													</tbody>
-												</table>
-												<c:if test="${not empty list.content}">
-													<div style="text-align: center;">
-														<ul class="pagination">
-															<li><a
-																href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}')">&laquo;</a></li>
-															<c:forEach var="s" begin="1" end="${list.totalPages}"
-																step="1">
-																<li><a href="javascript:getPageList('${s-1}')">${s}</a></li>
-															</c:forEach>
-															<li><a
-																href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}')">&raquo;</a></li>
-														</ul>
-													</div>
+															</td>
+															<td class="project-actions"><a href="projects.html#"
+																class="btn btn-white btn-sm"><span class="folder"></span>
+																	查看 </a>
+																<div class="btn-group"></div> <a
+																href="/saojie/toSaojieInstall?id=+${saojie.salesman.id }+"
+																class="btn btn-white btn-sm"><span class="folder"></span>
+																	设置 </a></td>
+														</tr>
+													</c:forEach>
 												</c:if>
-												<c:if test="${empty list.content}">
-													<div style="text-align: center;">
-														<ul class="pagination">
-															<tr>
-																<td colspan="100">没有相关数据</td>
-															</tr>
-														</ul>
-													</div>
-												</c:if>
-											</div>
-										</div>
-										<!--/box-list-->
+											</tbody>
+										</table>
 									</div>
-									<!--扫街中-->
+									<c:if test="${not empty list.content}">
+										<div style="text-align: center; padding-bottom: 20px">
+											<ul class="pagination box-page-ul">
+												<li><a
+													href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">&laquo;</a></li>
+												<!-- 1.total<=7 -->
+												<c:if test="${list.totalPages<=7 }">
+													<c:forEach var="s" begin="1" end="${list.totalPages}"
+														step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+												</c:if>
+												<c:if test="${list.totalPages>7 && list.number<4 }">
+													<c:forEach var="s" begin="1" end="6" step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<li><a href="javascript:void(0)">...</a></li>
+												</c:if>
+												<c:if
+													test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number>=3 }">
+													<li><a href="javascript:void(0)">...</a></li>
+													<c:forEach var="s" begin="${list.number-2 }"
+														end="${list.number+2 }" step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<li><a href="javascript:void(0)">...</a></li>
+												</c:if>
+												<c:if
+													test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number<3 }">
+													<li><a href="javascript:void(0)">...</a></li>
+													<c:forEach var="s" begin="${list.totalPages-6 }"
+														end="${list.totalPages }" step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+												</c:if>
+												<li><a
+													href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}','${regionId}','${truename}','${jobNum }','${saojieStatus}')">&raquo;</a></li>
+											</ul>
+										</div>
+									</c:if>
+									<c:if test="${empty list.content}">
+										<div style="text-align: center;">
+											<ul class="pagination">
+												<tr>
+													<td colspan="100">没有相关数据</td>
+												</tr>
+											</ul>
+										</div>
+									</c:if>
 								</div>
-								<!--/列表内容-->
+								<!--/box-list-->
 							</div>
-							<!--/box-body-->
+							<!--扫街中-->
 						</div>
-						<!--/box-->
+						<!--/列表内容-->
+					</div>
+					<!--/box-body-->
+				</div>
+				<!--/box-->
+			</div>
+			<!-- end col-sm-9 -->
+			<div class="col-md-3 ">
+				<!--box-->
+				<div class="member-district box border red">
+					<!--title-->
+					<div class="box-title">
+						<i class="ico icon-district"></i>区域
+					</div>
+					<div class="box-body">
+						<div style="height: 290px" id="allmap"></div>
+						<div align="center">
+							<!-- 							<a href="/salesman/showMap"><font color="#0099ff" size="3">查看完整地图</font></a> -->
+						</div>
+						<!-- 						地图 -->
+						<!-- 						<img width="100%" src="/static/img/saojieap.png" /> -->
+						<!-- 						/地图 -->
+						<!-- 						组织结构 -->
+						<!-- 						<div class="structure col-xs-12"> -->
+						<!-- 							<i class="icon icon-structure"></i> 组织结构 -->
+						<!-- 						</div> -->
+						<!-- 						tree view -->
+						<!-- 						<div id="tree3" class="tree"></div> -->
+						<!--/组织结构-->
 					</div>
 				</div>
-				<!-- /CALENDAR -->
 			</div>
+
 		</div>
+		<!-- /CALENDAR -->
 	</div>
 	<!-- Bootstrap core JavaScript================================================== -->
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -228,9 +298,94 @@
 	<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/static/js/common.js"></script>
 	<script src="../static/yw-team-member/team-member.js"
 		type="text/javascript" charset="utf-8"></script>
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
+	<script type="text/javascript">
+		<%String areaname = null;
+			if (null != request.getAttribute("regionName")) {
+				areaname = request.getAttribute("regionName").toString();
+			}
+			String parentid = null;
+			if (null != request.getAttribute("parentid")) {
+				parentid = request.getAttribute("parentid").toString();
+			}%>
+	 	var map = new BMap.Map("allmap");
+		<%if (null != request.getAttribute("pcoordinates")) {%>
+			<%String pcoordinates = request.getAttribute("pcoordinates").toString();
+				String[] listCoordinates = pcoordinates.split("=");%> 
+			 			var polygon = new BMap.Polygon([
+			 	<%for (int x = 0; x < listCoordinates.length; x++) {
+					String points = listCoordinates[x];
+					double lng = Double.parseDouble(points.split("-")[0]);//经度 
+					double lat = Double.parseDouble(points.split("-")[1]);//纬度%>				
+	<%if (x == listCoordinates.length - 1) {%>
+				 		  			new BMap.Point(<%=lng%>,<%=lat%>)
+				 		  			<%} else {%>
+				 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
+				 		  			<%}%>
+				 <%}%>
+							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
+			 				map.addOverlay(polygon);
+							<%String jlng = listCoordinates[1].split("-")[0];
+				String jlat = listCoordinates[1].split("-")[1];%>
+							 var point = new BMap.Point(<%=jlng%>,<%=jlat%>);
+							 map.centerAndZoom(point, 8);    
+			 				//map.centerAndZoom(name, 8);
+			 				map.enableScrollWheelZoom(true); 
+			 				
+			 				
+			 				 var points =[
+			 				   <%for (int y = 0; y < listCoordinates.length; y++) {
+					String points = listCoordinates[y];
+					double lng = Double.parseDouble(points.split("-")[0]);//经度 
+					double lat = Double.parseDouble(points.split("-")[1]);//纬度%>          
+					 		  		
+			 					
+				 		  		<%if (y == listCoordinates.length - 1) {%> 
+				 		  		 		{"lng":<%=lng%>,"lat":<%=lat%>,"count":50}
+				 		  			<%} else {%>
+				 		  				{"lng":<%=lng%>,"lat":<%=lat%>,"count":50},
+				 		  			<%}%> 
+					 		  	 <%}%>
+			 				              ];
+	
+			 				heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
+			 				map.addOverlay(heatmapOverlay);
+			 				heatmapOverlay.setDataSet({data:points,max:100});
+			 				setTimeout(
+			 						function(){
+			 							  heatmapOverlay.show();
+			 						},3000);
+	//		 				polygon.addEventListener('click',function(e) {
+	//		 				   var  point=JSON.stringify(e.pixel);
+	//							  alert(point);
+	<%-- 								  alert(<%=coordinates%>); --%>
+	//						});
+							<%} else {%>
+			var bdary = new BMap.Boundary();
+			bdary.get('<%=areaname%>', function(rs){ //获取行政区域
+			var count = rs.boundaries.length; //行政区域的点有多少个
+	
+			for(var i = 0; i < count; i++){
+			var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+			ply.setStrokeWeight(3);
+			map.addOverlay(ply); //添加覆盖物
+			map.setViewport(ply.getPath()); //调整视野 
+			} 
+			map.centerAndZoom('<%=areaname%>', 12);
+			map.enableScrollWheelZoom(true); 
+			}); 
+		<%}%>
+		
+	
+	
+		/*区域 */
+		function getRegion(id){
+			window.location.href='/region/getPersonalRegion?id='+id+"&flag=saojie";
+		}
+	</script>
 </body>
 </html>

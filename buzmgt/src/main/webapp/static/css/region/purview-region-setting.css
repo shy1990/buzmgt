@@ -35,22 +35,17 @@
 	top: 5px;
 	background: url(../img/icon/purview-setting/ddqx.png) no-repeat;
 }
+.region-setting-icon {
+    display: inline-block;
+    top: 5px;
+    background: url(../img/region/quyuhuafen.png) no-repeat;
+}
+.region-switch-icon{
+	display: inline-block;
+	top: 5px;
+	background: url(../img/icon/purview-setting/huafen.png) no-repeat;
+}
 
-.box.border.blue {
-    border: 1px solid #576ea7;
-}
-.box.border.orange {
-    border: 1px solid #FF7F00;
-}
-.box.border {
-    border-radius: 5px;
-}
-.box {
-    clear: both;
-    margin-top: 0px;
-    margin-bottom: 25px;
-    padding: 0px;
-}
 
 /*角色*/
 .re-padd-right{
@@ -202,5 +197,9 @@
 	padding-top: 40px;
 	padding-bottom: 50px;
 	color: #727272;
+}
+
+.regional-switch .box-title{
+	padding-top: 10px;
 }
 

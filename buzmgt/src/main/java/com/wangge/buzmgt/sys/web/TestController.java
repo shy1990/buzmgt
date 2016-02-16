@@ -50,6 +50,10 @@ public class TestController {
 	public String teamMemberAdd(String test,Model model){
 		return "saojie/saojie_det";
 	}
+	@RequestMapping("/kaohe_det")
+	public String kaoheDet(String test,Model model){
+	  return "kaohe/kaohe_det";
+	}
 	/**
 	 * 团队成员添加
 	 * @param test
@@ -60,6 +64,10 @@ public class TestController {
 	public String saojieSet(String test,Model model){
 	  return "saojie/saojie_set";
 	}
+  @RequestMapping("/saojie_upd")
+  public String saojieUpd(String test,Model model){
+    return "saojie/saojie_upd";
+  }	
 	/**
 	 * 团队成员列表
 	 * @param test
@@ -70,6 +78,11 @@ public class TestController {
 	public String teamMemberList(String test,Model model){
 		return "salesman/saleman_det";
 	}
+	@RequestMapping("/account_list")
+	public String accountList(String test,Model model){
+	  return "account/account_list";
+	}
+
 	
 	@RequestMapping("/menu")
 	@ResponseBody
