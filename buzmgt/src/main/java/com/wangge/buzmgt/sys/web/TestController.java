@@ -54,6 +54,10 @@ public class TestController {
 	public String kaoheDet(String test,Model model){
 	  return "kaohe/kaohe_det";
 	}
+	@RequestMapping("/accountManage")
+	public String accountManage(String test,Model model){
+	  return "account/account_list";
+	}
 	/**
 	 * 团队成员添加
 	 * @param test
