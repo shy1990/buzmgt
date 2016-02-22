@@ -28,4 +28,6 @@ public interface SaojieService {
   SaojieDataVo getsaojieDataList(String userId, String regionId);
   
   int getOrderNumById(String id);
+  
+  List<Region> findRegionById(String id);
 }

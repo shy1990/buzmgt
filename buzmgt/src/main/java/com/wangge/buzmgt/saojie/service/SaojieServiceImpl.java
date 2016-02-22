@@ -214,6 +214,10 @@ public class SaojieServiceImpl implements SaojieService {
    Saojie s = saojieRepository.findBySalesmanUserId(userId);
     return null;
   }*/
+  
+  public List<Region> findRegionById(String id){
+    return saojieRepository.findRegionById(id);
+  }
 }
   
   

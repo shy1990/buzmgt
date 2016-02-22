@@ -50,3 +50,30 @@ function getSaojieDataList(){
 		}
 	});
 }
+
+var i = 5; 
+var intervalid; 
+function audit(id,regName) {
+	$('#auditModal').modal({
+		keyboard: false
+		})
+	$("#salesmanId").val(id);
+	var a=document.getElementById ("regName");
+    a.innerHTML = regName;
+    
+    intervalid = setInterval("fun()", 1000); 
+}
+function fun() { 
+    if (i == 0) { 
+    	var id = $("#salesmanId").val();
+    	window.location.href = "/assess/toAssessSet?id="+id;
+    	clearInterval(intervalid); 
+    } 
+    document.getElementById("mes").innerHTML = i; 
+    i--; 
+} 
+
+function auditSet(){
+	var id = $("#salesmanId").val();
+	window.location.href = "/assess/toAssessSet?id="+id;
+}
