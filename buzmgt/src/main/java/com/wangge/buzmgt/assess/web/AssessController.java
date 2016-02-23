@@ -3,7 +3,9 @@ package com.wangge.buzmgt.assess.web;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,8 @@ import com.wangge.buzmgt.assess.entity.Assess.AssessStatus;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
@@ -92,4 +96,53 @@ public class AssessController {
     System.out.println(assess.getSalesman().getId());
     return "redirect:/saojie/saojieList";
   }
+  
+  /**
+   * 
+    * getSaojieList:(扫街列表(条件)). <br/> 
+    * 
+    * @author peter 
+    * @param model
+    * @param saojie
+    * @param saojieStatus
+    * @param page
+    * @param requet
+    * @return 
+    * @since JDK 1.8
+   */
+  @RequestMapping(value = "/getAssessList")
+  public  String  getSaojieList(Model model,Assess assess,String regionid,String regionName, String assessStatus,String page, HttpServletRequest requet){
+        int pageNum = Integer.parseInt(page != null ? page : "0");
+        if(AssessStatus.PENDING.getName().equals(assessStatus) ){
+          assess.setStatus(AssessStatus.PENDING);
+        }else if(AssessStatus.FAIL.getName().equals(assessStatus)){
+          assess.setStatus(AssessStatus.FAIL);
+        }
+        Region region=new Region();
+        if(null!=regionid){
+          region =regionService.getRegionById(regionid);
+          if(null!=region.getCoordinates()){
+            model.addAttribute("pcoordinates", region.getCoordinates());
+          }
+          model.addAttribute("regionName", region.getName());
+          model.addAttribute("regionId", region.getId());
+        }
+       if(null!=regionName){
+         region =regionService.findByNameLike(regionName);
+         if(null!=region.getCoordinates()){
+           model.addAttribute("pcoordinates", region.getCoordinates());
+         }
+         model.addAttribute("regionName", region.getName());
+         model.addAttribute("regionId", region.getId());
+       }
+       if(null != assess.getSalesman()){
+         model.addAttribute("truename",assess.getSalesman().getTruename());
+         model.addAttribute("jobNum",assess.getSalesman().getJobNum());
+       }
+        
+    Page<Assess> list = assessService.getAssessList(assess,pageNum,region.getName());
+    model.addAttribute("list", list);
+    model.addAttribute("assessStatus",assessStatus);
+    return   "saojie/saojie_list";
+  } 
 }

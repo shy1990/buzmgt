@@ -37,7 +37,7 @@ public class Assess implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum AssessStatus {
-		PENDING("进行中"), AGREE("通过");
+		PENDING("进行中"), AGREE("通过"), FAIL("考核失败");
 		private String name;
 
 		private AssessStatus(String name) {

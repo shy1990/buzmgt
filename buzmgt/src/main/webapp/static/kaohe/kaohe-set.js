@@ -7,7 +7,6 @@ $(function(){
 		data: {"id":salId},
 		dataType:"JSON",
 		success : function(obj){
-			alert(obj);
 		   if (obj) {
 			   var regionName;
 			   strtown ='';
