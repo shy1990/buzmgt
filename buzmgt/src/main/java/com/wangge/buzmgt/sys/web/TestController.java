@@ -54,6 +54,10 @@ public class TestController {
 	public String kaoheDet(String test,Model model){
 	  return "kaohe/kaohe_det";
 	}
+	@RequestMapping("/kaohe_list")
+	public String kaoheList(String test,Model model){
+	  return "kaohe/kaohe_list";
+	}
 	@RequestMapping("/accountManage")
 	public String accountManage(String test,Model model){
 	  return "account/account_list";

@@ -599,13 +599,13 @@ a:focus .kucun{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_cjsz2.png) no-repeat;
 }
 /* 客户开发 */
-.kehukaifa{
+.kaohekaifa{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_khkf1.png) no-repeat;
 }
-.menu-second .active .kehukaifa,
-.menu-second a:hover .kehukaifa,
-.menu-second a:focus .kehukaifa{
-	background: url(../img/icon/left-mean/ywmanage/ywgl_khkf1.png) no-repeat;
+.menu-second .active .kaohekaifa,
+.menu-second a:hover .kaohekaifa,
+.menu-second a:focus .kaohekaifa{
+	background: url(../img/icon/left-mean/ywmanage/ywgl_khkf2.png) no-repeat;
 }
 /* 业务考核 */
 .yewukaohe{
