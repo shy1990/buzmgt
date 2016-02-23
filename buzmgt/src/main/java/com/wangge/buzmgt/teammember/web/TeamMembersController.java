@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
@@ -128,7 +127,7 @@ public class TeamMembersController {
   @RequestMapping(value = "/addTeamMember",method = RequestMethod.POST)
   public String addTeamMembers(SalesMan salesman,String username,String regionId,String organizationId,String roleId,String regionPid ,Model model){
     if(!userService.existUsername(username)){
-    Organization o = organizationService.getOrganById(Long.parseLong(organizationId));
+    Organization o = organizationService.getOrganById(Integer.parseInt(organizationId));
     User u = new User();
     u.setOrganization(o);
     u.addRole(roleService.getRoleById(roleId));

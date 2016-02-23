@@ -23,6 +23,7 @@
 	href="/static/CloudAdmin/js/fuelux-tree/fuelux.min.css" />
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
  <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+ <link rel="stylesheet" type="text/css" href="static/zTree/css/zTreeStyle/organzTreeStyle.css" />
 </head>
 
 <body>
@@ -257,11 +258,11 @@
 <!-- 						<img width="100%" src="/static/img/team-map.png" /> -->
 <!-- 						/地图 -->
 <!-- 						组织结构 -->
-<!-- 						<div class="structure col-xs-12"> -->
-<!-- 							<i class="icon icon-structure"></i> 组织结构 -->
-<!-- 						</div> -->
-<!-- 						tree view -->
-<!-- 						<div id="tree3" class="tree"></div> -->
+						<div class="structure col-xs-12">
+							<i class="icon icon-structure"></i> 组织结构
+						</div>
+						tree view
+						<div id="tree3" class="tree"></div>
 						<!--/组织结构-->
 					</div>
 				</div>

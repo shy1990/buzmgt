@@ -2,9 +2,9 @@ package com.wangge.buzmgt.sys.vo;
 
 public class OrganizationVo {
 	
-	private Long id;
+	private int id;
 	
-	private Long pid;
+	private String pId;
 	
 	private String isParent;
 	
@@ -14,27 +14,33 @@ public class OrganizationVo {
 	
 	private String name;
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
+	private String iconOpen;
+	private String iconClose;
+	
+	
+	
+	public int getId() {
+    return id;
+  }
+  public void setId(int id) {
+    this.id = id;
+  }
+  public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
 	
-	public Long getPid() {
-		return pid;
-	}
-	public void setPid(Long pid) {
-		this.pid = pid;
-	}
 	
-	public String getIsParent() {
+	
+  public String getpId() {
+    return pId;
+  }
+  public void setpId(String pId) {
+    this.pId = pId;
+  }
+  public String getIsParent() {
 		return isParent;
 	}
 	public void setIsParent(String isParent) {
@@ -52,6 +58,18 @@ public class OrganizationVo {
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
+  public String getIconOpen() {
+    return iconOpen;
+  }
+  public void setIconOpen(String iconOpen) {
+    this.iconOpen = iconOpen;
+  }
+  public String getIconClose() {
+    return iconClose;
+  }
+  public void setIconClose(String iconClose) {
+    this.iconClose = iconClose;
+  }
 	
 
 }

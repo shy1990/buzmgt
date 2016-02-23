@@ -15,7 +15,12 @@ import com.wangge.buzmgt.sys.vo.OrganizationVo;
  */
 public interface OrganizationService {
 
-	public List<OrganizationVo> getOrganListById(Long id);
+	public List<OrganizationVo> getOrganListById(int id);
 
-	public Organization getOrganById(long id);
+	public Organization getOrganById(int id);
+	
+	public void addOrganization(Organization organ);
+	
+	public void deleteOrganization(Organization organ);
+	
 }
