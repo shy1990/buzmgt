@@ -94,24 +94,24 @@ public class AssessController {
     assess.setAssessStage("1");
     assessService.saveAssess(assess);
     System.out.println(assess.getSalesman().getId());
-    return "redirect:/saojie/saojieList";
+    return "redirect:/kaohe/kaoheList";
   }
   
   /**
    * 
-    * getSaojieList:(扫街列表(条件)). <br/> 
+    * getAssessList:(考核列表(条件)). <br/> 
     * 
     * @author peter 
     * @param model
-    * @param saojie
-    * @param saojieStatus
+    * @param assess
+    * @param assessStatus
     * @param page
     * @param requet
     * @return 
     * @since JDK 1.8
    */
   @RequestMapping(value = "/getAssessList")
-  public  String  getSaojieList(Model model,Assess assess,String regionid,String regionName, String assessStatus,String page, HttpServletRequest requet){
+  public  String  getAssessList(Model model,Assess assess,String regionid,String regionName, String assessStatus,String page, HttpServletRequest requet){
         int pageNum = Integer.parseInt(page != null ? page : "0");
         if(AssessStatus.PENDING.getName().equals(assessStatus) ){
           assess.setStatus(AssessStatus.PENDING);
@@ -143,6 +143,6 @@ public class AssessController {
     Page<Assess> list = assessService.getAssessList(assess,pageNum,region.getName());
     model.addAttribute("list", list);
     model.addAttribute("assessStatus",assessStatus);
-    return   "saojie/saojie_list";
+    return   "kaohe/kaohe_list";
   } 
 }
