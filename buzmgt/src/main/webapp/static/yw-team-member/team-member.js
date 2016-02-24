@@ -64,6 +64,7 @@ $(function(){
 
 var myDate = new Date();
 var tody = changeDateToString(myDate);
+
 $(function(){
     $(".form_datetime").datetimepicker({
         format: "yyyy年mm月",

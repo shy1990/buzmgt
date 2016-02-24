@@ -109,7 +109,45 @@ public class OrganizationController {
 	      
 	    return new ResponseEntity<List<OrganizationVo>>(listTreeVo,HttpStatus.OK);
 	  }
-	
+	   
+	 
+	 /**
+	  * 
+	   * findOneTeamOrganization:团队成员显示组织结构
+	   * TODO(这里描述这个方法适用条件 – 可选).<br/> 
+	   * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
+	   * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
+	   * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
+	   * 
+	   * @author Administrator 
+	   * @return 
+	   * @since JDK 1.8
+	  */
+	 @RequestMapping(value = "/findOneTeamOrganization", method = RequestMethod.POST)
+   @ResponseBody
+   public ResponseEntity<List<OrganizationVo>> findOneTeamOrganization() {
+      List<OrganizationVo> listTreeVo =new ArrayList<OrganizationVo>();
+      
+       Subject subject = SecurityUtils.getSubject();
+       User user=(User) subject.getPrincipal();
+     
+       Organization organ=user.getOrganization();
+       List<User> listUser=userService.getUserByOrgan(organ.getId());
+       
+       listTreeVo.add(getTeamOrganizationVo(listUser.get(0),null));
+       
+       if(null!=organ.getChildren()){
+         for(Organization o: organ.getChildren()){
+           List<User> list=userService.getUserByOrgan(o.getId());
+            for(User u:list){
+              listTreeVo.add(getTeamOrganizationVo(u,listUser.get(0)));
+            }
+          
+         }
+       }
+       
+     return new ResponseEntity<List<OrganizationVo>>(listTreeVo,HttpStatus.OK);
+   }
 	
 	/**
 	 * 
@@ -134,7 +172,18 @@ public class OrganizationController {
     return new ResponseEntity<List<OrganizationVo>>(listTreeVo,HttpStatus.OK);
   }
 	
-	
+	@RequestMapping(value = "/findTeamOrganizationByid", method = RequestMethod.POST)
+  @ResponseBody
+  public ResponseEntity<List<OrganizationVo>> findTeamOrganizationByid(String id) {
+     List<OrganizationVo> listTreeVo =new ArrayList<OrganizationVo>();
+     
+     User user =userService.getById(id);
+     for(User  u: userService.getUserByOrgan(user.getOrganization().getId()+1)){
+       listTreeVo.add(getTeamOrganizationVo(u,user));
+     }
+     
+    return new ResponseEntity<List<OrganizationVo>>(listTreeVo,HttpStatus.OK);
+  }
 	  /**
 	   * 
 	    * addOrganization:(这里用一句话描述这个方法的作用). <br/> 
@@ -219,7 +268,7 @@ public class OrganizationController {
 	   */
   	private OrganizationVo getOrganizationVo(Organization organ){
     	  OrganizationVo vo=new OrganizationVo();
-        vo.setId(organ.getId());
+        vo.setId(organ.getId()+"");
         vo.setName(organ.getName());
         String iconUrl=null;
         switch (organ.getLev()) {
@@ -259,5 +308,59 @@ public class OrganizationController {
         }
     	  return vo;
   	}
+  	
+  	
+    private OrganizationVo getTeamOrganizationVo(User u,User parent){
+      OrganizationVo vo=new OrganizationVo();
+      vo.setId(u.getId()+"");
+      if(null!=u.getManager()){
+        vo.setName(u.getManager().getTruename()+"("+u.getOrganization().getName()+")");
+      }else if(null!=u.getSalseMan()){
+        vo.setName(u.getSalseMan().getTruename()+"("+u.getOrganization().getName()+")");
+      }
+      
+      String iconUrl=null;
+      switch (u.getOrganization().getLev()) {
+      case 1:
+        iconUrl="/static/img/organization/jl.png";
+        break;
+      case 2:
+        iconUrl="/static/img/organization/qyzj.png";
+        break;
+      case 3:
+        iconUrl="/static/img/organization/dqjl.png";
+        break;
+      case 4:
+        iconUrl="/static/img/organization/dqjl.png";
+        break;
+      case 5:
+        iconUrl="/static/img/organization/dqjl.png";
+        break;
+      case 6:
+        iconUrl="/static/img/organization/dqjl.png";
+        break;
+      default:
+        iconUrl="/static/img/organization/dqjl.png";
+        break;
+      }
+      vo.setIcon(iconUrl);
+      vo.setIconClose(iconUrl);
+      vo.setIconOpen(iconUrl);
+      if(u.getOrganization().getChildren().size()>0){
+        if(userService.getUserByOrgan(u.getOrganization().getId()+1).size()>0){
+          vo.setIsParent("true");
+        }else{
+          vo.setIsParent("false");
+        }
+       
+      }else{
+        vo.setIsParent("false");
+      }
+      vo.setOpen("true");
+      if(null!=parent){
+        vo.setpId(parent.getId()+"");;
+      }
+      return vo;
+  }
 	
 }

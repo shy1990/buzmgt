@@ -35,7 +35,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 		Set<Organization> childrren =  organ.getChildren();
 		for(Organization o : childrren){
 				OrganizationVo vo = new OrganizationVo();
-				vo.setId(o.getId());
+				vo.setId(o.getId()+"");
 				vo.setName(o.getName());
 				voList.add(vo);
 				if(o.getChildren() != null){
@@ -43,7 +43,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 					while(childr.size() > 0){
 						for(Organization or : childr){
 							OrganizationVo vor = new OrganizationVo();
-							vor.setId(or.getId());
+							vor.setId(or.getId()+"");
 							vor.setName(or.getName());
 							childr = or.getChildren();
 							voList.add(vor);
