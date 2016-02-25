@@ -616,6 +616,7 @@ ul, ol {
 /**/
 .member-det-body .box-body{
 	padding: 0;
+	min-height: 750px;
 }
 .det-head{
 	padding: 24px 30px;
