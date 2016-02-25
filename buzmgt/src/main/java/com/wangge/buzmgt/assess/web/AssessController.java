@@ -5,6 +5,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +24,10 @@ import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.service.SaojieService;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 
 /**
@@ -45,6 +50,8 @@ public class AssessController {
   private SaojieService saojieService;
   @Resource
   private AssessService assessService;
+  @Resource
+  private ManagerService managerService;
   /**
    * 
     * toAssessSet:(跳转到考核设置页面). <br/> 
@@ -94,8 +101,27 @@ public class AssessController {
     assess.setAssessStage("1");
     assessService.saveAssess(assess);
     System.out.println(assess.getSalesman().getId());
-    return "redirect:/kaohe/kaoheList";
+    return "redirect:/assess/assessList";
   }
+  
+  @RequestMapping("/assessList")
+  public String assessList(String assessList, Model model,Assess assess){
+    int pageNum = 0;
+    Subject subject = SecurityUtils.getSubject();
+    User user=(User) subject.getPrincipal();
+    Manager manager = managerService.getById(user.getId());
+    if(null!=manager.getRegion().getCoordinates()){
+      model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
+    }
+    Page<Assess> list = assessService.getAssessList(assess,pageNum,manager.getRegion().getName());
+    System.out.println("=-----"+list.getTotalElements());
+    model.addAttribute("list", list);
+    model.addAttribute("assessList", assessList);
+     model.addAttribute("regionName", manager.getRegion().getName());
+     model.addAttribute("regionId", manager.getRegion().getId());
+    
+    return "kaohe/kaohe_list";
+  } 
   
   /**
    * 

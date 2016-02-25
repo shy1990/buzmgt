@@ -30,8 +30,8 @@
 			<i class="ico ico-kaohe-list"></i>考核开发
 			<!--区域选择按钮-->
 			<div class="area-choose">
-				选择区域：<span>山东省</span> <a class="are-line" href="javascript:;"
-					onclick="">切换</a>
+				选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;"
+					onclick="getRegion(${regionId});">切换</a>
 			</div>
 			<!--/区域选择按钮-->
 		</h4>
@@ -45,15 +45,15 @@
 							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<ul class="nav nav-tabs">
-									<input id="status" type="hidden" value="${Status}">
+									<input id="status" type="hidden" value="${assessStatus}">
 									<li class="active" title="全部"><a title="全部"
-										name="salesmanStatus" href="#box_tab1" data-toggle="tab"><i
+										name="status" onclick="getAllAssessList(${regionId});" href="#box_tab1" data-toggle="tab"><i
 											class="fa fa-circle-o"></i> <span
 											class="hidden-inline-mobile">全部</span></a></li>
-									<li title="考核中"><a title="考核中" name="salesmanStatus"
+									<li title="考核中"><a title="考核中" name="status" onclick="getAssessList(this.title,this.name,${regionId});"
 										href="#box_tab1" data-toggle="tab"><i class="fa fa-laptop"></i>
 											<span class="hidden-inline-mobile">考核中</span></a></li>
-									<li title="开发中"><a title="开发中" name="salesmanStatus"
+									<li title="考核失败"><a title="考核失败" name="status" onclick="getAssessList(this.title,this.name,${regionId});"
 										href="#box_tab1" data-toggle="tab"><i
 											class="fa fa-calendar-o"></i> <span
 											class="hidden-inline-mobile">考核失败</span></a></li>
@@ -64,9 +64,9 @@
 								<div class="form-group title-form">
 									<div class="input-group ">
 										<input type="text" class="form-control" name="truename"
-											id="param" placeholder="请输入名称或工号" onkeydown=""> <a
-											type="sumbit" class="input-group-addon" id="goSearch"
-											onclick="getList(this.value,this.id,${regionId})"><i
+											id="param" placeholder="请输入名称或工号" onkeypress="return check()"> <a
+											class="input-group-addon" id="goSearch"
+											onclick="getAssessList(this.value,this.id,${regionId});"><i
 											class="icon icon-finds"></i></a>
 									</div>
 								</div>
@@ -88,7 +88,10 @@
 										<div class="ibox-content">
 											<div class="project-list table-responsive">
 												<table class="table table-hover">
-													<tbody id="salemanlist">
+													<tbody id="assesslist">
+													<c:if test="${not empty list.content}">
+													<c:forEach var="assess" items="${list.content}"
+														varStatus="s">
 														<!-- 
 																考核状态标签:
 																	一阶段考核: onekaohe-status-on/onekaohe-status-out
@@ -107,52 +110,84 @@
 															<td class="project-people"><a href=""><img
 																	alt="image" class="img-circle"
 																	src="../static/img/team-member/a.jpg"></a></td>
-															<td class="project-title"><a href=""><strong>大鹏</strong>(区域经理)</a>
-																<br /> <span>山东省潍坊市</span></td>
+															<td class="project-title"><a href=""><strong>${assess.salesman.truename}</strong>(${assess.salesman.user.organization.name})</a>
+																<br /> <span>${assess.salesman.region.name}</span></td>
 															<td class="project-title"><span class="l-h">提货量：<strong
-																	class="shop-num">265部</strong></span> <br /> <span>活跃度：<strong
-																	class="shop-num-d">4.5分</strong></span></td>
+																	class="shop-num">${assess.assessOrdernum }部</strong></span> <br /> <span>活跃客户：<strong
+																	class="shop-num-d">${assess.assessActivenum }家</strong></span></td>
 															<td class="project-completion"><span
 																class="completion-ing">业务指标： 88%</span> <span><i
 																	class="ico ico-time-down"></i> 倒计时：<span class="">2天</span></span>
+																<c:if test="${assess.status == 'PENDING' && assess.assessStage == '1' }">
 																<span class="kaohe-status onekaohe-status-on">一阶段考核中</span>
+																</c:if>
+																<c:if test="${assess.status == 'AGREE' && assess.assessStage == '1' }">
+																<span class="kaohe-status onekaohe-status-out">一阶段考核通过</span>
+																</c:if>
+																<c:if test="${assess.status == 'FAIL' && assess.assessStage == '1' }">
+																<span class="kaohe-status bustkaohe-status">一阶段考核失败</span>
+																</c:if>
+																<c:if test="${assess.status == 'PENDING' && assess.assessStage == '2' }">
+																<span class="kaohe-status twokaohe-status-on">二阶段考核中</span>
+																</c:if>
+																<c:if test="${assess.status == 'AGREE' && assess.assessStage == '2' }">
+																<span class="kaohe-status twokaohe-status-out">二阶段考核通过</span>
+																</c:if>
+																<c:if test="${assess.status == 'FAIL' && assess.assessStage == '2' }">
+																<span class="kaohe-status bustkaohe-status">二阶段考核失败</span>
+																</c:if>
+																<c:if test="${assess.status == 'PENDING' && assess.assessStage == '3' }">
+																<span class="kaohe-status threekaohe-status-on">三阶段考核中</span>
+																</c:if>
+																<c:if test="${assess.status == 'AGREE' && assess.assessStage == '3' }">
+																<span class="kaohe-status threekaohe-status-out">三阶段考核通过</span>
+																</c:if>
+																<c:if test="${assess.status == 'FAIL' && assess.assessStage == '3' }">
+																<span class="kaohe-status bustkaohe-status">三阶段考核失败</span>
+																</c:if>
+																<c:if test="${assess.assessStage == '1' }">
 																<div class="progress progress-mini">
 																	<div style="width: 88%;"
 																		class="progress-bar onekaohe-bar"></div>
 																</div></td>
+																</c:if>
+																<c:if test="${assess.assessStage == '2' }">
+																<div class="progress progress-mini">
+																	<div style="width: 88%;"
+																		class="progress-bar twokaohe-bar"></div>
+																</div></td>
+																</c:if>
+																<c:if test="${assess.assessStage == '3' }">
+																<div class="progress progress-mini">
+																	<div style="width: 88%;"
+																		class="progress-bar threekaohe-bar"></div>
+																</div></td>
+																</c:if>
 															<td class="project-actions"><a href="projects.html#"
 																class="btn btn-white btn-sm "> <span class="folder"></span>
 																	查看
 															</a> <!-- Single button --></td>
 														</tr>
-														<tr>
-															<td class="project-people"><a href=""><img
-																	alt="image" class="img-circle"
-																	src="../static/img/team-member/a.jpg"></a></td>
-															<td class="project-title"><a href=""><strong>大鹏</strong>(区域经理)</a>
-																<br /> <span>山东省潍坊市</span></td>
-															<td class="project-title"><span class="l-h">提货量：<strong
-																	class="shop-num">265部</strong></span> <br /> <span>活跃度：<strong
-																	class="shop-num-d">4.5分</strong></span></td>
-															<td class="project-completion"><span
-																class="completion-ing">业务指标： 88%</span> <span><i
-																	class="ico ico-time-down"></i> 倒计时：<span class="">2天</span></span>
-																<span class="kaohe-status onekaohe-status-out">一阶段考核完成</span>
-																<div class="progress progress-mini">
-																	<div style="width: 88%;"
-																		class="progress-bar onekaohe-bar"></div>
-																</div></td>
-															<td class="project-actions"><a href="projects.html#"
-																class="btn btn-white btn-sm "> <span class="folder"></span>
-																	查看
-															</a> <!-- Single button --></td>
-														</tr>
+														</c:forEach>
+												</c:if>
 													</tbody>
 												</table>
 											</div>
-											<!-- 分页 pager -->
-											<div id="callBackPager"></div>
-											<!-- 分页 pager -->
+									<c:if test="${not empty list.content}">
+										<!-- 分页 pager -->
+										<%-- <input id="pageCount" type="hidden" value="${}"> --%>
+										<div id="callBackPager"></div>
+										<!-- 分页 pager -->
+									</c:if>
+									<c:if test="${empty list.content}">
+										<div style="text-align: center;">
+											<ul class="pagination">
+												<tr>
+													<td colspan="100">没有相关数据</td>
+												</tr>
+											</ul>
+										</div>
+									</c:if>
 										</div>
 									</div>
 
@@ -200,6 +235,7 @@
 	<!-- bootstrapPaeger -->
 	<script src="/static/bootStrapPager/js/extendPagination.js"></script>
 	<script src='/static/js/common.js'></script>
+	<script src="/static/kaohe/kaohe.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 		/*区域 */
 		function getRegion(id){
@@ -207,9 +243,10 @@
 		}
 //分页生成
 		
-		var totalCount = 356,//总条数
-			showCount = 11, //显示分页个数
-			limit =  5;//每页条数
+		/* var totalCount = $('#pageCount').val(); //总条数 */
+		var totalCount = 10; //总条数
+			showCount = 10, //显示分页个数
+			limit =  1;//每页条数
 // 		createTable(1, limit, totalCount);
 		$('#callBackPager').extendPagination({
 			totalCount : totalCount,
@@ -217,7 +254,14 @@
 			limit : limit,
 			callback : function(curr, limit, totalCount) {
 				alert("当前是第"+curr+"页,每页"+ limit+"条,总共"+ totalCount+"条");
-				
+				$.ajax({
+					   type:"post",
+					   url:"/assess/getAssessList",
+					   data: {"page":curr},
+					   success : function(obj){
+						   window.location.reload();
+					   }
+				   });	
 		// 		createTable(1, limit, totalCount); //生成列表
 			}
 		});

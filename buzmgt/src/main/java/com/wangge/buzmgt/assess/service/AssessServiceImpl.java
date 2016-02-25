@@ -45,10 +45,10 @@ public class AssessServiceImpl implements AssessService {
   @Override
   @Transactional
   public Page<Assess> getAssessList(Assess assess, int pageNum, String regionName) {
-    String hql = "select t.* from SYS_ASSESS t ";
+    String hql = "select t.* from SYS_ASSESS t left join sys_salesman s on t.user_id = s.user_id ";
     if(assess.getSalesman() != null){
       if((null!=assess.getSalesman().getJobNum()&&!"".equals(assess.getSalesman().getJobNum()))||(null!=assess.getSalesman().getTruename()&&!"".equals(assess.getSalesman().getTruename()))){
-        String serHql = "left join sys_salesman s on t.user_id = s.user_id where s.truename like '%"+assess.getSalesman().getTruename()+"%' or s.job_num='"+assess.getSalesman().getJobNum()+"'";
+        String serHql = "where s.truename like '%"+assess.getSalesman().getTruename()+"%' or s.job_num='"+assess.getSalesman().getJobNum()+"'";
         hql += ""+serHql+" and s.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
       }else{
