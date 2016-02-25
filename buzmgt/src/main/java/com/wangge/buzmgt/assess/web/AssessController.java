@@ -175,7 +175,12 @@ public class AssessController {
   }
   
   @RequestMapping("/toAccessDet")
-  public String toAccessDet(String test,Model model){
+  public String toAccessDet(String salesmanId,String asssessid,Model model){
+    SalesMan salesman = salesManService.findByUserId(salesmanId.trim());
+    Assess assess=assessService.findAssess(Long.parseLong(asssessid.trim()));
+    model.addAttribute("assess", assess);
+    model.addAttribute("salesman", salesman);
+    
     return "kaohe/kaohe_det";
   } 
   

@@ -32,12 +32,12 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<!--业务人员信息-->
-									<i class="ico icon-ywmember"></i>易小星 指标：
-									<span>活跃客户20家</span>
-									<span>提货量120台</span>
+									<i class="ico icon-ywmember"></i>${salesman.truename} 指标：
+									<span>活跃客户${assess.assessActivenum}家</span>
+									<span>提货量${assess.assessOrdernum}台</span>
 									<!--/业务人员信息-->
 									<div class="kaohe-time">
-										开始时间： <span>2015.11.12</span> 结束时间： <span>2015.11.21</span>
+										开始时间： <span></span> 结束时间： <span>2015.11.21</span>
 									</div>
 								</div>
 							</div>
@@ -79,7 +79,7 @@
 							<div class="search-box">
 								<!--区域选择按钮-->
 								<div class="btn-group btn-group-sm">
-									<button type="button" class="btn btn-default ">山东省</button>
+									<button type="button" class="btn btn-default ">${salesman.region.name}</button>
 									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										<span class="caret"></span>
 										<span class="sr-only">Toggle Dropdown</span>
@@ -162,11 +162,11 @@
 						<div class="box-body">
 							<!--ywmamber-body-->
 							<div class="ywmamber-body">
-								<img width="80" src="static/img/user-head.png" alt="..." class="img-circle">
+								<img width="80" src="/static/img/user-head.png" alt="..." class="img-circle">
 								<div class="msg-text">
-									<h4>易小星</h4>
-									<p>ID: A236743252</p>
-									<p>电话: 12547346455</p>
+									<h4>${salesman.truename}</h4>
+									<p>ID: ${salesman.id}</p>
+									<p>电话: ${salesman.mobile}</p>
 								</div>
 							</div>
 							<!--/ywmamber-body-->
@@ -182,9 +182,9 @@
 								<a href="javascript:;" class="pull-right">查看</a>
 							</div>
 							<div class="yw-text">
-								入职时间:<span> 2015.09.21</span>
+								入职时间:<span> ${salesman.regdate}</span>
 								<br /> 负责区域:
-								<span>山东省滨州市邹平县</span>
+								<span>${salesman.region.parent.parent.parent.name} ${salesman.region.parent.parent.name} ${salesman.region.parent.name} ${salesman.region.name}</span>
 							</div>
 							<!--拜访任务-->
 							<div class="visit">

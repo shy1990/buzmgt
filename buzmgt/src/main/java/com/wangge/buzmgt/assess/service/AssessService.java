@@ -9,4 +9,7 @@ public interface AssessService {
   void saveAssess(Assess assess);
   
   Page<Assess> getAssessList(Assess assess,int pageNum,String regionName);
+  
+  
+  public Assess findAssess(long id);
 }

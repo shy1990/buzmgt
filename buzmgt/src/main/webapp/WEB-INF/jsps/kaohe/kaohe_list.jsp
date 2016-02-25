@@ -163,7 +163,7 @@
 																		class="progress-bar threekaohe-bar"></div>
 																</div></td>
 																</c:if>
-															<td class="project-actions"><a href="/assess/toAccessDet" class="btn btn-white btn-sm "> <span class="folder"></span>
+															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=+${assess.salesman.id }+&asssessid=+${assess.id }+" class="btn btn-white btn-sm "> <span class="folder"></span>
 																	查看
 															</a> <!-- Single button --></td>
 														</tr>
