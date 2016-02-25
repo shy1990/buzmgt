@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*,com.wangge.buzmgt.saojie.entity.*,com.wangge.buzmgt.teammember.entity.*" contentType="text/html; charset=UTF-8"
+<%@ page language="java" import="java.util.*,com.wangge.buzmgt.saojie.entity.*,com.wangge.buzmgt.region.entity.*,com.wangge.buzmgt.teammember.entity.*" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
 <!DOCTYPE html>
@@ -16,6 +16,7 @@
 		<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="/static/kaohe/kaohe-set.css" />
 		<script src="/static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
 	</head>
 
 	<body>
@@ -133,11 +134,12 @@
 									<button class="btn btn-audit col-sm-2" onclick="toSubmit();">确定</button>
 								</div>
 							</div>
+							<div class="clearfix"></div>
 							<div class="hr"></div>
 							<!--扫街设置地图-->
 							<div class="saojie-set-map col-sm-10  col-sm-offset-1 col-xs-12">
-								<div class="map-box ">
-									<img style="width: 100%;" src="static/img/background/saojie-set-map.png" />
+								<div class="map-box " style="height: 700px" id="allmap">
+<!-- 									<img style="width: 100%;" src="static/img/background/saojie-set-map.png" /> -->
 								</div>
 							</div>
 							<!--/扫街设置地图-->
@@ -180,6 +182,73 @@
 				pickerPosition: "bottom-left",
 				forceParse: 0
 			});
+			
+			
+			/* 定位到区,以选择的区为中心点 */
+			 <% String areaname=request.getAttribute("areaname").toString();
+			 %>
+				 var map = new BMap.Map("allmap");
+			 	if("山东省"=="<%=areaname%>"){
+			 		map.centerAndZoom(new BMap.Point(117.010765,36.704194), 14);
+			 	}else{
+			 		var name ="<%=areaname%>";
+			 		
+			 		
+			 		var bdary = new BMap.Boundary();
+			 		
+			 		bdary.get(name, function(rs){ //获取行政区域
+			 		var count = rs.boundaries.length; //行政区域的点有多少个
+
+			 		for(var i = 0; i < count; i++){
+			 		var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "red", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+			 		map.addOverlay(ply); //添加覆盖物
+			 		map.setViewport(ply.getPath()); //调整视野 
+			 		} 
+			 		map.centerAndZoom(name, 11);
+			 		map.enableScrollWheelZoom(true); 
+			 		}); 
+			 		
+			 		
+			 		
+			 		  	/* 迭代每个镇轮廓 */
+			 		 <%		
+			 		 		if(null!=request.getAttribute("salesman")){
+			 		 		List<Region> listRegion=(List<Region>)request.getAttribute("regionData");
+			 		 		if(listRegion != null && listRegion.size()>0){
+								for(int i=0;i<listRegion.size();i++){
+								String coordinates=listRegion.get(i).getCoordinates();
+								String[] listCoordinates = null;
+								if(null != coordinates){
+								  listCoordinates=coordinates.split("=");
+								}
+					 			
+					 %> 
+					 			var polygon = new BMap.Polygon([
+					 	<%		if(listCoordinates != null && listCoordinates.length>0){
+									for(int x=0;x<listCoordinates.length;x++){
+										String points=listCoordinates[x];
+										  double lng = Double.parseDouble(points.split("-")[0]);//经度 
+										  double lat = Double.parseDouble(points.split("-")[1]);//纬度 
+						 %>				
+						 		  		<%
+						 		  			if(x==listCoordinates.length-1){%>
+						 		  			new BMap.Point(<%=lng%>,<%=lat%>)
+						 		  			<%}else{%>
+						 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
+						 		  			<%}
+						 		  		%>
+						 
+						 
+						 <%
+									}}%>
+									], {strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
+					 				map.addOverlay(polygon); 	
+									<%
+									 
+					 			}
+					 		}}%>
+			 	}
+			
 		</script>
 	</body>
 
