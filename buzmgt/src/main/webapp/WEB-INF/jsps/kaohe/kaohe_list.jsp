@@ -175,8 +175,7 @@
 																		class="progress-bar threekaohe-bar"></div>
 																</div></td>
 																</c:if>
-															<td class="project-actions"><a href="projects.html#"
-																class="btn btn-white btn-sm "> <span class="folder"></span>
+															<td class="project-actions"><a href="/assess/toAccessDet" class="btn btn-white btn-sm "> <span class="folder"></span>
 																	查看
 															</a> <!-- Single button --></td>
 														</tr>
@@ -341,6 +340,14 @@
 		// 		createTable(1, limit, totalCount); //生成列表
 			}
 		});
+		
+		
+		
+		function getAssessDet(){
+			
+			
+		}
+		
 	</script>
 </body>
 </html>

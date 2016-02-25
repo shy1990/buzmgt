@@ -172,5 +172,12 @@ public class AssessController {
     model.addAttribute("list", list);
     model.addAttribute("assessStatus",assessStatus);
     return   "kaohe/kaohe_list";
+  }
+  
+  @RequestMapping("/toAccessDet")
+  public String toAccessDet(String test,Model model){
+    return "kaohe/kaohe_det";
   } 
+  
+  
 }
