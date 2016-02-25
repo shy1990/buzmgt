@@ -249,7 +249,7 @@
 			limit =  1;//每页条数
 // 		createTable(1, limit, totalCount);
 		$('#callBackPager').extendPagination({
-			totalCount : totalCount,
+			totalCount : totalCount, 
 			showCount : showCount,
 			limit : limit,
 			callback : function(curr, limit, totalCount) {
