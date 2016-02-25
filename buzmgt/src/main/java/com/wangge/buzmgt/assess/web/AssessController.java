@@ -61,7 +61,7 @@ public class AssessController {
     * @return 
     * @since JDK 1.8
    */
-  @RequestMapping("/toAssessSet")
+  @RequestMapping("/toAssessSet") 
   public String toAssessSet(@RequestParam("id") String id , Model model){
     SalesMan salesman = salesManService.findByUserId(id.trim());
     model.addAttribute("salesman", salesman);
