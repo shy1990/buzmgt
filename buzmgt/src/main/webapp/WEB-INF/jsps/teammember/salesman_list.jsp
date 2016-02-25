@@ -23,6 +23,7 @@
 	href="/static/CloudAdmin/js/fuelux-tree/fuelux.min.css" />
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
  <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+ <link rel="stylesheet" type="text/css" href="/static/zTree/css/zTreeStyle/organzTreeStyle.css" />
 </head>
 
 <body>
@@ -257,11 +258,17 @@
 <!-- 						<img width="100%" src="/static/img/team-map.png" /> -->
 <!-- 						/地图 -->
 <!-- 						组织结构 -->
-<!-- 						<div class="structure col-xs-12"> -->
-<!-- 							<i class="icon icon-structure"></i> 组织结构 -->
-<!-- 						</div> -->
-<!-- 						tree view -->
-<!-- 						<div id="tree3" class="tree"></div> -->
+						<div class="structure col-xs-12">
+							<i class="icon icon-structure"></i> 组织结构
+						</div>
+						
+						<div class=""  >
+									<div class="role-list"  >
+													<div
+														style="width: 100%; height: 45px; border-right: 1px solid rgb(221, 221, 221);"></div>
+													<ul id="organizationId" class="ztree" style="overflow:auto;overflow-x: auto"></ul>
+									</div>
+						</div>
 						<!--/组织结构-->
 					</div>
 				</div>
@@ -295,6 +302,8 @@
 		src="/static/CloudAdmin/js/fuelux-tree/fuelux.tree.min.js"></script>
 	<script src="/static/CloudAdmin/js/script.js"></script>
 	<script src='/static/js/common.js'></script>
+	 <script src="/static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/static/js/organization/teamOrganizationTree.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 		jQuery(document).ready(function() {
 			App.setPage("treeview"); //Set current page
