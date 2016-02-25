@@ -256,7 +256,7 @@
 				alert("当前是第"+curr+"页,每页"+ limit+"条,总共"+ totalCount+"条");
 				$.ajax({
 					   type:"post",
-					   url:"/assess/getAssessList",
+					   url:"/assess/getAssessList", 
 					   data: {"page":curr},
 					   success : function(obj){
 						   window.location.reload();
