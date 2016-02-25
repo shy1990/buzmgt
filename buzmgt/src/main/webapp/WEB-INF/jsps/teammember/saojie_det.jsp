@@ -118,10 +118,10 @@
 						<!--/ywmamber-body-->
 						<div class="stage">
 							<span class="stage">${salesMan.salesmanStatus.name}:<span
-								class="percent">60%</span></span>
+								class="percent">0%</span></span>
 						</div>
 						<div class="progress progress-sm">
-							<div id="percent" style="width: 60%;"
+							<div id="percent" style="width: 0%;"
 								class="progress-bar bar-stage"></div>
 						</div>
 						<div class="operation">

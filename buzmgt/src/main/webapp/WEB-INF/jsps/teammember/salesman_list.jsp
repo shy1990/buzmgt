@@ -128,7 +128,7 @@
 																	href="projects.html#" class="btn btn-white btn-sm "><span
 																		class="folder"></span> 查看 </a>
 																	<!-- Single button -->
-																	<div class="btn-group">
+																	<div class="btn-group sr-only">
 																		<button type="button"
 																			class="btn btn-white btn-sm dropdown-toggle"
 																			data-toggle="dropdown" aria-haspopup="true"

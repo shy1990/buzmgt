@@ -187,10 +187,10 @@ ul, ol {
     float: left;
     margin-left: 1px;
 }
-.box  .nav-tabs > li > a {
+.box .nav-tabs > li > a {
     position: relative;
     background: #EEE none repeat scroll 0% 0%;
-    padding: 7px 15px;
+    padding: 8px 15px;
     float: right;
     text-decoration: none;
     color: #595959;
@@ -253,7 +253,7 @@ ul, ol {
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
-    color: #D9534F;
+    color: #3894C7;
     background-color: #FFF;
     border-width: 1px;
     border-style: solid;

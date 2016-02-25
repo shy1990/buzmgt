@@ -1,0 +1,11 @@
+.page-totle{
+	display: inline-block;
+	float: right;
+	margin-top: 25px;
+	margin-right: 20px;
+	color: #757575;
+}
+.currtPage{
+	display: inline-block;
+	width: 50px;
+}

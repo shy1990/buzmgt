@@ -253,6 +253,12 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	margin: 15px -20px;
 	border-top: 2px solid #DBDBDB;
 }
+/*实线*/
+.hr-solid-sm{
+	clear: both;
+	margin: 15px 0;
+	border-top: 1px solid #DBDBDB;
+}
 .marg-b-10{
 	margin-bottom: 10px;
 }

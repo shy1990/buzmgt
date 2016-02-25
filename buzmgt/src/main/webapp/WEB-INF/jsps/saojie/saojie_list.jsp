@@ -86,7 +86,7 @@
 								<div class="form-group title-form">
 									<div class="input-group ">
 										<input type="text" class="form-control" placeholder="请输入名称或工号"
-											id="param"> <span class="input-group-addon"
+											id="param" onkeypress="return check()"> <span class="input-group-addon"
 											id="goSearch"
 											onclick="getSaojieList(this.value,this.id,${regionId});"><i
 											class="icon icon-finds"></i></span>

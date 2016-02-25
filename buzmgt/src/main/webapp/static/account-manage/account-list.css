@@ -42,9 +42,58 @@
 	background: #555555;
 	color: #FFF;
 }
-
-
-
+.account-list .box-title{
+	padding-bottom: 0;
+}
+.nav-job{
+	font-size: 10px;
+}
+.nav-job > li{
+	float: left;
+}
+.nav-job > li>a{
+	color: #636363;
+	border: 1px solid #FFF;
+	padding: 0 5px;
+	margin: 0 10px;
+}
+.nav-job > li.active >a{
+	border-radius: 3px;
+	border: 1px solid #DDD;
+	background: #F1F1F1;
+}
+.nav-job > li.active >a:hover,
+.nav-job > li.active >a:focus,
+.nav-job > li.active >a:active{
+	background: #F1F1F1;
+	color: #636363;	
+}
+.nav-job > li>a:hover,
+.nav-job > li>a:focus,
+.nav-job > li>a:active{
+	background: none;
+	color: #3894C7;
+}
+/*操作*/
+.operation >a{
+	color: #3BA2DC;
+	padding: 4px 2px;
+	margin: 0 10px;
+}
+.operation >a.text-danger{
+	color: red;
+}
+.operation >a.text-danger:hover,
+.operation >a.text-danger:active{
+	border-bottom: 1px solid red;
+}
+.operation >a:first-child{
+	margin-left: 0;
+}
+.operation >a:hover,
+.operation >a:active{
+	border-bottom: 1px solid #3BA2DC;
+}
 
 
 
