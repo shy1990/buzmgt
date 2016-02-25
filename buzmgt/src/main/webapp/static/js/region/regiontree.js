@@ -492,7 +492,6 @@ function onloadZTree() {
 		success : function(data) {
 			ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
 			zNodes = zNodes.concat(ztreeNodes);
-			alert(JSON.stringify(zNodes));
 			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
 			rMenu = $("#rMenu");
 		}
