@@ -59,6 +59,8 @@ public class AssessController {
     SalesMan salesman = salesManService.findByUserId(id.trim());
     model.addAttribute("salesman", salesman);
     model.addAttribute("userId",salesman.getId());
+    model.addAttribute("areaname",salesman.getRegion().getName());
+    model.addAttribute("regionData",regionService.findByRegion(salesman.getRegion().getId()));
     return "kaohe/kaohe_set";
   }
   
