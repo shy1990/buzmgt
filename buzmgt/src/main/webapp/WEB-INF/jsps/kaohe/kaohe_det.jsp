@@ -70,7 +70,7 @@
 								</div>
 								<!--bar 布局-->
 								<div class="col-xs-2">
-									<button disabled="disabled" class="J_btn col-xs-12 btn btn-blue">考核通过</button>
+									<button disabled="disabled" class="J_btn col-xs-12 btn btn-blue" onclick="toAssessStage();">考核通过</button>
 								</div>
 							</div>
 							<!--/列表头部-->
