@@ -9,12 +9,12 @@
 		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 		<title>考核详情</title>
 		<!-- Bootstrap -->
-		<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-		<link href="static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="static/css/common.css" />
-		<link rel="stylesheet" type="text/css" href="static/kaohe/kaohe-det.css" />
-		<link rel="stylesheet" type="text/css" href="static/yw-team-member/ywmember.css" />
-		<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+		<link href="/static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/static/kaohe/kaohe-det.css" />
+		<link rel="stylesheet" type="text/css" href="/static/yw-team-member/ywmember.css" />
+		<script src="/static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 
 	<body>
@@ -62,7 +62,7 @@
 									<div class="J_kaohebar_parents progress progress-sm">
 										<div style="width: 100%;" class="J_kaohebar progress-bar bar-kaohe">
 											<div class="tag">
-												<span class="icon-tag tag-kaohe">56%</span>
+												<span class="icon-tag tag-kaohe">26%</span>
 											</div>
 										</div>
 									</div>
@@ -223,10 +223,10 @@
       <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-			<script src="static/bootstrap/js/bootstrap.min.js"></script>
-			<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-			<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-			<script src="static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+			<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+			<script src="/static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+			<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+			<script src="/static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
 			<script type="text/javascript">
 				$('body input').val('');
 				$(".form_datetime").datetimepicker({
