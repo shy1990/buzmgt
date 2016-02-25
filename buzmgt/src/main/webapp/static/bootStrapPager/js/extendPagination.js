@@ -3,12 +3,11 @@
  */
 (function ($) {
     $.fn.extendPagination = function (options) {
-    	alert(options.totalCount);
         var defaults = {
             //pageId:'',
             totalCount: '',
             showPage: '10',
-            limit: '5',
+            limit: '1',
             callback: function () {
                 return false;
             }

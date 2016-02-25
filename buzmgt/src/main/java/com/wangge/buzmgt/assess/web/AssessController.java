@@ -116,8 +116,8 @@ public class AssessController {
       model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
     }
     Page<Assess> list = assessService.getAssessList(assess,pageNum,manager.getRegion().getName());
-    System.out.println("=-----"+list.getTotalElements());
     model.addAttribute("list", list);
+    model.addAttribute("total",list.getTotalElements());
     model.addAttribute("assessList", assessList);
      model.addAttribute("regionName", manager.getRegion().getName());
      model.addAttribute("regionId", manager.getRegion().getId());

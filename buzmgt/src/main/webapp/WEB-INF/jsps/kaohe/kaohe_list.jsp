@@ -22,6 +22,18 @@
 <!-- tree view -->
 <link href="/static/CloudAdmin/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet">
+<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var status = $("#addClass").val();
+		console.info(status);
+		if (status != null && status != '') {
+			$("li[title = '" + status + "']").addClass("active");
+		} else {
+			$("li[title = '全部']").addClass("active");
+		}
+	});
+</script>
 </head>
 
 <body>
@@ -45,8 +57,8 @@
 							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<ul class="nav nav-tabs">
-									<input id="status" type="hidden" value="${assessStatus}">
-									<li class="active" title="全部"><a title="全部"
+									<input id="addClass" type="hidden" value="${assessStatus}">
+									<li title="全部"><a title="全部"
 										name="status" onclick="getAllAssessList(${regionId});" href="#box_tab1" data-toggle="tab"><i
 											class="fa fa-circle-o"></i> <span
 											class="hidden-inline-mobile">全部</span></a></li>
@@ -174,10 +186,80 @@
 												</table>
 											</div>
 									<c:if test="${not empty list.content}">
-										<!-- 分页 pager -->
-										<%-- <input id="pageCount" type="hidden" value="${}"> --%>
-										<div id="callBackPager"></div>
-										<!-- 分页 pager -->
+										<div style="text-align: center; padding-bottom: 20px">
+											<ul class="pagination box-page-ul">
+												<li><a
+													href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}','${regionId}','${truename}','${jobNum }','${assessStatus}')">&laquo;</a></li>
+												<!-- 1.total<=7 -->
+												<c:if test="${list.totalPages<=7 }">
+													<c:forEach var="s" begin="1" end="${list.totalPages}"
+														step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${assessStatus}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${assessStatus}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+												</c:if>
+												<c:if test="${list.totalPages>7 && list.number<4 }">
+													<c:forEach var="s" begin="1" end="6" step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${assessStatus}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${assessStatus}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<li><a href="javascript:void(0)">...</a></li>
+												</c:if>
+												<c:if
+													test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number>=3 }">
+													<li><a href="javascript:void(0)">...</a></li>
+													<c:forEach var="s" begin="${list.number-2 }"
+														end="${list.number+2 }" step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${assessStatus}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${assessStatus}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<li><a href="javascript:void(0)">...</a></li>
+												</c:if>
+												<c:if
+													test="${list.totalPages>7&&list.number>=4&&list.totalPages-list.number<3 }">
+													<li><a href="javascript:void(0)">...</a></li>
+													<c:forEach var="s" begin="${list.totalPages-6 }"
+														end="${list.totalPages }" step="1">
+														<c:choose>
+															<c:when test="${list.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${assessStatus}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${truename}','${jobNum }','${assessStatus}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+												</c:if>
+												<li><a
+													href="javascript:getPageList('${list.number+1 > list.totalPages-1 ? list.totalPages-1 : list.number+1}','${regionId}','${truename}','${jobNum }','${assessStatus}')">&raquo;</a></li>
+											</ul>
+										</div>
 									</c:if>
 									<c:if test="${empty list.content}">
 										<div style="text-align: center;">
@@ -230,7 +312,6 @@
 		</div>
 
 	</div>
-	<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
 	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 	<!-- bootstrapPaeger -->
 	<script src="/static/bootStrapPager/js/extendPagination.js"></script>
@@ -242,9 +323,11 @@
 			window.location.href='/region/getPersonalRegion?id='+id;
 		}
 //分页生成
-		
-		/* var totalCount = $('#pageCount').val(); //总条数 */
-		var totalCount = 10; //总条数
+		var regionId = $('#regionId').val();
+        		var job = $('#truename').val();
+        		var name = $('#jobNum').val();
+        		var statu = $('#assessStatus').val();
+		var totalCount = $('#total').val(); //总条数 
 			showCount = 10, //显示分页个数
 			limit =  1;//每页条数
 // 		createTable(1, limit, totalCount);
@@ -254,14 +337,7 @@
 			limit : limit,
 			callback : function(curr, limit, totalCount) {
 				alert("当前是第"+curr+"页,每页"+ limit+"条,总共"+ totalCount+"条");
-				$.ajax({
-					   type:"post",
-					   url:"/assess/getAssessList", 
-					   data: {"page":curr},
-					   success : function(obj){
-						   window.location.reload();
-					   }
-				   });	
+					
 		// 		createTable(1, limit, totalCount); //生成列表
 			}
 		});
