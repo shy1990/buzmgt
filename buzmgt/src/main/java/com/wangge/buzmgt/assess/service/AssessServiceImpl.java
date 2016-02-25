@@ -84,5 +84,10 @@ public class AssessServiceImpl implements AssessService {
     Page<Assess> page = new PageImpl<Assess>(q.getResultList(),new PageRequest(pageNum,7),count);   
     return page;  
 }
+
+  @Override
+  public Assess findAssess(long id) {
+    return assessRepository.findOne(id);
+  }
 	
 }
