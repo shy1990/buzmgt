@@ -1,5 +1,7 @@
 package com.wangge.buzmgt.assess.web;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -21,14 +23,13 @@ import com.wangge.buzmgt.assess.entity.Assess.AssessStatus;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.saojie.entity.Saojie;
-import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.util.DateUtil;
 
 /**
   * ClassName: AssessController <br/> 
@@ -190,7 +191,15 @@ public class AssessController {
     Assess assess=assessService.findAssess(Long.parseLong(asssessid.trim()));
     model.addAttribute("assess", assess);
     model.addAttribute("salesman", salesman);
-    
+    List<Region> list = saojieService.findRegionById(salesmanId.trim());
+    model.addAttribute("regionList", list);
+    Date startDate=assess.getAssessTime();
+    Calendar c = Calendar.getInstance();
+    c.setTimeInMillis(startDate.getTime());
+    c.add(Calendar.DATE, Integer.parseInt(assess.getAssessCycle()));//周期后的日期
+    Date endDate= new Date(c.getTimeInMillis());
+    model.addAttribute("startDate", DateUtil.date2String(startDate));
+    model.addAttribute("endDate", DateUtil.date2String(endDate));
     return "kaohe/kaohe_det";
   } 
   

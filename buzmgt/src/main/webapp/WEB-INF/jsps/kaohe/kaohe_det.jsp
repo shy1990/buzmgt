@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"   pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -37,7 +37,7 @@
 									<span>提货量${assess.assessOrdernum}台</span>
 									<!--/业务人员信息-->
 									<div class="kaohe-time">
-										开始时间： <span></span> 结束时间： <span>2015.11.21</span>
+										开始时间： <span>${startDate}</span> 结束时间： <span>${endDate}</span>
 									</div>
 								</div>
 							</div>
@@ -79,17 +79,17 @@
 							<div class="search-box">
 								<!--区域选择按钮-->
 								<div class="btn-group btn-group-sm">
-									<button type="button" class="btn btn-default ">${salesman.region.name}</button>
+									<button type="button" class="btn btn-default " id="regionNameid">${salesman.region.name}</button>
 									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										<span class="caret"></span>
 										<span class="sr-only">Toggle Dropdown</span>
 									</button>
 									<ul class="dropdown-menu">
-										<li><a href="#">Action</a></li>
-										<li><a href="#">Another action</a></li>
-										<li><a href="#">Something else here</a></li>
-										<li role="separator" class="divider"></li>
-										<li><a href="#">Separated link</a></li>
+										<c:if test="${not empty regionList}">
+												<c:forEach var="region" items="${regionList}" varStatus="s">
+													<li><a  onclick="getRegionName('${region.name}')">${region.name}</a></li>
+												</c:forEach>
+										</c:if>
 									</ul>
 								</div>
 								<!--/区域选择按钮-->
@@ -248,8 +248,9 @@
 				if($_haohe_planw===$_haohe_plan){
 					$(".J_btn").removeAttr("disabled");
 				}
-				function toAssessStage(salesmanId,assessId){
-					window.location.href="/assess/toAssessStage?id="+salesmanId+"&assessId="+assessId;
+
+				function getRegionName(name){
+					$("#regionNameid").text(name);
 				}
 			</script>
 	</body>
