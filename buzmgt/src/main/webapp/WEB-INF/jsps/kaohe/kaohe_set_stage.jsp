@@ -1,6 +1,8 @@
 <%@ page language="java" import="java.util.*,com.wangge.buzmgt.saojie.entity.*,com.wangge.buzmgt.region.entity.*,com.wangge.buzmgt.teammember.entity.*" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@  taglib  uri="http://java.sun.com/jsp/jstl/functions"   prefix="fn"%>
 <!DOCTYPE html>
 <html>
 
@@ -56,7 +58,6 @@
 							<!--一阶段考核设置内容-->
 							<div class="form-group">
 								<div class="saojie-upd-list col-sm-10  col-sm-offset-2 col-xs-12">
-								<input type="hidden" id="salesmanId" name="salesmanId" value="${salesman.id}"/>
 									<!--list-->
 									<div class="table-responsive">
 										<table class="table table-bordered">
@@ -68,13 +69,20 @@
 												</tr>
 											</thead>
 											<tbody>
+											<c:if test="${not empty list}">
+													<c:forEach var="assess" items="${list}"
+														varStatus="s">
 												<tr>
 													<td class="average-tr ">
 														<div class="col-sm-8">
 															<div class="form-group">
+															<c:if test="${assess.assessStage =='1' }">
 																<label class="">第一阶段:</label>
-																<label class="">大桥镇</label>
-																<label class="">家</label>
+															</c:if>
+															<c:if test="${assess.assessStage =='2' }">
+																<label class="">第二阶段:</label>
+															</c:if>
+																<label class="" id="regionlbl">${assess.regionName }</label>
 															</div>
 														</div>
 
@@ -83,14 +91,14 @@
 														<div class="col-sm-5">
 															<div class="form-group">
 																<label class="">活跃数:</label>
-																<label class="">14</label>
+																<label class="">${assess.assessActivenum }</label>
 																<label class="">家</label>
 															</div>
 														</div>
 														<div class="col-sm-5">
 															<div class="form-group">
 																<label class="">提货量:</label>
-																<label class="">200</label>
+																<label class="">${assess.assessOrdernum }</label>
 																<label class="">部</label>
 															</div>
 														</div>
@@ -112,6 +120,8 @@
 														</div>
 													</td>
 												</tr>
+												</c:forEach>
+												</c:if>
 											</tbody>
 										</table>
 										<!--/table-->
@@ -129,9 +139,15 @@
 						</div>
 						<!--/box-body-->
 						<!--box-body-->
+						<c:if test="${stage eq 1 or stage eq 2 }">
 						<div class="form-group  marg-b-10">
+							<c:if test="${stage eq 1 }">
 								<label class="col-sm-2 control-label">二阶段考核设置:</label>
-							</div>
+							</c:if>
+							<c:if test="${stage eq 2 }">
+								<label class="col-sm-2 control-label">三阶段考核设置:</label>
+							</c:if>
+						</div>
 							<div class="divider"></div>
 						<div class="box-body form-horizontal">
 							<!--内容-->
@@ -140,7 +156,7 @@
 							</div>
 							<!--考核设置内容-->
 							<form class="member-from-box form-horizontal"
-									action="/assess/saveAssess/${salesman.id}" name="form" method="post">
+									action="/assess/saveAssess/${salesman.id}?stage=+${stage }+" name="form" method="post">
 							<div class="form-group">
 								<div class="saojie-upd-list col-sm-10  col-sm-offset-2 col-xs-12">
 								<input type="hidden" id="salesmanId" name="salesmanId" value="${salesman.id}"/>
@@ -160,7 +176,11 @@
 														<div class="col-sm-4">
 															<a class="J_addDire btn btn-default btn-kaohe-add col-sm-6" href="javascript:;" id="btn"><i class="icon-saojie-add"></i></a>
 														</div>
-
+														<c:if test="${stage eq 1 }">
+														<div class="col-sm-2">
+															<label class="" id="regiontxt"></label>
+														</div>
+														</c:if>
 													</td>
 													<td class="average-tr target form-inline">
 														<div class="col-sm-5">
@@ -223,6 +243,7 @@
 							<div class="hr"></div>
 							<!--/内容-->
 						</div>
+					</c:if>
 						<!--/box-body-->
 					</div>
 					<!--/box-->
@@ -245,7 +266,7 @@
 		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="/static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-		<script src="/static/kaohe/kaohe-set.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/static/kaohe/kaohe-stage.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			$('body input').val('');
 			$(".form_datetime").datetimepicker({

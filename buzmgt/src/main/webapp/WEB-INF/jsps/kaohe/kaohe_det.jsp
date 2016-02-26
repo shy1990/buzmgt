@@ -62,7 +62,7 @@
 									<div class="J_kaohebar_parents progress progress-sm">
 										<div style="width: 100%;" class="J_kaohebar progress-bar bar-kaohe">
 											<div class="tag">
-												<span class="icon-tag tag-kaohe">26%</span>
+												<span class="icon-tag tag-kaohe">100%</span>
 											</div>
 										</div>
 									</div>
@@ -70,7 +70,7 @@
 								</div>
 								<!--bar 布局-->
 								<div class="col-xs-2">
-									<button disabled="disabled" class="J_btn col-xs-12 btn btn-blue" onclick="toAssessStage();">考核通过</button>
+									<button class="J_btn col-xs-12 btn btn-blue" onclick="toAssessStage('${salesman.id}','${assess.id}');">考核通过</button>
 								</div>
 							</div>
 							<!--/列表头部-->
@@ -227,6 +227,7 @@
 			<script src="/static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 			<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 			<script src="/static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+			<script src="/static/kaohe/kaohe-det.js" type="text/javascript" charset="utf-8"></script>
 			<script type="text/javascript">
 				$('body input').val('');
 				$(".form_datetime").datetimepicker({
@@ -246,6 +247,9 @@
 				$(".J_btn").attr("disabled",'disabled');
 				if($_haohe_planw===$_haohe_plan){
 					$(".J_btn").removeAttr("disabled");
+				}
+				function toAssessStage(salesmanId,assessId){
+					window.location.href="/assess/toAssessStage?id="+salesmanId+"&assessId="+assessId;
 				}
 			</script>
 	</body>

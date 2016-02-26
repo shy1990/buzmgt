@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -76,6 +77,8 @@ public class Assess implements Serializable {
 	private AssessStatus status;
 	@Column(name="ASSESS_DEFINE_AREA")
 	private String defineArea;
+	@Transient
+	private String regionName;
 
 	public Assess() {
 		super();
@@ -159,6 +162,14 @@ public class Assess implements Serializable {
 
   public void setDefineArea(String defineArea) {
     this.defineArea = defineArea;
+  }
+
+  public String getRegionName() {
+    return regionName;
+  }
+
+  public void setRegionName(String regionName) {
+    this.regionName = regionName;
   }
 
 }

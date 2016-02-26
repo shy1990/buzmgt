@@ -64,6 +64,8 @@ public class AssessController {
   @RequestMapping("/toAssessSet") 
   public String toAssessSet(@RequestParam("id") String id , Model model){
     SalesMan salesman = salesManService.findByUserId(id.trim());
+    List<Assess> list = assessService.findBysalesman(salesman);
+    model.addAttribute("list", list);
     model.addAttribute("salesman", salesman);
     model.addAttribute("userId",salesman.getId());
     model.addAttribute("areaname",salesman.getRegion().getName());
@@ -97,10 +99,18 @@ public class AssessController {
     * @since JDK 1.8
    */
   @RequestMapping(value = "/saveAssess/{userId}",method = RequestMethod.POST)
-  public String saveAssess(Assess assess,@PathVariable(value = "userId")SalesMan salesman){
+  public String saveAssess(Assess assess,@PathVariable(value = "userId")SalesMan salesman,int stage){
     assess.setSalesman(salesman);
     assess.setStatus(AssessStatus.PENDING);
-    assess.setAssessStage("1");
+    if(stage == 0){
+      assess.setAssessStage("1");
+    }
+    if(stage == 1){
+      assess.setAssessStage("2");
+    }
+    if(stage == 2){
+      assess.setAssessStage("3");
+    }
     assessService.saveAssess(assess);
     System.out.println(assess.getSalesman().getId());
     return "redirect:/assess/assessList";
@@ -184,5 +194,25 @@ public class AssessController {
     return "kaohe/kaohe_det";
   } 
   
+  /**
+   * 
+    * toAssessSet:(跳转到考核设置页面). <br/> 
+    * @author peter 
+    * @param id
+    * @param model
+    * @return 
+    * @since JDK 1.8
+   */
+  @RequestMapping("/toAssessStage") 
+  public String toAssessStage(@RequestParam("id") String id , Model model,@RequestParam("assessId") Assess assess){
+    SalesMan salesman = salesManService.findByUserId(id.trim());
+    List<Assess> list = assessService.findBysalesman(salesman);
+    int stage = assessService.gainMaxStage(id.trim());
+    model.addAttribute("stage",stage);
+    model.addAttribute("list", list);
+    model.addAttribute("salesman", salesman);
+    model.addAttribute("userId",salesman.getId());
+    return "kaohe/kaohe_set_stage";
+  }
   
 }

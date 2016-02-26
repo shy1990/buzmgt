@@ -1,7 +1,9 @@
 package com.wangge.buzmgt.assess.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +20,10 @@ import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.repository.AssessRepository;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**
  * 
@@ -36,6 +42,8 @@ public class AssessServiceImpl implements AssessService {
   private EntityManager em; 
   @Resource
   private AssessRepository assessRepository;
+  @Autowired
+  private RegionRepository regionRepository;
   
   @Override
   public void saveAssess(Assess assess) {
@@ -88,6 +96,41 @@ public class AssessServiceImpl implements AssessService {
   @Override
   public Assess findAssess(long id) {
     return assessRepository.findOne(id);
+  }
+
+  @Override
+  public List<Assess> findBysalesman(SalesMan salesman) {
+    List<Assess> result = assessRepository.findBysalesman(salesman);
+    List<Assess> list = new ArrayList<Assess>();
+    for(Assess obj: result){
+      String regionName = "";
+      String [] stringArr= obj.getAssessArea().split(",");
+      for(int i=0;i<stringArr.length;i++){
+        Region region = regionRepository.findById(stringArr[i]);
+        if(region != null && !"".equals(region)){
+          regionName += region.getName() + " ";
+        }
+      }
+      obj.setRegionName(regionName);
+      list.add(obj);
+    }
+    return list;
+  }
+
+  @Override
+  public int gainMaxStage(String salesmanId) {
+    String sql = "select max(to_number(a.assess_stage)) from SYS_ASSESS a where a.user_id='"+salesmanId+"'";
+    Query query =  em.createNativeQuery(sql);
+    BigDecimal str = null;
+    List<BigDecimal>  resultList = query.getResultList();
+    if(resultList != null && resultList.size() > 0){
+        str = (BigDecimal) resultList.get(0);
+    }
+    int stage = 0;
+    if(str != null && !"".equals(str)){
+      stage = str.intValue();
+    }
+    return stage;
   }
 	
 }
