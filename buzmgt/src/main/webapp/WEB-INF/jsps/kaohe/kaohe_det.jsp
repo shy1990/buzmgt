@@ -52,11 +52,11 @@
 							<!--bar 布局-->
 							<div class="col-sm-10">
 								<div class="quiet-days marg-b-20">
-									<span class="kaohe-stage onekaohe-stage">第一阶段考核</span>
-									<span class="kaohe-stage twokaohe-stage">第二阶段考核</span>
-									<span class="kaohe-stage threekaohe-stage">第三阶段考核</span>
-									<span class="kaohe-stage overkaohe-stage">已转正</span>
-									<span class="kaohe-stage failurekaohe-stage">考核失败</span>
+									<span class="kaohe-stage onekaohe-stage">第一阶段考核</span> <span
+										class="kaohe-stage twokaohe-stage">第二阶段考核</span> <span
+										class="kaohe-stage threekaohe-stage">第三阶段考核</span> <span
+										class="kaohe-stage overkaohe-stage">已转正</span> <span
+										class="kaohe-stage failurekaohe-stage">考核失败</span>
 								</div>
 								<!--class style 沉寂:progress-bar-later ;活跃：progress-bar-ok ;未提货：-->
 								<!--start 考核进度条-->
@@ -72,7 +72,7 @@
 							</div>
 							<!--bar 布局-->
 							<div class="col-xs-2">
-								<a href="javascript:;" class="kaohe-set">考核设置</a>
+								<a href="javascript:;" class="kaohe-set">考核设置--（占位置）</a>
 								<button disabled="disabled" class="J_btn col-xs-12 btn btn-blue">考核通过</button>
 							</div>
 						</div>
@@ -82,14 +82,15 @@
 						<div class="search-box">
 							<!--区域选择按钮-->
 							<select id="regionId" class="form-control input-xs ad-select"
-								onchange="getSaojieDataList();"
-								style="">
+								onchange="getSaojieDataList();" style="">
 								<option value="" selected="selected">全部区域</option>
 								<option value="">济南市</option>
 							</select>
 							<div class="search-date">
-								<input size="16" type="text" value="" readonly class="form-control form_datetime "> --
-								<input size="16" type="text" value="" readonly class="form-control form_datetime">
+								<input size="16" type="text" value="" readonly
+									class="form-control form_datetime "> -- <input
+									size="16" type="text" value="" readonly
+									class="form-control form_datetime">
 							</div>
 							<!--/区域选择按钮-->
 							<button class="btn btn-blue btn-sm">
@@ -159,19 +160,53 @@
 						</div>
 						<!--/ywmamber-body-->
 						<div class="stage">
-							<span class="stageone">第一阶段:60% </span>
-							<span class="stagetwo">第二阶段:60%      </span>
-								<span class="stagethree">第三阶段:60%      </span>
-								<span class="stageover">已转正:60%      </span>
-								<span class="stagefailure">考核失败</span>
+							<span class="stageone">第一阶段:60% </span> <span class="stagetwo">第二阶段:60%
+							</span> <span class="stagethree">第三阶段:60% </span> <span
+								class="stageover">已转正:60% </span> <span class="stagefailure">考核失败</span>
 						</div>
 						<div class="progress progress-sm">
 							<div style="width: 60%;" class="progress-bar bar-kaohe"></div>
 						</div>
 						<div class="operation">
-							<a href="javascript:;">辞退</a> <a href="javascript:;"
+							<a href="javascript:;" data-toggle="modal" data-target="#gridSystemModal">辞退</a> <a href="javascript:;"
 								class="pull-right">查看</a>
 						</div>
+						<!-- 辞退 html -->
+						<div id="gridSystemModal" class="modal-blue modal fade" role="dialog"
+							aria-labelledby="gridSystemModalLabel">
+							<div class="modal-dialog " role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+										</button>
+										<h3 class="modal-title" id="gridSystemModalLabel">
+											辞退
+											</h4>
+									</div>
+									<div class="modal-body">
+										<div class="container-fluid">
+											<div class="row">
+												<div class="col-md-12">
+													<h4 class="text-danger">您确定要辞退该员工么？</h4>
+													<p>1.若辞退该员工，2日后该员工将无法正常使用APP。</p>
+													<p>2.区域经理请确保该员工无拖欠贷款，以及辞退后该区域的配送。</p>
+													<p>3.辞退后该信息将会推送至人资，请做好月该员工的交接工作。</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-danger"
+											data-dismiss="modal">确定辞退</button>
+										<button type="button" class="btn btn-blue caution"
+											data-dismiss="modal">稍后再说</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /辞退 html -->
 						<div class="yw-text">
 							入职时间:<span> 2015.09.21</span> <br /> 负责区域: <span>山东省滨州市邹平县</span>
 						</div>
@@ -204,7 +239,6 @@
 								class="link-oper" href="javascript:;"><i
 								class="icon icon-saojie"></i>扫街记录</a>
 						</div>
-
 					</div>
 				</div>
 				<!--/team-map-->
@@ -237,7 +271,7 @@
 				forceParse : 0
 			}); */
 			$(".form_datetime").datetimepicker({
-				format: 'yyyy-mm-dd',
+				format : 'yyyy-mm-dd',
 				language : 'zh-CN',
 				weekStart : 1,
 				todayBtn : 1,
@@ -246,7 +280,7 @@
 				startView : 2,
 				minView : 2,
 				forceParse : 0
-				});
+			});
 			var $_haohe_plan = $('.J_kaohebar').width();
 			var $_haohe_planw = $('.J_kaohebar_parents').width();
 			$(".J_btn").attr("disabled", 'disabled');

@@ -134,6 +134,7 @@ a.link-export:hover, a.link-export:focus {
 }
 
 .kaohe-set, .kaohe-set:HOVER, .kaohe-set:FOCUS, .kaohe-set:ACTIVE {
+	visibility: hidden;
 	float: right;
 	font-size: 12px;
 	font-weight: bold;
