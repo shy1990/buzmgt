@@ -171,9 +171,6 @@
 																	href="javascript:;" id="btn"><i
 																	class="icon-saojie-add"></i></a>
 															</div> <c:if test="${stage eq 1 }">
-																<div class="col-sm-2">
-																	<label class="" id="regiontxt"></label>
-																</div>
 															</c:if>
 														</td>
 														<td class="average-tr target form-inline">
