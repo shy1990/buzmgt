@@ -49,7 +49,7 @@
 							<div class="tab-pane fade in active" id="box_tab1">
 								<div class="hr-solid-sm"></div>	
 							<ul class="nav nav-job">
-								<li><a href= "javascript:selectByOrg('all','used');"> 全部(在职)</a></li>
+								<li ><a href= "javascript:selectByOrg('all','used');"> 全部(在职)</a></li>
 								<li><a href= "javascript:selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
 								<li><a href= "javascript:selectByOrg('大区总监','0');"> 大区总监(在职)</a></li>
 								<li><a href= "javascript:selectByOrg('all','2');">已辞退</a></li>
@@ -61,7 +61,7 @@
 								});
 							</script>
 							<div class="hr-solid-sm"></div>
-								<table id="table_report" class="table-hover">
+								<table id="table_report" class="table-hover table">
 									<thead>
 										<th width="5%" class="center">序号</th>
 										<th width="10%" class="center">职务</th>

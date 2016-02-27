@@ -39,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
     if(orgName!=null && !"".equals(orgName)){
       if(!"all".equals(orgName)){
         if("大区总监".equals(orgName.trim())){
-          sb.append( " and v.oname != '服务站经理' and  v.status in ('0','1')");
+          sb.append( " and v.oname != '服务站经理' and v.truename!='root' and  v.status in ('0','1')");
         }else{
           sb.append( " and v.oname = '服务站经理' and  v.status in ('0','1')");
         }
