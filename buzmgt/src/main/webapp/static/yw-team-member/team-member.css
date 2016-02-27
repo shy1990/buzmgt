@@ -272,7 +272,8 @@ ul, ol {
 /*title-form*/
 .title-form{
 	float: right;
-	width: 100%;
+	width: 20%;
+	margin: 20px;
 	margin-bottom: 0;
 }
 @media (max-width:768px ) {

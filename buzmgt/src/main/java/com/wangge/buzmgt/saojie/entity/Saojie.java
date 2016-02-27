@@ -238,5 +238,4 @@ public class Saojie implements Serializable {
   public void setTiming(int timing) {
     this.timing = timing;
   }
-  
 }

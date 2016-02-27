@@ -27,4 +27,7 @@ public interface SaojieRepository extends JpaRepository<Saojie, Long>{
   List<Saojie> findAll(Specification<Saojie> specification);
   @Query("select max(s.order) from Saojie s where s.salesman.id=?1")
   int getOrderNumById(String id);
+  
+  @Query("select s.region from Saojie s where s.salesman.id=?1 and s.status=2")
+  List<Region> findRegionById(String id);
 }

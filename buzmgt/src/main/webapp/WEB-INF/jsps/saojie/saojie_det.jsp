@@ -70,7 +70,7 @@
 <!-- 									<img src="static/img/saojie-map.png" /> -->
 								</div>
 							</div>
-							<button class="btn btn-approve col-sm-2 col-sm-offset-5">审核通过</button>
+							<button class="btn btn-approve col-sm-2 col-sm-offset-5" onclick="audit('${salesMan.id}','${salesMan.region.name}')">审核通过</button>
 						</div>
 						<!--/地图-->
 						<!--列表-->
@@ -168,6 +168,37 @@
 				<!--/team-map-->
 			</div>
 		</div>
+		<!-- 模态框（Modal） -->
+<div class="modal fade" id="auditModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" 
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+               扫街审核已通过
+            </h4>
+         </div>
+         <div class="modal-body">
+         <input type="hidden" value="" id="salesmanId">
+	         <div class="form-group">
+	           <span id="regName"></span> 扫街审核已通过，请立即进行考核设置
+	         </div>
+	         <div class="form-group">
+	         将在 <span id="mes">5</span> 秒钟后进入<a href="javascript:auditSet();">考核设置</a>
+	         </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+</div>
 		<!-- Bootstrap core JavaScript================================================== -->
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -227,7 +258,7 @@
 			  		String lat=pointStr.split(",")[1];
 			  		String titile=saojiedata.getName();
 			  		//String truename=store.getTruename();
-			  		String desc=saojiedata.getDiscription();
+			  		String desc=saojiedata.getDescription();
 			  	%>	
 			  			var opts = {
 			  					width : 250,     // 信息窗口宽度

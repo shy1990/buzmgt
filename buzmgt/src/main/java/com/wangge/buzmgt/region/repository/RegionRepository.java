@@ -13,5 +13,5 @@ public interface RegionRepository extends JpaRepository<Region, String> {
 	public Region findByNameLike(String regionName);
 	
 	public List<Region> findByParentId(String id);
-
+	
 }

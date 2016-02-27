@@ -228,7 +228,7 @@
 			  		String lat=pointStr.split(",")[1];
 			  		String titile=saojiedata.getName();
 			  		//String truename=store.getTruename();
-			  		String desc=saojiedata.getDiscription();
+			  		String desc=saojiedata.getDescription();
 			  	%>	
 			  			var opts = {
 			  					width : 250,     // 信息窗口宽度
