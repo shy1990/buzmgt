@@ -314,9 +314,53 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 }
 
 
-
-
-
+/*modle-blue*/
+.modal-blue .modal-content{
+	border: 1px solid #3187B8;
+}
+.modal-blue .modal-header{
+	position: relative;
+	height: 39px;
+	background: #3C9FD8;
+	color: #FFF;
+	padding: 10px ;
+}
+@media (min-width: 970px) {
+	.modal-blue .modal-body{
+		padding-right: 50px;
+	}
+}
+.modal-blue .modal-title{
+	font-size: 15px;
+	font-weight: bold;
+	letter-spacing:1px;
+}
+.modal-blue .modal-body{
+	padding-top: 20px;
+	padding-bottom: 20px;
+	color: #727272;
+}
+.text-blue{
+	color: #3894C7;
+}
+/* 排序 */
+.port{
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin-right: 30px;
+	padding: 13px 20px;
+}
+.port:HOVER,
+.port:FOCUS,
+.port:ACTIVE{
+	background: #2F89BB;
+}
+.port> a{
+	color: #FFF;
+	font-weight: bold;
+	
+}
 
 
 
