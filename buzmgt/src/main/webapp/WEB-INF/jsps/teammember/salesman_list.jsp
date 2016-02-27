@@ -19,10 +19,10 @@
 <!-- tree view -->
 <link href="/static/CloudAdmin/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet">
-<link rel="stylesheet" type="text/css"
-	href="/static/CloudAdmin/js/fuelux-tree/fuelux.min.css" />
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
- <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
 </head>
 
 <body>
@@ -30,14 +30,28 @@
 		<h4 class="team-member-header page-header">
 			<i class="icon team-member-list-icon"></i>团队成员
 			<!--区域选择按钮-->
-			<div class="area-choose">选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;" onclick="getRegion(${regionId});">切换</a> </div>
+			<div class="area-choose">
+				选择区域：<span>${regionName}</span> <a class="are-line"
+					href="javascript:;" onclick="getRegion(${regionId});">切换</a>
+			</div>
 			<!--/区域选择按钮-->
-			<a href="/teammember/toAdd" class="btn btn-blue" type="button">
-				<i class="ico icon-add"></i>添加成员
-			</a>
-				<small class="header-text">共<span class="text-red">${list.totalElements}</span>位成员
-				</small> <small style="display: none" class="header-text sr-only">今日新增<span class="text-red">
-						0 +</span></small>
+			<a href="/teammember/toAdd" class="btn btn-blue" type="button"> <i
+				class="ico icon-add"></i>添加成员
+			</a> <small class="header-text">共<span class="text-red">${list.totalElements}</span>位成员
+			</small> <small style="display: none" class="header-text sr-only">今日新增<span
+				class="text-red"> 0 +</span></small>
+			<div class="form-group title-form">
+
+				<div class="input-group ">
+					<input type="text" class="form-control" name="truename" id="param"
+						placeholder="请输入名称或工号"
+						onkeydown="searchForm(event,this.value,${regionId})"> <a
+						type="sumbit" class="input-group-addon" id="goSearch"
+						onclick="getList(this.value,this.id,${regionId})"><i
+						class="icon icon-finds"></i></a>
+				</div>
+
+			</div>
 		</h4>
 		<div class="row">
 			<div class="col-md-9">
@@ -46,49 +60,44 @@
 					<!--title-->
 					<div class="box-title">
 						<div class="row">
-							<div class="col-sm-8 col-md-6">
+							<div class="col-sm-12">
 								<!--菜单栏-->
 								<ul class="nav nav-tabs">
 									<input id="status" type="hidden" value="${Status}">
+									<li title="全部"><a title="全部" name="salesmanStatus"
+										href="" onclick="getList(this.title,this.name,${regionId});"
+										data-toggle="tab">全部</a></li>
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name,${regionId});"
-										data-toggle="tab"><i class="fa fa-circle-o"></i> <span
-											class="hidden-inline-mobile">扫街中</span></a></li>
+										data-toggle="tab">扫街中</a></li>
 									<li title="考核中"><a title="考核中" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name,${regionId});"
-										data-toggle="tab"><i class="fa fa-laptop"></i> <span
-											class="hidden-inline-mobile">考核中</span></a></li>
+										data-toggle="tab"> 考核中</a></li>
 									<li title="开发中"><a title="开发中" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name,${regionId});"
-										data-toggle="tab"><i class="fa fa-calendar-o"></i> <span
-											class="hidden-inline-mobile">开发中</span></a></li>
+										data-toggle="tab">开发中</a></li>
 									<li title="已转正"><a title="已转正" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name,${regionId});"
-										data-toggle="tab"><i class="fa fa-check"></i> <span
-											class="hidden-inline-mobile">已转正</span></a></li>
+										data-toggle="tab">已转正</a></li>
+									<li title="辞退"><a title="辞退" name="salesmanStatus"
+										href="" onclick="getList(this.title,this.name,${regionId});"
+										data-toggle="tab">辞退</a></li>
 								</ul>
 								<!--/菜单栏-->
 							</div>
-							<div class="col-sm-4 col-md-3 col-md-offset-3 ">
-								<div class="form-group title-form">
-									
-									<div class="input-group ">
-										<input type="text" class="form-control" name="truename" id="param"
-											placeholder="请输入名称或工号" onkeydown="searchForm(event,this.value,${regionId})"> <a type="sumbit"
-											class="input-group-addon" id="goSearch"
-											onclick="getList(this.value,this.id,${regionId})"><i
-											class="icon icon-finds"></i></a>
-									</div>
-									
-								</div>
+							<div class="port pull-right">
+								<a class=" dropdown-toggle" type="button" id="dropdownMenu1"
+									data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="true">排序<span class="J_portDis"></span> <span
+									class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+									<li><a href="#">入职时间</a></li>
+									<li><a href="#">销量</a></li>
+									<li><a href="#">二次销量</a></li>
+								</ul>
 							</div>
 						</div>
-						<!--<div class="title-form input-group ">
-								<input class="form-control input-sm" type="text" name="" id="" value="" />
-								<span class=""><i class="icon icon-finds"></i></span>
-							</div>-->
-						<!--from-->
-						<!--<h4 style="text-align: right;"><i class="fa fa-columns"></i><span class="hidden-inline-mobile">Tabs on Color Header</span></h4>-->
 					</div>
 					<!--title-->
 					<!--box-body-->
@@ -111,22 +120,22 @@
 																<td class="project-people"><a href=""><img
 																		alt="image" class="img-circle"
 																		src="../static/img/team-member/a.jpg"></a></td>
-																<td class="project-title"><a href="javascript:toSalesManInfo('${salesman.id}','salesman');"><strong>${salesman.truename}</strong>(${salesman.user.organization.name})</a>
+																<td class="project-title"><a
+																	href="javascript:toSalesManInfo('${salesman.id}','salesman');"><strong>${salesman.truename}</strong>(${salesman.user.organization.name})</a>
 																	<br /> <span>${salesman.region.name}</span></td>
 																<td class="project-title"><span class="l-h">大桥镇：<strong
 																		class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
 																		class="shop-num-d">10家</strong></span></td>
-																<td class="project-completion">
-																	<span class="completion-ing">当前进度： 88%</span> 
-																	<span class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
+																<td class="project-completion"><span
+																	class="completion-ing">当前进度： 88%</span> <span
+																	class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
 																	<div class="progress progress-mini">
-																		<div style="width: 88%;" class="progress-bar saojie-bar-on"></div>
-																	</div>
-																</td>
+																		<div style="width: 88%;"
+																			class="progress-bar saojie-bar-on"></div>
+																	</div></td>
 																<td class="project-actions"><a
 																	href="projects.html#" class="btn btn-white btn-sm "><span
-																		class="folder"></span> 查看 </a>
-																	<!-- Single button -->
+																		class="folder"></span> 查看 </a> <!-- Single button -->
 																	<div class="btn-group sr-only">
 																		<button type="button"
 																			class="btn btn-white btn-sm dropdown-toggle"
@@ -139,15 +148,14 @@
 																			<li role="separator" class="divider"></li>
 																			<li><a href="#">冻结账户</a></li>
 																		</ul>
-																	</div>
-																</td>
+																	</div></td>
 															</tr>
 														</c:forEach>
 													</tbody>
 												</table>
 											</div>
 											<c:if test="${not empty list.content}">
-												<div style="text-align: center;padding-bottom: 20px" >
+												<div style="text-align: center; padding-bottom: 20px">
 													<ul class="pagination box-page-ul">
 														<li><a
 															href="javascript:getPageList('${list.number > 0 ? list.number-1 : 0}','${regionId}')">&laquo;</a></li>
@@ -161,7 +169,8 @@
 																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																		<li><a
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
@@ -174,7 +183,8 @@
 																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																		<li><a
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
@@ -191,7 +201,8 @@
 																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																		<li><a
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
@@ -208,7 +219,8 @@
 																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li><a href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
+																		<li><a
+																			href="javascript:getPageList('${s-1}','${regionId}')">${s}</a></li>
 																	</c:otherwise>
 																</c:choose>
 															</c:forEach>
@@ -250,18 +262,17 @@
 						<i class="icon icon-district"></i>区域
 					</div>
 					<div class="box-body">
-						<div style="height: 290px" id="allmap">
-						</div>
-<!-- 						<div align="center"><a href="/salesman/showMap"><font color="#0099ff" size="3">查看完整地图</font></a></div> -->
-<!-- 						地图 -->
-<!-- 						<img width="100%" src="/static/img/team-map.png" /> -->
-<!-- 						/地图 -->
-<!-- 						组织结构 -->
-<!-- 						<div class="structure col-xs-12"> -->
-<!-- 							<i class="icon icon-structure"></i> 组织结构 -->
-<!-- 						</div> -->
-<!-- 						tree view -->
-<!-- 						<div id="tree3" class="tree"></div> -->
+						<div style="height: 290px" id="allmap"></div>
+						<!-- 						<div align="center"><a href="/salesman/showMap"><font color="#0099ff" size="3">查看完整地图</font></a></div> -->
+						<!-- 						地图 -->
+						<!-- 						<img width="100%" src="/static/img/team-map.png" /> -->
+						<!-- 						/地图 -->
+						<!-- 						组织结构 -->
+						<!-- 						<div class="structure col-xs-12"> -->
+						<!-- 							<i class="icon icon-structure"></i> 组织结构 -->
+						<!-- 						</div> -->
+						<!-- 						tree view -->
+						<!-- 						<div id="tree3" class="tree"></div> -->
 						<!--/组织结构-->
 					</div>
 				</div>
@@ -300,50 +311,38 @@
 			App.setPage("treeview"); //Set current page
 			App.init(); //Initialise plugins and elements
 		});
+		$('.dropdown-menu li a').click(function(){
+			$('.J_portDis').html(":"+$(this).text());
+		});							
 	</script>
-	<!--<script>
-       $(document).ready(function(){$("#loading-example-btn").click(function(){btn=$(this);simpleLoad(btn,true);simpleLoad(btn,false)})});function simpleLoad(btn,state){if(state){btn.children().addClass("fa-spin");btn.contents().last().replaceWith(" Loading")}else{setTimeout(function(){btn.children().removeClass("fa-spin");btn.contents().last().replaceWith(" Refresh")},2000)}};
-    </script>-->
-      <script type="text/javascript">
+	<script type="text/javascript">
 	<%String areaname = null;
-	  if (null != request.getAttribute("regionName")) {
-	    areaname = request.getAttribute("regionName").toString();
-	  }
-		String parentid = null;
-		if (null != request.getAttribute("parentid")) {
-			parentid = request.getAttribute("parentid").toString();
-		}
-		%>
+			if (null != request.getAttribute("regionName")) {
+				areaname = request.getAttribute("regionName").toString();
+			}
+			String parentid = null;
+			if (null != request.getAttribute("parentid")) {
+				parentid = request.getAttribute("parentid").toString();
+			}%>
 	 	var map = new BMap.Map("allmap");
-		<%
-		if(null!=request.getAttribute("pcoordinates")){%>
-			<%
-			String pcoordinates=request.getAttribute("pcoordinates").toString();
-			String[] listCoordinates=pcoordinates.split("=");
-			 %> 
+		<%if (null != request.getAttribute("pcoordinates")) {%>
+			<%String pcoordinates = request.getAttribute("pcoordinates").toString();
+				String[] listCoordinates = pcoordinates.split("=");%> 
 			 			var polygon = new BMap.Polygon([
-			 	<%
-							for(int x=0;x<listCoordinates.length;x++){
-								String points=listCoordinates[x];
-								double lng=Double.parseDouble(points.split("-")[0]);//经度 
-				 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
-				 %>				
-	<%
-				 		  			if(x==listCoordinates.length-1){%>
+			 	<%for (int x = 0; x < listCoordinates.length; x++) {
+					String points = listCoordinates[x];
+					double lng = Double.parseDouble(points.split("-")[0]);//经度 
+					double lat = Double.parseDouble(points.split("-")[1]);//纬度%>				
+	<%if (x == listCoordinates.length - 1) {%>
 				 		  			new BMap.Point(<%=lng%>,<%=lat%>)
-				 		  			<%}else{%>
+				 		  			<%} else {%>
 				 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
-				 		  			<%}
-				 		  		%>
-				 <%
-							}%>
+				 		  			<%}%>
+				 <%}%>
 							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
 			 				map.addOverlay(polygon);
-							<%
-								String jlng=listCoordinates[1].split("-")[0];
-								String jlat=listCoordinates[1].split("-")[1];
-							
-							%>
+							<%String jlng = listCoordinates[1].split("-")[0];
+				String jlat = listCoordinates[1].split("-")[1];%>
 							 var point = new BMap.Point(<%=jlng%>,<%=jlat%>);
 							 map.centerAndZoom(point, 8);    
 			 				//map.centerAndZoom(name, 8);
@@ -351,23 +350,18 @@
 			 				
 			 				
 			 				 var points =[
-			 				   <%
-			 				  for(int y=0;y<listCoordinates.length;y++){
-									String points=listCoordinates[y];
-									double lng=Double.parseDouble(points.split("-")[0]);//经度 
-					 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
-			 				   %>          
+			 				   <%for (int y = 0; y < listCoordinates.length; y++) {
+					String points = listCoordinates[y];
+					double lng = Double.parseDouble(points.split("-")[0]);//经度 
+					double lat = Double.parseDouble(points.split("-")[1]);//纬度%>          
 					 		  		
 			 					
-				 		  		<%
- 				 		  			if(y==listCoordinates.length-1){%> 
+				 		  		<%if (y == listCoordinates.length - 1) {%> 
 				 		  		 		{"lng":<%=lng%>,"lat":<%=lat%>,"count":50}
-				 		  			<%}else{%>
+				 		  			<%} else {%>
 				 		  				{"lng":<%=lng%>,"lat":<%=lat%>,"count":50},
-				 		  			<%}
-				 		  		%> 
-					 		  	 <%
-									}%>
+				 		  			<%}%> 
+					 		  	 <%}%>
 			 				              ];
 
 			 				heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
@@ -382,8 +376,7 @@
 //								  alert(point);
 	<%-- 								  alert(<%=coordinates%>); --%>
 //							});
-							<%
-		}else{%>
+							<%} else {%>
 			var bdary = new BMap.Boundary();
 			bdary.get('<%=areaname%>', function(rs){ //获取行政区域
 			var count = rs.boundaries.length; //行政区域的点有多少个

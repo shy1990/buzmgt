@@ -183,6 +183,8 @@
 							<button class="btn btn-blue btn-sm">
 								<i class="ico ico-seach-wiath"></i>检索
 							</button>
+							<strong>指标已达成：</strong><span>活跃客户  <span class="text-blue">20</span> 家，提货量 <span class="text-blue">120 </span>台</span>
+							
 							<a class="link-export pull-right" href="javascript:void(0);">导出excel</a>
 							<!--列表内容-->
 						</div>
@@ -307,6 +309,8 @@
 		<script src="/static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 		<script src="/static/yw-team-member/team-member.js"
+			type="text/javascript" charset="utf-8"></script>
+		<script src="/static/js/common.js"
 			type="text/javascript" charset="utf-8"></script>
 		<script src="/static/kaohe/kaohe-det.js" type="text/javascript"
 			charset="utf-8"></script>
