@@ -143,7 +143,7 @@ public class AssessServiceImpl implements AssessService {
     if(regionid != null && !"".equals(regionid)){
       hql += " and t.REGION_ID='"+regionid+"'";
     }
-    if(begin != null && end != null){
+    if(begin != null && !"".equals(begin) && end != null && !"".equals(end)){
       hql += " and to_char(o.createtime,'yyyy-mm-dd') BETWEEN '"+begin+"' AND '"+end+"'";
     }
     hql += " Group by m.username";
