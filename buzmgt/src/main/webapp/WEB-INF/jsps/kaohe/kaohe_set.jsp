@@ -55,7 +55,7 @@
 							</div>
 							<!--考核设置内容-->
 							<form class="member-from-box form-horizontal"
-									action="/assess/saveAssess/${salesman.id}" name="form" method="post">
+									action="/assess/saveAssess/${salesman.id}?stage=+${stage=0 }+" name="form" method="post">
 							<div class="form-group">
 								<div class="saojie-upd-list col-sm-10  col-sm-offset-2 col-xs-12">
 								<input type="hidden" id="salesmanId" name="salesmanId" value="${salesman.id}"/>

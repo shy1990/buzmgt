@@ -77,6 +77,10 @@ public class Assess implements Serializable {
 	private AssessStatus status;
 	@Column(name="ASSESS_DEFINE_AREA")
 	private String defineArea;
+	@Column(name = "ASSESS_ENDTIME")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+  @Temporal(TemporalType.TIMESTAMP)
+	private Date assessEndTime;
 	@Transient
 	private String regionName;
 
@@ -162,6 +166,14 @@ public class Assess implements Serializable {
 
   public void setDefineArea(String defineArea) {
     this.defineArea = defineArea;
+  }
+  
+  public Date getAssessEndTime() {
+    return assessEndTime;
+  }
+
+  public void setAssessEndTime(Date assessEndTime) {
+    this.assessEndTime = assessEndTime;
   }
 
   public String getRegionName() {

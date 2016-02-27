@@ -79,15 +79,16 @@
 							<div class="search-box">
 								<!--区域选择按钮-->
 								<div class="btn-group btn-group-sm">
-									<button type="button" class="btn btn-default " id="regionNameid">${salesman.region.name}</button>
+									<button type="button" class="btn btn-default " id="regionNameid" value="">${salesman.region.name}</button>
 									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										<span class="caret"></span>
 										<span class="sr-only">Toggle Dropdown</span>
 									</button>
 									<ul class="dropdown-menu">
 										<c:if test="${not empty regionList}">
+										<li><a  onclick="getRegionName('${salesman.region.name}')">${salesman.region.name}</a></li>
 												<c:forEach var="region" items="${regionList}" varStatus="s">
-													<li><a  onclick="getRegionName('${region.name}')">${region.name}</a></li>
+													<li><a  onclick="getRegionName('${region.name}','${region.id}')">${region.name}</a></li>
 												</c:forEach>
 										</c:if>
 									</ul>
@@ -97,17 +98,17 @@
 								<div class="date-month">
 									<div class="input-group">
 										<span class="input-group-addon " id="basic-addon1"><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-										<input type="text" class="form-control form_datetime input-sm" placeholder="开始时间" readonly="readonly">
+										<input id="beginTime" type="text" class="form-control form_datetime input-sm" placeholder="开始时间" value="" readonly="readonly">
 									</div>
 								</div>--
 								<div class="date-month ">
 									<div class="input-group ">
 										<span class="input-group-addon " id="basic-addon1"><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-										<input type="text" class="form-control form_datetime input-sm" placeholder="结束时间" readonly="readonly">
+										<input id="endTime" type="text" class="form-control form_datetime input-sm" placeholder="结束时间" value="" readonly="readonly">
 									</div>
 								</div>
 								<!--考核开始时间-->
-								<button class="btn btn-blue btn-sm"><i class="ico ico-seach-wiath"></i>检索</button>
+								<button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');"><i class="ico ico-seach-wiath"></i>检索</button>
 								<a class="link-export pull-right" href="javascript:void(0);">导出excel</a>
 								<!--列表内容-->
 							</div>
@@ -123,27 +124,104 @@
 										</tr>
 									</thead>
 									<tbody>
+									<c:if test="${not empty statistics.content}">
+										<c:forEach var="stat" items="${statistics.content}" varStatus="s">
 										<tr>
-											<td class="shop-name">天桥手机专卖店</td>
-											<td class="tihuo-num">1次</td>
-											<td class="total-num">121</td>
-											<td class="sum">11112.45</td>
+											<td class="shop-name">${stat.shopName }</td>
+											<td class="tihuo-num">${stat.orderTimes }次</td>
+											<td class="total-num">${stat.orderNum }</td>
+											<td class="sum">${stat.orderTotalCost }</td>
 										</tr>
-										<tr>
-											<td class="shop-name">天桥手机专卖店</td>
-											<td class="tihuo-num">1次</td>
-											<td class="total-num">121</td>
-											<td class="sum">11112.45</td>
-										</tr>
-										<tr>
-											<td class="shop-name">天桥手机专卖店</td>
-											<td class="tihuo-num">1次</td>
-											<td class="total-num">121</td>
-											<td class="sum">11112.45</td>
-										</tr>
+										</c:forEach>
+									</c:if>
 									</tbody>
 								</table>
 							</div>
+							<c:if test="${not empty statistics.content}">
+										<div style="text-align: center; padding-bottom: 20px">
+											<ul class="pagination box-page-ul">
+												<li><a
+													href="javascript:getPageList('${statistics.number > 0 ? statistics.number-1 : 0}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">&laquo;</a></li>
+												<!-- 1.total<=7 -->
+												<c:if test="${statistics.totalPages<=7 }">
+													<c:forEach var="s" begin="1" end="${statistics.totalPages}"
+														step="1">
+														<c:choose>
+															<c:when test="${statistics.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+												</c:if>
+												<c:if test="${statistics.totalPages>7 && statistics.number<4 }">
+													<c:forEach var="s" begin="1" end="6" step="1">
+														<c:choose>
+															<c:when test="${statistics.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}',''${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<li><a href="javascript:void(0)">...</a></li>
+												</c:if>
+												<c:if
+													test="${statistics.totalPages>7&&statistics.number>=4&&statistics.totalPages-statistics.number>=3 }">
+													<li><a href="javascript:void(0)">...</a></li>
+													<c:forEach var="s" begin="${statistics.number-2 }"
+														end="${statistics.number+2 }" step="1">
+														<c:choose>
+															<c:when test="${statistics.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<li><a href="javascript:void(0)">...</a></li>
+												</c:if>
+												<c:if
+													test="${statistics.totalPages>7&&statistics.number>=4&&statistics.totalPages-statistics.number<3 }">
+													<li><a href="javascript:void(0)">...</a></li>
+													<c:forEach var="s" begin="${statistics.totalPages-6 }"
+														end="${statistics.totalPages }" step="1">
+														<c:choose>
+															<c:when test="${statistics.number == s-1 }">
+																<li class="active"><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a
+																	href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+												</c:if>
+												<li><a
+													href="javascript:getPageList('${statistics.number+1 > statistics.totalPages-1 ? statistics.totalPages-1 : statistics.number+1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">&raquo;</a></li>
+											</ul>
+										</div>
+									</c:if>
+									<c:if test="${empty statistics.content}">
+										<div style="text-align: center;">
+											<ul class="pagination">
+												<tr>
+													<td colspan="100">没有相关数据</td>
+												</tr>
+											</ul>
+										</div>
+									</c:if>
 							<!--/列表内容-->
 						</div>
 						<!--/box-body-->
@@ -249,8 +327,9 @@
 					$(".J_btn").removeAttr("disabled");
 				}
 
-				function getRegionName(name){
+				function getRegionName(name,id){
 					$("#regionNameid").text(name);
+					$("#regionNameid").val(id);
 				}
 			</script>
 	</body>
