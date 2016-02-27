@@ -113,7 +113,7 @@
 								<!--列表内容-->
 							</div>
 							<!--end 操作区域-->
-							<div class="company-table table-responsive ">
+							<div class="company-table table-responsive "> 
 								<table class="table table-hover">
 									<thead>
 										<tr>
