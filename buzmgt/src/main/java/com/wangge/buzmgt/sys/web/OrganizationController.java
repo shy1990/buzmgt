@@ -309,18 +309,33 @@ public class OrganizationController {
     	  return vo;
   	}
   	
-  	
+  	/**
+  	 * 
+  	  * getTeamOrganizationVo:(这里用一句话描述这个方法的作用). <br/> 
+  	  * TODO(这里描述这个方法适用条件 – 可选).<br/> 
+  	  * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
+  	  * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
+  	  * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
+  	  * 
+  	  * @author Administrator 
+  	  * @param u
+  	  * @param parent
+  	  * @return 
+  	  * @since JDK 1.8
+  	 */
     private OrganizationVo getTeamOrganizationVo(User u,User parent){
       OrganizationVo vo=new OrganizationVo();
       vo.setId(u.getId()+"");
-      if(null!=u.getManager()){
-        vo.setName(u.getManager().getTruename()+"("+u.getOrganization().getName()+")");
-      }else if(null!=u.getSalseMan()){
-        vo.setName(u.getSalseMan().getTruename()+"("+u.getOrganization().getName()+")");
+      if (null != u.getManager()) {
+        vo.setName(u.getManager().getTruename() + "("
+            + u.getOrganization().getName() + ")");
+      } else if (null != u.getSalseMan()) {
+        vo.setName(u.getSalseMan().getTruename() + "("
+            + u.getOrganization().getName() + ")");
       }
       
       String iconUrl=null;
-      switch (u.getOrganization().getLev()) {
+    switch (u.getOrganization().getLev()) {
       case 1:
         iconUrl="/static/img/organization/jl.png";
         break;
@@ -346,16 +361,16 @@ public class OrganizationController {
       vo.setIcon(iconUrl);
       vo.setIconClose(iconUrl);
       vo.setIconOpen(iconUrl);
-      if(u.getOrganization().getChildren().size()>0){
-        if(userService.getUserByOrgan(u.getOrganization().getId()+1).size()>0){
-          vo.setIsParent("true");
-        }else{
-          vo.setIsParent("false");
-        }
-       
-      }else{
+    if (u.getOrganization().getChildren().size() > 0) {
+      if (userService.getUserByOrgan(u.getOrganization().getId() + 1).size() > 0) {
+        vo.setIsParent("true");
+      } else {
         vo.setIsParent("false");
       }
+       
+    } else {
+      vo.setIsParent("false");
+    }
       vo.setOpen("true");
       if(null!=parent){
         vo.setpId(parent.getId()+"");;
