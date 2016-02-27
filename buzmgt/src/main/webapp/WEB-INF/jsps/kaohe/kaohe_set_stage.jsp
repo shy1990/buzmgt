@@ -269,6 +269,8 @@
 	<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script src="/static/kaohe/kaohe-stage.js" type="text/javascript"
 		charset="utf-8"></script>
+	<script src="/static/js/common.js" type="text/javascript"
+		charset="utf-8"></script>
 	<script type="text/javascript">
 		$('body input').val('');
 		$(".form_datetime").datetimepicker({

@@ -13,16 +13,19 @@
 <meta name="description" content="">
 <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="/static/yw-team-member/team-memberAdd.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/static/zTree/css/icon.css" />
+<link rel="stylesheet" type="text/css" href="/static/zTree/css/main.css" />
+<link rel="stylesheet" type="text/css" href="/static/zTree/css/zTreeStyle/organzTreeStyle.css" />
 <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link rel="stylesheet" type="text/css"
 	href="/static/yw-team-member/team-member.css" />
 <!-- tree view -->
 <link href="/static/CloudAdmin/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet">
-<script type="text/javascript"
-	src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
-<script type="text/javascript"
-	src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="/static/CloudAdmin/js/fuelux-tree/fuelux.min.css" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+ <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
 </head>
 
 <body>
@@ -40,7 +43,7 @@
 			</a> <small class="header-text">共<span class="text-red">${list.totalElements}</span>位成员
 			</small> <small style="display: none" class="header-text sr-only">今日新增<span
 				class="text-red"> 0 +</span></small>
-			<div class="form-group title-form">
+			<div class="form-group title-form1">
 
 				<div class="input-group ">
 					<input type="text" class="form-control" name="truename" id="param"
@@ -305,12 +308,16 @@
 	</div>
 	<%@include file="/static/js/alert/alert.html"%>
 	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src='/static/js/dateutil.js'></script>
 	<script src="/static/yw-team-member/team-member.js"
 		type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript"
 		src="/static/CloudAdmin/js/fuelux-tree/fuelux.tree-sampledata.js"></script>
 	<script type="text/javascript"
 		src="/static/CloudAdmin/js/fuelux-tree/fuelux.tree.min.js"></script>
+	<script src="/static/CloudAdmin/js/jQuery-Cookie/jquery.cookie.min.js"></script>
 	<script src="/static/CloudAdmin/js/script.js"></script>
 	<script src='/static/js/common.js'></script>
 	 <script src="/static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
