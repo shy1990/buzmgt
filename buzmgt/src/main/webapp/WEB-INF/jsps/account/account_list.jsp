@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 
@@ -23,10 +25,7 @@
 			<h4 class="page-header">
 				<i class="ico ico-account-manage"></i>账号管理
 				<!--区域选择按钮-->
-				<div class="area-choose">
-					选择区域：<span>山东省</span> 
-					<a class="are-line" href="javascript:;" onclick="">切换</a>
-				</div>
+					<div class="area-choose">选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;" onclick="getRegion(${regionId});">切换</a> </div>
 				<!--/区域选择按钮-->
 			</h4>
 			<div class="row">
@@ -38,8 +37,7 @@
 								<div class="col-sm-12">
 									<!--菜单栏-->
 									<ul class="nav nav-tabs">
-										<li class="active"><a href="#box_tab1" data-toggle="tab"><span class="hidden-inline-mobile">正在使用</span></a></li>
-										<li><a href="#box_tab2" data-toggle="tab"><span class="hidden-inline-mobile">已辞退</span></a></li>
+									<li>
 									</ul>
 									<!--/菜单栏-->
 								</div>
@@ -51,10 +49,10 @@
 							<div class="tab-pane fade in active" id="box_tab1">
 								<div class="hr-solid-sm"></div>	
 							<ul class="nav nav-job">
-								<li class="active"><a href="javascript:;">全部</a></li>
-								<li><a href="javascript:;">区域经理</a></li>
-								<li><a href="javascript:;">大区经理</a></li>
-								<li><a href="javascript:;">服务张经理</a></li>
+								<li><a href= "javascript:selectByOrg('all','used');"> 全部(在职)</a></li>
+								<li><a href= "javascript:selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
+								<li><a href= "javascript:selectByOrg('大区总监','0');"> 大区总监(在职)</a></li>
+								<li><a href= "javascript:selectByOrg('all','2');">已辞退</a></li>
 							</ul>
 							<script type="text/javascript">
 								$('.nav-job li').click(function(){
@@ -63,147 +61,142 @@
 								});
 							</script>
 							<div class="hr-solid-sm"></div>
-							<table class="table table-hover">
-								<tr>
-									<th>职务</th>
-									<th>账号</th>
-									<th>姓名</th>
-									<th>负责区域</th>
-									<th>角色权限</th>
-									<th>账号状态</th>
-									<th>操作</th>
-								</tr>
-								<tr>
-									<td>区域经理</td>
-									<td>18456445446</td>
-									<td>周星星</td>
-									<td>大东北</td>
-									<td>区域经理</td>
-									<td>
-										<div class="switch switch-small"  data-on="info" data-off="success">
-											<input type="checkbox" checked="checked" autocomplete="off" name="my-checkbox" id="accountStatus"  value="" 
-												data-on-color="info" data-off-color="success" data-size="mini" data-on-text="冻结"data-off-text="正常" />
-										</div>
-									</td>
-									<td class="operation">
-										<a href="" data-toggle="modal" data-target="#resetPwdModal">重置密码</a>
-										<a href="">修改资料</a>
-										<a class="text-danger" href="" data-toggle="modal" data-target="#gridSystemModal">辞退</a>
-										
-									</td>
-								</tr>
-								<tr>
-									<td>区域经理</td>
-									<td>18456445446</td>
-									<td>周星星</td>
-									<td>大东北</td>
-									<td>区域经理</td>
-									<td>
-										<div class="switch switch-small"  data-on="info" data-off="success">
-											<input type="checkbox" autocomplete="off" name="my-checkbox" id="accountStatus"  value="" 
-												data-on-color="info" data-off-color="success" data-size="mini" data-on-text="冻结"data-off-text="正常" />
-										</div>
-									</td>
-									<td class="operation">
-										<a href="" data-toggle="modal" data-target="#resetPwdModal">重置密码</a>
-										<a href="">修改资料</a>
-										<a class="text-danger" href="" data-toggle="modal" data-target="#gridSystemModal">辞退</a>
-										
-									</td>
-								</tr>
-							</table>
-							</div>
-							<div class="tab-pane fade" id="box_tab2">
-								<table class="table table-hover">
-									<tr>
-										<th>职务</th>
-										<th>账号</th>
-										<th>姓名</th>
-										<th>负责区域</th>
-										<th>角色权限</th>
-										<th>操作</th>
-									</tr>
-									<tr>
-										<td>区域经理</td>
-										<td>18456445446</td>
-										<td>周星星</td>
-										<td>大东北</td>
-										<td>区域经理</td>
-										<td class="operation">
-											<a href="" data-toggle="modal" data-target="">恢复</a>
-											<a class="text-danger" href="" data-toggle="modal" data-target="#deleteAccountModal">删除账号</a>
-										</td>
-									</tr>
-									<tr>
-										<td>区域经理</td>
-										<td>18456445446</td>
-										<td>周星星</td>
-										<td>大东北</td>
-										<td>区域经理</td>
-										<td class="operation">
-											<a href="" data-toggle="modal" data-target="">恢复</a>
-											<a class="text-danger" href="" data-toggle="modal" data-target="#deleteAccountModal">删除账号</a>
-										</td>
-									</tr>
+								<table id="table_report" class="table-hover">
+									<thead>
+										<th width="5%" class="center">序号</th>
+										<th width="10%" class="center">职务</th>
+										<th width="10%" class="center">账号</th>
+										<th width="10%" class="center">姓名</th>
+										<th width="10%" class="center">负责区域</th>
+										<th width="10%" class="center">角色权限</th>
+										<th width="10%" class="center">账号状态</th>
+										<th width="20%" class="center">操作</th>
+									</thead>
+									<tbody>
+										<c:choose>
+											<c:when test="${not empty accounts}">
+												<c:forEach var="ac" items="${accounts}" varStatus="s">
+													<tr class="am-active">
+														<td width="5%" class="center">${s.index+1}</td>
+														<td width="10%">${ac.position}</td>
+														<td width="10%">${ac.accountNum}</td>
+														<td width="10%">${ac.name}</td>
+														<td width="10%">${ac.areaName}</td>
+														<td width="10%">${ac.roleName}</td>
+														<td width="10%">
+															<div class="switch switch-small"  data-on="info" data-off="success">
+															<c:choose>
+																<c:when test="${ac.status==2}">
+																		<input type="checkbox"	checked="checked" autocomplete="off" name="my-checkbox" id="accountStatus" value="${ac.accountNum}" 
+																			data-on-color="info" data-off-color="success" data-size="mini" data-on-text="冻结" data-off-text="正常" readonly/>
+																</c:when>
+																<c:otherwise>
+																	<c:choose>
+																		<c:when test="${ac.status==0}">
+																			<input type="checkbox"	checked="checked" autocomplete="off" name="my-checkbox" id="accountStatus" value="${ac.accountNum}" 
+																				data-on-color="info" data-off-color="success" data-size="mini" data-off-text="冻结" data-on-text="正常" onchange="mofidyAccount('${ac.accountNum}','0')"/>
+																		</c:when>
+																		<c:otherwise>
+																			<input type="checkbox" autocomplete="off" name="my-checkbox" id="accountStatus" value="${ac.status}" 
+																				data-on-color="info" data-off-color="success" data-size="mini" data-off-text="冻结" data-on-text="正常" onchange="mofidyAccount('${ac.accountNum}','1')"/>
+																		</c:otherwise>
+																	</c:choose>
+																</c:otherwise>
+															
+															</c:choose>
+															</div>
+														</td>
+														<td width="20%" class="operation">
+															<a href="javascript:resetPwd('${ac.accountNum}');" >重置密码</a>
+															<a href= "javascript:modifyAccount('${ac.accountNum}','${ac.position}');"> 修改资料</a>
+															<c:choose>
+																<c:when test="${ac.status==2}">
+																	<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','3');">删除</a>
+																</c:when>
+																<c:otherwise>
+																	<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','2');">辞退</a>
+																</c:otherwise>
+															</c:choose>
+															
+														</td>
+													</tr>
+												</c:forEach>
+											</c:when>
+											<c:otherwise>
+												<tr>
+													<td colspan="100">没有相关数据</td>
+												</tr>
+											</c:otherwise>
+										</c:choose>
+									</tbody>
 								</table>
+								
 							</div>
+							<div id="pageNav" class="scott" align="center">
+								<font color="#88af3f">共${totalCount} 条数据，
+									共${totalPage} 页</font> 
+								<div class="page-link" >${pageNav}</div>
+							</div>	
+							
 						</div>
 						<!-- box-body -->
 					</div>
 					<!--box-->
-					<!-- alert html -->
-					<div id="gridSystemModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
-						<div class="modal-dialog " role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									<h3 class="modal-title" id="gridSystemModalLabel">辞退</h4>
-								</div>
-								<div class="modal-body">
-									<div class="container-fluid">
-										<div class="row">
-											<div class="col-md-12">
-												<h4 class="text-danger">您确定要辞退该员工么？</h4>
-												<p>1.若辞退该员工，2日后该员工将无法正常使用APP。</p>
-												<p>2.区域经理请确保该员工无拖欠贷款，以及辞退后该区域的配送。</p>
-												<p>3.辞退后该信息将会推送至人资，请做好月该员工的交接工作。</p>
+				
+						<!-- alert resetPwd html -->
+								<div id="resetPwdModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
+									<div class="modal-dialog " role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+												<h3 class="modal-title" id="gridSystemModalLabel">重置密码</h4>
+											</div>
+											<div class="modal-body">
+												<div class="container-fluid">
+													<div class="row">
+														<div class="col-md-12">
+															重置密码后将恢复初始状态！
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-success caution" data-dismiss="modal">取消</button>
+												<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="resetPwd('${ac.accountNum}')";>确定</button>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-danger" data-dismiss="modal">确定辞退</button>
-									<button type="button" class="btn btn-success caution" data-dismiss="modal">稍后再说</button>
-								</div>
-							</div>
-						</div>
-					</div>
 					<!-- /alert html -->
-					<!-- alert html -->
-					<div id="resetPwdModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
-						<div class="modal-dialog " role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									<h3 class="modal-title" id="gridSystemModalLabel">重置密码</h4>
-								</div>
-								<div class="modal-body">
-									<div class="container-fluid">
-										<div class="row">
-											<div class="col-md-12">
-												重置密码后将恢复初始状态！
+					
+					<!-- alert 辞退 html -->
+						<div id="gridSystemModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
+							<div class="modal-dialog " role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<h3 class="modal-title" id="gridSystemModalLabel">辞退</h4>
+									</div>
+									<div class="modal-body">
+										<div class="container-fluid">
+											<div class="row">
+												<div class="col-md-12">
+													<h4 class="text-danger">您确定要辞退该员工么？</h4>
+													<p>1.若辞退该员工，2日后该员工将无法正常使用APP。</p>
+													<p>2.区域经理请确保该员工无拖欠贷款，以及辞退后该区域的配送。</p>
+													<p>3.辞退后该信息将会推送至人资，请做好月该员工的交接工作。</p>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-success caution" data-dismiss="modal">取消</button>
-									<button type="button" class="btn btn-danger" data-dismiss="modal">确定</button>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-danger" data-dismiss="modal" >确定辞退</button>
+										<button type="button" class="btn btn-success caution" data-dismiss="modal">以后再说</button>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<!-- /alert html -->
+				<!-- /alert html -->
 					<!-- alert html -->
 					<div id="deleteAccountModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
 						<div class="modal-dialog " role="document">
@@ -232,26 +225,112 @@
 				</div>
 			</div>
 		</div>
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="static/js/jquery/jquery-1.11.3.min.js"></script>
-		<!-- Include all compiled plugins (below), or include individual files as needed -->
-		<script src="static/bootstrap/js/bootstrap.min.js"></script>
-		<script src="static/bootstrap/js/bootstrap-switch.min.js"></script>
-		<script src="static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js" type="text/javascript" charset="utf-8"></script>
-		<script type="text/javascript">
-			$("[name='my-checkbox']").bootstrapSwitch();
-			//checkbox点击事件回调函数
-			$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-  console.log(this); // DOM element
-  console.log(event); // jQuery event
-  console.log(state); // true | false
-  if(state){
-  	alert('冻结');
-  }else{
-  	alert('正常');
-  }
-});
-		</script>
 	</body>
-
+	<script src="static/bootstrap/js/bootstrap-switch.min.js"></script>
+	<script src="static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script src='/static/bootstrap/js/bootstrap.js'></script>
+	<script src='/static/js/common.js'></script>
+	<script type="text/javascript">
+		window.jQuery	|| document.write("<script src='../static/js/jquery.min.js'>\x3C/script>");
+	</script>
+	<script type="text/javascript">
+		$("[name='my-checkbox']").bootstrapSwitch();
+		//checkbox点击事件回调函数
+		$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
+			console.log(this); // DOM element
+			console.log(event); // jQuery event
+			console.log(state); // true | false
+		//	alert(event.target);
+			if(state){
+		//		alert(state+"==="+event.target.value);
+			}else{
+			//	alert(state+"---"+event.target.value);
+			}
+		});
+		//修改资料
+		function modifyAccount(accountNum,position){
+			var url = "modifyAccount?accountNum=" + accountNum+"&position="+position;
+			window.location = encodeURI(url);
+		}
+		//根据职务查询
+		function selectByOrg(orgName,status){
+			var url = "accountManage?orgName=" + orgName+"&status="+status;
+			window.location = encodeURI(url);
+		}
+		// 重置密码
+		function resetPwd(accountNum){
+			if (confirm("确定要重置密码？	初始密码1234567")) {
+				var url = "resetPwd?id=" + accountNum;
+				$.post(url, function(data) {
+					if (data === 'suc') {
+						alert("重置成功!");
+						setTimeout(function(){
+			        		location.reload()
+			        		},3000);
+					} else {
+						alert("系统异常,请重试");
+					}
+				});
+			}
+		}
+		// 修改账号状态,0正常,1冻结,2辞退,3删除
+		function mofidyAccount(accountNum,status){
+			if(status=='2'){
+				if (confirm("确定要辞退该员工")) {
+					var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
+					$.post(url, function(data) {
+						if (data === 'suc') {
+							alert("已辞退!");
+				        	location.reload();
+						} else {
+							alert("系统异常,请重试");
+						}
+					});
+				}
+			}else if(status=='3'){
+				if (confirm("确定要删除该员工?删除后无法恢复")) {
+					var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
+					$.post(url, function(data) {
+						if (data === 'suc') {
+							alert("已删除!");
+				        	location.reload();
+						} else {
+							alert("系统异常,请重试");
+						}
+					});
+				}
+			}else if(status=='0'){
+				if (confirm("确定要冻结改账号?")) {
+					var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
+					$.post(url, function(data) {
+						if (data === 'suc') {
+							alert("已冻结!");
+				        	location.reload();	
+						} else {
+							alert("系统异常,请重试");
+						}
+					});
+				}
+			}else if(status=='1'){
+				if (confirm("确定要解封该账号?")) {
+					var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
+					$.post(url, function(data) {
+						if (data === 'suc') {
+							alert("已解封!");
+				        	location.reload();
+						} else {
+							alert("系统异常,请重试");
+						}
+					});
+				}
+			}
+		}
+		
+		
+		/*区域 */
+		function getRegion(id){
+			window.location.href='/region/getPersonalRegion?flag='+"account";
+		}
+	</script>
 </html>

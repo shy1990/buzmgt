@@ -28,7 +28,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum UserStatus {
-		NORMAL, LOCKED
+		NORMAL, LOCKED ,DISMISS,DELETE;
 	}
 
 	@Id
