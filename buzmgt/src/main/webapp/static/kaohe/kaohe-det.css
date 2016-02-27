@@ -1,40 +1,64 @@
-.kaohe-time{
+.kaohe-time {
 	float: right;
 	display: inline-block;
 }
-.kaohe-det-body .box-title{
+
+.kaohe-det-body .box-title {
 	padding-top: 10px;
 }
-.kaohe-det-body .box-title span{
+
+.kaohe-det-body .box-title span {
 	font-weight: 400;
 }
 /*图标*/
-.icon-ywmember{
+.icon-ywmember {
 	background: url(../img/icon/kaohe/rencheng.png) no-repeat;
 }
 /*列表头部*/
-.det-head{
+.det-head {
 	position: relative;
 }
-.kaohe-det-body .box-body{
+
+.kaohe-det-body .box-body {
 	padding-top: 20px;
+	min-height: 750px;
 }
 /*倒计时*/
-.text-time{
+.text-time {
 	color: #D55383;
 	font-weight: 400;
 	font-size: 12px;
 }
 /*考核阶段*/
-.kaohe-stage{
+.kaohe-stage {
+	display:inline-block;
 	width: 120px;
 	height: 23px;
-	padding:4px 20px  6px ;
-	background: url(../img/icon/kaohe/biaoqian1.png) no-repeat;
+	padding: 2px 15px;
 	color: #FFF;
 }
+/* 一阶段考核 */
+.onekaohe-stage{
+	background: url(../img/kaohe/onekaohe.png) no-repeat;
+}
+/* 二阶段考核 */
+.twokaohe-stage{
+	background: url(../img/kaohe/twokaohe.png) no-repeat;
+}
+/* 三阶段考核 */
+.threekaohe-stage{
+	background: url(../img/kaohe/threekaohe.png) no-repeat;
+}
+/* 已转正*/
+.overkaohe-stage{
+	background: url(../img/kaohe/overkaohe.png) no-repeat;
+}
+/* 考核失败*/
+.failurekaohe-stage{
+	background: url(../img/kaohe/filkaohe.png) no-repeat;
+}
 /*标签定位*/
-	.tag{
+.tag {
 	position: absolute;
 	z-index: 100;
 	top: -2px;
@@ -46,7 +70,7 @@
 	border-radius: 2px;
 }
 /*进度条上的标签*/
-.icon-tag{
+.icon-tag {
 	position: absolute;
 	width: 25px;
 	height: 25px;
@@ -56,66 +80,91 @@
 	color: #FFF;
 	font-size: 12px;
 }
-.tag .icon-tag{
+
+.tag .icon-tag {
 	right: -6px;
 	top: -30px;
 }
-.tag-kaohe{
+
+.tag-kaohe {
 	background: url(../img/icon/kaohe/biaoqian2.png) no-repeat;
 }
 /*倒计时*/
-.icon-countdown{
+.icon-countdown {
 	background: url(../img/icon/kaohe/daojishi.png) no-repeat;
 }
-.date-month{
+
+.date-month {
 	position: relative;
 	display: inline-block;
-	vertical-align: middle;		
+	vertical-align: middle;
 }
 /*检索区域*/
-.search-box{
+.search-box {
 	margin-bottom: 20px;
 }
 /*导出*/
-.link-export{
+.link-export {
 	margin-left: 30px;
 	padding-bottom: 3px;
 	font-size: 14px;
 	font-weight: bold;
 }
-a.link-export:hover,
-a.link-export:focus{
+
+a.link-export:hover, a.link-export:focus {
 	color: #3B92C7;
 	border-bottom: 1px solid #3B92C7;
 }
-.ico-seach-wiath{
+
+.ico-seach-wiath {
 	background: url(../img/icon/kaohe/jiansuo.png) no-repeat;
 }
-.company-table .table{
+
+.company-table .table {
 	border: 1px solid #DDD;
 }
-.company-table .table>thead>tr>th{
+
+.company-table .table>thead>tr>th {
 	background: #F5F5F5;
 }
-.company-table .table>thead>tr>th,
-.company-table .table>tbody>tr>td{
+
+.company-table .table>thead>tr>th, .company-table .table>tbody>tr>td {
 	vertical-align: middle;
 	padding: 10px;
 }
 
+.kaohe-set, .kaohe-set:HOVER, .kaohe-set:FOCUS, .kaohe-set:ACTIVE {
+	visibility: hidden;
+	float: right;
+	font-size: 12px;
+	font-weight: bold;
+	color: #3993C7;
+	margin-top: -5px;
+	margin-bottom: 5px;
+}
 
+. /*考核进度条*/
+.bar-kaohe {
+	background: #3993C7;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.search-date {
+	display: inline-block;
+	margin-left: 20px;
+	position: relative;
+	top: 1px;
+}
+.search-date>input{
+	display: inline-block; 
+	width: auto;
+	height: 30px;
+}
+.ad-select {
+	width: 110px;
+	position: relative;
+	height: 30px;
+	padding: 2px 5px;
+	display: inline-block;
+	font-size: 12px;
+	color: #6d6d6d;
+}

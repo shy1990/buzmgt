@@ -18,10 +18,10 @@
 	rel="stylesheet">
 <script src="../static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript"
-	src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
-<script type="text/javascript"
-	src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+<script type="text/javascript"src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+ <link rel="stylesheet" type="text/css" href="../static/zTree/css/zTreeStyle/organzTreeStyle.css" />
+<link rel="stylesheet" type="text/css"	href="../static/yw-team-member/team-member.css" />
 <script type="text/javascript">
 	$(function() {
 		var status = $("#addClass").val();
@@ -273,11 +273,17 @@
 						<!-- 						<img width="100%" src="/static/img/saojieap.png" /> -->
 						<!-- 						/地图 -->
 						<!-- 						组织结构 -->
-						<!-- 						<div class="structure col-xs-12"> -->
-						<!-- 							<i class="icon icon-structure"></i> 组织结构 -->
-						<!-- 						</div> -->
-						<!-- 						tree view -->
-						<!-- 						<div id="tree3" class="tree"></div> -->
+								<div class="structure col-xs-12">
+										<i class="icon icon-structure"></i> 组织结构
+								</div>
+						
+								<div class=""  >
+											<div class="role-list"  >
+															<div
+																style="width: 100%; height: 45px; border-right: 1px solid rgb(221, 221, 221);"></div>
+															<ul id="organizationId" class="ztree" style="overflow:auto;overflow-x: auto"></ul>
+											</div>
+								</div>
 						<!--/组织结构-->
 					</div>
 				</div>
@@ -295,9 +301,12 @@
     <![endif]-->
 	<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	
 	<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+	 <script src="../static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../static/js/organization/teamOrganizationTree.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" src="/static/js/common.js"></script>
 	<script src="../static/yw-team-member/team-member.js"
 		type="text/javascript" charset="utf-8"></script>

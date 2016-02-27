@@ -1,0 +1,74 @@
+/*图标 */
+.ico-kaohe-list{
+	background: url(../img/kaohe/kaohekaifa.png) no-repeat;
+}
+.kaohe-status{
+	float: right;
+	display: inline-block;
+	position: relative;
+	color: #FFF;
+	width: 110px;
+	padding: 2px 0 2px 22px ;
+}
+/* 倒计时 */
+.ico-time-down{
+	background:url(../img/saojie/djs.png) no-repeat;
+}
+/* 一阶段考核 */
+.onekaohe-status-on{
+	background: url(../img/kaohe/yjdkh.png) no-repeat;
+}
+.onekaohe-status-out{
+	background: url(../img/kaohe/yjdkhwc.png) no-repeat;
+}
+/*  */
+.twokaohe-status-on{
+	background: url(../img/kaohe/ejdkh.png) no-repeat;
+}
+.twokaohe-status-out{
+	background: url(../img/kaohe/ejdkhwc.png) no-repeat;
+}
+/* 三阶段考核 */
+.threekaohe-status-on{
+	background: url(../img/kaohe/sjdke.png) no-repeat;
+}
+.threekaohe-status-out{
+	background: url(../img/kaohe/sjdkewc.png) no-repeat;
+}
+/* 转正 */
+.overkaohe-status-on{
+	background: url(../img/kaohe/yizhuanzheng.png) no-repeat;
+}
+.overkaohe-status-out{
+	background: url(../img/kaohe/yizhuanzhengwc.png) no-repeat;
+}
+/* 失败 */
+.bustkaohe-status{
+	background: url(../img/kaohe/khsb.png) no-repeat;
+}
+
+/* 一阶段考核进度条 */
+.onekaohe-bar{
+	background-color: #D45383; 
+}
+/* 二阶段考核进度条 */
+.twokaohe-bar{
+	background-color: #EFAD4D; 
+}
+/* 三阶段考核进度条 */
+.threekaohe-bar{
+	background-color: #48C351; 
+}
+/* 转正进度条 */
+.overkaohe-bar{
+	background-color: #55A1BB; 
+}
+/* 考核失败进度条 */
+.bustkaohe-bar{
+	background-color: #DA534F; 
+}
+.project-completion{
+	min-width: 350px;
+}
+
+

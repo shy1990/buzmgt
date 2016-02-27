@@ -2,7 +2,6 @@ package com.wangge.buzmgt.region.service;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -15,9 +14,6 @@ import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.util.RegionUtil;
-import com.wangge.buzmgt.sys.entity.Organization;
-import com.wangge.buzmgt.sys.vo.OrganizationVo;
-import com.wangge.buzmgt.sys.vo.RegionVo;
 
 @Service
 public class RegionServiceImpl implements RegionService {
@@ -27,11 +23,9 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public List<RegionTree> findTreeRegion(String id) {
     List<RegionTree> listRegionTree = new ArrayList<RegionTree>();
-    long start=System.currentTimeMillis();
     for (Region region : regionRepository.findOne(id).getChildren()) {
       listRegionTree.add(RegionUtil.getRegionTree(region));
     }
-    System.out.println(System.currentTimeMillis()-start);
     return listRegionTree;
   }
 	@Override

@@ -64,43 +64,43 @@ public class BuzmgtApplicationTests {
 	private SalesManService salesManService;
    @Resource
   private SaojieService saojieService;
-	@Test
-	@Transactional
-	public void contextLoads() {
-		
-		Organization type = OrganRepository.findOne(1L);
-		Set<Organization> childrren =  type.getChildren();
-		
- 		List<OrganizationVo> types = new ArrayList<OrganizationVo>();
- 		//types.add(type);
- 			for(Organization o : childrren){
- 				OrganizationVo vo = new OrganizationVo();
- 				vo.setId(o.getId());
- 				vo.setName(o.getName());
- 				types.add(vo);
- 				if(o.getChildren() != null){
- 					Set<Organization> childr =  o.getChildren();
- 					while(childr.size() > 0){
- 						for(Organization or : childr){
- 							OrganizationVo vor = new OrganizationVo();
- 							vor.setId(or.getId());
- 							vor.setName(or.getName());
- 							childr = or.getChildren();
- 							types.add(vor);
- 						}
- 					
- 				}
- 				//vo.setOpen("false");
- 				
- 				
- 			}
- 		   //  types.add(parent);
- 		  //   parent =  parent.getParent();
- 		}
- 		for(OrganizationVo r : types){
- 			System.out.println("id=="+r.getId()+"name==="+r.getName());
- 		}
-	}
+//	@Test
+//	@Transactional
+//	public void contextLoads() {
+//		
+//		Organization type = OrganRepository.findOne(1L);
+//		Set<Organization> childrren =  type.getChildren();
+//		
+// 		List<OrganizationVo> types = new ArrayList<OrganizationVo>();
+// 		//types.add(type);
+// 			for(Organization o : childrren){
+// 				OrganizationVo vo = new OrganizationVo();
+// 				vo.setId(o.getId());
+// 				vo.setName(o.getName());
+// 				types.add(vo);
+// 				if(o.getChildren() != null){
+// 					Set<Organization> childr =  o.getChildren();
+// 					while(childr.size() > 0){
+// 						for(Organization or : childr){
+// 							OrganizationVo vor = new OrganizationVo();
+// 							vor.setId(or.getId());
+// 							vor.setName(or.getName());
+// 							childr = or.getChildren();
+// 							types.add(vor);
+// 						}
+// 					
+// 				}
+// 				//vo.setOpen("false");
+// 				
+// 				
+// 			}
+// 		   //  types.add(parent);
+// 		  //   parent =  parent.getParent();
+// 		}
+// 		for(OrganizationVo r : types){
+// 			System.out.println("id=="+r.getId()+"name==="+r.getName());
+// 		}
+//	}
 	@Test
 	//@Transactional
 	public void testOrgan(){

@@ -12,6 +12,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.wangge.buzmgt.BuzmgtApplication;
+import com.wangge.buzmgt.region.repository.RegionRepository;
+import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.repository.ResourceRepository;
 import com.wangge.buzmgt.sys.service.ResourceService;
 import com.wangge.buzmgt.sys.service.ResourceService.Menu;
@@ -24,6 +26,8 @@ public class RoleRepositoryTest {
 	private ResourceService rs;
 	@Autowired
 	private ResourceRepository rr;
+	@Autowired
+  private RegionRepository res;
 //	@Test
 //	@Transactional
 //	public void testQueryRes() {
@@ -41,10 +45,14 @@ public class RoleRepositoryTest {
 //			System.out.println(m.getName());
 //		}
 //	}
+//	@Test
+//	@Transactional
+//	public void testDelRes() {
+//		rr.delete(360448L);
+////		rs.delResource(360448L);
+//	}
 	@Test
-	@Transactional
-	public void testDelRes() {
-		rr.delete(360448L);
-//		rs.delResource(360448L);
+	private void queryRegion(){
+	  System.out.println(res.findOne("370209").getName());
 	}
 }

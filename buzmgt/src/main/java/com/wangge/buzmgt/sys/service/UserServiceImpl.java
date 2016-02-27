@@ -12,9 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Resource;
 import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.sys.repository.OrganizationRepository;
 import com.wangge.buzmgt.sys.repository.ResourceRepository;
 import com.wangge.buzmgt.sys.repository.RoleRepository;
 import com.wangge.buzmgt.sys.repository.UserRepository;
@@ -24,14 +26,15 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	private RoleRepository roleRepository;
 	private ResourceRepository resourceRepository;
-
+	private OrganizationRepository organizationRepository;
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-			ResourceRepository resourceRepository) {
+			ResourceRepository resourceRepository,OrganizationRepository organizationRepository) {
 		super();
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
 		this.resourceRepository = resourceRepository;
+		this.organizationRepository=organizationRepository;
 	}
 
 	@Override
@@ -103,6 +106,13 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public User addUser(User u) {
     return userRepository.save(u);
+  }
+
+  @Override
+  public List<User> getUserByOrgan(int organId) {
+    // TODO Auto-generated method stub
+    Organization o=organizationRepository.findOne(organId);
+    return userRepository.findByOrganization(o);
   }
 
 }

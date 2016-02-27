@@ -18,87 +18,87 @@ public class TestController {
 	@Autowired
 	private ResourceService resourceService;
 	
-//	/**
-//	 * 权限设置页面跳转
-//	 * @param test
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequestMapping("/purviewSetting")
-//	public String purviewSetting(String test,Model model){
-//		return "purview-setting/purivew_setting";
-//	}
-//
-//	/**
-//	 * 角色查看
-//	 * @param test
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequestMapping("/character")
-//	public String character(String test,Model model){
-//		model.addAttribute("test", test);
-//		return "purview-setting/character";
-//	}
-//	/**
-//	 * 团队成员添加
-//	 * @param test
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequestMapping("/team_saojie_det")
-//	public String teamMemberAdd(String test,Model model){
-//		return "saojie/saojie_det";
-//	}
-//	@RequestMapping("/kaohe_det")
-//	public String kaoheDet(String test,Model model){
-//	  return "kaohe/kaohe_det";
-//	}
-//	@RequestMapping("/accountManage")
-//	public String accountManage(String test,Model model){
-//	  return "account/account_list";
-//	}
-//	/**
-//	 * 团队成员添加
-//	 * @param test
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequestMapping("/saojie_set")
-//	public String saojieSet(String test,Model model){
-//	  return "saojie/saojie_set";
-//	}
-//  @RequestMapping("/saojie_upd")
-//  public String saojieUpd(String test,Model model){
-//    return "saojie/saojie_upd";
-//  }	
-//	/**
-//	 * 团队成员列表
-//	 * @param test
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequestMapping("/team_member_det")
-//	public String teamMemberList(String test,Model model){
-//		return "salesman/saleman_det";
-//	}
-//	@RequestMapping("/account_list")
-//	public String accountList(String test,Model model){
-//	  return "account/account_list";
-//	}
-//
-//	
-//	@RequestMapping("/menu")
-//	@ResponseBody
-//	public List<Menu> menu(){
-//		List<Menu> menus = resourceService.getMenusByUsername(getCurrentUser().getUsername());
-//		return menus;
-//	}
-//	@RequestMapping("/test")
-//  public String test(String test,Model model){
-//    model.addAttribute("test", test);
-//    return "test";
-//  }
+	/**
+	 * 权限设置页面跳转
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/purviewSetting")
+	public String purviewSetting(String test,Model model){
+		return "purview-setting/purivew_setting";
+	}
+
+	/**
+	 * 角色查看
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/character")
+	public String character(String test,Model model){
+		model.addAttribute("test", test);
+		return "purview-setting/character";
+	}
+	/**
+	 * 团队成员添加
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/team_saojie_det")
+	public String teamMemberAdd(String test,Model model){
+		return "saojie/saojie_det";
+	}
+	@RequestMapping("/kaohe_det")
+	public String kaoheDet(String test,Model model){
+	  return "kaohe/kaohe_det";
+	}
+	@RequestMapping("/kaohe_list")
+	public String kaoheList(String test,Model model){
+	  return "kaohe/kaohe_list";
+	}
+	/**
+	 * 团队成员添加
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/saojie_set")
+	public String saojieSet(String test,Model model){
+	  return "saojie/saojie_set";
+	}
+  @RequestMapping("/saojie_upd")
+  public String saojieUpd(String test,Model model){
+    return "saojie/saojie_upd";
+  }	
+	/**
+	 * 团队成员列表
+	 * @param test
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/team_member_det")
+	public String teamMemberList(String test,Model model){
+		return "salesman/saleman_det";
+	}
+	@RequestMapping("/account_list")
+	public String accountList(String test,Model model){
+	  return "account/account_list";
+	}
+
+	
+	@RequestMapping("/menu")
+	@ResponseBody
+	public List<Menu> menu(){
+		List<Menu> menus = resourceService.getMenusByUsername(getCurrentUser().getUsername());
+		return menus;
+	}
+	@RequestMapping("/test")
+  public String test(String test,Model model){
+    model.addAttribute("test", test);
+    return "test";
+  }
 	@RequestMapping("/index")
 	public String index(String test,Model model){
 	  model.addAttribute("test", test);

@@ -159,7 +159,7 @@ public class AccountManageController  extends BaseController{
   public String saveyAccount(HttpServletRequest req,Model model){
     
 
-    Organization ora = os.getOrganById(Long.parseLong(req.getParameter("organizationId")));
+    Organization ora = os.getOrganById(Integer.parseInt(req.getParameter("organizationId")));
     Region region = rs.getRegionById(req.getParameter("regionId").trim());
     Role role = ros.getRoleById(req.getParameter("roleId"));
     Set<Role> rSet = new HashSet<Role>();
