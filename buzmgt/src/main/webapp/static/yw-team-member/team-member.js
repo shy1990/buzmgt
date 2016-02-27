@@ -1,5 +1,6 @@
 
 function getPageList(num,regionId){
+	$("#status").val();
 	window.location.href="/teammember/getSalesManList?page="+num+"&regionId="+regionId
 }
 
