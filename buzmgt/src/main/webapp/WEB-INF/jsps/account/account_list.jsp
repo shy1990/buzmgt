@@ -106,19 +106,39 @@
 															</c:choose>
 															</div>
 														</td>
-														<td width="20%" class="operation">
-															<a href="javascript:resetPwd('${ac.accountNum}');" >重置密码</a>
-															<a href= "javascript:modifyAccount('${ac.accountNum}','${ac.position}');"> 修改资料</a>
-															<c:choose>
-																<c:when test="${ac.status==2}">
-																	<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','3');">删除</a>
-																</c:when>
-																<c:otherwise>
-																	<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','2');">辞退</a>
-																</c:otherwise>
-															</c:choose>
-															
-														</td>
+														<c:choose>
+															<c:when test="${ac.status==2}">
+															 <td width="20%" class="operation">
+																	<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','1');">恢复账号</a>
+																	<c:choose>
+																		<c:when test="${ac.status==2}">
+																			<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','3');">删除</a>
+																		</c:when>
+																		<c:otherwise>
+																			<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','2');">辞退</a>
+																		</c:otherwise>
+																	</c:choose>
+																</td>
+															</c:when>
+															<c:otherwise>
+																<td width="20%" class="operation">
+																	<a href="javascript:resetPwd('${ac.accountNum}');" >重置密码</a>
+																	<a href= "javascript:modifyAccount('${ac.accountNum}','${ac.position}');"> 修改资料</a>
+																	<c:choose>
+																		<c:when test="${ac.status==2}">
+																			<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','3');">删除</a>
+																		</c:when>
+																		<c:otherwise>
+																			<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','2');">辞退</a>
+																		</c:otherwise>
+																	</c:choose>
+																</td>
+															</c:otherwise>
+														
+														
+														</c:choose>
+														
+													
 													</tr>
 												</c:forEach>
 											</c:when>
@@ -313,11 +333,11 @@
 					});
 				}
 			}else if(status=='1'){
-				if (confirm("确定要解封该账号?")) {
+				if (confirm("确定要解封/恢复该账号?")) {
 					var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
 					$.post(url, function(data) {
 						if (data === 'suc') {
-							alert("已解封!");
+							alert("已解封/恢复!");
 				        	location.reload();
 						} else {
 							alert("系统异常,请重试");
