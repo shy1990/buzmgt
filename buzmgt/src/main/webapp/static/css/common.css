@@ -361,7 +361,9 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	font-weight: bold;
 	
 }
-
+.organization .box-title{
+	padding-top: 10px;
+}
 
 
 
