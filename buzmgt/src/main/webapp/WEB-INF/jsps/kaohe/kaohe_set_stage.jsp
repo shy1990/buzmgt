@@ -45,14 +45,14 @@
 						<!--内容-->
 						<div class="form-group">
 							<label class="col-sm-2 control-label">考核人:</label>
-							<div class="col-sm-10" data-aa="${salesman.id}" id="salId">
+							<div class="col-sm-9" data-aa="${salesman.id}" id="salId">
 								<p class="form-control-static">${salesman.truename }</p>
 							</div>
 						</div>
 						<div class="hr"></div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">负责区域:</label>
-							<div class="col-sm-10">
+							<div class="col-sm-9">
 								<p class="form-control-static">${salesman.region.parent.parent.parent.name}
 									${salesman.region.parent.parent.name}
 									${salesman.region.parent.name} ${salesman.region.name}</p>
@@ -64,10 +64,10 @@
 						</div>
 						<!--一阶段考核设置内容-->
 						<div class="form-group">
-							<div class="saojie-upd-list col-sm-10  col-sm-offset-2 col-xs-12">
+							<div class="saojie-upd-list col-sm-9  col-sm-offset-2 col-xs-12">
 								<!--list-->
 								<div class="table-responsive">
-									<table class="table table-bordered">
+									<table class="table table-bordered kaoheset-stage">
 										<c:if test="${not empty list}">
 										<thead>
 											<tr>
@@ -100,12 +100,13 @@
 																	<label class="">家</label>
 																</div>
 															</div>
-															<div class="col-sm-5">
+															<div class="col-sm-7">
 																<div class="form-group">
 																	<label class="">提货量:</label> <label class="">${assess.assessOrdernum }</label>
 																	<label class="">部</label>
 																</div>
 															</div>
+															
 														</td>
 														<td class="target form-inline">
 															<div class="col-sm-5">
@@ -114,10 +115,11 @@
 																	<label class="">家</label>
 																</div>
 															</div>
-															<div class="col-sm-5">
+															<div class="col-sm-7">
 																<div class="form-group">
 																	<label class="">提货量</label> <label class="">100</label>
 																	<label class="">部</label>
+																	<span class="tag-tg">通过</span>
 																</div>
 															</div>
 														</td>
@@ -149,7 +151,7 @@
 								name="form" method="post">
 								<div class="form-group">
 									<div
-										class="saojie-upd-list col-sm-10  col-sm-offset-2 col-xs-12">
+										class="saojie-upd-list col-sm-9  col-sm-offset-2 col-xs-12">
 										<input type="hidden" id="salesmanId" name="salesmanId"
 											value="${salesman.id}" />
 										<!--list-->
@@ -231,7 +233,7 @@
 								<!--考核开始时间-->
 								<div class="hr"></div>
 								<div class="form-group">
-									<div class="col-sm-10 col-sm-offset-2 input-group">
+									<div class="col-sm-9 col-sm-offset-2 input-group">
 										<button class="btn btn-audit col-sm-2" onclick="toSubmit();">确定</button>
 									</div>
 								</div>
