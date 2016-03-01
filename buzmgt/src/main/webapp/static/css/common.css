@@ -365,6 +365,9 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	padding-top: 10px;
 }
 
+.table>tbody>tr:hover>td {
+	background-color: #fafafa; 
+}
 
 
 
