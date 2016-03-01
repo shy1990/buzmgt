@@ -17,11 +17,11 @@
 
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../static/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 
 <!-- 树型结构 -->
 <link rel="stylesheet" type="text/css" href="static/zTree/css/icon.css" />
-<link rel="stylesheet" type="text/css" href="static/zTree/css/main.css" />
+<link rel="stylesheet" type="text/css" href="/static/zTree/css/main.css" />
 <link rel="stylesheet" type="text/css" href="static/zTree/css/zTreeStyle/organzTreeStyle.css" />
 <link rel="stylesheet" type="text/css" href="static/css/organization/purview-organ-setting.css" />
 <link rel="stylesheet" type="text/css" href="static/purview-setting/purview-setting.css" />
@@ -39,11 +39,11 @@
 </style>
 </head>
 <body >
-				        <div id="j_page_main" class="content main">
+				        <div id="j_page_main" class=" content main">
 							<h4 class="page-header-region"><i class="icon organization-setting-icon"></i>组织结构 </h4>  
 							<div class="row">
 							<div class="col-md-12">
-								<div class="box border blue">
+								<div class="organization box border blue">
 								<div class="box-title">
 									<div class="row">
 										<div class="col-md-12">
@@ -75,6 +75,6 @@
    <script type="text/javascript" src="static/bootstrap/js/bootstrap-dialog.js"></script>
     <script type="text/javascript" src="static/bootstrap/js/jquery-confirm.min.js"></script>
    <script src="static/js/organization/organizationTree.js" type="text/javascript" charset="utf-8"></script>
-   
+   <script src='static/js/common.js'></script>
 </body>
 </html>
