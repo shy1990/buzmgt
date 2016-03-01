@@ -2341,8 +2341,8 @@
 			editNameSelectAll: false,
 			showRemoveBtn: true,
 			showRenameBtn: true,
-			removeTitle: "remove",
-			renameTitle: "rename",
+			removeTitle: "删除",
+			renameTitle: "重命名",
 			drag: {
 				autoExpandTrigger: false,
 				isCopy: true,

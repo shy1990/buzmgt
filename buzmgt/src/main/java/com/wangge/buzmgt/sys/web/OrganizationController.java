@@ -102,7 +102,7 @@ public class OrganizationController {
 	      listTreeVo.add(getOrganizationVo(organ));
 	      
 	      if(null!=organ.getChildren()){
-	        for(Organization o: organ.getChildren()){
+	        for(Organization o: organService.getOrganById(organ.getId()).getChildren()){
 	          listTreeVo.add(getOrganizationVo(o));
 	        }
 	      }
@@ -137,7 +137,7 @@ public class OrganizationController {
        listTreeVo.add(getTeamOrganizationVo(listUser.get(0),null));
        
        if(null!=organ.getChildren()){
-         for(Organization o: organ.getChildren()){
+         for(Organization o: organService.getOrganById(organ.getId()).getChildren()){
            List<User> list=userService.getUserByOrgan(o.getId());
             for(User u:list){
               listTreeVo.add(getTeamOrganizationVo(u,listUser.get(0)));
