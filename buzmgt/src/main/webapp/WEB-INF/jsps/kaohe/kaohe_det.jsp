@@ -21,7 +21,6 @@
 <script src="/static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 </head>
-
 <body>
 	<div class="content main">
 		<h4 class="page-header ">
@@ -37,8 +36,7 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<!--业务人员信息-->
-								<i class="ico icon-ywmember"></i>${salesman.truename} 指标： <span>活跃客户${assess.assessActivenum}家</span>
-								<span>提货量${assess.assessOrdernum}台</span>
+								<i class="ico icon-ywmember"></i>${salesman.truename} 
 								<!--/业务人员信息-->
 								<div class="kaohe-time">
 									开始时间： <span>${startDate}</span> 结束时间： <span>${endDate}</span>
@@ -53,16 +51,20 @@
 						<!--列表头部-->
 						<div class="det-head ">
 							<!--bar 布局-->
-							<div class="col-sm-10">
-								<div class="quiet-days marg-b-20">
+							<div class="col-sm-10 clear-p-l">
+								<div class="quiet-days marg-b-30">
+									
 									<span class="kaohe-stage onekaohe-stage">第一阶段考核</span> <span
 										class="kaohe-stage twokaohe-stage sr-only">第二阶段考核</span> <span
 										class="kaohe-stage threekaohe-stage sr-only">第三阶段考核</span> <span
 										class="kaohe-stage overkaohe-stage sr-only">已转正</span> <span
 										class="kaohe-stage failurekaohe-stage sr-only">考核失败</span> <span
-										class="pull-right"> <i class="ico icon-countdown"></i>倒计时:
-										<span class="text-time">2</span>天
+										class="count-down font-12"> <i class="ico icon-countdown"></i>倒计时:
+										<span class="text-time"></span>天
 									</span>
+									
+									<strong class="target font-12">指标：</strong><span class="font-12">活跃客户 <span class="text-blue"> ${assess.assessActivenum}</span>家 ，
+									提货量<span class="text-blue">${assess.assessOrdernum}</span>台 </span>
 								</div>
 								<!--class style 沉寂:progress-bar-later ;活跃：progress-bar-ok ;未提货：-->
 								<!--start 考核进度条-->
@@ -77,54 +79,50 @@
 								<!--end 考核进度条-->
 							</div>
 							<!--bar 布局-->
-							<div class="col-xs-2">
-								<button class="J_btn col-xs-12 btn btn-blue"
+							<div class="col-xs-2 clear-p-r">
+								<button class="J_btn col-xs-12 btn btn-blue marg-t-30"
 									onclick="toAssessStage('${salesman.id}','${assess.id}');">考核通过</button>
 							</div>
 						</div>
 						<!--/列表头部-->
 						<div class="hr-solid"></div>
 						<!--start 操作区域-->
-						<div class="search-box">
+						<div class="search-box ">
 							<!--区域选择按钮-->
-							<div class="btn-group btn-group-sm">
-								<button type="button" class="btn btn-default " id="regionNameid"
-									value="">${salesman.region.name}</button>
-								<button type="button" class="btn btn-default dropdown-toggle"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">
-									<span class="caret"></span> <span class="sr-only">Toggle
-										Dropdown</span>
-								</button>
-								<ul class="dropdown-menu">
-									<c:if test="${not empty regionList}">
-										<li><a onclick="getRegionName('${salesman.region.name}')">${salesman.region.name}</a></li>
-										<c:forEach var="region" items="${regionList}" varStatus="s">
-											<li><a
-												onclick="getRegionName('${region.name}','${region.id}')">${region.name}</a></li>
-										</c:forEach>
-									</c:if>
-								</ul>
-							</div>
-							<!--/区域选择按钮-->
-							<select id="regionId" class=" sr-only" onchange="getSaojieDataList();" style=""><!-- form-control input-xs ad-select -->
-								<option value="" selected="selected">全部区域</option>
-								<option value="">济南市</option>
+							请选择区域：
+							<select id="regionNameid" class="form-control input-xs ad-select" onchange="getSaojieDataList();" style=""><!--  -->
+								<c:if test="${not empty regionList}">
+									<option value="" selected="selected">${salesman.region.name}</option>
+									<c:forEach var="region" items="${regionList}" varStatus="s">
+										<option value="">${region.name}</option>
+								</c:forEach>
+								</c:if>
 							</select>
+							<!--/区域选择按钮-->
+							<strong class="targetover">已达成：</strong><span>活跃客户 <span class="text-blue"> 20</span>家 ，提货量<span class="text-blue">120</span>台 </span>
 							<!--考核开始时间-->
-							<div class="search-date">
-								<input id="beginTime" size="16" type="text" value="" readonly
-									class="form-control form_datetime "> -- <input
-									id="endTime" size="16" type="text" value="" readonly
-									class="form-control form_datetime">
+							<br>
+							<div class="marg-t">
+								请选择时间：
+								<div class="search-date">
+									<div class="input-group input-group-sm">
+										<span class="input-group-addon " id="basic-addon1"><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+										<input type="text" class="form-control form_datetime input-sm" placeholder="开始日期" readonly="readonly">
+									</div>
+								</div> --
+								<div class="search-date">
+									<div class="input-group input-group-sm">
+										<span class="input-group-addon " id="basic-addon1"><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+										<input type="text" class="form-control form_datetime input-sm" placeholder="结束日期" readonly="readonly">
+									</div>	
+								</div>
+								<!--考核开始时间-->
+								<button class="btn btn-blue btn-sm"
+									onclick="goSearch('${salesman.id}','${assess.id}');">
+									<i class="ico ico-seach-wiath"></i>检索
+								</button>
+								<a class="link-export pull-right" href="javascript:void(0);">导出excel</a>
 							</div>
-							<!--考核开始时间-->
-							<button class="btn btn-blue btn-sm"
-								onclick="goSearch('${salesman.id}','${assess.id}');">
-								<i class="ico ico-seach-wiath"></i>检索
-							</button>
-							<strong>指标已达成：</strong><span>活跃客户 <span class="text-blue"> 20</span>家 ，提货量<span class="text-blue">120</span>台 </span>
-							<a class="link-export pull-right" href="javascript:void(0);">导出excel</a>
 						</div>
 						<!--end 操作区域-->
 						<!--列表内容-->
@@ -274,7 +272,8 @@
 							<div style="width: 60%;" class="progress-bar bar-kaohe"></div>
 						</div>
 						<div class="operation">
-							<a href="javascript:;" class="">考核设置</a> <a href="javascript:;">辞退</a>
+<!-- 							<a href="javascript:;" class="">考核设置</a>  -->
+							<a href="javascript:;">辞退</a>
 							<a href="javascript:;" class="pull-right">查看</a>
 						</div>
 						<div class="yw-text">

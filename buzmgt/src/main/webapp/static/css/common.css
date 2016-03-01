@@ -275,10 +275,10 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 
 /*新图标实现方式*/
 .ico{
-	padding: 2px 18px 2px 2px;
+	padding: 2px 18px 6px 2px;
 	margin-right: 5px;
 	position: relative;
-	top:-1px;
+	top:-2px;
 }
 /* 区域切换 */
 .area-choose{
@@ -368,8 +368,12 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .table>tbody>tr:hover>td {
 	background-color: #fafafa; 
 }
-
-
+.marg-b-30{
+	margin-bottom: 30px;
+}
+.marg-t-30{
+	margin-top: 30px;
+}
 
 
 

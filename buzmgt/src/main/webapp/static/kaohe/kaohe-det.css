@@ -1,6 +1,10 @@
 .kaohe-time {
 	float: right;
 	display: inline-block;
+	font-weight: 400;
+}
+.kaohe-time> span{
+	margin-right: 10px;
 }
 
 .kaohe-det-body .box-title {
@@ -101,12 +105,14 @@
 }
 /*检索区域*/
 .search-box {
-	margin-bottom: 20px;
+	margin-bottom: 30px;
+	font-size: 12px;
 }
 /*导出*/
 .link-export {
+	position: relative;
+	top: 23px; 
 	margin-left: 30px;
-	padding-bottom: 3px;
 	font-size: 14px;
 	font-weight: bold;
 }
@@ -150,9 +156,10 @@ a.link-export:hover, a.link-export:focus {
 
 .search-date {
 	display: inline-block;
-	margin-left: 20px;
+	width:15%;
+	min-width: 100px;
 	position: relative;
-	top: 1px;
+	top: 12px;
 }
 .search-date>input{
 	display: inline-block; 
@@ -168,4 +175,22 @@ a.link-export:hover, a.link-export:focus {
 	font-size: 12px;
 	color: #6d6d6d;
 }
-
+.font-12{
+	font-size: 12px;
+}
+.targetover{
+	margin-left: 50px;
+}
+.count-down{
+	margin-right: 25px;
+	margin-left: 10px;
+}
+.clear-p-l{
+	padding-left: 0;
+}
+.clear-p-r{
+	padding-right: 0;
+}
+.marg-t{
+	margin-top: 10px;
+}
