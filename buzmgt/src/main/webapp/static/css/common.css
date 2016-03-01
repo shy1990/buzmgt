@@ -349,16 +349,17 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	right: 0;
 	top: 0;
 	margin-right: 30px;
-	padding: 13px 20px;
-}
-.port:HOVER,
-.port:FOCUS,
-.port:ACTIVE{
-	background: #2F89BB;
+	width: 100px;
 }
 .port> a{
+	background: #2F89BB;
+	padding: 13px 20px;
+	display: inline-block;
+	width:100%;
+	height:100%;
 	color: #FFF;
 	font-weight: bold;
+	cursor: pointer;
 	
 }
 .organization .box-title{

@@ -89,9 +89,9 @@
 								<!--/菜单栏-->
 							</div>
 							<div class="port pull-right">
-								<a class=" dropdown-toggle" type="button" id="dropdownMenu1"
+								<a class="J_portDis dropdown-toggle" type="button" id="dropdownMenu1"
 									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="true">排序<span class="J_portDis"></span> <span
+									aria-expanded="true">排序 <span
 									class="caret"></span>
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -328,8 +328,11 @@
 			App.init(); //Initialise plugins and elements
 		});
 		$('.dropdown-menu li a').click(function(){
-			$('.J_portDis').html(":"+$(this).text());
-		});							
+			$('.J_portDis').html($(this).text());
+		});
+		$('.J_portDis').mouseover(function(){
+			$(this).click();
+		});
 	</script>
 	<script type="text/javascript">
 	<%String areaname = null;
