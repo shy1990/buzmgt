@@ -138,8 +138,8 @@ public class SaojieController {
 	 */
 	@RequestMapping(value = "/gainSaojieMan",method = RequestMethod.POST)
 	@ResponseBody
-	public List<SalesMan> gainSaojieMan(){
-	  List<SalesMan> salesman = salesManService.gainSaojieMan();
+	public List<Object> gainSaojieMan(){
+	  List<Object> salesman = salesManService.gainSaojieMan();
 	  return salesman;
 	}
 	
@@ -155,7 +155,6 @@ public class SaojieController {
 	@RequestMapping(value = "/gainSaojieTown",method = RequestMethod.POST)
 	@ResponseBody
 	public List<Region> gainSaojieTown(String id){
-	  System.out.println(id);
 	  SalesMan sm = salesManService.findByUserId(id);
 	  List<Region> list = null;
 	  if(sm != null && !"".equals(sm)){

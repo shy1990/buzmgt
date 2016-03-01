@@ -137,7 +137,7 @@ public  class SalesManServiceImpl implements SalesManService {
     return salesManRepository.findById(userId);
   }
   
-  public List<SalesMan> gainSaojieMan() {
+  public List<Object> gainSaojieMan() {
     return salesManRepository.gainSaojieMan();
   }
 
@@ -149,7 +149,6 @@ public  class SalesManServiceImpl implements SalesManService {
   public SalesMan findByUserId(String userId) {
     return salesManRepository.findById(userId);
   }
-
 
   
 }

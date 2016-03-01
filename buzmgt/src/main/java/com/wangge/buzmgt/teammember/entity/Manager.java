@@ -17,10 +17,12 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.entity.User;
 @Entity
 @Table(name = "SYS_MANAGER")
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
 public class Manager implements Serializable {
 	
 	/**
