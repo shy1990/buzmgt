@@ -15,6 +15,7 @@
 		<link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link href="static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="static/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="static/css/menu.css" />
 		<link rel="stylesheet" type="text/css" href="static/yw-team-member/team-member.css" />
 		<link rel="stylesheet" type="text/css" href="static/account-manage/account-list.css" />
 		<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
@@ -90,7 +91,9 @@
 								//	$(this).siblings('li').removeClass('active');
 								//  });
 							</script>
-							<div class="hr-solid-sm"></div>
+							<div class="hr-solid-sm "></div>
+								<div class="table-responsive">
+								
 								<table id="table_report" class="table-hover table">
 									<thead>
 										<th width="5%" class="center">序号</th>
@@ -175,6 +178,10 @@
 										</c:choose>
 									</tbody>
 								</table>
+<<<<<<< HEAD
+=======
+								</div>
+>>>>>>> branch 'jiabin' of http://git.oschina.net/sylarlove/buzmgt.git
 							</div>
 							<div id="pageNav" class="scott" align="center">
 								<font color="#88af3f">共${totalCount} 条数据，
