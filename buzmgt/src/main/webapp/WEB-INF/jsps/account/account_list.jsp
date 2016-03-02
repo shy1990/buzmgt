@@ -50,16 +50,46 @@
 							<div class="tab-pane fade in active" id="box_tab1">
 								<div class="hr-solid-sm"></div>	
 							<ul class="nav nav-job">
-								<li ><a href= "javascript:selectByOrg('all','used');"> 全部(在职)</a></li>
-								<li><a href= "javascript:selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
-								<li><a href= "javascript:selectByOrg('大区总监','0');"> 大区总监(在职)</a></li>
-								<li><a href= "javascript:selectByOrg('all','2');">已辞退</a></li>
+								<c:choose>
+									<c:when test="${not empty org}">
+										<c:if test="${org=='allUsed'}">
+											<li class="active"><a href= "javascript:selectByOrg('allUsed','used');"> 全部(在职)</a></li>
+											<li ><a href= "javascript:selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
+											<li ><a href= "javascript:selectByOrg('大区总监','0');"> 大区总监(在职)</a></li>
+											<li ><a href= "javascript:selectByOrg('allDis','2');">已辞退</a></li>
+										</c:if>
+										<c:if test="${org=='服务站经理'}">
+											<li ><a href= "javascript:selectByOrg('allUsed','used');"> 全部(在职)</a></li>
+											<li class="active"><a href= "javascript:selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
+											<li ><a href= "javascript:selectByOrg('大区总监','0');"> 大区总监(在职)</a></li>
+											<li ><a href= "javascript:selectByOrg('allDis','2');">已辞退</a></li>
+										</c:if>
+										<c:if test="${org=='大区总监'}">
+											<li ><a href= "javascript:selectByOrg('allUsed','used');"> 全部(在职)</a></li>
+											<li ><a href= "javascript:selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
+											<li class="active"><a href= "javascript:selectByOrg('大区总监','0');"> 大区总监(在职)</a></li>
+											<li ><a href= "javascript:selectByOrg('allDis','2');">已辞退</a></li>
+										</c:if>
+										<c:if test="${org=='allDis'}">
+											<li ><a href= "javascript:selectByOrg('allUsed','used');"> 全部(在职)</a></li>
+											<li ><a href= "javascript:selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
+											<li ><a href= "javascript:selectByOrg('大区总监','0');"> 大区总监(在职)</a></li>
+											<li class="active"><a href= "javascript:selectByOrg('allDis','2');">已辞退</a></li>
+										</c:if>
+									</c:when>
+									<c:otherwise>
+										<li class="active"><a href= "javascript:selectByOrg('allDis','used');"> 全部(在职)</a></li>
+										<li ><a href= "javascript:selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
+										<li ><a href= "javascript:selectByOrg('大区总监','0');"> 大区总监(在职)</a></li>
+										<li ><a href= "javascript:selectByOrg('allDis','2');">已辞退</a></li>
+									</c:otherwise>
+								</c:choose>
 							</ul>
 							<script type="text/javascript">
-								$('.nav-job li').click(function(){
-									$(this).addClass('active');
-									$(this).siblings('li').removeClass('active');
-								});
+								//	$('.nav-job li').click(function(){
+								//	$(this).addClass('active');
+								//	$(this).siblings('li').removeClass('active');
+								//  });
 							</script>
 							<div class="hr-solid-sm "></div>
 								<div class="table-responsive">
@@ -105,7 +135,6 @@
 																		</c:otherwise>
 																	</c:choose>
 																</c:otherwise>
-															
 															</c:choose>
 															</div>
 														</td>
@@ -137,11 +166,7 @@
 																	</c:choose>
 																</td>
 															</c:otherwise>
-														
-														
 														</c:choose>
-														
-													
 													</tr>
 												</c:forEach>
 											</c:when>
@@ -160,12 +185,10 @@
 									共${totalPage} 页</font> 
 								<div class="page-link" >${pageNav}</div>
 							</div>	
-							
 						</div>
 						<!-- box-body -->
 					</div>
 					<!--box-->
-				
 						<!-- alert resetPwd html -->
 								<div id="resetPwdModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
 									<div class="modal-dialog " role="document">
@@ -280,6 +303,7 @@
 		function selectByOrg(orgName,status){
 			var url = "accountManage?orgName=" + orgName+"&status="+status;
 			window.location = encodeURI(url);
+		//	 document.getElementById("all").className="active";
 		}
 		// 重置密码
 		function resetPwd(accountNum){

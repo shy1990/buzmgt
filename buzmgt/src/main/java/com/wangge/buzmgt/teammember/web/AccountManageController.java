@@ -79,24 +79,52 @@ public class AccountManageController  extends BaseController{
     PageRequest pageRequest = SortUtil.buildPageRequest(page, pageSize,null);
     //过滤查询
     List<AccountBean> accList = new ArrayList<AccountBean>();
-    if(null==req.getParameter("orgName")){
-       accList = as.selectAccountByPositionAndStatus("all", "used", pageRequest);
-    }else {
-      String orgName = req.getParameter("orgName");
-      String status = req.getParameter("status");
-      accList = as.selectAccountByPositionAndStatus(orgName, status, pageRequest);
-    }
+    String rName = "";
+    String rId = "";
     if(null!=regionId && !"".equals(regionId)){
-      Region region =rs.getRegionById(regionId);
-      model.addAttribute("regionName", region.getName());
-      model.addAttribute("regionId", region.getId());
+      Region r =rs.getRegionById(regionId);
+      rName  = r.getName();
+      rId =  r.getId();
+      
+      req.getSession().setAttribute("rName", rName);
+      req.getSession().setAttribute("rId", rId);
+      
+      model.addAttribute("regionName",rName);
+      model.addAttribute("regionId", rId);
+      if(null==req.getParameter("orgName")){
+        accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
+     }else {
+       String orgName = req.getParameter("orgName");
+       model.addAttribute("org",orgName);
+       String status = req.getParameter("status");
+       
+       accList = as.selectAccountByPositionAndStatus(orgName, status,rName, pageRequest);
+     }
     }else{
       Subject subject = SecurityUtils.getSubject();
       User user=(User) subject.getPrincipal();
       Manager manager = ms.getById(user.getId());
-      model.addAttribute("regionName", manager.getRegion().getName());
-      model.addAttribute("regionId", manager.getRegion().getId());
+      if(null!=req.getSession().getAttribute("rName")){
+        rName = req.getSession().getAttribute("rName")+"";
+        rId = req.getSession().getAttribute("rId")+"";
+      }else{
+        rName  = manager.getRegion().getName();
+        rId =  manager.getRegion().getId();
+      }
+      model.addAttribute("regionName", rName);
+      model.addAttribute("regionId", rId);
+      if(null==req.getParameter("orgName")){
+        accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
+     }else {
+       String orgName = req.getParameter("orgName");
+       model.addAttribute("org",orgName);
+       String status = req.getParameter("status");
+       accList = as.selectAccountByPositionAndStatus(orgName, status,rName, pageRequest);
+     }
     }
+    
+    
+  
     PageData pd = new PageData();
     pd = this.getPageData();
     int totalNum  = accList.size() > 0 ? accList.get(0).getTotalNum() :0;

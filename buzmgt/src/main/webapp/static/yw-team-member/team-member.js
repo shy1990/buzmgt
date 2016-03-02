@@ -52,7 +52,7 @@ $(function(){
 //		//$('.j_district').click();//反选
 //	});
 
-
+	
 
 	//getList(param)
 	var status = $("#status").val();
