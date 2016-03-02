@@ -320,6 +320,7 @@ ul, ol {
 	background: #5D87AF;
 	color: #FFF;
 	font-weight: bold;
+	margin: 10px 0;
 }
 /*-----tree view*/
 .tree {

@@ -48,8 +48,9 @@
 						</select>
 						<!--/区域选择按钮-->
 						<div class="det-msg">
-							<span>扫街商家<span class="shopNum">256</span>家
-							</span> <span>扫街已完成<span class="percent">80%</span></span>
+							<span>扫街商家  <span class="shopNum">256</span> 家
+							</span> 
+							<span style="margin-left: 10px;">扫街已完成     <span class="percent">80%</span>  </span>
 						</div>
 						<!--/row-->
 						<div class="btn-group title-page">

@@ -74,3 +74,31 @@ function getTodayDate() {
 	var day = date.getDate();
 	return year + "-" + (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day);
 }
+
+/**
+ * 计算日期间隔Str
+ * @param startDateStr
+ * @param endDateStr
+ * @returns {Number}
+ */
+function GetDateDiffStr(startDateStr,endDateStr)  
+{  
+    var startTime = new Date(Date.parse(startDateStr.replace(/-/g,   "/"))).getTime();     
+    var endTime = new Date(Date.parse(endDateStr.replace(/-/g,   "/"))).getTime();     
+    var dates = Math.abs((startTime - endTime))/(1000*60*60*24);     
+    return  dates;    
+}
+/**
+ * 计算日期间隔Str
+ * @param startDate
+ * @param endDate
+ * @returns {Number}
+ */
+function GetDateDiff(startDate,endDate)  
+{  
+	    var startTime = startDate.getTime();     
+	    var endTime = endDate.getTime();     
+	    var dates = Math.floor((startTime - endTime)/(1000*60*60*24));     
+	    return  dates;    
+}
+

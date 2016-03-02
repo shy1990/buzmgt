@@ -53,14 +53,23 @@
 							<!--bar 布局-->
 							<div class="col-sm-10 clear-p-l">
 								<div class="quiet-days marg-b-30">
-									
-									<span class="kaohe-stage onekaohe-stage">第一阶段考核</span> <span
-										class="kaohe-stage twokaohe-stage sr-only">第二阶段考核</span> <span
-										class="kaohe-stage threekaohe-stage sr-only">第三阶段考核</span> <span
-										class="kaohe-stage overkaohe-stage sr-only">已转正</span> <span
-										class="kaohe-stage failurekaohe-stage sr-only">考核失败</span> <span
-										class="count-down font-12"> <i class="ico icon-countdown"></i>倒计时:
-										<span class="text-time"></span>天
+									<c:if test="${assess.assessStage == '1'}">
+										<span class="kaohe-stage onekaohe-stage">第一阶段考核</span> 
+									</c:if>
+									<c:if test="${assess.assessStage == '2' }">
+										<span class="kaohe-stage twokaohe-stage ">第二阶段考核</span> 
+									</c:if>
+									<c:if test="${assess.assessStage == '3'}">
+										<span class="kaohe-stage threekaohe-stage">第三阶段考核</span> 
+									</c:if>
+									<c:if test="${assess.assessStage == '3'&& assess.status == 'AGREE'}">
+										<span class="kaohe-stage overkaohe-stage">已转正</span> 
+									</c:if>
+									<c:if test="${assess.status == 'FAIL'}">
+										<span class="kaohe-stage failurekaohe-stage ">考核失败</span> 
+									</c:if>
+									<span class="count-down font-12"> <i class="ico icon-countdown"></i>倒计时:
+										<span class="text-time">${assess.timing }</span>天
 									</span>
 									
 									<strong class="target font-12">指标：</strong><span class="font-12">活跃客户 <span class="text-blue"> ${assess.assessActivenum}</span>家 ，

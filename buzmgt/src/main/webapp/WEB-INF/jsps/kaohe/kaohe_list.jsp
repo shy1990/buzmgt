@@ -23,10 +23,10 @@
 <link href="/static/CloudAdmin/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet">
 <script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
+<script src="../static/js/dateutil.js"></script>
 <script type="text/javascript">
 	$(function() {
 		var status = $("#addClass").val();
-		console.info(status);
 		if (status != null && status != '') {
 			$("li[title = '" + status + "']").addClass("active");
 		} else {
@@ -128,8 +128,8 @@
 																	class="shop-num">${assess.assessOrdernum }部</strong></span> <br /> <span>活跃客户：<strong
 																	class="shop-num-d">${assess.assessActivenum }家</strong></span></td>
 															<td class="project-completion"><span
-																class="completion-ing">业务指标： 88%</span> <span><i
-																	class="ico ico-time-down"></i> 倒计时：<span class="">2天</span></span>
+																class="completion-ing">业务指标： 88%</span> 
+																<span><i class="ico ico-time-down"></i> 倒计时：<span class="">${assess.timing }</span></span>
 																<c:if test="${assess.status == 'PENDING' && assess.assessStage == '1' }">
 																<span class="kaohe-status onekaohe-status-on">一阶段考核中</span>
 																</c:if>
@@ -152,12 +152,13 @@
 																<span class="kaohe-status threekaohe-status-on">三阶段考核中</span>
 																</c:if>
 																<c:if test="${assess.status == 'AGREE' && assess.assessStage == '3' }">
-																<span class="kaohe-status threekaohe-status-out">三阶段考核通过</span>
+																<span class="kaohe-status overkaohe-status-on">已转正</span>
 																</c:if>
 																<c:if test="${assess.status == 'FAIL' && assess.assessStage == '3' }">
 																<span class="kaohe-status bustkaohe-status">三阶段考核失败</span>
 																</c:if>
 																<c:if test="${assess.assessStage == '1' }">
+																
 																<div class="progress progress-mini">
 																	<div style="width: 88%;"
 																		class="progress-bar onekaohe-bar"></div>
@@ -175,7 +176,7 @@
 																		class="progress-bar threekaohe-bar"></div>
 																</div></td>
 																</c:if>
-															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=+${assess.salesman.id }+&asssessid=+${assess.id }+" class="btn btn-white btn-sm "> <span class="folder"></span>
+															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=${assess.salesman.id }&asssessid=${assess.id }" class="btn btn-white btn-sm "> <span class="folder"></span>
 																	查看
 															</a> <!-- Single button --></td>
 														</tr>

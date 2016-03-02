@@ -267,11 +267,6 @@
 					<div class="box-body">
 						<div style="height: 290px" id="allmap">
 						</div>
-<!-- 						<div align="center"><a href="/salesman/showMap"><font color="#0099ff" size="3">查看完整地图</font></a></div> -->
-<!-- 						地图 -->
-<!-- 						<img width="100%" src="/static/img/team-map.png" /> -->
-<!-- 						/地图 -->
-<!-- 						组织结构 -->
 						<div class="structure col-xs-12">
 							<i class="icon icon-structure"></i> 组织结构
 						</div>
