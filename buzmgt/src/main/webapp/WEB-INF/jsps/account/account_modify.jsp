@@ -197,7 +197,7 @@
 				dataType : "text", // 数据传输格式
 				url : "/region/getRegionById", // 请求链接
 				data :{
-					id : $("#region").val()
+					id :0
 				},
 				error : function() {
 					alert('访问服务器出错');

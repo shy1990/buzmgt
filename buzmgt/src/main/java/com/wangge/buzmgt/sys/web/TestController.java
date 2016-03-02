@@ -82,10 +82,10 @@ public class TestController {
 	public String teamMemberList(String test,Model model){
 		return "salesman/saleman_det";
 	}
-	@RequestMapping("/account_list")
-	public String accountList(String test,Model model){
-	  return "account/account_list";
-	}
+//	@RequestMapping("/account_list")
+//	public String accountList(String test,Model model){
+//	  return "account/account_list";
+//	}
 
 	
 	@RequestMapping("/menu")
