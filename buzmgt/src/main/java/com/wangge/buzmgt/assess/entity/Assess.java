@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.assess.entity;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -83,6 +84,22 @@ public class Assess implements Serializable {
 	private Date assessEndTime;
 	@Transient
 	private String regionName;
+	@Transient
+  private String percent;
+  
+  //辅助字段
+  @Transient
+  private int timing;
+  
+   public void addPercent(double num) {
+     if(num > 0 ){
+       NumberFormat nf = NumberFormat.getPercentInstance();
+       this.percent = nf.format(num / 2);
+     }else{
+       this.percent = "0%";
+     }
+    
+   }
 
 	public Assess() {
 		super();
@@ -182,6 +199,22 @@ public class Assess implements Serializable {
 
   public void setRegionName(String regionName) {
     this.regionName = regionName;
+  }
+
+  public String getPercent() {
+    return percent;
+  }
+
+  public void setPercent(String percent) {
+    this.percent = percent;
+  }
+
+  public int getTiming() {
+    return timing;
+  }
+
+  public void setTiming(int timing) {
+    this.timing = timing;
   }
 
 }
