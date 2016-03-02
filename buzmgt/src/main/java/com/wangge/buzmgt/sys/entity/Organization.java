@@ -18,7 +18,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * 组织机构
@@ -26,6 +28,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  * @author wujiming
  *
  */
+@JsonInclude(Include.NON_EMPTY)
 @Entity
 @Table(name = "sys_organization")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
@@ -35,10 +38,11 @@ public class Organization implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	@Column(name = "ORGANIZATION_ID")
-	private Long id;
+	private int id;
 
 	private String name;
 	private String description;
+	private int lev;
 
 	@ManyToOne
 	@JoinColumn(name = "parent_id")
@@ -54,15 +58,16 @@ public class Organization implements Serializable {
 		this.name = name;
 	}
 
-	public Long getId() {
-		return id;
-	}
+	
+	public int getId() {
+    return id;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setId(int id) {
+    this.id = id;
+  }
 
-	public String getName() {
+  public String getName() {
 		return name;
 	}
 
@@ -94,4 +99,13 @@ public class Organization implements Serializable {
 		this.children = children;
 	}
 
+  public int getLev() {
+    return lev;
+  }
+
+  public void setLev(int lev) {
+    this.lev = lev;
+  }
+	
+	
 }

@@ -28,7 +28,6 @@ import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
-import com.wangge.buzmgt.sys.vo.RegionVo;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.util.RegionUtil;

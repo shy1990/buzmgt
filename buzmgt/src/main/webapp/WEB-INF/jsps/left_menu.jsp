@@ -17,7 +17,7 @@
 						<li id="lm${menu.id }">
 							<c:choose>
 							<c:when test="${not empty menu.url}">
-								<a href="${menu.url}"><i class="${menu.icon} menu-icon"></i>${menu.name} </a>
+								<a href="${menu.url}"><i class="${menu.icon} menu-icon"></i>${menu.name}<span class="left-mark hidden"></span> </a>
 							</c:when>
 							<c:otherwise>
 							<a class="menu-second-box" href="" >
@@ -30,10 +30,10 @@
 								<c:choose>
 									<c:when test="${not empty sub.url}">
 									<li id="z${sub.id }">
-									<a href="${sub.url }"><i class="${sub.icon } menu-icon"></i>${sub.name }</a>
+									<a href="${sub.url }"><i class="${sub.icon } menu-icon"></i>${sub.name }<span class="left-mark">10</span></a>
 									</c:when>
 									<c:otherwise>
-									<li> <a href=""><i class="${sub.icon } menu-icon"></i>${sub.name }</a></li>
+									<li> <a href=""><i class="${sub.icon } menu-icon"></i>${sub.name }<span class="left-mark">6</span></a></li>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>

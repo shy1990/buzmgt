@@ -125,7 +125,7 @@
 	            });
             });
 
-            currentObj.click(function () {
+            currentObj.click(function (event) {
                 event.preventDefault();
                 var currPage = Number($(this).find('a').html()), activeObj = pageObj.find('li[class="active"]'),
                     activePage = Number(activeObj.find('a').html());

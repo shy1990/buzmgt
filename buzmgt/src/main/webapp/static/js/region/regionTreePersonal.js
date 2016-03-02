@@ -134,6 +134,8 @@ function zTreeOnClick(event, treeId, treeNode) {
 	var flag=$("#flag").val();
 	if(null===flag||""===flag){
 		window.location.href='/teammember/getSalesManList?regionId='+treeNode.id;
+	}else if("account" == flag){
+		window.location.href='/accountManage?regionId='+treeNode.id;
 	}else{
 		window.location.href='/saojie/getSaojieList?regionid='+treeNode.id;
 	}

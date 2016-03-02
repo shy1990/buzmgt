@@ -32,7 +32,26 @@
 	width: 130px;
 	font-size: 12px;
 	color: #FFF;
-	background: url(../img/icon/team-member/det/status-stage.png) no-repeat;
+}
+/* 第一阶段 */
+.stageone{
+	background: url(../img/kaohe/kaohe1.png) no-repeat;
+}
+/* 第二阶段 */
+.stagetwo{
+	background: url(../img/kaohe/kaohe2.png) no-repeat;
+}
+/* 第三阶段 */
+.stagethree{
+	background: url(../img/kaohe/kaohe3.png) no-repeat;
+}
+/* 已转正*/
+.stageover{
+	background: url(../img/kaohe/zhuanzheng.png) no-repeat;
+}
+/* 失败 */
+.stagefailure{
+	background: url(../img/kaohe/kaohe4.png) no-repeat;
 }
 .yw-text{
 	margin: 20px 0;
@@ -43,7 +62,7 @@
 }
 /*考核进度条*/
 .bar-kaohe{
-	background: #D55383;
+	background: #3993C7;
 }
 
 /*拜访*/
