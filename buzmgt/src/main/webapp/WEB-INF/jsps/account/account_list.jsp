@@ -178,10 +178,7 @@
 										</c:choose>
 									</tbody>
 								</table>
-<<<<<<< HEAD
-=======
 								</div>
->>>>>>> branch 'jiabin' of http://git.oschina.net/sylarlove/buzmgt.git
 							</div>
 							<div id="pageNav" class="scott" align="center">
 								<font color="#88af3f">共${totalCount} 条数据，
