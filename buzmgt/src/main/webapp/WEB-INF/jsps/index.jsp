@@ -21,7 +21,7 @@
 <body onload="initial();" style="padding: 0">
 					<!-- CALENDAR -->
 						<div class="index-bg">
-							<img alt="背景图片"  src="static/img/index-bg.jpg">
+							<img alt="背景图片"  src="static/img/index-bg.png">
 							<div class="index-calender" style="margin-left:50px;">
 								<div id="date">
 									<p>公历
