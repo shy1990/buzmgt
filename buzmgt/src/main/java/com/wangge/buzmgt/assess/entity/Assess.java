@@ -90,6 +90,10 @@ public class Assess implements Serializable {
   //辅助字段
   @Transient
   private int timing;
+  @Transient
+  private int activeNum;
+  @Transient
+  private int orderNum;
   
    public void addPercent(double num) {
      if(num > 0 ){
@@ -215,6 +219,22 @@ public class Assess implements Serializable {
 
   public void setTiming(int timing) {
     this.timing = timing;
+  }
+
+  public int getActiveNum() {
+    return activeNum;
+  }
+
+  public void setActiveNum(int activeNum) {
+    this.activeNum = activeNum;
+  }
+
+  public int getOrderNum() {
+    return orderNum;
+  }
+
+  public void setOrderNum(int orderNum) {
+    this.orderNum = orderNum;
   }
 
 }

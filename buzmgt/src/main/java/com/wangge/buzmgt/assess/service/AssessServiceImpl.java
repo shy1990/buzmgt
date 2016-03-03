@@ -146,6 +146,8 @@ public class AssessServiceImpl implements AssessService {
       long time2 = cal.getTimeInMillis();
       long timing=(time2-time1)/(1000*3600*24);
       ass.setTiming(Integer.parseInt(String.valueOf(timing)));
+      ass.setActiveNum(active);
+      ass.setOrderNum(orderNum);
       list.add(ass);
     }
     
@@ -162,17 +164,49 @@ public class AssessServiceImpl implements AssessService {
   public List<Assess> findBysalesman(SalesMan salesman) {
     List<Assess> result = assessRepository.findBysalesman(salesman);
     List<Assess> list = new ArrayList<Assess>();
-    for(Assess obj: result){
+    for(Assess ass: result){
+      String[] assStr = ass.getAssessArea().split(",");
+      int orderNum = 0;//提货量
+      int active = 0;//活跃家数
+      for(int i=0; i<assStr.length; i++){
+        String sql = "select count(o.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
+            "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
+            "where t.member_id=m.id and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
+        Query query =  em.createNativeQuery(sql);
+        BigDecimal str = null;
+        List<BigDecimal>  resultList = query.getResultList();
+        if(resultList != null && resultList.size() > 0){
+            str = (BigDecimal) resultList.get(0);
+            int num = str.intValue();
+            orderNum += num;
+        }
+        
+        String sql1 = "select count(*) from (select m.id,count(o.id) total from SYS_REGISTDATA t "+
+            "left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
+            "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
+            "where t.member_id=m.id and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"' "+
+            "Group by m.id) where total >= 2";
+        query =  em.createNativeQuery(sql1);
+        BigDecimal big = null;
+        resultList = query.getResultList();
+        if(resultList != null && resultList.size() > 0){
+            big = (BigDecimal) resultList.get(0);
+            int num = big.intValue();
+            active += num;
+        }
+      }
       String regionName = "";
-      String [] stringArr= obj.getAssessArea().split(",");
+      String [] stringArr= ass.getAssessArea().split(",");
       for(int i=0;i<stringArr.length;i++){
         Region region = regionRepository.findById(stringArr[i]);
         if(region != null && !"".equals(region)){
           regionName += region.getName() + " ";
         }
       }
-      obj.setRegionName(regionName);
-      list.add(obj);
+      ass.setRegionName(regionName);
+      ass.setActiveNum(active);
+      ass.setOrderNum(orderNum);
+      list.add(ass);
     }
     return list;
   }

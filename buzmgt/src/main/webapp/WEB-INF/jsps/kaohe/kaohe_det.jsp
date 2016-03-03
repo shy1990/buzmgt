@@ -69,7 +69,7 @@
 										<span class="kaohe-stage failurekaohe-stage ">考核失败</span> 
 									</c:if>
 									<span class="count-down font-12"> <i class="ico icon-countdown"></i>倒计时:
-										<span class="text-time">${assess.timing }</span>天
+										<span class="text-time">${timing }</span>天
 									</span>
 									
 									<strong class="target font-12">指标：</strong><span class="font-12">活跃客户 <span class="text-blue"> ${assess.assessActivenum}</span>家 ，
@@ -108,7 +108,7 @@
 								</c:if>
 							</select>
 							<!--/区域选择按钮-->
-							<strong class="targetover">已达成：</strong><span>活跃客户 <span class="text-blue"> 20</span>家 ，提货量<span class="text-blue">120</span>台 </span>
+							<strong class="targetover">已达成：</strong><span>活跃客户 <span class="text-blue"> ${active }</span>家 ，提货量<span class="text-blue">${orderNum }</span>台 </span>
 							<!--考核开始时间-->
 							<br>
 							<div class="marg-t">
