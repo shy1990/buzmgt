@@ -55,7 +55,8 @@ var i = 5;
 var intervalid; 
 function audit(id,regName) {
 	$('#auditModal').modal({
-		keyboard: false
+		keyboard: false,
+		backdrop: false
 		})
 	$("#salesmanId").val(id);
 	var a=document.getElementById ("regName");

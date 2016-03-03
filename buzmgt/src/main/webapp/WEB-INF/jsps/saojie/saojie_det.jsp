@@ -175,10 +175,6 @@
    <div class="modal-dialog">
       <div class="modal-content">
          <div class="modal-header">
-            <button type="button" class="close" 
-               data-dismiss="modal" aria-hidden="true">
-                  &times;
-            </button>
             <h4 class="modal-title" id="myModalLabel">
                扫街审核已通过
             </h4>
@@ -193,10 +189,7 @@
 	         </div>
          </div>
          <div class="modal-footer">
-            <button type="button" class="btn btn-default" 
-               data-dismiss="modal">关闭
-            </button>
-         </div>
+		 </div>
       </div><!-- /.modal-content -->
 </div><!-- /.modal -->
 </div>
@@ -209,7 +202,7 @@
     <![endif]-->
 		<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="static/js/jquery/jquery-1.11.3.min.js"></script>
+		<script src="/static/js/jquery/jquery-1.11.3.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/static/bootstrap/js/bootstrap-multiselect.js"></script>
