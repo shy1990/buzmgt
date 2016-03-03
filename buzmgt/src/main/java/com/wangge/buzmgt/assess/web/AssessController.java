@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.assess.web;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -193,7 +194,7 @@ public class AssessController {
   }
   
   @RequestMapping("/toAccessDet")
-  public String toAccessDet(String salesmanId,@RequestParam("asssessid") Assess assess,String page,String regionid,String begin,String end,Model model){
+  public String toAccessDet(String salesmanId,@RequestParam("asssessid") Assess assess,String page,String regionid,String begin,String end,String baifen,int active,int orderNum,Model model){
     int pageNum = Integer.parseInt(page != null ? page : "0");
     SalesMan salesman = salesManService.findByUserId(salesmanId.trim());
 //    Assess assess=assessService.findAssess(Long.parseLong(asssessid.trim()));
@@ -208,6 +209,15 @@ public class AssessController {
     model.addAttribute("endDate", DateUtil.date2String(assess.getAssessEndTime()));
     model.addAttribute("begin",begin);
     model.addAttribute("end",end);
+    try {
+      int timing = DateUtil.daysBetween(assess.getAssessTime(), assess.getAssessEndTime());
+      model.addAttribute("timing",timing);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    model.addAttribute("percent",baifen);
+    model.addAttribute("active",active);
+    model.addAttribute("orderNum",orderNum);
     return "kaohe/kaohe_det";
   } 
   
