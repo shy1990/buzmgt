@@ -104,6 +104,7 @@ public class AccountManageController  extends BaseController{
           accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
         }
       
+        
      }else {
        String orgName = req.getParameter("orgName"); 
 //       req.getSession().setAttribute("orgName", orgName);
