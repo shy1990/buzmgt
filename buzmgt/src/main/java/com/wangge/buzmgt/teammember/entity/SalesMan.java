@@ -1,7 +1,6 @@
 package com.wangge.buzmgt.teammember.entity;
 
 import java.io.Serializable;
-import java.text.NumberFormat;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -18,19 +17,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
-import com.wangge.buzmgt.sys.entity.Organization;
-import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
 
 /**
@@ -79,11 +73,11 @@ public class SalesMan implements Serializable {
 	private String jobNum;
 	
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
 	private Region region;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 	

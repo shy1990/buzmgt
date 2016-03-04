@@ -48,8 +48,9 @@
 						</select>
 						<!--/区域选择按钮-->
 						<div class="det-msg">
-							<span>扫街商家<span class="shopNum">256</span>家
-							</span> <span>扫街已完成<span class="percent">80%</span></span>
+							<span>扫街商家  <span class="shopNum">256</span> 家
+							</span> 
+							<span style="margin-left: 10px;">扫街已完成     <span class="percent">80%</span>  </span>
 						</div>
 						<!--/row-->
 						<div class="btn-group title-page">
@@ -174,10 +175,6 @@
    <div class="modal-dialog">
       <div class="modal-content">
          <div class="modal-header">
-            <button type="button" class="close" 
-               data-dismiss="modal" aria-hidden="true">
-                  &times;
-            </button>
             <h4 class="modal-title" id="myModalLabel">
                扫街审核已通过
             </h4>
@@ -192,10 +189,7 @@
 	         </div>
          </div>
          <div class="modal-footer">
-            <button type="button" class="btn btn-default" 
-               data-dismiss="modal">关闭
-            </button>
-         </div>
+		 </div>
       </div><!-- /.modal-content -->
 </div><!-- /.modal -->
 </div>
@@ -233,7 +227,7 @@
 			    enableGeolocation: true
 			  });
 			  map.addControl(navigationControl);
-			  
+			  map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 				
 				var bdary = new BMap.Boundary();
 				

@@ -2,9 +2,7 @@ package com.wangge.buzmgt.teammember.service;
 
 import java.util.List;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
-import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
@@ -22,7 +20,7 @@ public interface SalesManService {
   
   SalesMan findById(String id);
   
-  List<SalesMan> gainSaojieMan();
+  List<Object> gainSaojieMan();
   SalesMan findByUserId(String userId);
 
   

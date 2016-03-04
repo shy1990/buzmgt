@@ -275,12 +275,19 @@ ul, ol {
 	width: 100%;
 	margin-bottom: 0;
 }
+.title-form1{
+	float: right;
+	width: 20%;
+	margin: 20px;
+	margin-bottom: 0;
+}
 @media (max-width:768px ) {
 	.title-form{
 		margin-bottom: 10px;
 	}
 }
-.title-form .form-control{
+.title-form .form-control,
+.title-form1 .form-control{
 	height: 26px;
 	font-size: 12px;
 	font-weight: 100;
@@ -290,6 +297,7 @@ ul, ol {
 .icon-finds{
 	background: url(../img/icon/team-member/list/sousuo1.png) no-repeat;
 }
+.title-form1 .input-group-addon,
 .title-form .input-group-addon{
 	cursor: pointer;
 	padding: 2px 0px 0px 4px;
@@ -312,6 +320,7 @@ ul, ol {
 	background: #5D87AF;
 	color: #FFF;
 	font-weight: bold;
+	margin: 10px 0;
 }
 /*-----tree view*/
 .tree {
@@ -616,6 +625,7 @@ ul, ol {
 /**/
 .member-det-body .box-body{
 	padding: 0;
+	min-height: 750px;
 }
 .det-head{
 	padding: 24px 30px;

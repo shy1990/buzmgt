@@ -74,8 +74,18 @@
 }
 
 
+.tag-tg{
+	margin-left: 10px;
+	padding: 1px 10px;
+	background: url(../img/kaohe/tg.png) no-repeat;
+	color: #FFF;
+	font-size: 12px;
+}
 
-
+.kaoheset-stage tr>td .form-group>label{
+	font-size: 12px;
+	font-weight: 400;
+}
 
 
 

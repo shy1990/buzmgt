@@ -4,31 +4,36 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Entity
 @Table(name = "sys_user")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum UserStatus {
-		NORMAL, LOCKED
+		NORMAL, LOCKED ,DISMISS,DELETE;
 	}
 
 	@Id
@@ -43,11 +48,19 @@ public class User implements Serializable {
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "organization_id")
 	private Organization organization;
+	
+	@OneToOne(fetch=FetchType.EAGER)
+  @JoinColumn(name = "user_id")
+  private Manager manager;
+	
+	@OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private SalesMan salseMan;
 
 	@Enumerated(EnumType.ORDINAL)
 	private UserStatus status = UserStatus.NORMAL;
-
-	@ManyToMany
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "sys_users_roles", joinColumns = @JoinColumn(name = "user_id") , inverseJoinColumns = @JoinColumn(name = "role_id") )
 	private Set<Role> roles = new HashSet<Role>();
     
@@ -112,4 +125,20 @@ public class User implements Serializable {
 		this.organization = organization;
 	}
 
+  public Manager getManager() {
+    return manager;
+  }
+
+  public void setManager(Manager manager) {
+    this.manager = manager;
+  }
+
+  public SalesMan getSalseMan() {
+    return salseMan;
+  }
+
+  public void setSalseMan(SalesMan salseMan) {
+    this.salseMan = salseMan;
+  }
+	
 }

@@ -129,4 +129,8 @@ public interface UserService {
    */
   public  Boolean existUsername(String username);
 	
+  
+  
+  
+ public List<User> getUserByOrgan(int organId);
 }
