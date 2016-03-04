@@ -20,7 +20,7 @@ public interface SalesManService {
   
   SalesMan findById(String id);
   
-  List<SalesMan> gainSaojieMan();
+  List<Object> gainSaojieMan();
   SalesMan findByUserId(String userId);
 
   

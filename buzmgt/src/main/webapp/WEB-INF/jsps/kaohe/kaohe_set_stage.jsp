@@ -88,6 +88,9 @@
 																	<c:if test="${assess.assessStage =='2' }">
 																		<label class="">第二阶段:</label>
 																	</c:if>
+																	<c:if test="${assess.assessStage =='3' }">
+																		<label class="">第三阶段:</label>
+																	</c:if>
 																	<label class="" id="regionlbl">${assess.regionName }</label>
 																</div>
 															</div>
@@ -111,15 +114,17 @@
 														<td class="target form-inline">
 															<div class="col-sm-5">
 																<div class="form-group">
-																	<label class="">活跃数</label> <label class="">14</label>
+																	<label class="">活跃数</label> <label class="">${assess.activeNum }</label>
 																	<label class="">家</label>
 																</div>
 															</div>
 															<div class="col-sm-7">
 																<div class="form-group">
-																	<label class="">提货量</label> <label class="">100</label>
+																	<label class="">提货量</label> <label class="">${assess.orderNum }</label>
 																	<label class="">部</label>
+																	<c:if test="${assess.status eq 'AGREE' }">
 																	<span class="tag-tg">通过</span>
+																	</c:if>
 																</div>
 															</div>
 														</td>
@@ -172,7 +177,9 @@
 																	class="J_addDire btn btn-default btn-kaohe-add col-sm-6"
 																	href="javascript:;" id="btn"><i
 																	class="icon-saojie-add"></i></a>
-															</div> <c:if test="${stage eq 1 }">
+															</div> 
+															<c:if test="${stage eq 1 }">
+																${assess.regionName }
 															</c:if>
 														</td>
 														<td class="average-tr target form-inline">
