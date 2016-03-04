@@ -1,0 +1,124 @@
+.task-add-page .page-header{
+	margin-bottom: 10px;
+}
+.icon-task-list{
+	background:url(../img/task/renwu.png) no-repeat ;
+}
+.table-task-list{
+	
+}
+.link-posit{
+	position: relative;
+	display: inline-block;
+	text-align: right;
+	vertical-align: bottom;
+}
+/*状态*/
+.text-state-ok{
+	color: #0c6eba;
+}
+.text-state-no{
+	color: #ff9804;
+}
+.btn-sm{
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.view{
+	display: inline-block;
+	padding: 5px 10px;
+	margin: 0 10px;
+	border: 1px solid #3894C7;
+	border-radius: 10px;
+	color: #3894C7;
+	font-size: 12px;
+	font-weight: bold;
+}
+.view:hover{
+	color: #FFF;
+	background: #3894C7;
+}
+
+/*nav-task*/
+.nav-task{
+	position: relative;
+	top: 7px;
+	display: inline-block;
+	border: 1px solid #EEE;
+	border-left: none;
+}
+.nav-task>li{
+	float: left;
+}
+.nav-task>li>a{
+	color: #767676;
+	font-size: 14px;
+	font-weight: bold;
+	border-left: 1px solid #EEE;
+	background: #FFF;
+}
+.nav-task>li.active>a:hover,
+.nav-task>li.active>a{
+	background: #40abe8;
+	color: #FFF;
+	border-left-color: #40abe8;
+}
+
+.nav-task>li>a:hover{
+	color: #3893C7;
+	background: #FFF;
+}
+.task-add-page .link-posit{
+	top: 15px;
+}
+.task-add-page .new-table-box{
+	
+}
+.shop-num{
+	position: relative;
+	top: -7px;
+	font-size: 16px;
+	margin-left: 30px;
+}
+.text-red{
+	color: #f02c2c;
+}
+.table-before{
+	position: relative;
+}
+.icon-link{
+	background: url(../img/icon/team-member/det/gl.png) no-repeat;
+	top: -4px;
+}
+.link-span{
+	display: inline-block;
+	border-radius: 20px;
+	background: #4C9FCB;
+	font-size: 12px;
+	height: 18px;
+	padding: 2px 8px;
+	color: #FFF;
+}
+.map-box{
+	padding: 5px;
+	width: 100%;
+	height: 700px;
+	border: 1px solid #EEE;
+	margin-top: 1px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
