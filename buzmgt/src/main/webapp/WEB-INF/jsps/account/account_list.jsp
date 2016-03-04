@@ -334,7 +334,7 @@
 							alert("系统异常,请重试");
 						}
 					});
-				}
+				}   
 			}else if(status=='3'){
 				if (confirm("确定要删除该员工?删除后无法恢复")) {
 					var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;

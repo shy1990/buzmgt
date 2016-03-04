@@ -81,6 +81,12 @@ public class AccountManageController  extends BaseController{
     List<AccountBean> accList = new ArrayList<AccountBean>();
     String rName = "";
     String rId = "";
+   
+    if(null!=req.getParameter("orgName")){
+      String orgName = req.getParameter("orgName");
+      req.getSession().setAttribute("orgName", orgName);
+    }
+    
     if(null!=regionId && !"".equals(regionId)){
       Region r =rs.getRegionById(regionId);
       rName  = r.getName();
@@ -92,13 +98,24 @@ public class AccountManageController  extends BaseController{
       model.addAttribute("regionName",rName);
       model.addAttribute("regionId", rId);
       if(null==req.getParameter("orgName")){
-        accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
+        if(null != req.getSession().getAttribute("orgName")){
+          accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", "used",rName, pageRequest);
+        }else{
+          accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
+        }
+      
+        
      }else {
-       String orgName = req.getParameter("orgName");
-       model.addAttribute("org",orgName);
+       String orgName = req.getParameter("orgName"); 
+//       req.getSession().setAttribute("orgName", orgName);
+    
        String status = req.getParameter("status");
-       
-       accList = as.selectAccountByPositionAndStatus(orgName, status,rName, pageRequest);
+       if(null != req.getSession().getAttribute("orgName")){
+         accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", status,rName, pageRequest);
+       }else{
+         accList = as.selectAccountByPositionAndStatus("all", status,rName, pageRequest);
+       }
+//       accList = as.selectAccountByPositionAndStatus(orgName, status,rName, pageRequest);
      }
     }else{
       Subject subject = SecurityUtils.getSubject();
@@ -114,12 +131,21 @@ public class AccountManageController  extends BaseController{
       model.addAttribute("regionName", rName);
       model.addAttribute("regionId", rId);
       if(null==req.getParameter("orgName")){
-        accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
+        if(null != req.getSession().getAttribute("orgName")){
+          accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", "used",rName, pageRequest);
+        }else{
+          accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
+        }
+//        accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
      }else {
        String orgName = req.getParameter("orgName");
-       model.addAttribute("org",orgName);
        String status = req.getParameter("status");
-       accList = as.selectAccountByPositionAndStatus(orgName, status,rName, pageRequest);
+       if(null != req.getSession().getAttribute("orgName")){
+         accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"",status,rName, pageRequest);
+       }else{
+         accList = as.selectAccountByPositionAndStatus("all", status,rName, pageRequest);
+       }
+  //     accList = as.selectAccountByPositionAndStatus(orgName, status,rName, pageRequest);
      }
     }
     
@@ -128,6 +154,10 @@ public class AccountManageController  extends BaseController{
     PageData pd = new PageData();
     pd = this.getPageData();
     int totalNum  = accList.size() > 0 ? accList.get(0).getTotalNum() :0;
+    
+    if(null != req.getSession().getAttribute("orgName")){
+      model.addAttribute("org",req.getSession().getAttribute("orgName"));
+    }
     model.addAttribute("accounts",accList);
     model.addAttribute("page", pd);
     model.addAttribute("totalCount", totalNum);
