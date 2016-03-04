@@ -105,7 +105,7 @@ public class AccountManageController  extends BaseController{
         }
       
      }else {
-       String orgName = req.getParameter("orgName");
+       String orgName = req.getParameter("orgName"); 
 //       req.getSession().setAttribute("orgName", orgName);
     
        String status = req.getParameter("status");
