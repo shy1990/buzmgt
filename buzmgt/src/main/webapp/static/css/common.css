@@ -70,7 +70,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .box.border.default{
     border: 1px solid #CCC;
 }
-/*阶段box */
+/*闃舵box */
 .box.border.yellow{
     border: 1px solid #D29337;
 }
@@ -78,7 +78,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: #EFAD4D;
 	border-bottom: #D29337;
 }
-/*紫色*/
+/*绱壊*/
 .box.border.violet{
     border: 1px solid #498CA2;
 }
@@ -86,7 +86,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: #498CA2;
 	border-bottom: #498CA2;
 }
-/*青绿色*/
+/*闈掔豢鑹�*/
 .box.border.cyan{
     border: 1px solid #71AFC4;
 }
@@ -157,32 +157,32 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	height: 20px;
 	margin-right: 5px;
 }
-/*区域icon*/
+/*鍖哄煙icon*/
 .icon-district{
 	background: url(../img/icon/team-member/list/quyu.png) no-repeat;
 	top: 5px;
 }
-/*组织结构*/
+/*缁勭粐缁撴瀯*/
 .icon-structure{
 	background: url(../img/icon/team-member/list/zzjg.png) no-repeat;
 	top: 5px;
 }
-/* 错误信息提示 */
+/* 閿欒淇℃伅鎻愮ず */
 .msg-error{
 	display: none;
 	font-size: 12px;
 	font-weight: 300;
 }
-/* 显示错误信息 */
+/* 鏄剧ず閿欒淇℃伅 */
 .has-error .msg-error{
 	display: block;
 }
-/*公司列表*/
+/*鍏徃鍒楄〃*/
 .icon-comp-list{
 	background: url(../img/icon/team-member/det/Shape.png) no-repeat;
 	top: 5px;
 }
-/*业务详情*/
+/*涓氬姟璇︽儏*/
 .icon-ywdet,
 .icon-khxq{
 	background: url(../img/icon/team-member/det/bfjl.png) no-repeat;
@@ -207,9 +207,9 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: url(../img/icon/saojie/set/sjsz.png) no-repeat;
 	top: 5px;
 }
-/*进度条*/
+/*杩涘害鏉�*/
 .progress{
-	overflow:visible ;
+	overflow: visible;
 	background: #D5D5D5;
 }
 .progress-bar{
@@ -230,30 +230,55 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	background: #3993C7;
 	color: #FFF;
 }
-.btn-blue,
-.btn-blue:hover,
-.btn-blue:focus{
+.btn-blue{
 	background: #3993C7;
 	color: #FFF;
 }
+.btn-blue:hover,
+.btn-blue:focus{
+	background: #219ee5;
+	color: #FFF;
+}
+.btn-red{
+	background: #fa6161;
+	color: #FFF;
+	border: 1px solid #F14747;
+}
+.btn-red:hover,
+.btn-red:focus{
+	background: #f67373;
+	color: #FFF;
+}
+.btn-yellow{
+	background: #fa7a2c;
+	color: #FFF;
+	border: 1px solid #F47121;
+}
+.btn-yellow:hover,
+.btn-yellow:focus{
+	background: #ff8840;
+	color: #FFF;
+}
+
+
 
 
 .align-right{
 	text-align: right;
 }
-/*虚线*/
+/*铏氱嚎*/
 .hr{
 	margin: 15px -20px;
 	border-top: 1px dashed #D4D4D4;
 	clear: both;
 }
-/*实线*/
+/*瀹炵嚎*/
 .hr-solid{
 	clear: both;
 	margin: 15px -20px;
 	border-top: 2px solid #DBDBDB;
 }
-/*实线*/
+/*瀹炵嚎*/
 .hr-solid-sm{
 	clear: both;
 	margin: 15px 0;
@@ -265,7 +290,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .marg-b-20{
 	margin-bottom: 20px;
 }
-/*不同状态文字颜色*/
+/*涓嶅悓鐘舵�佹枃瀛楅鑹�*/
 .text-danger{
 	color: #DE433E;
 }
@@ -273,14 +298,14 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	color: #3894C7;
 }
 
-/*新图标实现方式*/
+/*鏂板浘鏍囧疄鐜版柟寮�*/
 .ico{
 	padding: 2px 18px 6px 2px;
 	margin-right: 5px;
 	position: relative;
 	top:-2px;
 }
-/* 区域切换 */
+/* 鍖哄煙鍒囨崲 */
 .area-choose{
 	display: inline-block;
 	margin-left: 30px;
@@ -299,9 +324,9 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	top: 5px; 
 }
 .icon-saojie-add{
-	background-image: url(../img/saojie/saojie-add.png); 
+	background: url(../img/saojie/saojie-add.png) no-repeat; 
 }
-/*添加成员按钮*/
+/*娣诲姞鎴愬憳鎸夐挳*/
 .member-add-btn{
 	margin-left: 20px;
 }
@@ -313,6 +338,70 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 	
 }
 
+/*瀵煎嚭*/
+a.table-export {
+	position: relative;
+	padding: 2px;
+	margin: 0 10px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+a.table-export:hover, a.table-export:focus {
+	color: #3B92C7;
+	border-bottom: 1px solid #3B92C7;
+}
+/*table-overflow 鏂囧瓧涓嶆崲琛�*/
+.table-overflow{
+	position: relative;
+	overflow-x: auto;
+  margin-bottom: 15px;
+  overflow-y: hidden;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+.table-overflow > .table > thead > tr > th,
+.table-overflow > .table > tbody > tr > th,
+.table-overflow > .table > tfoot > tr > th,
+.table-overflow > .table > thead > tr > td,
+.table-overflow > .table > tbody > tr > td,
+.table-overflow > .table > tfoot > tr > td {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+/*new-table 鏂拌〃鏍煎竷灞�*/
+.new-table{
+	
+}
+.new-table-box{
+	border: 1px solid #EEE;
+	margin-top: 15px;
+	min-height: 600px;
+	background: #FFF;
+}
+.new-table>thead>tr>th{
+	border-right: 1px solid #FFF;
+	border-bottom: none;
+	background-color: #DfDFDF;
+}
+.new-table>thead>tr>th:last-child{
+	border-right: none;
+}
+.new-table>tbody>tr>td,
+.new-table>thead>tr>th{
+	font-size: 12px;
+	color: #555555;
+	height: 46px;
+}
+.new-table>tbody>tr>td,
+.new-table>tbody>tr:last-child>td{
+	border-bottom: 1px solid #EEEEEE;
+}
+.text-strong{
+	font-weight: bold;
+}
+.text-bule{
+	color: #3894C7;
+}
 
 /*modle-blue*/
 .modal-blue .modal-content{
@@ -343,7 +432,7 @@ a,a:hover,a:focus,button,button:hover,button:focus,button:active{
 .text-blue{
 	color: #3894C7;
 }
-/* 排序 */
+/* 鎺掑簭 */
 .port{
 	position: absolute;
 	right: 0;
