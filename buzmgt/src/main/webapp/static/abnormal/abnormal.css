@@ -1,0 +1,120 @@
+.icon-abnormal{
+	background: url(../img/abnormal/qsyc.png) no-repeat;
+}
+.icon-tag-yc{
+	padding: 3px 10px;
+	color: #FFF;
+	margin-right: 10px;
+	background: url(../img/abnormal/tag-yc.png) no-repeat;
+}
+.icon-tag-zc{
+	padding: 3px 10px;
+	color: #FFF;
+	margin-right: 10px;
+	background: url(../img/abnormal/tag-zc.png) no-repeat;
+}
+.abnormal-body .box-title{
+	padding-top: 11px;
+	padding-bottom: 0;
+}
+.abnormal-body .box-body{
+	padding-top: 18px;
+}
+.abnormal-record-table>thead>tr>th,
+.abnormal-table>thead>tr>th{
+	padding-left: 20px;
+}
+
+.abnormal-table>tbody>tr>td{
+	height: 72px;
+	padding-left: 20px;
+}
+.abnormal-body .link-posit{
+	top: 21px;
+}
+.text-time{
+	font-size: 12px;
+	color: #636363;
+}
+.abnormal-details{
+	display: inline-block;
+	margin-left: 15px;
+}
+.abnormal-details>span{
+	margin: 0 10px;
+	position: relative;
+	top: 2px;
+}
+.business-name{
+	display: inline-block;
+	position: relative;
+	top: 10px; 
+	margin-left: 10px;
+}
+.table-abnormal-list{
+	margin: 15px -20px 20px -20px;
+}
+.btn-sm{
+	padding: 2px 10px;
+}
+.chang-time{
+	color: #9D9D9D;
+}
+.text-bule{
+	font-weight: 400;
+}
+
+/*签收记录 abnormal_record*/
+.icon-abnormal_record{
+	background: url(../img/abnormal/qsjl.png) no-repeat;
+}
+/*业务外部链接*/
+.yw-link{
+	width: 100%;
+	border: 1px solid #D4D4D4;
+	border-top: 4px solid #3993C7;
+	background: #FFF;
+	padding-bottom: 20px;
+}
+.link-oper{
+	display: block;
+	width: 100%;
+	border-bottom: 1px solid #D4D4D4;
+	font-size: 14px;
+	font-weight: bold;
+	color: #5A5A5A;
+	padding: 10px;
+}
+.link-oper:hover,
+.link-oper:focus{
+	background: #F4F4F4;
+	color: #5A5A5A;
+}
+.link-oper:last-child{
+	margin-bottom: 30px;
+}
+.status-over{
+	color: #0C6DBA;
+}
+.status-not{
+	color: #FE9805;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
