@@ -6,7 +6,6 @@ $(function() {
 			url:"/saojie/gainSaojieMan",
 			//data:formValue,
 			success : function(obj){
-				alert(obj.length);
 				if (obj) {
 					var saojieMan = $("#saojieMan");
 					saojieMan.empty();

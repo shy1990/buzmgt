@@ -42,17 +42,58 @@ function toSubmit(){
 	form.submit();
 }
 
- /*function btnAudit() { 
-	 var id = $("#saojie_id").val();
-	 var remark =document.getElementById("remark").value; 
-	 $.ajax({ type : "post", 
-		 url :"/saojie/auditPass", 
-		 data : {"saojieId" : id,"description" : remark }, 
-		 success :function(data) {
-			 if (data === 'ok') {
-				location.reload();
-			}
-		}
-	 });
-  }*/
+function checkForm(){
+	var activeNum = $("#activeNum").val()
+	var orderNum = $("#orderNum").val()
+	var assessCycle = $("#assessCycle").val()
+	var assessTime = $("#assessTime").val()
+	var town = $("#town").val()
+	
+	if (activeNum == null || activeNum.trim() == "") {
+		errorMsgShow($("#activeNum"));
+		return false;
+	}
+	
+	if (orderNum == null || orderNum.trim() == "") {
+		errorMsgShow($("#orderNum"));
+		return false;
+	}
+	
+	if (assessCycle == null || assessCycle.trim() == "") {
+		errorMsgShow($("#assessCycle"));
+		return false;
+	}
+
+	if (assessTime == null || assessTime.trim() == "") {
+		errorMsgShow($("#assessTime"));
+		return false;
+	}
+
+	if(typeof(town) == "undefined"){
+		alert("请先选择考核区域!");
+		return false;
+	}
+	
+	if (town == null || town.trim() == "") {
+		errorMsgShow($("#town"));
+		return false;
+	}
+	
+	return true;
+	
+}
+
+function errorMsgShow($option,msg){
+	if($option==null||$option==""){
+		$option=$(this);
+	}
+	$option.parents('.form-group').addClass('has-error');
+	$option.parents('.col-sm-4').addClass('has-error');
+	console.info(msg);
+	if(msg!=null&&msg!=""){
+		$option.parents('.form-group').find('.msg-error').html(msg);
+		$option.parents('.average-tr').find('.msg-error').html(msg);
+	}
+	
+}
  

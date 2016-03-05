@@ -194,7 +194,7 @@ public class AssessController {
   }
   
   @RequestMapping("/toAccessDet")
-  public String toAccessDet(String salesmanId,@RequestParam("asssessid") Assess assess,String page,String regionid,String begin,String end,String baifen,int active,int orderNum,Model model){
+  public String toAccessDet(String salesmanId,@RequestParam("asssessid") Assess assess,String page,String regionid,String begin,String end,String baifen,Integer active,Integer orderNum,Model model){
     int pageNum = Integer.parseInt(page != null ? page : "0");
     SalesMan salesman = salesManService.findByUserId(salesmanId.trim());
 //    Assess assess=assessService.findAssess(Long.parseLong(asssessid.trim()));
