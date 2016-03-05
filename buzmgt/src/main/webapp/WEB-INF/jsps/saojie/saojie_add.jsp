@@ -114,8 +114,8 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<div class="input-group col-sm-10 col-sm-offset-4">
-											<button class="btn btn-danger col-sm-3"
+										<div class="input-group col-sm-8 col-sm-offset-4">
+											<button class="btn btn-blue col-sm-3"
 												　onclick="toSubmit();">确定保存</button>
 										</div>
 									</div>
