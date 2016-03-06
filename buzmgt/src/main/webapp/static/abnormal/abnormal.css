@@ -100,11 +100,36 @@
 	color: #FE9805;
 }
 
-
-
-
-
-
+/*业务揽收*/
+.icon-shop-name{
+	background: url(../img/abnormal/mc.png) no-repeat;
+}
+.accepted{
+	background-color: #12BFC5;
+	padding: 2px 5px;
+	color: #FFF;
+}
+.text-hor{
+	margin-bottom: 10px;
+	font-size: 12px;
+}
+.text-hor>p{
+	display: inline-block;
+}
+.text-hor>label{
+	display: inline-block;
+	min-width: 95px;
+	padding: 5px 10px 0;
+	text-align: right;
+}
+.map-box{
+	display: inline-block;
+	padding: 5px;
+	width: 815px;
+	height: 437px;
+	border: 1px solid #EEE;
+	margin-bottom: 50px;
+}
 
 
 

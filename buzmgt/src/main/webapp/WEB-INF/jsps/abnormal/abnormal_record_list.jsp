@@ -264,7 +264,7 @@
 				var $_haohe_plan = $('.J_kaohebar').width();
 				var $_haohe_planw = $('.J_kaohebar_parents').width();
 				$(".J_btn").attr("disabled", 'disabled');
-				if ($_haohe_planw === $_haohe_plan) {
+				if ($_haohe_planw === $_haohe_plan) {　
 					$(".J_btn").removeAttr("disabled");
 				}
 			</script>
