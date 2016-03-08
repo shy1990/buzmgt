@@ -13,16 +13,19 @@
 <meta name="description" content="">
 <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="/static/yw-team-member/team-memberAdd.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/static/zTree/css/icon.css" />
+<link rel="stylesheet" type="text/css" href="/static/zTree/css/main.css" />
+<link rel="stylesheet" type="text/css" href="/static/zTree/css/zTreeStyle/organzTreeStyle.css" />
 <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link rel="stylesheet" type="text/css"
 	href="/static/yw-team-member/team-member.css" />
 <!-- tree view -->
 <link href="/static/CloudAdmin/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet">
-<script type="text/javascript"
-	src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
-<script type="text/javascript"
-	src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="/static/CloudAdmin/js/fuelux-tree/fuelux.min.css" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+ <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
 </head>
 
 <body>
@@ -40,7 +43,7 @@
 			</a> <small class="header-text">共<span class="text-red">${list.totalElements}</span>位成员
 			</small> <small style="display: none" class="header-text sr-only">今日新增<span
 				class="text-red"> 0 +</span></small>
-			<div class="form-group title-form">
+			<div class="form-group title-form1">
 
 				<div class="input-group ">
 					<input type="text" class="form-control" name="truename" id="param"
@@ -86,9 +89,9 @@
 								<!--/菜单栏-->
 							</div>
 							<div class="port pull-right">
-								<a class=" dropdown-toggle" type="button" id="dropdownMenu1"
+								<a class="J_portDis dropdown-toggle" type="button" id="dropdownMenu1"
 									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="true">排序<span class="J_portDis"></span> <span
+									aria-expanded="true">排序 <span
 									class="caret"></span>
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -262,17 +265,19 @@
 						<i class="icon icon-district"></i>区域
 					</div>
 					<div class="box-body">
-						<div style="height: 290px" id="allmap"></div>
-						<!-- 						<div align="center"><a href="/salesman/showMap"><font color="#0099ff" size="3">查看完整地图</font></a></div> -->
-						<!-- 						地图 -->
-						<!-- 						<img width="100%" src="/static/img/team-map.png" /> -->
-						<!-- 						/地图 -->
-						<!-- 						组织结构 -->
-						<!-- 						<div class="structure col-xs-12"> -->
-						<!-- 							<i class="icon icon-structure"></i> 组织结构 -->
-						<!-- 						</div> -->
-						<!-- 						tree view -->
-						<!-- 						<div id="tree3" class="tree"></div> -->
+						<div style="height: 290px" id="allmap">
+						</div>
+						<div class="structure col-xs-12">
+							<i class="icon icon-structure"></i> 组织结构
+						</div>
+						
+						<div class=""  >
+									<div class="role-list"  >
+													<div
+														style="width: 100%; height: 45px; border-right: 1px solid rgb(221, 221, 221);"></div>
+													<ul id="organizationId" class="ztree" style="overflow:auto;overflow-x: auto"></ul>
+									</div>
+						</div>
 						<!--/组织结构-->
 					</div>
 				</div>
@@ -298,22 +303,31 @@
 	</div>
 	<%@include file="/static/js/alert/alert.html"%>
 	<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src='/static/js/dateutil.js'></script>
 	<script src="/static/yw-team-member/team-member.js"
 		type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript"
 		src="/static/CloudAdmin/js/fuelux-tree/fuelux.tree-sampledata.js"></script>
 	<script type="text/javascript"
 		src="/static/CloudAdmin/js/fuelux-tree/fuelux.tree.min.js"></script>
+	<script src="/static/CloudAdmin/js/jQuery-Cookie/jquery.cookie.min.js"></script>
 	<script src="/static/CloudAdmin/js/script.js"></script>
 	<script src='/static/js/common.js'></script>
+	 <script src="/static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/static/js/organization/teamOrganizationTree.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 		jQuery(document).ready(function() {
 			App.setPage("treeview"); //Set current page
 			App.init(); //Initialise plugins and elements
 		});
 		$('.dropdown-menu li a').click(function(){
-			$('.J_portDis').html(":"+$(this).text());
-		});							
+			$('.J_portDis').html($(this).text());
+		});
+		$('.J_portDis').mouseover(function(){
+			$(this).click();
+		});
 	</script>
 	<script type="text/javascript">
 	<%String areaname = null;

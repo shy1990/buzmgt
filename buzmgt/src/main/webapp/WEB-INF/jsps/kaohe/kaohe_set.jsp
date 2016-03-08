@@ -55,7 +55,7 @@
 							</div>
 							<!--考核设置内容-->
 							<form class="member-from-box form-horizontal"
-									action="/assess/saveAssess/${salesman.id}" name="form" method="post">
+									action="/assess/saveAssess/${salesman.id}?stage=+${stage=0 }+" name="form" method="post" onsubmit="javascript:return checkForm()">
 							<div class="form-group">
 								<div class="saojie-upd-list col-sm-10  col-sm-offset-2 col-xs-12">
 								<input type="hidden" id="salesmanId" name="salesmanId" value="${salesman.id}"/>
@@ -75,22 +75,24 @@
 														<div class="col-sm-4">
 															<a class="J_addDire btn btn-default btn-kaohe-add col-sm-6" href="javascript:;" id="btn"><i class="icon-saojie-add"></i></a>
 														</div>
-
+													<label class="pull-right col-md-6 control-label msg-error">请选择考核区域</label>
 													</td>
 													<td class="average-tr target form-inline">
 														<div class="col-sm-5">
 															<div class="form-group">
 																<label class="">活跃数</label>
-																<input class="form-control input-sm" type="" name="assessActivenum" id="" value="" />
+																<input class="form-control input-sm" type="" name="assessActivenum" id="activeNum" value="" />
 																<label class="">家</label>
 															</div>
+															<label class="pull-right col-md-8 control-label msg-error">请填写活跃数</label>
 														</div>
 														<div class="col-sm-5">
 															<div class="form-group">
 																<label class="">提货量</label>
-																<input class="form-control input-sm" type="" name="assessOrdernum" id="" value="" />
+																<input class="form-control input-sm" type="" name="assessOrdernum" id="orderNum" value="" />
 																<label class="">部</label>
 															</div>
+															<label class="pull-right col-md-8 control-label msg-error">请填写提货量</label>
 														</div>
 													</td>
 												</tr>
@@ -112,9 +114,10 @@
 								<label class="col-sm-2 control-label">考核阶段周期:</label>
 								<div class="input-group col-sm-2">
 									<span class="input-group-addon" id="basic-addon1"><i class="ico icon-kaohe-week"></i></span>
-									<input type="text" class="form-control" aria-describedby="basic-addon1" name="assessCycle" value="">
+									<input id="assessCycle" type="text" class="form-control" aria-describedby="basic-addon1" name="assessCycle" value="">
 									<span class="input-group-addon">天</span>
 								</div>
+								<label class="pull-right col-md-6 control-label msg-error">请填写考核周期</label>
 							</div>
 							<!--考核周期-->
 							<div class="hr"></div>
@@ -123,19 +126,20 @@
 								<label class="col-sm-2 control-label">考核开始时间:</label>
 								<div class="input-group col-sm-2">
 									<span class="input-group-addon" id="basic-addon1"><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-									<input type="text" class="form-control form_datetime" readonly="readonly" name="assessTime" value="">
+									<input id="assessTime" type="text" class="form-control form_datetime" readonly="readonly" name="assessTime" value="">
 								</div>
+								<label class="pull-right col-md-6 control-label msg-error">请选择考核开始时间</label>
 							</div>
-							</form>
 							<!--考核开始时间-->
 							<div class="hr"></div>
 							<div class="form-group">
 								<div class="col-sm-10 col-sm-offset-2 input-group">
-									<button class="btn btn-audit col-sm-2" onclick="toSubmit();">确定</button>
+									<button class="btn btn-audit col-sm-2" type="submit">确定</button>
 								</div>
 							</div>
 							<div class="clearfix"></div>
 							<div class="hr"></div>
+							</form>
 							<!--扫街设置地图-->
 							<div class="saojie-set-map col-sm-10  col-sm-offset-1 col-xs-12">
 								<div class="map-box " style="height: 700px" id="allmap">

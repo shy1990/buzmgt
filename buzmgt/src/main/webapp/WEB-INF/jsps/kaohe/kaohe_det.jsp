@@ -21,7 +21,6 @@
 <script src="/static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 </head>
-
 <body>
 	<div class="content main">
 		<h4 class="page-header ">
@@ -37,8 +36,7 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<!--业务人员信息-->
-								<i class="ico icon-ywmember"></i>${salesman.truename} 指标： <span>活跃客户${assess.assessActivenum}家</span>
-								<span>提货量${assess.assessOrdernum}台</span>
+								<i class="ico icon-ywmember"></i>${salesman.truename} 
 								<!--/业务人员信息-->
 								<div class="kaohe-time">
 									开始时间： <span>${startDate}</span> 结束时间： <span>${endDate}</span>
@@ -53,12 +51,29 @@
 						<!--列表头部-->
 						<div class="det-head ">
 							<!--bar 布局-->
-							<div class="col-sm-10">
-								<div class="quiet-days marg-b-20">
-									<span class="kaohe-stage">第一阶段考核</span> <span
-										class="pull-right"> <i class="ico icon-countdown"></i>倒计时:
-										<span class="text-time">2</span>天
+							<div class="col-sm-10 clear-p-l">
+								<div class="quiet-days marg-b-30">
+									<c:if test="${assess.assessStage == '1'}">
+										<span class="kaohe-stage onekaohe-stage">第一阶段考核</span> 
+									</c:if>
+									<c:if test="${assess.assessStage == '2' }">
+										<span class="kaohe-stage twokaohe-stage ">第二阶段考核</span> 
+									</c:if>
+									<c:if test="${assess.assessStage == '3'}">
+										<span class="kaohe-stage threekaohe-stage">第三阶段考核</span> 
+									</c:if>
+									<c:if test="${assess.assessStage == '3'&& assess.status == 'AGREE'}">
+										<span class="kaohe-stage overkaohe-stage">已转正</span> 
+									</c:if>
+									<c:if test="${assess.status == 'FAIL'}">
+										<span class="kaohe-stage failurekaohe-stage ">考核失败</span> 
+									</c:if>
+									<span class="count-down font-12"> <i class="ico icon-countdown"></i>倒计时:
+										<span class="text-time">${timing }</span>天
 									</span>
+									
+									<strong class="target font-12">指标：</strong><span class="font-12">活跃客户 <span class="text-blue"> ${assess.assessActivenum}</span>家 ，
+									提货量<span class="text-blue">${assess.assessOrdernum}</span>台 </span>
 								</div>
 								<!--class style 沉寂:progress-bar-later ;活跃：progress-bar-ok ;未提货：-->
 								<!--start 考核进度条-->
@@ -73,122 +88,53 @@
 								<!--end 考核进度条-->
 							</div>
 							<!--bar 布局-->
-							<div class="col-xs-2">
-								<button class="J_btn col-xs-12 btn btn-blue" data-toggle="modal" data-target="#passKaoheModal" data-whatever="@mdo">考核通过</button>
+							<div class="col-xs-2 clear-p-r">
+								<button class="J_btn col-xs-12 btn btn-blue marg-t-30"
+									onclick="toAssessStage('${salesman.id}','${assess.id}');">考核通过</button>
 							</div>
 						</div>
 						<!--/列表头部-->
 						<div class="hr-solid"></div>
 						<!--start 操作区域-->
-						<div class="search-box">
+						<div class="search-box ">
 							<!--区域选择按钮-->
-							<div class="btn-group btn-group-sm">
-								<button type="button" class="btn btn-default " id="regionNameid">${salesman.region.name}</button>
-								<button type="button" class="btn btn-default dropdown-toggle"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">
-									<span class="caret"></span> <span class="sr-only">Toggle
-										Dropdown</span>
-								</button>
-								<ul class="dropdown-menu">
-									<c:if test="${not empty regionList}">
-										<c:forEach var="region" items="${regionList}" varStatus="s">
-											<li><a onclick="getRegionName('${region.name}')">${region.name}</a></li>
-										</c:forEach>
-									</c:if>
-								</ul>
-							</div>
+							请选择区域：
+							<select id="regionNameid" class="form-control input-xs ad-select" onchange="getSaojieDataList();" style=""><!--  -->
+								<c:if test="${not empty regionList}">
+									<option value="" selected="selected">${salesman.region.name}</option>
+									<c:forEach var="region" items="${regionList}" varStatus="s">
+										<option value="">${region.name}</option>
+								</c:forEach>
+								</c:if>
+							</select>
 							<!--/区域选择按钮-->
-							<!-- 一阶段考核    --审核通过 html -->
-							<div id="passKaoheModal" class="modal modal-blue fade" role="dialog"
-								aria-labelledby="gridSystemModalLabel">
-								<div class="modal-dialog " role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal"
-												aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-											<h3 class="modal-title" id="gridSystemModalLabel">
-												审核通过
-												</h3>
-										</div>
-										<div class="modal-body">
-											<div class="container-fluid">
-												<div class="row">
-													<div class="col-md-12">当前为第一阶段考核，点击确定进入第二阶段考核设置!</div>
-												</div>
-											</div>
-										</div>
-										<div class="modal-footer">
-											<button type="button" class="btn btn-danger caution"
-												data-dismiss="modal">稍后设置</button>
-											<button type="button" class="btn btn-blue"
-												data-dismiss="modal" onclick="toAssessStage('${salesman.id}','${assess.id}');">确定</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- /三阶段考核    --审核通过 html -->
-							<!-- 三阶段考核    --审核通过 html -->
-							<div id="threeKaoheModal" class="modal modal-blue fade" role="dialog"
-								aria-labelledby="gridSystemModalLabel">
-								<div class="modal-dialog " role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal"
-												aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-											<h3 class="modal-title" id="gridSystemModalLabel">
-												转正通过
-												</h3>
-										</div>
-										<div class="modal-body">
-											<div class="container-fluid">
-												<div class="row">
-													<div class="col-md-12">当前为第三阶段考核，考核已通过，此业务员可以转正。</div>
-												</div>
-											</div>
-										</div>
-										<div class="modal-footer">
-											<button type="button" class="btn btn-danger caution"
-												data-dismiss="modal">取消</button>
-											<button type="button" class="btn btn-blue"
-												data-dismiss="modal">确定</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- /三阶段考核    --审核通过 html -->
+							<strong class="targetover">已达成：</strong><span>活跃客户 <span class="text-blue"> ${active }</span>家 ，提货量<span class="text-blue">${orderNum }</span>台 </span>
 							<!--考核开始时间-->
-							<div class="date-month">
-								<div class="input-group">
-									<span class="input-group-addon " id="basic-addon1"><i
-										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-										type="text" class="form-control form_datetime input-sm"
-										placeholder="开始时间" readonly="readonly">
+							<br>
+							<div class="marg-t">
+								请选择时间：
+								<div class="search-date">
+									<div class="input-group input-group-sm">
+										<span class="input-group-addon " id="basic-addon1"><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+										<input type="text" class="form-control form_datetime input-sm" placeholder="开始日期" readonly="readonly">
+									</div>
+								</div> --
+								<div class="search-date">
+									<div class="input-group input-group-sm">
+										<span class="input-group-addon " id="basic-addon1"><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+										<input type="text" class="form-control form_datetime input-sm" placeholder="结束日期" readonly="readonly">
+									</div>	
 								</div>
+								<!--考核开始时间-->
+								<button class="btn btn-blue btn-sm"
+									onclick="goSearch('${salesman.id}','${assess.id}');">
+									<i class="ico ico-seach-wiath"></i>检索
+								</button>
+								<a class="link-export pull-right" href="javascript:void(0);">导出excel</a>
 							</div>
-							--
-							<div class="date-month ">
-								<div class="input-group ">
-									<span class="input-group-addon " id="basic-addon1"><i
-										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-										type="text" class="form-control form_datetime input-sm"
-										placeholder="结束时间" readonly="readonly">
-								</div>
-							</div>
-							<!--考核开始时间-->
-							<button class="btn btn-blue btn-sm">
-								<i class="ico ico-seach-wiath"></i>检索
-							</button>
-							<strong>指标已达成：</strong><span>活跃客户  <span class="text-blue">20</span> 家，提货量 <span class="text-blue">120 </span>台</span>
-							
-							<a class="link-export pull-right" href="javascript:void(0);">导出excel</a>
-							<!--列表内容-->
 						</div>
 						<!--end 操作区域-->
+						<!--列表内容-->
 						<div class="company-table table-responsive ">
 							<table class="table table-hover">
 								<thead>
@@ -200,28 +146,108 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td class="shop-name">天桥手机专卖店</td>
-										<td class="tihuo-num">1次</td>
-										<td class="total-num">121</td>
-										<td class="sum">11112.45</td>
-									</tr>
-									<tr>
-										<td class="shop-name">天桥手机专卖店</td>
-										<td class="tihuo-num">1次</td>
-										<td class="total-num">121</td>
-										<td class="sum">11112.45</td>
-									</tr>
-									<tr>
-										<td class="shop-name">天桥手机专卖店</td>
-										<td class="tihuo-num">1次</td>
-										<td class="total-num">121</td>
-										<td class="sum">11112.45</td>
-									</tr>
+									<c:if test="${not empty statistics.content}">
+										<c:forEach var="stat" items="${statistics.content}"
+											varStatus="s">
+											<tr>
+												<td class="shop-name">${stat.shopName }</td>
+												<td class="tihuo-num">${stat.orderTimes }次</td>
+												<td class="total-num">${stat.orderNum }</td>
+												<td class="sum">${stat.orderTotalCost }</td>
+											</tr>
+										</c:forEach>
+									</c:if>
 								</tbody>
 							</table>
 						</div>
 						<!--/列表内容-->
+						<!-- 分页 -->
+						<c:if test="${not empty statistics.content}">
+							<div style="text-align: center; padding-bottom: 20px">
+								<ul class="pagination box-page-ul">
+									<li><a
+										href="javascript:getPageList('${statistics.number > 0 ? statistics.number-1 : 0}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">&laquo;</a></li>
+									<!-- 1.total<=7 -->
+									<c:if test="${statistics.totalPages<=7 }">
+										<c:forEach var="s" begin="1" end="${statistics.totalPages}"
+											step="1">
+											<c:choose>
+												<c:when test="${statistics.number == s-1 }">
+													<li class="active"><a
+														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+												</c:when>
+												<c:otherwise>
+													<li><a
+														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</c:if>
+									<c:if test="${statistics.totalPages>7 && statistics.number<4 }">
+										<c:forEach var="s" begin="1" end="6" step="1">
+											<c:choose>
+												<c:when test="${statistics.number == s-1 }">
+													<li class="active"><a
+														href="javascript:getPageList('${s-1}','${regionId}',''${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+												</c:when>
+												<c:otherwise>
+													<li><a
+														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+										<li><a href="javascript:void(0)">...</a></li>
+									</c:if>
+									<c:if
+										test="${statistics.totalPages>7&&statistics.number>=4&&statistics.totalPages-statistics.number>=3 }">
+										<li><a href="javascript:void(0)">...</a></li>
+										<c:forEach var="s" begin="${statistics.number-2 }"
+											end="${statistics.number+2 }" step="1">
+											<c:choose>
+												<c:when test="${statistics.number == s-1 }">
+													<li class="active"><a
+														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+												</c:when>
+												<c:otherwise>
+													<li><a
+														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+										<li><a href="javascript:void(0)">...</a></li>
+									</c:if>
+									<c:if
+										test="${statistics.totalPages>7&&statistics.number>=4&&statistics.totalPages-statistics.number<3 }">
+										<li><a href="javascript:void(0)">...</a></li>
+										<c:forEach var="s" begin="${statistics.totalPages-6 }"
+											end="${statistics.totalPages }" step="1">
+											<c:choose>
+												<c:when test="${statistics.number == s-1 }">
+													<li class="active"><a
+														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+												</c:when>
+												<c:otherwise>
+													<li><a
+														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</c:if>
+									<li><a
+										href="javascript:getPageList('${statistics.number+1 > statistics.totalPages-1 ? statistics.totalPages-1 : statistics.number+1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">&raquo;</a></li>
+								</ul>
+							</div>
+						</c:if>
+						<c:if test="${empty statistics.content}">
+							<div style="text-align: center;">
+								<ul class="pagination">
+									<tr>
+										<td colspan="100">没有相关数据</td>
+									</tr>
+								</ul>
+							</div>
+						</c:if>
+						<!-- 分页 -->
 					</div>
 					<!--/box-body-->
 				</div>
@@ -230,7 +256,7 @@
 			<!--team-map-->
 			<div class="col-md-3">
 				<!--box-->
-				<!--不同阶段颜色不同1：pink 2：yellow 3:violet 4:-->
+				<!--不同阶段颜色不同1：pink（一阶段） 2：yellow（二阶段）  3:green（三阶段）  4:cyan(转正) 5:red(失败)-->
 				<div class="ywmamber-msg box border pink">
 					<!--title-->
 					<div class="box-title">
@@ -249,13 +275,14 @@
 						</div>
 						<!--/ywmamber-body-->
 						<div class="stage">
-							<span class="">第一阶段:60% </span>
+							<span class="kaohe-stage onekaohe-stage">第一阶段:60% </span>
 						</div>
 						<div class="progress progress-sm">
 							<div style="width: 60%;" class="progress-bar bar-kaohe"></div>
 						</div>
 						<div class="operation">
-							<a href="javascript:;" class="">考核设置</a> <a href="javascript:;">辞退</a>
+<!-- 							<a href="javascript:;" class="">考核设置</a>  -->
+							<a href="javascript:;">辞退</a>
 							<a href="javascript:;" class="pull-right">查看</a>
 						</div>
 						<div class="yw-text">
@@ -310,9 +337,9 @@
 		<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 		<script src="/static/yw-team-member/team-member.js"
 			type="text/javascript" charset="utf-8"></script>
-		<script src="/static/js/common.js"
-			type="text/javascript" charset="utf-8"></script>
 		<script src="/static/kaohe/kaohe-det.js" type="text/javascript"
+			charset="utf-8"></script>
+		<script src="/static/js/common.js" type="text/javascript"
 			charset="utf-8"></script>
 		<script type="text/javascript">
 			$('body input').val('');
@@ -325,7 +352,6 @@
 				todayHighlight : 1,
 				startView : 2,
 				minView : 2,
-				pickerPosition : "bottom-left",
 				forceParse : 0
 			});
 			var $_haohe_plan = $('.J_kaohebar').width();
@@ -335,8 +361,9 @@
 				$(".J_btn").removeAttr("disabled");
 			}
 
-			function getRegionName(name) {
+			function getRegionName(name, id) {
 				$("#regionNameid").text(name);
+				$("#regionNameid").val(id);
 			}
 		</script>
 </body>

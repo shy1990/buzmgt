@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.assess.web;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +26,7 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.sys.vo.OrderVo;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
@@ -112,6 +114,12 @@ public class AssessController {
     if(stage == 2){
       assess.setAssessStage("3");
     }
+    Date startDate=assess.getAssessTime();
+    Calendar c = Calendar.getInstance();
+    c.setTimeInMillis(startDate.getTime());
+    c.add(Calendar.DATE, Integer.parseInt(assess.getAssessCycle()));//周期后的日期
+    Date endDate= new Date(c.getTimeInMillis());
+    assess.setAssessEndTime(endDate);
     assessService.saveAssess(assess);
     System.out.println(assess.getSalesman().getId());
     return "redirect:/assess/assessList";
@@ -186,20 +194,30 @@ public class AssessController {
   }
   
   @RequestMapping("/toAccessDet")
-  public String toAccessDet(String salesmanId,String asssessid,Model model){
+  public String toAccessDet(String salesmanId,@RequestParam("asssessid") Assess assess,String page,String regionid,String begin,String end,String baifen,Integer active,Integer orderNum,Model model){
+    int pageNum = Integer.parseInt(page != null ? page : "0");
     SalesMan salesman = salesManService.findByUserId(salesmanId.trim());
-    Assess assess=assessService.findAssess(Long.parseLong(asssessid.trim()));
+//    Assess assess=assessService.findAssess(Long.parseLong(asssessid.trim()));
     model.addAttribute("assess", assess);
     model.addAttribute("salesman", salesman);
     List<Region> list = saojieService.findRegionById(salesmanId.trim());
     model.addAttribute("regionList", list);
-    Date startDate=assess.getAssessTime();
-    Calendar c = Calendar.getInstance();
-    c.setTimeInMillis(startDate.getTime());
-    c.add(Calendar.DATE, Integer.parseInt(assess.getAssessCycle()));//周期后的日期
-    Date endDate= new Date(c.getTimeInMillis());
-    model.addAttribute("startDate", DateUtil.date2String(startDate));
-    model.addAttribute("endDate", DateUtil.date2String(endDate));
+    Page<OrderVo> statistics = assessService.getOrderStatistics(salesmanId.trim(),regionid,pageNum,begin,end);
+    model.addAttribute("statistics",statistics);
+    model.addAttribute("regionId",regionid != null ? regionid : "");
+    model.addAttribute("startDate", DateUtil.date2String(assess.getAssessTime()));
+    model.addAttribute("endDate", DateUtil.date2String(assess.getAssessEndTime()));
+    model.addAttribute("begin",begin);
+    model.addAttribute("end",end);
+    try {
+      int timing = DateUtil.daysBetween(assess.getAssessTime(), assess.getAssessEndTime());
+      model.addAttribute("timing",timing);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    model.addAttribute("percent",baifen);
+    model.addAttribute("active",active);
+    model.addAttribute("orderNum",orderNum);
     return "kaohe/kaohe_det";
   } 
   

@@ -297,6 +297,25 @@ a:hover,a:focus,button,button:hover;button:focus,button:active{
 	padding: 0 2px;
 	background: #FF4647;
 }
+.left-mark,
+.left-mark:FOCUS,
+.left-mark:ACTIVE,
+.left-mark:HOVER{
+	position: relative;
+	top: -9px;
+	left:2px;
+	display: inline-block;
+	padding: 0 2px;
+	height: 13px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	font-size: 9px;
+	font-weight: 400;
+	line-height: 15px;
+	background: #FF4647;
+	color: #FFF;
+}
 .navbar-nav > li > a.user-icon-box {
 	vertical-align: top;
 	padding-left: 40px;

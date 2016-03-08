@@ -45,14 +45,14 @@
 						<!--内容-->
 						<div class="form-group">
 							<label class="col-sm-2 control-label">考核人:</label>
-							<div class="col-sm-10" data-aa="${salesman.id}" id="salId">
+							<div class="col-sm-9" data-aa="${salesman.id}" id="salId">
 								<p class="form-control-static">${salesman.truename }</p>
 							</div>
 						</div>
 						<div class="hr"></div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">负责区域:</label>
-							<div class="col-sm-10">
+							<div class="col-sm-9">
 								<p class="form-control-static">${salesman.region.parent.parent.parent.name}
 									${salesman.region.parent.parent.name}
 									${salesman.region.parent.name} ${salesman.region.name}</p>
@@ -64,10 +64,10 @@
 						</div>
 						<!--一阶段考核设置内容-->
 						<div class="form-group">
-							<div class="saojie-upd-list col-sm-10  col-sm-offset-2 col-xs-12">
+							<div class="saojie-upd-list col-sm-9  col-sm-offset-2 col-xs-12">
 								<!--list-->
 								<div class="table-responsive">
-									<table class="table table-bordered">
+									<table class="table table-bordered kaoheset-stage">
 										<c:if test="${not empty list}">
 										<thead>
 											<tr>
@@ -88,6 +88,9 @@
 																	<c:if test="${assess.assessStage =='2' }">
 																		<label class="">第二阶段:</label>
 																	</c:if>
+																	<c:if test="${assess.assessStage =='3' }">
+																		<label class="">第三阶段:</label>
+																	</c:if>
 																	<label class="" id="regionlbl">${assess.regionName }</label>
 																</div>
 															</div>
@@ -100,24 +103,28 @@
 																	<label class="">家</label>
 																</div>
 															</div>
-															<div class="col-sm-5">
+															<div class="col-sm-7">
 																<div class="form-group">
 																	<label class="">提货量:</label> <label class="">${assess.assessOrdernum }</label>
 																	<label class="">部</label>
 																</div>
 															</div>
+															
 														</td>
 														<td class="target form-inline">
 															<div class="col-sm-5">
 																<div class="form-group">
-																	<label class="">活跃数</label> <label class="">14</label>
+																	<label class="">活跃数</label> <label class="">${assess.activeNum }</label>
 																	<label class="">家</label>
 																</div>
 															</div>
-															<div class="col-sm-5">
+															<div class="col-sm-7">
 																<div class="form-group">
-																	<label class="">提货量</label> <label class="">100</label>
+																	<label class="">提货量</label> <label class="">${assess.orderNum }</label>
 																	<label class="">部</label>
+																	<c:if test="${assess.status eq 'AGREE' }">
+																	<span class="tag-tg">通过</span>
+																	</c:if>
 																</div>
 															</div>
 														</td>
@@ -149,7 +156,7 @@
 								name="form" method="post">
 								<div class="form-group">
 									<div
-										class="saojie-upd-list col-sm-10  col-sm-offset-2 col-xs-12">
+										class="saojie-upd-list col-sm-9  col-sm-offset-2 col-xs-12">
 										<input type="hidden" id="salesmanId" name="salesmanId"
 											value="${salesman.id}" />
 										<!--list-->
@@ -170,7 +177,9 @@
 																	class="J_addDire btn btn-default btn-kaohe-add col-sm-6"
 																	href="javascript:;" id="btn"><i
 																	class="icon-saojie-add"></i></a>
-															</div> <c:if test="${stage eq 1 }">
+															</div> 
+															<c:if test="${stage eq 1 }">
+																${assess.regionName }
 															</c:if>
 														</td>
 														<td class="average-tr target form-inline">
@@ -231,7 +240,7 @@
 								<!--考核开始时间-->
 								<div class="hr"></div>
 								<div class="form-group">
-									<div class="col-sm-10 col-sm-offset-2 input-group">
+									<div class="col-sm-9 col-sm-offset-2 input-group">
 										<button class="btn btn-audit col-sm-2" onclick="toSubmit();">确定</button>
 									</div>
 								</div>
@@ -268,6 +277,8 @@
 	<script src="/static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script src="/static/kaohe/kaohe-stage.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="/static/js/common.js" type="text/javascript"
 		charset="utf-8"></script>
 	<script type="text/javascript">
 		$('body input').val('');

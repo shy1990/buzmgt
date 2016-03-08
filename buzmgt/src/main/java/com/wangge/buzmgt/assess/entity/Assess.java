@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.assess.entity;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -77,8 +78,32 @@ public class Assess implements Serializable {
 	private AssessStatus status;
 	@Column(name="ASSESS_DEFINE_AREA")
 	private String defineArea;
+	@Column(name = "ASSESS_ENDTIME")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+  @Temporal(TemporalType.TIMESTAMP)
+	private Date assessEndTime;
 	@Transient
 	private String regionName;
+	@Transient
+  private String percent;
+  
+  //辅助字段
+  @Transient
+  private int timing;
+  @Transient
+  private int activeNum;
+  @Transient
+  private int orderNum;
+  
+   public void addPercent(double num) {
+     if(num > 0 ){
+       NumberFormat nf = NumberFormat.getPercentInstance();
+       this.percent = nf.format(num / 2);
+     }else{
+       this.percent = "0%";
+     }
+    
+   }
 
 	public Assess() {
 		super();
@@ -163,6 +188,14 @@ public class Assess implements Serializable {
   public void setDefineArea(String defineArea) {
     this.defineArea = defineArea;
   }
+  
+  public Date getAssessEndTime() {
+    return assessEndTime;
+  }
+
+  public void setAssessEndTime(Date assessEndTime) {
+    this.assessEndTime = assessEndTime;
+  }
 
   public String getRegionName() {
     return regionName;
@@ -170,6 +203,38 @@ public class Assess implements Serializable {
 
   public void setRegionName(String regionName) {
     this.regionName = regionName;
+  }
+
+  public String getPercent() {
+    return percent;
+  }
+
+  public void setPercent(String percent) {
+    this.percent = percent;
+  }
+
+  public int getTiming() {
+    return timing;
+  }
+
+  public void setTiming(int timing) {
+    this.timing = timing;
+  }
+
+  public int getActiveNum() {
+    return activeNum;
+  }
+
+  public void setActiveNum(int activeNum) {
+    this.activeNum = activeNum;
+  }
+
+  public int getOrderNum() {
+    return orderNum;
+  }
+
+  public void setOrderNum(int orderNum) {
+    this.orderNum = orderNum;
   }
 
 }

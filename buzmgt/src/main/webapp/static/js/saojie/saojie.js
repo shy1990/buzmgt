@@ -5,14 +5,13 @@ $(function() {
 			type:"post",
 			url:"/saojie/gainSaojieMan",
 			//data:formValue,
-			dataType:"JSON",
 			success : function(obj){
 				if (obj) {
 					var saojieMan = $("#saojieMan");
 					saojieMan.empty();
 					saojieMan.append("<option value='' selected='selected'>待扫街人员</option>");
                     for(var i=0;i<obj.length;i++){
-                    	saojieMan.append("<option value = '"+obj[i].id+"'>"+obj[i].truename+"</option>");
+                    	saojieMan.append("<option value = '"+obj[i][0]+"'>"+obj[i][1]+"</option>");
 					}
 				}else {
 //					alert(obj.length);

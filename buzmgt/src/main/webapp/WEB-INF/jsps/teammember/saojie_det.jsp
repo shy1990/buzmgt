@@ -191,6 +191,7 @@
 			  <% String areaname=request.getAttribute("areaName").toString();
 			  %>
 			   map.centerAndZoom("<%=areaname%>", 13);
+			   map.enableScrollWheelZoom(true);  
 			   //  map.centerAndZoom("上海",11);   
 			  // 添加带有定位的导航控件
 			  var navigationControl = new BMap.NavigationControl({
@@ -227,7 +228,7 @@
 			  		String lat=pointStr.split(",")[1];
 			  		String titile=saojiedata.getName();
 			  		//String truename=store.getTruename();
-			  		String desc=saojiedata.getDiscription();
+			  		String desc=saojiedata.getDescription();
 			  	%>	
 			  			var opts = {
 			  					width : 250,     // 信息窗口宽度

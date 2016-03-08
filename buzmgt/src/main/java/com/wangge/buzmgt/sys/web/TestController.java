@@ -58,10 +58,6 @@ public class TestController {
 	public String kaoheList(String test,Model model){
 	  return "kaohe/kaohe_list";
 	}
-	@RequestMapping("/accountManage")
-	public String accountManage(String test,Model model){
-	  return "account/account_list";
-	}
 	/**
 	 * 团队成员添加
 	 * @param test
@@ -86,10 +82,10 @@ public class TestController {
 	public String teamMemberList(String test,Model model){
 		return "salesman/saleman_det";
 	}
-	@RequestMapping("/account_list")
-	public String accountList(String test,Model model){
-	  return "account/account_list";
-	}
+//	@RequestMapping("/account_list")
+//	public String accountList(String test,Model model){
+//	  return "account/account_list";
+//	}
 
 	
 	@RequestMapping("/menu")

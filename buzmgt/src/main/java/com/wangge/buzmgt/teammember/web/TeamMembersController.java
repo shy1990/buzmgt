@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
@@ -84,7 +83,7 @@ public class TeamMembersController {
     Manager manager = managerService.getById(user.getId());
     Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum,manager.getRegion().getName(),null);
     model.addAttribute("list", list);
-    model.addAttribute("Status", "扫街中");
+    model.addAttribute("Status", "全部");
     model.addAttribute("salesManList", salesManList);
     
      if(null!=manager.getRegion().getCoordinates()){
@@ -128,7 +127,7 @@ public class TeamMembersController {
   @RequestMapping(value = "/addTeamMember",method = RequestMethod.POST)
   public String addTeamMembers(SalesMan salesman,String username,String regionId,String organizationId,String roleId,String regionPid ,Model model){
     if(!userService.existUsername(username)){
-    Organization o = organizationService.getOrganById(Long.parseLong(organizationId));
+    Organization o = organizationService.getOrganById(Integer.parseInt(organizationId));
     User u = new User();
     u.setOrganization(o);
     u.addRole(roleService.getRoleById(roleId));
@@ -191,7 +190,7 @@ public class TeamMembersController {
    */
   @RequestMapping(value = "/getSalesManList",method=RequestMethod.GET)
   public  String  getSalesManList(Model model,SalesMan salesman, String Status,String page,String regionId,String regionName, HttpServletRequest requet){
-        String name = Status != null ? Status : "扫街中";
+        String name = Status != null ? Status : "全部";
         int pageNum = Integer.parseInt(page != null ? page : "0");
         if(SalesmanStatus.SAOJIE.getName().equals(name) ){
           salesman.setSalesmanStatus(SalesmanStatus.SAOJIE);

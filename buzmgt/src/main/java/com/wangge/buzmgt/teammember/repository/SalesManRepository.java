@@ -19,7 +19,7 @@ public interface SalesManRepository extends JpaRepository<SalesMan,String>{
 
   SalesMan findById(String id);
   
-  @Query("select s from SalesMan s where s.salesmanStatus=0")
-  List<SalesMan> gainSaojieMan();
+  @Query("select s.id,s.truename,s.mobile,s.regdate from SalesMan s where s.salesmanStatus=0")
+  List<Object> gainSaojieMan();
   
 }

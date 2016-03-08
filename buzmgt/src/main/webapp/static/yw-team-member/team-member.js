@@ -1,5 +1,6 @@
 
 function getPageList(num,regionId){
+	$("#status").val();
 	window.location.href="/teammember/getSalesManList?page="+num+"&regionId="+regionId
 }
 
@@ -51,7 +52,7 @@ $(function(){
 //		//$('.j_district').click();//反选
 //	});
 
-
+	
 
 	//getList(param)
 	var status = $("#status").val();
@@ -64,6 +65,7 @@ $(function(){
 
 var myDate = new Date();
 var tody = changeDateToString(myDate);
+
 $(function(){
     $(".form_datetime").datetimepicker({
         format: "yyyy年mm月",

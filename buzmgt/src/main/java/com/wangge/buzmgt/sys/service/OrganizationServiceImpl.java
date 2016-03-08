@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.repository.OrganizationRepository;
 import com.wangge.buzmgt.sys.vo.OrganizationVo;
@@ -22,18 +23,19 @@ import com.wangge.buzmgt.sys.vo.OrganizationVo;
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
 
-	@Resource
+  @Autowired
 	private OrganizationRepository organRepository;
-	
+  @Autowired
+  private RegionRepository regionRepository;
 	@Override
-	public List<OrganizationVo> getOrganListById(Long id) {
+	public List<OrganizationVo> getOrganListById(int id) {
 
         List<OrganizationVo> voList = new ArrayList<OrganizationVo>();
 		Organization organ = organRepository.findOrganizationById(id);
 		Set<Organization> childrren =  organ.getChildren();
 		for(Organization o : childrren){
 				OrganizationVo vo = new OrganizationVo();
-				vo.setId(o.getId());
+				vo.setId(o.getId()+"");
 				vo.setName(o.getName());
 				voList.add(vo);
 				if(o.getChildren() != null){
@@ -41,7 +43,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 					while(childr.size() > 0){
 						for(Organization or : childr){
 							OrganizationVo vor = new OrganizationVo();
-							vor.setId(or.getId());
+							vor.setId(or.getId()+"");
 							vor.setName(or.getName());
 							childr = or.getChildren();
 							voList.add(vor);
@@ -53,8 +55,24 @@ public class OrganizationServiceImpl implements OrganizationService {
 	}
 
 	@Override
-	public Organization getOrganById(long id) {
+	public Organization getOrganById(int id) {
 		
 		return  organRepository.findOrganizationById(id);
 	}
+
+  @Override
+  public void addOrganization(Organization organ) {
+    // TODO Auto-generated method stub
+    
+     organRepository.save(organ);
+  }
+
+  @Override
+  @Transactional 
+  public void deleteOrganization(Organization organ) {
+    organRepository.deleteOrganization(organ.getId());
+  }
+	
+	
+	
 }

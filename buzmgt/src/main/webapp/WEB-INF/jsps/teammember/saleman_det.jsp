@@ -199,7 +199,11 @@
 							</div>
 							<!--/ywmamber-body-->
 							<div class="stage">
-								<span class="">第一阶段:60%      </span>
+								<span class="stageone">第一阶段:60%      </span>
+								<!-- <span class="stagetwo">第一阶段:60%      </span>
+								<span class="stagethree">第一阶段:60%      </span>
+								<span class="stageover">已转正:60%      </span>
+								<span class="stagefailure">失败</span> -->
 							</div>
 							<div class="progress progress-sm">
 								<div style="width: 60%;" class="progress-bar bar-stage"></div>

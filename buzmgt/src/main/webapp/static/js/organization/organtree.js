@@ -1,4 +1,4 @@
-/*$(document).ready(
+$(document).ready(
 		function() {
 			$.ajax({
 				type : "post",
@@ -21,7 +21,7 @@
 				}
 			});
 		});
-*/
+
 
 		
 		/**
@@ -30,7 +30,7 @@
 		var setting = {
 			async : {
 				enable : true,
-				url : "/organ/getOrganById",
+				url : "organization/getOrganById",
 				autoParam : [ "id" ],
 		        dataFilter: filter
 			},

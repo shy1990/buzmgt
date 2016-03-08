@@ -62,7 +62,7 @@
 											</div>
 										</div>
 
-										<div class="form-group">
+										<div class="form-group"> 
 											<label class="col-sm-2 col-xs-12 control-label">顺序:</label>
 											<div class="col-sm-10" style="padding: 0;" id="pid">
 												<div class="col-sm-6 p-t" id="btType">
