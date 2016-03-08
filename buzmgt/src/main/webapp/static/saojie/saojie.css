@@ -1010,6 +1010,7 @@ dd.project-people {
 .project-status .status-ing{
 	padding: .3em 2em;
 	color: #fff;
+	float: none;
 	text-align: center;
 	white-space: nowrap;
 	vertical-align: baseline;

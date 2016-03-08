@@ -10,6 +10,7 @@
 <html>
 
 <head>
+<base href="<%=basePath%>" />
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -68,12 +69,10 @@
 							<label></label>
 							<p>
 							<div class="img-box">
-								<img class="visit-img"
-									src="static/img/saojie-img.png" alt="" />
+								<img class="visit-img" src="static/img/saojie-img.png" alt="" />
 							</div>
 							<div class="img-box">
-								<img class="visit-img" src="static/img/shop-img.png"
-									alt="" />
+								<img class="visit-img" src="static/img/shop-img.png" alt="" />
 							</div>
 							</p>
 						</div>
@@ -113,8 +112,8 @@
 					<div class="box-body">
 						<!--ywmamber-body-->
 						<div class="ywmamber-body">
-							<img width="80" src="static/img/user-head.png"
-								alt="..." class="img-circle">
+							<img width="80" src="static/img/user-head.png" alt="..."
+								class="img-circle">
 							<div class="msg-text">
 								<h4>易小星</h4>
 								<p>ID: A236743252</p>
