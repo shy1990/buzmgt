@@ -18,12 +18,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-@JsonInclude(Include.NON_EMPTY)
+//@JsonInclude(Include.NON_EMPTY)
 @Entity
-@SecondaryTable(name = "SYS_COORDINATES")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@Table(name = "BIZ_ORDER_SIGNFOR")
+@Table(name = "SYS_ORDER_SIGNFOR")
 public class OrderSignfor implements Serializable {
 
   /**
@@ -44,7 +42,7 @@ public class OrderSignfor implements Serializable {
   private String shopName;
   private String orderPrice;
   private String phoneCount;
-  private String crreateTime;
+  private String creatTime;
   private Date yewuSignforTime; 
   private Date customSignforTime;
   private Integer orderStatus;
@@ -106,10 +104,10 @@ public class OrderSignfor implements Serializable {
     this.phoneCount = phoneCount;
   }
   public String getCrreateTime() {
-    return crreateTime;
+    return creatTime;
   }
-  public void setCrreateTime(String crreateTime) {
-    this.crreateTime = crreateTime;
+  public void setCrreateTime(String creatTime) {
+    this.creatTime = creatTime;
   }
   public Date getYewuSignforTime() {
     return yewuSignforTime;
