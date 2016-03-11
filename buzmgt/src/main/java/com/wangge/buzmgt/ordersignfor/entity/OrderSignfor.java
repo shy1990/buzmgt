@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.ordersignfor.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -42,9 +43,9 @@ public class OrderSignfor implements Serializable {
   private String userId;
   private String userPhone;
   private String shopName;
-  private String orderPrice;
-  private String phoneCount;
-  private String crreateTime;
+  private Float orderPrice;
+  private Integer phoneCount;
+  private Date createTime;
   private Date yewuSignforTime; 
   private Date customSignforTime;
   private Integer orderStatus;
@@ -93,24 +94,31 @@ public class OrderSignfor implements Serializable {
   public void setShopName(String shopName) {
     this.shopName = shopName;
   }
-  public String getOrderPrice() {
+ 
+  public Float getOrderPrice() {
     return orderPrice;
   }
-  public void setOrderPrice(String orderPrice) {
+
+  public void setOrderPrice(Float orderPrice) {
     this.orderPrice = orderPrice;
   }
-  public String getPhoneCount() {
+
+  public Integer getPhoneCount() {
     return phoneCount;
   }
-  public void setPhoneCount(String phoneCount) {
+
+  public void setPhoneCount(Integer phoneCount) {
     this.phoneCount = phoneCount;
   }
-  public String getCrreateTime() {
-    return crreateTime;
+
+  public Date getCreateTime() {
+    return createTime;
   }
-  public void setCrreateTime(String crreateTime) {
-    this.crreateTime = crreateTime;
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
   }
+
   public Date getYewuSignforTime() {
     return yewuSignforTime;
   }
