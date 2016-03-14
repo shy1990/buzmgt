@@ -7,16 +7,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 //@JsonInclude(Include.NON_EMPTY)
 @Entity
@@ -40,9 +35,9 @@ public class OrderSignfor implements Serializable {
   private String userId;
   private String userPhone;
   private String shopName;
-  private String orderPrice;
-  private String phoneCount;
-  private String creatTime;
+  private Float orderPrice;
+  private Integer phoneCount;
+  private Date createTime;
   private Date yewuSignforTime; 
   private Date customSignforTime;
   private Integer orderStatus;
@@ -91,24 +86,31 @@ public class OrderSignfor implements Serializable {
   public void setShopName(String shopName) {
     this.shopName = shopName;
   }
-  public String getOrderPrice() {
+ 
+  public Float getOrderPrice() {
     return orderPrice;
   }
-  public void setOrderPrice(String orderPrice) {
+
+  public void setOrderPrice(Float orderPrice) {
     this.orderPrice = orderPrice;
   }
-  public String getPhoneCount() {
+
+  public Integer getPhoneCount() {
     return phoneCount;
   }
-  public void setPhoneCount(String phoneCount) {
+
+  public void setPhoneCount(Integer phoneCount) {
     this.phoneCount = phoneCount;
   }
-  public String getCrreateTime() {
-    return creatTime;
+
+  public Date getCreateTime() {
+    return createTime;
   }
-  public void setCrreateTime(String creatTime) {
-    this.creatTime = creatTime;
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
   }
+
   public Date getYewuSignforTime() {
     return yewuSignforTime;
   }
