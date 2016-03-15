@@ -2,16 +2,21 @@ package com.wangge.buzmgt.ordersignfor.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 //@JsonInclude(Include.NON_EMPTY)
 @Entity
@@ -33,11 +38,18 @@ public class OrderSignfor implements Serializable {
   private String fastmailNo;
   private String orderNo;
   private String userId;
+  @Transient
+  private String truename;
+  
+  @OneToMany
+  @JoinColumn(name = "user_id")
+  private List<SalesMan> salesMan;
+  
   private String userPhone;
   private String shopName;
   private Float orderPrice;
   private Integer phoneCount;
-  private Date createTime;
+  private Date creatTime;
   private Date yewuSignforTime; 
   private Date customSignforTime;
   private Integer orderStatus;
@@ -104,11 +116,11 @@ public class OrderSignfor implements Serializable {
   }
 
   public Date getCreateTime() {
-    return createTime;
+    return creatTime;
   }
 
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
+  public void setCreateTime(Date creatTime) {
+    this.creatTime = creatTime;
   }
 
   public Date getYewuSignforTime() {
@@ -152,6 +164,14 @@ public class OrderSignfor implements Serializable {
   }
   public void setCustomSignforException(Integer customSignforException) {
     this.customSignforException = customSignforException;
+  }
+
+  public String getTruename() {
+    return truename;
+  }
+
+  public void setTruename(String truename) {
+    this.truename = truename;
   }
   
   
