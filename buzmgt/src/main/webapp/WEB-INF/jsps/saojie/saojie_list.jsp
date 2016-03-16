@@ -339,7 +339,7 @@
 							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
 			 				map.addOverlay(polygon);
 							<%String jlng = listCoordinates[1].split("-")[0];
-				String jlat = listCoordinates[1].split("-")[1];%>
+							  String jlat = listCoordinates[1].split("-")[1];%>
 							 var point = new BMap.Point(<%=jlng%>,<%=jlat%>);
 							 map.centerAndZoom(point, 8);    
 			 				//map.centerAndZoom(name, 8);

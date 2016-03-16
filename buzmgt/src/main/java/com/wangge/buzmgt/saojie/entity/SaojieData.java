@@ -20,6 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.assess.entity.RegistData;
@@ -51,15 +52,16 @@ public class SaojieData implements Serializable {
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 	private String name;
-	@Column(name = "DISCRIPTION")
+	@Column(name = "DESCRIPTION")
 	private String description = "";
 	private String imageUrl;
 	private String coordinate;
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "REGISTDATA_ID")
 	private RegistData registData;
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@Column(name = "SAOJIE_DATE")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+//	@DateTimeFormat(pattern = "yyyy-MM-dd")
   @Temporal(TemporalType.TIMESTAMP)
 	private Date saojieDate;
 	@Transient
@@ -173,6 +175,14 @@ public class SaojieData implements Serializable {
 
   public void setDateInterval(int dateInterval) {
     this.dateInterval = dateInterval;
+  }
+
+  public Date getSaojieDate() {
+    return saojieDate;
+  }
+
+  public void setSaojieDate(Date saojieDate) {
+    this.saojieDate = saojieDate;
   }
   
 }

@@ -103,7 +103,7 @@
 				<div class="ywmamber-msg box border pink">
 					<!--title-->
 					<div class="box-title">
-						<i class="icon icon-time"></i>${salesMan.salesmanStatus.name }
+						<i class="icon icon-time"></i>${salesMan.status.name }
 					</div>
 					<div class="box-body">
 						<!--ywmamber-body-->
@@ -118,7 +118,7 @@
 						</div>
 						<!--/ywmamber-body-->
 						<div class="stage">
-							<span class="stage">${salesMan.salesmanStatus.name}:<span
+							<span class="stage">${salesMan.status.name}:<span
 								class="percent">60%</span></span>
 						</div>
 						<div class="progress progress-sm">
@@ -248,8 +248,9 @@
 			  	if(saojieDataVo.getList().size()>0){
 			  	  	for(SaojieData saojiedata:saojieDataVo.getList()){
 			  		String pointStr=saojiedata.getCoordinate();
-			  		String lag=pointStr.split(",")[0];
-			  		String lat=pointStr.split(",")[1];
+			  		System.out.println(pointStr);
+			  		String lag=pointStr.split("-")[0];
+			  		String lat=pointStr.split("-")[1];
 			  		String titile=saojiedata.getName();
 			  		//String truename=store.getTruename();
 			  		String desc=saojiedata.getDescription();

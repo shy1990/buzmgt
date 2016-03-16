@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
@@ -24,20 +22,17 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
-import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.service.SaojieService;
-import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.repository.OrganizationRepository;
 import com.wangge.buzmgt.sys.repository.UserRepository;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.UserService;
-import com.wangge.buzmgt.sys.vo.OrganizationVo;
 import com.wangge.buzmgt.sys.vo.SaojieDataVo;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
-import com.wangge.buzmgt.teammember.entity.SalesMan.SalesmanStatus;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.RegionUtil;
@@ -194,7 +189,7 @@ public class BuzmgtApplicationTests {
 	}
 	@Test
 	public void test2(){
-	  System.out.println("============="+SalesmanStatus.SAOJIE);
+	  System.out.println("============="+SalesmanStatus.saojie);
 	}
 	@Test
 	public void testRegion(){

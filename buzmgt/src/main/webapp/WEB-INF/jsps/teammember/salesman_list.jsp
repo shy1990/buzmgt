@@ -131,7 +131,7 @@
 																		class="shop-num-d">10家</strong></span></td>
 																<td class="project-completion"><span
 																	class="completion-ing">当前进度： 88%</span> <span
-																	class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
+																	class="status-ing saojie-status-on">${salesman.status.name}</span>
 																	<div class="progress progress-mini">
 																		<div style="width: 88%;"
 																			class="progress-bar saojie-bar-on"></div>

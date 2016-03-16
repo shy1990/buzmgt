@@ -24,6 +24,7 @@ import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 
@@ -223,6 +224,9 @@ public class SaojieController {
     saojie.setStatus(SaojieStatus.AGREE);
     saojie.setDescription(description);
     saojieService.saveSaojie(saojie);
+    SalesMan sm=saojie.getSalesman();
+    sm.setStatus(SalesmanStatus.kaifa);
+    salesManService.addSalesman(sm);
     return "ok";
   }
 	

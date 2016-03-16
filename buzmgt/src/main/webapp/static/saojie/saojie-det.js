@@ -37,10 +37,10 @@ function getSaojieDataList(){
 			   saojiedata.empty();  
 			   for(var i = 0;i<result.list.length;i++){
 				   saojiedata.append("<div  class='list-tr'>"+
-							"<img class='shop-img' src='"+result.list[i].imageUrl+"' />"+
+							"<img class='shop-img' style='height:80%;'  src='"+result.list[i].imageUrl+"' />"+
 							"<div style='display: inline-block;' class='list-conter'>"+
 								"<h4>"+result.list[i].name+"</h4>"+
-								"<p>"+result.list[i].discription+"</p>"+
+								"<p>"+result.list[i].description+"</p>"+
 								"<span class='pull-right'>"+result.list[i].saojieDate+"</span>"+
 							"</div>"+
 						"</div>     ");

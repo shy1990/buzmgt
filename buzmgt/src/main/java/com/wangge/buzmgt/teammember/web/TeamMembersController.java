@@ -32,7 +32,7 @@ import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.SaojieDataVo;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
-import com.wangge.buzmgt.teammember.entity.SalesMan.SalesmanStatus;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 
@@ -147,7 +147,7 @@ public class TeamMembersController {
     
       u = userService.addUser(u);
       salesman.setRegion(regionService.getRegionById(regionId.trim()));
-      salesman.setSalesmanStatus(SalesmanStatus.SAOJIE);
+      salesman.setStatus(com.wangge.buzmgt.teammember.entity.SalesmanStatus.saojie);
       salesman.setRegdate(new Date());
       salesman.setUser(u);
       salesManService.addSalesman(salesman);
@@ -192,16 +192,16 @@ public class TeamMembersController {
   public  String  getSalesManList(Model model,SalesMan salesman, String Status,String page,String regionId,String regionName, HttpServletRequest requet){
         String name = Status != null ? Status : "全部";
         int pageNum = Integer.parseInt(page != null ? page : "0");
-        if(SalesmanStatus.SAOJIE.getName().equals(name) ){
-          salesman.setSalesmanStatus(SalesmanStatus.SAOJIE);
-        }else if(SalesmanStatus.KAIFA.getName().equals(name)){
-          salesman.setSalesmanStatus(SalesmanStatus.KAIFA);
-        }else if(SalesmanStatus.WEIHU.getName().equals(name)){
-          salesman.setSalesmanStatus(SalesmanStatus.WEIHU);
-        }else if(SalesmanStatus.ZHUANZHENG.getName().equals(name)){
-          salesman.setSalesmanStatus(SalesmanStatus.ZHUANZHENG);
-        }else if(SalesmanStatus.SHENHE.getName().equals(name)){
-          salesman.setSalesmanStatus(SalesmanStatus.SHENHE);
+        if(SalesmanStatus.saojie.getName().equals(name) ){
+          salesman.setStatus(SalesmanStatus.saojie); 
+        }else if(SalesmanStatus.kaifa.getName().equals(name)){
+          salesman.setStatus(SalesmanStatus.kaifa); 
+        }else if(SalesmanStatus.weihu.getName().equals(name)){
+          salesman.setStatus(SalesmanStatus.weihu); 
+        }else if(SalesmanStatus.zhuanzheng.getName().equals(name)){
+          salesman.setStatus(SalesmanStatus.zhuanzheng);
+        }else if(SalesmanStatus.shenhe.getName().equals(name)){
+          salesman.setStatus(SalesmanStatus.shenhe);
         }
         Region region=new Region();
         if(null!=regionId){
