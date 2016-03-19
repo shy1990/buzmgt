@@ -178,9 +178,12 @@ public class OrganizationController {
      List<OrganizationVo> listTreeVo =new ArrayList<OrganizationVo>();
      
      User user =userService.getById(id);
-     for(User  u: userService.getUserByOrgan(user.getOrganization().getId()+1)){
-       listTreeVo.add(getTeamOrganizationVo(u,user));
+     for(Organization o: organService.getOrganById(user.getOrganization().getId()).getChildren()){
+       for(User  u: userService.getUserByOrgan(o.getId())){
+         listTreeVo.add(getTeamOrganizationVo(u,user));
+       }
      }
+    
      
     return new ResponseEntity<List<OrganizationVo>>(listTreeVo,HttpStatus.OK);
   }

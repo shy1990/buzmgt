@@ -137,7 +137,8 @@
 																		class="time-down"> 倒计时：${saojie.timing }天</span>
 																</div>
 																<div class="progress progress-mini">
-																	<div style="width: ${saojie.percent};"
+																	<div style="width: <c:if test="${saojie.percent>='100%'}">100%;</c:if>
+																	<c:if test="${saojie.percent<'100%'}">${saojie.percent};</c:if>
 																		class="progress-bar"></div>
 																</div> <!-- 100%的用这个 --> <!-- <div>
 																		<span class="completion-ing">当前进度： 100%</span> <span

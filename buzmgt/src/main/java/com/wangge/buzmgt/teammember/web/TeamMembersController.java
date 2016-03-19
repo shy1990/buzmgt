@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.assess.entity.Assess;
+import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.service.SaojieService;
@@ -62,6 +64,8 @@ public class TeamMembersController {
   private UserService userService;
   @Resource
   private SaojieService saojieService;
+  @Resource
+  private AssessService assessService;
   /**
    * 
   * @Title: toTeamMembers 
@@ -163,6 +167,7 @@ public class TeamMembersController {
       m.setRegdate(new Date());
       m.setRegion(regionService.getRegionById(regionId.trim()));
       m.setUser(u);
+      
       managerService.addManager(m);
     //  return Redirect("/User/Edit");"salesman/salesman_list";
       
@@ -247,6 +252,16 @@ public class TeamMembersController {
        SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(userId, "");
        model.addAttribute("saojiedatalist", saojiedatalist);
        model.addAttribute("areaName", salesMan.getRegion().getName());
+       //判断业务员所处的模式
+       List<Assess> listAssess=assessService.findBysalesman(salesMan);
+       
+       if(salesMan.getStatus().equals(SalesmanStatus.kaifa)&&listAssess.size()==0){
+         model.addAttribute("salesStatus", "kaifa");
+       }
+       
+       
+       
+       
        if("saojie".equals(flag)){
          return "saojie/saojie_det";
        }else{
@@ -278,6 +293,7 @@ public class TeamMembersController {
     String time = formatter.format(new Date());
     String userId = "";
     List<User> uList = salesManService.findByReginId(id);
+    List<Manager> umList=managerService.findByReginId(id);
     if("服务站经理".equals(o.getName())){
       
       if(uList.size() > 0){
@@ -292,9 +308,9 @@ public class TeamMembersController {
         }
       }
     }else{
-      if(uList.size() > 0){
-          for(int j=0;j<uList.size();j++){
-            userId += num[uList.size()]+id+time+"0";
+      if(umList.size() > 0){
+          for(int j=0;j<umList.size();j++){
+            userId += num[umList.size()]+id+time+"0";
             break;
           }
       }else{

@@ -71,7 +71,9 @@
 <!-- 									<img src="static/img/saojie-map.png" /> -->
 								</div>
 							</div>
-							<button class="btn btn-approve col-sm-2 col-sm-offset-5" onclick="audit('${salesMan.id}','${salesMan.region.name}')">审核通过</button>
+							<c:if test="${salesStatus=='kaifa'}">
+								<button class="btn btn-approve col-sm-2 col-sm-offset-5" onclick="audit('${salesMan.id}','${salesMan.region.name}')">审核通过</button>
+							</c:if>
 						</div>
 						<!--/地图-->
 						<!--列表-->

@@ -224,9 +224,20 @@ public class SaojieController {
     saojie.setStatus(SaojieStatus.AGREE);
     saojie.setDescription(description);
     saojieService.saveSaojie(saojie);
+    //更改业务工作模式
     SalesMan sm=saojie.getSalesman();
-    sm.setStatus(SalesmanStatus.kaifa);
-    salesManService.addSalesman(sm);
+    List<Saojie> listSaojie= saojieService.findBysalesman(sm);
+    boolean flag =true;
+    for(Saojie s: listSaojie){
+      if(s.getStatus().equals(SalesmanStatus.saojie)) {
+          flag =false;
+          break;
+      }
+    }
+    if(flag){
+      sm.setStatus(SalesmanStatus.kaifa);
+      salesManService.addSalesman(sm);
+    }
     return "ok";
   }
 	

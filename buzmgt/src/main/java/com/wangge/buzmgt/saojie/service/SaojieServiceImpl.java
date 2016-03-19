@@ -101,6 +101,7 @@ public class SaojieServiceImpl implements SaojieService {
     if(saojie.getStatus() != null){
       hql += " and t.saojie_status='"+saojie.getStatus().ordinal()+"'";
     }
+    
     hql +=" order by t.begin_time desc ";
     Query q = em.createNativeQuery(hql,Saojie.class);  
     int count=q.getResultList().size();
