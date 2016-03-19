@@ -269,6 +269,7 @@ public class DateUtil {
 		return date2String(d, "yyyy-MM-dd 23:59:59");
 	}
 	
+	
 	/**
 	 * 
 	 * 名称:  dateMinDiff

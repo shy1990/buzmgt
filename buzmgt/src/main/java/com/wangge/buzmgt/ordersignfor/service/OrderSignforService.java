@@ -42,4 +42,6 @@ public interface OrderSignforService {
       String status,String startTime,String endTime,Pageable pageRequest);
 
   public Page<OrderSignfor> getOrderSingforList(Map<String, Object> searchParams, Pageable pageRequest);
+
+  public List<OrderSignfor> findAll(Map<String, Object> searchParams);
 }

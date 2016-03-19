@@ -2,20 +2,22 @@ package com.wangge.buzmgt.ordersignfor.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 //@JsonInclude(Include.NON_EMPTY)
@@ -37,13 +39,14 @@ public class OrderSignfor implements Serializable {
   
   private String fastmailNo;
   private String orderNo;
-  private String userId;
   @Transient
-  private String truename;
+  private Long aging;//时效
+//  private String userId;
+//  private String truename;
   
-  @OneToMany
+  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
   @JoinColumn(name = "user_id")
-  private List<SalesMan> salesMan;
+  private SalesMan salesMan;
   
   private String userPhone;
   private String shopName;
@@ -58,6 +61,31 @@ public class OrderSignfor implements Serializable {
   private String customSignforGeopoint;
   private Integer customSignforException;
   
+  
+  public Long getAging() {
+    return aging;
+  }
+
+  public void setAging(Long aging) {
+    this.aging = aging;
+  }
+
+  public Date getCreatTime() {
+    return creatTime;
+  }
+
+  public void setCreatTime(Date creatTime) {
+    this.creatTime = creatTime;
+  }
+
+  public SalesMan getSalesMan() {
+    return salesMan;
+  }
+
+  public void setSalesMan(SalesMan salesMan) {
+    this.salesMan = salesMan;
+  }
+
   public OrderSignfor (){
     super();
   }
@@ -80,12 +108,12 @@ public class OrderSignfor implements Serializable {
   public void setOrderNo(String orderNo) {
     this.orderNo = orderNo;
   }
-  public String getUserId() {
-    return userId;
-  }
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
+//  public String getUserId() {
+//    return userId;
+//  }
+//  public void setUserId(String userId) {
+//    this.userId = userId;
+//  }
   public String getUserPhone() {
     return userPhone;
   }
@@ -166,13 +194,6 @@ public class OrderSignfor implements Serializable {
     this.customSignforException = customSignforException;
   }
 
-  public String getTruename() {
-    return truename;
-  }
-
-  public void setTruename(String truename) {
-    this.truename = truename;
-  }
   
   
 

@@ -35,12 +35,17 @@
 		<td>
 			<img width="50" height="50"src="static/img/abnormal/user-head.png" class="img-circle" />
 			<div class="business-name">
-				<span class="text-strong">{{userId}}</span>(区域经理) <br /> {{shopName}}
+				{{#with salesMan}}<span class="text-strong">{{truename}} </span>
+				{{#with user}}
+					{{#with organization}}({{name}})
+					{{/with}}
+				{{/with}} 
+				{{/with}}<br /> {{shopName}}
 			</div>
 		</td>
 		<td>{{orderNo}}</td>
 		<td>山东省滨州市邹平县大桥镇223号</td>
-		<td><span class="icon-tag-yc">异常</span>{{yewuSignforTime}}</td>
+		<td><span class="icon-tag-yc">异常</span>{{formDate yewuSignforTime}}</td>
 		<td><a class="btn btn-blue btn-sm" href="javascrip:void({{id}});">查看</a></td>				
 	</tr>
 	{{/each}}
@@ -51,22 +56,26 @@
 		<td>
 			<img width="50" height="50"src="static/img/abnormal/user-head.png" class="img-circle" />
 			<div class="business-name">
-				<span class="text-strong">{{userId}}</span>(区域经理) <br /> {{shopName}}
+				{{#with salesMan}}<span class="text-strong">{{truename}} </span>
+				{{#with user}}
+					{{#with organization}}({{name}})
+					{{/with}}
+				{{/with}} 
+				{{/with}}<br /> {{shopName}}
 			</div>
 		</td>
 		<td>{{orderNo}}</td>
 		<td><span class="icon-tag-yc">异常</span> 山东省滨州市邹平县大桥镇223号</td>
-		<td>{{yewuSignforTime}}</td>
-		<td>6小时20分钟</td>
+		<td>{{formDate yewuSignforTime}}</td>
+		<td>{{checkAging aging}}</td>
 		<td><a class="btn btn-blue btn-sm" href="javascrip:void({{id}});">查看</a></td>				
 	</tr>
 	{{/each}}
 </script>
 <script type="text/javascript">
 var SearchData = {
-		"size" : "20",
+		"size" : "1",
 		"page" : "0",
-		
 	}
 </script>
 </head>
@@ -90,9 +99,9 @@ var SearchData = {
 					<div class="box-title">
 						<!--菜单栏-->
 						<ul class="nav nav-tabs">
-							<li class="active"><a href="#box_tab1" data-toggle="tab"><span
+							<li class="active" data-tital="ywtab"><a href="#box_tab1" data-toggle="tab"><span
 									class="">业务揽收异常</span></a></li>
-							<li><a href="#box_tab2" data-toggle="tab"><span class="">客户签收异常</span></a></li>
+							<li data-tital="membertab"><a href="#box_tab2" data-toggle="tab"><span class="">客户签收异常</span></a></li>
 						</ul>
 						<!--/菜单栏-->
 					</div>
@@ -102,19 +111,19 @@ var SearchData = {
 						<div class="marg-t text-time">
 							<span class="text-strong chang-time">请选择时间：</span>
 							<div class="search-date">
-								<div class="input-group input-group-sm">
+								<div class="input-group input-group-sm form_date_start">
 									<span class="input-group-addon " id="basic-addon1"><i
 										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-										type="text" id="startTime" class="form-control form_datetime input-sm"
+										type="text" id="startTime" class="form-control input-sm "
 										placeholder="开始日期" readonly="readonly">
 								</div>
 							</div>
 							--
 							<div class="search-date">
-								<div class="input-group input-group-sm">
+								<div class="input-group input-group-sm form_date_end">
 									<span class="input-group-addon " id="basic-addon1"><i
 										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-										type="text" id="endTime" class="form-control form_datetime input-sm"
+										type="text" id="endTime" class="form-control form_date_end input-sm"
 										placeholder="结束日期" readonly="readonly">
 								</div>
 							</div>
@@ -153,6 +162,9 @@ var SearchData = {
 									</table>
 								</div>
 								<!--table-box-->
+								<!-- 分页 -->
+								<div id="ywPager"></div>
+								<!-- 分页 -->
 							</div>
 							<!--业务揽收异常-->
 
@@ -175,6 +187,9 @@ var SearchData = {
 									</table>
 								</div>
 								<!--table-box-->
+								<!-- 分页 -->
+								<div id="memberPager"></div>
+								<!-- 分页 -->
 							</div>
 							<!--客户签收异常-->
 						</div>
@@ -199,23 +214,13 @@ var SearchData = {
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 		<script src="static/js/common.js" type="text/javascript"
 			charset="utf-8"></script>
+		<script src="/static/js/dateutil.js" type="text/javascript"
+			charset="utf-8"></script>
 		<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"></script>
 		<script type="text/javascript" src="static/abnormal/abnormal_list.js"></script>
 		<script type="text/javascript" src="static/bootStrapPager/js/extendPagination.js"></script>
 		<script type="text/javascript">
-			$('body input').val('');
-			$(".form_datetime").datetimepicker({
-				format : "yyyy-mm-dd",
-				language : 'zh-CN',
-				weekStart : 1,
-				todayBtn : 1,
-				autoclose : 1,
-				todayHighlight : 1,
-				startView : 2,
-				minView : 2,
-				pickerPosition : "bottom-right",
-				forceParse : 0
-			});
+			
 		</script>
 		
 </body>
