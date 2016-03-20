@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,12 +24,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.ExcelExport;
 
 @Controller
 @RequestMapping(value="/ordersignfor")
@@ -41,53 +44,7 @@ public class OrderSignforController {
   private RegionService regionService;
   
   private static final String SEARCH_OPERTOR = "sc_";
-  
-//  @SuppressWarnings("deprecation")
-//  @RequestMapping(value="/list",method=RequestMethod.GET)
-//  @ResponseBody
-//  public  ResponseEntity<Page<OrderSignfor>> OrderSignforList(HttpServletRequest request,
-//      @PageableDefault(page = 0,size=10,sort={"creatTime"},direction=Direction.DESC) Pageable pageRequest ){
-//    String type=request.getParameter("type");
-//    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-//    OrderSignfor osf=new OrderSignfor();
-//    Page<OrderSignfor> orderSignforslist=null;
-//    if("ywOrderSignfor".equals(type)){
-//      List<OrderSignfor> list=os.findAll(searchParams);
-//      
-//      List<OrderSignfor> ywlist=new ArrayList<OrderSignfor>();
-//      //TODO  某一个时间点（如9:00）拓展后期后台设置;
-//      String timesGap = "9:00";
-//      String[] times=timesGap.split(":");
-//      int total=0;
-//      for(OrderSignfor order : list){
-//        Date ctrateTime = order.getCreateTime();
-//        Date checkDate=DateUtil.moveDate(ctrateTime, 1);
-//        checkDate.setHours(Integer.parseInt(times[0]));
-//        checkDate.setMinutes(Integer.parseInt(times[1]));
-//        System.out.println(DateUtil.date2String(checkDate));
-//        Date yewuSignforTime = order.getYewuSignforTime();
-//        
-//        if(yewuSignforTime.getTime()-checkDate.getTime()>0){
-//          ywlist.add(order);
-//          total++;
-//        }
-//      }
-//      orderSignforslist = new PageImpl<OrderSignfor>(ywlist,pageRequest,total);
-//      
-//      
-//    }else{
-//      String status="1";
-////      if((!"".equals(startTime)||startTime!=null)&&(!"".equals(endTime)||endTime!=null)){
-////        orderSignforslist =os.findByCustomSignforExceptionAndCreatTimeBetween(status, startTime, endTime, pageRequest);
-////      }else{
-////        orderSignforslist =os.findByCustomSignforException(status,pageRequest);
-////      }
-//      orderSignforslist=os.getOrderSingforList(searchParams, pageRequest);
-//    }
-//    
-//    return new ResponseEntity<Page<OrderSignfor>>(orderSignforslist,HttpStatus.OK) ;
-//  }
-//  
+ 
   @SuppressWarnings("deprecation")
   @RequestMapping(value="/list",method=RequestMethod.GET)
   @ResponseBody
@@ -95,7 +52,6 @@ public class OrderSignforController {
       @PageableDefault(page = 0,size=10,sort={"creatTime"},direction=Direction.DESC) Pageable pageRequest ){
     String type=request.getParameter("type");
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-    OrderSignfor osf=new OrderSignfor();
     Page<OrderSignfor> orderSignforslist=null;
     if("ywOrderSignfor".equals(type)){
       List<OrderSignfor> list=os.findAll(searchParams);
@@ -167,6 +123,52 @@ public class OrderSignforController {
     model.addAttribute("totalCount",orderTotal);
 //    model.addAttribute("memberCount",memberSignforCount);
     return "abnormal/abnormal_list";
+  }
+  
+  /**
+   * 导出交易记录
+   * 
+   * @param request
+   * @param response
+   */
+  @SuppressWarnings("deprecation")
+  @RequestMapping("/export")
+  public void excelExport(HttpServletRequest request, HttpServletResponse response) {
+    String[] gridTitles = { "店铺名称","商品描述", "钱包交易号","订单号","管易单据号", "金额(元)", "时间", "状态" };
+    String[] coloumsKey = { "shopName","description", "id","orderNum","ecerpNo", "amount","createTimeStr", "statusStr" };
+
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    Page<OrderSignfor> orderSignforslist=null;
+    String type=request.getParameter("type");
+    List<OrderSignfor> ywlist=null;
+    if("ywOrderSignfor".equals(type)){
+      List<OrderSignfor> list=os.findAll(searchParams);
+      
+      ywlist=new ArrayList<OrderSignfor>();
+      //TODO  某一个时间点（如9:00）拓展后期后台设置;
+      String timesGap = "9:00";
+      String[] times=timesGap.split(":");
+      int total=0;
+      for(OrderSignfor order : list){
+        Date ctrateTime = order.getCreateTime();
+        Date checkDate=DateUtil.moveDate(ctrateTime, 1);
+        checkDate.setHours(Integer.parseInt(times[0]));
+        checkDate.setMinutes(Integer.parseInt(times[1]));
+        Date yewuSignforTime = order.getYewuSignforTime();
+        
+        if(yewuSignforTime.getTime()-checkDate.getTime()>0){
+          //分页
+            ywlist.add(order);
+          total++;
+        }
+      }
+      ExcelExport.doExcelExport("钱包交易记录.xls", ywlist, gridTitles, coloumsKey, request, response);
+      
+    }else{
+      ywlist=os.findAll(searchParams);
+      ExcelExport.doExcelExport("钱包交易记录.xls", ywlist, gridTitles, coloumsKey, request, response);
+    }
+
   }
   
 }
