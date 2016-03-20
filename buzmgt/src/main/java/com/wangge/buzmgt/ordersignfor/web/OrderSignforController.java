@@ -71,7 +71,7 @@ public class OrderSignforController {
         checkDate.setMinutes(Integer.parseInt(times[1]));
         Date yewuSignforTime = order.getYewuSignforTime();
         
-        if(yewuSignforTime.getTime()-checkDate.getTime()>0){
+        if(yewuSignforTime != null &&yewuSignforTime.getTime()-checkDate.getTime()>0){
           //分页
           if(number*size <= total && total < (number+1)*size){
             ywlist.add(order);
