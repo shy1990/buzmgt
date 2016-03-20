@@ -645,12 +645,12 @@ a:focus .kucun{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_rw2.png) no-repeat;
 }
 /* 签收记录 */
-.qianshoujilu{
+.qianshouyichang{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_qsjl1.png) no-repeat;
 }
-.menu-second .active .qianshoujilu,
-.menu-second a:hover .qianshoujilu,
-.menu-second a:focus .qianshoujilu{
+.menu-second .active .qianshouyichang,
+.menu-second a:hover .qianshouyichang,
+.menu-second a:focus .qianshouyichang{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_qsjl2.png) no-repeat;
 }
 /* 调价申请 */

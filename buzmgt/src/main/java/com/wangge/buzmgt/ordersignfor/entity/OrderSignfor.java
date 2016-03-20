@@ -1,30 +1,27 @@
 package com.wangge.buzmgt.ordersignfor.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.SecondaryTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
-@JsonInclude(Include.NON_EMPTY)
+//@JsonInclude(Include.NON_EMPTY)
 @Entity
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "SYS_ORDER_SIGNFOR")
 public class OrderSignfor implements Serializable {
 
@@ -40,29 +37,56 @@ public class OrderSignfor implements Serializable {
   private int id;
   private String fastmailNo;
   private String orderNo;
-  private String userId;
+  @Transient
+  private Long aging;//时效
+//  private String userId;
+//  private String truename;
+  
+  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+  @JoinColumn(name = "user_id")
+  private SalesMan salesMan;
+  
   private String userPhone;
   private String shopName;
   private Float orderPrice;
   private Integer phoneCount;
-  @JsonFormat(pattern = "MM.dd HH:mm")
   private Date creatTime;
-  @JsonFormat(pattern = "MM.dd HH:mm")
   private Date yewuSignforTime; 
-  @JsonFormat(pattern = "MM.dd HH:mm")
   private Date customSignforTime;
   private Integer orderStatus;
   private Integer orderPayType;
   private String yewuSignforGeopoint;
   private String customSignforGeopoint;
   private Integer customSignforException;
-  @JsonInclude(Include.NON_DEFAULT)
   private int partsCount;
-  @JsonFormat(pattern = "yyyy-MM-dd")
   private Date fastmailTime;
-  
   private String customUnSignRemark;
   
+  
+  public Long getAging() {
+    return aging;
+  }
+
+  public void setAging(Long aging) {
+    this.aging = aging;
+  }
+
+  public Date getCreatTime() {
+    return creatTime;
+  }
+
+  public void setCreatTime(Date creatTime) {
+    this.creatTime = creatTime;
+  }
+
+  public SalesMan getSalesMan() {
+    return salesMan;
+  }
+
+  public void setSalesMan(SalesMan salesMan) {
+    this.salesMan = salesMan;
+  }
+
   public OrderSignfor (){
     super();
   }
@@ -85,12 +109,12 @@ public class OrderSignfor implements Serializable {
   public void setOrderNo(String orderNo) {
     this.orderNo = orderNo;
   }
-  public String getUserId() {
-    return userId;
-  }
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
+//  public String getUserId() {
+//    return userId;
+//  }
+//  public void setUserId(String userId) {
+//    this.userId = userId;
+//  }
   public String getUserPhone() {
     return userPhone;
   }
@@ -118,14 +142,6 @@ public class OrderSignfor implements Serializable {
 
   public void setPhoneCount(Integer phoneCount) {
     this.phoneCount = phoneCount;
-  }
-
-  public Date getCreatTime() {
-    return creatTime;
-  }
-
-  public void setCreatTime(Date creatTime) {
-    this.creatTime = creatTime;
   }
 
   public Date getYewuSignforTime() {

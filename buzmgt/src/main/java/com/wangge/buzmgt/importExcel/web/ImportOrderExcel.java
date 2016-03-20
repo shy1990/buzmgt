@@ -58,13 +58,12 @@ public class ImportOrderExcel {
   
   @RequestMapping(value = "/toImportLogisticsNo")
   public String toImportLogisticsNo(){
-    return "excel/test";
+    return "excel/toImport";
   }
   
   
   @RequestMapping(value = "/images/upload", method = RequestMethod.POST)
-  @ResponseBody
-  public ResponseEntity<Json> upload(@RequestParam("file") MultipartFile file,
+  public String upload(@RequestParam("file") MultipartFile file,
       HttpServletRequest request) {
     Json json = new Json();
     SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd/HH/");
@@ -77,23 +76,25 @@ public class ImportOrderExcel {
       if (ExcelUtil.validateExcel(pathdir+filename)){  
         String urlPath = FileUtil.saveFile(pathdir, filename, file,dateformat);
         if (urlPath != null && !"".equals(urlPath)) {
-          json.setMsg("上传成功！");
+          json.setMsg("导入成功！");
           saveExcelData(pathdir+filename);
           FileUtil.deleteFile(pathdir+filename);
         } else {
-          json.setMsg("上传失败！");
+          json.setMsg("导入失败！");
          // return new ResponseEntity<Json>(json, HttpStatus.UNAUTHORIZED);
         }
       }  else{
         json.setMsg("格式不正确！");
       }
-      return new ResponseEntity<Json>(json, HttpStatus.OK);
+      request.setAttribute("message", json);
+      return "excel/result";
      
     } catch (Exception e) {
       logger.error("login() occur error. ", e);
       e.printStackTrace();
-      json.setMsg("图片上传异常！");
-      return new ResponseEntity<Json>(json, HttpStatus.UNAUTHORIZED);
+      json.setMsg("excel导入异常！");
+      request.setAttribute("message", json);
+      return "excel/result";
     }
 
   }
@@ -108,21 +109,12 @@ public class ImportOrderExcel {
               e.printStackTrace();
           }*/
            for (OrderSignfor os : list) {
-            // xlsOrder = (OrderSignfor) list.get(i);
-              //  boolean flag =  orderSignforService.exsixtOrderSignforByOrderno(xlsOrder);
                 OrderSignfor orderSf = orderSignforService.findByOrderNo(os.getOrderNo());
                 if(orderSf != null){
-                  orderSf.setFastmailNo(xlsOrder.getFastmailNo());
-                  orderSf.setFastmailTime(xlsOrder.getFastmailTime());
+                  orderSf.setFastmailNo(os.getFastmailNo());
+                  orderSf.setFastmailTime(os.getFastmailTime());
                   orderSignforService.updateOrderSignfor(orderSf);
                 }
-                /* if(flag){
-                   orderSignforService.updateOrderSignfor(xlsOrder);
-                  System.out.println(">>>>>>>>>>>>>>>>>>>>>>>"+xlsOrder.getOrderNo()+"++++++++"+flag);
-               }else{
-                 System.out.println("========================"+xlsOrder.getOrderNo()+"++++++++"+flag);
-               }
-              */
           }
       }
     
