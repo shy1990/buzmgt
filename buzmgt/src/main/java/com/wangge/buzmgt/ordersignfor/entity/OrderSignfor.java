@@ -17,7 +17,6 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 //@JsonInclude(Include.NON_EMPTY)
@@ -35,8 +34,7 @@ public class OrderSignfor implements Serializable {
   @Column(name = "SIGNID")
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
-  private Long id;
-  
+  private int id;
   private String fastmailNo;
   private String orderNo;
   @Transient
@@ -60,6 +58,9 @@ public class OrderSignfor implements Serializable {
   private String yewuSignforGeopoint;
   private String customSignforGeopoint;
   private Integer customSignforException;
+  private int partsCount;
+  private Date fastmailTime;
+  private String customUnSignRemark;
   
   
   public Long getAging() {
@@ -90,10 +91,10 @@ public class OrderSignfor implements Serializable {
     super();
   }
   
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
-  public void setId(Long id) {
+  public void setId(int id) {
     this.id = id;
   }
   public String getFastmailNo() {
@@ -143,14 +144,6 @@ public class OrderSignfor implements Serializable {
     this.phoneCount = phoneCount;
   }
 
-  public Date getCreateTime() {
-    return creatTime;
-  }
-
-  public void setCreateTime(Date creatTime) {
-    this.creatTime = creatTime;
-  }
-
   public Date getYewuSignforTime() {
     return yewuSignforTime;
   }
@@ -194,7 +187,29 @@ public class OrderSignfor implements Serializable {
     this.customSignforException = customSignforException;
   }
 
-  
-  
+  public Date getFastmailTime() {
+    return fastmailTime;
+  }
 
+  public void setFastmailTime(Date fastmailTime) {
+    this.fastmailTime = fastmailTime;
+  }
+
+  public String getCustomUnSignRemark() {
+    return customUnSignRemark;
+  }
+
+  public void setCustomUnSignRemark(String customUnSignRemark) {
+    this.customUnSignRemark = customUnSignRemark;
+  }
+
+  public int getPartsCount() {
+    return partsCount;
+  }
+
+  public void setPartsCount(int partsCount) {
+    this.partsCount = partsCount;
+  }
+
+  
 }

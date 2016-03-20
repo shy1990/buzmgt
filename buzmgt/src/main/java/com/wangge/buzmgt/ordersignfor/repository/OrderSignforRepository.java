@@ -15,5 +15,7 @@ JpaSpecificationExecutor<OrderSignfor>{
   
   public Page<OrderSignfor> findByCustomSignforExceptionAndCreatTimeBetween(
       String status,String startTime,String endTime,Pageable pageRequest);
+
+  public OrderSignfor findByOrderNo(String orderNo);
   
 }

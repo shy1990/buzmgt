@@ -10,6 +10,10 @@ import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 
 public interface OrderSignforService {
 
+  void updateOrderSignfor(OrderSignfor xlsOrder);
+
+  OrderSignfor findByOrderNo(String orderNo);
+
   public List<OrderSignfor> findAll();
   
   /**

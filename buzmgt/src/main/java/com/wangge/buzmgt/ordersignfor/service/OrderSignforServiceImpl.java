@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -33,10 +34,24 @@ import com.wangge.buzmgt.util.SearchFilter;
 @Service
 public class OrderSignforServiceImpl implements OrderSignforService {
 
+ 
+
   @PersistenceContext  
   private EntityManager em; 
   @Autowired
   private OrderSignforRepository orderSignforRepository;
+  
+  
+  @Override
+  public void updateOrderSignfor(OrderSignfor xlsOrder) {
+    orderSignforRepository.save(xlsOrder);
+    
+  }
+
+  @Override
+  public OrderSignfor findByOrderNo(String orderNo) {
+    return  orderSignforRepository.findByOrderNo(orderNo);
+  }
   
   @Override
   public List<OrderSignfor> findAll(){

@@ -65,7 +65,7 @@ public class OrderSignforController {
       int size=pageRequest.getPageSize();
       System.out.println(number+":"+size);
       for(OrderSignfor order : list){
-        Date ctrateTime = order.getCreateTime();
+        Date ctrateTime = order.getCreatTime();
         Date checkDate=DateUtil.moveDate(ctrateTime, 1);
         checkDate.setHours(Integer.parseInt(times[0]));
         checkDate.setMinutes(Integer.parseInt(times[1]));
