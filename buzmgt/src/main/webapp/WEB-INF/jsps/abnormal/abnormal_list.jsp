@@ -4,7 +4,6 @@
   String path = request.getContextPath();
 			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 					+ path + "/";
-			System.out.print(basePath);
 %>
 <!DOCTYPE html>
 <html>
@@ -73,10 +72,11 @@
 	{{/each}}
 </script>
 <script type="text/javascript">
+var	base='<%=basePath%>';
 var SearchData = {
 		"size" : "1",
 		"page" : "0",
-	}
+	};
 </script>
 </head>
 

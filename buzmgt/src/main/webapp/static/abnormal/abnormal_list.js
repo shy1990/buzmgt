@@ -46,8 +46,40 @@ $(function(){
 			}
 		}
 	});
-});
+	$('.table-export').on('click',function(){
+		var tab =$('.abnormal-body .nav-tabs li.active').attr('data-tital');
+		var startTime=$('#startTime').val();
+		var endTime=$('#endTime').val();
+		if(checkDate(startTime,endTime)){
+			SearchData['sc_GTE_creatTime'] = startTime;
+			SearchData['sc_LTE_creatTime'] = endTime;
+			if('ywtab'==tab){
+				delete SearchData['sc_EQ_customSignforException']
+				window.location.href = base + "ordersignfor/export?type=ywOrderSignfor&"
+				+ conditionProcess() ;
+			}else if('membertab'==tab){
+				window.location.href = base + "ordersignfor/export?sc_EQ_customSignforException=1&"
+				+ conditionProcess(); 
+			}
+		}
 
+	});
+});
+/**
+ * 处理检索条件
+ * 
+ * @returns {String}
+ */
+function conditionProcess() {
+	var strSearchData ="sc_GTE_creatTime="
+			+ (SearchData.sc_GTE_creatTime == null ? ''
+					: SearchData.sc_GTE_creatTime)
+			+ "&sc_LTE_creatTime="
+			+ (SearchData.sc_LTE_creatTime == null ? ''
+					: SearchData.sc_LTE_creatTime);
+			
+	return strSearchData;
+}
 function findYwOrderList(page){
 	page=page==null||page==''? 0 :page;
 	SearchData['page']=page;

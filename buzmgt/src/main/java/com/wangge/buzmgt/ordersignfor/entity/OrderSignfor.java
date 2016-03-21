@@ -41,7 +41,9 @@ public class OrderSignfor implements Serializable {
   private Long aging;//时效
 //  private String userId;
 //  private String truename;
-  
+//  @Transient
+//  private String ywName;//业务名称;
+ 
   @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
   @JoinColumn(name = "user_id")
   private SalesMan salesMan;

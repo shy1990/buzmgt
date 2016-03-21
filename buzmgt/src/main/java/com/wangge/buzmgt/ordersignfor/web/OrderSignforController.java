@@ -83,12 +83,6 @@ public class OrderSignforController {
       
       
     }else{
-      String status="1";
-//      if((!"".equals(startTime)||startTime!=null)&&(!"".equals(endTime)||endTime!=null)){
-//        orderSignforslist =os.findByCustomSignforExceptionAndCreatTimeBetween(status, startTime, endTime, pageRequest);
-//      }else{
-//        orderSignforslist =os.findByCustomSignforException(status,pageRequest);
-//      }
       orderSignforslist=os.getOrderSingforList(searchParams, pageRequest);
     }
     String s ="";
@@ -108,20 +102,8 @@ public class OrderSignforController {
   
   @RequestMapping(value="/show")
   public String showList(Model model){
-    //获取组织结构
-   /* Organization organization=((User) SecurityUtils.getSubject().getPrincipal()).getOrganization(); 
-    if("1".equals(organization.getLev())){
-      
-    }
-    page = page== null ? 1 : page<1 ? 1 : page;
-    int pageSize = 10;
-    PageRequest pageRequest = SortUtil.buildPageRequest(page,pageSize ,"role");
-    
-    Page<OrderSignfor> list = os.getOrderSingforList(pageRequest);*/
     Long orderTotal=os.findCount();//订单总数
-//    Long memberSignforCount=os.getMemberSignforCount();//客户签收异常条数
     model.addAttribute("totalCount",orderTotal);
-//    model.addAttribute("memberCount",memberSignforCount);
     return "abnormal/abnormal_list";
   }
   
@@ -134,21 +116,19 @@ public class OrderSignforController {
   @SuppressWarnings("deprecation")
   @RequestMapping("/export")
   public void excelExport(HttpServletRequest request, HttpServletResponse response) {
-    String[] gridTitles = { "店铺名称","商品描述", "钱包交易号","订单号","管易单据号", "金额(元)", "时间", "状态" };
-    String[] coloumsKey = { "shopName","description", "id","orderNum","ecerpNo", "amount","createTimeStr", "statusStr" };
+    String[] gridTitles = { "业务名称","店铺名称","订单号", "签收地址","签收时间"};
+    String[] coloumsKey = { "salesMan.truename","shopName", "orderNo", "signforAddr", "yewuSignforTime"};
 
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<OrderSignfor> orderSignforslist=null;
     String type=request.getParameter("type");
     List<OrderSignfor> ywlist=null;
+    List<OrderSignfor> list=os.findAll(searchParams);
     if("ywOrderSignfor".equals(type)){
-      List<OrderSignfor> list=os.findAll(searchParams);
-      
       ywlist=new ArrayList<OrderSignfor>();
       //TODO  某一个时间点（如9:00）拓展后期后台设置;
       String timesGap = "9:00";
       String[] times=timesGap.split(":");
-      int total=0;
       for(OrderSignfor order : list){
         Date ctrateTime = order.getCreatTime();
         Date checkDate=DateUtil.moveDate(ctrateTime, 1);
@@ -156,17 +136,14 @@ public class OrderSignforController {
         checkDate.setMinutes(Integer.parseInt(times[1]));
         Date yewuSignforTime = order.getYewuSignforTime();
         
-        if(yewuSignforTime.getTime()-checkDate.getTime()>0){
-          //分页
-            ywlist.add(order);
-          total++;
+        if(yewuSignforTime != null &&yewuSignforTime.getTime()-checkDate.getTime()>0){
+          ywlist.add(order);
         }
       }
-      ExcelExport.doExcelExport("钱包交易记录.xls", ywlist, gridTitles, coloumsKey, request, response);
+      ExcelExport.doExcelExport("业务揽收异常.xls", ywlist, gridTitles, coloumsKey, request, response);
       
     }else{
-      ywlist=os.findAll(searchParams);
-      ExcelExport.doExcelExport("钱包交易记录.xls", ywlist, gridTitles, coloumsKey, request, response);
+      ExcelExport.doExcelExport("客户签收异常.xls", list, gridTitles, coloumsKey, request, response);
     }
 
   }

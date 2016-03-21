@@ -85,7 +85,6 @@
             }
 
             function callBack(obj,curr) {
-            	//$(this)==> <li>
             	$(obj).parents('.pagination').siblings('.page-totle').find('input.currtPage').val(curr);
                 defaults.callback(curr, defaults.limit, totalCount);
             }
