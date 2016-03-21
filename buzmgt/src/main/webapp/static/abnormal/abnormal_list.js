@@ -17,10 +17,8 @@ $(function(){
 		$('.form_date_start').removeClass('has-error');
 		$('.form_date_end').removeClass('has-error');
 		var endInputDateStr = $('#endTime').val();
-		console.info(endInputDateStr);
 		if (endInputDateStr != "" && endInputDateStr != null) {
 			var endInputDate = stringToDate(endInputDateStr).valueOf();
-			console.info(endInputDate);
 			if (ev.date.valueOf() - endInputDate > 0) {
 				$('.form_date_start').addClass('has-error');
 			}
@@ -53,7 +51,6 @@ $(function(){
 function findYwOrderList(page){
 	page=page==null||page==''? 0 :page;
 	SearchData['page']=page;
-	console.info(SearchData);
 	delete SearchData['sc_EQ_customSignforException'];
 	$.ajax({
 		url:"ordersignfor/list?type=ywOrderSignfor",
@@ -102,15 +99,14 @@ function findMemberOrderList(page){
 	})
 }
 
-	var myTemplate = Handlebars.compile($("#memberSignfor-table-template").html());
 	function createMemberTable(data) {
+		var myTemplate = Handlebars.compile($("#memberSignfor-table-template").html());
 	$('#memberOrderList').html(myTemplate(data));
 //	Paging(data);
 }
 function ywPaging(data) {
     var totalCount = data.totalElements,
             limit = data.size;
-    createYwTable(data);
     $('#ywPager').extendPagination({
         totalCount: totalCount,
         showCount: 5,
@@ -123,8 +119,9 @@ function ywPaging(data) {
 function memberPaging(data) {
 	var totalCount = data.totalElements,
     limit = data.size;
+	createMemberTable(data);
     $('#memberPager').extendPagination({
-		totalCount: data.totalElements,
+		totalCount: totalCount,
 		showCount: 5,
 		limit: limit,
 		callback: function (curr, limit, totalCount) {
