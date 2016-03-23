@@ -2,6 +2,7 @@ package com.wangge.buzmgt.sys.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.OrganizationVo;
-import com.wangge.buzmgt.util.RegionUtil;
 /**
  * 
 * @ClassName: OrganiztionController
@@ -102,7 +101,8 @@ public class OrganizationController {
 	      listTreeVo.add(getOrganizationVo(organ));
 	      
 	      if(null!=organ.getChildren()){
-	        for(Organization o: organService.getOrganById(organ.getId()).getChildren()){
+	        List<Organization>  setO=organService.getOrganById(organ.getId()).getChildren();
+	        for(Organization o:setO ){
 	          listTreeVo.add(getOrganizationVo(o));
 	        }
 	      }

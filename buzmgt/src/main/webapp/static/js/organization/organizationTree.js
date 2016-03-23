@@ -475,17 +475,6 @@ function onloadZTree() {
 			BootstrapDialog.alert("访问服务器出错");
 		},
 		success : function(data) {
-//			data='[{"id":"1","isParent":"true","open":"true","icon":"/static/img/organization/jl.png",' +
-//					'"name":"老张","iconOpen":"/static/img/organization/jl.png","iconClose":"/static/img/organization/jl.png"},' +
-//							'{"id":2,"pId":"1","isParent":"true","open":"true","icon":"/static/img/organization/qyzj.png",' +
-//									'"name":"大区经理","iconOpen":"/static/img/organization/qyzj.png",' +
-//											'"iconClose":"/static/img/organization/qyzj.png"},{"id":7,"pId":"1","isParent":"true","open":"true",' +
-//													'"icon":"/static/img/organization/qyzj.png","name":"大区财务","iconOpen":"/static/img/organization/qyzj.png",' +
-//															'"iconClose":"/static/img/organization/qyzj.png"}]';
-//			data='[{ "name": "中国","font": {"font-weight": "italic"},"id": "0","isParent": true,"open": true,"iconOpen": '+
-//				'"static/zTree/css/zTreeStyle/img/diy/zhongguo.png", "iconClose": "static/zTree/css/zTreeStyle/img/diy/zhongguo.png"},'+
-//			    '{"id": "1","pId": "0","isParent": "true","icon": "/static/img/region/quyu.png","iconOpen": "/static/img/region/quyu.png",'+
-//			    '"iconClose": "/static/img/region/quyu.png","name": "华北大区","regiontype": null,"open": "true"}]';
 			ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
 			zNodes = zNodes.concat(ztreeNodes);
 			$.fn.zTree.init($("#organizationId"), setting, zNodes);
