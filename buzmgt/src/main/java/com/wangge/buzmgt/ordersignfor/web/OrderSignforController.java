@@ -1,7 +1,10 @@
 package com.wangge.buzmgt.ordersignfor.web;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.junit.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +36,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.ExcelExport;
 
@@ -55,7 +62,6 @@ public class OrderSignforController {
     Page<OrderSignfor> orderSignforslist=null;
     if("ywOrderSignfor".equals(type)){
       List<OrderSignfor> list=os.findAll(searchParams);
-      
       List<OrderSignfor> ywlist=new ArrayList<OrderSignfor>();
       //TODO  某一个时间点（如9:00）拓展后期后台设置;
       String timesGap = "9:00";
@@ -89,7 +95,7 @@ public class OrderSignforController {
     orderSignforslist.forEach(osfl->{
       osfl.getSalesMan().setUser(null);
       osfl.getSalesMan().setRegion(null);
-      osfl.setAging(osfl.getCustomSignforTime().getTime()-osfl.getYewuSignforTime().getTime());
+      osfl.setAging(DateUtil.getAging(osfl.getCustomSignforTime().getTime()-osfl.getYewuSignforTime().getTime()));
     });
     try { s = JSON.toJSONString(orderSignforslist, SerializerFeature.DisableCircularReferenceDetect);
    }
@@ -124,6 +130,11 @@ public class OrderSignforController {
     String type=request.getParameter("type");
     List<OrderSignfor> ywlist=null;
     List<OrderSignfor> list=os.findAll(searchParams);
+    list.forEach(osfl->{
+      osfl.getSalesMan().setUser(null);
+      osfl.getSalesMan().setRegion(null);
+      osfl.setAging(DateUtil.getAging(osfl.getCustomSignforTime().getTime()-osfl.getYewuSignforTime().getTime()));
+    });
     if("ywOrderSignfor".equals(type)){
       ywlist=new ArrayList<OrderSignfor>();
       //TODO  某一个时间点（如9:00）拓展后期后台设置;
@@ -143,9 +154,60 @@ public class OrderSignforController {
       ExcelExport.doExcelExport("业务揽收异常.xls", ywlist, gridTitles, coloumsKey, request, response);
       
     }else{
+      
+      gridTitles=Arrays.copyOf(gridTitles, gridTitles.length+1);
+      gridTitles[gridTitles.length-1]="送货时效";
+      
+      coloumsKey=Arrays.copyOf(coloumsKey, coloumsKey.length+1);
+      coloumsKey[coloumsKey.length-1]="aging";
+      
       ExcelExport.doExcelExport("客户签收异常.xls", list, gridTitles, coloumsKey, request, response);
     }
 
+  }
+  /**
+   * 业务所有订单签收信息
+   * @param model
+   * @return
+   */
+  @RequestMapping(value="/showrecord/{salesManId}")
+  public String showRecordList(Model model , @PathVariable("salesManId") String userId,HttpServletRequest request){
+    String tabs=request.getParameter("tabs");
+    model.addAttribute("tabs",tabs);
+    model.addAttribute("userId",userId);
+    //TODO  某一个时间点（如9:00）拓展后期后台设置;
+    String timesGap = "9:00";
+    model.addAttribute("timesGap",timesGap);
+    return "abnormal/abnormal_record_list";
+  }
+  /**
+   * 业务所有订单签收信息
+   * @param model
+   * @return
+   */
+  @RequestMapping(value="/getrecord/{salesManId}",method=RequestMethod.GET)
+  @ResponseBody
+  public String getRecordList(@PathVariable("salesManId") SalesMan salesMan, HttpServletRequest request,
+      @PageableDefault(page = 0,size=10,sort={"creatTime"},direction=Direction.DESC) Pageable pageRequest ){
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    searchParams.put("EQ_salesMan", salesMan);
+    String s ="";
+    try {
+    Page<OrderSignfor> orderSignforslist=os.getOrderSingforList(searchParams, pageRequest);
+    
+    orderSignforslist.forEach(osfl->{
+      osfl.getSalesMan().setUser(null);
+      osfl.getSalesMan().setRegion(null);
+      if(osfl.getCustomSignforTime()!=null&&osfl.getYewuSignforTime()!=null){
+        osfl.setAging(DateUtil.getAging(osfl.getCustomSignforTime().getTime()-osfl.getYewuSignforTime().getTime()));
+      }
+    });
+      s = JSON.toJSONString(orderSignforslist, SerializerFeature.DisableCircularReferenceDetect);
+   } catch(Exception e){
+      System.out.println(e.getMessage());
+    }
+    
+    return s;
   }
   
 }

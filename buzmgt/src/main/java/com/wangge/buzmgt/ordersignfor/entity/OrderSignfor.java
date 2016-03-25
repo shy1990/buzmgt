@@ -38,7 +38,7 @@ public class OrderSignfor implements Serializable {
   private String fastmailNo;
   private String orderNo;
   @Transient
-  private Long aging;//时效
+  private String aging;//时效
 //  private String userId;
 //  private String truename;
 //  @Transient
@@ -65,11 +65,11 @@ public class OrderSignfor implements Serializable {
   private String customUnSignRemark;
   
   
-  public Long getAging() {
+  public String getAging() {
     return aging;
   }
 
-  public void setAging(Long aging) {
+  public void setAging(String aging) {
     this.aging = aging;
   }
 

@@ -1,7 +1,11 @@
 var membertotal=0,ywtotal=0;
+var userId;
 $(function(){
+	//先获取业务员的id
+	userId=getUserId();
 	findYwOrderList();
 	findMemberOrderList();
+	showTab();
 	$('#startTime').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
@@ -55,11 +59,11 @@ $(function(){
 			SearchData['sc_LTE_creatTime'] = endTime;
 			if('ywtab'==tab){
 				delete SearchData['sc_EQ_customSignforException']
-				window.location.href = base + "ordersignfor/export?type=ywOrderSignfor&"
-				+ conditionProcess() ;
+//				window.location.href = base + "ordersignfor/export?type=ywOrderSignfor&"
+//				+ conditionProcess() ;
 			}else if('membertab'==tab){
-				window.location.href = base + "ordersignfor/export?sc_EQ_customSignforException=1&"
-				+ conditionProcess(); 
+//				window.location.href = base + "ordersignfor/export?sc_EQ_customSignforException=1&"
+//				+ conditionProcess(); 
 			}
 		}
 
@@ -80,12 +84,27 @@ function conditionProcess() {
 			
 	return strSearchData;
 }
+function showTab(){
+	var _$tabs = $('.J_URL');
+	if("box_tab2"==_$tabs.attr('data-tabs')){
+		var tabs = _$tabs.find('li:last-child a');
+		tabs.click();//展开客户签收列表
+	}
+}
+/**
+ * 获取userId
+ * @returns
+ */
+function getUserId(){
+	var userId = $('.J_UserID').attr('data-user');
+	return userId;
+}
 function findYwOrderList(page){
 	page=page==null||page==''? 0 :page;
 	SearchData['page']=page;
 	delete SearchData['sc_EQ_customSignforException'];
 	$.ajax({
-		url:"ordersignfor/list?type=ywOrderSignfor",
+		url:"ordersignfor/getrecord/"+userId,
 		type:"GET",
 		data: SearchData,
 		dataType:"json",
@@ -94,7 +113,6 @@ function findYwOrderList(page){
 			var searchTotal=orderData.totalElements;
 			if (searchTotal != ywtotal || searchTotal == 0) {
 				ywtotal = searchTotal;
-
                 ywPaging(orderData);
             }
 		},error:function(){
@@ -111,9 +129,11 @@ function createYwTable(data) {
 function findMemberOrderList(page){
 	page=page==null||page==''? 0 :page;
 	SearchData['page']=page;
-	SearchData['sc_EQ_customSignforException']=1;
+//	SearchData['sc_EQ_customSignforException']=1;
+	var url_="ordersignfor/getrecord/"+userId;
+	console.info(url_);
 	$.ajax({
-		url:"ordersignfor/list?type=&page="+page,
+		url:url_,
 		type:"GET",
 		dataType:"json",
 		data: SearchData,
@@ -163,16 +183,82 @@ function memberPaging(data) {
 }
 //日期格式化
 Handlebars.registerHelper('formDate', function(value) {
-	return changeDateToString(new Date(value));
+	if(value != ""&&value!= null){
+		return changeDateToString(new Date(value));
+	}else{
+		return "0000-00-00 00:00";
+	}
 });
-////送货时效
-//Handlebars.registerHelper('checkAging', function(value) {
-//	var aging="";
-//	var hour=parseInt(value/1000/3600);
-//	var minute=parseInt((value/1000/3600-hour)*60);
-//	return hour+"小时"+minute+"分钟";
-//});
+//
+Handlebars.registerHelper('whatStatus', function(value) {
+	var html='';
+	if(value === 2 || value === 3 || value ===0){
+		html='<span class="status-over">已签收</span>';
+	}else {
+		html='<span class="status-not">未签收</span>';
+	}
+	return html;
+});
 
+/**
+ * 业务揽收是否异常
+ * @param v1 creatTime
+ * @param v2 yewuSignforTime
+ */
+Handlebars.registerHelper('whatTag', function(v1,v2) {
+	var html='';
+	if(checkTag(v1,v2)){
+		html='<span class="icon-tag-zc">正常</span>';
+	}else {
+		html='<span class="icon-tag-yc">异常</span>';
+	}
+	return html;
+});
+/**
+ * 业务揽收操作
+ * @param v1 creatTime
+ * @param v2 yewuSignforTime
+ */
+Handlebars.registerHelper('whatOperate', function(v1,v2) {
+	var html='';
+	if(checkTag(v1,v2)){
+		html='<a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>';
+	}else {
+		html='<a class="btn btn-blue btn-sm" href="javascrip:;">查看</a> <a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a>';
+	}
+	return html;
+});
+
+/**
+ * 判断是否异常
+ * @param v1 creatTime
+ * @param v2 yewuSignforTime
+ */
+function checkTag(v1,v2){
+	//依据判定时间
+	var gap=$('.J_Gap').attr("data-time");
+	var grps=gap.split(":");
+	var nowDate=new Date();
+	var createDate=new Date(v1);
+	var gapDate=createDate;
+	
+	gapDate.setDate(createDate.getDate()+1);
+	gapDate.setHours(grps[0]);
+	gapDate.setMinutes(grps[1]);
+	if(v2 == '' || v2 ==null ){
+		if(nowDate.getTime()>gapDate.getTime()){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	var ywSignforDate=new Date(v2);
+	if(ywSignforDate.getTime()>gapDate.getTime()){
+		return false;
+	}else{
+		return true;
+	}
+}
 function goSearch() {
 	var tab =$('.abnormal-body .nav-tabs li.active').attr('data-tital');
 	var startTime=$('#startTime').val();

@@ -45,9 +45,9 @@
 		<td>{{orderNo}}</td>
 		<td>山东省滨州市邹平县大桥镇223号</td>
 		<td><span class="icon-tag-yc">异常</span>{{formDate yewuSignforTime}}</td>
-		<td><a class="btn btn-blue btn-sm" href="javascrip:void({{id}});">查看</a></td>				
+		<td><a class="btn btn-blue btn-sm" href="/ordersignfor/showrecord/{{#with salesMan}}{{id}}{{/with}}">查看</a></td>				
 	</tr>
-	{{/each}}
+	{{/each}}http://localhost:8081/ordersignfor/show
 </script>
 <script id="memberSignfor-table-template" type="text/x-handlebars-template">
 	{{#each content}}
@@ -64,17 +64,18 @@
 			</div>
 		</td>
 		<td>{{orderNo}}</td>
+		<td>{{shopName}}</td>
 		<td><span class="icon-tag-yc">异常</span> 山东省滨州市邹平县大桥镇223号</td>
 		<td>{{formDate yewuSignforTime}}</td>
-		<td>{{checkAging aging}}</td>
-		<td><a class="btn btn-blue btn-sm" href="javascrip:void({{id}});">查看</a></td>				
+		<td>{{aging}}</td>
+		<td><a class="btn btn-blue btn-sm" href="/ordersignfor/showrecord/{{#with salesMan}}{{id}}{{/with}}?tabs=box_tab2">查看</a></td>				
 	</tr>
 	{{/each}}
 </script>
 <script type="text/javascript">
 var	base='<%=basePath%>';
 var SearchData = {
-		"size" : "1",
+		"size" : "10",
 		"page" : "0",
 	};
 </script>
@@ -177,6 +178,7 @@ var SearchData = {
 											<tr>
 												<th>业务名称</th>
 												<th>订单号</th>
+												<th>客户名称</th>
 												<th>签收地址</th>
 												<th>签收时间</th>
 												<th>送货时间</th>

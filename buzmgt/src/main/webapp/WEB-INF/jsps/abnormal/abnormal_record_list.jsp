@@ -28,13 +28,62 @@
 	href="static/yw-team-member/ywmember.css" />
 <link rel="stylesheet" type="text/css"
 	href="static/abnormal/abnormal.css" />
+<link rel="stylesheet" type="text/css"
+	href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script id="ywSignfor-table-template" type="text/x-handlebars-template">
+{{#each content}}
+	<tr>
+		<td class="text-strong">{{shopName}}</td>
+		<td>{{orderNo}}</td>
+		<td>{{yewuSignforGeopoint}}</td>
+		<td>
+			{{{whatTag creatTime yewuSignforTime}}}
+			{{formDate yewuSignforTime}}
+		</td>
+		<td class="text-strong">
+			{{#if yewuSignforTime}}
+			<span class="status-over">已签收</span>
+			{{else}}
+			<span class="status-not">未签收</span>
+			{{/if}}	
+		</td>
+		<td>
+			{{{whatOperate creatTime yewuSignforTime}}}
+		</td>
+	</tr>
+{{/each}}
+</script>
+<script id="memberSignfor-table-template" type="text/x-handlebars-template">
+	{{#each content}}
+      <tr>
+        <td class="text-strong">小米手机专卖店</td>
+        <td>201603041256</td>
+        <td><span class="icon-tag-zc">正常</span> <span class="icon-tag-yc">异常</span>山东省滨州市邹平县大桥镇223号</td>
+        <td>6小时40分钟</td>
+        <td>收现金</td>
+        <td>2016.03.12 18:20</td>
+        <td class="text-strong"><span class="status-over">已签收</span>
+          <span class="status-not">未签收</span></td>
+        <td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
+        </td>
+      </tr>
+	{{/each}}
+</script>
+<script type="text/javascript">
+var	base='<%=basePath%>';
+var SearchData = {
+		"size" : "1",
+		"page" : "0",
+	};
+</script>
 </head>
 
 <body>
+<!-- {{{whatOperate yewuSignforTime}}} -->
 	<div class="content main">
-		<h4 class="page-header ">
+		<h4 class="page-header J_UserID" data-user="${userId }">
 			<i class="ico icon-abnormal_record"></i>签收记录
 		</h4>
 		<div class="row">
@@ -44,10 +93,10 @@
 					<!--title-->
 					<div class="box-title">
 						<!--菜单栏-->
-						<ul class="nav nav-tabs">
-							<li class="active"><a href="#box_tab1" data-toggle="tab"><span
+						<ul class="nav nav-tabs J_URL" data-tabs="${tabs }">
+							<li class="active" data-tital="ywtab"><a href="#box_tab1" data-toggle="tab"><span
 									class="">业务揽收</span></a></li>
-							<li><a href="#box_tab2" data-toggle="tab"><span class="">客户签收</span></a></li>
+							<li data-tital="membertab"><a href="#box_tab2" data-toggle="tab"><span class="">客户签收</span></a></li>
 						</ul>
 						<!--/菜单栏-->
 					</div>
@@ -57,32 +106,31 @@
 						<div class="marg-t text-time">
 							<span class="text-strong chang-time">请选择时间：</span>
 							<div class="search-date">
-								<div class="input-group input-group-sm">
+								<div class="input-group input-group-sm form_date_start">
 									<span class="input-group-addon " id="basic-addon1"><i
 										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-										type="text" class="form-control form_datetime input-sm"
+										type="text" id="startTime" class="form-control form_datetime input-sm"
 										placeholder="开始日期" readonly="readonly">
 								</div>
 							</div>
 							--
 							<div class="search-date">
-								<div class="input-group input-group-sm">
+								<div class="input-group input-group-sm form_date_end">
 									<span class="input-group-addon " id="basic-addon1"><i
 										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-										type="text" class="form-control form_datetime input-sm"
+										type="text" id="endTime" class="form-control form_datetime input-sm"
 										placeholder="结束日期" readonly="readonly">
 								</div>
 							</div>
 							<!--考核开始时间-->
 							<button class="btn btn-blue btn-sm"
-								onclick="goSearch('${salesman.id}','${assess.id}');">
+								onclick="goSearch();">
 								检索</button>
 							<!---->
 							<div class="abnormal-details">
-								<span>共 <span class="text-bule">2580</span> 单
-								</span> <span>客户签收 <span class="text-bule">2500</span> 单
-								</span> <span>拒收 <span class="text-bule">80</span> 单
-								</span>
+								<span>共<span class="text-bule">2580</span>单</span>
+								<span>客户签收<span class="text-bule">2500</span>单</span>
+								<span>拒收 <span class="text-bule">80</span>单</span>
 							</div>
 							<div class="link-posit pull-right">
 								<a class="table-export" href="javascript:void(0);">导出excel</a>
@@ -100,26 +148,19 @@
 											<tr>
 												<th>店铺名称</th>
 												<th>订单号</th>
-												<th>签收地点</th>
-												<th>签收时间</th>
+												<th>揽收地点</th>
+												<th class="J_Gap" data-time="${timesGap }">揽收时间</th>
 												<th>状态</th>
 												<th>操作</th>
 											</tr>
 										</thead>
-										<tr>
-											<td class="text-strong">小米手机专卖店</td>
-											<td>201603041256</td>
-											<td>山东省滨州市邹平县大桥镇223号</td>
-											<td><span class="icon-tag-zc">正常</span> <span
-												class="icon-tag-yc">异常</span>2016.03.12 18:20</td>
-											<td class="text-strong"><span class="status-over">已签收</span>
-												<span class="status-not">未签收</span></td>
-											<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-												<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
-										</tr>
+										<tbody id="ywOrderList"></tbody>
 									</table>
 								</div>
 								<!--table-box-->
+								<!-- 分页 -->
+								<div id="ywPager"></div>
+								<!-- 分页 -->
 							</div>
 							<!--业务揽收异常-->
 
@@ -141,22 +182,13 @@
 												<th>操作</th>
 											</tr>
 										</thead>
-										<tr>
-											<td class="text-strong">小米手机专卖店</td>
-											<td>201603041256</td>
-											<td><span class="icon-tag-zc">正常</span> <span
-												class="icon-tag-yc">异常</span>山东省滨州市邹平县大桥镇223号</td>
-											<td>6小时40分钟</td>
-											<td>收现金</td>
-											<td>2016.03.12 18:20</td>
-											<td class="text-strong"><span class="status-over">已签收</span>
-												<span class="status-not">未签收</span></td>
-											<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-											</td>
-										</tr>
+										<tbody id="memberOrderList"></tbody>
 									</table>
 								</div>
 								<!--table-box-->
+								<!-- 分页 -->
+								<div id="memberPager"></div>
+								<!-- 分页 -->
 							</div>
 							<!--客户签收异常-->
 						</div>
@@ -245,28 +277,15 @@
 		<script src="static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-		<script src="static/yw-team-member/team-member.js"
-			type="text/javascript" charset="utf-8"></script>
+		<script src="static/js/common.js" type="text/javascript"
+			charset="utf-8"></script>
+		<script src="/static/js/dateutil.js" type="text/javascript"
+			charset="utf-8"></script>
+		<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"></script>
+		<script src="static/abnormal/abnormal_record_list.js"></script>
+		<script type="text/javascript" src="static/bootStrapPager/js/extendPagination.js"></script>
 		<script type="text/javascript">
-				$('body input').val('');
-				$(".form_datetime").datetimepicker({
-					format: "yyyy-mm-dd",
-					language: 'zh-CN',
-					weekStart: 1,
-					todayBtn: 1,
-					autoclose: 1,
-					todayHighlight: 1,
-					startView: 2,
-					minView: 2,
-					pickerPosition: "bottom-right",
-					forceParse: 0
-				});
-				var $_haohe_plan = $('.J_kaohebar').width();
-				var $_haohe_planw = $('.J_kaohebar_parents').width();
-				$(".J_btn").attr("disabled", 'disabled');
-				if ($_haohe_planw === $_haohe_plan) {　
-					$(".J_btn").removeAttr("disabled");
-				}
+				
 			</script>
 </body>
 
