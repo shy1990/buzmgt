@@ -24,6 +24,7 @@ import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
@@ -271,10 +272,9 @@ public class TeamMembersController {
   
   @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.POST)
   @ResponseBody
-  public ResponseEntity<SaojieDataVo> getSojieDtaList(String userId, String regionId){
+  public ResponseEntity<List<SaojieData>> getSojieDtaList(String userId, String regionId){
     SaojieDataVo list  = saojieService.getsaojieDataList(userId, regionId);
-   
-    return new ResponseEntity<SaojieDataVo>(list,HttpStatus.OK);
+    return new ResponseEntity<List<SaojieData>>(list.getList(),HttpStatus.OK);
   }
   
   /**

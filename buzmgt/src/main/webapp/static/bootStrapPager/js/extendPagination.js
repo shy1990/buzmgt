@@ -84,15 +84,15 @@
                 }
             }
 
-            function callBack(curr) {
-            	$('#currtPage').val(curr);
+            function callBack(obj,curr) {
+            	$(obj).parents('.pagination').siblings('.page-totle').find('input.currtPage').val(curr);
                 defaults.callback(curr, defaults.limit, totalCount);
             }
             
             //跳页(拓展)
             gotoObj.click(function(event){
             	event.preventDefault();
-            	var currPage = Number($('#currtPage').val()), activeObj = pageObj.find('li[class="active"]'),
+            	var currPage = Number($(this).siblings('input.currtPage').val()), activeObj = pageObj.find('li[class="active"]'),
                 activePage = Number(activeObj.find('a').html());
 	            if (currPage == activePage) return false;
 	            
@@ -120,7 +120,7 @@
 	            $.each(currentObj, function (index, thiz) {
 	                if ($(thiz).find('a').html() == currPage) {
 	                    $(thiz).addClass('active');
-	                    callBack(currPage);
+	                    callBack(thiz,currPage);
 	                }
 	            });
             });
@@ -150,7 +150,7 @@
                 $.each(currentObj, function (index, thiz) {
                     if ($(thiz).find('a').html() == currPage) {
                         $(thiz).addClass('active');
-                        callBack(currPage);
+                        callBack(thiz,currPage);
                     }
                 });
             });
@@ -172,7 +172,7 @@
                     if ($(thiz).find('a').html() == (activePage - 1)) {
                         activeObj.removeClass('active');
                         $(thiz).addClass('active');
-                        callBack(activePage - 1);
+                        callBack(thiz,(activePage - 1));
                     }
                 });
             });
@@ -194,7 +194,7 @@
                     if ($(thiz).find('a').html() == (activePage + 1)) {
                         activeObj.removeClass('active');
                         $(thiz).addClass('active');
-                        callBack(activePage + 1);
+                        callBack(thiz,(activePage + 1));
                     }
                 });
             });
