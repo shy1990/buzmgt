@@ -29,8 +29,36 @@
 <link rel="stylesheet" type="text/css"
 	href="static/abnormal/abnormal.css" />
 <link rel="stylesheet" type="text/css" href="static/visit/visit.css" />
+<link href="<%=basePath%>static/bootStrapPager/css/page.css" rel="stylesheet" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var base = "<%=basePath%>";
+	var number = '';//当前页数（从零开始）
+	var totalPages = '';//总页数(个数)
+	var searchData = {
+		"size" : "2",
+		"page" : "0",
+	}
+	var totalElements;//总条数
+</script>
+<script id="table-template" type="text/x-handlebars-template">
+{{#each content}}
+	<tr>
+		<td class="text-strong">{{taskName}}</td>
+		<td>{{Convert expiredTime}}</td>
+		<td><span class="icon-tag-zc">正常</span> <span
+		class="icon-tag-yc">异常</span> {{address}}</td>
+		<td>{{period}}天</td>
+		<td><a class="btn btn-blue btn-sm" href="javascript:;" onclick="seeDetails('{{id}}')">查看</a>
+		</td>
+	</tr>
+{{else}}
+<div style="text-align: center;">
+	<tr style="text-align: center;">没有相关数据!</tr>
+</div>
+{{/each}}
+</script>
 </head>
 
 <body>
@@ -43,15 +71,15 @@
 				<!--box-->
 				<div class="visit-body box border blue">
 					<!--title-->
-					<div class="box-title">
+					<div class="box-title" id="box-title" data-a="${sm.id}">
 						<!--区域选择按钮-->
-						<select id="regionId" class="form-control input-xs "
+						<select id="area" class="form-control input-xs "
 							onchange="getSaojieDataList();"
 							style="width: 110px; position: relative; height: 25px; padding: 2px 5px; display: inline-block; font-size: 12px; color: #6d6d6d;">
-							<option value="" selected="selected">全部区域</option>
-							<c:forEach var="region" items="${rList}" varStatus="s">
+							<option value="${sm.region.id}" selected="selected">${sm.region.name}</option>
+							<%-- <c:forEach var="region" items="${rList}" varStatus="s">
 								<option value="${region.id}">${region.name}</option>
-							</c:forEach>
+							</c:forEach> --%>
 						</select>
 						<!--/区域选择按钮-->
 					</div>
@@ -61,33 +89,31 @@
 						<div class="text-time">
 							<span class="text-strong chang-time">请选择时间：</span>
 							<div class="search-date">
-								<div class="input-group input-group-sm">
+								<div class="input-group input-group-sm date form_date_start">
 									<span class="input-group-addon " id="basic-addon1"><i
 										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
 										type="text" class="form-control form_datetime input-sm"
-										placeholder="开始日期" readonly="readonly">
+										placeholder="开始日期" readonly="readonly" id="beginTime">
 								</div>
 							</div>
 							--
 							<div class="search-date">
-								<div class="input-group input-group-sm">
+								<div class="input-group input-group-sm date form_date_end">
 									<span class="input-group-addon " id="basic-addon1"><i
 										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
 										type="text" class="form-control form_datetime input-sm"
-										placeholder="结束日期" readonly="readonly">
+										placeholder="结束日期" readonly="readonly" id="endTime">
 								</div>
 							</div>
 							<!--考核开始时间-->
-							<button class="btn btn-blue btn-sm"
-								onclick="goSearch('${salesman.id}','${assess.id}');">
-								检索</button>
+							<button class="btn btn-blue btn-sm" onclick="goSearch();">检索</button>
 							<!---->
 							<div class="abnormal-details">
-								<span>共 <span class="text-bule">2580</span> 次拜访
-								</span> <span>平均拜访周期 ：<span class="text-bule">1</span> 天<span
+								<span>共 <span class="text-bule" id="totalElements"></span> 次拜访
+								</span> <!-- <span>平均拜访周期 ：<span class="text-bule">1</span> 天<span
 									class="text-bule">6</span> 小时<span class="text-bule">26</span>
 									分/次
-								</span>
+								</span> -->
 							</div>
 							<div class="link-posit pull-right">
 								<a class="table-export" href="javascript:void(0);">导出excel</a>
@@ -110,25 +136,11 @@
 												<th>操作</th>
 											</tr>
 										</thead>
-										<tr>
-											<td class="text-strong">小米手机专卖店</td>
-											<td>201611.12 10:20</td>
-											<td><span class="icon-tag-zc">正常</span> <span
-												class="icon-tag-yc">异常</span> 山东省滨州市邹平县大桥镇223号</td>
-											<td>15天</td>
-											<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-											</td>
-										</tr>
-										<tr>
-											<td class="text-strong">小米手机专卖店</td>
-											<td>201611.12 10:20</td>
-											<td><span class="icon-tag-zc">正常</span> <span
-												class="icon-tag-yc">异常</span> 山东省滨州市邹平县大桥镇223号</td>
-											<td>15天</td>
-											<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-											</td>
-										</tr>
+										<tbody id="tableList">
+							
+										</tbody>
 									</table>
+									<div id="callBackPager"></div>
 								</div>
 								<!--table-box-->
 							</div>
@@ -220,8 +232,10 @@
 		<script src="static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-		<script src="static/yw-team-member/team-member.js"
-			type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+		<script src="<%=basePath%>static/js/dateutil.js"></script>
+		<script src="<%=basePath%>static/visit/visit-record-yw.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 		<script type="text/javascript">
 				$('body input').val('');
 				$(".form_datetime").datetimepicker({

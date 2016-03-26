@@ -5,9 +5,9 @@
     $.fn.extendPagination = function (options) {
         var defaults = {
             //pageId:'',
-            totalCount: '',
-            showPage: '10',
-            limit: '1',
+            totalCount: options.totalCount,
+            showPage: options.showCount,
+            limit: options.limit,
             callback: function () {
                 return false;
             }

@@ -12,7 +12,15 @@
 	background:url(../img/task/renwu.png) no-repeat ;
 }
 
+.img-box {
+	padding-left:35px;
+}
 
+.img-box .visit-img{
+	padding: 5px 10px 0;
+	height: 25%;
+	width: 25%;
+}
 
 
 

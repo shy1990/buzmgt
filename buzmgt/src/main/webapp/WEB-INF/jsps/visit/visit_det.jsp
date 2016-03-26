@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt"  uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
   String path = request.getContextPath();
 			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -44,22 +46,27 @@
 				<div class="abnormal-body box border blue">
 					<!--title-->
 					<div class="box-title">
-						<i class="ico icon-shop-name"></i>小米手机专卖店
+						<i class="ico icon-shop-name"></i>${visit.taskName }
 					</div>
 					<!--title-->
 					<!--box-body-->
 					<div class="box-body">
 						<div class="text-hor">
 							<label>拜访时间：</label>
-							<p>2016.03.15 10:50</p>
+							<p><fmt:formatDate value="${visit.finishTime }" pattern="yyyy-MM-dd HH:mm:ss"/></p>
 						</div>
 						<div class="text-hor">
 							<label>拜访总结：</label>
-							<p>老板人挺好的，就是挺逗逼的、、、</p>
+							<c:if test="${visit.summary ne null }">
+								<p>${visit.summary }</p>
+							</c:if>
+							<c:if test="${visit.summary eq null }">
+								<p>无信息</p>
+							</c:if>
 						</div>
 						<div class="text-hor">
 							<label>坐标：</label>
-							<p>山东省济南市天桥区二环东路250号</p>
+							<p>${visit.address }</p>
 						</div>
 						<div class="text-hor">
 							<label>照片：</label>
@@ -69,19 +76,22 @@
 							<label></label>
 							<p>
 							<div class="img-box">
-								<img class="visit-img" src="static/img/saojie-img.png" alt="" />
+								<img class="visit-img" src="${visit.imageurl1 }" alt="" />
 							</div>
 							<div class="img-box">
-								<img class="visit-img" src="static/img/shop-img.png" alt="" />
+								<img class="visit-img" src="${visit.imageurl2 }" alt="" />
+							</div>
+							<div class="img-box">
+								<img class="visit-img" src="${visit.imageurl3 }" alt="" />
 							</div>
 							</p>
 						</div>
-						<div class="text-hor">
+						<!-- <div class="text-hor">
 							<label>足迹匹配：</label>
 							<p>
 								<span class="icon-tag-zc">正常</span> <span class="icon-tag-yc">异常</span>
 							</p>
-						</div>
+						</div> -->
 						<div class="hr"></div>
 						<div class="text-hor">
 							<label>轨迹查看：</label>

@@ -66,7 +66,7 @@ public class Saojie implements Serializable {
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USER_ID")
 	private SalesMan salesman;
 

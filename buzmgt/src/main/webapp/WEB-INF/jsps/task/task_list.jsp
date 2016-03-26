@@ -21,9 +21,38 @@
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
+<link href="<%=basePath%>static/bootStrapPager/css/page.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/task/task.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var base = "<%=basePath%>";
+	var number = '';//当前页数（从零开始）
+	var totalPages = '';//总页数(个数)
+	var searchData = {
+		"size" : "2",
+		"page" : "0",
+	}
+	var totalElements;//总条数
+</script>
+<script id="table-template" type="text/x-handlebars-template">
+{{#each content}}
+	<tr>
+		<td class="text-strong"><span class="text-bule">【拜访】</span>{{taskName}}</td>
+		<td>{{executor}}</td>
+		<td>{{shopAddress }}</td>
+		<td>{{Convert expiredTime }}</td>
+		<td class="text-strong">{{{WhatStatus visitStatus}}}</td>
+		<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a></td>
+		<!--<td><a class="btn btn-red btn-sm" href="javascrip:;">警告</a>
+		<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>-->
+	</tr>
+{{else}}
+<div style="text-align: center;">
+	<tr style="text-align: center;">没有相关数据!</tr>
+</div>
+{{/each}}
+</script>
 </head>
 
 <body>
@@ -31,12 +60,13 @@
 		<h4 class="page-header ">
 			<i class="ico icon-task-list"></i>任务
 			<!--区域选择按钮-->
-			<div class="area-choose">
-				选择区域：<span>山东省</span> <a class="are-line" href="javascript:;"
-					onclick="">切换</a>
+			<div class="area-choose" id="area" data-a="${regionId}">
+				选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;"
+					onclick="getRegion(${regionId});">切换</a>
+				<%-- <input id="area" type="hidden" value="${regionId}"> --%>
 			</div>
 			<!--/区域选择按钮-->
-			<a href="/teammember/toAdd" class="btn btn-blue" data-toggle="modal"
+			<a href="javascript:addTask();" class="btn btn-blue" data-toggle="modal"
 				data-target="#addTask" data-whatever="@mdo"> <i
 				class="ico icon-add"></i>添加任务
 			</a>
@@ -61,10 +91,11 @@
 					<!--modal-header-->
 					<!--modal-body-->
 					<div class="modal-body">
-						<a href="javascript:;" class="btn btn-blue">拜访任务</a> <a
-							href="javascript:;" class="btn btn-blue">任务1</a> <a
-							href="javascript:;" class="btn btn-blue">任务2</a>
+						<a href="/task/addVisitMap" class="btn btn-blue">拜访任务</a> <a
+							href="javascript:;" class="btn btn-blue">任务1</a>
 					</div>
+					<div class="modal-footer">
+		 			</div>
 					<!--modal-body-->
 				</div>
 			</div>
@@ -88,37 +119,11 @@
 								<th>操作</th>
 							</tr>
 						</thead>
-						<tr>
-							<td class="text-strong"><span class="text-bule">【拜访】</span>小米手机专卖店</td>
-							<td>吴磊</td>
-							<td>山东省滨州市邹平县大桥镇223号</td>
-							<td>2016.03.12 18:20</td>
-							<td class="text-strong"><span class="text-state-ok">已完成</span>
-							</td>
-							<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-							</td>
-						</tr>
-						<tr>
-							<td class="text-strong"><span class="text-bule">【拜访】</span>小米手机专卖店</td>
-							<td>吴磊</td>
-							<td>山东省滨州市邹平县大桥镇223号</td>
-							<td>2016.03.12 18:20</td>
-							<td class="text-strong"><span class="text-state-no">未完成</span>
-							</td>
-							<td><a class="btn btn-red btn-sm" href="javascrip:;">警告</a>
-								<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
-						</tr>
-						<tr>
-							<td class="text-strong"><span class="text-bule">【拜访】</span>小米手机专卖店</td>
-							<td>吴磊</td>
-							<td>山东省滨州市邹平县大桥镇223号</td>
-							<td>2016.03.12 18:20</td>
-							<td class="text-strong"><span class="text-state-no">未完成</span>
-							</td>
-							<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-							</td>
-						</tr>
+						<tbody id="tableList">
+							
+						</tbody>
 					</table>
+					<div id="callBackPager"></div>
 				</div>
 			</div>
 		</div>
@@ -132,8 +137,10 @@
 		<script src="static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-		<script src="static/yw-team-member/team-member.js"
-			type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+		<script src="<%=basePath%>static/js/dateutil.js"></script>
+		<script src="<%=basePath%>static/task/task.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 		<script type="text/javascript">
 				$('body input').val('');
 				$(".form_datetime").datetimepicker({
@@ -151,7 +158,7 @@
 				var $_haohe_plan = $('.J_kaohebar').width();
 				var $_haohe_planw = $('.J_kaohebar_parents').width();
 				$(".J_btn").attr("disabled", 'disabled');
-				if ($_haohe_planw === $_haohe_plan) {　
+				if ($_haohe_planw === $_haohe_plan) {
 					$(".J_btn").removeAttr("disabled");
 				}
 			</script>

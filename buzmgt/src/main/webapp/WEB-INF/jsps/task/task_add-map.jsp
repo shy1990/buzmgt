@@ -55,7 +55,7 @@
 						});
 					</script>
 					<div class="link-posit pull-right">
-						<a href="" class="view">列表查看</a>
+						<a href="/task/addVisitList" class="view">列表查看</a>
 					</div>
 				</div>
 				<div class="clearfix"></div>

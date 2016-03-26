@@ -14,7 +14,7 @@ function getList(param,name,regionId){
 }
 
 function toSalesManInfo(id,flag){
-	window.location.href="/teammember/toSalesManInfo?userId="+id+"&flag="+flag;
+	window.location.href="/teammember/toSalesManInfo?saojieId="+id+"&flag="+flag;
 }
 
 function searchForm(event,value,regionId){

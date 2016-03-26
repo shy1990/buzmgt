@@ -30,7 +30,6 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
  */
 @Entity
 @Table(name = "SYS_REGISTDATA")
-@JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"}) 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class RegistData implements Serializable {
 
