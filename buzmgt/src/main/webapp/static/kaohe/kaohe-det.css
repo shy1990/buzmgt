@@ -38,8 +38,11 @@
 	display:inline-block;
 	width: 120px;
 	height: 23px;
-	padding: 2px 15px;
+	padding: 2px 0;
 	color: #FFF;
+}
+.default-stage{
+	background: url(../img/kaohe/default-stage.png) no-repeat;
 }
 /* 一阶段考核 */
 .onekaohe-stage{

@@ -39,7 +39,7 @@
 		<td>{{orderNo}}</td>
 		<td>{{yewuSignforGeopoint}}</td>
 		<td>
-			{{{whatTag creatTime yewuSignforTime}}}
+			{{{whatYwTag creatTime yewuSignforTime}}}
 			{{formDate yewuSignforTime}}
 		</td>
 		<td class="text-strong">
@@ -50,6 +50,7 @@
 			{{/if}}	
 		</td>
 		<td>
+			<a class="btn btn-blue btn-sm" href="/ordersignfor/toAbnormalDet/{{id}}?type=ywSignfor&abnormal={{parament creatTime yewuSignforTime}}">查看</a>
 			{{{whatOperate creatTime yewuSignforTime}}}
 		</td>
 	</tr>
@@ -58,15 +59,22 @@
 <script id="memberSignfor-table-template" type="text/x-handlebars-template">
 	{{#each content}}
       <tr>
-        <td class="text-strong">小米手机专卖店</td>
-        <td>201603041256</td>
-        <td><span class="icon-tag-zc">正常</span> <span class="icon-tag-yc">异常</span>山东省滨州市邹平县大桥镇223号</td>
-        <td>6小时40分钟</td>
-        <td>收现金</td>
-        <td>2016.03.12 18:20</td>
-        <td class="text-strong"><span class="status-over">已签收</span>
-          <span class="status-not">未签收</span></td>
-        <td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
+        <td class="text-strong">{{shopName}}</td>
+        <td>{{orderNo}}</td>
+        <td>
+		{{{whatMemberTag customSignforException}}}
+		{{customSignforGeopoint}}</td>
+        <td>{{whatAging customSignforTime yewuSignforTime}}</td>
+        <td>{{whatPayType orderPayType}}</td>
+        <td>{{formDate customSignforTime}}</td>
+        <td class="text-strong">
+		  {{#if customSignforTime}}
+		  <span class="status-over">已签收</span>
+		  {{else}}
+          <span class="status-not">未签收</span>
+		  {{/if}}
+		</td>
+        <td><a class="btn btn-blue btn-sm" href="/ordersignfor/toAbnormalDet/{{id}}">查看</a>
         </td>
       </tr>
 	{{/each}}
@@ -200,70 +208,7 @@ var SearchData = {
 			</div>
 			<!--col-md-9-->
 			<div class="col-md-3">
-				<!--box-->
-				<!--不同阶段颜色不同1：pink 2：yellow 3:violet 4:-->
-				<div class="ywmamber-msg box border pink">
-					<!--title-->
-					<div class="box-title">
-						<i class="icon icon-time"></i>考核中
-					</div>
-					<!--box-body-->
-					<div class="box-body">
-						<!--ywmamber-body-->
-						<div class="ywmamber-body">
-							<img width="80" src="static/img/background/user-head.png"
-								alt="..." class="img-circle">
-							<div class="msg-text">
-								<h4>易小星</h4>
-								<p>ID: A236743252</p>
-								<p>电话: 12547346455</p>
-							</div>
-						</div>
-						<!--/ywmamber-body-->
-						<div class="stage">
-							<span class="kaohe-stage onekaohe-stage">第一阶段:60% </span>
-						</div>
-						<div class="progress progress-sm">
-							<div style="width: 60%;" class="progress-bar bar-kaohe"></div>
-						</div>
-						<div class="operation">
-							<a href="saojie_upd.html" class="">考核设置</a> <a
-								href="kaohe_det.html" class="pull-right">查看</a>
-						</div>
-						<div class="yw-text">
-							入职时间:<span> 2015.09.21</span> <br /> 负责区域: <span>山东省滨州市邹平县</span>
-						</div>
-						<!--拜访任务-->
-						<div class="visit">
-							<button class="col-xs-12 btn btn-visit" href="javascript:;">
-								<i class="ico icon-add"></i>拜访任务
-							</button>
-						</div>
-						<!--拜访任务-->
-						<!--操作-->
-						<div class="operation">
-							<a href="javascript:;" class="">账户设置</a> <a href="javascript:;">冻结账户</a>
-						</div>
-						<!--操作-->
-					</div>
-					<!--box-body-->
-				</div>
-				<!--box-->
-				<!--业务外部链接-->
-				<div class="yw-link">
-					<a class="link-oper" href="javascript:;"><i
-						class="icon icon-user"></i>个人资料</a> <a class="link-oper"
-						href="javascript:;"><i class="icon icon-income"></i>收益</a> <a
-						class="link-oper" href="javascript:;"><i
-						class="icon icon-task"></i>任务</a> <a class="link-oper"
-						href="javascript:;"><i class="icon icon-log"></i>日志</a> <a
-						class="link-oper" href="javascript:;"><i
-						class="icon icon-footprint"></i>足迹</a> <a class="link-oper"
-						href="javascript:;"><i class="icon icon-signin"></i>签收记录</a> <a
-						class="link-oper" href="javascript:;"><i
-						class="icon icon-saojie"></i>扫街记录</a>
-				</div>
-
+				<%@ include file="../kaohe/right_member_det.jsp"%>
 			</div>
 		</div>
 		<!--row-->

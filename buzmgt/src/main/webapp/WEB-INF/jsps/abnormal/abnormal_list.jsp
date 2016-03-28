@@ -47,7 +47,7 @@
 		<td><span class="icon-tag-yc">异常</span>{{formDate yewuSignforTime}}</td>
 		<td><a class="btn btn-blue btn-sm" href="/ordersignfor/showrecord/{{#with salesMan}}{{id}}{{/with}}">查看</a></td>				
 	</tr>
-	{{/each}}http://localhost:8081/ordersignfor/show
+	{{/each}}
 </script>
 <script id="memberSignfor-table-template" type="text/x-handlebars-template">
 	{{#each content}}

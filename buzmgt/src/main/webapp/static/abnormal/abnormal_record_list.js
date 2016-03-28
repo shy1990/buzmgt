@@ -205,7 +205,7 @@ Handlebars.registerHelper('whatStatus', function(value) {
  * @param v1 creatTime
  * @param v2 yewuSignforTime
  */
-Handlebars.registerHelper('whatTag', function(v1,v2) {
+Handlebars.registerHelper('whatYwTag', function(v1,v2) {
 	var html='';
 	if(checkTag(v1,v2)){
 		html='<span class="icon-tag-zc">正常</span>';
@@ -222,9 +222,61 @@ Handlebars.registerHelper('whatTag', function(v1,v2) {
 Handlebars.registerHelper('whatOperate', function(v1,v2) {
 	var html='';
 	if(checkTag(v1,v2)){
-		html='<a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>';
+		html='';
 	}else {
-		html='<a class="btn btn-blue btn-sm" href="javascrip:;">查看</a> <a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a>';
+		html='<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a>';
+	}
+	return html;
+});
+
+/**
+ * 用于传递参数
+ */
+Handlebars.registerHelper('parament', function(v1,v2) {
+	return checkTag(v1,v2);
+});
+
+/**
+ * 客户签收是否异常
+ * @param v1 creatTime
+ */
+Handlebars.registerHelper('whatMemberTag', function(value) {
+	var html='';
+	if(value ===1){
+		html='<span class="icon-tag-yc">异常</span>';
+	}else {
+		html='<span class="icon-tag-zc">正常</span>';
+	}
+	return html;
+});
+/**
+ * 业务给-- 客户-- 送货失效计算
+ * @param v1 customSignforTime
+ * @param v2 yewuSignforTime
+ */
+Handlebars.registerHelper('whatAging', function(v1,v2) {
+	if(v1==''||v1==null||v2==''||v2==null){
+		return "--小时--分钟";
+	}
+	var value=v1-v2;
+	var hour=parseInt(value/1000/3600);
+	var minute=parseInt((value/1000/3600-hour)*60);
+	return hour+"小时"+minute+"分钟";
+});
+
+/**
+ * 客户付款方式
+ * @param value orderPayType
+ */
+Handlebars.registerHelper('whatPayType', function(value) {
+	var html='';
+	if(value == null || value==''){return '未付款';}
+	if(value ===0){
+		html='线上付款';
+	}else if(value ===1){
+		html='pos付款';
+	}else {
+		html='现金';
 	}
 	return html;
 });

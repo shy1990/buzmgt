@@ -37,6 +37,7 @@ import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.ExcelExport;
 
@@ -49,6 +50,9 @@ public class OrderSignforController {
   
   @Resource
   private RegionService regionService;
+  
+  @Resource
+  private SalesManService salesManService;
   
   private static final String SEARCH_OPERTOR = "sc_";
  
@@ -95,7 +99,12 @@ public class OrderSignforController {
     orderSignforslist.forEach(osfl->{
       osfl.getSalesMan().setUser(null);
       osfl.getSalesMan().setRegion(null);
-      osfl.setAging(DateUtil.getAging(osfl.getCustomSignforTime().getTime()-osfl.getYewuSignforTime().getTime()));
+      String DateStr="";
+      
+      if(osfl.getCustomSignforTime() != null && osfl.getYewuSignforTime() != null){
+        DateStr = DateUtil.getAging(osfl.getCustomSignforTime().getTime()-osfl.getYewuSignforTime().getTime());
+      }
+      osfl.setAging(DateStr);
     });
     try { s = JSON.toJSONString(orderSignforslist, SerializerFeature.DisableCircularReferenceDetect);
    }
@@ -133,8 +142,14 @@ public class OrderSignforController {
     list.forEach(osfl->{
       osfl.getSalesMan().setUser(null);
       osfl.getSalesMan().setRegion(null);
-      osfl.setAging(DateUtil.getAging(osfl.getCustomSignforTime().getTime()-osfl.getYewuSignforTime().getTime()));
-    });
+      
+      String DateStr="";
+      if(osfl.getCustomSignforTime() != null && osfl.getYewuSignforTime() != null){
+        DateStr = DateUtil.getAging(osfl.getCustomSignforTime().getTime()-osfl.getYewuSignforTime().getTime());
+      }
+      osfl.setAging(DateStr);
+      
+      });
     if("ywOrderSignfor".equals(type)){
       ywlist=new ArrayList<OrderSignfor>();
       //TODO  某一个时间点（如9:00）拓展后期后台设置;
@@ -171,17 +186,19 @@ public class OrderSignforController {
    * @return
    */
   @RequestMapping(value="/showrecord/{salesManId}")
-  public String showRecordList(Model model , @PathVariable("salesManId") String userId,HttpServletRequest request){
+  public String showRecordList(Model model , @PathVariable("salesManId") SalesMan salesMan,HttpServletRequest request){
     String tabs=request.getParameter("tabs");
     model.addAttribute("tabs",tabs);
-    model.addAttribute("userId",userId);
+    model.addAttribute("salesMan",salesMan);
+    model.addAttribute("userId",salesMan.getId());
+    model.addAttribute("areaName", salesMan.getRegion().getName());
     //TODO  某一个时间点（如9:00）拓展后期后台设置;
     String timesGap = "9:00";
     model.addAttribute("timesGap",timesGap);
     return "abnormal/abnormal_record_list";
   }
   /**
-   * 业务所有订单签收信息
+   * 业务所有订单信息
    * @param model
    * @return
    */
@@ -208,6 +225,25 @@ public class OrderSignforController {
     }
     
     return s;
+  }
+  
+  @RequestMapping(value="/toAbnormalDet/{id}",method=RequestMethod.GET)
+  public String toAbnormalDet(@PathVariable("id") OrderSignfor orderSignfor, 
+      HttpServletRequest request, Model model ){
+    String page="";
+    String type=request.getParameter("type");
+    String abnormal=request.getParameter("abnormal");
+    orderSignfor.setYwSignforTag(abnormal);
+    model.addAttribute("orderSignfor", orderSignfor);
+    model.addAttribute("salesMan", orderSignfor.getSalesMan());
+    
+    
+    if("ywSignfor".equals(type)){
+      page="abnormal/abnormal_det_yw";
+    }else{
+      page="abnormal/abnormal_det_member";
+    }
+    return page;
   }
   
 }

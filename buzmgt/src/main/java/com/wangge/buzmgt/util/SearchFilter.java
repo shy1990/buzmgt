@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class SearchFilter {
   public enum Operator {
-    EQ, LIKE, GT, LT, GTE, LTE,NOTEQ
+    EQ, LIKE, GT, LT, GTE, LTE,NOTEQ,ISNULL,NOTNULL
   }
 
   public String fieldName;
