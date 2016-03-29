@@ -1,11 +1,6 @@
 package com.wangge.buzmgt.importExcel.web;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,29 +12,21 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.util.ExcelUtil;
 import com.wangge.buzmgt.util.FileUtil;
-import com.wangge.buzmgt.util.UploadUtil;
-import com.wangge.buzmgt.util.WdwUtil;
 
 
 @Controller
@@ -100,23 +87,30 @@ public class ImportOrderExcel {
   }
   
    private  void saveExcelData(String path) throws IOException {
-          OrderSignfor xlsOrder = null;
-          List<OrderSignfor> list = readXls(path);
-          //从数据库导出表
-         /* try {
-              XlsDto2Excel.xlsDto2Excel(list);
-          } catch (Exception e) {
-              e.printStackTrace();
-          }*/
-           for (OrderSignfor os : list) {
-                OrderSignfor orderSf = orderSignforService.findByOrderNo(os.getOrderNo());
-                if(orderSf != null){
-                  orderSf.setFastmailNo(os.getFastmailNo());
-                  orderSf.setFastmailTime(os.getFastmailTime());
-                  orderSignforService.updateOrderSignfor(orderSf);
+     OrderSignfor xlsOrder = null;
+     List<OrderSignfor> list = readXls(path);
+     //从数据库导出表
+    /* try {
+         XlsDto2Excel.xlsDto2Excel(list);
+     } catch (Exception e) {
+         e.printStackTrace();
+     }*/
+     if(list != null && list.size() > 0){
+       for (OrderSignfor os : list) {
+         String[] orderno =  os.getOrderNo().split(",");
+           for(int i=0;i<orderno.length;i++){
+             OrderSignfor orderSf = orderSignforService.findByOrderNo(orderno[i]);
+             if(orderSf != null && (os.getFastmailNo() != null && !"".equals(os.getFastmailNo()))){
+                 orderSf.setFastmailTime(os.getFastmailTime());
+                 orderSf.setFastmailNo(os.getFastmailNo());
+                 orderSf.setFastmailTime(os.getFastmailTime());
+                 orderSignforService.updateOrderSignfor(orderSf);
                 }
-          }
-      }
+           }
+       }
+     }
+     
+  }
     
    
       /**
@@ -158,15 +152,7 @@ public class ImportOrderExcel {
                   if (ordernum == null) {
                       continue;
                   }
-                  String[] orderno =  ExcelUtil.getValue(ordernum).split(",");
-                  if(orderno.length >=2){
-                    for(int i=0;i<orderno.length;i++){
-                      orderSignfor.setOrderNo(orderno[i]);
-                    }
-                  }else{
-                    orderSignfor.setOrderNo(orderno[0]);
-                  }
-                  
+                   orderSignfor.setOrderNo(ExcelUtil.getValue(ordernum));
                   Cell fastmailNo = hssfRow.getCell(2);
                   if (fastmailNo == null) {
                       continue;
