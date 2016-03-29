@@ -12,27 +12,23 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.wangge.buzmgt.assess.entity.Assess;
+import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.service.RegionService;
@@ -53,6 +49,10 @@ public class OrderSignforController {
   
   @Resource
   private SalesManService salesManService;
+  
+  @Resource
+  private AssessService assessService;
+  
   
   private static final String SEARCH_OPERTOR = "sc_";
  
@@ -188,8 +188,10 @@ public class OrderSignforController {
   @RequestMapping(value="/showrecord/{salesManId}")
   public String showRecordList(Model model , @PathVariable("salesManId") SalesMan salesMan,HttpServletRequest request){
     String tabs=request.getParameter("tabs");
+    Assess assesse = findAssessBySalesMan(salesMan);
     model.addAttribute("tabs",tabs);
     model.addAttribute("salesMan",salesMan);
+    model.addAttribute("assess", assesse);
     model.addAttribute("userId",salesMan.getId());
     model.addAttribute("areaName", salesMan.getRegion().getName());
     //TODO  某一个时间点（如9:00）拓展后期后台设置;
@@ -234,8 +236,10 @@ public class OrderSignforController {
     String type=request.getParameter("type");
     String abnormal=request.getParameter("abnormal");
     orderSignfor.setYwSignforTag(abnormal);
+    Assess assesse = findAssessBySalesMan(orderSignfor.getSalesMan());
     model.addAttribute("orderSignfor", orderSignfor);
     model.addAttribute("salesMan", orderSignfor.getSalesMan());
+    model.addAttribute("assess", assesse);
     
     
     if("ywSignfor".equals(type)){
@@ -244,6 +248,33 @@ public class OrderSignforController {
       page="abnormal/abnormal_det_member";
     }
     return page;
+  }
+  
+  /**
+   * 通过salesMan查询Assess考核阶段
+   * @param salesMan
+   * @return
+   */
+  public Assess findAssessBySalesMan(SalesMan salesMan) {
+    List<Assess> assesseList = assessService.findBysalesman(salesMan);
+    Assess assess = new Assess();
+    Map<String, Assess> assessMaxStage=new HashMap<String, Assess>();
+    assessMaxStage.put("max", assess);
+    try {
+      if(assesseList.size()>0){
+        assesseList.forEach(assess_ -> {
+          int max=Integer.parseInt(assessMaxStage.get("max").getAssessStage()==null ? "0" : assessMaxStage.get("max").getAssessStage());
+          if(Integer.parseInt(assess_.getAssessStage()) > max){
+            assessMaxStage.put("max", assess_);
+            System.out.println(assess_.getAssessStage());
+          }
+        });
+      }
+    } catch (Exception e) {
+      // TODO: handle exception 
+      e.printStackTrace();
+    }
+    return assessMaxStage.get("max");
   }
   
 }

@@ -44,16 +44,28 @@
 				<!--/ywmamber-body-->
 				<div class="stage">
 				<c:choose>
-				<c:when test="${salesMan.salesmanStatus.name == '考核中'}">
-					<span class="kaohe-stage onekaohe-stage">${salesMan.salesmanStatus.name}:60% </span>
+				<c:when test="${salesMan.salesmanStatus.name == '考核中' && assess.assessStage == '1'}">
+					<span class="kaohe-stage onekaohe-stage">第一阶段:${assess.percent } </span>
+				</c:when>
+				<c:when test="${salesMan.salesmanStatus.name == '考核中' && assess.assessStage == '2'}">
+					<span class="kaohe-stage twokaohe-stage">第二阶段:${assess.percent } </span>
+				</c:when>
+				<c:when test="${salesMan.salesmanStatus.name == '考核中' && assess.assessStage == '3'}">
+					<span class="kaohe-stage threekaohe-stage">第三阶段:${assess.percent } </span>
+				</c:when>
+				<c:when test="${assess.status == 'AGREE' && assess.assessStage == '3' }">
+					<span class="kaohe-stage overkaohe-stage">已转正</span>
+				</c:when>
+				<c:when test="${assess.status == 'FAIL'}">
+					<span class="kaohe-stage failurekaohe-stage">考核失败</span>
 				</c:when>
 				<c:otherwise>
-					<span class="kaohe-stage default-stage">${salesMan.salesmanStatus.name}:60% </span>
+					<span class="kaohe-stage default-stage">${salesMan.salesmanStatus.name} ${assess.percent } </span>
 				</c:otherwise>
 				</c:choose>
 				</div>
 				<div class="progress progress-sm">
-					<div style="width: 60%;" class="progress-bar bar-kaohe"></div>
+					<div style="width:<c:if test="${empty assess.percent }">20%</c:if><c:if test="${!empty assess.percent }">${assess.percent }</c:if>;" class="progress-bar bar-kaohe"></div>
 				</div>
 				<div class="operation">
 					<a href="javascript:;" class="">考核设置</a> <a
