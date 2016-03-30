@@ -27,8 +27,8 @@ public class FileUtil {
               // 写入文件
               out.write(tmp, 0, len);
               out.flush();
-              out.close();
             }
+            out.close();
             return url+dateformat.format(new Date()) + fileName;
         } catch (Exception e) {
             e.printStackTrace();

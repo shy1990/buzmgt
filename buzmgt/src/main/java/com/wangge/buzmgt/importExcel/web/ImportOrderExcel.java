@@ -152,12 +152,12 @@ public class ImportOrderExcel {
                   if (ordernum == null) {
                       continue;
                   }
-                   orderSignfor.setOrderNo(ExcelUtil.getValue(ordernum));
+                   orderSignfor.setOrderNo(ExcelUtil.getValue(ordernum).replace("\r\n", "").trim());
                   Cell fastmailNo = hssfRow.getCell(2);
                   if (fastmailNo == null) {
                       continue;
                   }
-                  orderSignfor.setFastmailNo(ExcelUtil.getValue(fastmailNo));
+                  orderSignfor.setFastmailNo(ExcelUtil.getValue(fastmailNo).replace("\r\n", "").trim());
                  // member.setUsername(getFormatName(getValue(username)));
                   Cell fastmailTime = hssfRow.getCell(5);
                   if (fastmailTime == null) {
