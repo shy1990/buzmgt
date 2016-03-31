@@ -19,6 +19,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 //@JsonInclude(Include.NON_EMPTY)
@@ -211,13 +212,13 @@ public class OrderSignfor implements Serializable {
     this.customSignforTime = customSignforTime;
   }
   public String getOrderStatus() {
-    return orderStatus.getName();
+    return orderStatus == null ? "" :orderStatus.getName();
   }
   public void setOrderStatus(OrderStatus orderStatus) {
     this.orderStatus = orderStatus;
   }
-  public OrderPayType getOrderPayType() {
-    return orderPayType;
+  public String getOrderPayType() {
+    return orderPayType == null ? "":orderPayType.getName();
   }
   public void setOrderPayType(OrderPayType orderPayType) {
     this.orderPayType = orderPayType;

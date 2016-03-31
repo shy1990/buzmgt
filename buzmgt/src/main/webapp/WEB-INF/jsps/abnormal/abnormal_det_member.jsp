@@ -70,15 +70,13 @@
 						<div class="text-hor">
 							<label>签收时间：</label>
 							<p>
-								<fmt:formatDate value="${orderSignfor.customSignforTime}" pattern="yyyy-MM-dd HH:mm"/>
+								<fmt:formatDate value="${orderSignfor.customSignforTime }" pattern="yyyy-MM-dd HH:mm"/>
 							</p>
 						</div>
 						<div class="text-hor">
 							<label>付款方式：</label>
 							<p>
-								<c:if test="${orderSignfor.orderPayType== 0 }">线上支付</c:if>
-								<c:if test="${orderSignfor.orderPayType== 1 }">POS</c:if>
-								<c:if test="${orderSignfor.orderPayType== 2 }">现金</c:if>
+								<c:if test="${！empty orderSignfor.orderPayType }">${orderSignfor.orderPayType }</c:if>
 								<c:if test="${empty orderSignfor.orderPayType }">未付款</c:if>
 							</p>
 						</div>
