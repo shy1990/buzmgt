@@ -41,7 +41,15 @@ public class VisitRecordController {
   @Resource
   private SalesManService salesManService;
   
-  
+  /**
+   * 
+    * visitRecordPage:(跳转到拜访记录页). <br/> 
+    * 
+    * @author peter 
+    * @param model
+    * @return 
+    * @since JDK 1.8
+   */
   @RequestMapping("/visitRecordPage")
   public String visitRecordPage(Model model){
     Subject subject = SecurityUtils.getSubject();
@@ -52,6 +60,15 @@ public class VisitRecordController {
     return "visit/visit_record_list";
   }
   
+  /**
+   * 
+    * visitRecordList:(获取拜访记录列表). <br/> 
+    * 
+    * @author peter 
+    * @param request
+    * @return 
+    * @since JDK 1.8
+   */
   @ResponseBody
   @RequestMapping("/visitRecordList")
   public Page<VisitVo> visitRecordList(HttpServletRequest request){
@@ -68,6 +85,17 @@ public class VisitRecordController {
     return list;
   }
   
+  /**
+   * 
+    * visitTotal:(统计拜访总次数). <br/> 
+    * 
+    * @author peter 
+    * @param regionid
+    * @param beginTime
+    * @param endTime
+    * @return 
+    * @since JDK 1.8
+   */
   @ResponseBody
   @RequestMapping("/totalVisit")
   public int visitTotal(String regionid,String beginTime,String endTime){
@@ -79,6 +107,16 @@ public class VisitRecordController {
     return total;
   }
   
+  /**
+   * 
+    * visitRecordYWPage:(跳转到业务的拜访记录页). <br/> 
+    * 
+    * @author peter 
+    * @param userId
+    * @param model
+    * @return 
+    * @since JDK 1.8
+   */
   @RequestMapping("/visitRecordYWPage")
   public String visitRecordYWPage(String userId,Model model){
     SalesMan sm = salesManService.getSalesmanByUserId(userId);
@@ -86,6 +124,15 @@ public class VisitRecordController {
     return "visit/visit_record_list_yw";
   }
   
+  /**
+   * 
+    * visitRecordYWList:(获取业务的拜访记录). <br/> 
+    * 
+    * @author peter 
+    * @param request
+    * @return 
+    * @since JDK 1.8
+   */
   @ResponseBody
   @RequestMapping("/visitRecordYWList")
   public Page<Visit> visitRecordYWList(HttpServletRequest request){
@@ -98,6 +145,16 @@ public class VisitRecordController {
     return list;
   }
   
+  /**
+   * 
+    * visitDetPage:(店铺拜访记录详情). <br/> 
+    * 
+    * @author peter 
+    * @param visitId
+    * @param model
+    * @return 
+    * @since JDK 1.8
+   */
   @RequestMapping("/visitDetPage")
   public String visitDetPage(String visitId,Model model){
     Visit visit = vrs.findById(Long.parseLong(visitId));

@@ -1,5 +1,7 @@
 package com.wangge.buzmgt.task.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.wangge.buzmgt.sys.vo.CustomerVo;
@@ -22,4 +24,6 @@ public interface VisitTaskService {
   String findMaxLastVisit(Long registId);
   
   Page<Visit> getVisitData(int pageNum,int limit,String regionName);
+  
+  List<CustomerVo> getshopMap(String regionName,int status,int condition);
 }

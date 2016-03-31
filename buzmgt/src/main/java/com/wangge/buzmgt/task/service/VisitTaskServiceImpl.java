@@ -33,7 +33,6 @@ public class VisitTaskServiceImpl implements VisitTaskService {
   private VisitTaskRepository vtr;
   
   @Override
-  @Transactional
   public Page<CustomerVo> getshopList(int pageNum,int limit, String regionName,int status,int condition) {
     String hql = "select m.id,m.username,aa.name || bb.name || cc.name || dd.name as address,count(o.id),trunc(sysdate)-trunc(max(o.createtime)),max(v.expired_time),t.registdata_id,s.user_id"+
     " from SJ_BUZMGT.SYS_REGISTDATA t left join SJ_BUZMGT.Sys_Salesman s on t.user_id=s.user_id left join SJ_BUZMGT.Sys_Visit v on t.registdata_id=v.registdata_id"+
@@ -48,6 +47,9 @@ public class VisitTaskServiceImpl implements VisitTaskService {
       hql += "SJ_BUZMGT.sys_passed ";
     }
     hql += "oo on m.id=oo.id left join SJZAIXIAN.SJ_TB_ORDER o on o.member_id=oo.id where t.member_id=m.id and s.salesman_status="+status+" ";
+    if(status == 2){
+      hql += "and (o.createtime >= (  select to_date(to_char(sysdate,'yyyy/mm'),'yyyy/mm') from dual)   and  o.createtime <= (  select to_date(to_char(sysdate+1,'yyyy/mm/dd'),'yyyy/mm/dd') from dual) ) ";
+    }
     if(condition == 2){
       hql += "and total >= "+condition+"";
     }
@@ -144,5 +146,52 @@ public class VisitTaskServiceImpl implements VisitTaskService {
   }
     Page<Visit> page = new PageImpl<Visit>(list,new PageRequest(pageNum,limit),count);
     return page;
-  }   
+  }
+  
+  @Override
+  public List<CustomerVo> getshopMap(String regionName,int status,int condition) {
+    String hql = "select t.registdata_id,s.user_id,m.username,count(o.id),t.COORDINATE,trunc(count(o.id)/3)"+
+    " from SJ_BUZMGT.SYS_REGISTDATA t left join SJ_BUZMGT.Sys_Salesman s on t.user_id=s.user_id left join SJ_BUZMGT.Sys_Visit v on t.registdata_id=v.registdata_id"+
+    " left join SJZAIXIAN.SJ_TB_MEMBERS m on t.member_id=m.id left join ";
+    if(status == 1){
+      hql += "SJ_BUZMGT.sys_check ";
+    }
+    if(status == 2){
+      hql += "SJ_BUZMGT.sys_avg_passed ";
+    }
+    hql += "oo on m.id=oo.id left join SJZAIXIAN.SJ_TB_ORDER o on o.member_id=oo.id where t.member_id=m.id and s.salesman_status="+status+" ";
+    if(status == 2){
+      hql += "and (o.createtime >= ( select add_months(trunc(sysdate, 'mm' )-1,-3) from dual) and o.createtime <= ( select trunc(sysdate, 'mm' )-1 from dual )) ";
+    }
+    if(condition == 2){
+      hql += "and total >= "+condition+"";
+    }
+    if(condition == 1 || condition == 0){
+      hql += "and total = "+condition+"";
+    }
+    if(regionName != null && !"".equals(regionName)){
+      hql += " and s.region_id in (SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
+    }
+    hql += " Group by t.registdata_id,s.user_id,m.username,t.COORDINATE";
+    
+    Query q = em.createNativeQuery(hql);
+    List customer = q.getResultList();
+    int count=customer.size();
+    System.out.println(customer);
+    List<CustomerVo> list = new ArrayList<CustomerVo>();
+    if(customer != null && count > 0){
+      for(int i = 0;i < count;i++){
+        Object[] o = (Object[])customer.get(i);
+        CustomerVo cus = new CustomerVo();
+        cus.setRegistId(((BigDecimal)o[0]).intValue());
+        cus.setUserId(o[1]+"");
+        cus.setShopName(o[2]+"");
+        cus.setOrderNum((BigDecimal)o[3]);
+        cus.setCoordinate(o[4]+"");
+        cus.setAvgOrderNum(((BigDecimal)o[5]).intValue());
+        list.add(cus);
+      }
+    }
+    return list;
+  }
 }

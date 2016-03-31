@@ -30,7 +30,6 @@ public class VisitRecordServiceImpl implements VisitRecordService {
   private VisitTaskRepository vtr;
   
   @Override
-  @Transactional
   public Page<VisitVo> getVisitData(int pageNum, int limit, String regionName,String begin,String end) {
     String hql = "";
     if(begin != null && !"".equals(begin) && end != null && !"".equals(end)){
@@ -103,7 +102,6 @@ public class VisitRecordServiceImpl implements VisitRecordService {
     }
   
   @Override
-  @Transactional
   public Page<Visit> getVisitYWData(int pageNum, int limit, String userId,String begin,String end) {
     String hql = "select v.user_id,v.visit_id,r.shop_name,v.finish_time,v.address,trunc(sysdate)-trunc(max(v.finish_time)) from sys_visit v "+
         "left join sys_registdata r on v.registdata_id = r.registdata_id where v.finish_time in (select max(v.finish_time) "+ 
