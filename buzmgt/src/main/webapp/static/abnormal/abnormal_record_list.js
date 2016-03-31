@@ -59,11 +59,11 @@ $(function(){
 			SearchData['sc_LTE_creatTime'] = endTime;
 			if('ywtab'==tab){
 				delete SearchData['sc_EQ_customSignforException']
-//				window.location.href = base + "ordersignfor/export?type=ywOrderSignfor&"
-//				+ conditionProcess() ;
+				window.location.href = base + "ordersignfor/export/"+userId+"?type=ywSignforDet&"
+				+ conditionProcess() ;
 			}else if('membertab'==tab){
-//				window.location.href = base + "ordersignfor/export?sc_EQ_customSignforException=1&"
-//				+ conditionProcess(); 
+				window.location.href = base + "ordersignfor/export/"+userId+"?&"
+				+ conditionProcess(); 
 			}
 		}
 
@@ -131,7 +131,6 @@ function findMemberOrderList(page){
 	SearchData['page']=page;
 //	SearchData['sc_EQ_customSignforException']=1;
 	var url_="ordersignfor/getrecord/"+userId;
-	console.info(url_);
 	$.ajax({
 		url:url_,
 		type:"GET",
