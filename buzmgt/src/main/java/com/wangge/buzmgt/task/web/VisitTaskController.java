@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.task.web;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -97,8 +98,49 @@ public class VisitTaskController {
    */
   @RequestMapping("/addVisitMap")
   public String addVisitMap(String addVisitMap, Model model){
+    Subject subject = SecurityUtils.getSubject();
+    User user=(User) subject.getPrincipal();
+    Manager manager = managerService.getById(user.getId());
+    model.addAttribute("regionName", manager.getRegion().getName());
+    model.addAttribute("regionId", manager.getRegion().getId());
     model.addAttribute("addVisitMap", addVisitMap);
     return "task/task_add-map";
+  }
+  
+  /**
+   * 
+    * shopList:(获取店铺统计数据地图显示). <br/> 
+    * @author peter 
+    * @param request
+    * @return Page
+    * @since JDK 1.8
+   */
+  @ResponseBody
+  @RequestMapping(value = "/shopMap",method = RequestMethod.GET)
+  public List<CustomerVo> shopMap(HttpServletRequest request){
+    String regionid = request.getParameter("regionid");
+    int status = Integer.parseInt(request.getParameter("status"));
+    int condition = Integer.parseInt(request.getParameter("condition"));
+    Region region=new Region();
+    if(null!=regionid){
+      region =regionService.getRegionById(regionid);
+    }
+    List<CustomerVo> list = visitTaskService.getshopMap(region.getName(),status,condition);
+    return list;
+  }
+  
+  @ResponseBody
+  @RequestMapping("/gainPoint")
+  public JSONObject gainPoint(String regionid, Model model){
+    JSONObject json = new JSONObject();
+    Region region=new Region();
+    if(null!=regionid){
+      region =regionService.getRegionById(regionid);
+      if(null!=region.getCoordinates()){
+        json.put("pcoordinates", region.getCoordinates());
+      }
+    }
+    return json;
   }
   
   /**

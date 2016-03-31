@@ -13,6 +13,8 @@ public class CustomerVo {
   private int associate;//关联商家
   private String lastVisit;//上次拜访
   private String userId;
+  private String coordinate;
+  private int avgOrderNum;//平均提货量
   
   public String getShopName() {
     return shopName;
@@ -67,6 +69,18 @@ public class CustomerVo {
   }
   public void setUserId(String userId) {
     this.userId = userId;
+  }
+  public String getCoordinate() {
+    return coordinate;
+  }
+  public void setCoordinate(String coordinate) {
+    this.coordinate = coordinate;
+  }
+  public int getAvgOrderNum() {
+    return avgOrderNum;
+  }
+  public void setAvgOrderNum(int avgOrderNum) {
+    this.avgOrderNum = avgOrderNum;
   }
 	
 }

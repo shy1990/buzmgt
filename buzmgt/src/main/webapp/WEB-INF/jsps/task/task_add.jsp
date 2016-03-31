@@ -167,7 +167,7 @@
 			</div>
 		</div>
 		<!--添加任务-->
-		<!--添加任务-->
+		<!--温馨提示-->
 		<div class="modal-blue modal fade " id="tips" tabindex="-1"
 			role="dialog" aria-labelledby="exampleModalLabel">
 			<div class="modal-dialog " style="width:500px;" role="document">
@@ -187,13 +187,13 @@
 					<!--modal-header-->
 					<!--modal-body-->
 					<div class="modal-body" style="padding-right:70px">
-						<h4 style="text-align:center">您上次拜访任务还未完成!</h4>
+						<h4 style="text-align:center">该店铺上次拜访任务还未完成!</h4>
 					</div>
 					<!--modal-body-->
 				</div>
 			</div>
 		</div>
-		<!--添加任务-->
+		<!--温馨提示-->
 		<!-- Bootstrap core JavaScript================================================== -->
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
