@@ -40,11 +40,12 @@
 	display: inline-block;
 	margin-left: 15px;
 }
-.abnormal-details>span{
-	margin: 0 10px;
-	position: relative;
-	top: 2px;
+@media (min-width: 1200px){
+	.abnormal-details>span{
+		margin: 0 5px;
+	}
 }
+
 .business-name{
 	display: inline-block;
 	position: relative;
@@ -125,10 +126,11 @@
 .map-box{
 	display: inline-block;
 	padding: 5px;
-	width: 815px;
+	width: 80%;
 	height: 437px;
 	border: 1px solid #EEE;
 	margin-bottom: 50px;
+	overflow:hidden;
 }
 
 

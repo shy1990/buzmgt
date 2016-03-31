@@ -202,6 +202,22 @@ public class OrderSignforServiceImpl implements OrderSignforService {
               }
 
               break;
+            case ISNULL:
+              if (javaTypeName.equals(TYPE_RED_ENVELOP_TYPE)) {
+
+                predicates.add(cb.isNull(expression));
+              }
+
+              break;
+            case NOTNULL:
+              if (javaTypeName.equals(TYPE_RED_ENVELOP_TYPE)) {
+                
+                predicates.add(cb.isNull(expression));
+              }
+              
+              break;
+              
+              
             }
           }
 

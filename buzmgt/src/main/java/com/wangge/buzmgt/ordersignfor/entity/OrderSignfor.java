@@ -34,15 +34,20 @@ public class OrderSignfor implements Serializable {
   @Column(name = "SIGNID")
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
-  private int id;
+  private Long id;
   private String fastmailNo;
   private String orderNo;
   @Transient
-  private Long aging;//时效
+  private String aging;//时效
+  //业务签收异常标记
+  @Transient
+  private String ywSignforTag;
+  
 //  private String userId;
 //  private String truename;
 //  @Transient
 //  private String ywName;//业务名称;
+ 
  
   @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
   @JoinColumn(name = "user_id")
@@ -65,11 +70,20 @@ public class OrderSignfor implements Serializable {
   private String customUnSignRemark;
   
   
-  public Long getAging() {
+  public String getYwSignforTag() {
+    return ywSignforTag;
+  }
+
+  public void setYwSignforTag(String ywSignforTag) {
+    this.ywSignforTag = ywSignforTag;
+  }
+
+  
+  public String getAging() {
     return aging;
   }
 
-  public void setAging(Long aging) {
+  public void setAging(String aging) {
     this.aging = aging;
   }
 
@@ -93,10 +107,10 @@ public class OrderSignfor implements Serializable {
     super();
   }
   
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
   public String getFastmailNo() {

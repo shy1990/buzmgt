@@ -28,13 +28,70 @@
 	href="static/yw-team-member/ywmember.css" />
 <link rel="stylesheet" type="text/css"
 	href="static/abnormal/abnormal.css" />
+<link rel="stylesheet" type="text/css"
+	href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script id="ywSignfor-table-template" type="text/x-handlebars-template">
+{{#each content}}
+	<tr>
+		<td class="text-strong">{{shopName}}</td>
+		<td>{{orderNo}}</td>
+		<td>{{yewuSignforGeopoint}}</td>
+		<td>
+			{{{whatYwTag creatTime yewuSignforTime}}}
+			{{formDate yewuSignforTime}}
+		</td>
+		<td class="text-strong">
+			{{#if yewuSignforTime}}
+			<span class="status-over">已签收</span>
+			{{else}}
+			<span class="status-not">未签收</span>
+			{{/if}}	
+		</td>
+		<td>
+			<a class="btn btn-blue btn-sm" href="/ordersignfor/toAbnormalDet/{{id}}?type=ywSignfor&abnormal={{parament creatTime yewuSignforTime}}">查看</a>
+			{{{whatOperate creatTime yewuSignforTime}}}
+		</td>
+	</tr>
+{{/each}}
+</script>
+<script id="memberSignfor-table-template" type="text/x-handlebars-template">
+	{{#each content}}
+      <tr>
+        <td class="text-strong">{{shopName}}</td>
+        <td>{{orderNo}}</td>
+        <td>
+		{{{whatMemberTag customSignforException}}}
+		{{customSignforGeopoint}}</td>
+        <td>{{whatAging customSignforTime yewuSignforTime}}</td>
+        <td>{{whatPayType orderPayType}}</td>
+        <td>{{formDate customSignforTime}}</td>
+        <td class="text-strong">
+		  {{#if customSignforTime}}
+		  <span class="status-over">已签收</span>
+		  {{else}}
+          <span class="status-not">未签收</span>
+		  {{/if}}
+		</td>
+        <td><a class="btn btn-blue btn-sm" href="/ordersignfor/toAbnormalDet/{{id}}">查看</a>
+        </td>
+      </tr>
+	{{/each}}
+</script>
+<script type="text/javascript">
+var	base='<%=basePath%>';
+var SearchData = {
+		"size" : "1",
+		"page" : "0",
+	};
+</script>
 </head>
 
 <body>
+<!-- {{{whatOperate yewuSignforTime}}} -->
 	<div class="content main">
-		<h4 class="page-header ">
+		<h4 class="page-header J_UserID" data-user="${userId }">
 			<i class="ico icon-abnormal_record"></i>签收记录
 		</h4>
 		<div class="row">
@@ -44,10 +101,10 @@
 					<!--title-->
 					<div class="box-title">
 						<!--菜单栏-->
-						<ul class="nav nav-tabs">
-							<li class="active"><a href="#box_tab1" data-toggle="tab"><span
+						<ul class="nav nav-tabs J_URL" data-tabs="${tabs }">
+							<li class="active" data-tital="ywtab"><a href="#box_tab1" data-toggle="tab"><span
 									class="">业务揽收</span></a></li>
-							<li><a href="#box_tab2" data-toggle="tab"><span class="">客户签收</span></a></li>
+							<li data-tital="membertab"><a href="#box_tab2" data-toggle="tab"><span class="">客户签收</span></a></li>
 						</ul>
 						<!--/菜单栏-->
 					</div>
@@ -57,32 +114,31 @@
 						<div class="marg-t text-time">
 							<span class="text-strong chang-time">请选择时间：</span>
 							<div class="search-date">
-								<div class="input-group input-group-sm">
+								<div class="input-group input-group-sm form_date_start">
 									<span class="input-group-addon " id="basic-addon1"><i
 										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-										type="text" class="form-control form_datetime input-sm"
+										type="text" id="startTime" class="form-control form_datetime input-sm"
 										placeholder="开始日期" readonly="readonly">
 								</div>
 							</div>
 							--
 							<div class="search-date">
-								<div class="input-group input-group-sm">
+								<div class="input-group input-group-sm form_date_end">
 									<span class="input-group-addon " id="basic-addon1"><i
 										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-										type="text" class="form-control form_datetime input-sm"
+										type="text" id="endTime" class="form-control form_datetime input-sm"
 										placeholder="结束日期" readonly="readonly">
 								</div>
 							</div>
 							<!--考核开始时间-->
 							<button class="btn btn-blue btn-sm"
-								onclick="goSearch('${salesman.id}','${assess.id}');">
+								onclick="goSearch();">
 								检索</button>
 							<!---->
 							<div class="abnormal-details">
-								<span>共 <span class="text-bule">2580</span> 单
-								</span> <span>客户签收 <span class="text-bule">2500</span> 单
-								</span> <span>拒收 <span class="text-bule">80</span> 单
-								</span>
+								<span>共<span class="text-bule">2580</span>单</span>
+								<span>客户签收<span class="text-bule">2500</span>单</span>
+								<span>拒收 <span class="text-bule">80</span>单</span>
 							</div>
 							<div class="link-posit pull-right">
 								<a class="table-export" href="javascript:void(0);">导出excel</a>
@@ -100,26 +156,19 @@
 											<tr>
 												<th>店铺名称</th>
 												<th>订单号</th>
-												<th>签收地点</th>
-												<th>签收时间</th>
+												<th>揽收地点</th>
+												<th class="J_Gap" data-time="${timesGap }">揽收时间</th>
 												<th>状态</th>
 												<th>操作</th>
 											</tr>
 										</thead>
-										<tr>
-											<td class="text-strong">小米手机专卖店</td>
-											<td>201603041256</td>
-											<td>山东省滨州市邹平县大桥镇223号</td>
-											<td><span class="icon-tag-zc">正常</span> <span
-												class="icon-tag-yc">异常</span>2016.03.12 18:20</td>
-											<td class="text-strong"><span class="status-over">已签收</span>
-												<span class="status-not">未签收</span></td>
-											<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-												<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
-										</tr>
+										<tbody id="ywOrderList"></tbody>
 									</table>
 								</div>
 								<!--table-box-->
+								<!-- 分页 -->
+								<div id="ywPager"></div>
+								<!-- 分页 -->
 							</div>
 							<!--业务揽收异常-->
 
@@ -141,22 +190,13 @@
 												<th>操作</th>
 											</tr>
 										</thead>
-										<tr>
-											<td class="text-strong">小米手机专卖店</td>
-											<td>201603041256</td>
-											<td><span class="icon-tag-zc">正常</span> <span
-												class="icon-tag-yc">异常</span>山东省滨州市邹平县大桥镇223号</td>
-											<td>6小时40分钟</td>
-											<td>收现金</td>
-											<td>2016.03.12 18:20</td>
-											<td class="text-strong"><span class="status-over">已签收</span>
-												<span class="status-not">未签收</span></td>
-											<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-											</td>
-										</tr>
+										<tbody id="memberOrderList"></tbody>
 									</table>
 								</div>
 								<!--table-box-->
+								<!-- 分页 -->
+								<div id="memberPager"></div>
+								<!-- 分页 -->
 							</div>
 							<!--客户签收异常-->
 						</div>
@@ -168,70 +208,7 @@
 			</div>
 			<!--col-md-9-->
 			<div class="col-md-3">
-				<!--box-->
-				<!--不同阶段颜色不同1：pink 2：yellow 3:violet 4:-->
-				<div class="ywmamber-msg box border pink">
-					<!--title-->
-					<div class="box-title">
-						<i class="icon icon-time"></i>考核中
-					</div>
-					<!--box-body-->
-					<div class="box-body">
-						<!--ywmamber-body-->
-						<div class="ywmamber-body">
-							<img width="80" src="static/img/background/user-head.png"
-								alt="..." class="img-circle">
-							<div class="msg-text">
-								<h4>易小星</h4>
-								<p>ID: A236743252</p>
-								<p>电话: 12547346455</p>
-							</div>
-						</div>
-						<!--/ywmamber-body-->
-						<div class="stage">
-							<span class="kaohe-stage onekaohe-stage">第一阶段:60% </span>
-						</div>
-						<div class="progress progress-sm">
-							<div style="width: 60%;" class="progress-bar bar-kaohe"></div>
-						</div>
-						<div class="operation">
-							<a href="saojie_upd.html" class="">考核设置</a> <a
-								href="kaohe_det.html" class="pull-right">查看</a>
-						</div>
-						<div class="yw-text">
-							入职时间:<span> 2015.09.21</span> <br /> 负责区域: <span>山东省滨州市邹平县</span>
-						</div>
-						<!--拜访任务-->
-						<div class="visit">
-							<button class="col-xs-12 btn btn-visit" href="javascript:;">
-								<i class="ico icon-add"></i>拜访任务
-							</button>
-						</div>
-						<!--拜访任务-->
-						<!--操作-->
-						<div class="operation">
-							<a href="javascript:;" class="">账户设置</a> <a href="javascript:;">冻结账户</a>
-						</div>
-						<!--操作-->
-					</div>
-					<!--box-body-->
-				</div>
-				<!--box-->
-				<!--业务外部链接-->
-				<div class="yw-link">
-					<a class="link-oper" href="javascript:;"><i
-						class="icon icon-user"></i>个人资料</a> <a class="link-oper"
-						href="javascript:;"><i class="icon icon-income"></i>收益</a> <a
-						class="link-oper" href="javascript:;"><i
-						class="icon icon-task"></i>任务</a> <a class="link-oper"
-						href="javascript:;"><i class="icon icon-log"></i>日志</a> <a
-						class="link-oper" href="javascript:;"><i
-						class="icon icon-footprint"></i>足迹</a> <a class="link-oper"
-						href="javascript:;"><i class="icon icon-signin"></i>签收记录</a> <a
-						class="link-oper" href="javascript:;"><i
-						class="icon icon-saojie"></i>扫街记录</a>
-				</div>
-
+				<%@ include file="../kaohe/right_member_det.jsp"%>
 			</div>
 		</div>
 		<!--row-->
@@ -245,28 +222,15 @@
 		<script src="static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-		<script src="static/yw-team-member/team-member.js"
-			type="text/javascript" charset="utf-8"></script>
+		<script src="static/js/common.js" type="text/javascript"
+			charset="utf-8"></script>
+		<script src="/static/js/dateutil.js" type="text/javascript"
+			charset="utf-8"></script>
+		<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"></script>
+		<script src="static/abnormal/abnormal_record_list.js"></script>
+		<script type="text/javascript" src="static/bootStrapPager/js/extendPagination.js"></script>
 		<script type="text/javascript">
-				$('body input').val('');
-				$(".form_datetime").datetimepicker({
-					format: "yyyy-mm-dd",
-					language: 'zh-CN',
-					weekStart: 1,
-					todayBtn: 1,
-					autoclose: 1,
-					todayHighlight: 1,
-					startView: 2,
-					minView: 2,
-					pickerPosition: "bottom-right",
-					forceParse: 0
-				});
-				var $_haohe_plan = $('.J_kaohebar').width();
-				var $_haohe_planw = $('.J_kaohebar_parents').width();
-				$(".J_btn").attr("disabled", 'disabled');
-				if ($_haohe_planw === $_haohe_plan) {　
-					$(".J_btn").removeAttr("disabled");
-				}
+				
 			</script>
 </body>
 
