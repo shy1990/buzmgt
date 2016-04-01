@@ -87,6 +87,8 @@ public class SalesMan implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date regdate;
 	
+	private int isOldSalesman;
+	
 	public SalesMan() {
 		super();
 	}
@@ -181,6 +183,14 @@ public class SalesMan implements Serializable {
 
   public void setRegdate(Date regdate) {
     this.regdate = regdate;
+  }
+
+  public int getIsOldSalesman() {
+    return isOldSalesman;
+  }
+
+  public void setIsOldSalesman(int isOldSalesman) {
+    this.isOldSalesman = isOldSalesman;
   }
 
   
