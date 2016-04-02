@@ -1,8 +1,11 @@
 package com.wangge.buzmgt.sys.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -49,7 +52,7 @@ public class Organization implements Serializable {
 	private Organization parent;
 
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private Set<Organization> children = new HashSet<Organization>();
+	private List<Organization> children = new  ArrayList<Organization>();
 
 	public Organization() {
 	}
@@ -90,14 +93,15 @@ public class Organization implements Serializable {
 	public void setParent(Organization parent) {
 		this.parent = parent;
 	}
+	
 
-	public Set<Organization> getChildren() {
-		return children;
-	}
+  public List<Organization> getChildren() {
+    return children;
+  }
 
-	public void setChildren(Set<Organization> children) {
-		this.children = children;
-	}
+  public void setChildren(List<Organization> children) {
+    this.children = children;
+  }
 
   public int getLev() {
     return lev;

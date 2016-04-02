@@ -44,7 +44,11 @@ public class MyRealm extends AuthorizingRealm {
 			LOG.warn("被锁定的用户[{}]尝试登录。", user.getUsername());
 			throw new LockedAccountException("用户被锁定。");
 		}
-
+		
+		if(null==user.getManager()){
+		  LOG.warn("登录人不是平台用户", user.getUsername());
+      throw new AuthenticationException("登录人不是平台用户。");
+		}
 		return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
 	}
 
