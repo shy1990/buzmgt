@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.assess.entity.Assess;
+import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
@@ -32,7 +35,7 @@ import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.SaojieDataVo;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
-import com.wangge.buzmgt.teammember.entity.SalesMan.SalesmanStatus;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 
@@ -62,6 +65,8 @@ public class TeamMembersController {
   private UserService userService;
   @Resource
   private SaojieService saojieService;
+  @Resource
+  private AssessService assessService;
   /**
    * 
   * @Title: toTeamMembers 
@@ -147,7 +152,7 @@ public class TeamMembersController {
     
       u = userService.addUser(u);
       salesman.setRegion(regionService.getRegionById(regionId.trim()));
-      salesman.setSalesmanStatus(SalesmanStatus.SAOJIE);
+      salesman.setStatus(com.wangge.buzmgt.teammember.entity.SalesmanStatus.saojie);
       salesman.setRegdate(new Date());
       salesman.setUser(u);
       salesManService.addSalesman(salesman);
@@ -163,6 +168,7 @@ public class TeamMembersController {
       m.setRegdate(new Date());
       m.setRegion(regionService.getRegionById(regionId.trim()));
       m.setUser(u);
+      
       managerService.addManager(m);
     //  return Redirect("/User/Edit");"salesman/salesman_list";
       
@@ -192,16 +198,16 @@ public class TeamMembersController {
   public  String  getSalesManList(Model model,SalesMan salesman, String Status,String page,String regionId,String regionName, HttpServletRequest requet){
         String name = Status != null ? Status : "全部";
         int pageNum = Integer.parseInt(page != null ? page : "0");
-        if(SalesmanStatus.SAOJIE.getName().equals(name) ){
-          salesman.setSalesmanStatus(SalesmanStatus.SAOJIE);
-        }else if(SalesmanStatus.KAIFA.getName().equals(name)){
-          salesman.setSalesmanStatus(SalesmanStatus.KAIFA);
-        }else if(SalesmanStatus.WEIHU.getName().equals(name)){
-          salesman.setSalesmanStatus(SalesmanStatus.WEIHU);
-        }else if(SalesmanStatus.ZHUANZHENG.getName().equals(name)){
-          salesman.setSalesmanStatus(SalesmanStatus.ZHUANZHENG);
-        }else if(SalesmanStatus.SHENHE.getName().equals(name)){
-          salesman.setSalesmanStatus(SalesmanStatus.SHENHE);
+        if(SalesmanStatus.saojie.getName().equals(name) ){
+          salesman.setStatus(SalesmanStatus.saojie); 
+        }else if(SalesmanStatus.kaifa.getName().equals(name)){
+          salesman.setStatus(SalesmanStatus.kaifa); 
+        }else if(SalesmanStatus.weihu.getName().equals(name)){
+          salesman.setStatus(SalesmanStatus.weihu); 
+        }else if(SalesmanStatus.zhuanzheng.getName().equals(name)){
+          salesman.setStatus(SalesmanStatus.zhuanzheng);
+        }else if(SalesmanStatus.shenhe.getName().equals(name)){
+          salesman.setStatus(SalesmanStatus.shenhe);
         }
         Region region=new Region();
         if(null!=regionId){
@@ -247,6 +253,16 @@ public class TeamMembersController {
        SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(userId, "");
        model.addAttribute("saojiedatalist", saojiedatalist);
        model.addAttribute("areaName", salesMan.getRegion().getName());
+       //判断业务员所处的模式
+       List<Assess> listAssess=assessService.findBysalesman(salesMan);
+       
+       if(salesMan.getStatus().equals(SalesmanStatus.kaifa)&&listAssess.size()==0){
+         model.addAttribute("salesStatus", "kaifa");
+       }
+       
+       
+       
+       
        if("saojie".equals(flag)){
          return "saojie/saojie_det";
        }else{
@@ -256,10 +272,9 @@ public class TeamMembersController {
   
   @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.POST)
   @ResponseBody
-  public ResponseEntity<SaojieDataVo> getSojieDtaList(String userId, String regionId){
+  public ResponseEntity<List<SaojieData>> getSojieDtaList(String userId, String regionId){
     SaojieDataVo list  = saojieService.getsaojieDataList(userId, regionId);
-   
-    return new ResponseEntity<SaojieDataVo>(list,HttpStatus.OK);
+    return new ResponseEntity<List<SaojieData>>(list.getList(),HttpStatus.OK);
   }
   
   /**
@@ -278,6 +293,7 @@ public class TeamMembersController {
     String time = formatter.format(new Date());
     String userId = "";
     List<User> uList = salesManService.findByReginId(id);
+    List<Manager> umList=managerService.findByReginId(id);
     if("服务站经理".equals(o.getName())){
       
       if(uList.size() > 0){
@@ -292,9 +308,9 @@ public class TeamMembersController {
         }
       }
     }else{
-      if(uList.size() > 0){
-          for(int j=0;j<uList.size();j++){
-            userId += num[uList.size()]+id+time+"0";
+      if(umList.size() > 0){
+          for(int j=0;j<umList.size();j++){
+            userId += num[umList.size()]+id+time+"0";
             break;
           }
       }else{

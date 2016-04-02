@@ -28,23 +28,36 @@ function getSaojieDataList(){
 			"userId" : userId,
 			"regionId" : regionId
 		},
-		success : function(result){
-		   if (result) {
+		success : function(data){
+		   if (data) {
 			   var saojiedata = $("#saojiedata");  
-			   $(".shopNum").text(result.shopNum);
-			   $(".percent").text(result.percent); 
-			   $("#percent").width(result.percent);
-			   saojiedata.empty();  
-			   for(var i = 0;i<result.list.length;i++){
-				   saojiedata.append("<div  class='list-tr'>"+
-							"<img class='shop-img' src='"+result.list[i].imageUrl+"' />"+
-							"<div style='display: inline-block;' class='list-conter'>"+
-								"<h4>"+result.list[i].name+"</h4>"+
-								"<p>"+result.list[i].discription+"</p>"+
-								"<span class='pull-right'>"+result.list[i].saojieDate+"</span>"+
-							"</div>"+
-						"</div>     ");
-			   }
+			   $(".shopNum").text(data.shopNum);
+			   $(".percent").text(data.percent); 
+			   $("#percent").width(data.percent);
+			   saojiedata.empty();
+			   
+			   saojiedata.append("<div  class='list-tr'>"+
+						"<img class='shop-img' style='height:80%;'  src='"+data[0].imageUrl+"' />"+
+						"<div style='display: inline-block;' class='list-conter'>"+
+							"<h4>"+data[0].name+"</h4>"+
+							"<p>"+data[0].description+"</p>"+
+							"<span class='pull-right'>"+data[0].saojieDate+"</span>"+
+						"</div>"+
+					"</div>     ");
+			 if(data[0].saojie.saojiedata.length>1){
+			
+				for(var i = 1;i<data[0].saojie.saojiedata.length;i++){
+						   saojiedata.append("<div  class='list-tr'>"+
+									"<img class='shop-img' style='height:80%;'  src='"+data[0].saojie.saojiedata[i].imageUrl+"' />"+
+									"<div style='display: inline-block;' class='list-conter'>"+
+										"<h4>"+data[0].saojie.saojiedata[i].name+"</h4>"+
+										"<p>"+data[0].saojie.saojiedata[i].description+"</p>"+
+										"<span class='pull-right'>"+data[0].saojie.saojiedata[i].saojieDate+"</span>"+
+									"</div>"+
+								"</div>     ");
+				}
+				   
+			 }  
 			  
 			}
 		}

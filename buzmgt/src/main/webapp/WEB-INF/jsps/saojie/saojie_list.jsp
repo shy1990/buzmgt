@@ -137,8 +137,9 @@
 																		class="time-down"> 倒计时：${saojie.timing }天</span>
 																</div>
 																<div class="progress progress-mini">
-																	<div style="width: ${saojie.percent};"
-																		class="progress-bar"></div>
+																	<div style="width: <c:if test="${saojie.percent>='100%'}">100%;</c:if>
+																	<c:if test="${saojie.percent<'100%'}">${saojie.percent};</c:if>
+																		" class="progress-bar"></div>
 																</div> <!-- 100%的用这个 --> <!-- <div>
 																		<span class="completion-ing">当前进度： 100%</span> <span
 																			class="time-finish"> 通过</span>
@@ -339,7 +340,7 @@
 							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
 			 				map.addOverlay(polygon);
 							<%String jlng = listCoordinates[1].split("-")[0];
-				String jlat = listCoordinates[1].split("-")[1];%>
+							  String jlat = listCoordinates[1].split("-")[1];%>
 							 var point = new BMap.Point(<%=jlng%>,<%=jlat%>);
 							 map.centerAndZoom(point, 8);    
 			 				//map.centerAndZoom(name, 8);
