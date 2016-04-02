@@ -102,6 +102,8 @@ public class SaojieServiceImpl implements SaojieService {
     if(saojie.getStatus() != null){
       hql += " and t.saojie_status='"+saojie.getStatus().ordinal()+"'";
     }
+    
+    hql +=" order by t.begin_time desc ";
     Query q = em.createNativeQuery(hql,Saojie.class);  
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
@@ -128,7 +130,14 @@ public class SaojieServiceImpl implements SaojieService {
   
   @Override
   public List<Saojie> findBysalesman(SalesMan salesman) {
-    return saojieRepository.findBysalesmanOrderByOrderAsc(salesman);
+    
+    List<Saojie> listSaojie=new ArrayList<Saojie>();
+    for(Saojie saojie:saojieRepository.findBysalesmanOrderByOrderAsc(salesman)){
+      saojie.addPercent(saojie.getSaojiedata().size(), saojie.getMinValue());
+      listSaojie.add(saojie);
+   }
+    return listSaojie;
+    
   }
 
   @Override

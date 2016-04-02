@@ -41,6 +41,9 @@
 	padding: 2px 15px;
 	color: #FFF;
 }
+.default-stage{
+	background: url(../img/kaohe/default-stage.png) no-repeat;
+}
 /* 一阶段考核 */
 .onekaohe-stage{
 	background: url(../img/kaohe/onekaohe.png) no-repeat;

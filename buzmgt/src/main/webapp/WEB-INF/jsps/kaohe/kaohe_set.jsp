@@ -1,5 +1,6 @@
-<%@ page language="java" import="java.util.*,com.wangge.buzmgt.saojie.entity.*,com.wangge.buzmgt.region.entity.*,com.wangge.buzmgt.teammember.entity.*" contentType="text/html; charset=UTF-8"
+<%@ page language="java" import="java.util.*,com.wangge.buzmgt.saojie.entity.*,com.wangge.buzmgt.region.entity.*,com.wangge.buzmgt.teammember.entity.*,net.sf.json.JSONArray" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
@@ -11,15 +12,32 @@
 		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 		<title>考核设置</title>
 		<!-- Bootstrap -->
-		<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+		
 		<link href="/static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="/static/kaohe/kaohe-set.css" />
 		<script src="/static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+		<script type="text/javascript" src="http://www.daimajiayuan.com/download/jquery/jquery-1.10.2.min.js"></script>
+		<link   rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-select.css">
+		<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/static/bootstrap/js/bootstrap-select.js"></script>
+		<script type="text/javascript">
+        $(window).on('load', function () {
+
+            $('.selectpicker').selectpicker({
+                'selectedText': 'cat'
+            });
+
+            // $('.selectpicker').selectpicker('hide');
+        });
+    </script>
 	</head>
 
 	<body>
+	
+	
 		<div class="content main">
 			<h4 class="team-member-header page-header ">
 				<i class="icon icon-add-set"></i>添加设置
@@ -59,6 +77,7 @@
 							<div class="form-group">
 								<div class="saojie-upd-list col-sm-10  col-sm-offset-2 col-xs-12">
 								<input type="hidden" id="salesmanId" name="salesmanId" value="${salesman.id}"/>
+								<input type="hidden" id="assesszh" name="assesszh" />
 									<!--list-->
 									<div class="table-responsive">
 										<table class="table table-bordered">
@@ -71,11 +90,34 @@
 											<tbody>
 												<tr>
 													<td class="average-tr ">
-														
+													
+														<div class="col-sm-8" >
+															<select class="form-control selectpicker" id="assessAreaId" name="assessArea" multiple >
+																<option selected>行政区域</option>
+<%-- 																	<c:foreach items="${list}" var ="li" varStatus="status"> --%>
+<%-- 																	<c:if text="${status.first}">我是第一个元素</c:if> --%>
+<%-- 																	<c:if text="${status.last}">我是最后一个元素</c:if> --%>
+<%-- 																	</c:foreach> --%>
+																<% 
+																List<Object> listR=(List<Object>)request.getAttribute("listAdminDivision");
+																	if(null!=listR){
+																	  for(int i=0;i<listR.size();i++){%>
+																	  <option value="<%=JSONArray.fromObject(listR.get(i)).get(0) %>"><%=JSONArray.fromObject(listR.get(i)).get(1)%></option>
+																	<%  }
+																	}
+																%>
+															</select>
+														</div>
+													
+													
+													
 														<div class="col-sm-4">
 															<a class="J_addDire btn btn-default btn-kaohe-add col-sm-6" href="javascript:;" id="btn"><i class="icon-saojie-add"></i></a>
 														</div>
 													<label class="pull-right col-md-6 control-label msg-error">请选择考核区域</label>
+														
+														
+														
 													</td>
 													<td class="average-tr target form-inline">
 														<div class="col-sm-5">
@@ -166,9 +208,8 @@
     <![endif]-->
 		<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="/static/js/jquery/jquery-1.11.3.min.js"></script>
+<!-- 		<script src="/static/js/jquery/jquery-1.11.3.min.js"></script> -->
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
-		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="/static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 		<script src="/static/kaohe/kaohe-set.js" type="text/javascript" charset="utf-8"></script>
@@ -186,6 +227,7 @@
 				pickerPosition: "bottom-left",
 				forceParse: 0
 			});
+			
 			
 			
 			/* 定位到区,以选择的区为中心点 */

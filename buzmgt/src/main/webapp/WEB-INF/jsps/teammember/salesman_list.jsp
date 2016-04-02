@@ -26,6 +26,23 @@
 	href="/static/CloudAdmin/js/fuelux-tree/fuelux.min.css" />
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
  <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+ <script src="../static/js/jquery/jquery-1.11.3.min.js"
+	type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+<script type="text/javascript"src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+ <link rel="stylesheet" type="text/css" href="../static/zTree/css/zTreeStyle/organzTreeStyle.css" />
+<link rel="stylesheet" type="text/css"	href="../static/yw-team-member/team-member.css" />
+<script type="text/javascript">
+	$(function() {
+		var status = $("#addClass").val();
+		console.info(status);
+		if (status != null && status != '') {
+			$("li[title = '" + status + "']").addClass("active");
+		} else {
+			$("li[title = '全部']").addClass("active");
+		}
+	});
+</script>
 </head>
 
 <body>
@@ -131,14 +148,15 @@
 																		class="shop-num-d">10家</strong></span></td>
 																<td class="project-completion"><span
 																	class="completion-ing">当前进度： 88%</span> <span
-																	class="status-ing saojie-status-on">${salesman.salesmanStatus.name}</span>
+																	class="status-ing saojie-status-on">${salesman.status.name}</span>
 																	<div class="progress progress-mini">
 																		<div style="width: 88%;"
 																			class="progress-bar saojie-bar-on"></div>
 																	</div></td>
 																<td class="project-actions"><a
-																	href="projects.html#" class="btn btn-white btn-sm "><span
-																		class="folder"></span> 查看 </a> <!-- Single button -->
+																	href="javascript:toSalesManInfo('${salesman.id}','salesman');"
+																class="btn btn-white btn-sm"><span class="folder"></span>
+																	查看 </a>
 																	<div class="btn-group sr-only">
 																		<button type="button"
 																			class="btn btn-white btn-sm dropdown-toggle"
@@ -316,6 +334,7 @@
 	<script src="/static/CloudAdmin/js/script.js"></script>
 	<script src='/static/js/common.js'></script>
 	 <script src="/static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+	<script src="src/main/webapp/static/yw-team-member/team-member.js"></script>
 	<script src="/static/js/organization/teamOrganizationTree.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 		jQuery(document).ready(function() {
@@ -410,6 +429,19 @@
 		/*区域 */
 		function getRegion(id){
 			window.location.href='/region/getPersonalRegion?id='+id;
+		}
+		/*查找区域 */
+		function toSalesManInfo(id,flag){
+			window.location.href="/teammember/toSalesManInfo?userId="+id+"&flag="+flag;
+		}
+		
+		function getList(param,name,regionId){
+		    if(name == "goSearch" || name == "param"){
+		    	var value = $("#param").val();
+		    	window.location.href="/teammember/getSalesManList?truename="+value+"&jobNum="+value+"&regionId="+regionId
+		    }else if(name == "salesmanStatus"){
+		    	window.location.href="/teammember/getSalesManList?Status="+param+"&regionId="+regionId
+		    }
 		}
 		
 		</script>

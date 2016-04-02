@@ -78,6 +78,8 @@ public class Assess implements Serializable {
 	private AssessStatus status;
 	@Column(name="ASSESS_DEFINE_AREA")
 	private String defineArea;
+	@Column(name = "ASSESS_AREA_ZH")
+	private String assesszh;
 	@Column(name = "ASSESS_ENDTIME")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
   @Temporal(TemporalType.TIMESTAMP)
@@ -237,4 +239,12 @@ public class Assess implements Serializable {
     this.orderNum = orderNum;
   }
 
+  public String getAssesszh() {
+    return assesszh;
+  }
+
+  public void setAssesszh(String assesszh) {
+    this.assesszh = assesszh;
+  }
+  
 }

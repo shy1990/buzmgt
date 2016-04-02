@@ -3,7 +3,6 @@ package com.wangge.buzmgt.teammember.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -42,19 +41,6 @@ import com.wangge.buzmgt.sys.entity.User;
 public class SalesMan implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public static enum SalesmanStatus {
-		SAOJIE("扫街中"), KAIFA("开发中"), WEIHU("维护中"),ZHUANZHENG("已转正"),SHENHE("考核中");
-		
-		private String name;
-
-		SalesmanStatus(String name) {
-      this.name = name;
-    }
-
-    public String getName() {
-      return name;
-    }
-	}
 	
 	@Id
 	@GeneratedValue(generator = "foreign")
@@ -65,15 +51,13 @@ public class SalesMan implements Serializable {
 	
 	private String simId;
 	
-    @Enumerated(EnumType.ORDINAL)
-	private SalesmanStatus salesmanStatus = SalesmanStatus.SAOJIE;
-	
+  private SalesmanStatus status = SalesmanStatus.saojie;
 	private String truename;
 	
 	private String jobNum;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
 	private Region region;
 
@@ -86,6 +70,8 @@ public class SalesMan implements Serializable {
 	private String mobile;
 	@Temporal(TemporalType.DATE)
 	private Date regdate;
+	
+	private int isOldSalesman;
 	
 	public SalesMan() {
 		super();
@@ -111,19 +97,16 @@ public class SalesMan implements Serializable {
 
 
 
-	public SalesmanStatus getSalesmanStatus() {
-		return salesmanStatus;
-	}
 
+  public SalesmanStatus getStatus() {
+    return status;
+  }
 
+  public void setStatus(SalesmanStatus status) {
+    this.status = status;
+  }
 
-	public void setSalesmanStatus(SalesmanStatus salesmanStatus) {
-		this.salesmanStatus = salesmanStatus;
-	}
-
-
-
-	public Region getRegion() {
+  public Region getRegion() {
 		return region;
 	}
 
@@ -181,6 +164,14 @@ public class SalesMan implements Serializable {
 
   public void setRegdate(Date regdate) {
     this.regdate = regdate;
+  }
+
+  public int getIsOldSalesman() {
+    return isOldSalesman;
+  }
+
+  public void setIsOldSalesman(int isOldSalesman) {
+    this.isOldSalesman = isOldSalesman;
   }
 
   

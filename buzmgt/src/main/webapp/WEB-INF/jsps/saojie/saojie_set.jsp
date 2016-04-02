@@ -88,8 +88,8 @@
 											</c:if>
 											<!--箭头-->
 											<td><span class="norm">指标：<span
-													class="text-danger">${saojie.minValue}</span>家
-											</span> <span class="td-span">已完成：<span class="text-primary">80%</span></span>
+													class="text-danger">${saojie.minValue}</span>家 
+											</span> <span class="td-span">已完成：<span class="text-primary">${saojie.percent}</span></span>
 											</td>
 											<c:if test="${saojie.status == 'PENDING' }">
 												<td>

@@ -19,75 +19,16 @@ public class TestController {
 	private ResourceService resourceService;
 	
 	/**
-	 * 权限设置页面跳转
+	 * 拜访
 	 * @param test
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("/purviewSetting")
+	@RequestMapping("/visit_record_list")
 	public String purviewSetting(String test,Model model){
-		return "purview-setting/purivew_setting";
+		return "visit/visit_det";
 	}
 
-	/**
-	 * 角色查看
-	 * @param test
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("/character")
-	public String character(String test,Model model){
-		model.addAttribute("test", test);
-		return "purview-setting/character";
-	}
-	/**
-	 * 团队成员添加
-	 * @param test
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("/team_saojie_det")
-	public String teamMemberAdd(String test,Model model){
-		return "saojie/saojie_det";
-	}
-	@RequestMapping("/kaohe_det")
-	public String kaoheDet(String test,Model model){
-	  return "kaohe/kaohe_det";
-	}
-	@RequestMapping("/kaohe_list")
-	public String kaoheList(String test,Model model){
-	  return "kaohe/kaohe_list";
-	}
-	/**
-	 * 团队成员添加
-	 * @param test
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("/saojie_set")
-	public String saojieSet(String test,Model model){
-	  return "saojie/saojie_set";
-	}
-  @RequestMapping("/saojie_upd")
-  public String saojieUpd(String test,Model model){
-    return "saojie/saojie_upd";
-  }	
-	/**
-	 * 团队成员列表
-	 * @param test
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("/team_member_det")
-	public String teamMemberList(String test,Model model){
-		return "salesman/saleman_det";
-	}
-//	@RequestMapping("/account_list")
-//	public String accountList(String test,Model model){
-//	  return "account/account_list";
-//	}
-
-	
 	@RequestMapping("/menu")
 	@ResponseBody
 	public List<Menu> menu(){

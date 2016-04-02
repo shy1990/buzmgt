@@ -215,7 +215,7 @@ function zTreeOnRemove(event, treeId, treeNode) {
 function beforeRename(treeId, treeNode, newName, isCancel) {
 	className = (className === "dark" ? "" : "dark");
 	if (newName.length == 0) {
-		BootstrapDialog.alert("节点名称不能为空");
+		alert("节点名称不能为空");
 		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 		setTimeout(function() {
 			zTree.editName(treeNode)
