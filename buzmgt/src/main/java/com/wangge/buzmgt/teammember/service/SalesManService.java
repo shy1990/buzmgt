@@ -12,7 +12,7 @@ public interface SalesManService {
 
 	List<User> findByReginId(String regionId);
 
-	Page<SalesMan> getSalesmanList(SalesMan salesman, int pageNum, String regionName, String where);
+	Page<SalesMan> getSalesmanList(SalesMan salesman,String salesmanStatus, int pageNum, String regionName, String where);
 	
 	Page<SalesMan> getSalesmanList(SalesMan salesman, int pageNum);
 

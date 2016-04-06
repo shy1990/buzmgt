@@ -111,11 +111,17 @@ public  class SalesManServiceImpl implements SalesManService {
   
   }
   
-  public Page<SalesMan> getSalesmanList(SalesMan salesMan, int pageNum, String regionName,String where){
+  public Page<SalesMan> getSalesmanList(SalesMan salesMan,String salesmanStatus, int pageNum, String regionName,String stage){
    // String and = "";
-    String whereql = where!=null && !"".equals(where.trim()) ? " and "+ where : "" ;
-    String hql = "select t.* from SYS_SALESMAN t where  t.status = '"+salesMan.getStatus().ordinal()+"' "+whereql+" and  t.region_id in "
-        + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
+    String whereql = stage!=null && !"".equals(stage.trim()) ? " and "+ stage : "" ;
+//    String hql = "select t.* from SYS_SALESMAN t where  t.status = '"+salesMan.getStatus().ordinal()+"' "+whereql+" and  t.region_id in "
+//        + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
+    String hql = "select t.* from SYS_SALESMAN t where  t.region_id in "
+        + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
+    
+    if(null!=salesmanStatus){
+      hql+= " and t.status='"+salesMan.getStatus().ordinal()+"'";
+    }
     Query q = em.createNativeQuery(hql,SalesMan.class); 
     if(salesMan.getTruename()!= null && !"".equals(salesMan.getTruename())){
       q.setParameter(1, "%"+salesMan.getTruename()+"%");

@@ -438,9 +438,9 @@
 		function getList(param,name,regionId){
 		    if(name == "goSearch" || name == "param"){
 		    	var value = $("#param").val();
-		    	window.location.href="/teammember/getSalesManList?truename="+value+"&jobNum="+value+"&regionId="+regionId
+		    	window.location.href="/teammember/getSalesManList?truename="+value+"&jobNum="+value+"&regionId="+regionId;
 		    }else if(name == "salesmanStatus"){
-		    	window.location.href="/teammember/getSalesManList?Status="+param+"&regionId="+regionId
+		    	window.location.href="/teammember/getSalesManList?salesmanStatus="+param+"&regionId="+regionId;
 		    }
 		}
 		

@@ -81,12 +81,12 @@ public class TeamMembersController {
    */
   
   @RequestMapping("/salesManList")
-  public String toTeamMembers(String salesManList, String Status, Model model,SalesMan salesman){
+  public String toTeamMembers(String salesManList, String salesmanStatus, Model model,SalesMan salesman,String regionId){
     int pageNum = 0;
     Subject subject = SecurityUtils.getSubject();
     User user=(User) subject.getPrincipal();
     Manager manager = managerService.getById(user.getId());
-    Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum,manager.getRegion().getName(),null);
+    Page<SalesMan> list = salesManService.getSalesmanList(salesman,salesmanStatus,pageNum,manager.getRegion().getName(),null);
     model.addAttribute("list", list);
     model.addAttribute("Status", "全部");
     model.addAttribute("salesManList", salesManList);
@@ -195,8 +195,8 @@ public class TeamMembersController {
   * @throws
    */
   @RequestMapping(value = "/getSalesManList",method=RequestMethod.GET)
-  public  String  getSalesManList(Model model,SalesMan salesman, String Status,String page,String regionId,String regionName, HttpServletRequest requet){
-        String name = Status != null ? Status : "全部";
+  public  String  getSalesManList(Model model,SalesMan salesman, String salesmanStatus,String page,String regionId,String regionName, HttpServletRequest requet){
+        String name = salesmanStatus != null ? salesmanStatus : "全部";
         int pageNum = Integer.parseInt(page != null ? page : "0");
         if(SalesmanStatus.saojie.getName().equals(name) ){
           salesman.setStatus(SalesmanStatus.saojie); 
@@ -232,9 +232,9 @@ public class TeamMembersController {
        if((salesman.getTruename()!=null && !"".equals(salesman.getTruename())) || (salesman.getJobNum()!= null && !"".equals(salesman.getJobNum()))){
          jpql.append("(t.truename like ?1 or t.job_num like ?2)");
        }
-    Page<SalesMan> list = salesManService.getSalesmanList(salesman,pageNum,region.getName(),jpql.toString());
+    Page<SalesMan> list = salesManService.getSalesmanList(salesman,salesmanStatus,pageNum,region.getName(),jpql.toString());
     model.addAttribute("list", list);
-    model.addAttribute("Status", Status);
+    model.addAttribute("Status", salesmanStatus);
     return "teammember/salesman_list";
   }
   
