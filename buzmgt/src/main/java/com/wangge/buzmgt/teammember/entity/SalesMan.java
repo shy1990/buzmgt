@@ -56,6 +56,8 @@ public class SalesMan implements Serializable {
 	
 	private String jobNum;
 	
+	@Column(name = "ASSESS_STAGE")
+  private String assessStage;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
@@ -164,5 +166,14 @@ public class SalesMan implements Serializable {
     this.regdate = regdate;
   }
 
+  public String getAssessStage() {
+    return assessStage;
+  }
+
+  public void setAssessStage(String assessStage) {
+    this.assessStage = assessStage;
+  }
+  
+  
   
 }

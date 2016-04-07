@@ -48,9 +48,9 @@
 						</select>
 						<!--/区域选择按钮-->
 						<div class="det-msg">
-							<span>扫街商家  <span class="shopNum">256</span> 家
+							<span>扫街商家  <span class="shopNum" id="shopNumId">0</span> 家
 							</span> 
-							<span style="margin-left: 10px;">扫街已完成     <span class="percent">80%</span>  </span>
+							<span style="margin-left: 10px;">扫街已完成     <span class="percent" id="percentId">0%</span>  </span>
 						</div>
 						<!--/row-->
 						<div class="btn-group title-page">
@@ -248,6 +248,7 @@
 			  <%
 			  	SaojieDataVo saojieDataVo=	(SaojieDataVo)request.getAttribute("saojiedatalist");
 			  	if(saojieDataVo.getList().size()>0){
+			  	
 			  	  	for(SaojieData saojiedata:saojieDataVo.getList()){
 			  		String pointStr=saojiedata.getCoordinate();
 			  		System.out.println(pointStr);
@@ -257,6 +258,9 @@
 			  		//String truename=store.getTruename();
 			  		String desc=saojiedata.getDescription();
 			  	%>	
+			   			 $("#shopNumId").html(<%=saojieDataVo.getList().size()%>); 
+			   			 var percent='<%=saojieDataVo.getPercent()%>';
+			   			 $("#percentId").html(percent);
 			  			var opts = {
 			  					width : 250,     // 信息窗口宽度
 			  					height: 80,     // 信息窗口高度
