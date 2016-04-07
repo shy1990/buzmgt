@@ -48,6 +48,7 @@ $(function() {
 		var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
 		return currentdate;
 	}
+	
 });
 
 /**
@@ -94,10 +95,9 @@ function ajaxSearch(searchData) {
 	                for (i = 0;i < arr.length;i++){
 	                	pt = new BMap.Point(arr[0],arr[1]);  // 拿到坐标点
 	                }
-					alert(pt.lng+","+pt.lat);
 					var orderNum = item.orderNum;
 					var uId = item.userId;
-					var htm = "<div style='background:none;'> ";
+					var htm = "<div class=\"J-imgwrapper\"> ";
 						if(searchData['condition'] == "0" && item.avgOrderNum >= 20 && searchData['status'] == "2"){
 							htm += "<img src='../static/img/task/zcwth1.png' border='0' /><div class='ltten'><font color='white'>";
 						}
@@ -132,11 +132,12 @@ function ajaxSearch(searchData) {
 						}
 						htm += "</font></div></div>";
 					var myRichMarkerObject = new BMapLib.RichMarker(htm, pt, {"anchor": new BMap.Size(-17, -17), "enableDragging": false});
-					var content = item.shopName;
-					content += "<div style='padding-top:20px;'><a href='/task/addVisitList' class='view'>查看</a><a href='javascript:;' onclick=addVisit("+item.registId+",\'"+uId+"\',\'"+item.shopName+"\') class='view'>拜访</a></div>";
+					var content = "<div style=\"width:160px;text-align:center;margin:10px auto;\">+"item.shopName"+</div>";
+					content += "<div style=\"text-align:center;\"><button style=\"width:70px;padding:5px 0;margin:5px;border:0;\">查看</button>"+
+								"<button style=\"width:70px;padding:5px 0;margin:5px;border:0;\" onclick=addVisit("+item.registId+",\'"+uId+"\',\'"+item.shopName+"\')>拜访</button></div>";
 					map.addOverlay(myRichMarkerObject);               // 将标注添加到地图中
-					alert(content);
 					addClickHandler(content,myRichMarkerObject);
+					$('.J-imgwrapper').parent('div').css('background','none');
 	            });
 			}else{
 				alert("暂无数据!");

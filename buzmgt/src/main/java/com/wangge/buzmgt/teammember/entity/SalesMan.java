@@ -73,7 +73,7 @@ public class SalesMan implements Serializable {
 	private String jobNum;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
 	private Region region;
 
@@ -86,6 +86,8 @@ public class SalesMan implements Serializable {
 	private String mobile;
 	@Temporal(TemporalType.DATE)
 	private Date regdate;
+	
+	private int isOldSalesman;
 	
 	public SalesMan() {
 		super();
@@ -181,6 +183,14 @@ public class SalesMan implements Serializable {
 
   public void setRegdate(Date regdate) {
     this.regdate = regdate;
+  }
+
+  public int getIsOldSalesman() {
+    return isOldSalesman;
+  }
+
+  public void setIsOldSalesman(int isOldSalesman) {
+    this.isOldSalesman = isOldSalesman;
   }
 
   
