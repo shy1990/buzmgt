@@ -136,6 +136,8 @@ public class AssessController {
     assess.setAssessEndTime(endDate);
     assess.setAssesszh(getRegionName(assess.getAssessArea()));
     assessService.saveAssess(assess);
+    salesman.setAssessStage(assess.getAssessStage());
+    salesManService.addSalesman(salesman);
     System.out.println(assess.getSalesman().getId());
     return "redirect:/assess/assessList";
   }
