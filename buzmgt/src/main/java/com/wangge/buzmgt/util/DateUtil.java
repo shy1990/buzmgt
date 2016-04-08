@@ -269,6 +269,7 @@ public class DateUtil {
 		return date2String(d, "yyyy-MM-dd 23:59:59");
 	}
 	
+	
 	/**
 	 * 
 	 * 名称:  dateMinDiff
@@ -741,6 +742,16 @@ public class DateUtil {
 		strMilliSecond = milliSecond < 100 ? "0" + strMilliSecond : "" + strMilliSecond;
 		return strDay + "天" + strHour + "时" + strMinute + "分" + strSecond + "秒";
 	}
+	 /**
+   * 计算时间差
+   * @param between (Long)毫秒值
+   * @return  xx小时xx分钟
+   */
+  public static String getAging(Long between){
+    Long hour=between/1000/3600;
+    Long minute=(between%(1000*3600))/(1000*60);
+    return hour+"小时"+minute+"分钟";
+  }
 	
 //	public static void main(String[] args) throws Exception{
 //		  Date currentTime = new Date();//获取当前时间

@@ -31,6 +31,7 @@ function queryTown(){
 	len.prevAll().remove();
 	$("#btn").show();
 	var userId = document.getElementById("saojieMan").value;
+	var map = new BMap.Map("allmap");    // 创建Map实例
 	$.ajax({
 		   type:"post",
 		   url:"/saojie/getOrderNum",
@@ -46,7 +47,8 @@ function queryTown(){
 	dataType:"JSON",
 	success : function(obj){
 	   if (obj) {
-		   var map = new BMap.Map("allmap");    // 创建Map实例
+		   map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+		   map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
 		   var regionName;
 		   strtown ='';
             strtown+='<option value = "" selected="selected">请选择</option>';
@@ -78,7 +80,7 @@ function queryTown(){
 		   url:"/saojie/getRegionName",
 		   data: {"id":userId},
 		   success : function(obj){
-			   map.centerAndZoom(obj, 11);  // 初始化地图,设置中心点坐标和地图级别
+			   map.centerAndZoom(obj, 13);  // 初始化地图,设置中心点坐标和地图级别
 			   map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
 			   map.setCurrentCity(obj);          // 设置地图显示的城市 此项是必须设置的
 			   map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
@@ -112,11 +114,6 @@ function AddOrder(btType) {
 		} else {
 			order = orderNum;
 		}
-		//					var arrName;
-		//					if (1 == 1) {
-		//						arrName = ["序号", "地区", "指标"];
-		//						alert(arrName);
-		//					}
 		var strApp = '<div class="col-sm-6 p-n" id="selOrder' + orderNum + '">\
 			  	<div class="input-group col-sm-7 ">\
 				  <span class="input-group-btn" id="basic-addon1"><span class="order-icon saojie-number-icon"><input type="hidden" name="num" value="' + orderNum + '"/>' + order + '</span></span>\
@@ -195,7 +192,7 @@ $(function() {
 					$('#starttime').datetimepicker('setEndDate', endtime);
 					$('#starttime').datetimepicker('hide');
 				});
-				$('#starttime').datetimepicker('setEndDate', getCurentTime());
+				$('#starttime').datetimepicker('setStartDate', getCurentTime());
 				$('#endtime').datetimepicker('setStartDate', getCurentTime());
 				$('#starttime').val(getCurentTime());
 				$('#endtime').val(getCurentTime());

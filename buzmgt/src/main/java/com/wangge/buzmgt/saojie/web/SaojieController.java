@@ -24,6 +24,7 @@ import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 
@@ -223,6 +224,20 @@ public class SaojieController {
     saojie.setStatus(SaojieStatus.AGREE);
     saojie.setDescription(description);
     saojieService.saveSaojie(saojie);
+    //更改业务工作模式
+    SalesMan sm=saojie.getSalesman();
+    List<Saojie> listSaojie= saojieService.findBysalesman(sm);
+    boolean flag =true;
+    for(Saojie s: listSaojie){
+      if(s.getStatus().equals(SalesmanStatus.saojie)) {
+          flag =false;
+          break;
+      }
+    }
+    if(flag){
+      sm.setStatus(SalesmanStatus.kaifa);
+      salesManService.addSalesman(sm);
+    }
     return "ok";
   }
 	

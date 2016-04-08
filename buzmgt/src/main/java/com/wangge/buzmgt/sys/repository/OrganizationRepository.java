@@ -10,7 +10,7 @@ import com.wangge.buzmgt.sys.entity.Organization;
 
 public interface OrganizationRepository extends JpaRepository<Organization, Integer>{
 
-	public Organization findOrganizationById(int id);
+	public Organization findOrganizationByIdOrderById(int id);
 
 	public List<Organization> findOrganizationByParentId(int id);
 	

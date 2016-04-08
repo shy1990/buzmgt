@@ -10,7 +10,7 @@ $(function(){
 		   if (obj) {
 			   var regionName;
 			   strtown ='';
-	            strtown+='<option value = "" selected="selected">请选择</option>';
+	            strtown+='<option value = "" selected="selected">自定义区域</option>';
 		        for(var i=0;i<obj.length;i++){
 		        	strtown+="<option value = '"+obj[i].id+"'>"+obj[i].name+"</option>";
 				}
@@ -29,16 +29,17 @@ $('.J_addDire').click(function() {
 		orderNum++;
 	}
 	var dirHtml = '<div class="col-sm-4" id="selOrder' + orderNum + '">\
-	 <select class="form-control" name="assessArea" id="town">\
+	 <select class="form-control" name="defineArea"  id="town">\
 	  ' + strtown + '\
 		</select>\
-		</div>';
+	</div>';
 	$(this).parents('.col-sm-4').before(dirHtml);
 	var options = document.getElementById("town").options.length;
 	if ($("div[id^='selOrder']").length == options-1) $("#btn").hide();
 });
 
 function toSubmit(){
+//	$("#assesszh").val($("#assessAreaId").find("option:selected").text());
 	form.submit();
 }
 

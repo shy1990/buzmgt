@@ -142,6 +142,19 @@
 									</div>
 									<label class="pull-right col-md-3 control-label msg-error">请选择负责区域</label>
 								</div>
+								<div class="form-group">
+									<label for="inputPassword" class="col-sm-3 control-label">是否老业务:</label>
+									<div class="input-group col-sm-9 ">
+										<span class="input-group-addon"><i
+											class="member-icon member-role-icon"></i></span>
+										<select id="isOldSalesman" class="form-control" name="isOldSalesman">
+											<option selected="selected" value="">请选择</option>
+											<option  value="0">新业务</option>
+											<option  value="1">老业务</option>
+										</select>
+									</div>
+									<label class="pull-right col-md-6 control-label msg-error">请选择角色权限</label>
+								</div>
 								<!-- <div class="form-group">
 								    	<label class="col-sm-3 control-label">ID编号:</label>
 								    	<div class="input-group col-sm-9 ">

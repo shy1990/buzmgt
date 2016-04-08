@@ -26,7 +26,7 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
-import com.wangge.buzmgt.teammember.entity.SalesMan.SalesmanStatus;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 
 @Service
@@ -94,10 +94,10 @@ public  class SalesManServiceImpl implements SalesManService {
          Predicate p2=cb.equal(root.get("jobNum").as(String.class), salesMan.getJobNum());        
          predicates.add(cb.or(p1,p2));
        }
-       if( salesMan.getSalesmanStatus() != null){
-         predicates.add(cb.equal(root.get("salesmanStatus").as(SalesmanStatus.class), salesMan.getSalesmanStatus()));
+       if( salesMan.getStatus()!= null){
+         predicates.add(cb.equal(root.get("salesmanStatus").as(SalesmanStatus.class), salesMan.getStatus()));
          }else{
-           predicates.add(cb.equal(root.get("salesmanStatus").as(SalesmanStatus.class), SalesmanStatus.SAOJIE));
+           predicates.add(cb.equal(root.get("salesmanStatus").as(SalesmanStatus.class), SalesmanStatus.saojie));
          }
        
         if(salesMan.getRegion() != null){
@@ -114,7 +114,7 @@ public  class SalesManServiceImpl implements SalesManService {
   public Page<SalesMan> getSalesmanList(SalesMan salesMan, int pageNum, String regionName,String where){
    // String and = "";
     String whereql = where!=null && !"".equals(where.trim()) ? " and "+ where : "" ;
-    String hql = "select t.* from SYS_SALESMAN t where  t.salesman_status = '"+salesMan.getSalesmanStatus().ordinal()+"' "+whereql+" and  t.region_id in "
+    String hql = "select t.* from SYS_SALESMAN t where  t.status = '"+salesMan.getStatus().ordinal()+"' "+whereql+" and  t.region_id in "
         + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
     Query q = em.createNativeQuery(hql,SalesMan.class); 
     if(salesMan.getTruename()!= null && !"".equals(salesMan.getTruename())){

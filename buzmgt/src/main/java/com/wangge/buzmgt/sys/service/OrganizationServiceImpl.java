@@ -31,15 +31,15 @@ public class OrganizationServiceImpl implements OrganizationService {
 	public List<OrganizationVo> getOrganListById(int id) {
 
         List<OrganizationVo> voList = new ArrayList<OrganizationVo>();
-		Organization organ = organRepository.findOrganizationById(id);
-		Set<Organization> childrren =  organ.getChildren();
+		Organization organ = organRepository.findOrganizationByIdOrderById(id);
+		List<Organization> childrren =  organ.getChildren();
 		for(Organization o : childrren){
 				OrganizationVo vo = new OrganizationVo();
 				vo.setId(o.getId()+"");
 				vo.setName(o.getName());
 				voList.add(vo);
 				if(o.getChildren() != null){
-					Set<Organization> childr =  o.getChildren();
+				  List<Organization> childr =  o.getChildren();
 					while(childr.size() > 0){
 						for(Organization or : childr){
 							OrganizationVo vor = new OrganizationVo();
@@ -57,7 +57,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 	@Override
 	public Organization getOrganById(int id) {
 		
-		return  organRepository.findOrganizationById(id);
+		return  organRepository.findOrganizationByIdOrderById(id);
 	}
 
   @Override

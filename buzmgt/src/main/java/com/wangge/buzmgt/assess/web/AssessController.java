@@ -1,15 +1,25 @@
 package com.wangge.buzmgt.assess.web;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,6 +65,8 @@ public class AssessController {
   private AssessService assessService;
   @Resource
   private ManagerService managerService;
+  @Autowired
+  private EntityManagerFactory emf;
   /**
    * 
     * toAssessSet:(跳转到考核设置页面). <br/> 
@@ -73,6 +85,8 @@ public class AssessController {
     model.addAttribute("userId",salesman.getId());
     model.addAttribute("areaname",salesman.getRegion().getName());
     model.addAttribute("regionData",regionService.findByRegion(salesman.getRegion().getId()));
+    List<Object> listRegion =  regionList(salesman.getRegion().getId());
+    model.addAttribute("listAdminDivision", listRegion);
     return "kaohe/kaohe_set";
   }
   
@@ -120,11 +134,27 @@ public class AssessController {
     c.add(Calendar.DATE, Integer.parseInt(assess.getAssessCycle()));//周期后的日期
     Date endDate= new Date(c.getTimeInMillis());
     assess.setAssessEndTime(endDate);
+    assess.setAssesszh(getRegionName(assess.getAssessArea()));
     assessService.saveAssess(assess);
     System.out.println(assess.getSalesman().getId());
     return "redirect:/assess/assessList";
   }
   
+  /**
+   * 
+    * assessList:(这里用一句话描述这个方法的作用). <br/> 
+    * TODO(这里描述这个方法适用条件 – 可选).<br/> 
+    * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
+    * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
+    * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
+    * 
+    * @author Administrator 
+    * @param assessList
+    * @param model
+    * @param assess
+    * @return 
+    * @since JDK 1.8
+   */
   @RequestMapping("/assessList")
   public String assessList(String assessList, Model model,Assess assess){
     int pageNum = 0;
@@ -193,6 +223,28 @@ public class AssessController {
     return   "kaohe/kaohe_list";
   }
   
+  /**
+   * 
+    * toAccessDet:(这里用一句话描述这个方法的作用). <br/> 
+    * TODO(这里描述这个方法适用条件 – 可选).<br/> 
+    * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
+    * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
+    * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
+    * 
+    * @author Administrator 
+    * @param salesmanId
+    * @param assess
+    * @param page
+    * @param regionid
+    * @param begin
+    * @param end
+    * @param baifen
+    * @param active
+    * @param orderNum
+    * @param model
+    * @return 
+    * @since JDK 1.8
+   */
   @RequestMapping("/toAccessDet")
   public String toAccessDet(String salesmanId,@RequestParam("asssessid") Assess assess,String page,String regionid,String begin,String end,String baifen,Integer active,Integer orderNum,Model model){
     int pageNum = Integer.parseInt(page != null ? page : "0");
@@ -242,4 +294,66 @@ public class AssessController {
     return "kaohe/kaohe_set_stage";
   }
   
+    /**
+     * 
+      * regionList:(这里用一句话描述这个方法的作用). <br/> 
+      * TODO(这里描述这个方法适用条件 – 可选).<br/> 
+      * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
+      * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
+      * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
+      * 
+      * @author Administrator 
+      * @param regionId
+      * @return 
+      * @since JDK 1.8
+     */
+      public List<Object> regionList(String regionId) {
+          
+          EntityManager em = emf.createEntityManager();
+          List<Object> objecArraytList = new ArrayList<Object>();
+          
+          try {  
+            // 定义SQL
+            String sql = "select id,name from SJZAIXIAN.SJ_TB_REGIONS where pid=(select id from SJZAIXIAN.SJ_TB_REGIONS where id2='"+regionId+"')";
+            // 创建原生SQL查询QUERY实例
+            Query query = em.createNativeQuery(sql);
+            // 每一个对象数组存的是相应的实体属性
+            objecArraytList = query.getResultList();
+      //      for (int i = 0; i < objecArraytList.size(); i++) {
+      //        Map<String, Object> map = new HashMap<String, Object>();
+      //        Object[] obj = (Object[]) objecArraytList.get(i);
+      //        // 使用obj[0],obj[1],obj[2]...取出属性　
+      //        map.put("id", obj[0]);
+      //        map.put("name", obj[1]);
+      //        ormap.add(map);
+      //      }
+            em.close();
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+          return objecArraytList;
+        }
+  
+  
+      public String getRegionName(String regionid){
+        
+        EntityManager em = emf.createEntityManager();
+        List<Object> objecArraytList = new ArrayList<Object>();
+        try { 
+        // 定义SQL
+        String sql = "select name from SJZAIXIAN.SJ_TB_REGIONS where id in ("+regionid+")";
+        // 创建原生SQL查询QUERY实例
+        Query query = em.createNativeQuery(sql);
+        // 每一个对象数组存的是相应的实体属性
+        objecArraytList = query.getResultList();
+       System.out.println(objecArraytList.toString()); 
+        em.close();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        
+        return objecArraytList.toString().substring(1, objecArraytList.toString().length()-1);
+      }
+      
+      
 }
