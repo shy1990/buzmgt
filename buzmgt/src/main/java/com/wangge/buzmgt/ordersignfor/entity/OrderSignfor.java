@@ -19,13 +19,12 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 //@JsonInclude(Include.NON_EMPTY)
 @Entity
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
-@Table(name = "SYS_ORDER_SIGNFOR")
+@Table(name = "BIZ_ORDER_SIGNFOR")
 public class OrderSignfor implements Serializable {
 
   /**

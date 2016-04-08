@@ -101,4 +101,25 @@ function GetDateDiff(startDate,endDate) 
 	    var dates = Math.floor((startTime - endTime)/(1000*60*60*24));     
 	    return  dates;    
 }
-
+/**
+ * 两个字段都不为空时进行校验日期查询
+ * @param startTimeStr
+ * @param endTimeStr
+ * @returns {Boolean}
+ */
+function checkDate(startTimeStr,endTimeStr){
+	//当两个字段都不为空时进行校验;
+	var fale=(startTimeStr != "" && startTimeStr != null)&&
+	(endTimeStr != '' && endTimeStr != null);
+	if(fale){
+		var startDate= stringToDate(startTimeStr);
+		var endDate= stringToDate(endTimeStr);
+		if(endDate.valueOf()-startDate.valueOf()>=0){
+			return true;
+		}else{
+			return false;
+		}
+	}else{
+		return true;
+	}
+}

@@ -29,6 +29,12 @@
 	height: 72px;
 	padding-left: 20px;
 }
+
+/*abnormal-order-table*/
+.abnormal-order-table>tbody>tr>td{	
+	height: 86px;
+	padding-left: 20px;
+}
 .abnormal-body .link-posit{
 	top: 21px;
 }
@@ -133,14 +139,50 @@
 	overflow:hidden;
 }
 
-
-
-
-
-
-
-
-
+/*-------------abnormal_receipt_order_list.html------------*/
+.icon-abnormal_order{
+	background: url(../img/abnormal/skycdd.png) no-repeat;
+}
+.abnormal-body .search-date-box{
+	display: inline;
+	position: relative;
+	top: -8px;
+	margin-left: 30px;
+}
+.img-goods{
+	display: inline-block;
+	position: relative;
+	margin-left: -4px;
+}
+.pay-time{
+	padding: 1px 10px 0px 5px;
+	color: #FFF;
+	display: inline-block;
+	margin-right: 10px;
+	margin-bottom: 5px;
+}
+.icon-tag-wfk{
+	background: url(../img/abnormal/wfk.png) no-repeat;
+}
+.icon-tag-yfk{
+	background: url(../img/abnormal/yfk.png) no-repeat;
+}
+.pay-time-box .text-bule{
+	font-size: 12px;
+}
+.pay-time-box .text-red{
+	font-size: 12px;
+	font-weight: 400;
+}
+.pay-time-box{
+	display: inline-block;
+	position: relative;
+	margin-left: 10px;
+}
+.input-group .input-group-addon {
+	background: #FFF;
+	margin-left: 2px;
+}
 
 
 
