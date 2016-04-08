@@ -48,8 +48,8 @@
 						</select>
 						<!--/区域选择按钮-->
 						<div class="det-msg">
-							<span>扫街商家<span class="shopNum">256</span>家
-							</span> <span>扫街已完成<span class="percent">80%</span></span>
+							<span>扫街商家<span class="shopNum" id="shopNumId">0</span>家
+							</span> <span>扫街已完成<span class="percent"id="percentId">0%</span></span>
 						</div>
 						<!--/row-->
 						<div class="btn-group title-page">
@@ -70,7 +70,9 @@
 <!-- 									<img src="static/img/saojie-map.png" /> -->
 								</div>
 							</div>
-							<button class="btn btn-approve col-sm-2 col-sm-offset-5">审核通过</button>
+							 <c:if test="${salesStatus=='kaifa'}">
+								<button class="btn btn-approve col-sm-2 col-sm-offset-5" onclick="audit('${salesMan.id}','${salesMan.region.name}')">审核通过</button>
+							</c:if>
 						</div>
 						<!--/地图-->
 						<!--列表-->
@@ -230,6 +232,10 @@
 			  		//String truename=store.getTruename();
 			  		String desc=saojiedata.getDescription();
 			  	%>	
+			  	
+			  	 $("#shopNumId").html(<%=saojieDataVo.getList().size()%>); 
+	   			 var percent='<%=saojieDataVo.getPercent()%>';
+	   			 $("#percentId").html(percent);
 			  			var opts = {
 			  					width : 250,     // 信息窗口宽度
 			  					height: 80,     // 信息窗口高度
