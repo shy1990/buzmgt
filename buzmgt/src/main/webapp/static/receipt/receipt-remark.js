@@ -6,14 +6,19 @@ $('.nav-task li').on("click", function() {
 	$(this).addClass('active');
 	$(this).siblings('li').removeClass('active');
 	var item = $(this).data('item');
+	deleteStatus()
 	switch(item){
-	case 'all': delete SearchData['sc_EQ_status']; break;
-	case 'unpay':SearchData['sc_EQ_status'] = "UnPay";break;
-	case 'timeout':SearchData['sc_GTE_status'] = "UnPayLate";break;
-	case 'payed':SearchData['sc_EQ_status'] = "OverPay";break;
+	case 'all': ; break;
+	case 'unpay': SearchData['sc_EQ_status'] = "UnPay";break;
+	case 'timeout': SearchData['sc_GTE_status'] = "UnPayLate";break;
+	case 'payed': SearchData['sc_EQ_status'] = "OverPay";break;
 	default:break;
-}
+	}
 });
+function deleteStatus(){
+	delete SearchData['sc_EQ_status'];
+	delete SearchData['sc_GTE_status'];
+}	
 $('#startTime').datetimepicker({
 	format : "yyyy-mm-dd",
 	language : 'zh-CN',

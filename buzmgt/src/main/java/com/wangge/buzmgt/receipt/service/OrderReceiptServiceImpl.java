@@ -63,14 +63,14 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
   @Override
   public List<ReceiptRemark> findAll(Map<String, Object> searchParams) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<ReceiptRemark> spec = orderSignforSearchFilter(filters.values(), ReceiptRemark.class);
+    Specification<ReceiptRemark> spec = orderReceiptSearchFilter(filters.values(), ReceiptRemark.class);
     return orderReceiptRepository.findAll(spec);
   }
 
   @Override
   public Page<ReceiptRemark> getReceiptRemarkList(Map<String, Object> searchParams, Pageable pageRequest) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<ReceiptRemark> spec = orderSignforSearchFilter(filters.values(), ReceiptRemark.class);
+    Specification<ReceiptRemark> spec = orderReceiptSearchFilter(filters.values(), ReceiptRemark.class);
 
     Page<ReceiptRemark> receiptRemarkPage=orderReceiptRepository.findAll(spec,pageRequest);
     receiptRemarkPage.getContent().forEach(receiptRemark->{
@@ -81,7 +81,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
   }
   
   
-  private static <T> Specification<ReceiptRemark> orderSignforSearchFilter(final Collection<SearchFilter> filters,
+  private static <T> Specification<ReceiptRemark> orderReceiptSearchFilter(final Collection<SearchFilter> filters,
       final Class<ReceiptRemark> entityClazz) {
 
     return new Specification<ReceiptRemark>() {
@@ -92,7 +92,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
 
       private final static String TIME_MAX = " 23:59:59 999";
 
-      private final static String TYPE_ORDERSIGNFOR_TYPE = "com.wangge.buzmgt.receipt.entity.ReceiptRemark$RemarkStatus";
+      private final static String TYPE_ORDERSIGNFOR_TYPE = "com.wangge.buzmgt.receipt.entity.RemarkStatusEnum";
       
       private final static String TYPE_ORDERSIGNFOR = "com.wangge.buzmgt.receipt.entity.ReceiptRemark";
       
@@ -130,16 +130,16 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
               } else if(javaTypeName.equals(TYPE_ORDERSIGNFOR_TYPE)){
                 String status=filter.value.toString();
                 if(RemarkStatusEnum.UnPay.toString().equals(status)){
-                  filter.value=RemarkStatusEnum.UnPay.getValue();
+                  filter.value=RemarkStatusEnum.UnPay;
                 }
                 if(RemarkStatusEnum.OverPay.toString().equals(status)){
-                  filter.value=RemarkStatusEnum.OverPay.getValue();
+                  filter.value=RemarkStatusEnum.OverPay;
                 }
                 if(RemarkStatusEnum.UnPayLate.toString().equals(status)){
-                  filter.value=RemarkStatusEnum.UnPayLate.getValue();
+                  filter.value=RemarkStatusEnum.UnPayLate;
                 }
                 if(RemarkStatusEnum.OverPayLate.toString().equals(status)){
-                  filter.value=RemarkStatusEnum.OverPayLate.getValue();
+                  filter.value=RemarkStatusEnum.OverPayLate;
                 }
                 predicates.add(cb.equal(expression, filter.value));
               } else {
@@ -191,16 +191,16 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
               } else if(javaTypeName.equals(TYPE_ORDERSIGNFOR_TYPE)){
                 String status=filter.value.toString();
                 if(RemarkStatusEnum.UnPay.toString().equals(status)){
-                  filter.value=RemarkStatusEnum.UnPay.getValue();
+                  filter.value=RemarkStatusEnum.UnPay;
                 }
                 if(RemarkStatusEnum.OverPay.toString().equals(status)){
-                  filter.value=RemarkStatusEnum.OverPay.getValue();
+                  filter.value=RemarkStatusEnum.OverPay;
                 }
                 if(RemarkStatusEnum.UnPayLate.toString().equals(status)){
-                  filter.value=RemarkStatusEnum.UnPayLate.getValue();
+                  filter.value=RemarkStatusEnum.UnPayLate;
                 }
                 if(RemarkStatusEnum.OverPayLate.toString().equals(status)){
-                  filter.value=RemarkStatusEnum.OverPayLate.getValue();
+                  filter.value=RemarkStatusEnum.OverPayLate;
                 }
                 predicates.add(cb.greaterThanOrEqualTo(expression,(Comparable) filter.value));
                   
