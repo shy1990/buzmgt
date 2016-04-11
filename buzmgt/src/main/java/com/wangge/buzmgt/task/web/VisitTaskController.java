@@ -129,6 +129,16 @@ public class VisitTaskController {
     return list;
   }
   
+  /**
+   * 
+    * gainPoint:(获取地区坐标点). <br/> 
+    * 
+    * @author peter 
+    * @param regionid
+    * @param model
+    * @return 
+    * @since JDK 1.8
+   */
   @ResponseBody
   @RequestMapping("/gainPoint")
   public JSONObject gainPoint(String regionid, Model model){

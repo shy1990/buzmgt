@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,11 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.sys.vo.CustomerVo;
-import com.wangge.buzmgt.sys.vo.OrderVo;
 import com.wangge.buzmgt.task.entity.Visit;
-import com.wangge.buzmgt.task.entity.Visit.VisitStatus;
 import com.wangge.buzmgt.task.repository.VisitTaskRepository;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.util.DateUtil;
 
 @Service
@@ -34,66 +30,57 @@ public class VisitTaskServiceImpl implements VisitTaskService {
   
   @Override
   public Page<CustomerVo> getshopList(int pageNum,int limit, String regionName,int status,int condition) {
-    String hql = "select m.id,m.username,aa.name || bb.name || cc.name || dd.name as address,count(o.id),trunc(sysdate)-trunc(max(o.createtime)),max(v.expired_time),t.registdata_id,s.user_id"+
-    " from SJ_BUZMGT.SYS_REGISTDATA t left join SJ_BUZMGT.Sys_Salesman s on t.user_id=s.user_id left join SJ_BUZMGT.Sys_Visit v on t.registdata_id=v.registdata_id"+
-    " left join SJZAIXIAN.SJ_TB_MEMBERS m on t.member_id=m.id  left join SJZAIXIAN.sj_tb_regions aa on m.province = aa.id"+
-    " left join SJZAIXIAN.sj_tb_regions bb on m.city = bb.id"+
-    " left join SJZAIXIAN.sj_tb_regions cc on m.area = cc.id"+
-    " left join SJZAIXIAN.sj_tb_regions dd on m.town = dd.id left join ";
+    String hql = "select p.registdata_id,s.user_id,p.username,p.days,p.COORDINATE,a.avgNum,p.total,p.address,p.lastvisit from sys_avg_ordernum a right outer join ";
     if(status == 1){
-      hql += "SJ_BUZMGT.sys_check ";
+      hql += "SJ_BUZMGT.sys_assesslist_checkin p ";
     }
     if(status == 2){
-      hql += "SJ_BUZMGT.sys_passed ";
+      hql += "SJ_BUZMGT.sys_assesslist_passed p ";
     }
-    hql += "oo on m.id=oo.id left join SJZAIXIAN.SJ_TB_ORDER o on o.member_id=oo.id where t.member_id=m.id and s.salesman_status="+status+" ";
-    if(status == 2){
-      hql += "and (o.createtime >= (  select to_date(to_char(sysdate,'yyyy/mm'),'yyyy/mm') from dual)   and  o.createtime <= (  select to_date(to_char(sysdate+1,'yyyy/mm/dd'),'yyyy/mm/dd') from dual) ) ";
-    }
+    hql += "on a.id = p.id left join SJ_BUZMGT.Sys_Salesman s on p.user_id = s.user_id where s.status = '"+status+"' ";
     if(condition == 2){
-      hql += "and total >= "+condition+"";
+      hql += "and p.total >= "+condition+"";
     }
     if(condition == 1 || condition == 0){
-      hql += "and total = "+condition+"";
+      hql += "and p.total = "+condition+"";
     }
     if(regionName != null && !"".equals(regionName)){
       hql += " and s.region_id in (SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
     }
-    hql += " Group by m.id,m.username,aa.name || bb.name || cc.name || dd.name,t.registdata_id,s.user_id";
     
     Query q = em.createNativeQuery(hql);
-    int count=q.getResultList().size();
+    List customer = q.getResultList();
+    int count=customer.size();
     q.setFirstResult(pageNum* limit);
     q.setMaxResults(limit);
-    System.out.println(q.getResultList());
     List<CustomerVo> list = new ArrayList<CustomerVo>();
-    if(q.getResultList() != null && count > 0){
-    Iterator it = q.getResultList().iterator();  
-    while(it.hasNext()){
-      Object[] o = (Object[])it.next();
-      CustomerVo cus = new CustomerVo();
-      cus.setShopName(o[1]+"");
-      cus.setAddress(o[2]+"");
-      cus.setOrderTimes((BigDecimal)o[3]);
-      BigDecimal p = (BigDecimal)o[4];
-      if(p != null && !"".equals(p)){
-        cus.setPeriod(p.toString());
-      }else{
-        cus.setPeriod("无记录");
+    if(customer != null && count > 0){
+      for(int i = 0;i < count;i++){
+        Object[] o = (Object[])customer.get(i);
+        CustomerVo cus = new CustomerVo();
+        cus.setRegistId(((BigDecimal)o[0]).intValue());
+        cus.setUserId(o[1]+"");
+        cus.setShopName(o[2]+"");
+        BigDecimal p = (BigDecimal)o[3];
+        if(p != null && !"".equals(p)){
+          cus.setPeriod(p.toString());
+        }else{
+          cus.setPeriod("无记录");
+        }
+        cus.setCoordinate(o[4]+"");
+        cus.setAvgOrderNum(((BigDecimal)o[5]).intValue());
+        cus.setOrderTimes(((BigDecimal)o[6]));
+        cus.setAddress(o[7]+"");
+        Date date = (Date)o[8];
+        if(date != null && !"".equals(date)){
+          String d = DateUtil.date2String(date);
+          cus.setLastVisit(d);
+        }else{
+          cus.setLastVisit("无记录");
+        }
+        list.add(cus);
       }
-      Date date = (Date)o[5];
-      if(date != null && !"".equals(date)){
-        String d = DateUtil.date2String(date);
-        cus.setLastVisit(d);
-      }else{
-        cus.setLastVisit("无记录");
-      }
-      cus.setRegistId(((BigDecimal) o[6]).intValue());
-      cus.setUserId(o[7]+"");
-      list.add(cus);
     }
-  }
-    
     Page<CustomerVo> page = new PageImpl<CustomerVo>(list,new PageRequest(pageNum,limit),count);
     return page;
   }
@@ -150,29 +137,23 @@ public class VisitTaskServiceImpl implements VisitTaskService {
   
   @Override
   public List<CustomerVo> getshopMap(String regionName,int status,int condition) {
-    String hql = "select t.registdata_id,s.user_id,m.username,count(o.id),t.COORDINATE,trunc(count(o.id)/3)"+
-    " from SJ_BUZMGT.SYS_REGISTDATA t left join SJ_BUZMGT.Sys_Salesman s on t.user_id=s.user_id left join SJ_BUZMGT.Sys_Visit v on t.registdata_id=v.registdata_id"+
-    " left join SJZAIXIAN.SJ_TB_MEMBERS m on t.member_id=m.id left join ";
+    String hql = "select t.registdata_id,s.user_id,p.username,p.days,t.COORDINATE,a.avgNum,p.total from sys_avg_ordernum a right outer join ";
     if(status == 1){
-      hql += "SJ_BUZMGT.sys_check ";
+      hql += "SJ_BUZMGT.sys_assess_checkin p ";
     }
     if(status == 2){
-      hql += "SJ_BUZMGT.sys_avg_passed ";
+      hql += "SJ_BUZMGT.sys_assess_passed p ";
     }
-    hql += "oo on m.id=oo.id left join SJZAIXIAN.SJ_TB_ORDER o on o.member_id=oo.id where t.member_id=m.id and s.salesman_status="+status+" ";
-    if(status == 2){
-      hql += "and (o.createtime >= ( select add_months(trunc(sysdate, 'mm' )-1,-3) from dual) and o.createtime <= ( select trunc(sysdate, 'mm' )-1 from dual )) ";
-    }
+    hql += "on a.id = p.id left join SJ_BUZMGT.SYS_REGISTDATA t on t.member_id = p.id left join SJ_BUZMGT.Sys_Salesman s on t.user_id = s.user_id where s.status = '"+status+"' ";
     if(condition == 2){
-      hql += "and total >= "+condition+"";
+      hql += "and p.total >= "+condition+"";
     }
     if(condition == 1 || condition == 0){
-      hql += "and total = "+condition+"";
+      hql += "and p.total = "+condition+"";
     }
     if(regionName != null && !"".equals(regionName)){
       hql += " and s.region_id in (SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
     }
-    hql += " Group by t.registdata_id,s.user_id,m.username,t.COORDINATE";
     
     Query q = em.createNativeQuery(hql);
     List customer = q.getResultList();
@@ -186,9 +167,18 @@ public class VisitTaskServiceImpl implements VisitTaskService {
         cus.setRegistId(((BigDecimal)o[0]).intValue());
         cus.setUserId(o[1]+"");
         cus.setShopName(o[2]+"");
-        cus.setOrderNum((BigDecimal)o[3]);
+        BigDecimal period = (BigDecimal)o[3];
+        if(period != null && !"".equals(period)){
+          cus.setPeriod(period.toString());
+        }else{
+          cus.setPeriod("");
+        }
         cus.setCoordinate(o[4]+"");
-        cus.setAvgOrderNum(((BigDecimal)o[5]).intValue());
+        BigDecimal aon = (BigDecimal)o[5];
+        if(aon != null && !"".equals(aon)){
+          cus.setAvgOrderNum((aon).intValue());
+        }
+        cus.setOrderTimes(((BigDecimal)o[6]));
         list.add(cus);
       }
     }

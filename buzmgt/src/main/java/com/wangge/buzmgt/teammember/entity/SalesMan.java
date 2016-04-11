@@ -56,6 +56,8 @@ public class SalesMan implements Serializable {
 	
 	private String jobNum;
 	
+	@Column(name = "ASSESS_STAGE")
+  private String assessStage;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
@@ -70,8 +72,6 @@ public class SalesMan implements Serializable {
 	private String mobile;
 	@Temporal(TemporalType.DATE)
 	private Date regdate;
-	
-	private int isOldSalesman;
 	
 	public SalesMan() {
 		super();
@@ -166,13 +166,14 @@ public class SalesMan implements Serializable {
     this.regdate = regdate;
   }
 
-  public int getIsOldSalesman() {
-    return isOldSalesman;
+  public String getAssessStage() {
+    return assessStage;
   }
 
-  public void setIsOldSalesman(int isOldSalesman) {
-    this.isOldSalesman = isOldSalesman;
+  public void setAssessStage(String assessStage) {
+    this.assessStage = assessStage;
   }
-
+  
+  
   
 }

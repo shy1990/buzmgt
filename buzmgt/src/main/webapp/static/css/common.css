@@ -94,7 +94,6 @@ button:active {
 	border: 1px solid #CCC;
 }
 
-
 /*阶段box */
 
 .box.border.yellow {
@@ -106,7 +105,6 @@ button:active {
 	border-bottom: #D29337;
 }
 
-
 /*紫色*/
 
 .box.border.violet {
@@ -117,7 +115,6 @@ button:active {
 	background: #A795CE;
 	border-bottom: #498CA2;
 }
-
 
 /*青绿色*/
 
@@ -204,7 +201,6 @@ button:active {
 	margin-right: 5px;
 }
 
-
 /*区域icon*/
 
 .icon-district {
@@ -212,14 +208,12 @@ button:active {
 	top: 5px;
 }
 
-
 /*组织结构*/
 
 .icon-structure {
 	background: url(../img/icon/team-member/list/zzjg.png) no-repeat;
 	top: 5px;
 }
-
 
 /* 错误信息提示 */
 
@@ -229,13 +223,11 @@ button:active {
 	font-weight: 300;
 }
 
-
 /* 显示错误信息 */
 
 .has-error .msg-error {
 	display: block;
 }
-
 
 /*公司列表*/
 
@@ -243,7 +235,6 @@ button:active {
 	background: url(../img/icon/team-member/det/Shape.png) no-repeat;
 	top: 5px;
 }
-
 
 /*业务详情*/
 
@@ -276,7 +267,6 @@ button:active {
 	background: url(../img/icon/saojie/set/sjsz.png) no-repeat;
 	top: 5px;
 }
-
 
 /*进度条*/
 
@@ -314,11 +304,6 @@ button:active {
 
 .btn-blue:hover,
 .btn-blue:focus {
-	background: #219ee5;
-	color: #FFF;
-}
-.btn-blue:hover,
-.btn-blue:focus{
 	background: #219ee5;
 	color: #FFF;
 }
@@ -373,7 +358,6 @@ button:active {
 	text-align: right;
 }
 
-
 /*虚线*/
 
 .hr {
@@ -382,7 +366,6 @@ button:active {
 	clear: both;
 }
 
-
 /*实线*/
 
 .hr-solid {
@@ -390,7 +373,6 @@ button:active {
 	margin: 15px -20px;
 	border-top: 2px solid #DBDBDB;
 }
-
 
 /*实线*/
 
@@ -408,7 +390,6 @@ button:active {
 	margin-bottom: 20px;
 }
 
-
 /*不同状态文字颜色*/
 
 .text-danger {
@@ -418,8 +399,6 @@ button:active {
 .text-primary {
 	color: #3894C7;
 }
-
-
 /*新图标实现方式*/
 
 .ico {
@@ -428,7 +407,6 @@ button:active {
 	position: relative;
 	top: -1px;
 }
-
 
 /* 区域切换 */
 
@@ -456,7 +434,6 @@ button:active {
 .icon-saojie-add {
 	background: url(../img/saojie/saojie-add.png) no-repeat;
 }
-
 
 /*添加成员按钮*/
 

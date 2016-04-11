@@ -115,9 +115,6 @@
 															<a class="J_addDire btn btn-default btn-kaohe-add col-sm-6" href="javascript:;" id="btn"><i class="icon-saojie-add"></i></a>
 														</div>
 													<label class="pull-right col-md-6 control-label msg-error">请选择考核区域</label>
-														
-														
-														
 													</td>
 													<td class="average-tr target form-inline">
 														<div class="col-sm-5">

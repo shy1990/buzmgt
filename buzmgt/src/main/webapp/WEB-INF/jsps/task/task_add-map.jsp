@@ -23,7 +23,7 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
 <link rel="stylesheet" type="text/css" href="static/task/task.css" />
-<script src="static/js/jquery/jquery-1.11.3.min.js"
+<script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
 <script type="text/javascript"src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
@@ -32,14 +32,8 @@
 	.ltten{
 		position:absolute;
 		z-index:2;
-		left:13px;
-		top:10px
-	}
-	.mtten{
-		position:absolute;
-		z-index:2;
-		left:13px;
-		top:10px
+		left:8px;
+		top:5px
 	}
 	.lticon{
 		position:absolute;
@@ -188,7 +182,7 @@
       <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-		<script src="static/bootstrap/js/bootstrap.min.js"></script>
+		<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 		<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 		<script src="<%=basePath%>static/task/task-map.js" type="text/javascript" charset="utf-8"></script>

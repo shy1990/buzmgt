@@ -71,14 +71,6 @@
 <!-- 									<img src="static/img/saojie-map.png" /> -->
 								</div>
 							</div>
-<%-- 							<c:choose> --%>
-<%-- 								<c:when test="${saojie.status eq 'AGREE' && assFlag eq false}"> --%>
-<%-- 									<button class="btn btn-approve col-sm-2 col-sm-offset-5" onclick="audit('${salesMan.id}','${salesMan.region.name}')">审核通过</button> --%>
-<%-- 								</c:when> --%>
-<%-- 								<c:otherwise> --%>
-<!-- 									<button class="btn btn-approve col-sm-2 col-sm-offset-5" disabled="disabled">审核通过</button> -->
-<%-- 								</c:otherwise> --%>
-<%-- 							</c:choose> --%>
 							<c:if test="${salesStatus=='kaifa'}">
 								<button class="btn btn-approve col-sm-2 col-sm-offset-5" onclick="audit('${salesMan.id}','${salesMan.region.name}')">审核通过</button>
 							</c:if>

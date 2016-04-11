@@ -255,22 +255,13 @@ public class TeamMembersController {
        SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "");
        model.addAttribute("saojiedatalist", saojiedatalist);
        model.addAttribute("areaName", salesMan.getRegion().getName());
-       List<Assess> list = assessService.findBysalesman(salesMan);
-       boolean assFlag = false;
-       if(list != null && list.size()>0){
-         assFlag = true;
-       }
-       model.addAttribute("assFlag",assFlag);
+
        //判断业务员所处的模式
        List<Assess> listAssess=assessService.findBysalesman(salesMan);
        
        if(salesMan.getStatus().equals(SalesmanStatus.kaifa)&&listAssess.size()==0){
          model.addAttribute("salesStatus", "kaifa");
        }
-       
-       
-       
-       
        if("saojie".equals(flag)){
          model.addAttribute("saojie",saojie);
          return "saojie/saojie_det";
