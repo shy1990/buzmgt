@@ -558,6 +558,30 @@ a.table-export:focus {
 	padding-bottom: 20px;
 	color: #727272;
 }
+.text-blue{
+	color: #3894C7;
+}
+/* 排序 */
+.port{
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin-right: 30px;
+	padding: 13px 20px;
+}
+.port:HOVER,
+.port:FOCUS,
+.port:ACTIVE{
+	background: #2F89BB;
+}
+.port> a{
+	color: #FFF;
+	font-weight: bold;
+	
+}
+.organization .box-title{
+	padding-top: 10px;
+}
 
 .search-date {
 	display: inline-block;
@@ -587,9 +611,6 @@ a.table-export:focus {
 	margin-top: 10px;
 }
 
-.input-group-addon {
-	background: inherit;
-}
 .img-box{
 	display: inline-block;
 	width: 260px;

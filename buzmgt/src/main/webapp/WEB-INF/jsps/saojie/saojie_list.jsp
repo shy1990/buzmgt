@@ -12,8 +12,7 @@
 <!-- Bootstrap -->
 <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="../static/css/common.css" />
-<link rel="stylesheet" type="text/css"
-	href="../static/saojie/saojie.css" />
+<link rel="stylesheet" type="text/css" href="../static/saojie/saojie.css" />
 <link href="/static/CloudAdmin/font-awesome/css/font-awesome.css"
 	rel="stylesheet">
 <script src="../static/js/jquery/jquery-1.11.3.min.js"

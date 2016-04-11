@@ -319,7 +319,7 @@ public class RegionController {
 		}else{
 			Subject subject = SecurityUtils.getSubject();
 			User user=(User) subject.getPrincipal();
-			com.wangge.buzmgt.teammember.entity.Manager manager = managerService.getById(user.getId());
+//			com.wangge.buzmgt.teammember.entity.Manager manager = managerService.getById(user.getId());
 			Manager manager1 = managerService.getById(user.getId());
 			regionId = String.valueOf(manager1.getRegion().getId());
 		}
