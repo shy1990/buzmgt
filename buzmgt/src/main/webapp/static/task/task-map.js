@@ -1,4 +1,4 @@
-/*任务地图*/
+/*任务地图开始*/
 
 var total;
 /*拜访任务列表*/
@@ -62,13 +62,17 @@ function getRegion(regionid) { // 地区
 	ajaxSearch(searchData);
 }
 
-var map = new BMap.Map("allmap");
+var map = new BMap.Map("allmap"); //创建地图
 var opts = {
 		width : 250,     // 信息窗口宽度
 		height: 80,     // 信息窗口高度
 		enableMessage:true//设置允许信息窗发送短息
 	   };
 
+/**
+ * 请求数据
+ * @param searchData
+ */
 function ajaxSearch(searchData) {
 	//百度地图API功能
 	var point = new BMap.Point(117.109808,36.667004);
@@ -91,52 +95,52 @@ function ajaxSearch(searchData) {
 				$('#totalElements').text(shopData.length);
 				
 				$.each(shopData, function(i,item){
-	                arr = item.coordinate.split(",");
+	                arr = item.coordinate.split("-");
 	                for (i = 0;i < arr.length;i++){
 	                	pt = new BMap.Point(arr[0],arr[1]);  // 拿到坐标点
 	                }
-					var orderNum = item.orderNum;
+					var period = item.period;
 					var uId = item.userId;
-					var htm = "<div class=\"J-imgwrapper\"> ";
-						if(searchData['condition'] == "0" && item.avgOrderNum >= 20 && searchData['status'] == "2"){
+					var htm = "<div class='J-imgwrapper'> ";
+						if(item.orderTimes == 0 && item.avgOrderNum >= 20 && searchData['status'] == "2"){
 							htm += "<img src='../static/img/task/zcwth1.png' border='0' /><div class='ltten'><font color='white'>";
 						}
-						if(searchData['condition'] == "0" && item.avgOrderNum < 20 && searchData['status'] == "2"){
-							htm += "<img src='../static/img/task/zcwth2.png' border='0' /><div class='lticon'><font color='white'>";
+						if(item.orderTimes == 0 && item.avgOrderNum < 20 && searchData['status'] == "2"){
+							htm += "<img src='../static/img/task/zcwth2.png' border='0' /><div class='ltten'><font color='white'>";
 						}
-						if(searchData['condition'] == "1" && item.avgOrderNum >= 20 && searchData['status'] == "2"){
+						if(item.orderTimes == 1 && item.avgOrderNum >= 20 && searchData['status'] == "2"){
 							htm += "<img src='../static/img/task/yicth1.png' border='0' /><div class='ltten'><font color='white'>";
 						}
-						if(searchData['condition'] == "1" && item.avgOrderNum < 20 && searchData['status'] == "2"){
-							htm += "<img src='../static/img/task/yicth2.png' border='0' /><div class='lticon'><font color='white'>";
+						if(item.orderTimes == 1 && item.avgOrderNum < 20 && searchData['status'] == "2"){
+							htm += "<img src='../static/img/task/yicth2.png' border='0' /><div class='ltten'><font color='white'>";
 						}
-						if(searchData['condition'] == "2" && item.avgOrderNum >= 20 && searchData['status'] == "2"){
+						if(item.orderTimes >= 2 && item.avgOrderNum >= 20 && searchData['status'] == "2"){
 							htm += "<img src='../static/img/task/ercth1.png' border='0' /><div class='ltten'><font color='white'>";
 						}
-						if(searchData['condition'] == "2" && item.avgOrderNum < 20 && searchData['status'] == "2"){
-							htm += "<img src='../static/img/task/ercth2.png' border='0' /><div class='lticon'><font color='white'>";
+						if(item.orderTimes >= 2 && item.avgOrderNum < 20 && searchData['status'] == "2"){
+							htm += "<img src='../static/img/task/ercth2.png' border='0' /><div class='ltten'><font color='white'>";
 						}
-						if(searchData['condition'] == "0" && searchData['status'] == "1"){
-							htm += "<img src='../static/img/task/zcwth2.png' border='0' /><div class='lticon'><font color='white'>";
+						if(item.orderTimes == 0 && searchData['status'] == "1"){
+							htm += "<img src='../static/img/task/zcwth2.png' border='0' /><div class='ltten'><font color='white'>";
 						}
-						if(searchData['condition'] == "1" && searchData['status'] == "1"){
-							htm += "<img src='../static/img/task/yicth2.png' border='0' /><div class='lticon'><font color='white'>";
+						if(item.orderTimes == 1 && searchData['status'] == "1"){
+							htm += "<img src='../static/img/task/yicth2.png' border='0' /><div class='ltten'><font color='white'>";
 						}
-						if(searchData['condition'] == "2" && searchData['status'] == "1"){
-							htm += "<img src='../static/img/task/ercth2.png' border='0' /><div class='lticon'><font color='white'>";
+						if(item.orderTimes >= 2 && searchData['status'] == "1"){
+							htm += "<img src='../static/img/task/ercth2.png' border='0' /><div class='ltten'><font color='white'>";
 						}
-						if(orderNum > 99){
+						if(period > 99){
 							htm += "99+";
 						}else{
-							htm += orderNum;
+							htm += period;
 						}
 						htm += "</font></div></div>";
 					var myRichMarkerObject = new BMapLib.RichMarker(htm, pt, {"anchor": new BMap.Size(-17, -17), "enableDragging": false});
-					var content = "<div style=\"width:160px;text-align:center;margin:10px auto;\">+"item.shopName"+</div>";
-					content += "<div style=\"text-align:center;\"><button style=\"width:70px;padding:5px 0;margin:5px;border:0;\">查看</button>"+
-								"<button style=\"width:70px;padding:5px 0;margin:5px;border:0;\" onclick=addVisit("+item.registId+",\'"+uId+"\',\'"+item.shopName+"\')>拜访</button></div>";
-					map.addOverlay(myRichMarkerObject);               // 将标注添加到地图中
-					addClickHandler(content,myRichMarkerObject);
+					var content = "<div style='width:160px;text-align:center;margin:10px auto;'>"+item.shopName+"</div>";
+					content += "<div style='text-align:center;'><button style='width:70px;padding:5px 0;margin:5px;border:0;'>查看</button>"+
+								"<button style='width:70px;padding:5px 0;margin:5px;border:0;' onclick=addVisit("+item.registId+",\'"+uId+"\',\'"+item.shopName+"\')>拜访</button></div>";
+					map.addOverlay(myRichMarkerObject);// 将标注添加到地图中
+					addClickHandler(content,myRichMarkerObject);//添加监听事件
 					$('.J-imgwrapper').parent('div').css('background','none');
 	            });
 			}else{
@@ -151,7 +155,7 @@ function ajaxSearch(searchData) {
 
 function addClickHandler(content,marker){
 	marker.addEventListener("click",function(e){
-		openInfo(content,e)}
+		openInfo(content,e)}//开启窗口
 	);
 }
 function openInfo(content,e){
@@ -198,7 +202,9 @@ function searchConditionData(condition) { // 条件：活跃、未提货、一�
 	ajaxSearch(searchData);
 }
 
-//添加拜访
+/**
+ * 添加拜访模态框
+ */
 function addVisit(registId,userId,shopName) {
 	$.ajax({
 		url : base + "task/lastVisit",
@@ -225,6 +231,9 @@ function addVisit(registId,userId,shopName) {
 	$('#taskName').val(shopName+"拜访");
 }
 
+/**
+ * 保存拜访
+ */
 function saveVisit(){
 	var arr = $('#addForm').serializeArray();
 	var param = $.param(arr);
@@ -246,3 +255,4 @@ function saveVisit(){
 		}
 	});
 }
+/*任务地图结束*/
