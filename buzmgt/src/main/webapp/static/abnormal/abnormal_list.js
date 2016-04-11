@@ -1,10 +1,12 @@
 var membertotal=0,ywtotal=0;
 $(function(){
+	nowTime();
 	findYwOrderList();
 	findMemberOrderList();
 	$('#startTime').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
+		endDate : new Date(),
 		weekStart : 1,
 		todayBtn : 1,
 		autoclose : 1,
@@ -27,6 +29,7 @@ $(function(){
 	$('#endTime').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
+		endDate : new Date(),
 		weekStart : 1,
 		todayBtn : 1,
 		autoclose : 1,
@@ -187,6 +190,19 @@ function goSearch() {
 		}
 	}
 }
+/**
+ * 初始化日期
+ * 最近3天
+ */
+function nowTime(){
+	var nowDate=changeDateToString(new Date());
+	var beforeDate=changeDateToString((new Date()).DateAdd('d',-3));
+	SearchData['sc_GTE_creatTime'] = beforeDate;
+	SearchData['sc_LTE_creatTime'] = nowDate;
+	$('#startTime').val(beforeDate);
+	$('#endTime').val(nowDate)
+}
+
 function checkDate(startTimeStr,endTimeStr){
 	//当两个字段都不为空时进行校验;
 	var fale=(startTimeStr != "" && startTimeStr != null)&&

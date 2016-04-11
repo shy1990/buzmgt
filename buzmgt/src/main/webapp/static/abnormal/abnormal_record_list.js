@@ -3,12 +3,14 @@ var userId;
 $(function(){
 	//先获取业务员的id
 	userId=getUserId();
+	nowTime();
 	findYwOrderList();
 	findMemberOrderList();
 	showTab();
 	$('#startTime').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
+		endDate : new Date(), 
 		weekStart : 1,
 		todayBtn : 1,
 		autoclose : 1,
@@ -31,6 +33,7 @@ $(function(){
 	$('#endTime').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
+		endDate : new Date(),
 		weekStart : 1,
 		todayBtn : 1,
 		autoclose : 1,
@@ -180,6 +183,19 @@ function memberPaging(data) {
 		}
 	});
 }
+/**
+ * 初始化日期
+ * 最近3天
+ */
+function nowTime(){
+	var nowDate=changeDateToString(new Date());
+	var beforeDate=changeDateToString((new Date()).DateAdd('d',-3));
+	SearchData['sc_GTE_creatTime'] = beforeDate;
+	SearchData['sc_LTE_creatTime'] = nowDate;
+	$('#startTime').val(beforeDate);
+	$('#endTime').val(nowDate)
+}
+
 //日期格式化
 Handlebars.registerHelper('formDate', function(value) {
 	if(value != ""&&value!= null){

@@ -1,6 +1,8 @@
 var remarkedTotal = 0;
 $(function() {
+	nowTime();//初始化日期
 	findRemarked();
+	findNOTRemarked();
 })
 $('.nav-task li').on("click", function() {
 	$(this).addClass('active');
@@ -22,6 +24,7 @@ function deleteStatus(){
 $('#startTime').datetimepicker({
 	format : "yyyy-mm-dd",
 	language : 'zh-CN',
+	endDate : new Date(),
 	weekStart : 1,
 	todayBtn : 1,
 	autoclose : 1,
@@ -44,6 +47,7 @@ $('#startTime').datetimepicker({
 $('#endTime').datetimepicker({
 	format : "yyyy-mm-dd",
 	language : 'zh-CN',
+	endDate : new Date(),
 	weekStart : 1,
 	todayBtn : 1,
 	autoclose : 1,
@@ -63,13 +67,29 @@ $('#endTime').datetimepicker({
 		}
 	}
 });
+
+/**
+ * 初始化日期
+ * 最近3天
+ */
+function nowTime(){
+	var nowDate=changeDateToString(new Date());
+	var beforeDate=changeDateToString((new Date()).DateAdd('d',-3));
+	SearchData['sc_GTE_createTime'] = beforeDate;
+	SearchData['sc_LTE_createTime'] = nowDate;
+	$('#startTime').val(beforeDate);
+	$('#endTime').val(nowDate)
+}
+/**
+ * 检索
+ */
 function goSearch() {
 	var tab =$('.abnormal-body .nav-tabs li.active').attr('data-tital');
 	var startTime=$('#startTime').val();
 	var endTime=$('#endTime').val();
 	if(checkDate(startTime,endTime)){
-		SearchData['sc_GTE_creatTime'] = startTime;
-		SearchData['sc_LTE_creatTime'] = endTime;
+		SearchData['sc_GTE_createTime'] = startTime;
+		SearchData['sc_LTE_createTime'] = endTime;
 		if('reported'==tab){
 			findRemarked();
 		}else if('membertab'==tab){
@@ -112,6 +132,29 @@ function findRemarked(page) {
 				remarkedTotal = searchTotal;
 
 				 remarkedPaging(orderData);
+			}
+		},
+		error : function() {
+			alert("系统异常，请稍后重试！")
+		}
+	})
+}
+function findNOTRemarked(page) {
+	page = page == null || page == '' ? 0 : page;
+	SearchData['page'] = page;
+	// delete SearchData['sc_EQ_customSignforException'];
+	$.ajax({
+		url : "/receiptRemark/remarkList",
+		type : "POST",
+		data : SearchData,
+		dataType : "json",
+		success : function(orderData) {
+			createRemarkedTable(orderData);
+			var searchTotal = orderData.totalElements;
+			if (searchTotal != remarkedTotal || searchTotal == 0) {
+				remarkedTotal = searchTotal;
+				
+				remarkedPaging(orderData);
 			}
 		},
 		error : function() {
