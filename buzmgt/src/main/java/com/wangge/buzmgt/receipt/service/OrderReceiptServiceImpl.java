@@ -21,10 +21,14 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.assess.entity.Assess;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
 import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.receipt.entity.RemarkStatusEnum;
@@ -261,6 +265,20 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
         return cb.conjunction();
       }
     };
+  }
+
+
+  @Override
+  public Page<OrderSignfor> getReceiptNotRemark(Map<String, Object> searchParams, Pageable pageRequest) {
+    // TODO Auto-generated method stub
+    String status="";
+    String startTime="";
+    String endTime="";
+    startTime = (String) searchParams.get("GTE_createTime");
+    endTime = (String) searchParams.get("LTE_createTime");
+    List<OrderSignfor> list = orderSignforRepository.getReceiptNotRemarkList(status, startTime, endTime);
+    Page<OrderSignfor> page = new PageImpl<OrderSignfor>(list,pageRequest,list.size());
+    return page;
   }
   
 

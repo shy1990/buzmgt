@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 
 public interface OrderSignforRepository extends JpaRepository<OrderSignfor, Long>,
-JpaSpecificationExecutor<OrderSignfor>{
+JpaSpecificationExecutor<OrderSignfor>,OrderSignforRepositoryCustom{
   public Page<OrderSignfor> findAll(Pageable pageRequest);
   
   public Page<OrderSignfor> findByCustomSignforException(String status,Pageable pageRequest);

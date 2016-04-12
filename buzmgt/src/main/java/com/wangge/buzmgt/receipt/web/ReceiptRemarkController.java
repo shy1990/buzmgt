@@ -17,6 +17,7 @@ import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.receipt.service.OrderReceiptService;
 
@@ -54,5 +55,20 @@ public class ReceiptRemarkController {
      }
     return json;
   }
-  
+  @RequestMapping(value="notRemarkList",method=RequestMethod.POST)
+  @ResponseBody
+  public String getReceiptNotRemark(HttpServletRequest request,
+      @PageableDefault(page = 0,size=10,sort={"creatTime"},direction=Direction.DESC) Pageable pageRequest ){
+    String json="";
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    Page<OrderSignfor> receiptRemarkList=orderReceiptService.getReceiptNotRemark(searchParams, pageRequest);
+    
+    try { 
+      json=JSON.toJSONString(receiptRemarkList, SerializerFeature.DisableCircularReferenceDetect);
+    }
+     catch(Exception e){
+       System.out.println(e.getMessage());
+     }
+    return json;
+  }
 }
