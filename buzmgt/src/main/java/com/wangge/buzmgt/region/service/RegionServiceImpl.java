@@ -66,6 +66,7 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
+	@Transactional
 	public void saveRegion(Region region) {
 		regionRepository.save(region);
 	}

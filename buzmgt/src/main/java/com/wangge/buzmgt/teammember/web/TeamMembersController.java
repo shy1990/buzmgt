@@ -274,6 +274,7 @@ public class TeamMembersController {
   @ResponseBody
   public ResponseEntity<List<SaojieData>> getSojieDtaList(String userId, String regionId){
     SaojieDataVo list  = saojieService.getsaojieDataList(userId, regionId);
+    
     return new ResponseEntity<List<SaojieData>>(list.getList(),HttpStatus.OK);
   }
   

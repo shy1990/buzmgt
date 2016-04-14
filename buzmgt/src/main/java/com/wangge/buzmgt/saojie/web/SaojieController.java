@@ -229,7 +229,7 @@ public class SaojieController {
     List<Saojie> listSaojie= saojieService.findBysalesman(sm);
     boolean flag =true;
     for(Saojie s: listSaojie){
-      if(s.getStatus().equals(SalesmanStatus.saojie)) {
+      if(s.getStatus().equals(Saojie.SaojieStatus.PENDING)) {
           flag =false;
           break;
       }

@@ -224,6 +224,7 @@
 			  <%
 			  	SaojieDataVo saojieDataVo=	(SaojieDataVo)request.getAttribute("saojiedatalist");
 			  	if(saojieDataVo.getList().size()>0){
+			  	  System.out.println(saojieDataVo.getList().size());
 			  	  	for(SaojieData saojiedata:saojieDataVo.getList()){
 			  		String pointStr=saojiedata.getCoordinate();
 			  		String lag=pointStr.split("-")[0];
