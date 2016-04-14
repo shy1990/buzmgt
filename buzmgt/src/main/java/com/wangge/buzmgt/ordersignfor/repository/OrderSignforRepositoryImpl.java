@@ -26,6 +26,12 @@ public class OrderSignforRepositoryImpl implements OrderSignforRepositoryCustom 
       sql+="and a.CREAT_TIME <= TO_DATE('%s', 'YYYY-MM-DD')";
       sql = String.format(sql, endTime);
     }
+    if("UNPAY".equals(status)){
+      sql+="and a.CUSTOM_SIGNFOR_TIME is null";
+    }
+    if("PAYED".equals(status)){
+      sql+="and a.CUSTOM_SIGNFOR_TIME is not null";
+    }
     Query query = em.createNativeQuery(sql,OrderSignfor.class);
     return query.getResultList();
   }

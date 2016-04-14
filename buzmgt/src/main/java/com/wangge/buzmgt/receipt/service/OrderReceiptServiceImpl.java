@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -252,7 +254,6 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
               
               break;
               
-              
             }
           }
 
@@ -268,6 +269,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
   }
 
 
+  @SuppressWarnings("deprecation")
   @Override
   public Page<OrderSignfor> getReceiptNotRemark(Map<String, Object> searchParams, Pageable pageRequest) {
     // TODO Auto-generated method stub
@@ -277,7 +279,21 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
     startTime = (String) searchParams.get("GTE_createTime");
     endTime = (String) searchParams.get("LTE_createTime");
     List<OrderSignfor> list = orderSignforRepository.getReceiptNotRemarkList(status, startTime, endTime);
-    Page<OrderSignfor> page = new PageImpl<OrderSignfor>(list,pageRequest,list.size());
+    List<OrderSignfor> notRemarkList = new ArrayList<OrderSignfor>();
+    String timesGap ="24:00";
+    String[] timesGapAry=timesGap.split(":");
+    list.forEach(notRemark->{
+      //截止时间
+      Date abortTime = notRemark.getYewuSignforTime();
+      System.out.println(abortTime.toString());
+      abortTime.setHours(Integer.parseInt(timesGapAry[0]));
+      abortTime.setMinutes(Integer.parseInt(timesGapAry[1]));
+      if(notRemark.getYewuSignforTime().getTime() > abortTime.getTime()){
+        notRemarkList.add(notRemark);
+      }
+      
+    });
+    Page<OrderSignfor> page = new PageImpl<OrderSignfor>(notRemarkList,pageRequest,list.size());
     return page;
   }
   
