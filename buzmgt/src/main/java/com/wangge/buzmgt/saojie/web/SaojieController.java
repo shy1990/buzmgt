@@ -212,7 +212,7 @@ public class SaojieController {
 	  }
 	  model.addAttribute("list",list);
 	  model.addAttribute("salesman",salesman);
-	  model.addAttribute("areaname",salesman.getRegion().getName());
+	  model.addAttribute("areaname",salesman.getRegion().getParent().getName()+salesman.getRegion().getName());
 	  model.addAttribute("regionData",regionService.findByRegion(salesman.getRegion().getId()));
 	  return "saojie/saojie_set";
 	}

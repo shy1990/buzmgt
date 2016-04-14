@@ -217,6 +217,7 @@
 				if (listRegion != null && listRegion.size() > 0) {
 					for (int i = 0; i < listRegion.size(); i++) {
 						String coordinates = listRegion.get(i).getCoordinates();
+						String name=listRegion.get(i).getName();
 						String[] listCoordinates = null;
 						if (null != coordinates) {
 							listCoordinates = coordinates.split("=");
@@ -238,6 +239,23 @@
 						}%>
 							], {strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
 			 				map.addOverlay(polygon); 	
+							//色块上的文字shuomi
+			 				<%if (listCoordinates != null && listCoordinates.length > 0) {
+									String points = listCoordinates[0];
+									double lng = Double.parseDouble(points.split("-")[0]);//经度 
+									double lat = Double.parseDouble(points.split("-")[1]);//纬度%>
+									var secRingCenter = new BMap.Point(<%=lng%>,<%=lat%>)
+									var secRingLabel2 = new BMap.Label("<%=name%>",{offset: new BMap.Size(10,-30), position: secRingCenter});
+									secRingLabel2.setStyle({"line-height": "20px", "text-align": "center", "width": "80px", "height": "29px", "border": "none", "padding": "2px","background": "url(http://jixingjx.com/mapapi/ac.gif) no-repeat",});
+									map.addOverlay(secRingLabel2);
+					 
+					 
+					 <%
+							}%>
+							
+							
+							
+							
 							<%}
 				}
 			}%>

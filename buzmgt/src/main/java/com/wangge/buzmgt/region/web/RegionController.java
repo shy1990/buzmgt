@@ -112,7 +112,7 @@ public class RegionController {
 	 */
 	@RequestMapping(value = "/addRegion", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<RegionTree> addRegion(String pid,String name) {
+	public ResponseEntity<RegionTree> addRegion(String pid,String name,String centerPoint) {
 		Collection<Region>  collectionRegion =new ArrayList<Region>();
 		Region region=regionService.findListRegionbyid(pid);
 		Long maxid=getMaxId(pid);

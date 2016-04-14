@@ -232,26 +232,36 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 
    //添加鼠标绘制工具监听事件，用于获取绘制结果
    var pointStr=null;
+   centerPoint=null;
    drawingManager.addEventListener('overlaycomplete',function(e) {
 	   overlays.push(e.overlay);
        pointStr=JSON.stringify(e.overlay.getPath());
        jQuery.noConflict();
-       $(function(){
-    	   $('#exampleModal').modal({
-    		   
-    	   }).css({
-    	   	    	"margin-top": function () {  
-    	   	         return ($(this).height() / 3 );  
-    	   	      },  
-    	   	      "margin-left": function () {  
-    	   	         return ($(this).width() / 7 );  
-    	   	       }
-    	   	    });
-   		})
+      
    	   
 });
 
    		
+   		//中心点坐标
+   		map.addEventListener("click",function(e){
+			//alert(e.point.lng + "," + e.point.lat);
+			centerPoint=e.point.lng + "-" + e.point.lat;
+			$(function(){
+	    	   $('#exampleModal').modal({
+	    		   
+	    	   }).css({
+	    	   	    	"margin-top": function () {  
+	    	   	         return ($(this).height() / 3 );  
+	    	   	      },  
+	    	   	      "margin-left": function () {  
+	    	   	         return ($(this).width() / 7 );  
+	    	   	       }
+	    	   	    });
+	   		})
+		});
+   
+   
+   
 	   function onConfirm(){
 	 	  var parentid="<%=parentid%>";
 	 	  var name=$("#regionName").val();
@@ -260,6 +270,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	 		    data:{    
 	 		    		points:pointStr,
 	 		    		parentid:parentid,
+	 		    		centerPoint:centerPoint,
 	 		    		name:name
 	 		    },    
 	 		    type:'post',    
