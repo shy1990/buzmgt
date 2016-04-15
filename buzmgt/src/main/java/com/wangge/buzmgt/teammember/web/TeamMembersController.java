@@ -18,12 +18,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.Organization;
@@ -245,12 +247,12 @@ public class TeamMembersController {
   } 
   
   @RequestMapping(value = "/toSalesManInfo", method = RequestMethod.GET)
-  public String getSalesManInfo(String userId,String flag, Model model){
-       SalesMan salesMan  =  salesManService.getSalesmanByUserId(userId);
+  public String getSalesManInfo(@RequestParam(value = "saojieId",required = false)Saojie saojie,String flag, Model model){
+       SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
        List<Region> rList = regionService.getListByIds(salesMan);
        model.addAttribute("salesMan", salesMan);
        model.addAttribute("rList", rList);
-       SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(userId, "");
+       SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "");
        model.addAttribute("saojiedatalist", saojiedatalist);
        model.addAttribute("areaName", salesMan.getRegion().getName());
        //判断业务员所处的模式
@@ -259,11 +261,8 @@ public class TeamMembersController {
        if(salesMan.getStatus().equals(SalesmanStatus.kaifa)&&listAssess.size()==0){
          model.addAttribute("salesStatus", "kaifa");
        }
-       
-       
-       
-       
        if("saojie".equals(flag)){
+         model.addAttribute("saojie",saojie);
          return "saojie/saojie_det";
        }else{
          return "teammember/saojie_det";

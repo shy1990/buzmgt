@@ -1,4 +1,4 @@
-/*图标*/
+/*鍥炬爣*/
 .icon-saojie-add{
 	padding: 2px 8px 18px 12px;
 	margin: 0 10px;
@@ -9,7 +9,7 @@
 	background: url(../img/icon/saojie/upd/tj.png) no-repeat;
 	
 }
-/*设置*/
+/*璁剧疆*/
 .saojie-upd-body .box-title>h4{
 	font-size: 14px;
 	font-weight: bold;
@@ -26,30 +26,30 @@
 	padding-left: 20px;
 	/*vertical-align: middle;*/
 }
-/*考核区域添加按钮*/
+/*鑰冩牳鍖哄煙娣诲姞鎸夐挳*/
 .btn-kaohe-add,
 .btn-kaohe-add:hover,
 .btn-kaohe-add:focus{
 	background: #FFFFFF;
 }
-/*平分tr*/
+/*骞冲垎tr*/
 .average-tr{
 	width: 50%;
 }
-/*考核指标*/
+/*鑰冩牳鎸囨爣*/
 .target .form-control{
 	width: 50%;
 }
-/*区域选中*/
+/*鍖哄煙閫変腑*/
 .average-tr .col-sm-4{
 	padding-left: 0;
 	margin-bottom: 10px;
 }
-/*考核周期图标*/
+/*鑰冩牳鍛ㄦ湡鍥炬爣*/
 .icon-kaohe-week{
 	background: url(../img/icon/saojie/upd/khsj.png) no-repeat;
 }
-/*考核开始*/
+/*鑰冩牳寮�濮�*/
 .kaohe-week-start .input-group-addon{
 	padding-left: 9px;
 	padding-right: 10px;

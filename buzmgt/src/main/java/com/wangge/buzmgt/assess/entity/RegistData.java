@@ -30,7 +30,6 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
  */
 @Entity
 @Table(name = "SYS_REGISTDATA")
-@JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"}) 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class RegistData implements Serializable {
 
@@ -79,6 +78,8 @@ public class RegistData implements Serializable {
 	private String memberId;
 	@OneToOne(mappedBy = "registData")
   private SaojieData saojieData;
+	@Column(name = "COORDINATE")
+	private String coordinate;
 	
   public RegistData() {
 		super();
@@ -270,6 +271,14 @@ public class RegistData implements Serializable {
 
   public void setMemberId(String memberId) {
     this.memberId = memberId;
+  }
+
+  public String getCoordinate() {
+    return coordinate;
+  }
+
+  public void setCoordinate(String coordinate) {
+    this.coordinate = coordinate;
   }
   
 }

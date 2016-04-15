@@ -1,11 +1,11 @@
 package com.wangge.buzmgt.assess.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 
 import com.wangge.buzmgt.assess.entity.Assess;
+import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.sys.vo.OrderVo;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
@@ -23,4 +23,6 @@ public interface AssessService {
   int gainMaxStage(String salesmanId);
   
   Page<OrderVo> getOrderStatistics(String salesmanId,String regionid,int pageNum,String begin,String end);
+  
+  RegistData findRegistData(Long registId);
 }

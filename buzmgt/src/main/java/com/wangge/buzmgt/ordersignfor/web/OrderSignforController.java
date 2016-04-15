@@ -42,7 +42,7 @@ import com.wangge.buzmgt.util.ExcelExport;
 public class OrderSignforController {
   
   @Resource
-  private OrderSignforService os; 
+  private OrderSignforService os;
   
   @Resource
   private RegionService regionService;
@@ -132,7 +132,7 @@ public class OrderSignforController {
   @RequestMapping("/export")
   public void excelExport(HttpServletRequest request, HttpServletResponse response) {
     String[] gridTitles = { "业务名称","店铺名称","订单号", "签收地址","签收时间"};
-    String[] coloumsKey = { "salesMan.truename","shopName", "orderNo", "signforAddr", "yewuSignforTime"};
+    String[] coloumsKey = { "salesMan.truename","shopName", "orderNo", "yewuSignforGeopoint", "yewuSignforTime"};
 
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<OrderSignfor> orderSignforslist=null;
@@ -175,6 +175,8 @@ public class OrderSignforController {
       
       coloumsKey=Arrays.copyOf(coloumsKey, coloumsKey.length+1);
       coloumsKey[coloumsKey.length-1]="aging";
+      coloumsKey[3]="customSignforGeopoint";
+      
       
       ExcelExport.doExcelExport("客户签收异常.xls", list, gridTitles, coloumsKey, request, response);
     }
@@ -229,6 +231,48 @@ public class OrderSignforController {
     return s;
   }
   
+  /**
+   * 导出excel列表根据salesManId
+   * @param salesMan
+   * @param request
+   * @param response
+   */
+  @RequestMapping("/export/{salesManId}")
+  public void excelExportForSalesMan(@PathVariable("salesManId") SalesMan salesMan,HttpServletRequest request,
+      HttpServletResponse response) {
+    String[] gridTitles = { "店铺名称","订单号", "签收地点","签收时间","状态"};
+    String[] coloumsKey = { "shopName", "orderNo", "yewuSignforGeopoint", "yewuSignforTime","orderStatus"};
+    String type=request.getParameter("type");
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    searchParams.put("EQ_salesMan", salesMan);
+    List<OrderSignfor> list=os.findAll(searchParams);
+    list.forEach(osfl->{
+      osfl.getSalesMan().setUser(null);
+      osfl.getSalesMan().setRegion(null);
+      if(osfl.getCustomSignforTime() != null && osfl.getYewuSignforTime() != null){
+        osfl.setAging(DateUtil.getAging(osfl.getCustomSignforTime().getTime()-osfl.getYewuSignforTime().getTime()));
+      }
+    });
+    if("ywSignforDet".equals(type)){
+      ExcelExport.doExcelExport(salesMan.getTruename()+"-揽收异常.xls", list, gridTitles, coloumsKey, request, response);
+    }else{
+      gridTitles=Arrays.copyOf(gridTitles, gridTitles.length+2);
+      gridTitles[gridTitles.length-2]="送货时效";
+      gridTitles[gridTitles.length-1]="支付方式";
+      
+      coloumsKey=Arrays.copyOf(coloumsKey, coloumsKey.length+2);
+      coloumsKey[coloumsKey.length-2]="aging";
+      coloumsKey[coloumsKey.length-1]="orderPayType";
+      ExcelExport.doExcelExport(salesMan.getTruename()+"-客户签收异常.xls", list, gridTitles, coloumsKey, request, response);
+    }
+  }
+  /**
+   * 订单信息详情
+   * @param orderSignfor
+   * @param request
+   * @param model
+   * @return
+   */
   @RequestMapping(value="/toAbnormalDet/{id}",method=RequestMethod.GET)
   public String toAbnormalDet(@PathVariable("id") OrderSignfor orderSignfor, 
       HttpServletRequest request, Model model ){
@@ -278,3 +322,4 @@ public class OrderSignforController {
   }
   
 }
+

@@ -30,4 +30,6 @@ public interface SaojieRepository extends JpaRepository<Saojie, Long>{
   
   @Query("select s.region from Saojie s where s.salesman.id=?1 and s.status=2")
   List<Region> findRegionById(String id);
+
+  Saojie findByOrderAndSalesman(int ordernum, SalesMan salesman);
 }

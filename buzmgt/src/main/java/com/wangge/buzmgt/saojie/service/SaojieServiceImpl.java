@@ -84,18 +84,19 @@ public class SaojieServiceImpl implements SaojieService {
   @Override
   @Transactional
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
-    String hql = "select t.* from SYS_SAOJIE t ";
+    String hql = "select t.* from SYS_SAOJIE t,(select user_id,max(SAOJIE_ORDER) ordernum from SYS_SAOJIE group by user_id) b "+
+"left join sys_salesman s on b.user_id = s.user_id where t.user_id=b.user_id and t.saojie_order=b.ordernum ";
     if(saojie.getSalesman() != null){
       if((null!=saojie.getSalesman().getJobNum()&&!"".equals(saojie.getSalesman().getJobNum()))||(null!=saojie.getSalesman().getTruename()&&!"".equals(saojie.getSalesman().getTruename()))){
-        String serHql = "left join sys_salesman s on t.user_id = s.user_id where s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
+        String serHql = "and s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
         hql += ""+serHql+" and t.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
       }else{
-        hql += "where t.region_id in"
+        hql += "and t.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
       }
     }else{
-      hql += "where t.region_id in"
+      hql += "and t.region_id in"
           + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
     }
     if(saojie.getStatus() != null){
@@ -211,6 +212,11 @@ public class SaojieServiceImpl implements SaojieService {
   
   public List<Region> findRegionById(String id){
     return saojieRepository.findRegionById(id);
+  }
+
+  @Override
+  public Saojie findByOrderAndSalesman(int ordernum, SalesMan salesman) {
+    return saojieRepository.findByOrderAndSalesman(ordernum,salesman);
   }
 }
   

@@ -29,4 +29,6 @@ public interface SaojieService {
   int getOrderNumById(String id);
   
   List<Region> findRegionById(String id);
+  
+  Saojie findByOrderAndSalesman(int ordernum,SalesMan salesman);
 }
