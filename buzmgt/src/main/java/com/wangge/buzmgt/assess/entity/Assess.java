@@ -87,15 +87,15 @@ public class Assess implements Serializable {
 	@Transient
 	private String regionName;
 	@Transient
-  private String percent;
+  private String percent;//百分比
   
   //辅助字段
   @Transient
-  private int timing;
+  private int timing;//倒计时
   @Transient
-  private int activeNum;
+  private int activeNum;//活跃客户
   @Transient
-  private int orderNum;
+  private int orderNum;//提货量
   
   //百分比换算
    public void addPercent(double num) {

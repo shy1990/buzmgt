@@ -213,6 +213,11 @@ public class SaojieServiceImpl implements SaojieService {
   public List<Region> findRegionById(String id){
     return saojieRepository.findRegionById(id);
   }
+
+  @Override
+  public Saojie findByOrderAndSalesman(int ordernum, SalesMan salesman) {
+    return saojieRepository.findByOrderAndSalesman(ordernum,salesman);
+  }
 }
   
   
