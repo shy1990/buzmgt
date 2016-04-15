@@ -78,7 +78,7 @@
 													<span class="icon-tag-span">${saojie.order }</span>
 												</c:if> <span class="addreass">${saojie.region.name}</span></td>
 											<!--箭头-->
-											<c:if test="${saojie.status == 'PENDING' }">
+											<c:if test="${saojie.status == 'NOTSTARTED' }">
 												<td><span class="icon-arow arow-down"
 													id="${saojie.id }"></span> <span class="icon-arow arow-up"
 													id="${saojie.id }"></span></td>
