@@ -1,10 +1,17 @@
 <%@ page language="java" import="java.util.*,com.wangge.buzmgt.sys.vo.*,com.wangge.buzmgt.saojie.entity.*" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+  String path = request.getContextPath();
+			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+					+ path + "/";
+			System.out.print(basePath);
+%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 
 <head>
+<base href="<%=basePath%>" />
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +21,7 @@
 <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="/static/bootstrap/css/bootstrap-multiselect.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"
 	href="/static/saojie/saojie-det.css" />
 <link rel="stylesheet" type="text/css"
@@ -21,6 +29,36 @@
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+<script type="text/javascript">
+	var base = "<%=basePath%>";
+	var number = '';//当前页数（从零开始）
+	var totalPages = '';//总页数(个数)
+	var searchData = {
+		"size" : "2",
+		"page" : "0",
+	}
+	var totalElements;//总条数
+</script>
+<script id="table-template" type="text/x-handlebars-template">
+{{#each content}}
+<!--tr-->
+	<div class="list-tr">
+	<img class="shop-img" src="/static/img/saojie-img.png" />
+	<div style="display: inline-block;" class="list-conter">
+	<h4>大鹏十年手机品质专卖店</h4>
+	<p>备注：百度和携程两个难兄难弟，一个是市值580亿美元，
+	制霸行业十余年的国内搜索龙头的老大，一个是国内OTA绝对龙头，
+	市值120亿美元的旅行老大，在这一周都过得水深火热......</p>
+	<span class="pull-right">2015.11.12 15:22</span>
+	</div>
+	</div>
+<!--/tr-->
+{{else}}
+<div style="text-align: center;">
+	<tr style="text-align: center;">没有相关数据!</tr>
+</div>
+{{/each}}
+</script>
 </head>
 
 <body>
@@ -78,19 +116,9 @@
 						<!--/地图-->
 						<!--列表-->
 						<div class="saojie-list active" id="saojiedata">
-							<!--tr-->
-							<div class="list-tr">
-								<img class="shop-img" src="/static/img/saojie-img.png" />
-								<div style="display: inline-block;" class="list-conter">
-									<h4>大鹏十年手机品质专卖店</h4>
-									<p>备注：百度和携程两个难兄难弟，一个是市值580亿美元，
-										制霸行业十余年的国内搜索龙头的老大，一个是国内OTA绝对龙头，
-										市值120亿美元的旅行老大，在这一周都过得水深火热......</p>
-									<span class="pull-right">2015.11.12 15:22</span>
-								</div>
-							</div>
-							<!--/tr-->
+							
 						</div>
+						<div id="callBackPager"></div>
 						<!--/列表-->
 					</div>
 					<!--/box-body-->
@@ -208,10 +236,10 @@
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/static/bootstrap/js/bootstrap-multiselect.js"></script>
-        <script src="/static/saojie/saojie-det.js" type="text/javascript"
-			charset="utf-8"></script>
-		<script src="/static/js/common.js" type="text/javascript"
-			charset="utf-8"></script>
+		<script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+        <script src="/static/saojie/saojie-det.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/static/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 			<script type="text/javascript">
 			 // 百度地图API功能
 			  var map = new BMap.Map("allmap");

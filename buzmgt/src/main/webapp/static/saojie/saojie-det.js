@@ -12,7 +12,13 @@ $(function(){
 			$('.saojie-list').slideDown(500);
 		}
 	})
-	getSaojieDataList();
+	
+	var userId = $("#userId").html();
+	var regionId = $("#regionId").val();
+	searchData['userId'] = userId;
+	searchData['regionid'] = regionId;
+	
+	ajaxSearch(searchData);
 });
 
 
@@ -44,24 +50,68 @@ function getSaojieDataList(){
 							"<span class='pull-right'>"+data[0].saojieDate+"</span>"+
 						"</div>"+
 					"</div>     ");
-			 if(data[0].saojie.saojiedata.length>1){
-			
-				for(var i = 1;i<data[0].saojie.saojiedata.length;i++){
-						   saojiedata.append("<div  class='list-tr'>"+
-									"<img class='shop-img' style='height:80%;'  src='"+data[0].saojie.saojiedata[i].imageUrl+"' />"+
-									"<div style='display: inline-block;' class='list-conter'>"+
-										"<h4>"+data[0].saojie.saojiedata[i].name+"</h4>"+
-										"<p>"+data[0].saojie.saojiedata[i].description+"</p>"+
-										"<span class='pull-right'>"+data[0].saojie.saojiedata[i].saojieDate+"</span>"+
-									"</div>"+
-								"</div>     ");
-				}
-				   
-			 }  
-			  
 			}
 		}
 	});
+}
+
+function ajaxSearch(searchData) {
+	$.ajax({
+		url : base + "teammember/getSaojiedataList",
+		type : "POST",
+		data : searchData,
+		beforeSend : function(request) {
+			request.setRequestHeader("Content-Type",
+					"application/json; charset=UTF-8");
+		},
+		dataType : "json",
+		success : function(visitData) {
+			$(".shopNum").text(data.shopNum);
+			$(".percent").text(data.percent); 
+			$("#percent").width(data.percent);
+			totalElements = visitData.totalElements;
+			totalPages = visitData.totalPages;
+			seachSuccessTable(visitData);
+			var searchTotal = totalElements;
+
+            if (searchTotal != total || searchTotal == 0) {
+                total = searchTotal;
+                initPaging();
+            }
+		},
+		error : function() {
+			alert("系统错误，请稍后再试");
+		}
+	});
+}
+
+function initPaging(){
+	var totalCount = totalElements; //总条数 
+	showCount = totalPages, //显示分页个数
+	limit =  2;//每页条数
+	$('#callBackPager').extendPagination({
+	totalCount : totalCount, 
+	showCount : showCount,
+	limit : limit,
+	callback : function(curr, limit, totalCount) {
+//		alert("当前是第"+curr+"页,每页"+ limit+"条,总共"+ totalCount+"条");
+		searchData['page'] = curr - 1;
+		searchData['size'] = limit;
+		ajaxSearch(searchData);
+	}
+	});
+}
+
+/**
+ * 检索成功后
+ * 
+ * @param data
+ */
+function seachSuccessTable(data) {
+	var myTemplate = Handlebars.compile($("#table-template").html());
+
+	$('#saojiedata').html(myTemplate(data));
+	
 }
 
 var i = 5; 
