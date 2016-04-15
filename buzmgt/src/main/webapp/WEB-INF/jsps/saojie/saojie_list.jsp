@@ -128,6 +128,10 @@
 																<td class="project-status"><span
 																	class="status-finish">扫街完成</span></td>
 															</c:if>
+															<c:if test="${saojie.status == 'NOTSTARTED' }">
+																<td class="project-status"><span
+																	class="status-ing">未进行</span></td>
+															</c:if>
 															<td class="project-title"><span class="l-h">${saojie.region.name}：<strong
 																	class="shop-num">${saojie.minValue}家</strong></span></td>
 															<td class="project-completion">
