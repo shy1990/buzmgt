@@ -40,7 +40,7 @@ public class Saojie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum SaojieStatus {
-		PENDING("扫街中"), COMMIT("提交审核"), AGREE("已完成");
+		NOTSTARTED("未进行"),PENDING("扫街中"), COMMIT("提交审核"), AGREE("已完成");
 
 		private String name;
 

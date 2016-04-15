@@ -3,7 +3,6 @@ package com.wangge.buzmgt.assess.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +20,9 @@ import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.entity.Assess.AssessStatus;
+import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.repository.AssessRepository;
+import com.wangge.buzmgt.assess.repository.RegistDataRepository;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.sys.vo.OrderVo;
@@ -46,6 +47,8 @@ public class AssessServiceImpl implements AssessService {
   private AssessRepository assessRepository;
   @Autowired
   private RegionRepository regionRepository;
+  @Resource
+  private RegistDataRepository rdr;
   
   @Override
   public void saveAssess(Assess assess) {
@@ -263,6 +266,11 @@ public class AssessServiceImpl implements AssessService {
     
     Page<OrderVo> page = new PageImpl<OrderVo>(list,new PageRequest(pageNum,7),count);
     return page;
+  }
+
+  @Override
+  public RegistData findRegistData(Long registId) {
+    return rdr.findRegistDataById(registId);
   }
 	
 }

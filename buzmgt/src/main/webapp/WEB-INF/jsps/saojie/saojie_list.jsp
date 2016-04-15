@@ -119,7 +119,7 @@
 															<td class="project-people"><a href=""><img
 																	alt="image" class="img-circle"
 																	src="../static/img/saojie/a.jpg"></a></td>
-															<td class="project-title"><a href="javascript:toSalesManInfo('${saojie.salesman.id}','saojie');"><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
+															<td class="project-title"><a href="javascript:toSalesManInfo('${saojie.id}','saojie');"><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
 																<br /> <span>${saojie.salesman.region.name}</span></td>
 															<c:if test="${saojie.status == 'PENDING' }">
 																<td class="project-status"><span class="status-ing">${saojie.status.name}</span></td>

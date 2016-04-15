@@ -87,21 +87,26 @@ public class Assess implements Serializable {
 	@Transient
 	private String regionName;
 	@Transient
-  private String percent;
+  private String percent;//百分比
   
   //辅助字段
   @Transient
-  private int timing;
+  private int timing;//倒计时
   @Transient
-  private int activeNum;
+  private int activeNum;//活跃客户
   @Transient
-  private int orderNum;
+  private int orderNum;//提货量
   
+  //百分比换算
    public void addPercent(double num) {
-     if(num > 0 ){
+     if(num > 0 && num <= 2){
        NumberFormat nf = NumberFormat.getPercentInstance();
        this.percent = nf.format(num / 2);
-     }else{
+     }
+     if(num > 2){
+       this.percent = "100%";
+     }
+     if(num == 0){
        this.percent = "0%";
      }
     

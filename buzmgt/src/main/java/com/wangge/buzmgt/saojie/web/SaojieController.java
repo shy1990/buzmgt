@@ -50,6 +50,18 @@ public class SaojieController {
   private SaojieService saojieService;
   @Resource
   private ManagerService managerService;
+  
+  /**
+   * 
+    * saojieList:(跳转到扫街列表). <br/> 
+    * 
+    * @author Administrator 
+    * @param saojieList
+    * @param model
+    * @param saojie
+    * @return 
+    * @since JDK 1.8
+   */
 	@RequestMapping("/saojieList")
 	public String saojieList(String saojieList, Model model,Saojie saojie){
 	  int pageNum = 0;
@@ -189,7 +201,11 @@ public class SaojieController {
 	  System.out.println(strArray.length);
 	  for(int i=0; i<strArray.length;i++){
 	    Saojie sj = new Saojie();
-	    sj.setStatus(SaojieStatus.PENDING);
+	    if(i == 0){
+	      sj.setStatus(SaojieStatus.PENDING);
+	    }else{
+	      sj.setStatus(SaojieStatus.NOTSTARTED);
+	    }
 	    sj.setBeginTime(saojie.getBeginTime());
 	    sj.setExpiredTime(saojie.getExpiredTime());
 	    sj.setOrder(Integer.valueOf(strOrder[i]));
@@ -203,6 +219,16 @@ public class SaojieController {
 	  return "redirect:/saojie/saojieList";
 	}
 	
+	/**
+	 * 
+	  * toSaojieInstall:(跳转到扫街设置). <br/> 
+	  * 
+	  * @author peter 
+	  * @param id
+	  * @param model
+	  * @return 
+	  * @since JDK 1.8
+	 */
 	@RequestMapping("/toSaojieInstall")
 	public String toSaojieInstall(@RequestParam("id") String id,Model model){
 	  SalesMan salesman = salesManService.findByUserId(id.trim());
@@ -217,6 +243,17 @@ public class SaojieController {
 	  return "saojie/saojie_set";
 	}
 
+	/**
+	 * 
+	  * auditPass:(扫街审核通过). <br/> 
+	  * 
+	  * @author Administrator 
+	  * @param saojieId
+	  * @param description
+	  * @param model
+	  * @return 
+	  * @since JDK 1.8
+	 */
 	@RequestMapping("/auditPass")
 	@ResponseBody
   public String auditPass(String saojieId,String description,Model model){
@@ -224,8 +261,12 @@ public class SaojieController {
     saojie.setStatus(SaojieStatus.AGREE);
     saojie.setDescription(description);
     saojieService.saveSaojie(saojie);
-    //更改业务工作模式
     SalesMan sm=saojie.getSalesman();
+    //更改下一个扫街地区为进行中
+    saojie = saojieService.findByOrderAndSalesman(saojie.getOrder() + 1,sm);
+    saojie.setStatus(SaojieStatus.PENDING);
+    saojieService.saveSaojie(saojie);
+  //更改业务工作模式
     List<Saojie> listSaojie= saojieService.findBysalesman(sm);
     boolean flag =true;
     for(Saojie s: listSaojie){
@@ -243,9 +284,9 @@ public class SaojieController {
 	
 	/**
 	 * 
-	  * changeOrder:(这里用一句话描述这个方法的作用). <br/> 
+	  * changeOrder:(调整扫街的顺序). <br/> 
 	  * TODO 上移使用到<br/> 
-	  * @author Administrator 
+	  * @author peter 
 	  * @param id
 	  * @param ordernum
 	  * @return 
@@ -273,6 +314,16 @@ public class SaojieController {
 	  saojieService.saveSaojie(sj);
 	  return "ok";
 	}
+	
+	/**
+	 * 
+	  * getRegionName:(获取地区的名字). <br/> 
+	  * 
+	  * @author Administrator 
+	  * @param id
+	  * @return 
+	  * @since JDK 1.8
+	 */
 	@RequestMapping(value = "/getRegionName",method = RequestMethod.POST)
   @ResponseBody
   public String getRegionName(String id){
@@ -281,6 +332,15 @@ public class SaojieController {
     return regionName;
   }
 	
+	/**
+	 * 
+	  * getOrderNum:(查看当前业务扫街进行到第几个地区). <br/> 
+	  * 
+	  * @author peter 
+	  * @param salesman
+	  * @return 
+	  * @since JDK 1.8
+	 */
 	@RequestMapping(value = "/getOrderNum",method = RequestMethod.POST)
   @ResponseBody
   public int getOrderNum(@RequestParam("id")SalesMan salesman){

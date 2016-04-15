@@ -227,7 +227,7 @@ var SearchData = {
 		<script src="/static/js/dateutil.js" type="text/javascript"
 			charset="utf-8"></script>
 		<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"></script>
-		<script src="static/abnormal/abnormal_record_list.js"></script>
+		<script src="/static/abnormal/abnormal_record_list.js"></script>
 		<script type="text/javascript" src="static/bootStrapPager/js/extendPagination.js"></script>
 		<script type="text/javascript">
 				

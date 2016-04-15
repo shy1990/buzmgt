@@ -94,7 +94,6 @@ button:active {
 	border: 1px solid #CCC;
 }
 
-
 /*阶段box */
 
 .box.border.yellow {
@@ -106,7 +105,6 @@ button:active {
 	border-bottom: #D29337;
 }
 
-
 /*紫色*/
 
 .box.border.violet {
@@ -117,7 +115,6 @@ button:active {
 	background: #A795CE;
 	border-bottom: #498CA2;
 }
-
 
 /*青绿色*/
 
@@ -204,7 +201,6 @@ button:active {
 	margin-right: 5px;
 }
 
-
 /*区域icon*/
 
 .icon-district {
@@ -212,14 +208,12 @@ button:active {
 	top: 5px;
 }
 
-
 /*组织结构*/
 
 .icon-structure {
 	background: url(../img/icon/team-member/list/zzjg.png) no-repeat;
 	top: 5px;
 }
-
 
 /* 错误信息提示 */
 
@@ -229,13 +223,11 @@ button:active {
 	font-weight: 300;
 }
 
-
 /* 显示错误信息 */
 
 .has-error .msg-error {
 	display: block;
 }
-
 
 /*公司列表*/
 
@@ -243,7 +235,6 @@ button:active {
 	background: url(../img/icon/team-member/det/Shape.png) no-repeat;
 	top: 5px;
 }
-
 
 /*业务详情*/
 
@@ -276,7 +267,6 @@ button:active {
 	background: url(../img/icon/saojie/set/sjsz.png) no-repeat;
 	top: 5px;
 }
-
 
 /*进度条*/
 
@@ -317,6 +307,28 @@ button:active {
 	background: #219ee5;
 	color: #FFF;
 }
+.btn-red{
+	background: #fa6161;
+	color: #FFF;
+	border: 1px solid #F14747;
+}
+.btn-red:hover,
+.btn-red:focus{
+	background: #f67373;
+	color: #FFF;
+}
+.btn-yellow{
+	background: #fa7a2c;
+	color: #FFF;
+	border: 1px solid #F47121;
+}
+.btn-yellow:hover,
+.btn-yellow:focus{
+	background: #ff8840;
+	color: #FFF;
+}
+
+
 
 .btn-red {
 	background: #fa6161;
@@ -346,7 +358,6 @@ button:active {
 	text-align: right;
 }
 
-
 /*虚线*/
 
 .hr {
@@ -355,7 +366,6 @@ button:active {
 	clear: both;
 }
 
-
 /*实线*/
 
 .hr-solid {
@@ -363,7 +373,6 @@ button:active {
 	margin: 15px -20px;
 	border-top: 2px solid #DBDBDB;
 }
-
 
 /*实线*/
 
@@ -381,7 +390,6 @@ button:active {
 	margin-bottom: 20px;
 }
 
-
 /*不同状态文字颜色*/
 
 .text-danger {
@@ -392,7 +400,6 @@ button:active {
 	color: #3894C7;
 }
 
-
 /*新图标实现方式*/
 
 .ico {
@@ -401,7 +408,6 @@ button:active {
 	position: relative;
 	top: -1px;
 }
-
 
 /* 区域切换 */
 
@@ -429,7 +435,6 @@ button:active {
 .icon-saojie-add {
 	background: url(../img/saojie/saojie-add.png) no-repeat;
 }
-
 
 /*添加成员按钮*/
 
@@ -526,6 +531,70 @@ a.table-export:focus {
 	color: #3894C7;
 }
 
+/*瀵煎嚭*/
+a.table-export {
+	position: relative;
+	padding: 2px;
+	margin: 0 10px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+a.table-export:hover, a.table-export:focus {
+	color: #3B92C7;
+	border-bottom: 1px solid #3B92C7;
+}
+/*table-overflow 鏂囧瓧涓嶆崲琛�*/
+.table-overflow{
+	position: relative;
+	overflow-x: auto;
+  margin-bottom: 15px;
+  overflow-y: hidden;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+.table-overflow > .table > thead > tr > th,
+.table-overflow > .table > tbody > tr > th,
+.table-overflow > .table > tfoot > tr > th,
+.table-overflow > .table > thead > tr > td,
+.table-overflow > .table > tbody > tr > td,
+.table-overflow > .table > tfoot > tr > td {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+/*new-table 鏂拌〃鏍煎竷灞�*/
+.new-table{
+	
+}
+.new-table-box{
+	border: 1px solid #EEE;
+	margin-top: 15px;
+	min-height: 600px;
+	background: #FFF;
+}
+.new-table>thead>tr>th{
+	border-right: 1px solid #FFF;
+	border-bottom: none;
+	background-color: #DfDFDF;
+}
+.new-table>thead>tr>th:last-child{
+	border-right: none;
+}
+.new-table>tbody>tr>td,
+.new-table>thead>tr>th{
+	font-size: 12px;
+	color: #555555;
+	height: 46px;
+}
+.new-table>tbody>tr>td,
+.new-table>tbody>tr:last-child>td{
+	border-bottom: 1px solid #EEEEEE;
+}
+.text-strong{
+	font-weight: bold;
+}
+.text-bule{
+	color: #3894C7;
+}
 
 /*modle-blue*/
 
@@ -561,6 +630,7 @@ a.table-export:focus {
 .text-blue{
 	color: #3894C7;
 }
+
 /* 排序 */
 .port{
 	position: absolute;

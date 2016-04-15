@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,6 +19,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 //@JsonInclude(Include.NON_EMPTY)
@@ -30,6 +33,39 @@ public class OrderSignfor implements Serializable {
   */
   
   private static final long serialVersionUID = 1L;
+  
+  /**
+   * 订单状态
+   *
+   */
+  public static enum OrderStatus{
+    SUCCESS("订单成功"),UNDO("订单取消"),YWSIGNFOR("业务签收"),MEMBERSIGNFO("客户签收"),MEMBERREJECT("客户拒收");
+    
+    private String name;
+    
+    OrderStatus(String name){
+      this.name=name;
+    }
+    public String getName(){
+      return name;
+    }
+    
+  }
+  
+  public static enum OrderPayType{
+    ONLINE("线上支付"),POS("POS"),CASH("现金") ;
+    
+    private String name;
+    
+    OrderPayType(String name){
+      this.name=name;
+    }
+    public String getName(){
+      return name;
+    }
+  }
+  
+  
   @Id
   @Column(name = "SIGNID")
   @GenericGenerator(name = "idgen", strategy = "increment")
@@ -60,8 +96,11 @@ public class OrderSignfor implements Serializable {
   private Date creatTime;
   private Date yewuSignforTime; 
   private Date customSignforTime;
-  private Integer orderStatus;
-  private Integer orderPayType;
+  @Enumerated(EnumType.ORDINAL)
+  private OrderStatus orderStatus;
+  
+  @Enumerated(EnumType.ORDINAL)
+  private OrderPayType orderPayType;
   private String yewuSignforGeopoint;
   private String customSignforGeopoint;
   private Integer customSignforException;
@@ -172,16 +211,16 @@ public class OrderSignfor implements Serializable {
   public void setCustomSignforTime(Date customSignforTime) {
     this.customSignforTime = customSignforTime;
   }
-  public Integer getOrderStatus() {
-    return orderStatus;
+  public String getOrderStatus() {
+    return orderStatus == null ? "" :orderStatus.getName();
   }
-  public void setOrderStatus(Integer orderStatus) {
+  public void setOrderStatus(OrderStatus orderStatus) {
     this.orderStatus = orderStatus;
   }
-  public Integer getOrderPayType() {
-    return orderPayType;
+  public String getOrderPayType() {
+    return orderPayType == null ? "":orderPayType.getName();
   }
-  public void setOrderPayType(Integer orderPayType) {
+  public void setOrderPayType(OrderPayType orderPayType) {
     this.orderPayType = orderPayType;
   }
   public String getYewuSignforGeopoint() {
