@@ -14,10 +14,7 @@ $(function() {
                     	saojieMan.append("<option value = '"+obj[i][0]+"'>"+obj[i][1]+"</option>");
 					}
 				}else {
-//					alert(obj.length);
-//					for(var i=0;i<obj.length;i++){
-//						alert(obj[i].name);
-//					}
+					
 				};
 		 }
 		});
@@ -69,6 +66,19 @@ function queryTown(){
 	        		polygon.setFillColor("red");
 	        		polygon.setStrokeOpacity(0.5);
 	        		map.addOverlay(polygon);   //增加多边形
+	        		
+	        		
+	        		var name=obj[i].name;
+	        		var centerPoint=obj[i].centerPoint;
+	        		
+	        		if(null!=centerPoint){
+						var lng = Double.parseDouble(centerPoint.split("-")[0]);//经度 
+						var lat = Double.parseDouble(centerPoint.split("-")[1]);//纬度%>
+						var secRingCenter = new BMap.Point(lng,lat);
+						var secRingLabel2 = new BMap.Label(name,{offset: new BMap.Size(10,-30), position: secRingCenter});
+						secRingLabel2.setStyle({"line-height": "20px", "text-align": "center", "width": "80px", "height": "29px", "border": "none", "padding": "2px","background": "url(http://jixingjx.com/mapapi/ac.gif) no-repeat",});
+						map.addOverlay(secRingLabel2);
+	        		}
 	        	}
 			}
 	}
