@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
 import com.wangge.buzmgt.sys.vo.SaojieDataVo;
@@ -82,10 +83,8 @@ public class SaojieServiceImpl implements SaojieService {
 //
 //  }
   @Override
-  @Transactional
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
-    String hql = "select t.* from SYS_SAOJIE t,(select user_id,max(SAOJIE_ORDER) ordernum from SYS_SAOJIE group by user_id) b "+
-"left join sys_salesman s on b.user_id = s.user_id where t.user_id=b.user_id and t.saojie_order=b.ordernum ";
+    String hql = "SELECT t.* FROM SYS_SAOJIE t LEFT JOIN sys_salesman s ON s.user_id = t.user_id where ";
     if(saojie.getSalesman() != null){
       if((null!=saojie.getSalesman().getJobNum()&&!"".equals(saojie.getSalesman().getJobNum()))||(null!=saojie.getSalesman().getTruename()&&!"".equals(saojie.getSalesman().getTruename()))){
         String serHql = "and s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
@@ -100,7 +99,10 @@ public class SaojieServiceImpl implements SaojieService {
           + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
     }
     if(saojie.getStatus() != null){
-      hql += " and t.saojie_status='"+saojie.getStatus().ordinal()+"'";
+      int status = saojie.getStatus().ordinal();
+      if(SaojieStatus.PENDING.equals(saojie.getStatus())){
+        hql += " and t.saojie_status='"+status+"'";
+      }
     }
     
     hql +=" order by t.begin_time desc ";
