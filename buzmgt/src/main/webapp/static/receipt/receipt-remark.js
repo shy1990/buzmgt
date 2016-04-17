@@ -1,6 +1,7 @@
-var remarkedTotal = 0;
+var remarkedTotal = 0;// 报备总条数
+var notRemarkedTotal = 0;// 未报备总条数
 $(function() {
-	nowTime();//初始化日期
+	// nowTime();//初始化日期
 	findRemarked();
 	findNOTRemarked();
 })
@@ -9,18 +10,32 @@ $('.nav-task li').on("click", function() {
 	$(this).siblings('li').removeClass('active');
 	var item = $(this).data('item');
 	deleteStatus()
-	switch(item){
-	case 'all': ; break;
-	case 'unpay': SearchData['sc_EQ_status'] = "UnPay";break;
-	case 'timeout': SearchData['sc_GTE_status'] = "UnPayLate";break;
-	case 'payed': SearchData['sc_EQ_status'] = "OverPay";break;
-	default:break;
+	switch (item) {
+	case 'all':
+		;
+		break;
+	case 'unpay':
+		SearchData['sc_EQ_status'] = "UnPay";
+		break;
+	case 'timeout':
+		SearchData['sc_GTE_status'] = "UnPayLate";
+		break;
+	case 'payed':
+		SearchData['sc_EQ_status'] = "OverPay";
+		break;
+	default:
+		break;
 	}
+	goSearch();
 });
-function deleteStatus(){
+$('#receiptOrderStatus li').on('click', function() {
+	$('.nav-task li:first-child').addClass('active');
+	$('.nav-task li:first-child').siblings().removeClass('active');
+});
+function deleteStatus() {
 	delete SearchData['sc_EQ_status'];
 	delete SearchData['sc_GTE_status'];
-}	
+}
 $('#startTime').datetimepicker({
 	format : "yyyy-mm-dd",
 	language : 'zh-CN',
@@ -69,12 +84,11 @@ $('#endTime').datetimepicker({
 });
 
 /**
- * 初始化日期
- * 最近3天
+ * 初始化日期 最近3天
  */
-function nowTime(){
-	var nowDate=changeDateToString(new Date());
-	var beforeDate=changeDateToString((new Date()).DateAdd('d',-3));
+function nowTime() {
+	var nowDate = changeDateToString(new Date());
+	var beforeDate = changeDateToString((new Date()).DateAdd('d', -3));
 	SearchData['sc_GTE_createTime'] = beforeDate;
 	SearchData['sc_LTE_createTime'] = nowDate;
 	$('#startTime').val(beforeDate);
@@ -84,45 +98,65 @@ function nowTime(){
  * 检索
  */
 function goSearch() {
-	var tab =$('.abnormal-body .nav-tabs li.active').attr('data-tital');
-	var startTime=$('#startTime').val();
-	var endTime=$('#endTime').val();
-	if(checkDate(startTime,endTime)){
-		SearchData['sc_GTE_createTime'] = startTime;
-		SearchData['sc_LTE_createTime'] = endTime;
-		if('reported'==tab){
-			findRemarked();
-		}else if('membertab'==tab){
-		}
-	}
-}
-$('.table-export').on('click',function() {
-	var tab = $('.abnormal-body .nav-tabs li.active').attr('data-tital');
+	var tab = findTab();
 	var startTime = $('#startTime').val();
 	var endTime = $('#endTime').val();
 	if (checkDate(startTime, endTime)) {
-		SearchData['sc_GTE_creatTime'] = startTime;
-		SearchData['sc_LTE_creatTime'] = endTime;
-		if ('ywtab' == tab) {
-			delete SearchData['sc_EQ_customSignforException']
-		window.location.href = base + "ordersignfor/export?type=ywOrderSignfor&"
-									+ conditionProcess();
-						} else if ('membertab' == tab) {
-							window.location.href = base
-									+ "ordersignfor/export?sc_EQ_customSignforException=1&"
-									+ conditionProcess();
-						}
-					}
+		SearchData['sc_GTE_createTime'] = startTime;
+		SearchData['sc_LTE_createTime'] = endTime;
+		switch (tab) {
+		case 'reported':
+			findRemarked();
+			break;
+		case 'notreported':
+			findNOTRemarked();
+			break;
+		default:
+			break;
+		}
+	}
+}
+$('.table-export').on(
+		'click',
+		function() {
+			var tab = findTab();
+			var startTime = $('#startTime').val();
+			var endTime = $('#endTime').val();
+			if (checkDate(startTime, endTime)) {
+				SearchData['sc_GTE_createTime'] = startTime;
+				SearchData['sc_LTE_createTime'] = endTime;
+				var jsonToString = JSON.stringify(SearchData);
+				window.location.href = base + "receiptRemark/export?type="
+						+ tab + "&"+ conditionProcess();
+			}
 
-				});
+		});
+function findTab(){
+	var tab = $('#receiptOrderStatus li.active').attr('data-tital');
+	return tab;
+}
+/**
+ * 处理检索条件
+ * 
+ * @returns {String}
+ */
+function conditionProcess() {
+	var SearchData_ = "sc_GTE_createTime="
+			+ (SearchData.sc_GTE_creatTime == null ? ''
+					: SearchData.sc_GTE_creatTime)
+			+ "&sc_LTE_createTime="
+			+ (SearchData.sc_LTE_creatTime == null ? ''
+					: SearchData.sc_LTE_creatTime);
 
+	return SearchData_;
+}
 function findRemarked(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
 	// delete SearchData['sc_EQ_customSignforException'];
 	$.ajax({
 		url : "/receiptRemark/remarkList",
-		type : "POST",
+		type : "GET",
 		data : SearchData,
 		dataType : "json",
 		success : function(orderData) {
@@ -131,11 +165,11 @@ function findRemarked(page) {
 			if (searchTotal != remarkedTotal || searchTotal == 0) {
 				remarkedTotal = searchTotal;
 
-				 remarkedPaging(orderData);
+				remarkedPaging(orderData);
 			}
 		},
 		error : function() {
-			alert("系统异常，请稍后重试！")
+			alert("系统异常，请稍后重试！");
 		}
 	})
 }
@@ -144,21 +178,20 @@ function findNOTRemarked(page) {
 	SearchData['page'] = page;
 	// delete SearchData['sc_EQ_customSignforException'];
 	$.ajax({
-		url : "/receiptRemark/remarkList",
-		type : "POST",
+		url : "/receiptRemark/notRemarkList",
+		type : "GET",
 		data : SearchData,
 		dataType : "json",
 		success : function(orderData) {
-			createRemarkedTable(orderData);
+			createNotRemarkedTable(orderData);
 			var searchTotal = orderData.totalElements;
-			if (searchTotal != remarkedTotal || searchTotal == 0) {
-				remarkedTotal = searchTotal;
-				
-				remarkedPaging(orderData);
+			if (searchTotal != notRemarkedTotal || searchTotal == 0) {
+				notRemarkedTotal = searchTotal;
+				notRemarkedPaging(orderData);
 			}
 		},
 		error : function() {
-			alert("系统异常，请稍后重试！")
+			alert("系统异常，请稍后重试！");
 		}
 	})
 }
@@ -171,7 +204,11 @@ function createRemarkedTable(data) {
 	var myTemplate = Handlebars.compile($("#remarked-table-template").html());
 	$('#remarkedList').html(myTemplate(data));
 }
-
+function createNotRemarkedTable(data) {
+	var myTemplate = Handlebars
+			.compile($("#notremarked-table-template").html());
+	$('#notRemarkedList').html(myTemplate(data));
+}
 function remarkedPaging(data) {
 	var totalCount = data.totalElements, limit = data.size;
 	$('#remarkedPager').extendPagination({
@@ -183,20 +220,50 @@ function remarkedPaging(data) {
 		}
 	});
 }
+function notRemarkedPaging(data) {
+	var totalCount = data.totalElements, limit = data.size;
+	$('#notRemarkedPager').extendPagination({
+		totalCount : totalCount,
+		showCount : 5,
+		limit : limit,
+		callback : function(curr, limit, totalCount) {
+			findNOTRemarked(curr - 1);
+		}
+	});
+}
 Handlebars.registerHelper('formDate', function(value) {
-	return changeDateToString(new Date(value));
+	if(value==null||value==""){
+		return "未发货";
+	}
+	return changeTimeToString(new Date(value));
 });
 Handlebars.registerHelper('whatremarkStatus', function(value) {
-	var html="";
-	if(value.indexOf("未付款") >= 0){
-		html+='<span class="pay-time icon-tag-wfk">未付款</span>';
+	var html = "";
+	if (value.indexOf("未付款") >= 0) {
+		html += '<span class="pay-time icon-tag-wfk">未付款</span>';
 	}
-	if(value.indexOf("已付款") >= 0){
-		html+='<span class="pay-time icon-tag-yfk">已付款</span>';
+	if (value.indexOf("已付款") >= 0) {
+		html += '<span class="pay-time icon-tag-yfk">已付款</span>';
 	}
-	if(value.indexOf("超时") >= 0){
-		html+='<span class="text-red">超时</span>';
+	if (value.indexOf("超时") >= 0) {
+		html += '<span class="text-red">超时</span>';
 	}
 	return html;
 });
-
+Handlebars.registerHelper('whetherPunish', function(value) {
+	var html = "";
+	if (value.indexOf("超时") >= 0) {
+		html += '<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a>';
+	}
+	return html;
+});
+Handlebars.registerHelper('whatCustomSignforStatus', function(value) {
+	var html = "";
+	if (value === 0) {
+		html += '<span class="icon-tag-yc">异常</span>';
+	}
+	if (value === 1) {
+		html += '<span class="icon-tag-zc">正常</span> ';
+	}
+	return html;
+});

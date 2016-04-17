@@ -18,11 +18,27 @@ public interface OrderReceiptService {
 
   public Long findCount();
 
+  /**
+   * 查询报备记录
+   * @param searchParams
+   * @return
+   */
   public List<ReceiptRemark> findAll(Map<String, Object> searchParams);
 
+  /**
+   * 查询分页报备记录
+   * @param searchParams
+   * @param pageRequest
+   * @return
+   */
   public Page<ReceiptRemark> getReceiptRemarkList(Map<String, Object> searchParams, Pageable pageRequest);
 
-  public Page<OrderSignfor> getReceiptNotRemark(Map<String, Object> searchParams, Pageable pageRequest);
+  /**
+   * 查询未报备记录
+   * @param searchParams
+   * @return
+   */
+  public List<OrderSignfor> getReceiptNotRemark(Map<String, Object> searchParams);
 }
 
   

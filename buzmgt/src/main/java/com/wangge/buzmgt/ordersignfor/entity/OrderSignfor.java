@@ -78,11 +78,10 @@ public class OrderSignfor implements Serializable {
   @Transient
   private String ywSignforTag;
   
-//  private String userId;
+  @Column(name="user_id",insertable=false,updatable=false)
+  private String userId;
 //  private String truename;
-//  @Transient
 //  private String ywName;//业务名称;
- 
  
   @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
   @JoinColumn(name = "user_id")
@@ -107,7 +106,15 @@ public class OrderSignfor implements Serializable {
   private Date fastmailTime;
   private String customUnSignRemark;
   
-  
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
   public String getYwSignforTag() {
     return ywSignforTag;
   }

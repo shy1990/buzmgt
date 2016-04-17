@@ -597,6 +597,17 @@ a:hover .kucun,
 a:focus .kucun{
 	background:  url(../img/icon/left-mean/kc2.png) no-repeat ;
 }
+/* 油补统计 */
+.youbutongji{
+	background:  url(../img/icon/left-mean/ybtj1.png) no-repeat;
+}
+.active .youbutongji,
+a:hover .youbutongji,
+a:focus .youbutongji{
+	background:  url(../img/icon/left-mean/ybtj2.png) no-repeat ;
+}
+
+
 /* ==========end 一级菜单=========== */
 /* ==========start 业务管理=============== */
 /* 团队成员 */
@@ -662,13 +673,13 @@ a:focus .kucun{
 .menu-second a:focus .tiaojishenqing{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_tjsq2.png) no-repeat;
 }
-/* 未收款报备 */
-.weishoukuanbaobei{
+/* 未收款报备 收款异常订单 */
+.shoukuanyichangdingdan{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_wskbb1.png) no-repeat;
 }
-.menu-second .active .weishoukuanbaobei,
-.menu-second a:hover .weishoukuanbaobei,
-.menu-second a:focus .weishoukuanbaobei{
+.menu-second .active .shoukuanyichangdingdan,
+.menu-second a:hover .shoukuanyichangdingdan,
+.menu-second a:focus .shoukuanyichangdingdan{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_wskbb2.png) no-repeat;
 }
 /* 拜访记录 */

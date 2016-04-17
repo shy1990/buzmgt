@@ -73,7 +73,6 @@ public class OrderSignforController {
       int total=0;
       int number=pageRequest.getPageNumber();
       int size=pageRequest.getPageSize();
-      System.out.println(number+":"+size);
       for(OrderSignfor order : list){
         Date ctrateTime = order.getCreatTime();
         Date checkDate=DateUtil.moveDate(ctrateTime, 1);

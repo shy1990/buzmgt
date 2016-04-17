@@ -46,19 +46,47 @@
         <td>
           <div class="pay-time-box">
 			{{{whatremarkStatus status}}}	
-            <br /> <span class="text-bule">2016.03.12 18:20</span> 
+            <br /> <span class="text-bule">2016.03.12 18:20(缺少数据)</span> 
           </div>
         </td>
         <td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-          <a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
+			{{{whetherPunish status}}}
+          </td>
       </tr>
+	{{/each}}
+</script>
+<script id="notremarked-table-template" type="text/x-handlebars-template">
+	{{#each content}}
+    <tr>
+      <td class="">{{#with salesMan}}{{truename}}{{/with}}</td>
+      <td class="">{{shopName}}</td>
+      <td>{{orderNo}}</td>
+      <td>{{orderPrice}}</td>
+      <td>{{formDate creatTime}}</td>
+      <td>{{formDate fastmailTime}}</td>
+      <td>{{formDate yewuSignforTime}}</td>
+      <td>
+        <div class="pay-time-box">
+		  {{#if customSignforTime}}
+		  <span class="pay-time icon-tag-yfk">已付款</span>
+		  <span class="text-red">超时</span> <br />
+		  <span class="text-red">{{formDate customSignforTime}}</span>
+		  {{else}}
+          <span class="pay-time icon-tag-wfk">未付款</span>
+		  <span class="text-red">超时</span>
+		  {{/if}}
+        </div>
+      </td>
+      <td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
+        <a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
+    </tr>
 	{{/each}}
 </script>
 <script type="text/javascript">
 var	base='<%=basePath%>';
 var SearchData = {
 		'page':'0',
-		'size':'4'
+		'size':'10'
 	}
 </script>
 </head>
@@ -83,12 +111,12 @@ var SearchData = {
 						<div class="row">
 							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
-								<ul class="nav nav-tabs">
+								<ul id="receiptOrderStatus" class="nav nav-tabs">
 									<li class="active" data-tital="reported"><a href="#box_tab1" data-toggle="tab"><span
 											class="">报备</span></a></li>
 									<li data-tital="cash"><a href="#box_tab2" data-toggle="tab"><span
 											class="">收现金</span></a></li>
-									<li data-tital="notreported"><a href="#box_tab2" data-toggle="tab"><span
+									<li data-tital="notreported"><a href="#box_tab3" data-toggle="tab"><span
 											class="">未报备</span></a></li>
 								</ul>
 								<!--/菜单栏-->
@@ -99,7 +127,7 @@ var SearchData = {
 								<div class="form-group title-form">
 									<div class="input-group ">
 										<input type="text" class="form-control" name="truename"
-											id="param" placeholder="请输入名称或工号" onkeypress="return check()">
+											id="param" placeholder="请输入订单号" onkeypress="return check()">
 										<a class="input-group-addon " id="goSearch" onclick=""> <i
 											class="icon icon-finds"></i>
 										</a>
@@ -178,7 +206,7 @@ var SearchData = {
 							</div>
 							<!--业务揽收异常-->
 
-							<!--客户签收异常-->
+							<!--收现金-->
 							<div class="tab-pane fade" id="box_tab2">
 								<!--table-box-->
 								<div class="table-abnormal-list table-overflow">
@@ -214,25 +242,6 @@ var SearchData = {
 											<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
 												<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
 										</tr>
-										<tr>
-											<td class="">易小川</td>
-											<td class="">小米手机专卖店</td>
-											<td>201603041256</td>
-											<td>1232</td>
-											<td><span class="icon-tag-yc">异常</span> <span
-												class="icon-tag-zc">正常</span> 山东省滨州市邹平县大桥镇223号</td>
-											<td>2016.03.12 18:20</td>
-											<td>
-												<div class="pay-time-box">
-													<span class="pay-time icon-tag-wfk">未付款</span> <span
-														class="pay-time icon-tag-yfk">已付款</span> <span
-														class="text-red">超时</span> <br /> <span class="text-bule">2016.03.12
-														18:20</span> <span class="text-red">2016.03.12 18:20</span>
-												</div>
-											</td>
-											<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-												<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
-										</tr>
 									</table>
 								</div>
 								<!--table-box-->
@@ -240,7 +249,34 @@ var SearchData = {
 								<div id="memberPager"></div>
 								<!-- 分页 -->
 							</div>
-							<!--客户签收异常-->
+							<!--收现金-->
+							<!--未报备-->
+							<div class="tab-pane fade" id="box_tab3">
+								<!--table-box-->
+								<div class="table-abnormal-list table-overflow">
+									<table class="table table-hover new-table ">
+										<thead>
+											<tr>
+												<th>业务名称</th>
+												<th>店铺名称</th>
+												<th>订单号</th>
+												<th>金额</th>
+												<th>下单时间</th>
+												<th>发货时间</th>
+												<th>业务签收时间</th>
+												<th>打款时间</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody id="notRemarkedList"></tbody>
+									</table>
+								</div>
+								<!--table-box-->
+								<!-- 分页 -->
+								<div id="notRemarkedPager"></div>
+								<!-- 分页 -->
+							</div>
+							<!--未报备-->
 						</div>
 						<!--列表内容-->
 					</div>
@@ -263,6 +299,7 @@ var SearchData = {
 		<script type="text/javascript" src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 		<script src="/static/js/dateutil.js" type="text/javascript"
 			charset="utf-8"></script>
+		<script type="text/javascript" src="static/js/common.js" charset="utf-8"></script>
 		<script type="text/javascript" src="static/js/handlebars-v4.0.2.js" charset="utf-8"></script>
 		<script type="text/javascript" src="static/bootStrapPager/js/extendPagination.js"></script>
 		<script type="text/javascript" src="static/receipt/receipt-remark.js" 

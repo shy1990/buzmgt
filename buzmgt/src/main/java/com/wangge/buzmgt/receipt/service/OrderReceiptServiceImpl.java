@@ -22,6 +22,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.devtools.tunnel.client.TunnelClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Service;
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
+import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.receipt.entity.RemarkStatusEnum;
 import com.wangge.buzmgt.receipt.repository.OrderReceiptRepository;
@@ -48,7 +50,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
   private OrderReceiptRepository orderReceiptRepository ;
   
   @Autowired
-  private OrderSignforRepository orderSignforRepository ;
+  private OrderSignforService orderSignforService ;
   
 //  @Override
 //  public ReceiptRemark findByOrder(OrderSignfor orderNo) {
@@ -70,7 +72,11 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
   public List<ReceiptRemark> findAll(Map<String, Object> searchParams) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<ReceiptRemark> spec = orderReceiptSearchFilter(filters.values(), ReceiptRemark.class);
-    return orderReceiptRepository.findAll(spec);
+    List<ReceiptRemark> remarkedList = orderReceiptRepository.findAll(spec);
+    remarkedList.forEach(remark->{
+      remark.setOrder(orderSignforService.findByOrderNo(remark.getOrderno()));
+    });
+    return remarkedList;
   }
 
   @Override
@@ -80,7 +86,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
 
     Page<ReceiptRemark> receiptRemarkPage=orderReceiptRepository.findAll(spec,pageRequest);
     receiptRemarkPage.getContent().forEach(receiptRemark->{
-      receiptRemark.setOrder(orderSignforRepository.findByOrderNo(receiptRemark.getOrderno()));
+      receiptRemark.setOrder(orderSignforService.findByOrderNo(receiptRemark.getOrderno()));
     });
     
     return receiptRemarkPage;
@@ -269,32 +275,41 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
   }
 
 
-  @SuppressWarnings("deprecation")
   @Override
-  public Page<OrderSignfor> getReceiptNotRemark(Map<String, Object> searchParams, Pageable pageRequest) {
+  public List<OrderSignfor> getReceiptNotRemark(Map<String, Object> searchParams) {
     // TODO Auto-generated method stub
     String status="";
     String startTime="";
     String endTime="";
     startTime = (String) searchParams.get("GTE_createTime");
     endTime = (String) searchParams.get("LTE_createTime");
-    List<OrderSignfor> list = orderSignforRepository.getReceiptNotRemarkList(status, startTime, endTime);
+    status=(String) searchParams.get("EQ_status");
+    List<OrderSignfor> list = orderSignforService.getReceiptNotRemarkList(status, startTime, endTime);
     List<OrderSignfor> notRemarkList = new ArrayList<OrderSignfor>();
     String timesGap ="24:00";
     String[] timesGapAry=timesGap.split(":");
+    //获取当前时间
+    Date now=new Date();
     list.forEach(notRemark->{
       //截止时间
       Date abortTime = notRemark.getYewuSignforTime();
-      System.out.println(abortTime.toString());
       abortTime.setHours(Integer.parseInt(timesGapAry[0]));
       abortTime.setMinutes(Integer.parseInt(timesGapAry[1]));
-      if(notRemark.getYewuSignforTime().getTime() > abortTime.getTime()){
-        notRemarkList.add(notRemark);
+      if(notRemark.getCustomSignforTime()!=null){
+        //付款超时
+        if(notRemark.getCustomSignforTime().getTime()>abortTime.getTime()){
+          notRemarkList.add(notRemark);
+        }
+        
+      }else{
+        //超时未付款
+        if(now.getTime() > abortTime.getTime()){
+          notRemarkList.add(notRemark);
+        }
       }
       
     });
-    Page<OrderSignfor> page = new PageImpl<OrderSignfor>(notRemarkList,pageRequest,list.size());
-    return page;
+    return notRemarkList;
   }
   
 

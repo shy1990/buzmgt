@@ -74,14 +74,14 @@ $(function(){
  * @returns {String}
  */
 function conditionProcess() {
-	var strSearchData ="sc_GTE_creatTime="
+	var SearchData_ ="sc_GTE_creatTime="
 			+ (SearchData.sc_GTE_creatTime == null ? ''
 					: SearchData.sc_GTE_creatTime)
 			+ "&sc_LTE_creatTime="
 			+ (SearchData.sc_LTE_creatTime == null ? ''
 					: SearchData.sc_LTE_creatTime);
 			
-	return strSearchData;
+	return SearchData_;
 }
 function findYwOrderList(page){
 	page=page==null||page==''? 0 :page;
