@@ -91,28 +91,28 @@
 												<tr>
 													<td class="average-tr ">
 													
-														<div class="col-sm-8" >
-															<select class="form-control selectpicker" id="assessAreaId" name="assessArea" multiple >
-																<option selected>行政区域</option>
-<%-- 																	<c:foreach items="${list}" var ="li" varStatus="status"> --%>
-<%-- 																	<c:if text="${status.first}">我是第一个元素</c:if> --%>
-<%-- 																	<c:if text="${status.last}">我是最后一个元素</c:if> --%>
-<%-- 																	</c:foreach> --%>
-																<% 
-																List<Object> listR=(List<Object>)request.getAttribute("listAdminDivision");
-																	if(null!=listR){
-																	  for(int i=0;i<listR.size();i++){%>
-																	  <option value="<%=JSONArray.fromObject(listR.get(i)).get(0) %>"><%=JSONArray.fromObject(listR.get(i)).get(1)%></option>
-																	<%  }
-																	}
-																%>
-															</select>
-														</div>
+<!-- 														<div class="col-sm-4" > -->
+<!-- 															<select class="form-control selectpicker" id="assessAreaId" name="assessArea" multiple > -->
+<!-- 																<option selected>行政区域</option> -->
+<%-- <%-- 																	<c:foreach items="${list}" var ="li" varStatus="status"> --%> 
+<%-- <%-- 																	<c:if text="${status.first}">我是第一个元素</c:if> --%> 
+<%-- <%-- 																	<c:if text="${status.last}">我是最后一个元素</c:if> --%> 
+<%-- <%-- 																	</c:foreach> --%> 
+<%-- 																<%  --%>
+<!-- // 																List<Object> listR=(List<Object>)request.getAttribute("listAdminDivision"); -->
+<!-- // 																	if(null!=listR){ -->
+<%-- 																	  for(int i=0;i<listR.size();i++){%> --%>
+<%-- 																	  <option value="<%=JSONArray.fromObject(listR.get(i)).get(0) %>"><%=JSONArray.fromObject(listR.get(i)).get(1)%></option> --%>
+<%-- 																	<%  } --%>
+<!--  																	} -->
+<%-- 																%> --%>
+<!-- 															</select> -->
+<!-- 														</div> -->
 													
 													
 													
 														<div class="col-sm-4">
-															<a class="J_addDire btn btn-default btn-kaohe-add col-sm-6" href="javascript:;" id="btn"><i class="icon-saojie-add"></i></a>
+															<a class="J_addDire btn btn-default btn-kaohe-add col-sm-4" href="javascript:;" id="btn"><i class="icon-saojie-add"></i></a>
 														</div>
 													<label class="pull-right col-md-6 control-label msg-error">请选择考核区域</label>
 													</td>
@@ -237,6 +237,40 @@
 			 		var name ="<%=areaname%>";
 			 		
 			 		
+			 		<%
+					if(null!=request.getAttribute("pcoordinates")){%>
+						<%
+						String pcoordinates=request.getAttribute("pcoordinates").toString();
+						String[] listCoordinates=pcoordinates.split("=");
+						 %> 
+						 			var polygon = new BMap.Polygon([
+						 	<%
+										for(int x=0;x<listCoordinates.length;x++){
+											String points=listCoordinates[x];
+											double lng=Double.parseDouble(points.split("-")[0]);//经度 
+							 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
+							 %>				
+							 		  		<%
+							 		  			if(x==listCoordinates.length-1){%>
+							 		  			new BMap.Point(<%=lng%>,<%=lat%>)
+							 		  			<%}else{%>
+							 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
+							 		  			<%}
+							 		  		%>
+							 <%
+										}%>
+										], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
+						 				map.addOverlay(polygon);
+										<%
+											String jlng=listCoordinates[0].split("-")[0];
+											String jlat=listCoordinates[0].split("-")[1];
+										%>
+						 				map.centerAndZoom(new BMap.Point(<%=jlng%>, <%=jlat%>), 12);
+						 				map.enableScrollWheelZoom(true); 
+										<%
+					}else{%>
+			 		
+			 		
 			 		var bdary = new BMap.Boundary();
 			 		
 			 		bdary.get(name, function(rs){ //获取行政区域
@@ -251,7 +285,7 @@
 			 		map.enableScrollWheelZoom(true); 
 			 		}); 
 			 		
-			 		
+			 		<%}%>
 			 		
 			 		  	/* 迭代每个镇轮廓 */
 			 		 <%		
@@ -260,6 +294,8 @@
 			 		 		if(listRegion != null && listRegion.size()>0){
 								for(int i=0;i<listRegion.size();i++){
 								String coordinates=listRegion.get(i).getCoordinates();
+								String name=listRegion.get(i).getName();
+								String centerPoint=listRegion.get(i).getCenterPoint();
 								String[] listCoordinates = null;
 								if(null != coordinates){
 								  listCoordinates=coordinates.split("=");
@@ -286,7 +322,17 @@
 									}}%>
 									], {strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
 					 				map.addOverlay(polygon); 	
-									<%
+									
+					 				//色块上的文字shuomi
+					 				<%
+											if(null !=centerPoint){
+											double lng = Double.parseDouble(centerPoint.split("-")[0]);//经度 
+											double lat = Double.parseDouble(centerPoint.split("-")[1]);//纬度%>
+											var secRingCenter = new BMap.Point(<%=lng%>,<%=lat%>)
+											var secRingLabel2 = new BMap.Label("<%=name%>",{offset: new BMap.Size(10,-30), position: secRingCenter});
+											secRingLabel2.setStyle({"line-height": "20px", "text-align": "center", "width": "80px", "height": "29px", "border": "none", "padding": "2px","background": "url(http://jixingjx.com/mapapi/ac.gif) no-repeat",});
+											map.addOverlay(secRingLabel2);
+									<%}
 									 
 					 			}
 					 		}}%>

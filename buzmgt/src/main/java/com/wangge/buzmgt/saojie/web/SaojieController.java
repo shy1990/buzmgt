@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.saojie.web;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.util.DateUtil;
 
 /**
  * 
@@ -236,10 +238,15 @@ public class SaojieController {
 	  if(salesman != null && !"".equals(salesman)){
 	     list = saojieService.findBysalesman(salesman);
 	  }
+	  String startTime=DateUtil.date2String(list.get(0).getBeginTime());
+	  String endTime=DateUtil.date2String(list.get(0).getExpiredTime());
+	  model.addAttribute("startTime",startTime);
+	  model.addAttribute("endTime",endTime);
 	  model.addAttribute("list",list);
 	  model.addAttribute("salesman",salesman);
 	  model.addAttribute("areaname",salesman.getRegion().getParent().getName()+salesman.getRegion().getName());
 	  model.addAttribute("regionData",regionService.findByRegion(salesman.getRegion().getId()));
+	  model.addAttribute("pcoordinates",salesman.getRegion().getCoordinates());
 	  return "saojie/saojie_set";
 	}
 
@@ -264,8 +271,10 @@ public class SaojieController {
     SalesMan sm=saojie.getSalesman();
     //更改下一个扫街地区为进行中
     saojie = saojieService.findByOrderAndSalesman(saojie.getOrder() + 1,sm);
-    saojie.setStatus(SaojieStatus.PENDING);
-    saojieService.saveSaojie(saojie);
+    if(null!=saojie){
+      saojie.setStatus(SaojieStatus.PENDING);
+      saojieService.saveSaojie(saojie);
+    }
   //更改业务工作模式
     List<Saojie> listSaojie= saojieService.findBysalesman(sm);
     boolean flag =true;
@@ -329,7 +338,8 @@ public class SaojieController {
   public String getRegionName(String id){
     SalesMan sm = salesManService.findByUserId(id);
     String  regionName=sm.getRegion().getName();
-    return regionName;
+    String  coordinates =sm.getRegion().getCoordinates();
+    return regionName+"|"+coordinates;
   }
 	
 	/**

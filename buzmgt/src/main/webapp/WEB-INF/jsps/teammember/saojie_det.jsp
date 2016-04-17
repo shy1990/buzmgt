@@ -192,6 +192,41 @@
 			  var map = new BMap.Map("allmap");
 			  <% String areaname=request.getAttribute("areaName").toString();
 			  %>
+			  
+			  
+			  
+			  <%
+				if(null!=request.getAttribute("pcoordinates")){%>
+					<%
+					String pcoordinates=request.getAttribute("pcoordinates").toString();
+					String[] listCoordinates=pcoordinates.split("=");
+					 %> 
+					 			var polygon = new BMap.Polygon([
+					 	<%
+									for(int x=0;x<listCoordinates.length;x++){
+										String points=listCoordinates[x];
+										double lng=Double.parseDouble(points.split("-")[0]);//经度 
+						 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
+						 %>				
+						 		  		<%
+						 		  			if(x==listCoordinates.length-1){%>
+						 		  			new BMap.Point(<%=lng%>,<%=lat%>)
+						 		  			<%}else{%>
+						 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
+						 		  			<%}
+						 		  		%>
+						 <%
+									}%>
+									], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
+					 				map.addOverlay(polygon);
+									<%
+										String jlng=listCoordinates[0].split("-")[0];
+										String jlat=listCoordinates[0].split("-")[1];
+									%>
+					 				map.centerAndZoom(new BMap.Point(<%=jlng%>, <%=jlat%>), 12);
+					 				map.enableScrollWheelZoom(true); 
+									<%
+				}else{%>
 			   map.centerAndZoom("<%=areaname%>", 13);
 			   map.enableScrollWheelZoom(true);  
 			   //  map.centerAndZoom("上海",11);   
@@ -219,7 +254,7 @@
 				} 
 				}); 
 			  
-			  
+				<%}%>
 			  
 			  <%
 			  	SaojieDataVo saojieDataVo=	(SaojieDataVo)request.getAttribute("saojiedatalist");

@@ -86,6 +86,9 @@
 											<c:if test="${saojie.status == 'AGREE' }">
 												<td><span></span> <span></span></td>
 											</c:if>
+											<c:if test="${saojie.status == 'PENDING' }">
+												<td><span></span> <span></span></td>
+											</c:if>
 											<!--箭头-->
 											<td><span class="norm">指标：<span
 													class="text-danger">${saojie.minValue}</span>家 
@@ -120,8 +123,8 @@
 						<div class="saojie-set-map col-sm-10  col-sm-offset-1 col-xs-12">
 							<!--map-title-->
 							<p class="map-tital">
-								开始时间: 2015.11.12 <span class="drive-row"></span> 结束时间:
-								2016.01.17
+								开始时间: ${startTime} <span class="drive-row"></span> 结束时间:
+								 ${endTime}
 							</p>
 							<!--map-title-->
 							<div class="map-box " id="allmap">
@@ -192,24 +195,61 @@
 	 	if("山东省"=="<%=areaname%>"){
 	 		map.centerAndZoom(new BMap.Point(117.010765,36.704194), 14);
 	 	}else{
+	 		
+	 		
 	 		var name ="<%=areaname%>";
 	 		
 	 		
-	 		var bdary = new BMap.Boundary();
-	 		
-	 		bdary.get(name, function(rs){ //获取行政区域
-	 		var count = rs.boundaries.length; //行政区域的点有多少个
-
-	 		for(var i = 0; i < count; i++){
-	 		var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "red", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
-	 		map.addOverlay(ply); //添加覆盖物
-	 		map.setViewport(ply.getPath()); //调整视野 
-	 		} 
-	 		map.centerAndZoom(name, 11);
-	 		map.enableScrollWheelZoom(true); 
-	 		}); 
 	 		
 	 		
+	 		<%
+			if(null!=request.getAttribute("pcoordinates")){%>
+				<%
+				String pcoordinates=request.getAttribute("pcoordinates").toString();
+				String[] listCoordinates=pcoordinates.split("=");
+				 %> 
+				 			var polygon = new BMap.Polygon([
+				 	<%
+								for(int x=0;x<listCoordinates.length;x++){
+									String points=listCoordinates[x];
+									double lng=Double.parseDouble(points.split("-")[0]);//经度 
+					 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
+					 %>				
+					 		  		<%
+					 		  			if(x==listCoordinates.length-1){%>
+					 		  			new BMap.Point(<%=lng%>,<%=lat%>)
+					 		  			<%}else{%>
+					 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
+					 		  			<%}
+					 		  		%>
+					 <%
+								}%>
+								], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
+				 				map.addOverlay(polygon);
+								<%
+									String jlng=listCoordinates[0].split("-")[0];
+									String jlat=listCoordinates[0].split("-")[1];
+								%>
+				 				map.centerAndZoom(new BMap.Point(<%=jlng%>, <%=jlat%>), 12);
+				 				map.enableScrollWheelZoom(true); 
+								<%
+			}else{%>
+	 		
+		 		var bdary = new BMap.Boundary();
+		 		
+		 		bdary.get(name, function(rs){ //获取行政区域
+		 		var count = rs.boundaries.length; //行政区域的点有多少个
+	
+		 		for(var i = 0; i < count; i++){
+		 		var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "red", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+		 		map.addOverlay(ply); //添加覆盖物
+		 		map.setViewport(ply.getPath()); //调整视野 
+		 		} 
+		 		map.centerAndZoom(name, 11);
+		 		map.enableScrollWheelZoom(true); 
+		 		}); 
+	 		
+	 		<%}%>
 	 		
 	 		  	/* 迭代每个镇轮廓 */
 	 		 <%if (null != request.getAttribute("salesman")) {
@@ -242,8 +282,7 @@
 			 				map.addOverlay(polygon); 	
 							//色块上的文字shuomi
 			 				<%
-									String points = listCoordinates[0];
-									if(null!=centerPoint){
+									if(null !=centerPoint){
 									double lng = Double.parseDouble(centerPoint.split("-")[0]);//经度 
 									double lat = Double.parseDouble(centerPoint.split("-")[1]);//纬度%>
 									var secRingCenter = new BMap.Point(<%=lng%>,<%=lat%>)

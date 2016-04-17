@@ -154,7 +154,11 @@ public class TeamMembersController {
     
       u = userService.addUser(u);
       salesman.setRegion(regionService.getRegionById(regionId.trim()));
-      salesman.setStatus(com.wangge.buzmgt.teammember.entity.SalesmanStatus.saojie);
+      if(salesman.getIsOldSalesman()==1){
+        salesman.setStatus(SalesmanStatus.weihu);
+      }else{
+        salesman.setStatus(com.wangge.buzmgt.teammember.entity.SalesmanStatus.saojie);
+      }
       salesman.setRegdate(new Date());
       salesman.setUser(u);
       salesManService.addSalesman(salesman);
@@ -254,13 +258,15 @@ public class TeamMembersController {
        model.addAttribute("rList", rList);
        SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "");
        model.addAttribute("saojiedatalist", saojiedatalist);
-       model.addAttribute("areaName", salesMan.getRegion().getName());
+       model.addAttribute("areaName", salesMan.getRegion().getParent().getName()+salesMan.getRegion().getName());
+       model.addAttribute("pcoordinates", salesMan.getRegion().getCoordinates());
        //判断业务员所处的模式
        List<Assess> listAssess=assessService.findBysalesman(salesMan);
        
        if(salesMan.getStatus().equals(SalesmanStatus.kaifa)&&listAssess.size()==0){
          model.addAttribute("salesStatus", "kaifa");
        }
+       
        if("saojie".equals(flag)){
          model.addAttribute("saojie",saojie);
          return "saojie/saojie_det";

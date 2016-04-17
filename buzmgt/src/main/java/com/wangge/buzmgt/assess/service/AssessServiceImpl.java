@@ -83,7 +83,10 @@ public class AssessServiceImpl implements AssessService {
     List<Assess> list = new ArrayList<Assess>();
     for(Object obj: q.getResultList()){
       Assess ass = (Assess)obj;
-      String[] assStr = ass.getAssessArea().split(",");
+      String[] assStr=null;
+      if(null !=ass.getDefineArea()){
+        assStr = ass.getDefineArea().split(",");
+      }
       int orderNum = 0;//提货量
       int active = 0;//活跃家数
       if("3".equals(ass.getAssessStage()) && ass.getStatus().equals(AssessStatus.AGREE)){
@@ -110,6 +113,7 @@ public class AssessServiceImpl implements AssessService {
             active = big.intValue();
         }
       }else{
+        if(null!=assStr){
         for(int i=0; i<assStr.length; i++){
           String sql = "select count(o.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
               "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
@@ -136,6 +140,7 @@ public class AssessServiceImpl implements AssessService {
               int num = big.intValue();
               active += num;
           }
+        }
         }
       }
       double activeNum = active / Integer.parseInt(ass.getAssessActivenum());//活跃家数占的比例
@@ -168,7 +173,7 @@ public class AssessServiceImpl implements AssessService {
     List<Assess> result = assessRepository.findBysalesman(salesman);
     List<Assess> list = new ArrayList<Assess>();
     for(Assess ass: result){
-      String[] assStr = ass.getAssessArea().split(",");
+      String[] assStr = ass.getDefineArea().split(",");
       int orderNum = 0;//提货量
       int active = 0;//活跃家数
       for(int i=0; i<assStr.length; i++){
@@ -199,7 +204,7 @@ public class AssessServiceImpl implements AssessService {
         }
       }
       String regionName = "";
-      String [] stringArr= ass.getAssessArea().split(",");
+      String [] stringArr= ass.getDefineArea().split(",");
       for(int i=0;i<stringArr.length;i++){
         Region region = regionRepository.findById(stringArr[i]);
         if(region != null && !"".equals(region)){
