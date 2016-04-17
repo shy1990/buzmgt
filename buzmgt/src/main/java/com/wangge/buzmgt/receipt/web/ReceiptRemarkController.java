@@ -1,8 +1,6 @@
 package com.wangge.buzmgt.receipt.web;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.junit.runners.Parameterized.Parameter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,11 +24,11 @@ import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.wangge.buzmgt.importExcel.web.ImportOrderExcel;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.receipt.service.OrderReceiptService;
-import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.util.ExcelExport;
 
 @Controller
@@ -44,10 +41,17 @@ public class ReceiptRemarkController {
   @Resource
   private OrderReceiptService orderReceiptService; 
   
+  @Resource
+  private OrderSignforService orderSignforService;
+  
   @RequestMapping(value="/show",method=RequestMethod.GET)
   public String showReceiptRemark(){
     
-    return "receipt/receipt_abnormal";
+    return "receipt/receipt_remark";
+  }
+  @RequestMapping(value="/allOrderList",method=RequestMethod.GET)
+  public String showAllOrderList(){
+    return "receipt/all_order_list";
   }
   /**
    * 报备列表
@@ -82,8 +86,14 @@ public class ReceiptRemarkController {
    */
   @RequestMapping(value="/remarkList/{orderId}")
   public String getReceiptRemarkList(Model model ,@PathVariable("orderId") ReceiptRemark receiptRemark , HttpServletRequest request){
-    
-    return "";
+    if(receiptRemark.getSalesMan()==null){
+      receiptRemark.setSalesMan(new SalesMan());
+    }
+    String orderNo=receiptRemark.getOrderno();
+    OrderSignfor order= orderSignforService.findByOrderNo(orderNo);
+    receiptRemark.setOrder(order);
+    model.addAttribute("receiptRemark", receiptRemark);
+    return "receipt/receipt_remark_det";
   }
   /**
    * 导出
@@ -91,7 +101,6 @@ public class ReceiptRemarkController {
    * @param request
    * @param response
    */
-  @SuppressWarnings("deprecation")
   @RequestMapping("/export")
   public void excelExport(HttpServletRequest request, HttpServletResponse response) {
     String[] gridTitles = { "业务名称","店铺名称","订单号", "金额","理由","报备时间","付款时间"};
@@ -133,7 +142,7 @@ public class ReceiptRemarkController {
 
   }
   
-  @RequestMapping(value="/notRemarkList",method=RequestMethod.POST)
+  @RequestMapping(value="/notRemarkList",method=RequestMethod.GET)
   @ResponseBody
   public String getReceiptNotRemark(HttpServletRequest request,
       @PageableDefault(page = 0,size=10,sort={"creatTime"},direction=Direction.DESC) Pageable pageRequest ){
@@ -157,6 +166,34 @@ public class ReceiptRemarkController {
      catch(Exception e){
        logger.error(e.getMessage());
      }
+    return json;
+  }
+  /**
+   * 获取全部订单列表
+   * @param request
+   * @param pageRequest
+   * @return
+   */
+  @RequestMapping(value="/getAllOrderList",method=RequestMethod.GET)
+  @ResponseBody
+  public String getAllOrderList(HttpServletRequest request,
+      @PageableDefault(page = 0,size=10,sort={"creatTime"},direction=Direction.DESC) Pageable pageRequest ){
+    String json="";
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    Page<OrderSignfor> allOrderPage = orderSignforService.getOrderSingforList(searchParams, pageRequest);
+    allOrderPage.getContent().forEach(osfl->{
+      if(osfl.getSalesMan()==null){
+        osfl.setSalesMan(new SalesMan());
+      }
+      osfl.getSalesMan().setUser(null);
+      osfl.getSalesMan().setRegion(null);
+    });
+    try {
+      json=JSON.toJSONString(allOrderPage, SerializerFeature.DisableCircularReferenceDetect);
+    }
+    catch(Exception e){
+      logger.error(e.getMessage());
+    }
     return json;
   }
 }

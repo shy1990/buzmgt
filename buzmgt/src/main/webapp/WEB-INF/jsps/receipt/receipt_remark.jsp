@@ -46,10 +46,10 @@
         <td>
           <div class="pay-time-box">
 			{{{whatremarkStatus status}}}	
-            <br /> <span class="text-bule">2016.03.12 18:20(缺少数据)</span> 
+            <br /> <span class="text-bule">{{#with order}}{{formDate customSignforTime}}{{/with}}</span> 
           </div>
         </td>
-        <td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
+        <td><a class="btn btn-blue btn-sm" href="/receiptRemark/remarkList/{{id}}">查看</a>
 			{{{whetherPunish status}}}
           </td>
       </tr>
@@ -77,7 +77,7 @@
 		  {{/if}}
         </div>
       </td>
-      <td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
+      <td><a class="btn btn-blue btn-sm" href="">查看</a>
         <a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
     </tr>
 	{{/each}}

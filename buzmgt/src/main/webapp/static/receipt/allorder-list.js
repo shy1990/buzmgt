@@ -1,41 +1,9 @@
 var remarkedTotal = 0;// 报备总条数
 var notRemarkedTotal = 0;// 未报备总条数
 $(function() {
-	nowTime();//初始化日期
-	findRemarked();
-	findNOTRemarked();
+//	nowTime();//初始化日期
+	findAllOrderList();
 })
-$('.nav-task li').on("click", function() {
-	$(this).addClass('active');
-	$(this).siblings('li').removeClass('active');
-	var item = $(this).data('item');
-	deleteStatus()
-	switch (item) {
-	case 'all':
-		;
-		break;
-	case 'unpay':
-		SearchData['sc_EQ_status'] = "UnPay";
-		break;
-	case 'timeout':
-		SearchData['sc_GTE_status'] = "UnPayLate";
-		break;
-	case 'payed':
-		SearchData['sc_EQ_status'] = "OverPay";
-		break;
-	default:
-		break;
-	}
-	goSearch();
-});
-$('#receiptOrderStatus li').on('click', function() {
-	$('.nav-task li:first-child').addClass('active');
-	$('.nav-task li:first-child').siblings().removeClass('active');
-});
-function deleteStatus() {
-	delete SearchData['sc_EQ_status'];
-	delete SearchData['sc_GTE_status'];
-}
 $('#startTime').datetimepicker({
 	format : "yyyy-mm-dd",
 	language : 'zh-CN',
@@ -89,8 +57,8 @@ $('#endTime').datetimepicker({
 function nowTime() {
 	var nowDate = changeDateToString(new Date());
 	var beforeDate = changeDateToString((new Date()).DateAdd('d', -3));
-	SearchData['sc_GTE_createTime'] = beforeDate;
-	SearchData['sc_LTE_createTime'] = nowDate;
+	SearchData['sc_GTE_creatTime'] = beforeDate;
+	SearchData['sc_LTE_creatTime'] = nowDate;
 	$('#startTime').val(beforeDate);
 	$('#endTime').val(nowDate)
 }
@@ -131,10 +99,6 @@ $('.table-export').on(
 			}
 
 		});
-function findTab(){
-	var tab = $('#receiptOrderStatus li.active').attr('data-tital');
-	return tab;
-}
 /**
  * 处理检索条件
  * 
@@ -150,22 +114,22 @@ function conditionProcess() {
 
 	return SearchData_;
 }
-function findRemarked(page) {
+function findAllOrderList(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
 	// delete SearchData['sc_EQ_customSignforException'];
 	$.ajax({
-		url : "/receiptRemark/remarkList",
+		url : "/receiptRemark/getAllOrderList",
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
 		success : function(orderData) {
-			createRemarkedTable(orderData);
+			createAllOrderTable(orderData);
 			var searchTotal = orderData.totalElements;
 			if (searchTotal != remarkedTotal || searchTotal == 0) {
 				remarkedTotal = searchTotal;
 
-				remarkedPaging(orderData);
+				allOrderPaging(orderData);
 			}
 		},
 		error : function() {
@@ -173,45 +137,19 @@ function findRemarked(page) {
 		}
 	})
 }
-function findNOTRemarked(page) {
-	page = page == null || page == '' ? 0 : page;
-	SearchData['page'] = page;
-	// delete SearchData['sc_EQ_customSignforException'];
-	$.ajax({
-		url : "/receiptRemark/notRemarkList",
-		type : "GET",
-		data : SearchData,
-		dataType : "json",
-		success : function(orderData) {
-			createNotRemarkedTable(orderData);
-			var searchTotal = orderData.totalElements;
-			if (searchTotal != notRemarkedTotal || searchTotal == 0) {
-				notRemarkedTotal = searchTotal;
-				notRemarkedPaging(orderData);
-			}
-		},
-		error : function() {
-			alert("系统异常，请稍后重试！");
-		}
-	})
-}
+
 /**
  * 
  * @param data
  */
 
-function createRemarkedTable(data) {
-	var myTemplate = Handlebars.compile($("#remarked-table-template").html());
-	$('#remarkedList').html(myTemplate(data));
+function createAllOrderTable(data) {
+	var myTemplate = Handlebars.compile($("#allorder-table-template").html());
+	$('#allOrderList').html(myTemplate(data));
 }
-function createNotRemarkedTable(data) {
-	var myTemplate = Handlebars
-			.compile($("#notremarked-table-template").html());
-	$('#notRemarkedList').html(myTemplate(data));
-}
-function remarkedPaging(data) {
+function allOrderPaging(data) {
 	var totalCount = data.totalElements, limit = data.size;
-	$('#remarkedPager').extendPagination({
+	$('#allOrderPager').extendPagination({
 		totalCount : totalCount,
 		showCount : 5,
 		limit : limit,
@@ -260,6 +198,9 @@ Handlebars.registerHelper('whetherPunish', function(value) {
 Handlebars.registerHelper('whatPartsCount', function(value) {
 	if (value== ""||value==null) { return 0; }
 	return value;
+});
+Handlebars.registerHelper('whatOrderStatus', function(v1,v2) {
+	return "";
 });
 Handlebars.registerHelper('whatCustomSignforStatus', function(value) {
 	var html = "";

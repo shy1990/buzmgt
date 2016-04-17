@@ -95,7 +95,10 @@ public class OrderSignforController {
       orderSignforslist=os.getOrderSingforList(searchParams, pageRequest);
     }
     String s ="";
-    orderSignforslist.forEach(osfl->{
+    orderSignforslist.getContent().forEach(osfl->{
+      if(osfl.getSalesMan()==null){
+        osfl.setSalesMan(new SalesMan());
+      }
       osfl.getSalesMan().setUser(null);
       osfl.getSalesMan().setRegion(null);
       String DateStr="";

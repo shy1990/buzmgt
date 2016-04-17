@@ -43,7 +43,7 @@ public class ReceiptRemark implements Serializable{
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
-  private Integer  id;
+  private Long  id;
   private String aboveImgUrl;
   private String frontImgUrl;
   private String sideImgUrl;
@@ -65,10 +65,10 @@ public class ReceiptRemark implements Serializable{
   @JoinColumn(name = "salesman_id")
   private SalesMan salesMan;
   
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
   public String getAboveImgUrl() {
