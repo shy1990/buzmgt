@@ -286,7 +286,7 @@ public class BuzmgtApplicationTests {
   }
   @Test
   public void testSaojieData(){
-    SaojieDataVo sList =  saojieService.getsaojieDataList("B37090301220","37090305");
+    SaojieDataVo sList =  saojieService.getsaojieDataList("B37090301220","37090305",0,0);
      if(sList != null){
        for(SaojieData d : sList.getList()){
          System.out.println("========================"+d.getName());

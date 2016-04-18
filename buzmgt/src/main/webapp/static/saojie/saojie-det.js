@@ -1,4 +1,6 @@
+var total = 0;
 $(function(){
+	$('#callBackPager').hide();
 	$('a.title-btn').click(function(){
 		$('.title-btn').removeClass('active');
 		$(this).addClass('active');
@@ -6,72 +8,42 @@ $(function(){
 		console.info($_btnText);
 		if("地图"===$_btnText){
 			$('.saojie-list').hide(1);
+			$('#callBackPager').hide();
 			$('.saojie-map').slideDown(500);
 		}else if("列表"===$_btnText){
 			$('.saojie-map').hide(1);
+			$('#callBackPager').show();
 			$('.saojie-list').slideDown(500);
+			var userId = $("#userId").html();
+			var regionId = $("#regionId").val();
+			searchData['userId'] = userId;
+			searchData['regionid'] = regionId;
+			
+			ajaxSearch(searchData);
 		}
 	})
 	
-	var userId = $("#userId").html();
-	var regionId = $("#regionId").val();
-	searchData['userId'] = userId;
-	searchData['regionid'] = regionId;
 	
-	ajaxSearch(searchData);
 });
 
-
-function getSaojieDataList(){
-	var userId = $("#userId").html();
-	var regionId = $("#regionId").val();
-	$.ajax({
-		type:"post",
-		url:"/teammember/getSaojiedataList",
-		//data:formValue,
-		dataType:"JSON",
-		data :{
-			"userId" : userId,
-			"regionId" : regionId
-		},
-		success : function(data){
-		   if (data) {
-			   var saojiedata = $("#saojiedata");  
-			   $(".shopNum").text(data.shopNum);
-			   $(".percent").text(data.percent); 
-			   $("#percent").width(data.percent);
-			   saojiedata.empty();
-			   
-			   saojiedata.append("<div  class='list-tr'>"+
-						"<img class='shop-img' style='height:80%;'  src='"+data[0].imageUrl+"' />"+
-						"<div style='display: inline-block;' class='list-conter'>"+
-							"<h4>"+data[0].name+"</h4>"+
-							"<p>"+data[0].description+"</p>"+
-							"<span class='pull-right'>"+data[0].saojieDate+"</span>"+
-						"</div>"+
-					"</div>     ");
-			}
-		}
-	});
-}
 
 function ajaxSearch(searchData) {
 	$.ajax({
 		url : base + "teammember/getSaojiedataList",
-		type : "POST",
+		type : "GET",
 		data : searchData,
 		beforeSend : function(request) {
 			request.setRequestHeader("Content-Type",
 					"application/json; charset=UTF-8");
 		},
 		dataType : "json",
-		success : function(visitData) {
+		success : function(data) {
 			$(".shopNum").text(data.shopNum);
 			$(".percent").text(data.percent); 
 			$("#percent").width(data.percent);
-			totalElements = visitData.totalElements;
-			totalPages = visitData.totalPages;
-			seachSuccessTable(visitData);
+			totalElements = data.list.totalElements;
+			totalPages = data.list.totalPages;
+			seachSuccessTable(data.list);
 			var searchTotal = totalElements;
 
             if (searchTotal != total || searchTotal == 0) {
@@ -88,7 +60,7 @@ function ajaxSearch(searchData) {
 function initPaging(){
 	var totalCount = totalElements; //总条数 
 	showCount = totalPages, //显示分页个数
-	limit =  2;//每页条数
+	limit =  1;//每页条数
 	$('#callBackPager').extendPagination({
 	totalCount : totalCount, 
 	showCount : showCount,

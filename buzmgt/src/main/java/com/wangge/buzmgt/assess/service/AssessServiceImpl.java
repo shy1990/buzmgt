@@ -56,7 +56,6 @@ public class AssessServiceImpl implements AssessService {
   }
 
   @Override
-  @Transactional
   public Page<Assess> getAssessList(Assess assess, int pageNum, String regionName) {
     String hql = "select t.* from SYS_ASSESS t,(select user_id,max(to_number(assess_stage)) stage from SYS_Assess group by user_id) b left join sys_salesman s on b.user_id = s.user_id where t.user_id=b.user_id and to_number(t.assess_stage)=b.stage ";
     if(assess.getSalesman() != null){
@@ -83,9 +82,9 @@ public class AssessServiceImpl implements AssessService {
     List<Assess> list = new ArrayList<Assess>();
     for(Object obj: q.getResultList()){
       Assess ass = (Assess)obj;
-      String[] assStr = ass.getAssessArea().split(",");
-      int orderNum = 0;//提货量
-      int active = 0;//活跃家数
+      String[] assStr = ass.getDefineArea().split(",");
+      double orderNum = 0;//提货量
+      double active = 0;//活跃家数
       if("3".equals(ass.getAssessStage()) && ass.getStatus().equals(AssessStatus.AGREE)){
         String sql = "select count(o.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
             "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
@@ -95,7 +94,7 @@ public class AssessServiceImpl implements AssessService {
         List<BigDecimal>  resultList = query.getResultList();
         if(resultList != null && resultList.size() > 0){
             str = (BigDecimal) resultList.get(0);
-            orderNum = str.intValue();
+            orderNum = str.doubleValue();
         }
         String sql1 = "select count(*) from (select m.id,count(o.id) total from SYS_REGISTDATA t "+
             "left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
@@ -107,7 +106,7 @@ public class AssessServiceImpl implements AssessService {
         resultList = query.getResultList();
         if(resultList != null && resultList.size() > 0){
             big = (BigDecimal) resultList.get(0);
-            active = big.intValue();
+            active = big.doubleValue();
         }
       }else{
         for(int i=0; i<assStr.length; i++){
@@ -119,7 +118,7 @@ public class AssessServiceImpl implements AssessService {
           List<BigDecimal>  resultList = query.getResultList();
           if(resultList != null && resultList.size() > 0){
               str = (BigDecimal) resultList.get(0);
-              int num = str.intValue();
+              double num = str.doubleValue();
               orderNum += num;
           }
           
@@ -133,7 +132,7 @@ public class AssessServiceImpl implements AssessService {
           resultList = query.getResultList();
           if(resultList != null && resultList.size() > 0){
               big = (BigDecimal) resultList.get(0);
-              int num = big.intValue();
+              double num = big.doubleValue();
               active += num;
           }
         }
@@ -149,8 +148,8 @@ public class AssessServiceImpl implements AssessService {
       long time2 = cal.getTimeInMillis();
       long timing=(time2-time1)/(1000*3600*24);
       ass.setTiming(Integer.parseInt(String.valueOf(timing)));
-      ass.setActiveNum(active);
-      ass.setOrderNum(orderNum);
+      ass.setActiveNum((int)active);
+      ass.setOrderNum((int)orderNum);
       list.add(ass);
     }
     
@@ -168,9 +167,9 @@ public class AssessServiceImpl implements AssessService {
     List<Assess> result = assessRepository.findBysalesman(salesman);
     List<Assess> list = new ArrayList<Assess>();
     for(Assess ass: result){
-      String[] assStr = ass.getAssessArea().split(",");
-      int orderNum = 0;//提货量
-      int active = 0;//活跃家数
+      String[] assStr = ass.getDefineArea().split(",");
+      double orderNum = 0;//提货量
+      double active = 0;//活跃家数
       for(int i=0; i<assStr.length; i++){
         String sql = "select count(o.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
             "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
@@ -180,7 +179,7 @@ public class AssessServiceImpl implements AssessService {
         List<BigDecimal>  resultList = query.getResultList();
         if(resultList != null && resultList.size() > 0){
             str = (BigDecimal) resultList.get(0);
-            int num = str.intValue();
+            double num = str.doubleValue();
             orderNum += num;
         }
         
@@ -194,12 +193,12 @@ public class AssessServiceImpl implements AssessService {
         resultList = query.getResultList();
         if(resultList != null && resultList.size() > 0){
             big = (BigDecimal) resultList.get(0);
-            int num = big.intValue();
+            double num = big.doubleValue();
             active += num;
         }
       }
       String regionName = "";
-      String [] stringArr= ass.getAssessArea().split(",");
+      String [] stringArr= ass.getDefineArea().split(",");
       for(int i=0;i<stringArr.length;i++){
         Region region = regionRepository.findById(stringArr[i]);
         if(region != null && !"".equals(region)){
@@ -207,8 +206,8 @@ public class AssessServiceImpl implements AssessService {
         }
       }
       ass.setRegionName(regionName);
-      ass.setActiveNum(active);
-      ass.setOrderNum(orderNum);
+      ass.setActiveNum((int)active);
+      ass.setOrderNum((int)orderNum);
       list.add(ass);
     }
     return list;
@@ -231,7 +230,6 @@ public class AssessServiceImpl implements AssessService {
   }
 
   @Override
-  @Transactional
   public Page<OrderVo> getOrderStatistics(String salesmanId,String regionid,int pageNum,String begin,String end) {
     String hql = "select m.username,count(o.id),sum(oi.nums),sum(o.total_cost) from SJ_BUZMGT.SYS_REGISTDATA t "+
 "left join SJ_BUZMGT.SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+

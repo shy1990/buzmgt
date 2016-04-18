@@ -2,6 +2,7 @@ package com.wangge.buzmgt.saojie.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -82,7 +83,6 @@ public class SaojieServiceImpl implements SaojieService {
 //
 //  }
   @Override
-  @Transactional
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
     String hql = "select t.* from SYS_SAOJIE t,(select user_id,max(SAOJIE_ORDER) ordernum from SYS_SAOJIE group by user_id) b "+
 "left join sys_salesman s on b.user_id = s.user_id where t.user_id=b.user_id and t.saojie_order=b.ordernum ";
@@ -123,7 +123,7 @@ public class SaojieServiceImpl implements SaojieService {
       list.add(sj);
     }
     
-    Page<Saojie> page = new PageImpl<Saojie>(list,new PageRequest(pageNum,7),count);   
+    Page<Saojie> page = new PageImpl<Saojie>(list,new PageRequest(pageNum,7),count);
     return page;  
 }
   
@@ -161,10 +161,10 @@ public class SaojieServiceImpl implements SaojieService {
   }
   
   @Override
-  @Transactional
-  public SaojieDataVo getsaojieDataList(String userId,String regionId) {
+  public SaojieDataVo getsaojieDataList(String userId,String regionId,int pageNum,int limit) {
     int a = 0;
     SaojieDataVo sdv = new SaojieDataVo();
+    List<SaojieData> sd = new ArrayList<SaojieData>();
      List<Saojie> list = saojieRepository.findAll(new Specification<Saojie>() {
       public Predicate toPredicate(Root<Saojie> root, CriteriaQuery<?> query,
           CriteriaBuilder cb) {
@@ -185,15 +185,24 @@ public class SaojieServiceImpl implements SaojieService {
       }
 
     });
-   for(Saojie s : list){
-     if(s.getSaojiedata() != null ){
-        for(SaojieData data  : s.getSaojiedata()){
-          sdv.getList().add(data);
-        }
+     for(Saojie s : list){
+       if(s.getSaojiedata() != null ){
+          for(SaojieData data  : s.getSaojiedata()){
+            sd.add(data);
+          }
+       }
+       a += s.getMinValue();
      }
-     a += s.getMinValue();
-   }
-      sdv.addPercent(sdv.getList().size(),a);
+      sdv.addPercent(sd.size(),a);
+      Page<SaojieData> page;
+      List<SaojieData> sub = new ArrayList<SaojieData>();
+      if(limit != 100){
+        sub = sd.subList(pageNum*limit,(pageNum+1)*limit);
+        page = new PageImpl<SaojieData>(sub,new PageRequest(pageNum,limit),sd.size());
+      }else{
+        page = new PageImpl<SaojieData>(sd,new PageRequest(pageNum,limit),sd.size());
+      }
+      sdv.setList(page);
     return sdv;
    
   }

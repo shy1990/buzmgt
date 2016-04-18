@@ -252,7 +252,7 @@ public class TeamMembersController {
        List<Region> rList = regionService.getListByIds(salesMan);
        model.addAttribute("salesMan", salesMan);
        model.addAttribute("rList", rList);
-       SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "");
+       SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "",0,100);
        model.addAttribute("saojiedatalist", saojiedatalist);
        model.addAttribute("areaName", salesMan.getRegion().getName());
        //判断业务员所处的模式
@@ -269,11 +269,13 @@ public class TeamMembersController {
        }
   }
   
-  @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.POST)
+  @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.GET)
   @ResponseBody
-  public ResponseEntity<List<SaojieData>> getSojieDtaList(String userId, String regionId){
-    SaojieDataVo list  = saojieService.getsaojieDataList(userId, regionId);
-    return new ResponseEntity<List<SaojieData>>(list.getList(),HttpStatus.OK);
+  public SaojieDataVo getSojieDtaList(String userId, String regionId,String page,String size){
+    int pageNum = Integer.parseInt(page != null ? page : "0");
+    int limit = Integer.parseInt(size);
+    SaojieDataVo list  = saojieService.getsaojieDataList(userId, regionId,pageNum,limit);
+    return list;
   }
   
   /**

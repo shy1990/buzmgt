@@ -4,7 +4,6 @@
   String path = request.getContextPath();
 			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 					+ path + "/";
-			System.out.print(basePath);
 %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -34,25 +33,21 @@
 	var number = '';//当前页数（从零开始）
 	var totalPages = '';//总页数(个数)
 	var searchData = {
-		"size" : "2",
+		"size" : "1",
 		"page" : "0",
 	}
 	var totalElements;//总条数
 </script>
 <script id="table-template" type="text/x-handlebars-template">
 {{#each content}}
-<!--tr-->
 	<div class="list-tr">
-	<img class="shop-img" src="/static/img/saojie-img.png" />
+	<img class="shop-img" src="{{imageUrl}}" />
 	<div style="display: inline-block;" class="list-conter">
-	<h4>大鹏十年手机品质专卖店</h4>
-	<p>备注：百度和携程两个难兄难弟，一个是市值580亿美元，
-	制霸行业十余年的国内搜索龙头的老大，一个是国内OTA绝对龙头，
-	市值120亿美元的旅行老大，在这一周都过得水深火热......</p>
-	<span class="pull-right">2015.11.12 15:22</span>
+	<h4>{{name}}</h4>
+	<p>{{description}}</p>
+	<span class="pull-right">{{saojieDate}}</span>
 	</div>
 	</div>
-<!--/tr-->
 {{else}}
 <div style="text-align: center;">
 	<tr style="text-align: center;">没有相关数据!</tr>
@@ -88,7 +83,7 @@
 						<div class="det-msg">
 							<span>扫街商家  <span class="shopNum">256</span> 家
 							</span> 
-							<span style="margin-left: 10px;">扫街已完成     <span class="percent">80%</span>  </span>
+							<span style="margin-left: 10px;">扫街已完成     <span class="percent"> </span>  </span>
 						</div>
 						<!--/row-->
 						<div class="btn-group title-page">
@@ -275,7 +270,7 @@
 			  
 			  <%
 			  	SaojieDataVo saojieDataVo=	(SaojieDataVo)request.getAttribute("saojiedatalist");
-			  	if(saojieDataVo.getList().size()>0){
+			  	if(saojieDataVo.getList().getSize()>0){
 			  	  	for(SaojieData saojiedata:saojieDataVo.getList()){
 			  		String pointStr=saojiedata.getCoordinate();
 			  		System.out.println(pointStr);

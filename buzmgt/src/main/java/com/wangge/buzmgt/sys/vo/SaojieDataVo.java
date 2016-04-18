@@ -4,6 +4,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.wangge.buzmgt.saojie.entity.SaojieData;
 
 public class SaojieDataVo {
@@ -14,7 +16,7 @@ public class SaojieDataVo {
   
   private  int  taskNum;
   
-  private List<SaojieData> list = new ArrayList<SaojieData>();
+  private Page<SaojieData> list;
 
   public String getPercent() {
     return percent;
@@ -35,12 +37,12 @@ public class SaojieDataVo {
     this.percent = percent;
   }
 
-  public List<SaojieData> getList() {
+  public Page<SaojieData> getList() {
     return list;
   }
 
-  public void setList(List<SaojieData> list) {
-    this.list = list;
+  public void setList(Page<SaojieData> page) {
+    this.list = page;
   }
 
   public int getShopNum() {
