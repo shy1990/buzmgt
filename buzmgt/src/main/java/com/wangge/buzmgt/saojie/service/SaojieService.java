@@ -31,4 +31,6 @@ public interface SaojieService {
   List<Region> findRegionById(String id);
   
   Saojie findByOrderAndSalesman(int ordernum,SalesMan salesman);
+
+  SaojieDataVo getsaojieDataList(String userId, String regionId);
 }

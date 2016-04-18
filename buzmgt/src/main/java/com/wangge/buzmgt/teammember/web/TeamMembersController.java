@@ -252,7 +252,7 @@ public class TeamMembersController {
        List<Region> rList = regionService.getListByIds(salesMan);
        model.addAttribute("salesMan", salesMan);
        model.addAttribute("rList", rList);
-       SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "",0,100);
+       SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "");
        model.addAttribute("saojiedatalist", saojiedatalist);
        model.addAttribute("areaName", salesMan.getRegion().getName());
        //判断业务员所处的模式

@@ -188,25 +188,57 @@ public class SaojieServiceImpl implements SaojieService {
      for(Saojie s : list){
        if(s.getSaojiedata() != null ){
           for(SaojieData data  : s.getSaojiedata()){
-            sd.add(data);
+              sd.add(data);
           }
        }
        a += s.getMinValue();
      }
-      sdv.addPercent(sd.size(),a);
-      Page<SaojieData> page;
-      List<SaojieData> sub = new ArrayList<SaojieData>();
-      if(limit != 100){
-        sub = sd.subList(pageNum*limit,(pageNum+1)*limit);
-        page = new PageImpl<SaojieData>(sub,new PageRequest(pageNum,limit),sd.size());
-      }else{
-        page = new PageImpl<SaojieData>(sd,new PageRequest(pageNum,limit),sd.size());
-      }
-      sdv.setList(page);
+    sdv.addPercent(sd.size(),a);
+    Page<SaojieData> page;
+    List<SaojieData> sub = new ArrayList<SaojieData>();
+    sub = sd.subList(pageNum*limit,(pageNum+1)*limit);
+    page = new PageImpl<SaojieData>(sub,new PageRequest(pageNum,limit),sd.size());
+    sdv.setList(page);
     return sdv;
-   
   }
+  
+  @Override
+  public SaojieDataVo getsaojieDataList(String userId,String regionId) {
+    int a = 0;
+    SaojieDataVo sdv = new SaojieDataVo();
+    List<SaojieData> sd = new ArrayList<SaojieData>();
+     List<Saojie> list = saojieRepository.findAll(new Specification<Saojie>() {
+      public Predicate toPredicate(Root<Saojie> root, CriteriaQuery<?> query,
+          CriteriaBuilder cb) {
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        
+        if (userId != null && !"".equals(userId)) {
+          Join<Saojie, SalesMan> salesManJoin = root.join(root.getModel()
+              .getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
+          predicates.add(cb.equal(salesManJoin.get("id").as(String.class), userId));
+        }
 
+        if (regionId != null && !"".equals(regionId)) {
+          Join<Saojie, Region> regionJoin = root.join(root.getModel()
+              .getSingularAttribute("region", Region.class), JoinType.LEFT);
+          predicates.add(cb.equal(regionJoin.get("id").as(String.class), regionId));
+        }
+        return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+      }
+
+    });
+     for(Saojie s : list){
+       if(s.getSaojiedata() != null ){
+          for(SaojieData data  : s.getSaojiedata()){
+            sdv.getList().add(data);
+          }
+       }
+       a += s.getMinValue();
+     }
+        sdv.addPercent(sdv.getList().size(),a);
+      return sdv;
+  }
+  
   @Override
   public int getOrderNumById(String id) {
     int order = saojieRepository.getOrderNumById(id);
