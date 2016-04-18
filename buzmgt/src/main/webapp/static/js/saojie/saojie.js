@@ -255,7 +255,6 @@ function getSaojieList(param,name,regionId){
     	var value = $("#param").val();
     	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value+"&regionid="+regionId;
     }else if(name == "status"){
-    	alert(param);
     	window.location.href="/saojie/getSaojieList?saojieStatus="+param+"&regionid="+regionId;
     }
 }
