@@ -142,11 +142,11 @@ function findTab(){
  */
 function conditionProcess() {
 	var SearchData_ = "sc_GTE_createTime="
-			+ (SearchData.sc_GTE_creatTime == null ? ''
-					: SearchData.sc_GTE_creatTime)
+			+ (SearchData.sc_GTE_createTime == null ? ''
+					: SearchData.sc_GTE_createTime)
 			+ "&sc_LTE_createTime="
-			+ (SearchData.sc_LTE_creatTime == null ? ''
-					: SearchData.sc_LTE_creatTime);
+			+ (SearchData.sc_LTE_createTime == null ? ''
+					: SearchData.sc_LTE_createTime);
 
 	return SearchData_;
 }

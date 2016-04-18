@@ -115,6 +115,9 @@ public class ReceiptRemarkController {
       
       List<ReceiptRemark> receiptRemarkList=orderReceiptService.findAll(searchParams);
       receiptRemarkList.forEach(list->{
+        if(list.getSalesMan()==null){
+          list.setSalesMan(new SalesMan());
+        }
         list.getSalesMan().setUser(null);
         list.getSalesMan().setRegion(null);
       });
@@ -125,12 +128,27 @@ public class ReceiptRemarkController {
     case "notreported":
       List<OrderSignfor> receiptNotRemarkList=orderReceiptService.getReceiptNotRemark(searchParams);
       String[] gridTitles_ = { "业务名称","店铺名称","订单号", "金额","下单时间","发货时间","业务签收时间","打款时间"};
-      String[] coloumsKey_ = { "salesMan.truename","shopName", "orderNo", "orderPrice","creatTime",
+      String[] coloumsKey_ = { "salesMan.truename","shopName", "orderNo", "orderPrice","createTime",
               "fastmailTime","yewuSignforTime","customSignforTime"};
       ExcelExport.doExcelExport("未报备导出.xls", receiptNotRemarkList, gridTitles_, coloumsKey_, request, response);
       
       break;
     
+    case "allOrder":
+      List<OrderSignfor> allOrderList = orderSignforService.findAll(searchParams);
+      allOrderList.forEach(list->{
+        if(list.getSalesMan()==null){
+          list.setSalesMan(new SalesMan());
+        }
+        list.getSalesMan().setUser(null);
+        list.getSalesMan().setRegion(null);
+      });
+      String[] gridTitles_1 = { "业务名称","店铺名称","订单号", "金额","下单时间","发货时间","业务签收时间","打款时间"};
+      String[] coloumsKey_1 = { "salesMan.truename","shopName", "orderNo", "orderPrice","createTime",
+              "fastmailTime","yewuSignforTime","customSignforTime"};
+      ExcelExport.doExcelExport("订单导出("+searchParams.get("GTE_createTime")+"-"+searchParams.get("LTE_createTime")+").xls", allOrderList, gridTitles_1, coloumsKey_1, request, response);
+      
+      break;
     case "cash":
       //TODO 收现金导出
       break;
@@ -145,7 +163,7 @@ public class ReceiptRemarkController {
   @RequestMapping(value="/notRemarkList",method=RequestMethod.GET)
   @ResponseBody
   public String getReceiptNotRemark(HttpServletRequest request,
-      @PageableDefault(page = 0,size=10,sort={"creatTime"},direction=Direction.DESC) Pageable pageRequest ){
+      @PageableDefault(page = 0,size=10,sort={"createTime"},direction=Direction.DESC) Pageable pageRequest ){
     String json="";
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     List<OrderSignfor> receiptRemarkList = orderReceiptService.getReceiptNotRemark(searchParams);
@@ -177,7 +195,7 @@ public class ReceiptRemarkController {
   @RequestMapping(value="/getAllOrderList",method=RequestMethod.GET)
   @ResponseBody
   public String getAllOrderList(HttpServletRequest request,
-      @PageableDefault(page = 0,size=10,sort={"creatTime"},direction=Direction.DESC) Pageable pageRequest ){
+      @PageableDefault(page = 0,size=10,sort={"createTime"},direction=Direction.DESC) Pageable pageRequest ){
     String json="";
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<OrderSignfor> allOrderPage = orderSignforService.getOrderSingforList(searchParams, pageRequest);

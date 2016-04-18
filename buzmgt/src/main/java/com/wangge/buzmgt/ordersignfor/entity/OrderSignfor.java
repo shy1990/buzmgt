@@ -52,7 +52,7 @@ public class OrderSignfor implements Serializable {
   }
   
   public static enum OrderPayType{
-    ONLINE("线上支付"),POS("POS"),CASH("现金") ;
+    ONLINE("线上支付"),POS("POS"),CASH("现金"),NUPANTEBT("未支付") ;
     
     private String name;
     
@@ -91,14 +91,15 @@ public class OrderSignfor implements Serializable {
   private String shopName;
   private Float orderPrice;
   private Integer phoneCount;
-  private Date creatTime;
+  @Column(name="creat_time")
+  private Date createTime;
   private Date yewuSignforTime; 
   private Date customSignforTime;
   @Enumerated(EnumType.ORDINAL)
   private OrderStatus orderStatus;
   
   @Enumerated(EnumType.ORDINAL)
-  private OrderPayType orderPayType;
+  private OrderPayType orderPayType = OrderPayType.NUPANTEBT;
   private String yewuSignforGeopoint;
   private String customSignforGeopoint;
   private Integer customSignforException;
@@ -132,12 +133,12 @@ public class OrderSignfor implements Serializable {
     this.aging = aging;
   }
 
-  public Date getCreatTime() {
-    return creatTime;
+  public Date getCreateTime() {
+    return createTime;
   }
 
-  public void setCreatTime(Date creatTime) {
-    this.creatTime = creatTime;
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
   }
 
   public SalesMan getSalesMan() {
@@ -224,7 +225,7 @@ public class OrderSignfor implements Serializable {
     this.orderStatus = orderStatus;
   }
   public String getOrderPayType() {
-    return orderPayType == null ? "":orderPayType.getName();
+    return orderPayType == null ? OrderPayType.NUPANTEBT.getName():orderPayType.getName();
   }
   public void setOrderPayType(OrderPayType orderPayType) {
     this.orderPayType = orderPayType;

@@ -62,7 +62,7 @@
       <td class="">{{shopName}}</td>
       <td>{{orderNo}}</td>
       <td>{{orderPrice}}</td>
-      <td>{{formDate creatTime}}</td>
+      <td>{{formDate createTime}}</td>
       <td>{{formDate fastmailTime}}</td>
       <td>{{formDate yewuSignforTime}}</td>
       <td>

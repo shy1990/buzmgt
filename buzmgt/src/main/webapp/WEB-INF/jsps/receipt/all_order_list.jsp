@@ -29,32 +29,6 @@
 <link rel="stylesheet" type="text/css" href="static/visit/visit.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script id="remarked-table-template" type="text/x-handlebars-template">
-	{{#each content}}
-      <tr>
-        <td class="">
-		  <img width="108" height="72" src="{{aboveImgUrl}}" class="img-goods" />
-          <img width="108" height="72" src="{{frontImgUrl}}" class="img-goods" />
-          <img width="108" height="72" src="{{sideImgUrl}}" class="img-goods" />
-        </td>
-        <td class="">{{#with salesMan}}{{truename}}{{/with}}</td>
-        <td class="">{{shopName}}</td>
-        <td> {{orderno}}</td>
-        <td>{{#with order}}{{orderPrice}}{{/with}}</td>
-        <td>{{remark}}</td>
-        <td>{{formDate createTime}}</td>
-        <td>
-          <div class="pay-time-box">
-			{{{whatremarkStatus status}}}	
-            <br /> <span class="text-bule">2016.03.12 18:20(缺少数据)</span> 
-          </div>
-        </td>
-        <td><a class="btn btn-blue btn-sm" href="/receiptRemark/remarkList/{{id}}">查看</a>
-			{{{whetherPunish status}}}
-          </td>
-      </tr>
-	{{/each}}
-</script>
 <script id="allorder-table-template" type="text/x-handlebars-template">
 	{{#each content}}
  		<tr>
@@ -64,9 +38,9 @@
       <td>手机&nbsp;<span class="text-sblue">{{phoneCount}}</span>&nbsp;部 &nbsp; 
 				配件<span class="text-sblue">&nbsp;{{whatPartsCount partsCount}}&nbsp;</span>件
       </td>
-      <td><span class="text-sblue">11,268,39</span></td>
+      <td><span class="text-sblue">{{orderPrice}}</span></td>
       <td>
-			<span class="icon-tag-wfka">未付款</span>
+			{{{whatOrderPayType orderPayType}}}
 			</td>
       <td><span class="text-sblues">{{whatOrderStatus fastmailTime orderStatus}}</span></td>
     </tr>
@@ -76,16 +50,10 @@
 var	base='<%=basePath%>';
 	var SearchData = {
 		'page' : '0',
-		'size' : '10'
+		'size' : '10',
+		'sort' : 'id'
 	}
 </script>
-<!-- <span class="icon-tag-wfka">未付款</span>
-			<span class="icon-tag-wbb">未报备</span>
-			<span class="icon-tag-ybb">已报备</span>
-			<span class="icon-tag-yfka">收现金</span>
-			<span class="text-sbluea">（已付款）</span>
-			<span class="icon-tag-yfka">刷poss</span>
-			<span class="icon-tag-yfka">网上支付</span> -->
 </head>
 
 <body>
@@ -111,7 +79,7 @@ var	base='<%=basePath%>';
 						<div class="marg-t text-time">
 							<span class="text-strong chang-time">请选择时间：</span>
 							<div class="search-date">
-								<div class="input-group input-group-sm">
+								<div class="input-group form_date_start input-group-sm">
 									<span class="input-group-addon " id="basic-addon1"><i
 										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
 										type="text" id="startTime" class="form-control form_datetime input-sm"
@@ -120,7 +88,7 @@ var	base='<%=basePath%>';
 							</div>
 							--
 							<div class="search-date">
-								<div class="input-group input-group-sm">
+								<div class="input-group form_date_end input-group-sm">
 									<span class="input-group-addon " id="basic-addon1"><i
 										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
 										type="text" id="endTime" class="form-control form_datetime input-sm"
@@ -129,7 +97,7 @@ var	base='<%=basePath%>';
 							</div>
 							<!--考核开始时间-->
 							<button class="btn btn-blue btn-sm"
-								onclick="goSearch('${salesman.id}','${assess.id}');">
+								onclick="goSearch()">
 								检索</button>
 
 							<div class="link-posit pull-right">
@@ -154,93 +122,9 @@ var	base='<%=basePath%>';
 												<th>订单状态</th>
 											</tr>
 										</thead>
+										
 										<tbody id="allOrderList"></tbody>
-										<!-- <tr>
-											<td class="">20160112319160035</td>
-											<td>易小星</td>
-											<td>小米手机专卖店</td>
-											<td>手机&nbsp;<span class="text-sblue">3</span>&nbsp;部
-												&nbsp; 配件<span class="text-sblue">&nbsp;2&nbsp;</span>件
-											</td>
-											<td><span class="text-sblue">11,268,39</span></td>
-											<td><span class="icon-tag-wfka">未付款</span></td>
-											<td><span class="text-sblues">已出库</span></td>
-										</tr>
-
-										<tr>
-											<td class="">20160112319160035</td>
-											<td>易小星</td>
-											<td>小米手机专卖店</td>
-											<td>手机&nbsp;<span class="text-sblue">3</span>&nbsp;部
-												&nbsp; 配件<span class="text-sblue">&nbsp;2&nbsp;</span>件
-											</td>
-											<td><span class="text-sblue">11,268,39</span></td>
-											<td><span class="icon-tag-wbb">未报备</span></td>
-											<td><span class="text-sblues">已出库</span></td>
-										</tr>
-
-										<tr>
-											<td class="">20160112319160035</td>
-											<td>易小星</td>
-											<td>小米手机专卖店</td>
-											<td>手机&nbsp;<span class="text-sblue">3</span>&nbsp;部
-												&nbsp; 配件<span class="text-sblue">&nbsp;2&nbsp;</span>件
-											</td>
-											<td><span class="text-sblue">11,268,39</span></td>
-											<td><span class="icon-tag-ybb">已报备</span></td>
-											<td><span class="text-sblues">业务已揽收</span></td>
-										</tr>
-
-										<tr>
-											<td class="">20160112319160035</td>
-											<td>易小星</td>
-											<td>小米手机专卖店</td>
-											<td>手机&nbsp;<span class="text-sblue">3</span>&nbsp;部
-												&nbsp; 配件<span class="text-sblue">&nbsp;2&nbsp;</span>件
-											</td>
-											<td><span class="text-sblue">11,268,39</span></td>
-											<td><span class="icon-tag-yfka">收现金</span><span
-												class="text-reda">（未付款）</span></td>
-											<td><span class="text-sblues">客户已签收</span></td>
-										</tr>
-
-										<tr>
-											<td class="">20160112319160035</td>
-											<td>易小星</td>
-											<td>小米手机专卖店</td>
-											<td>手机&nbsp;<span class="text-sblue">3</span>&nbsp;部
-												&nbsp; 配件<span class="text-sblue">&nbsp;2&nbsp;</span>件
-											</td>
-											<td><span class="text-sblue">11,268,39</span></td>
-											<td><span class="icon-tag-yfka">收现金</span><span
-												class="text-sbluea">（已付款）</span></td>
-											<td><span class="text-sblues">客户已签收</span></td>
-										</tr>
-
-
-										<tr>
-											<td class="">20160112319160035</td>
-											<td>易小星</td>
-											<td>小米手机专卖店</td>
-											<td>手机&nbsp;<span class="text-sblue">3</span>&nbsp;部
-												&nbsp; 配件<span class="text-sblue">&nbsp;2&nbsp;</span>件
-											</td>
-											<td><span class="text-sblue">11,268,39</span></td>
-											<td><span class="icon-tag-yfka">刷poss</span></td>
-											<td><span class="text-sblues">客户已签收</span></td>
-										</tr>
-
-										<tr>
-											<td class="">20160112319160035</td>
-											<td>易小星</td>
-											<td>小米手机专卖店</td>
-											<td>手机&nbsp;<span class="text-sblue">3</span>&nbsp;部
-												&nbsp; 配件<span class="text-sblue">&nbsp;2&nbsp;</span>件
-											</td>
-											<td><span class="text-sblue">11,268,39</span></td>
-											<td><span class="icon-tag-yfka">网上支付</span></td>
-											<td><span class="text-sblues">客户已签收</span></td>
-										</tr> -->
+										
 									</table>
 								</div>
 								<!--table-box-->
@@ -279,9 +163,6 @@ var	base='<%=basePath%>';
 				src="static/bootStrapPager/js/extendPagination.js"></script>
 			<script type="text/javascript" src="static/receipt/allorder-list.js"
 				charset="utf-8"></script>
-			<script type="text/javascript">
-				
-			</script>
 </body>
 
 </html>

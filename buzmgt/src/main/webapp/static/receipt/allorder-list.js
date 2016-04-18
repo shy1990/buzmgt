@@ -1,7 +1,7 @@
 var remarkedTotal = 0;// 报备总条数
 var notRemarkedTotal = 0;// 未报备总条数
 $(function() {
-//	nowTime();//初始化日期
+	nowTime();//初始化日期
 	findAllOrderList();
 })
 $('#startTime').datetimepicker({
@@ -52,13 +52,13 @@ $('#endTime').datetimepicker({
 });
 
 /**
- * 初始化日期 最近3天
+ * 初始化日期 最近1天
  */
 function nowTime() {
 	var nowDate = changeDateToString(new Date());
-	var beforeDate = changeDateToString((new Date()).DateAdd('d', -3));
-	SearchData['sc_GTE_creatTime'] = beforeDate;
-	SearchData['sc_LTE_creatTime'] = nowDate;
+	var beforeDate = changeDateToString((new Date()).DateAdd('d', -1));
+	SearchData['sc_GTE_createTime'] = beforeDate;
+	SearchData['sc_LTE_createTime'] = nowDate;
 	$('#startTime').val(beforeDate);
 	$('#endTime').val(nowDate)
 }
@@ -66,28 +66,17 @@ function nowTime() {
  * 检索
  */
 function goSearch() {
-	var tab = findTab();
+//	var tab = findTab();
 	var startTime = $('#startTime').val();
 	var endTime = $('#endTime').val();
 	if (checkDate(startTime, endTime)) {
 		SearchData['sc_GTE_createTime'] = startTime;
 		SearchData['sc_LTE_createTime'] = endTime;
-		switch (tab) {
-		case 'reported':
-			findRemarked();
-			break;
-		case 'notreported':
-			findNOTRemarked();
-			break;
-		default:
-			break;
-		}
+			findAllOrderList();
 	}
 }
-$('.table-export').on(
-		'click',
+$('.table-export').on('click',
 		function() {
-			var tab = findTab();
 			var startTime = $('#startTime').val();
 			var endTime = $('#endTime').val();
 			if (checkDate(startTime, endTime)) {
@@ -106,18 +95,17 @@ $('.table-export').on(
  */
 function conditionProcess() {
 	var SearchData_ = "sc_GTE_createTime="
-			+ (SearchData.sc_GTE_creatTime == null ? ''
-					: SearchData.sc_GTE_creatTime)
+			+ (SearchData.sc_GTE_createTime == null ? ''
+					: SearchData.sc_GTE_createTime)
 			+ "&sc_LTE_createTime="
-			+ (SearchData.sc_LTE_creatTime == null ? ''
-					: SearchData.sc_LTE_creatTime);
+			+ (SearchData.sc_LTE_createTime == null ? ''
+					: SearchData.sc_LTE_createTime);
 
 	return SearchData_;
 }
 function findAllOrderList(page) {
-	page = page == null || page == '' ? 0 : page;
+	page = ((page == null || page == '') ? 0 : page);
 	SearchData['page'] = page;
-	// delete SearchData['sc_EQ_customSignforException'];
 	$.ajax({
 		url : "/receiptRemark/getAllOrderList",
 		type : "GET",
@@ -144,6 +132,7 @@ function findAllOrderList(page) {
  */
 
 function createAllOrderTable(data) {
+	console.info(data);
 	var myTemplate = Handlebars.compile($("#allorder-table-template").html());
 	$('#allOrderList').html(myTemplate(data));
 }
@@ -154,18 +143,7 @@ function allOrderPaging(data) {
 		showCount : 5,
 		limit : limit,
 		callback : function(curr, limit, totalCount) {
-			findRemarked(curr - 1);
-		}
-	});
-}
-function notRemarkedPaging(data) {
-	var totalCount = data.totalElements, limit = data.size;
-	$('#notRemarkedPager').extendPagination({
-		totalCount : totalCount,
-		showCount : 5,
-		limit : limit,
-		callback : function(curr, limit, totalCount) {
-			findNOTRemarked(curr - 1);
+			findAllOrderList(curr - 1);
 		}
 	});
 }
@@ -188,27 +166,60 @@ Handlebars.registerHelper('whatremarkStatus', function(value) {
 	}
 	return html;
 });
-Handlebars.registerHelper('whetherPunish', function(value) {
-	var html = "";
-	if (value.indexOf("超时") >= 0) {
-		html += '<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a>';
-	}
-	return html;
-});
+/*
+ * 配件
+ */
 Handlebars.registerHelper('whatPartsCount', function(value) {
 	if (value== ""||value==null) { return 0; }
 	return value;
 });
+/**
+ * v1:fastMailTime(发货时间)
+ * v2:orderStatus
+ * 订单状态判断
+ */
 Handlebars.registerHelper('whatOrderStatus', function(v1,v2) {
-	return "";
+	if(checkEmpty(v2)){
+		if(checkEmpty(v1)){
+			return "未发货"
+		}
+		return "已发货";
+	}
+	return v2;
 });
-Handlebars.registerHelper('whatCustomSignforStatus', function(value) {
-	var html = "";
-	if (value === 0) {
-		html += '<span class="icon-tag-yc">异常</span>';
+/**
+ * 判读是否为空
+ * @param value
+ * @returns 为空返回true 不为空返回false
+ */
+function checkEmpty(value){
+	return value ==""||value==null;
+} 
+//<span class="icon-tag-wfka">未付款</span>
+//<span class="icon-tag-wbb">未报备</span>
+//<span class="icon-tag-ybb">已报备</span>
+//<span class="icon-tag-yfka">收现金</span>
+//<span class="text-sbluea">（已付款）</span>
+//<span class="icon-tag-yfka">刷poss</span>
+//<span class="icon-tag-yfka">网上支付</span> 
+Handlebars.registerHelper('whatOrderPayType', function(value) {
+	var html='';
+	var tag='';
+	switch (value) {
+	case '未支付':
+		tag='wfka';
+		break;
+	case '未报备':
+		tag='wbb';
+		break;
+	case '已报备':
+		tag='ybb';
+		break;
+
+	default:
+		tag='yfka';
+		break;
 	}
-	if (value === 1) {
-		html += '<span class="icon-tag-zc">正常</span> ';
-	}
+	html='<span class="icon-tag-'+tag+'">'+value+'</span>';
 	return html;
 });

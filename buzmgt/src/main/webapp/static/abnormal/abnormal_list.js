@@ -54,8 +54,8 @@ $(function(){
 		var startTime=$('#startTime').val();
 		var endTime=$('#endTime').val();
 		if(checkDate(startTime,endTime)){
-			SearchData['sc_GTE_creatTime'] = startTime;
-			SearchData['sc_LTE_creatTime'] = endTime;
+			SearchData['sc_GTE_createTime'] = startTime;
+			SearchData['sc_LTE_createTime'] = endTime;
 			if('ywtab'==tab){
 				delete SearchData['sc_EQ_customSignforException']
 				window.location.href = base + "ordersignfor/export?type=ywOrderSignfor&"
@@ -74,12 +74,12 @@ $(function(){
  * @returns {String}
  */
 function conditionProcess() {
-	var SearchData_ ="sc_GTE_creatTime="
-			+ (SearchData.sc_GTE_creatTime == null ? ''
-					: SearchData.sc_GTE_creatTime)
-			+ "&sc_LTE_creatTime="
-			+ (SearchData.sc_LTE_creatTime == null ? ''
-					: SearchData.sc_LTE_creatTime);
+	var SearchData_ ="sc_GTE_createTime="
+			+ (SearchData.sc_GTE_createTime == null ? ''
+					: SearchData.sc_GTE_createTime)
+			+ "&sc_LTE_createTime="
+			+ (SearchData.sc_LTE_createTime == null ? ''
+					: SearchData.sc_LTE_createTime);
 			
 	return SearchData_;
 }
@@ -181,8 +181,8 @@ function goSearch() {
 	var startTime=$('#startTime').val();
 	var endTime=$('#endTime').val();
 	if(checkDate(startTime,endTime)){
-		SearchData['sc_GTE_creatTime'] = startTime;
-		SearchData['sc_LTE_creatTime'] = endTime;
+		SearchData['sc_GTE_createTime'] = startTime;
+		SearchData['sc_LTE_createTime'] = endTime;
 		if('ywtab'==tab){
 			findYwOrderList();
 		}else if('membertab'==tab){
@@ -197,8 +197,8 @@ function goSearch() {
 function nowTime(){
 	var nowDate=changeDateToString(new Date());
 	var beforeDate=changeDateToString((new Date()).DateAdd('d',-3));
-	SearchData['sc_GTE_creatTime'] = beforeDate;
-	SearchData['sc_LTE_creatTime'] = nowDate;
+	SearchData['sc_GTE_createTime'] = beforeDate;
+	SearchData['sc_LTE_createTime'] = nowDate;
 	$('#startTime').val(beforeDate);
 	$('#endTime').val(nowDate)
 }
