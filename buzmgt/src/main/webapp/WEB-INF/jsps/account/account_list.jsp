@@ -102,8 +102,9 @@
 										<th width="10%" class="center">姓名</th>
 										<th width="10%" class="center">负责区域</th>
 										<th width="10%" class="center">角色权限</th>
-										<th width="10%" class="center">账号状态</th>
+										<th width="5%" class="center">账号状态</th>
 										<th width="20%" class="center">操作</th>
+										<th width="20%" class="center">子账号</th>
 									</thead>
 									<tbody>
 										<c:choose>
@@ -164,6 +165,12 @@
 																			<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','2');">辞退</a>
 																		</c:otherwise>
 																	</c:choose>
+																</td>
+																<td>
+																	 <a class="" href="" data-toggle="modal" onclick="addAccount('${ac.accountNum}');"s><img
+									                                        src="static/img/addcode/tj.png" >添加</a>
+									                                <a  href="account_manage_son.html" aria-controls="pofile" role="tab" data-target="tab">0个子账号<img
+									                                        src="static/img/addcode/jl.png"></a>
 																</td>
 															</c:otherwise>
 														</c:choose>
@@ -268,6 +275,43 @@
 						</div>
 					</div>
 					<!-- /alert html -->
+					
+					 <!-- /alert html添加子账号 -->
+	                  <div id="addAccount" class="modal fade" role="dialog" >
+		                <div class="modal-dialog " role="document">
+		                    <div class="modal-content modal-blue">
+		                        <div class="modal-header">
+		                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+		                                    aria-hidden="true">&times;</span></button>
+		                             <h3 class="modal-title" id="">添加子账号</h3>
+		                        </div>
+		                        <div class="modal-body">
+		                            <div class="container-fluid">
+		                                    <div class="form-group">
+		                                        <label for="" class="col-sm-2 control-label">姓名：</label>
+		                                        <div class="col-sm-10">
+		                                            <div class="input-group are-line">
+		                                                <span class="input-group-addon" id=""><i class="icon icon-user"></i></span>
+		                                                <input type="text" class="form-control input-h" id="truename" name="truename" placeholder="请输入姓名" aria-describedby="basic-addon1">
+		                                                <input type="hidden"  id="userId" name="userId" >
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                    <div class="form-group">
+		                                        <div class="col-sm-offset-4 col-sm-4">
+		                                            <button type="button" class="col-sm-12 btn btn-primary" onclick="addChildAccount();">确定</button>
+		                                        </div>
+		                                    </div>
+		                                <div class="col-sm-offset-5 col-sm-7">
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+					
+					
+					
 				</div>
 			</div>
 		</div>
@@ -277,6 +321,9 @@
 	
 	<script src='/static/bootstrap/js/bootstrap.js'></script>
 	<script src='/static/js/common.js'></script>
+	 <script src="/static/bootstrap/js/bootstrap-switch.min.js"></script>
+        <script src="/static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js" type="text/javascript"
+                charset="utf-8"></script>
 	<script type="text/javascript">
 		window.jQuery	|| document.write("<script src='../static/js/jquery.min.js'>\x3C/script>");
 	</script>
@@ -379,5 +426,45 @@
 		function getRegion(id){
 			window.location.href='/region/getPersonalRegion?flag='+"account";
 		}
+		
+	     $("[name='my-checkbox']").bootstrapSwitch();
+         //checkbox点击事件回调函数
+         $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
+             console.log(this); // DOM element
+             console.log(event); // jQuery event
+             console.log(state); // true | false
+             if (state) {
+                 alert('冻结');
+             } else {
+                 alert('正常');
+             }
+         });
+		
+		
+         
+         
+         //弹出子账号model 
+         function addAccount(id){
+        	 $("#userId").val(id);
+        	 $('#addAccount').modal({
+					keyboard: false
+				})
+			
+         }
+         
+         
+         
+         
+         //添加子账号
+        function addChildAccount(){
+        	 var truename=$("#truename").val();
+        	 var userId=$("#userId").val();
+        	 window.location.href="/addChildAccount?truename="+truename+"&userId="+userId;
+        	 
+         }
+         
+         
+         
+         
 	</script>
 </html>

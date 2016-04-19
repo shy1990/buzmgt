@@ -15,7 +15,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.base.BaseController;
+import com.wangge.buzmgt.sys.entity.ChildAccount;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.entity.User.UserStatus;
+import com.wangge.buzmgt.sys.service.ChildAccountService;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.RoleService;
 import com.wangge.buzmgt.sys.service.UserService;
@@ -61,6 +62,8 @@ public class AccountManageController  extends BaseController{
   private RoleService ros;
   @Autowired
   private UserService us;
+  @Autowired
+  private ChildAccountService ca;
   /**
    * 
    * @Description: 账号列表
@@ -296,5 +299,16 @@ public class AccountManageController  extends BaseController{
       e.printStackTrace();
     }
     return "err";
+  }
+  
+  
+  @RequestMapping(value="/addChildAccount" ,method = RequestMethod.GET)
+  @ResponseBody
+  public void addChildAccount(String truename,String userId){
+    String firstCh=userId.substring(0, 1);
+    String childId=firstCh+Long.parseLong(userId.substring(1, userId.length()-1)) +1;
+    ChildAccount childAccount=new ChildAccount(childId,userId,truename);
+    ca.save(childAccount);
+    
   }
 }

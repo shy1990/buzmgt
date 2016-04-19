@@ -11,7 +11,7 @@ public class AccountBean implements Serializable{
   private String  areaName; //负责区域名称
   private String  roleName;   //角色权限
   private String  status ;    //账号状态  0正常,1冻结
-  
+  private String  userId;     //用户id
   private Integer totalNum;   //总条数
   
   public Integer getTotalNum() {
@@ -55,6 +55,12 @@ public class AccountBean implements Serializable{
   }
   public void setStatus(String status) {
     this.status = status;
+  }
+  public String getUserId() {
+    return userId;
+  }
+  public void setUserId(String userId) {
+    this.userId = userId;
   }
   
   
