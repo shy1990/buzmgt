@@ -167,9 +167,10 @@
 																	</c:choose>
 																</td>
 																<td>
-																	 <a class="" href="" data-toggle="modal" onclick="addAccount('${ac.accountNum}');"s><img
+																	
+																	<a class="" href="" data-toggle="modal" onclick="addAccount('${ac.accountNum}');"s><img
 									                                        src="static/img/addcode/tj.png" >添加</a>
-									                                <a  href="account_manage_son.html" aria-controls="pofile" role="tab" data-target="tab">0个子账号<img
+									                                <a  href="javascript:findChildAccount('${ac.accountNum}');" aria-controls="pofile" role="tab" data-target="tab">${ac.childCount}个子账号<img
 									                                        src="static/img/addcode/jl.png"></a>
 																</td>
 															</c:otherwise>
@@ -464,6 +465,10 @@
          }
          
          
+         //子账号列表展示
+         function findChildAccount(userId){
+        	 window.location.href="/findChildAccount?userId="+userId;
+         }
          
          
 	</script>

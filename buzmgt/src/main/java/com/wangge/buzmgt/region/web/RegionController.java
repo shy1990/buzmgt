@@ -289,7 +289,7 @@ public class RegionController {
 		} else {
 			if (region.getChildren().size() > 0) {
 				for (Region reg : region.getChildren()) {
-					if (maxid < Integer.parseInt(reg.getId())) {
+					if (maxid < Long.parseLong(reg.getId())) {
 						maxid = Long.parseLong(reg.getId());
 					}
 				}
