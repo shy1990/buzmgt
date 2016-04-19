@@ -12,6 +12,6 @@ public interface OrderReceiptRepository extends JpaRepository<ReceiptRemark, Lon
 JpaSpecificationExecutor<ReceiptRemark>{
   public Page<ReceiptRemark> findAll(Pageable pageRequest);
 
-//  public ReceiptRemark findByOrder(OrderSignfor orderNo);
+  public ReceiptRemark findByOrderno(String orderNo);
   
 }

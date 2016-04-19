@@ -77,6 +77,8 @@ public class OrderSignfor implements Serializable {
   //业务签收异常标记
   @Transient
   private String ywSignforTag;
+  @Transient
+  private String goodNum;
   
   @Column(name="user_id",insertable=false,updatable=false)
   private String userId;
@@ -91,8 +93,9 @@ public class OrderSignfor implements Serializable {
   private String shopName;
   private Float orderPrice;
   private Integer phoneCount;
-  @Column(name="creat_time")
+  @Column(name="CREAT_TIME")
   private Date createTime;
+
   private Date yewuSignforTime; 
   private Date customSignforTime;
   @Enumerated(EnumType.ORDINAL)
@@ -103,11 +106,26 @@ public class OrderSignfor implements Serializable {
   private String yewuSignforGeopoint;
   private String customSignforGeopoint;
   private Integer customSignforException;
-  private int partsCount;
+  private Integer partsCount;
   private Date fastmailTime;
   private String customUnSignRemark;
   
 
+  public String getGoodNum() {
+    return goodNum;
+  }
+
+  public void setGoodNum(String goodNum) {
+    this.goodNum = goodNum;
+  }
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
+  
   public String getUserId() {
     return userId;
   }
@@ -133,14 +151,7 @@ public class OrderSignfor implements Serializable {
     this.aging = aging;
   }
 
-  public Date getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
-  }
-
+ 
   public SalesMan getSalesMan() {
     return salesMan;
   }
@@ -265,11 +276,11 @@ public class OrderSignfor implements Serializable {
     this.customUnSignRemark = customUnSignRemark;
   }
 
-  public int getPartsCount() {
+  public Integer getPartsCount() {
     return partsCount;
   }
 
-  public void setPartsCount(int partsCount) {
+  public void setPartsCount(Integer partsCount) {
     this.partsCount = partsCount;
   }
 

@@ -196,7 +196,7 @@ function findNOTRemarked(page) {
 	})
 }
 /**
- * 
+ * 生成报备列表
  * @param data
  */
 
@@ -204,11 +204,19 @@ function createRemarkedTable(data) {
 	var myTemplate = Handlebars.compile($("#remarked-table-template").html());
 	$('#remarkedList').html(myTemplate(data));
 }
+/**
+ * 生成未报备列表
+ * @param data
+ */
 function createNotRemarkedTable(data) {
 	var myTemplate = Handlebars
 			.compile($("#notremarked-table-template").html());
 	$('#notRemarkedList').html(myTemplate(data));
 }
+/**
+ * 报备的分页
+ * @param data
+ */
 function remarkedPaging(data) {
 	var totalCount = data.totalElements, limit = data.size;
 	$('#remarkedPager').extendPagination({
@@ -220,6 +228,10 @@ function remarkedPaging(data) {
 		}
 	});
 }
+/**
+ * 未报备的分页
+ * @param data
+ */
 function notRemarkedPaging(data) {
 	var totalCount = data.totalElements, limit = data.size;
 	$('#notRemarkedPager').extendPagination({
@@ -271,3 +283,57 @@ Handlebars.registerHelper('whatCustomSignforStatus', function(value) {
 	}
 	return html;
 });
+/**
+ * 根据订单号查询
+ */
+function findByOrderNo(){
+	var tab=findTab();
+	var orderNo=$('#orderNo').val();
+	switch (tab) {
+	case 'reported':
+		$.ajax({
+			url : "/receiptRemark/remarkList?sc_EQ_orderno="+orderNo,
+			type : "GET",
+			dataType : "json",
+			success : function(orderData) {
+				if(orderData.totalElements<1){
+					alert("报备订单中，未查到地订单！");
+					return false;
+				}
+				createRemarkedTable(orderData);
+			},
+			error : function() {
+				alert("系统异常，请稍后重试！");
+			}
+		})
+		break;
+	case 'notreported':
+		$.ajax({
+			url : "/receiptRemark/notRemarkList?sc_EQ_orderNo="+orderNo,
+			type : "GET",
+			dataType : "json",
+			success : function(orderData) {
+				if(orderData.totalElements<1){
+					alert("未报备订单中，未查到此订单！");
+					return false;
+				}
+				createNotRemarkedTable(orderData);
+			},
+			error : function() {
+				alert("系统异常，请稍后重试！");
+			}
+		})
+		break;
+	default:
+		break;
+	}
+	
+}
+/**
+ * 判读是否为空
+ * @param value
+ * @returns 为空返回true 不为空返回false
+ */
+function checkEmpty(value){
+	return value ==""||value==null;
+} 

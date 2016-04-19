@@ -13,7 +13,7 @@ JpaSpecificationExecutor<OrderSignfor>,OrderSignforRepositoryCustom{
   
   public Page<OrderSignfor> findByCustomSignforException(String status,Pageable pageRequest);
   
-  public Page<OrderSignfor> findByCustomSignforExceptionAndCreatTimeBetween(
+  public Page<OrderSignfor> findByCustomSignforExceptionAndCreateTimeBetween(
       String status,String startTime,String endTime,Pageable pageRequest);
 
   public OrderSignfor findByOrderNo(String orderNo);

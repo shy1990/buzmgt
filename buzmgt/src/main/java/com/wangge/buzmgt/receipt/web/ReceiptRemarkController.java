@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.receipt.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -142,11 +143,15 @@ public class ReceiptRemarkController {
         }
         list.getSalesMan().setUser(null);
         list.getSalesMan().setRegion(null);
+        String phoneNum= list.getPhoneCount().toString();
+        String partsNum=list.getPartsCount().toString();
+        list.setGoodNum("手机 "+phoneNum+"部，配件"+partsNum+"件");
       });
-      String[] gridTitles_1 = { "业务名称","店铺名称","订单号", "金额","下单时间","发货时间","业务签收时间","打款时间"};
-      String[] coloumsKey_1 = { "salesMan.truename","shopName", "orderNo", "orderPrice","createTime",
-              "fastmailTime","yewuSignforTime","customSignforTime"};
-      ExcelExport.doExcelExport("订单导出("+searchParams.get("GTE_createTime")+"-"+searchParams.get("LTE_createTime")+").xls", allOrderList, gridTitles_1, coloumsKey_1, request, response);
+      String[] gridTitles_1 = {"订单号", "店铺名称","业务名称", "商品数量","下单时间","交易额","收款状态","订单状态"};
+      String[] coloumsKey_1 = { "orderNo", "shopName", "salesMan.truename", "goodNum","createTime",
+              "orderPrice","orderPayType","orderStatus"};
+      ExcelExport.doExcelExport("订单导出"+(searchParams.get("GTE_createTime")+"~"+searchParams.get("LTE_createTime"))+".xls", 
+          allOrderList, gridTitles_1, coloumsKey_1, request, response);
       
       break;
     case "cash":
@@ -185,6 +190,21 @@ public class ReceiptRemarkController {
        logger.error(e.getMessage());
      }
     return json;
+  }
+  @RequestMapping(value="/notRemarkList/{orderNo}",method=RequestMethod.GET)
+  public String getNotRemarkByOrderNo(@PathVariable("orderNo") String orderNo,Model model,
+      HttpServletRequest request){
+    Map<String, Object> searchParams = new HashMap<String, Object>();
+    searchParams.put("EQ_orderNo", orderNo);
+    List<OrderSignfor> notRemarkList = orderReceiptService.getReceiptNotRemark(searchParams);
+    try {
+      OrderSignfor notRemark=notRemarkList.get(0);
+      model.addAttribute("notRemark", notRemark);
+    }
+    catch(Exception e){
+      logger.error(e.getMessage());
+    }
+    return "receipt/receipt_notremark_det";
   }
   /**
    * 获取全部订单列表

@@ -5,5 +5,5 @@ import java.util.List;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 
 public interface OrderSignforRepositoryCustom {
-  public List<OrderSignfor> getReceiptNotRemarkList(String status,String startTime,String endTime);
+  public List<OrderSignfor> getReceiptNotRemarkList(String status,String startTime,String endTime,String orderNo);
 }

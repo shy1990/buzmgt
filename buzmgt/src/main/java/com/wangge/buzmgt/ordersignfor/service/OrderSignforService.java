@@ -29,5 +29,5 @@ public interface OrderSignforService {
    * @param endTime
    * @return
    */
-  List<OrderSignfor> getReceiptNotRemarkList(String status, String startTime, String endTime);
+  List<OrderSignfor> getReceiptNotRemarkList(String status, String startTime, String endTime,String orderNo);
 }

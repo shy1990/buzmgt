@@ -72,7 +72,26 @@ var	base='<%=basePath%>';
 				<!--box-->
 				<div class="abnormal-body box border blue">
 					<!--title-->
-					<div class="box-title">订单列表</div>
+					<div class="box-title">
+						<div class="row">
+							<div class="col-sm-6">订单列表</div>
+							<!--col-->
+							<div class="col-sm-6">
+								<!--form-group-->
+								<div class="form-group title-form remark-title">
+									<div class="input-group ">
+										<input type="text" class="form-control"
+											id="orderNo" placeholder="请输入订单号">
+										<a class="input-group-addon " onclick="findByOrderNo();"> <i
+											class="icon icon-finds"></i>
+										</a>
+									</div>
+								</div>
+								<!--form-group-->
+							</div>
+							<!--col-->
+						</div>
+					</div>
 					<!--title-->
 					<!--box-body-->
 					<div class="box-body">

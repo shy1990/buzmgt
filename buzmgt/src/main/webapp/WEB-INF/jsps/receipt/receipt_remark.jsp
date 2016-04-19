@@ -77,7 +77,7 @@
 		  {{/if}}
         </div>
       </td>
-      <td><a class="btn btn-blue btn-sm" href="">查看</a>
+      <td><a class="btn btn-blue btn-sm" href="/receiptRemark/notRemarkList/{{orderNo}}">查看</a>
         <a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
     </tr>
 	{{/each}}
@@ -122,13 +122,14 @@ var SearchData = {
 								<!--/菜单栏-->
 							</div>
 							<!--col-->
-							<div class="col-sm-4 col-md-3 col-md-offset-3 ">
+							<div class="col-sm-4 col-md-6">
 								<!--form-group-->
-								<div class="form-group title-form">
+								<a class="remark-title-link" href="/receiptRemark/allOrderList">所有订单列表</a>
+								<div class="form-group title-form remark-title">
 									<div class="input-group ">
-										<input type="text" class="form-control" name="truename"
-											id="param" placeholder="请输入订单号" onkeypress="return check()">
-										<a class="input-group-addon " id="goSearch" onclick=""> <i
+										<input type="text" class="form-control"
+											id="orderNo" placeholder="请输入订单号">
+										<a class="input-group-addon"onclick="findByOrderNo();"> <i
 											class="icon icon-finds"></i>
 										</a>
 									</div>

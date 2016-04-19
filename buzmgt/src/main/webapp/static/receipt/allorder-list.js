@@ -82,9 +82,7 @@ $('.table-export').on('click',
 			if (checkDate(startTime, endTime)) {
 				SearchData['sc_GTE_createTime'] = startTime;
 				SearchData['sc_LTE_createTime'] = endTime;
-				var jsonToString = JSON.stringify(SearchData);
-				window.location.href = base + "receiptRemark/export?type="
-						+ tab + "&"+ conditionProcess();
+				window.location.href = base + "receiptRemark/export?type=allOrder&"+ conditionProcess();
 			}
 
 		});
@@ -132,7 +130,6 @@ function findAllOrderList(page) {
  */
 
 function createAllOrderTable(data) {
-	console.info(data);
 	var myTemplate = Handlebars.compile($("#allorder-table-template").html());
 	$('#allOrderList').html(myTemplate(data));
 }
@@ -223,3 +220,28 @@ Handlebars.registerHelper('whatOrderPayType', function(value) {
 	html='<span class="icon-tag-'+tag+'">'+value+'</span>';
 	return html;
 });
+
+
+/**
+ * 根据订单号查询订单
+ */
+function findByOrderNo(){
+	var orderNo=$('#orderNo').val();
+	$.ajax({
+		url : "/receiptRemark/getAllOrderList?sc_EQ_orderNo="+orderNo,
+		type : "GET",
+		dataType : "json",
+		success : function(orderData) {
+			if(orderData.totalElements<1){
+				alert("未查到相关订单信息");
+				return false;
+			}
+			createAllOrderTable(orderData);
+		},
+		error : function() {
+			alert("系统异常，请稍后重试！");
+		}
+	})
+}
+
+

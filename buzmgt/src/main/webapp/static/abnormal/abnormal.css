@@ -282,3 +282,22 @@
 	color: #a7a7a7;
 }
 
+/*收款异常订单  title输入框*/
+.remark-title{
+	width: 50%;
+	margin-bottom: 8px;
+}
+.remark-title-link{
+	float: right;
+	color: #fff;
+	margin-left: 10px;
+	margin-top: 5px;
+	margin-bottom: 2px;
+	border-bottom: 1px solid #3894C7;
+	font-size: 12px;
+	font-weight: bold;
+}
+.remark-title-link:HOVER {
+	color: #fff;
+	border-bottom: 1px solid #fff;
+}
