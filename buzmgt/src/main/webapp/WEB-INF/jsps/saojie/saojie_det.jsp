@@ -72,7 +72,7 @@
 					<!--title-->
 					<div class="box-title">
 						<!--区域选择按钮-->
-						<select id="regionId" class="form-control input-xs " onchange="getSaojieDataList();"
+						<select id="regionId" class="form-control input-xs " onchange="ajaxSearchByRegion();"
 							style="width: 110px; position: relative;height:25px; padding: 2px 5px; display: inline-block; font-size: 12px; color: #6d6d6d;">
 							<option value="" selected="selected">全部区域</option>
 							<c:forEach var="region" items="${rList}" varStatus="s">
@@ -80,6 +80,7 @@
 							</c:forEach>
 						</select>
 						<!--/区域选择按钮-->
+						<input id="saojieId" type="hidden" value="${saojieId}">
 						<div class="det-msg">
 							<span>扫街商家  <span class="shopNum">256</span> 家
 							</span> 
@@ -235,80 +236,7 @@
         <script src="/static/saojie/saojie-det.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/static/js/common.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
-			<script type="text/javascript">
-			 // 百度地图API功能
-			  var map = new BMap.Map("allmap");
-			  <% String areaname=request.getAttribute("areaName").toString();
-			  %>
-			   map.centerAndZoom("<%=areaname%>", 13);
-			   //  map.centerAndZoom("上海",11);   
-			  // 添加带有定位的导航控件
-			  var navigationControl = new BMap.NavigationControl({
-			    // 靠左上角位置
-			    anchor: BMAP_ANCHOR_TOP_LEFT,
-			    // LARGE类型
-			    type: BMAP_NAVIGATION_CONTROL_LARGE,
-			    // 启用显示定位
-			    enableGeolocation: true
-			  });
-			  map.addControl(navigationControl);
-			  map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-				
-				var bdary = new BMap.Boundary();
-				
-				bdary.get("<%=areaname%>", function(rs){ //获取行政区域
-				var count = rs.boundaries.length; //行政区域的点有多少个
-
-				for(var i = 0; i < count; i++){
-				var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
-				map.addOverlay(ply); //添加覆盖物
-				map.setViewport(ply.getPath()); //调整视野 
-				} 
-				}); 
-			  
-			  
-			  
-			  <%
-			  	SaojieDataVo saojieDataVo=	(SaojieDataVo)request.getAttribute("saojiedatalist");
-			  	if(saojieDataVo.getList().getSize()>0){
-			  	  	for(SaojieData saojiedata:saojieDataVo.getList()){
-			  		String pointStr=saojiedata.getCoordinate();
-			  		System.out.println(pointStr);
-			  		String lag=pointStr.split("-")[0];
-			  		String lat=pointStr.split("-")[1];
-			  		String titile=saojiedata.getName();
-			  		//String truename=store.getTruename();
-			  		String desc=saojiedata.getDescription();
-			  	%>	
-			  			var opts = {
-			  					width : 250,     // 信息窗口宽度
-			  					height: 80,     // 信息窗口高度
-			  					title : "扫街信息" , // 信息窗口标题
-			  					enableMessage:true//设置允许信息窗发送短息
-			  				   };
-			  			var desc="<%=desc%>";
-			  			var marker = new BMap.Marker(new BMap.Point(<%=lag%>,<%=lat%>));  // 创建标注
-			  			var content ="<%=titile%>";
-			  			map.addOverlay(marker);               // 将标注添加到地图中
-			  			addClickHandler(content,marker);
-			  			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-			  <%	}
-			  	}
-			  %>
-			  
-			  function addClickHandler(content,marker){
-					marker.addEventListener("click",function(e){
-						openInfo(content,e)}
-					);
-				}
-				function openInfo(content,e){
-					var p = e.target;
-					var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
-					var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
-					map.openInfoWindow(infoWindow,point); //开启信息窗口
-				}
-				
-		</script>
+			
 </body>
 
 </html>

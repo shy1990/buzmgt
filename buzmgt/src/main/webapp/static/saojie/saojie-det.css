@@ -1,4 +1,4 @@
-/*扫街明细*/
+/*鎵鏄庣粏*/
 .saojie-det-body .box-title{
 	padding-top: 2px;
 	padding-bottom: 2px;
@@ -16,7 +16,7 @@
 	font-size: 15px;
 	margin: 0 5px;
 }
-/*标题分页*/
+/*鏍囬鍒嗛〉*/
 .title-page{
 	position: absolute;
 	top: 0;
@@ -24,7 +24,7 @@
 	right: 0;
 }
 
-/*标题按钮*/
+/*鏍囬鎸夐挳*/
 .title-btn{
 	display: inline-block;
 	height: 100%;
@@ -46,7 +46,7 @@
 	background: #3088BA;
 }
 
-/*地图*/
+/*鍦板浘*/
 .saojie-map{
 	text-align: center;
 }
@@ -58,7 +58,7 @@
 	width: 100%;
 	height: auto;
 }
-/*审核通过按钮*/
+/*瀹℃牳閫氳繃鎸夐挳*/
 .btn-approve,
 .btn-approve:hover,
 .btn-approve:focus{
@@ -70,12 +70,12 @@
 	font-size: 14px;
 	font-weight: bold;
 }
-/*列表*/
+/*鍒楄〃*/
 .saojie-list{
 	display: none;
 	margin: -10px -20px;
 }
-/*列表行*/
+/*鍒楄〃琛�*/
 .list-tr{
 	vertical-align: middle;
 	position: relative;
@@ -96,7 +96,7 @@
 img.shop-img{
 	width: 142px;
 	position: absolute;
-	
+	height: 100px;
 }
 .col-img{
 	min-width: 150px;

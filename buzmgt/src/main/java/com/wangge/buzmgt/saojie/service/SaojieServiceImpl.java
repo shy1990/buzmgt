@@ -165,26 +165,7 @@ public class SaojieServiceImpl implements SaojieService {
     int a = 0;
     SaojieDataVo sdv = new SaojieDataVo();
     List<SaojieData> sd = new ArrayList<SaojieData>();
-     List<Saojie> list = saojieRepository.findAll(new Specification<Saojie>() {
-      public Predicate toPredicate(Root<Saojie> root, CriteriaQuery<?> query,
-          CriteriaBuilder cb) {
-        List<Predicate> predicates = new ArrayList<Predicate>();
-        
-        if (userId != null && !"".equals(userId)) {
-          Join<Saojie, SalesMan> salesManJoin = root.join(root.getModel()
-              .getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
-          predicates.add(cb.equal(salesManJoin.get("id").as(String.class), userId));
-        }
-
-        if (regionId != null && !"".equals(regionId)) {
-          Join<Saojie, Region> regionJoin = root.join(root.getModel()
-              .getSingularAttribute("region", Region.class), JoinType.LEFT);
-          predicates.add(cb.equal(regionJoin.get("id").as(String.class), regionId));
-        }
-        return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-      }
-
-    });
+     List<Saojie> list = findAll(userId,regionId);
      for(Saojie s : list){
        if(s.getSaojiedata() != null ){
           for(SaojieData data  : s.getSaojiedata()){
@@ -196,9 +177,11 @@ public class SaojieServiceImpl implements SaojieService {
     sdv.addPercent(sd.size(),a);
     Page<SaojieData> page;
     List<SaojieData> sub = new ArrayList<SaojieData>();
-    sub = sd.subList(pageNum*limit,(pageNum+1)*limit);
+    if(sd != null && sd.size() > 0){
+      sub = sd.subList(pageNum*limit,(pageNum+1)*limit);
+    }
     page = new PageImpl<SaojieData>(sub,new PageRequest(pageNum,limit),sd.size());
-    sdv.setList(page);
+    sdv.setPage(page);
     return sdv;
   }
   
@@ -206,8 +189,21 @@ public class SaojieServiceImpl implements SaojieService {
   public SaojieDataVo getsaojieDataList(String userId,String regionId) {
     int a = 0;
     SaojieDataVo sdv = new SaojieDataVo();
-    List<SaojieData> sd = new ArrayList<SaojieData>();
-     List<Saojie> list = saojieRepository.findAll(new Specification<Saojie>() {
+    List<Saojie> list = findAll(userId,regionId);
+     for(Saojie s : list){
+       if(s.getSaojiedata() != null ){
+          for(SaojieData data  : s.getSaojiedata()){
+            sdv.getList().add(data);
+          }
+       }
+       a += s.getMinValue();
+     }
+        sdv.addPercent(sdv.getList().size(),a);
+      return sdv;
+  }
+  
+  public List<Saojie> findAll(String userId,String regionId){
+    List<Saojie> list = saojieRepository.findAll(new Specification<Saojie>() {
       public Predicate toPredicate(Root<Saojie> root, CriteriaQuery<?> query,
           CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<Predicate>();
@@ -227,16 +223,7 @@ public class SaojieServiceImpl implements SaojieService {
       }
 
     });
-     for(Saojie s : list){
-       if(s.getSaojiedata() != null ){
-          for(SaojieData data  : s.getSaojiedata()){
-            sdv.getList().add(data);
-          }
-       }
-       a += s.getMinValue();
-     }
-        sdv.addPercent(sdv.getList().size(),a);
-      return sdv;
+    return list;
   }
   
   @Override

@@ -246,15 +246,25 @@ public class TeamMembersController {
     return null;
   } 
   
+  /**
+   * 
+    * getSalesManInfo:(跳转到扫街详情页). <br/> 
+    * 
+    * @author Administrator 
+    * @param saojie
+    * @param flag
+    * @param model
+    * @return 
+    * @since JDK 1.8
+   */
   @RequestMapping(value = "/toSalesManInfo", method = RequestMethod.GET)
   public String getSalesManInfo(@RequestParam(value = "saojieId",required = false)Saojie saojie,String flag, Model model){
        SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
        List<Region> rList = regionService.getListByIds(salesMan);
        model.addAttribute("salesMan", salesMan);
        model.addAttribute("rList", rList);
-       SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "");
-       model.addAttribute("saojiedatalist", saojiedatalist);
-       model.addAttribute("areaName", salesMan.getRegion().getName());
+       model.addAttribute("saojieId",saojie.getId());
+//       model.addAttribute("areaName", salesMan.getRegion().getName());
        //判断业务员所处的模式
        List<Assess> listAssess=assessService.findBysalesman(salesMan);
        
@@ -269,6 +279,37 @@ public class TeamMembersController {
        }
   }
   
+  /**
+   * 
+    * getSaojiedataMap:(异步获取扫街详情地图数据). <br/> 
+    * 
+    * @author Administrator 
+    * @param saojie
+    * @param regionId
+    * @return 
+    * @since JDK 1.8
+   */
+  @RequestMapping(value = "/getSaojiedataMap", method = RequestMethod.GET)
+  @ResponseBody
+  public SaojieDataVo getSaojiedataMap(@RequestParam(value = "saojieId",required = false)Saojie saojie,String regionId){
+    SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
+    SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), regionId);
+    saojiedatalist.setAreaName(salesMan.getRegion().getName());//设置业务负责区域，用于地图加载
+    return saojiedatalist;
+  }
+  
+  /**
+   * 
+    * getSojieDtaList:(加载扫街详情列表). <br/> 
+    * 
+    * @author Administrator 
+    * @param userId
+    * @param regionId
+    * @param page
+    * @param size
+    * @return 
+    * @since JDK 1.8
+   */
   @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.GET)
   @ResponseBody
   public SaojieDataVo getSojieDtaList(String userId, String regionId,String page,String size){
