@@ -35,7 +35,6 @@
 <script type="text/javascript">
 	$(function() {
 		var status = $("#addClass").val();
-		console.info(status);
 		if (status != null && status != '') {
 			$("li[title = '" + status + "']").addClass("active");
 		} else {

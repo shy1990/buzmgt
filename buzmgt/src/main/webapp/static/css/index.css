@@ -597,15 +597,6 @@ a:hover .kucun,
 a:focus .kucun{
 	background:  url(../img/icon/left-mean/kc2.png) no-repeat ;
 }
-/* 油补统计 */
-.youbutongji{
-	background:  url(../img/icon/left-mean/ybtj1.png) no-repeat;
-}
-.active .youbutongji,
-a:hover .youbutongji,
-a:focus .youbutongji{
-	background:  url(../img/icon/left-mean/ybtj2.png) no-repeat ;
-}
 
 
 /* ==========end 一级菜单=========== */
@@ -684,12 +675,21 @@ a:focus .youbutongji{
 }
 /* 拜访记录 */
 .baifangjilu{
-	background: url(../img/icon/left-mean/ywmanage/ywgl_bfjl2.png) no-repeat;
+	background: url(../img/icon/left-mean/ywmanage/ywgl_bfjl1.png) no-repeat;
 }
 .menu-second .active .baifangjilu,
 .menu-second a:hover .baifangjilu,
 .menu-second a:focus .baifangjilu{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_bfjl2.png) no-repeat;
+}
+/* 油补统计 */
+.youbutongji{
+	background:  url(../img/icon/left-mean/ybtj1.png) no-repeat;
+}
+.menu-second .active .youbutongji,
+.menu-second a:hover .youbutongji,
+.menu-second a:focus .youbutongji{
+	background:  url(../img/icon/left-mean/ybtj2.png) no-repeat ;
 }
 /* 足迹 */
 .zuji{

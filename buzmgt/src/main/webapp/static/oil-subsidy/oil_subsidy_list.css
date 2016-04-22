@@ -1,0 +1,47 @@
+.icon-oil{
+    background:url(../img/icon/left-mean/oil.jpg) no-repeat;
+}
+.icon-ratio{
+    display: inline-block;
+    margin-right:3px;
+    padding:7px;
+    background:url(../img/icon/oil-subsidy/setting.png) no-repeat;
+    vertical-align: middle;
+}
+.acu-km{
+    color:#3893c7;
+}
+.acu-mny{
+    color:#ff5b5b;
+}
+.yw-name{
+    margin-left:5px;
+}
+.location:before{
+    display:inline-block;
+    padding-right:5px;
+    content:'>';
+}
+.abnormal-state{
+    color:#ff9804;
+}
+.normal-state:before,
+.abnormal-state:before{
+    display: inline-block;
+    content:'(';
+    color:#000;
+}
+.normal-state:after,
+.abnormal-state:after{
+    display: inline-block;
+    content:')';
+    color:#000;
+}
+.btn-setting{
+    margin-left:5px;
+    padding:3px;
+    background-color:#fbfbfb;
+    color:#8c8c8c;
+    border:1px solid #eee;
+    font-size:12px;
+}
