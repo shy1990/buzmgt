@@ -84,28 +84,32 @@ public class SaojieServiceImpl implements SaojieService {
 //  }
   @Override
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
-    String hql = "SELECT t.* FROM SYS_SAOJIE t LEFT JOIN sys_salesman s ON s.user_id = t.user_id where ";
+    String hql = "SELECT t.* FROM SYS_SAOJIE t right join (select sj.user_id,sj.saojie_id,max(sj.saojie_order) from sys_saojie sj left join sys_salesman s on sj.user_id=s.user_id where ";
     if(saojie.getSalesman() != null){
       if((null!=saojie.getSalesman().getJobNum()&&!"".equals(saojie.getSalesman().getJobNum()))||(null!=saojie.getSalesman().getTruename()&&!"".equals(saojie.getSalesman().getTruename()))){
-        String serHql = "and s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
-        hql += ""+serHql+" and t.region_id in"
+        String serHql = " s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
+        hql += ""+serHql+" and sj.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
       }else{
-        hql += "and t.region_id in"
+        hql += "and sj.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
       }
     }else{
-      hql += "and t.region_id in"
+      hql += " sj.region_id in"
           + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
     }
     if(saojie.getStatus() != null){
       int status = saojie.getStatus().ordinal();
       if(SaojieStatus.PENDING.equals(saojie.getStatus())){
-        hql += " and t.saojie_status='"+status+"'";
+        hql += " and s.status='0' and sj.saojie_status='"+status+"'";
+      }else if(SaojieStatus.AGREE.equals(saojie.getStatus())){
+        hql += " and s.status='1' and sj.saojie_status='"+status+"'";
       }
+    }else{
+      hql += " and sj.saojie_status='1' or sj.saojie_status='3'";
     }
     
-    hql +=" order by t.begin_time desc ";
+    hql +=" group by sj.user_id,sj.saojie_id) saojie on saojie.saojie_id=t.saojie_id";
     Query q = em.createNativeQuery(hql,Saojie.class);  
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
@@ -163,7 +167,6 @@ public class SaojieServiceImpl implements SaojieService {
   }
   
   @Override
-  @Transactional
   public SaojieDataVo getsaojieDataList(String userId,String regionId) {
     int a = 0;
     SaojieDataVo sdv = new SaojieDataVo();
@@ -220,6 +223,7 @@ public class SaojieServiceImpl implements SaojieService {
   public Saojie findByOrderAndSalesman(int ordernum, SalesMan salesman) {
     return saojieRepository.findByOrderAndSalesman(ordernum,salesman);
   }
+
 }
   
   
