@@ -38,6 +38,8 @@ import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
 import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
+import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
@@ -55,7 +57,7 @@ public class OilCostServiceImpl implements OilCostService {
   private OilCostRepository oilCostRepository;
 
   @Autowired
-  private SalesManService salesManService;
+  private RegionService regionService;
 
   @Override
   public List<OilCost> findAll() {
@@ -69,12 +71,70 @@ public class OilCostServiceImpl implements OilCostService {
 
   @Override
   public List<OilCost> findAll(Map<String, Object> searchParams) {
+    disposeSearchParams(searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<OilCost> spec = oilCostSearchFilter(filters.values(), OilCost.class);
     List<OilCost> list=oilCostRepository.findAll(spec);
     disposeOilCostList(list);
 
     return list;
+  }
+  /**
+   * 处理条件参数
+   * 区域选择（油补统计）
+   * @param searchParams
+   */
+  public void disposeSearchParams(Map<String, Object> searchParams){
+    String regionId = (String) searchParams.get("regionId");
+    String regionType = (String) searchParams.get("regionType");
+//    COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他")
+    //TODO 整理查询出来的regionID列表
+    String regionArr="";
+    switch (regionType) {
+    case "COUNTRY":
+      break;
+    case "PARGANA":
+      
+    case "PROVINCE":
+      regionArr = disposeRegionId(regionId);
+      regionArr=regionArr.substring(0, regionArr.length()-1);
+      break;
+    case "AREA":
+      regionArr = regionId.substring(0, 4);
+      break;
+
+    default:
+      regionArr =regionId;
+      break;
+    }
+    searchParams.put("ORMLK_userId", regionArr);
+    searchParams.remove("regionId");
+    searchParams.remove("regionType");
+    
+  }
+  /**
+   * 根据每一个regionType判断 regionId截取的位数
+   * type-->count:国家-->all
+   * 
+   * 
+   * @param regionList
+   * @return String 格式 "3701,3702,xxxx,xxx"
+   */
+  public String disposeRegionId(String regionId){
+    //3701,
+    String regionArr="";
+    List<Region> regionList=regionService.findByRegion(regionId); 
+    for(int n=0;n<regionList.size();n++){
+      Region region= regionList.get(n);
+      String regionId1=region.getId();
+      if(RegionType.AREA.equals(region.getType())){
+        regionArr+=regionId1.substring(0, 4)+",";
+        continue;
+      }
+      regionArr+=disposeRegionId(regionId1);
+    }
+      
+    return regionArr;
   }
   /**
    * 处理salesMan信息
@@ -111,6 +171,7 @@ public class OilCostServiceImpl implements OilCostService {
 
   @Override
   public Page<OilCost> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
+    disposeSearchParams(searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<OilCost> spec = oilCostSearchFilter(filters.values(), OilCost.class);
     Page<OilCost> page=oilCostRepository.findAll(spec, pageRequest);
@@ -300,7 +361,18 @@ public class OilCostServiceImpl implements OilCostService {
               break;
             case ORLK:
               /**
-               * sc_OR_userId = praentId_A37010506130
+               * sc_ORLK_userId = praentId_A37010506130
+               */
+              String[] parameter_LK = ((String) filter.value).split("_");
+              Path expression_LK = root.get(parameter_LK[0]);
+              String value_LK= parameter_LK[1];
+              Predicate p_LK = cb.or(cb.like(expression_LK, value_LK), cb.like(expression, value_LK));
+              predicates.add(p_LK);
+              
+              break;
+            case ORMLK:
+              /**
+               * sc_ORMLK_userId = 370105,3701050,3701051
                */
               String[] parameterValue = ((String) filter.value).split(",");
               Predicate[] pl=new Predicate[parameterValue.length];

@@ -2,9 +2,9 @@ var oilCostTotal = 0;//油补统计总条数
 var abnormalCoordTotal = 0;//油补统计总条数 
 $(function() {
 //	nowTime();//初始化日期
-	DispositRegionId();//处理区域ID
 	findOilCostList();//油补统计
 	abnormalCoordList();//异常坐标
+	DispositRegionId();//处理区域ID
 })
 $('#startTime').datetimepicker({
 	format : "yyyy-mm-dd",
@@ -70,10 +70,8 @@ function nowTime() {
  * TODO 处理区域ID 根据Regiontype 
  */
 function DispositRegionId(){
-	var regionId=$('#regionId').val();
-	var regionType=$('#regionType').val();
-	SearchData['sc_regionId'] = regionId;
-	SearchData['sc_regionType'] = regionType;
+	var regionId=$('#regionId');
+	
 }
 /**
  * 检索

@@ -89,6 +89,8 @@ var SearchData = {
         <div class="area-choose">
             选择区域：<span>${regionName }</span>
             <a class="are-line" onclick="getRegion(${regionId});" href="javascript:;">切换</a>
+           	<input type="hidden" id="regionId" value="${regionId }">
+           	<input type="hidden" id="regionType" value="${regionType }">
         </div>
 
         <!--/区域选择按钮-->
