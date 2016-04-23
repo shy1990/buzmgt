@@ -91,16 +91,19 @@ function ajaxSearch(searchData) {
 				//扫街数据循环
 				var marker;
 				var arr = new Array(); //创建数组
-				$.each(data.list, function(i,item){
-					arr = item.coordinate.split("-");
-	                for (i = 0;i < arr.length;i++){
-	                	marker = new BMap.Marker(new BMap.Point(arr[0],arr[1]));// 拿到坐标点
-	                }
-//					var desc="<%=desc%>";
-		  			var content =item.name;
-		  			map.addOverlay(marker);               // 将标注添加到地图中
-		  			addClickHandler(content,marker);
-		  			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+				$.each(data.list,function(n,items) {
+					var coor = items.coordinate;
+					if(coor != null && coor != ""){
+						arr = coor.split("-");
+		                for (var j = 0;j < arr.length;j++){
+		                	marker = new BMap.Marker(new BMap.Point(arr[0],arr[1]));// 拿到坐标点
+		                }
+	//					var desc="<%=desc%>";
+			  			var content = items.name;
+			  			map.addOverlay(marker);               // 将标注添加到地图中
+			  			addClickHandler(content,marker);
+			  			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+					}
 				  });
 			},
 			error : function() {
@@ -155,7 +158,7 @@ function openInfo(content,e){
 function initPaging(){
 	var totalCount = totalElements; //总条数 
 	showCount = totalPages, //显示分页个数
-	limit =  1;//每页条数
+	limit =  6;//每页条数
 	$('#callBackPager').extendPagination({
 	totalCount : totalCount, 
 	showCount : showCount,

@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
 import com.wangge.buzmgt.sys.vo.SaojieDataVo;
@@ -84,26 +85,32 @@ public class SaojieServiceImpl implements SaojieService {
 //  }
   @Override
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
-    String hql = "select t.* from SYS_SAOJIE t,(select user_id,max(SAOJIE_ORDER) ordernum from SYS_SAOJIE group by user_id) b "+
-"left join sys_salesman s on b.user_id = s.user_id where t.user_id=b.user_id and t.saojie_order=b.ordernum ";
+    String hql = "SELECT t.* FROM SYS_SAOJIE t right join (select sj.user_id,sj.saojie_id,max(sj.saojie_order) from sys_saojie sj left join sys_salesman s on sj.user_id=s.user_id where ";
     if(saojie.getSalesman() != null){
       if((null!=saojie.getSalesman().getJobNum()&&!"".equals(saojie.getSalesman().getJobNum()))||(null!=saojie.getSalesman().getTruename()&&!"".equals(saojie.getSalesman().getTruename()))){
-        String serHql = "and s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
-        hql += ""+serHql+" and t.region_id in"
+        String serHql = " s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
+        hql += ""+serHql+" and sj.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
       }else{
-        hql += "and t.region_id in"
+        hql += "and sj.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
       }
     }else{
-      hql += "and t.region_id in"
+      hql += " sj.region_id in"
           + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
     }
     if(saojie.getStatus() != null){
-      hql += " and t.saojie_status='"+saojie.getStatus().ordinal()+"'";
+      int status = saojie.getStatus().ordinal();
+      if(SaojieStatus.PENDING.equals(saojie.getStatus())){
+        hql += " and s.status='0' and sj.saojie_status='"+status+"'";
+      }else if(SaojieStatus.AGREE.equals(saojie.getStatus())){
+        hql += " and s.status='1' and sj.saojie_status='"+status+"'";
+      }
+    }else{
+      hql += " and sj.saojie_status='1' or sj.saojie_status='3'";
     }
     
-    hql +=" order by t.begin_time desc ";
+    hql +=" group by sj.user_id,sj.saojie_id) saojie on saojie.saojie_id=t.saojie_id";
     Query q = em.createNativeQuery(hql,Saojie.class);  
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
@@ -178,7 +185,13 @@ public class SaojieServiceImpl implements SaojieService {
     Page<SaojieData> page;
     List<SaojieData> sub = new ArrayList<SaojieData>();
     if(sd != null && sd.size() > 0){
-      sub = sd.subList(pageNum*limit,(pageNum+1)*limit);
+      int expectedSize = (pageNum + 1)*limit;
+      int last = expectedSize - limit;
+      if(expectedSize >= sd.size() && last <= sd.size()){
+        sub = sd.subList(last,last + limit - (expectedSize - sd.size()));
+      }else{
+        sub = sd.subList(pageNum*limit,(pageNum+1)*limit);
+      }
     }
     page = new PageImpl<SaojieData>(sub,new PageRequest(pageNum,limit),sd.size());
     sdv.setPage(page);
