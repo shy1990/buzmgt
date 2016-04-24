@@ -47,8 +47,6 @@ public class OilCostController {
   private OilCostService oilCostService;
   @Autowired
   private ManagerService managerService;
-  @Autowired
-  private RegionService regionService;
   
   
   private static final String SEARCH_OPERTOR="sc_";
@@ -106,7 +104,7 @@ public class OilCostController {
    * @param pageRequest
    * @return
    */
-  @RequestMapping(value="/AbnormalCoord",method=RequestMethod.GET)
+  @RequestMapping(value="/abnormalCoord",method=RequestMethod.GET)
   @ResponseBody
   public String getAbnormalCoordList(HttpServletRequest request,
       @PageableDefault(page = 0,size=10,sort={"dateTime"},direction=Direction.DESC) Pageable pageRequest ){
@@ -122,7 +120,33 @@ public class OilCostController {
     return msg;
   }
   /**
-   * 油补统计详情
+   * 油补统计查看页面跳转
+   */
+  @RequestMapping(value="/record/{userId}",method=RequestMethod.GET)
+  public String showRecordList(@PathVariable String userId,Model model,HttpServletRequest request){
+    model.addAttribute("userId", userId);
+    model.addAttribute("startTime",request.getParameter("startTime"));
+    model.addAttribute("endTime",request.getParameter("endTime"));
+    model.addAttribute("oilTotalCost",request.getParameter("oilTotalCost"));
+    model.addAttribute("totalDistance",request.getParameter("totalDistance"));
+    return "oilsubsidy/oil_subsidy_record";
+  }
+  /**
+   * 
+   * @param userId
+   * @param model
+   * @param request
+   * @return
+   */
+  @RequestMapping(value="/detail/{Id}",method=RequestMethod.GET)
+  public String showDetailList(@PathVariable("Id") OilCost oilCost,Model model,HttpServletRequest request){
+    oilCostService.disposeOilCostRecord(oilCost);
+    model.addAttribute("oilCost", oilCost);
+    return "oilsubsidy/oil_subsidy_detail";
+  }
+  
+  /**
+   * 油补统计详情数据查询
    * @param request
    * @param pageRequest
    * @return

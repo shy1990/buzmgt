@@ -1,9 +1,13 @@
 var oilCostRecordTotal = 0;//油补统计总条数 
 $(function() {
-//	nowTime();//初始化日期
-	findOilCostRecord();//油补记录
+//	createRecordSort(detialData);
+//	createOilCostDetialList(detialData);//油补详情
+//	页面的渲染（关于异常坐标握手点）
+	renduAbnormal();
 })
-
+function renduAbnormal(){
+	var $('#renduAbnormal');
+}
 /**
  * 检索
  */
@@ -94,28 +98,24 @@ function totalRecord(){
 	
 }
 /**
- * 生成油补统计列表
+ * 生成油补记录详情列表
  * @param data
  */
 
-function createOilCostRecordList(data) {
-	var myTemplate = Handlebars.compile($("#oilCostRecord-table-template").html());
-	$('#oilCostRecordList').html(myTemplate(data));
+function createOilCostDetialList(data) {
+	console.info(data);
+	var myTemplate = Handlebars.compile($("#detailList-table-template").html());
+	$('#detailList').html(myTemplate(data));
 }
 /**
- * 报备的分页
+ * 生成油补记录地点
  * @param data
  */
-function oilCostRecordPaging(data) {
-	var totalCount = data.totalElements, limit = data.size;
-	$('#oilCostPager').extendPagination({
-		totalCount : totalCount,
-		showCount : 5,
-		limit : limit,
-		callback : function(curr, limit, totalCount) {
-			findOilCostList(curr - 1);
-		}
-	});
+
+function createRecordSort(data) {
+	console.info(data);
+	var myTemplate = Handlebars.compile($("#record-sort-table-template").html());
+	$('#recordSort').html(myTemplate(data));
 }
 Handlebars.registerHelper('formDate', function(value) {
 	if(value==null||value==""){
@@ -152,11 +152,13 @@ Handlebars.registerHelper('disposeRecordList', function(type,regionName) {
 /**
  * parentId userId
  */
-Handlebars.registerHelper('whatUserId', function(parentId, userId) {
-	if (parentId !=null||parentId !="") {
-		return parentId;
+Handlebars.registerHelper('addOne', function(index) {
+	var html='';
+	if (index === 0) {
+		return html ='<span class="order begin">起</span>';
 	}
-	return userId;
+		html = '<span class="order">'+index+'</span>'
+	return html;
 });
 
 /**
@@ -167,18 +169,3 @@ Handlebars.registerHelper('whatUserId', function(parentId, userId) {
 function checkEmpty(value){
 	return value ==""||value==null;
 }
-
-$('#monthDate').datetimepicker({
-	format : "yyyy-mm",
-	language : 'zh-CN',
-	weekStart : 1,
-	todayBtn : 1,
-	autoclose : true,
-	startView : 3,
-	minView : 3,
-	viewSelect : 3,
-	forceParse : false
-})
-$('#monthDate').on("click",function(){
-	$('.today').text('本月');
-});

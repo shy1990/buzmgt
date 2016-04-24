@@ -40,6 +40,8 @@ public interface OilCostService {
    */
   public Page<OilCost> findGroupByUserId(Map<String, Object> searchParams, Pageable pageRequest);
   
+  public void disposeOilCostRecord(OilCost oc);
+  
 }
 
   

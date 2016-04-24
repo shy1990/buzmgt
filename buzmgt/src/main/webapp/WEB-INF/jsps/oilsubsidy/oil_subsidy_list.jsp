@@ -44,7 +44,8 @@
         <p class="acu-mny">{{oilTotalCost}}<span> 元</span></p>
       </td>
       <td>
-        <a class="btn btn-blue btn-sm" href="/oilCost/statistics/{{whatUserId parentId userId}}">查看</a>
+        <a class="btn btn-blue btn-sm" href="javascript:void(0);" 
+				onclick="turnRecord('{{whatUserId parentId userId}}','{{oilTotalCost}}','{{totalDistance}}');">查看</a>
       </td>
     </tr>      
 	{{/each}}
@@ -173,75 +174,6 @@ var SearchData = {
                                     </tr>
                                     </thead>
                                     <tbody id="abnormalCoordList"></tbody>
-                                    <tr>
-                                        <td class="">
-                                            <img width="50" height="50" src="static/img/abnormal/user-head.png" class="img-circle" />
-                                            <span class="yw-name"><b>易小川</b>(区域经理)</span>
-                                        </td>
-                                        <td>
-                                            <span>起点<span class="abnormal-state">异常</span></span>
-                                            <span class="location">大桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">终点<span class="normal-state">家</span></span>
-                                        </td>
-                                        <td>
-                                            <p><span class="acu-km">1,250.36km</span> &#47; <span class="acu-mny">250.36元</span></p>
-                                        </td>
-                                        <td>2016.03.12 18:20</td>
-                                        <td>
-                                            <a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="">
-                                            <img width="50" height="50" src="static/img/abnormal/user-head.png" class="img-circle" />
-                                            <span class="yw-name"><b>易小川</b>(区域经理)</span>
-                                        </td>
-                                        <td>
-                                            <span>起点<span class="abnormal-state">异常</span></span>
-                                            <span class="location">大桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">终点<span class="abnormal-state">异常</span></span>
-                                        </td>
-                                        <td>
-                                            <p><span class="acu-km">1,250.36km</span> &#47; <span class="acu-mny">250.36元</span></p>
-                                        </td>
-                                        <td>2016.03.12 18:20</td>
-                                        <td>
-                                            <a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="">
-                                            <img width="50" height="50" src="static/img/abnormal/user-head.png" class="img-circle" />
-                                            <span class="yw-name"><b>易小川</b>(区域经理)</span>
-                                        </td>
-                                        <td>
-                                            <span>起点<span class="normal-state">家</span></span>
-                                            <span class="location">大桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">小桥镇</span>
-                                            <span class="location">终点<span class="abnormal-state">异常</span></span>
-                                        </td>
-                                        <td>
-                                            <p><span class="acu-km">1,250.36km</span> &#47; <span class="acu-mny">250.36元</span></p>
-                                        </td>
-                                        <td>2016.03.12 18:20</td>
-                                        <td>
-                                            <a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-                                        </td>
-                                    </tr>
                                 </table>
                             </div>
                             <!--table-box-->

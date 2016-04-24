@@ -90,22 +90,25 @@ public class OilCostServiceImpl implements OilCostService {
 //    COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他")
     //TODO 整理查询出来的regionID列表
     String regionArr="";
-    switch (regionType) {
-    case "COUNTRY":
-      break;
-    case "PARGANA":
+    if(StringUtils.isNotEmpty(regionType)){
       
-    case "PROVINCE":
-      regionArr = disposeRegionId(regionId);
-      regionArr=regionArr.substring(0, regionArr.length()-1);
-      break;
-    case "AREA":
-      regionArr = regionId.substring(0, 4);
-      break;
-
-    default:
-      regionArr =regionId;
-      break;
+      switch (regionType) {
+      case "COUNTRY":
+        break;
+      case "PARGANA":
+        
+      case "PROVINCE":
+        regionArr = disposeRegionId(regionId);
+        regionArr=regionArr.substring(0, regionArr.length()-1);
+        break;
+      case "AREA":
+        regionArr = regionId.substring(0, 4);
+        break;
+        
+      default:
+        regionArr =regionId;
+        break;
+      }
     }
     searchParams.put("ORMLK_userId", regionArr);
     searchParams.remove("regionId");
@@ -148,25 +151,33 @@ public class OilCostServiceImpl implements OilCostService {
    * @param list
    */
   public void disposeOilCostList(List<OilCost> list){
-    list.forEach(l->{
-      String oilRecord=l.getOilRecord();
-      l.setOilRecordList(JSONUtil.stringArrtoJsonList(oilRecord, OilRecord.class));
-      l.setOilRecord("");
-      String orgName="";
-      String regName="";
-      String turename="";
-      String id ="";
-      try {
-        SalesMan salesman=l.getSalesMan();
-        id=salesman.getId();
-        orgName=salesman.getUser().getOrganization().getName();
-        regName=salesman.getRegion().getName();
-        turename=salesman.getTruename();
-      } catch (Exception e) {
-        e.getMessage();
-      }
-      l.setSalesManPart(new SalesManPart(id,turename,regName,orgName));
-    });
+    list.forEach(l->{disposeOilCostRecord(l);});
+  }
+  /**
+   * 处理 oilCostRecord
+   * @param oilCost l
+   */
+  @Override
+  public void disposeOilCostRecord(OilCost l){
+
+    String oilRecord=l.getOilRecord();
+    l.setOilRecordList(JSONUtil.stringArrtoJsonList(oilRecord, OilRecord.class));
+    l.setOilRecord("");
+    String orgName="";
+    String regName="";
+    String turename="";
+    String id ="";
+    try {
+      SalesMan salesman=l.getSalesMan();
+      id=salesman.getId();
+      orgName=salesman.getUser().getOrganization().getName();
+      regName=salesman.getRegion().getName();
+      turename=salesman.getTruename();
+    } catch (Exception e) {
+      e.getMessage();
+    }
+    l.setSalesManPart(new SalesManPart(id,turename,regName,orgName));
+  
   }
 
   @Override
@@ -201,6 +212,8 @@ public class OilCostServiceImpl implements OilCostService {
       if(o==null){
         if(number*size <= total && total < (number+1)*size){
           //添加条数
+          action.setTotalDistance(action.getDistance());
+          action.setOilTotalCost(action.getOilCost());
           oilCostMap.put(userId, action);
         }
         total++;

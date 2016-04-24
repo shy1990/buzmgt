@@ -1,7 +1,7 @@
 var oilCostTotal = 0;//油补统计总条数 
 var abnormalCoordTotal = 0;//油补统计总条数 
 $(function() {
-//	nowTime();//初始化日期
+	nowTime();//初始化日期
 	DispositRegionId();//处理区域ID
 	findOilCostList();//油补统计
 	abnormalCoordList();//异常坐标
@@ -42,7 +42,7 @@ $('#endTime').datetimepicker({
 	pickerPosition : "bottom-right",
 	forceParse : 0
 }).on('changeDate', function(ev) {
-	k$('.form_date_start').removeClass('has-error');
+	$('.form_date_start').removeClass('has-error');
 	$('.form_date_end').removeClass('has-error');
 	var startInputDateStr = $('#startTime').val();
 	if (startInputDateStr != "" && startInputDateStr != null) {
@@ -75,6 +75,7 @@ function DispositRegionId(){
 	SearchData['sc_regionId'] = regionId;
 	SearchData['sc_regionType'] = regionType;
 }
+
 /**
  * 检索
  */
@@ -109,9 +110,8 @@ $('.table-export').on(
 			if (checkDate(startTime, endTime)) {
 				SearchData['sc_GTE_dateTime'] = startTime;
 				SearchData['sc_LTE_dateTime'] = endTime;
-				var jsonToString = JSON.stringify(SearchData);
-				window.location.href = base + "receiptRemark/export?type="
-						+ tab + "&"+ conditionProcess();
+//				window.location.href = base + "receiptRemark/export?type="
+//						+ tab + "&"+ conditionProcess();
 			}
 
 		});
@@ -160,7 +160,7 @@ function abnormalCoordList(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
 	$.ajax({
-		url : "/oilCost/AbnormalCoord",
+		url : "/oilCost/abnormalCoord",
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
@@ -265,6 +265,10 @@ Handlebars.registerHelper('whatUserId', function(parentId, userId) {
 	}
 	return userId;
 });
+/**
+ * 选择区域
+ * @param id
+ */
 function getRegion(id){
 	window.location.href='/region/getPersonalRegion?id='+id+'&flag=oilCost';
 }
@@ -321,3 +325,11 @@ function findByOrderNo(){
 function checkEmpty(value){
 	return value ==""||value==null;
 } 
+
+function turnRecord(userId,oilTotalCost,totalDistance){
+	var startTime = $('#startTime').val();
+	var endTime = $('#endTime').val();
+	window.location.href = base+"oilCost/record/"+userId+"?startTime=" +startTime+
+			"&endTime="+endTime+"&oilTotalCost="+oilTotalCost+"&totalDistance="+totalDistance;
+	
+}
