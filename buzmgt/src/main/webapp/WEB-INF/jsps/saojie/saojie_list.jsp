@@ -125,31 +125,35 @@ p{margin-left:5px; font-size:14px;}
 																	src="../static/img/saojie/a.jpg"></a></td>
 															<td class="project-title"><a href="javascript:toSalesManInfo('${saojie.id}','saojie');"><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
 																<br /> <span>${saojie.salesman.region.name}</span></td>
-															<c:if test="${saojie.status == 'PENDING' }">
+															<c:if test="${saojie.status == 'PENDING' or saojie.status == 'NOTSTARTED'}">
 																<td class="project-status"><span class="status-ing">${saojie.status.name}</span></td>
 															</c:if>
-															<c:if test="${saojie.status == 'AGREE' }">
+															<c:if test="${saojie.status == 'AGREE' or saojie.status == 'COMMIT'}">
 																<td class="project-status"><span
 																	class="status-finish">扫街完成</span></td>
 															</c:if>
 															<td class="project-title"><span class="l-h">${saojie.region.name}：<strong
 																	class="shop-num">${saojie.minValue}家</strong></span></td>
 															<td class="project-completion">
-																<div>
-																	<span class="completion-ing">当前进度：${saojie.percent}</span> <span
-																		class="time-down"> 倒计时：${saojie.timing }天</span>
-																</div>
-																<div class="progress progress-mini">
-																	<div style="width: <c:if test="${saojie.percent>='100%'}">100%;</c:if>
-																	<c:if test="${saojie.percent<'100%'}">${saojie.percent};</c:if>
-																		" class="progress-bar"></div>
-																</div> <!-- 100%的用这个 --> <!-- <div>
-																		<span class="completion-ing">当前进度： 100%</span> <span
-																			class="time-finish"> 通过</span>
+																<c:if test="${saojie.status == 'PENDING' or saojie.status == 'NOTSTARTED'}">
+																	<div>
+																		<span class="completion-ing">当前进度：${saojie.percent}</span> <span
+																			class="time-down"> 倒计时：${saojie.timing }天</span>
 																	</div>
 																	<div class="progress progress-mini">
-                                                    					<div style="width: 100%;" class="progress-finish"></div>
-                                                					</div>-->
+																		<div style="width:${saojie.percent}" class="progress-bar"></div>
+																	</div>
+																</c:if>
+																<!-- 100%的用这个 --> 
+																<c:if test="${saojie.status == 'AGREE' or saojie.status == 'COMMIT'}">
+																<div>
+																	<span class="completion-ing">当前进度： 100%</span> <span
+																		class="time-finish"> 通过</span>
+																</div>
+																<div class="progress progress-mini">
+																	<div style="width: 100%;" class="progress-finish"></div>
+																</div>
+																</c:if>
 															</td>
 															<td class="project-actions"><a href="projects.html#"
 																class="btn btn-white btn-sm"><span class="folder"></span>
