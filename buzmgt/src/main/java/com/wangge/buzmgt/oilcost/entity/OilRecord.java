@@ -39,10 +39,16 @@ public class OilRecord implements Serializable {
   private String time;
   private String shopName;
   private String missTime;
-  private String misName;
+  private String missName;
   private String exception;
   private String type;
   
+  public String getMissName() {
+    return missName;
+  }
+  public void setMissName(String missName) {
+    this.missName = missName;
+  }
   public String getRegionType() {
     return regionType;
   }
@@ -84,12 +90,6 @@ public class OilRecord implements Serializable {
   }
   public void setMissTime(String missTime) {
     this.missTime = missTime;
-  }
-  public String getMisName() {
-    return misName;
-  }
-  public void setMisName(String misName) {
-    this.misName = misName;
   }
   public String getException() {
     return exception;

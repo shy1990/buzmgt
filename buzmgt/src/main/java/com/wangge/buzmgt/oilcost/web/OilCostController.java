@@ -43,7 +43,9 @@ import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.ExcelExport;
 
@@ -56,7 +58,8 @@ public class OilCostController {
   private OilCostService oilCostService;
   @Autowired
   private ManagerService managerService;
-  
+  @Autowired
+  private SalesManService salesManService; 
   
   private static final String SEARCH_OPERTOR="sc_";
   
@@ -131,7 +134,7 @@ public class OilCostController {
   public String getAbnormalCoordList(HttpServletRequest request,
       @PageableDefault(page = 0,size=10,sort={"dateTime"},direction=Direction.DESC) Pageable pageRequest ){
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-    searchParams.put("LIKE_oilRecord", "异常");
+    searchParams.put("LIKE_oilRecord", "exception");
     Page<OilCost> oilCostPage = oilCostService.findAll(searchParams,pageRequest);
     String msg="";
     try {
@@ -147,10 +150,12 @@ public class OilCostController {
   @RequestMapping(value="/record/{userId}",method=RequestMethod.GET)
   public String showRecordList(@PathVariable String userId,Model model,HttpServletRequest request){
     model.addAttribute("userId", userId);
+    SalesMan salesMan= salesManService.findById(userId);
     model.addAttribute("startTime",request.getParameter("startTime"));
     model.addAttribute("endTime",request.getParameter("endTime"));
     model.addAttribute("oilTotalCost",request.getParameter("oilTotalCost"));
     model.addAttribute("totalDistance",request.getParameter("totalDistance"));
+    model.addAttribute("salesMan", salesMan);
     return "oilsubsidy/oil_subsidy_record";
   }
   /**
@@ -198,7 +203,8 @@ public class OilCostController {
   @RequestMapping("/export/{type}")
   public void excelExport(@PathVariable String type,HttpServletRequest request, HttpServletResponse response) {
     String[] gridTitles = { "业务名称","负责区域","累计公里数", "累计油补金额","日期"};
-    String[] coloumsKey = { "salesManPart.truename","salesManPart.regionName", "totalDistance", "oilTotalCost", "dataTime"};
+    String[] coloumsKey = { "salesManPart.truename","salesManPart.regionName", "totalDistance", "oilTotalCost", "dateTime"};
+    String oilId= request.getParameter("oilCostId");
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     List<OilCost> oilCostlist=null;
     switch (type) {
@@ -212,19 +218,19 @@ public class OilCostController {
       
     case "record":
       String[] gridTitles_ = { "业务名称","油补握手顺序","公里数","金额","日期"};
-      String[] coloumsKey_ = { "salesManPart.truename","recordSort", "totalDistance", "oilTotalCost", "dataTime"};
+      String[] coloumsKey_ = { "salesManPart.truename","recordSort", "distance", "oilCost", "dateTime"};
       
       oilCostlist = oilCostService.findAll(searchParams);
       
-      ExcelExport.doExcelExport("异常坐标.xls", oilCostlist, gridTitles_, coloumsKey_, request, response);
+      ExcelExport.doExcelExport("油补记录.xls", oilCostlist, gridTitles_, coloumsKey_, request, response);
       break;
     case "detail":
-      String[] gridTitles_1 = { "业务名称","油补握手顺序","公里数","金额","日期"};
-      String[] coloumsKey_1 = { "salesManPart.truename","recordSort", "totalDistance", "oilTotalCost", "dataTime"};
-      Long oilCostId=(Long) request.getAttribute("oilCostId");
+      String[] gridTitles_1 = { "握手镇","动作", "握手时间"};
+      String[] coloumsKey_1 = { "regionName", "distance", "time"};
+      Long oilCostId=Long.valueOf(oilId);
       OilCost oc = oilCostService.findOne(oilCostId);
       
-      ExcelExport.doExcelExport("异常坐标.xls", oilCostlist, gridTitles_1, coloumsKey_1, request, response);
+      ExcelExport.doExcelExport("油补详情握手点记录.xls", oc.getOilRecordList(), gridTitles_1, coloumsKey_1, request, response);
       break;
 
     default:
