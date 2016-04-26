@@ -33,10 +33,15 @@ public class OilRecord implements Serializable {
 
 
 
-  private String regionType;
+  private String regionType;//(0-起点，1-物流点，2-工作区域，3-结束)
   private String regionName;
-  private String coordinates;
+  private String coordinates;//坐标
   private String time;
+  private String shopName;
+  private String missTime;
+  private String misName;
+  private String exception;
+  private String type;
   
   public String getRegionType() {
     return regionType;
@@ -68,5 +73,29 @@ public class OilRecord implements Serializable {
   public void setType(String type) {
     this.type = type;
   }
-  private String type;
+  public String getShopName() {
+    return shopName;
+  }
+  public void setShopName(String shopName) {
+    this.shopName = shopName;
+  }
+  public String getMissTime() {
+    return missTime;
+  }
+  public void setMissTime(String missTime) {
+    this.missTime = missTime;
+  }
+  public String getMisName() {
+    return misName;
+  }
+  public void setMisName(String misName) {
+    this.misName = misName;
+  }
+  public String getException() {
+    return exception;
+  }
+  public void setException(String exception) {
+    this.exception = exception;
+  }
+  
 }

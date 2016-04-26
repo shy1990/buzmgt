@@ -38,9 +38,20 @@ public interface OilCostService {
    * @param pageRequest
    * @return
    */
-  public Page<OilCost> findGroupByUserId(Map<String, Object> searchParams, Pageable pageRequest);
+  public List<OilCost> findGroupByUserId(Map<String, Object> searchParams);
   
+  /**
+   * 处理 oilCostRecord
+   * @param oilCost l
+   */
   public void disposeOilCostRecord(OilCost oc);
+
+  /**
+   * 根据OilCost id 查询
+   * @param id
+   * @return
+   */
+  public OilCost findOne(Long id);
   
 }
 

@@ -101,15 +101,23 @@ function goSearch() {
 /**
  * 导出
  */
-$('.table-export').on(
-		'click',
-		function() {
+$('.table-export').on('click',function() {
 			var tab = findTab();
 			var startTime = $('#startTime').val();
 			var endTime = $('#endTime').val();
 			if (checkDate(startTime, endTime)) {
+				
 				SearchData['sc_GTE_dateTime'] = startTime;
 				SearchData['sc_LTE_dateTime'] = endTime;
+				switch (tab) {
+				case "all":
+					
+					break;
+
+				default:
+					
+					break;
+				}
 //				window.location.href = base + "receiptRemark/export?type="
 //						+ tab + "&"+ conditionProcess();
 			}

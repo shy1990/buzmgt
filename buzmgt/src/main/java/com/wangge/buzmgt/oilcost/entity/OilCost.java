@@ -71,12 +71,21 @@ public class OilCost implements Serializable{
   @Transient
   private SalesManPart salesManPart;//处理salesMan中数据
   
+  @Transient
+  private String recordSort;//握手顺序
+  
   private String parentId;
   @Column(name="regionids")
   private String regionIds;
   
   
   
+  public String getRecordSort() {
+    return recordSort;
+  }
+  public void setRecordSort(String recordSort) {
+    this.recordSort = recordSort;
+  }
   public SalesManPart getSalesManPart() {
     return salesManPart;
   }

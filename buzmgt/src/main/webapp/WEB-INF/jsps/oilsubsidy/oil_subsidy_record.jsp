@@ -43,7 +43,7 @@
 			 <span class="oil-mny"><span class="J_oil-mny">{{oilCost}}</span>元</span></td>
       <td>{{formDate dateTime}}</td>
       <td>
-        <a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
+        <a class="btn btn-blue btn-sm" href="/oilCost/detail/{{id}}">查看</a>
       </td>
     </tr>     
 	{{/each}}

@@ -153,33 +153,35 @@ public class OilCostServiceImpl implements OilCostService {
   public void disposeOilCostList(List<OilCost> list){
     list.forEach(l->{disposeOilCostRecord(l);});
   }
-  /**
+  /**Util
    * 处理 oilCostRecord
    * @param oilCost l
    */
   @Override
   public void disposeOilCostRecord(OilCost l){
-
-    String oilRecord=l.getOilRecord();
-    l.setOilRecordList(JSONUtil.stringArrtoJsonList(oilRecord, OilRecord.class));
-    l.setOilRecord("");
-    String orgName="";
-    String regName="";
-    String turename="";
-    String id ="";
-    try {
-      SalesMan salesman=l.getSalesMan();
-      id=salesman.getId();
-      orgName=salesman.getUser().getOrganization().getName();
-      regName=salesman.getRegion().getName();
-      turename=salesman.getTruename();
-    } catch (Exception e) {
-      e.getMessage();
+    if(l!=null){
+      
+      String oilRecord=l.getOilRecord();
+      l.setOilRecordList(JSONUtil.stringArrtoJsonList(oilRecord, OilRecord.class));
+      l.setOilRecord("");
+      String orgName="";
+      String regName="";
+      String turename="";
+      String id ="";
+      try {
+        SalesMan salesman=l.getSalesMan();
+        id=salesman.getId();
+        orgName=salesman.getUser().getOrganization().getName();
+        regName=salesman.getRegion().getName();
+        turename=salesman.getTruename();
+      } catch (Exception e) {
+        e.getMessage();
+      }
+      l.setSalesManPart(new SalesManPart(id,turename,regName,orgName));
     }
-    l.setSalesManPart(new SalesManPart(id,turename,regName,orgName));
   
   }
-
+  
   @Override
   public Page<OilCost> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     disposeSearchParams(searchParams);
@@ -191,32 +193,28 @@ public class OilCostServiceImpl implements OilCostService {
   }
 
   @Override
-  public Page<OilCost> findGroupByUserId(Map<String, Object> searchParams, Pageable pageRequest) {
+  public List<OilCost> findGroupByUserId(Map<String, Object> searchParams) {
     //查询所有油补信息
     List<OilCost> list = findAll(searchParams);
     //存储统计数据
     Map<String, OilCost> oilCostMap = new HashMap<String, OilCost>();
     // 统计后列表
     List<OilCost> oilCostList = new ArrayList<OilCost>();
-    Page<OilCost> page = null;
     if (list.size() < 1) {
-      return new PageImpl<OilCost>(list,pageRequest,list.size());
+      return list;
     }
-    int total=0;
-    int number=pageRequest.getPageNumber();
-    int size=pageRequest.getPageSize();
-    for(OilCost action:list) {
+   for(OilCost action:list) {
       String parentId = action.getParentId();
       String userId = StringUtils.isNotEmpty(parentId)? parentId: action.getUserId();
       OilCost o = oilCostMap.get(userId);
       if(o==null){
-        if(number*size <= total && total < (number+1)*size){
+//        if(number*size <= total && total < (number+1)*size){
           //添加条数
           action.setTotalDistance(action.getDistance());
           action.setOilTotalCost(action.getOilCost());
           oilCostMap.put(userId, action);
-        }
-        total++;
+//        }
+//        total++;
       }else{
         //操作数据
         Float totalDistance = o.getTotalDistance();
@@ -236,10 +234,19 @@ public class OilCostServiceImpl implements OilCostService {
     coc.forEach(ocl->{
       oilCostList.add(ocl);
     });
-    page = new PageImpl<OilCost>(oilCostList, pageRequest, total);
-    return page;
+//    page = new PageImpl<OilCost>(oilCostList, pageRequest, total);
+    return oilCostList;
   }
-
+  @Override
+  public OilCost findOne(Long id){
+    OilCost oc=null;
+    if(id==null){
+      return oc=new OilCost();
+    }
+    oc=oilCostRepository.findOne(id);
+    disposeOilCostRecord(oc);
+    return oc;
+  }
   private static <T> Specification<OilCost> oilCostSearchFilter(final Collection<SearchFilter> filters,
       final Class<OilCost> entityClazz) {
 
