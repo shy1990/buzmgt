@@ -1,10 +1,10 @@
 package com.wangge.buzmgt.teammember.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wangge.buzmgt.sys.service.ChildAccountService;
 import com.wangge.buzmgt.teammember.vo.AccountBean;
 
 @Repository
@@ -21,6 +22,8 @@ public class AccountServiceImpl implements AccountService {
 
   private static final Logger LOG = Logger.getLogger(AccountServiceImpl.class);
   
+  @Resource
+  private ChildAccountService childaccountService;
   @PersistenceContext  
   private EntityManager em; 
   
@@ -65,6 +68,7 @@ public class AccountServiceImpl implements AccountService {
       while(it.hasNext()){
         Object[] o = (Object[])it.next(); 
         AccountBean ac = new AccountBean();
+        ac.setChildCount(childaccountService.findChildCount(o[1].toString()));
         ac.setAccountNum(o[1]+"");
         ac.setAreaName(o[3]+"");
         ac.setName(o[2]+"");

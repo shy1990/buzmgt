@@ -15,7 +15,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.base.BaseController;
+import com.wangge.buzmgt.sys.entity.ChildAccount;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.entity.User.UserStatus;
+import com.wangge.buzmgt.sys.service.ChildAccountService;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.RoleService;
 import com.wangge.buzmgt.sys.service.UserService;
@@ -61,6 +62,8 @@ public class AccountManageController  extends BaseController{
   private RoleService ros;
   @Autowired
   private UserService us;
+  @Autowired
+  private ChildAccountService ca;
   /**
    * 
    * @Description: 账号列表
@@ -297,4 +300,70 @@ public class AccountManageController  extends BaseController{
     }
     return "err";
   }
+  
+  /**
+   * 
+    * addChildAccount:添加子账号. <br/> 
+    * TODO(这里描述这个方法适用条件 – 可选).<br/> 
+    * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
+    * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
+    * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
+    * 
+    * @author rebort 
+    * @param truename
+    * @param userId
+    * @param model 
+    * @since JDK 1.8
+   */
+  @RequestMapping(value="/addChildAccount" ,method = RequestMethod.GET)
+  @ResponseBody
+  public void addChildAccount(String truename,String userId,Model model){
+    String firstCh=userId.substring(0, 1);
+    String childId=firstCh+Long.parseLong(userId.substring(1, userId.length()-1)) +1;
+    ChildAccount childAccount=new ChildAccount(childId,userId,truename);
+    ca.save(childAccount);
+  }
+  
+  /**
+   * 
+    * findChildAccount:查询子账号列表 <br/> 
+    * TODO(这里描述这个方法适用条件 – 可选).<br/> 
+    * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
+    * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
+    * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
+    * 
+    * @author Administrator 
+    * @param userId
+    * @param model
+    * @return 
+    * @since JDK 1.8
+   */
+  @RequestMapping(value="/findChildAccount" ,method = RequestMethod.GET)
+  public String findChildAccount(String userId,Model model){
+    
+    List<ChildAccount> listChild=ca.findChildCountByParentId(userId);
+    model.addAttribute("listChild", listChild);
+    model.addAttribute("fatherAccount", sm.getSalesmanByUserId(userId));
+    return "account/childAccount_list";
+  }
+  
+  
+      @RequestMapping(value="/mofidyChildAccountStatus" ,method = RequestMethod.POST)
+      @ResponseBody
+      public String mofidyChildAccountStatus(String userid,String status){
+        try {
+          ChildAccount cAccount=ca.findbyUserId(userid);
+          if(status.equals("3")){
+            ca.delete(cAccount);
+          }else{
+            cAccount.setEnable(Integer.parseInt(status));
+            ca.save(cAccount);
+          }
+          return "suc";
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return "err";
+      }
+  
 }
