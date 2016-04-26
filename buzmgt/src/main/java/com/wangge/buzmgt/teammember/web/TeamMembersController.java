@@ -250,6 +250,17 @@ public class TeamMembersController {
     return null;
   } 
   
+  /**
+   * 
+    * getSalesManInfo:(跳转到扫街详情页). <br/> 
+    * 
+    * @author Administrator 
+    * @param saojie
+    * @param flag
+    * @param model
+    * @return 
+    * @since JDK 1.8
+   */
   @RequestMapping(value = "/toSalesManInfo", method = RequestMethod.GET)
   public String getSalesManInfo(@RequestParam(value = "saojieId",required = false)Saojie saojie,String flag, Model model){
        SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
@@ -260,6 +271,7 @@ public class TeamMembersController {
        model.addAttribute("saojiedatalist", saojiedatalist);
        model.addAttribute("areaName", salesMan.getRegion().getParent().getName()+salesMan.getRegion().getName());
        model.addAttribute("pcoordinates", salesMan.getRegion().getCoordinates());
+       model.addAttribute("saojieId",saojie.getId());
        //判断业务员所处的模式
        List<Assess> listAssess=assessService.findBysalesman(salesMan);
        
@@ -275,12 +287,44 @@ public class TeamMembersController {
        }
   }
   
-  @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.POST)
+  /**
+   * 
+    * getSaojiedataMap:(异步获取扫街详情地图数据). <br/> 
+    * 
+    * @author Administrator 
+    * @param saojie
+    * @param regionId
+    * @return 
+    * @since JDK 1.8
+   */
+  @RequestMapping(value = "/getSaojiedataMap", method = RequestMethod.GET)
   @ResponseBody
-  public ResponseEntity<List<SaojieData>> getSojieDtaList(String userId, String regionId){
-    SaojieDataVo list  = saojieService.getsaojieDataList(userId, regionId);
-    
-    return new ResponseEntity<List<SaojieData>>(list.getList(),HttpStatus.OK);
+  public SaojieDataVo getSaojiedataMap(@RequestParam(value = "saojieId",required = false)Saojie saojie,String regionId){
+    SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
+    SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), regionId);
+    saojiedatalist.setAreaName(salesMan.getRegion().getName());//设置业务负责区域，用于地图加载
+    return saojiedatalist;
+  }
+  
+  /**
+   * 
+    * getSojieDtaList:(加载扫街详情列表). <br/> 
+    * 
+    * @author Administrator 
+    * @param userId
+    * @param regionId
+    * @param page
+    * @param size
+    * @return 
+    * @since JDK 1.8
+   */
+  @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.GET)
+  @ResponseBody
+  public SaojieDataVo getSojieDtaList(String userId, String regionId,String page,String size){
+    int pageNum = Integer.parseInt(page != null ? page : "0");
+    int limit = Integer.parseInt(size);
+    SaojieDataVo list  = saojieService.getsaojieDataList(userId, regionId,pageNum,limit);
+    return list;
   }
   
   /**

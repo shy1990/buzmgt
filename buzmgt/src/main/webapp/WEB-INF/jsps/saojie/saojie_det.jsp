@@ -1,10 +1,16 @@
 <%@ page language="java" import="java.util.*,com.wangge.buzmgt.sys.vo.*,com.wangge.buzmgt.saojie.entity.*" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+  String path = request.getContextPath();
+			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+					+ path + "/";
+%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 
 <head>
+<base href="<%=basePath%>" />
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +20,7 @@
 <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="/static/bootstrap/css/bootstrap-multiselect.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"
 	href="/static/saojie/saojie-det.css" />
 <link rel="stylesheet" type="text/css"
@@ -21,6 +28,32 @@
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+<script type="text/javascript">
+	var base = "<%=basePath%>";
+	var number = '';//当前页数（从零开始）
+	var totalPages = '';//总页数(个数)
+	var searchData = {
+		"size" : "6",
+		"page" : "0",
+	}
+	var totalElements;//总条数
+</script>
+<script id="table-template" type="text/x-handlebars-template">
+{{#each content}}
+	<div class="list-tr">
+	<img class="shop-img" src="{{imageUrl}}" />
+	<div style="display: inline-block;" class="list-conter">
+	<h4>{{name}}</h4>
+	<p>{{description}}</p>
+	<span class="pull-right">{{saojieDate}}</span>
+	</div>
+	</div>
+{{else}}
+<div style="text-align: center;">
+	<tr style="text-align: center;">没有相关数据!</tr>
+</div>
+{{/each}}
+</script>
 </head>
 
 <body>
@@ -39,7 +72,7 @@
 					<!--title-->
 					<div class="box-title">
 						<!--区域选择按钮-->
-						<select id="regionId" class="form-control input-xs " onchange="getSaojieDataList();"
+						<select id="regionId" class="form-control input-xs " onchange="ajaxSearchByRegion();"
 							style="width: 110px; position: relative;height:25px; padding: 2px 5px; display: inline-block; font-size: 12px; color: #6d6d6d;">
 							<option value="" selected="selected">全部区域</option>
 							<c:forEach var="region" items="${rList}" varStatus="s">
@@ -47,10 +80,11 @@
 							</c:forEach>
 						</select>
 						<!--/区域选择按钮-->
+						<input id="saojieId" type="hidden" value="${saojieId}">
 						<div class="det-msg">
-							<span>扫街商家  <span class="shopNum" id="shopNumId">0</span> 家
+							<span>扫街商家  <span class="shopNum"> </span> 家
 							</span> 
-							<span style="margin-left: 10px;">扫街已完成     <span class="percent" id="percentId">0%</span>  </span>
+							<span style="margin-left: 10px;">扫街已完成     <span class="percent"> </span>  </span>
 						</div>
 						<!--/row-->
 						<div class="btn-group title-page">
@@ -78,19 +112,9 @@
 						<!--/地图-->
 						<!--列表-->
 						<div class="saojie-list active" id="saojiedata">
-							<!--tr-->
-							<div class="list-tr">
-								<img class="shop-img" src="/static/img/saojie-img.png" />
-								<div style="display: inline-block;" class="list-conter">
-									<h4>大鹏十年手机品质专卖店</h4>
-									<p>备注：百度和携程两个难兄难弟，一个是市值580亿美元，
-										制霸行业十余年的国内搜索龙头的老大，一个是国内OTA绝对龙头，
-										市值120亿美元的旅行老大，在这一周都过得水深火热......</p>
-									<span class="pull-right">2015.11.12 15:22</span>
-								</div>
-							</div>
-							<!--/tr-->
+							
 						</div>
+						<div id="callBackPager"></div>
 						<!--/列表-->
 					</div>
 					<!--/box-body-->
@@ -208,124 +232,11 @@
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/static/bootstrap/js/bootstrap-multiselect.js"></script>
-        <script src="/static/saojie/saojie-det.js" type="text/javascript"
-			charset="utf-8"></script>
-		<script src="/static/js/common.js" type="text/javascript"
-			charset="utf-8"></script>
-			<script type="text/javascript">
-			 // 百度地图API功能
-			  var map = new BMap.Map("allmap");
-			  <% String areaname=request.getAttribute("areaName").toString();
-			  %>
-			  
-			  
-			  <%
-				if(null!=request.getAttribute("pcoordinates")){%>
-					<%
-					String pcoordinates=request.getAttribute("pcoordinates").toString();
-					String[] listCoordinates=pcoordinates.split("=");
-					 %> 
-					 			var polygon = new BMap.Polygon([
-					 	<%
-									for(int x=0;x<listCoordinates.length;x++){
-										String points=listCoordinates[x];
-										double lng=Double.parseDouble(points.split("-")[0]);//经度 
-						 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
-						 %>				
-						 		  		<%
-						 		  			if(x==listCoordinates.length-1){%>
-						 		  			new BMap.Point(<%=lng%>,<%=lat%>)
-						 		  			<%}else{%>
-						 		  			 new BMap.Point(<%=lng%>,<%=lat%>),
-						 		  			<%}
-						 		  		%>
-						 <%
-									}%>
-									], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
-					 				map.addOverlay(polygon);
-									<%
-										String jlng=listCoordinates[0].split("-")[0];
-										String jlat=listCoordinates[0].split("-")[1];
-									%>
-					 				map.centerAndZoom(new BMap.Point(<%=jlng%>, <%=jlat%>), 12);
-					 				map.enableScrollWheelZoom(true); 
-									<%
-				}else{%>
-			  
-			   map.centerAndZoom("<%=areaname%>", 13);
-			   //  map.centerAndZoom("上海",11);   
-			  // 添加带有定位的导航控件
-			  var navigationControl = new BMap.NavigationControl({
-			    // 靠左上角位置
-			    anchor: BMAP_ANCHOR_TOP_LEFT,
-			    // LARGE类型
-			    type: BMAP_NAVIGATION_CONTROL_LARGE,
-			    // 启用显示定位
-			    enableGeolocation: true
-			  });
-			   map.addControl(navigationControl);
-			   map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-				
-				var bdary = new BMap.Boundary();
-				
-				bdary.get("<%=areaname%>", function(rs){ //获取行政区域
-				var count = rs.boundaries.length; //行政区域的点有多少个
 
-				for(var i = 0; i < count; i++){
-				var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
-				map.addOverlay(ply); //添加覆盖物
-				map.setViewport(ply.getPath()); //调整视野 
-				} 
-				}); 
-				
-				<%}%>
-				
-				
-			  <%
-			  	SaojieDataVo saojieDataVo=	(SaojieDataVo)request.getAttribute("saojiedatalist");
-			  	if(saojieDataVo.getList().size()>0){
-			  	
-			  	  	for(SaojieData saojiedata:saojieDataVo.getList()){
-			  		String pointStr=saojiedata.getCoordinate();
-			  		System.out.println(pointStr);
-			  		String lag=pointStr.split("-")[0];
-			  		String lat=pointStr.split("-")[1];
-			  		String titile=saojiedata.getName();
-			  		//String truename=store.getTruename();
-			  		String desc=saojiedata.getDescription();
-			  	%>	
-			   			 $("#shopNumId").html(<%=saojieDataVo.getList().size()%>); 
-			   			 var percent='<%=saojieDataVo.getPercent()%>';
-			   			 $("#percentId").html(percent);
-			  			var opts = {
-			  					width : 250,     // 信息窗口宽度
-			  					height: 80,     // 信息窗口高度
-			  					title : "扫街信息" , // 信息窗口标题
-			  					enableMessage:true//设置允许信息窗发送短息
-			  				   };
-			  			var desc="<%=desc%>";
-			  			var marker = new BMap.Marker(new BMap.Point(<%=lag%>,<%=lat%>));  // 创建标注
-			  			var content ="<%=titile%>";
-			  			map.addOverlay(marker);               // 将标注添加到地图中
-			  			addClickHandler(content,marker);
-			  			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-			  <%	}
-			  	}
-			  %>
-			  
-			  function addClickHandler(content,marker){
-					marker.addEventListener("click",function(e){
-						openInfo(content,e)}
-					);
-				}
-				function openInfo(content,e){
-					var p = e.target;
-					var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
-					var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
-					map.openInfoWindow(infoWindow,point); //开启信息窗口
-				}
-				
-		</script>
+		<script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+        <script src="/static/saojie/saojie-det.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/static/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 </body>
 
 </html>

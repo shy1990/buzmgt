@@ -177,5 +177,6 @@ public class SalesMan implements Serializable {
   public void setIsOldSalesman(int isOldSalesman) {
     this.isOldSalesman = isOldSalesman;
   }
+
   
 }

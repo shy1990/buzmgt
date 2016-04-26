@@ -27,7 +27,7 @@ function queryTown(){
 	var len = $("#btType");
 	len.prevAll().remove();
 	$("#btn").show();
-	var userId = document.getElementById("saojieMan").value;
+	var userId = $("#saojieMan  option:selected").val();
 	var map = new BMap.Map("allmap");    // 创建Map实例
 	$.ajax({
 		   type:"post",
