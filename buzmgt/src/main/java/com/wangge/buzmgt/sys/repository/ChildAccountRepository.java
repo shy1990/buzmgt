@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.wangge.buzmgt.sys.entity.ChildAccount;
 
-public interface ChildAccountRepository extends JpaRepository<ChildAccount, String>{
+public interface ChildAccountRepository extends JpaRepository<ChildAccount, Long>{
 	
-	List<ChildAccount> findByParentId(String parentId);
+	List<ChildAccount> findByParentIdOrderByIdDesc(String parentId);
   
 }

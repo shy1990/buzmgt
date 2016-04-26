@@ -460,7 +460,14 @@
         function addChildAccount(){
         	 var truename=$("#truename").val();
         	 var userId=$("#userId").val();
-        	 window.location.href="/addChildAccount?truename="+truename+"&userId="+userId;
+        	 var url="/addChildAccount?truename="+truename+"&userId="+userId;
+        	 $.post(url, function(data) {
+					if (data === 'suc') {
+			        	location.reload();
+					} else {
+						alert("系统异常,请重试");
+					}
+				});
         	 
          }
          

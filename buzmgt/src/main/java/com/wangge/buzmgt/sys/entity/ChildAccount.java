@@ -2,8 +2,11 @@ package com.wangge.buzmgt.sys.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 
 
 
@@ -23,12 +26,19 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_EMPTY)
 public class ChildAccount {
 
+  
+  
   /*子账号主键id */
   @Id
+  @GeneratedValue(strategy = GenerationType.TABLE)
+  @Column(name = "ID")
+  private Long id;
+  
+  
  /* @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")*/
   @Column(name = "CHILD_ID")
-  private String id;
+  private String childId;
   /*父类id，关联主账号*/
   private String parentId;
   /*手机sim卡号*/
@@ -40,8 +50,8 @@ public class ChildAccount {
   
   
 
-  public ChildAccount(String id, String parentId,String truename) {
-      this.id=id;
+  public ChildAccount(String childId, String parentId,String truename) {
+      this.childId=childId;
       this.parentId=parentId;
       this.truename=truename;
   }
@@ -49,13 +59,6 @@ public class ChildAccount {
   
   public ChildAccount() {
     super();
-  }
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
   }
 
   public String getParentId() {
@@ -82,6 +85,28 @@ public class ChildAccount {
   public void setEnable(int enable) {
     this.enable = enable;
   }
+
+
+  public String getChildId() {
+    return childId;
+  }
+
+
+  public void setChildId(String childId) {
+    this.childId = childId;
+  }
+
+
+  public Long getId() {
+    return id;
+  }
+
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+
 
   
  

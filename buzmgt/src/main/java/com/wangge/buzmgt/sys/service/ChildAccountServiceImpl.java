@@ -22,14 +22,14 @@ public class ChildAccountServiceImpl implements ChildAccountService {
   @Override
   public int findChildCount(String id) {
     // TODO Auto-generated method stub
-    return childAccountRepository.findByParentId(id).size();
+    return childAccountRepository.findByParentIdOrderByIdDesc(id).size();
   }
   @Override
   public List<ChildAccount> findChildCountByParentId(String id) {
-    return childAccountRepository.findByParentId(id);
+    return childAccountRepository.findByParentIdOrderByIdDesc(id) ;
   }
   @Override
-  public ChildAccount findbyUserId(String id) {
+  public ChildAccount findbyUserId(Long id) {
     return childAccountRepository.findOne(id);
   }
   

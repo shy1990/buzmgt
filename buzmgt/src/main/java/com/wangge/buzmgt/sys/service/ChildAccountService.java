@@ -13,7 +13,7 @@ public interface ChildAccountService {
    
    List<ChildAccount> findChildCountByParentId(String id);
    
-   ChildAccount findbyUserId(String id);
+   ChildAccount findbyUserId(Long id);
    
    void delete(ChildAccount childAccount);
 }

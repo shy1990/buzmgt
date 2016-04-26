@@ -304,34 +304,32 @@ public class AccountManageController  extends BaseController{
   /**
    * 
     * addChildAccount:添加子账号. <br/> 
-    * TODO(这里描述这个方法适用条件 – 可选).<br/> 
-    * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
-    * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
-    * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
-    * 
     * @author rebort 
     * @param truename
     * @param userId
     * @param model 
     * @since JDK 1.8
    */
-  @RequestMapping(value="/addChildAccount" ,method = RequestMethod.GET)
+  @RequestMapping(value="/addChildAccount" ,method = RequestMethod.POST)
   @ResponseBody
-  public void addChildAccount(String truename,String userId,Model model){
+  public String addChildAccount(String truename,String userId,Model model){
     String firstCh=userId.substring(0, 1);
-    String childId=firstCh+Long.parseLong(userId.substring(1, userId.length()-1)) +1;
+    List<ChildAccount> listChildAccount=ca.findChildCountByParentId(userId);
+    String childId=null;
+    if(listChildAccount.size()==0){
+       childId=firstCh+(Long.parseLong(userId.substring(1, userId.length())) +1); 
+    }else{
+      childId=firstCh+(Long.parseLong(listChildAccount.get(0).getChildId().substring(1, listChildAccount.get(0).getChildId().length())) +1);
+    }
+   
     ChildAccount childAccount=new ChildAccount(childId,userId,truename);
     ca.save(childAccount);
+    return "suc";
   }
   
   /**
    * 
     * findChildAccount:查询子账号列表 <br/> 
-    * TODO(这里描述这个方法适用条件 – 可选).<br/> 
-    * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
-    * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
-    * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
-    * 
     * @author Administrator 
     * @param userId
     * @param model
@@ -347,12 +345,20 @@ public class AccountManageController  extends BaseController{
     return "account/childAccount_list";
   }
   
-  
+  /**
+   * 
+    * mofidyChildAccountStatus:修改子账号. <br/> 
+    * @author Administrator 
+    * @param userid
+    * @param status
+    * @return 
+    * @since JDK 1.8
+   */
       @RequestMapping(value="/mofidyChildAccountStatus" ,method = RequestMethod.POST)
       @ResponseBody
       public String mofidyChildAccountStatus(String userid,String status){
         try {
-          ChildAccount cAccount=ca.findbyUserId(userid);
+          ChildAccount cAccount=ca.findbyUserId(Long.parseLong(userid));
           if(status.equals("3")){
             ca.delete(cAccount);
           }else{

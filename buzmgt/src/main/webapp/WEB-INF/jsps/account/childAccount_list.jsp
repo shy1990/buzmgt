@@ -119,7 +119,6 @@
             
             //改变状态  0 正常 1 冻结账号 
             function mofidyAccount(userid,status){
-            	alert(status);
             	if(status=='1'){//冻结账号
             		if (confirm("确定要冻结改账号?")) {
     					var url = "mofidyChildAccountStatus?userid="+userid+"&status="+status;
