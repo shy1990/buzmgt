@@ -1,10 +1,12 @@
 var membertotal=0,ywtotal=0;
 $(function(){
+	nowTime();
 	findYwOrderList();
 	findMemberOrderList();
 	$('#startTime').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
+		endDate : new Date(),
 		weekStart : 1,
 		todayBtn : 1,
 		autoclose : 1,
@@ -27,6 +29,7 @@ $(function(){
 	$('#endTime').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
+		endDate : new Date(),
 		weekStart : 1,
 		todayBtn : 1,
 		autoclose : 1,
@@ -51,8 +54,8 @@ $(function(){
 		var startTime=$('#startTime').val();
 		var endTime=$('#endTime').val();
 		if(checkDate(startTime,endTime)){
-			SearchData['sc_GTE_creatTime'] = startTime;
-			SearchData['sc_LTE_creatTime'] = endTime;
+			SearchData['sc_GTE_createTime'] = startTime;
+			SearchData['sc_LTE_createTime'] = endTime;
 			if('ywtab'==tab){
 				delete SearchData['sc_EQ_customSignforException']
 				window.location.href = base + "ordersignfor/export?type=ywOrderSignfor&"
@@ -71,14 +74,14 @@ $(function(){
  * @returns {String}
  */
 function conditionProcess() {
-	var strSearchData ="sc_GTE_creatTime="
-			+ (SearchData.sc_GTE_creatTime == null ? ''
-					: SearchData.sc_GTE_creatTime)
-			+ "&sc_LTE_creatTime="
-			+ (SearchData.sc_LTE_creatTime == null ? ''
-					: SearchData.sc_LTE_creatTime);
+	var SearchData_ ="sc_GTE_createTime="
+			+ (SearchData.sc_GTE_createTime == null ? ''
+					: SearchData.sc_GTE_createTime)
+			+ "&sc_LTE_createTime="
+			+ (SearchData.sc_LTE_createTime == null ? ''
+					: SearchData.sc_LTE_createTime);
 			
-	return strSearchData;
+	return SearchData_;
 }
 function findYwOrderList(page){
 	page=page==null||page==''? 0 :page;
@@ -178,8 +181,8 @@ function goSearch() {
 	var startTime=$('#startTime').val();
 	var endTime=$('#endTime').val();
 	if(checkDate(startTime,endTime)){
-		SearchData['sc_GTE_creatTime'] = startTime;
-		SearchData['sc_LTE_creatTime'] = endTime;
+		SearchData['sc_GTE_createTime'] = startTime;
+		SearchData['sc_LTE_createTime'] = endTime;
 		if('ywtab'==tab){
 			findYwOrderList();
 		}else if('membertab'==tab){
@@ -187,6 +190,19 @@ function goSearch() {
 		}
 	}
 }
+/**
+ * 初始化日期
+ * 最近3天
+ */
+function nowTime(){
+	var nowDate=changeDateToString(new Date());
+	var beforeDate=changeDateToString((new Date()).DateAdd('d',-3));
+	SearchData['sc_GTE_createTime'] = beforeDate;
+	SearchData['sc_LTE_createTime'] = nowDate;
+	$('#startTime').val(beforeDate);
+	$('#endTime').val(nowDate)
+}
+
 function checkDate(startTimeStr,endTimeStr){
 	//当两个字段都不为空时进行校验;
 	var fale=(startTimeStr != "" && startTimeStr != null)&&

@@ -21,6 +21,43 @@ function changeDateToString(DateIn) {
 	}
 	return currentDate;
 }
+//日期格式（yyyy-MM-dd hh:mm）
+function changeTimeToString(DateIn) {
+	var year = 0;
+	var month = 0;
+	var day = 0;
+	var currentDate = "";
+	var hour = 0;
+	var minute = 0;
+	// 初始化时间
+	year = DateIn.getFullYear();
+	month = DateIn.getMonth() + 1;
+	day = DateIn.getDate();
+	hour = DateIn.getHours();
+	minute = DateIn.getMinutes();
+	currentDate = year + "-";
+	if (month >= 10) {
+		currentDate = currentDate + month + "-";
+	} else {
+		currentDate = currentDate + "0" + month + "-";
+	}
+	if (day >= 10) {
+		currentDate = currentDate + day +" ";
+	} else {
+		currentDate = currentDate + "0" + day+ " ";
+	}
+	if (hour >= 10) {
+		currentDate = currentDate + hour + ":";
+	} else {
+		currentDate = currentDate + "0" + hour + ":";
+	}
+	if (minute >= 10) {
+		currentDate = currentDate + minute;
+	} else {
+		currentDate = currentDate + "0" + minute;
+	}
+	return currentDate;
+}
 // +---------------------------------------------------
 // | 日期计算
 // +---------------------------------------------------
@@ -101,4 +138,25 @@ function GetDateDiff(startDate,endDate) 
 	    var dates = Math.floor((startTime - endTime)/(1000*60*60*24));     
 	    return  dates;    
 }
-
+/**
+ * 两个字段都不为空时进行校验日期查询
+ * @param startTimeStr
+ * @param endTimeStr
+ * @returns {Boolean}
+ */
+function checkDate(startTimeStr,endTimeStr){
+	//当两个字段都不为空时进行校验;
+	var fale=(startTimeStr != "" && startTimeStr != null)&&
+	(endTimeStr != '' && endTimeStr != null);
+	if(fale){
+		var startDate= stringToDate(startTimeStr);
+		var endDate= stringToDate(endTimeStr);
+		if(endDate.valueOf()-startDate.valueOf()>=0){
+			return true;
+		}else{
+			return false;
+		}
+	}else{
+		return true;
+	}
+}

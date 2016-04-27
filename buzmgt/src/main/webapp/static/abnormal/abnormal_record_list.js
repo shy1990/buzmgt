@@ -3,12 +3,14 @@ var userId;
 $(function(){
 	//先获取业务员的id
 	userId=getUserId();
+	nowTime();
 	findYwOrderList();
 	findMemberOrderList();
 	showTab();
 	$('#startTime').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
+		endDate : new Date(), 
 		weekStart : 1,
 		todayBtn : 1,
 		autoclose : 1,
@@ -31,6 +33,7 @@ $(function(){
 	$('#endTime').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
+		endDate : new Date(),
 		weekStart : 1,
 		todayBtn : 1,
 		autoclose : 1,
@@ -55,8 +58,8 @@ $(function(){
 		var startTime=$('#startTime').val();
 		var endTime=$('#endTime').val();
 		if(checkDate(startTime,endTime)){
-			SearchData['sc_GTE_creatTime'] = startTime;
-			SearchData['sc_LTE_creatTime'] = endTime;
+			SearchData['sc_GTE_createTime'] = startTime;
+			SearchData['sc_LTE_createTime'] = endTime;
 			if('ywtab'==tab){
 				delete SearchData['sc_EQ_customSignforException']
 				window.location.href = base + "ordersignfor/export/"+userId+"?type=ywSignforDet&"
@@ -75,12 +78,12 @@ $(function(){
  * @returns {String}
  */
 function conditionProcess() {
-	var strSearchData ="sc_GTE_creatTime="
-			+ (SearchData.sc_GTE_creatTime == null ? ''
-					: SearchData.sc_GTE_creatTime)
-			+ "&sc_LTE_creatTime="
-			+ (SearchData.sc_LTE_creatTime == null ? ''
-					: SearchData.sc_LTE_creatTime);
+	var strSearchData ="sc_GTE_createTime="
+			+ (SearchData.sc_GTE_createTime == null ? ''
+					: SearchData.sc_GTE_createTime)
+			+ "&sc_LTE_createTime="
+			+ (SearchData.sc_LTE_createTime == null ? ''
+					: SearchData.sc_LTE_createTime);
 			
 	return strSearchData;
 }
@@ -180,6 +183,19 @@ function memberPaging(data) {
 		}
 	});
 }
+/**
+ * 初始化日期
+ * 最近3天
+ */
+function nowTime(){
+	var nowDate=changeDateToString(new Date());
+	var beforeDate=changeDateToString((new Date()).DateAdd('d',-3));
+	SearchData['sc_GTE_createTime'] = beforeDate;
+	SearchData['sc_LTE_createTime'] = nowDate;
+	$('#startTime').val(beforeDate);
+	$('#endTime').val(nowDate)
+}
+
 //日期格式化
 Handlebars.registerHelper('formDate', function(value) {
 	if(value != ""&&value!= null){
@@ -201,7 +217,7 @@ Handlebars.registerHelper('whatStatus', function(value) {
 
 /**
  * 业务揽收是否异常
- * @param v1 creatTime
+ * @param v1 createTime
  * @param v2 yewuSignforTime
  */
 Handlebars.registerHelper('whatYwTag', function(v1,v2) {
@@ -215,7 +231,7 @@ Handlebars.registerHelper('whatYwTag', function(v1,v2) {
 });
 /**
  * 业务揽收操作
- * @param v1 creatTime
+ * @param v1 createTime
  * @param v2 yewuSignforTime
  */
 Handlebars.registerHelper('whatOperate', function(v1,v2) {
@@ -237,7 +253,7 @@ Handlebars.registerHelper('parament', function(v1,v2) {
 
 /**
  * 客户签收是否异常
- * @param v1 creatTime
+ * @param v1 createTime
  */
 Handlebars.registerHelper('whatMemberTag', function(value) {
 	var html='';
@@ -282,7 +298,7 @@ Handlebars.registerHelper('whatPayType', function(value) {
 
 /**
  * 判断是否异常
- * @param v1 creatTime
+ * @param v1 createTime
  * @param v2 yewuSignforTime
  */
 function checkTag(v1,v2){
@@ -315,8 +331,8 @@ function goSearch() {
 	var startTime=$('#startTime').val();
 	var endTime=$('#endTime').val();
 	if(checkDate(startTime,endTime)){
-		SearchData['sc_GTE_creatTime'] = startTime;
-		SearchData['sc_LTE_creatTime'] = endTime;
+		SearchData['sc_GTE_createTime'] = startTime;
+		SearchData['sc_LTE_createTime'] = endTime;
 		if('ywtab'==tab){
 			findYwOrderList();
 		}else if('membertab'==tab){
@@ -324,22 +340,7 @@ function goSearch() {
 		}
 	}
 }
-function checkDate(startTimeStr,endTimeStr){
-	//当两个字段都不为空时进行校验;
-	var fale=(startTimeStr != "" && startTimeStr != null)&&
-	(endTimeStr != '' && endTimeStr != null);
-	if(fale){
-		var startDate= stringToDate(startTimeStr);
-		var endDate= stringToDate(endTimeStr);
-		if(endDate.valueOf()-startDate.valueOf()>=0){
-			return true;
-		}else{
-			return false;
-		}
-	}else{
-		return true;
-	}
-}
+
 
 
 
