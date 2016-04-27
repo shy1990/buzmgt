@@ -276,7 +276,7 @@ Handlebars.registerHelper('disposeRecordList', function(regionType,regionName,ex
  * parentId userId
  */
 Handlebars.registerHelper('whatUserId', function(parentId, userId) {
-	if (parentId !=null||parentId !="") {
+	if (!isEmpty(parentId)) {
 		return parentId;
 	}
 	return userId;
@@ -339,7 +339,7 @@ function findByOrderNo(){
  * @returns 为空返回true 不为空返回false
  */
 function isEmpty(value){
-	return value ==""||value==null;
+	return value ==undefined || value ==""||value==null ;
 } 
 
 function turnRecord(userId,oilTotalCost,totalDistance){

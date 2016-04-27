@@ -163,7 +163,7 @@ public class OilCostServiceImpl implements OilCostService {
       
       String oilRecord=l.getOilRecord();
       l.setOilRecordList(JSONUtil.stringArrtoJsonList(oilRecord, OilRecord.class));
-      l.setOilRecord("");
+//      l.setOilRecord("");
       String orgName="";
       String regName="";
       String turename="";
@@ -246,6 +246,26 @@ public class OilCostServiceImpl implements OilCostService {
     oc=oilCostRepository.findOne(id);
     disposeOilCostRecord(oc);
     return oc;
+  }
+  @Override
+  public void recordSortUtil(List<OilCost> oilCostlist) {
+    oilCostlist.forEach(oilCost->{
+      List<OilRecord> orl= oilCost.getOilRecordList();
+      oilCost.setRecordSort(OilRecordUtil(orl));
+    });
+    
+  }
+  public String OilRecordUtil(List<OilRecord> orl){
+    String recordSort="";
+    for(OilRecord or:orl){
+      recordSort+=or.getRegionName();
+      if(StringUtils.isNotEmpty(or.getException())){
+        recordSort+="（异常）";
+      }
+      recordSort+=">";
+    }
+    recordSort=recordSort.substring(0, recordSort.length()-1);
+    return recordSort;
   }
   private static <T> Specification<OilCost> oilCostSearchFilter(final Collection<SearchFilter> filters,
       final Class<OilCost> entityClazz) {
@@ -419,5 +439,6 @@ public class OilCostServiceImpl implements OilCostService {
       }
     };
   }
+
 
 }

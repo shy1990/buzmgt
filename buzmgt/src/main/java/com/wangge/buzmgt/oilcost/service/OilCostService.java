@@ -52,6 +52,12 @@ public interface OilCostService {
    * @return
    */
   public OilCost findOne(Long id);
+
+  /**
+   * 处理握手顺序的导出数据
+   * @param oilCostlist
+   */
+  public void recordSortUtil(List<OilCost> oilCostlist);
   
 }
 

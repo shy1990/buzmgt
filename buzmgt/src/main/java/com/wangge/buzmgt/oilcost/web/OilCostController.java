@@ -223,7 +223,8 @@ public class OilCostController {
       String[] coloumsKey_ = { "salesManPart.truename","recordSort", "distance", "oilCost", "dateTime"};
       
       oilCostlist = oilCostService.findAll(searchParams);
-      
+      //处理
+      oilCostService.recordSortUtil(oilCostlist);
       ExcelExport.doExcelExport("油补记录.xls", oilCostlist, gridTitles_, coloumsKey_, request, response);
       break;
     case "detail":
