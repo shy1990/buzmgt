@@ -169,7 +169,9 @@ public class OilCostController {
   public String showDetailList(@PathVariable("Id") Long id,Model model,HttpServletRequest request){
 //    oilCostService.disposeOilCostRecord(oilCost);//处理数据
     OilCost oc=oilCostService.findOne(id);
+    SalesMan salesMan= salesManService.findById(oc.getUserId());
     model.addAttribute("oilCost", oc);
+    model.addAttribute("salesMan", salesMan);
     return "oilsubsidy/oil_subsidy_detail";
   }
   
@@ -226,11 +228,11 @@ public class OilCostController {
       break;
     case "detail":
       String[] gridTitles_1 = { "握手镇","动作", "握手时间"};
-      String[] coloumsKey_1 = { "regionName", "distance", "time"};
+      String[] coloumsKey_1 = { "regionName", "missName", "missTime"};
       Long oilCostId=Long.valueOf(oilId);
       OilCost oc = oilCostService.findOne(oilCostId);
       
-      ExcelExport.doExcelExport("油补详情握手点记录.xls", oc.getOilRecordList(), gridTitles_1, coloumsKey_1, request, response);
+      ExcelExport.doExcelExport(oc.getSalesManPart().getTruename()+"握手点记录"+oc.getDateTime()+".xls", oc.getOilRecordList(), gridTitles_1, coloumsKey_1, request, response);
       break;
 
     default:

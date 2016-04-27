@@ -486,7 +486,14 @@ a.table-export:focus {
 	white-space: nowrap;
 	vertical-align: middle;
 }
-
+.table-overflow > .table > thead > tr > th.normal,
+.table-overflow > .table > tbody > tr > th.normal,
+.table-overflow > .table > tfoot > tr > th.normal,
+.table-overflow > .table > thead > tr > td.normal,
+.table-overflow > .table > tbody > tr > td.normal,
+.table-overflow > .table > tfoot > tr > td.normal {
+	white-space: normal;
+}
 
 /*new-table 新表格布局*/
 

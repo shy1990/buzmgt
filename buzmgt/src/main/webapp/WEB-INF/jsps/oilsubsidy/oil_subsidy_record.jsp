@@ -33,9 +33,9 @@
 	{{#each content}}
     <tr>
       <td>{{salesManPart.truename}}</td>
-      <td>
+      <td class="normal">
 				{{#each oilRecordList}}
-					{{{disposeRecordList type regionName}}}
+					{{{disposeRecordList regionType regionName exception}}}
 				{{/each}}
       </td>
       <td>
