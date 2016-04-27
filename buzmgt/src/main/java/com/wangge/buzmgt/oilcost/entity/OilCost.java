@@ -63,6 +63,7 @@ public class OilCost implements Serializable{
   @Transient
   private Float  totalDistance;//某一时间段的总里程数
   @Lob
+  @JSONField(serialize = false)
   private String  oilRecord;//Coordinates,regionIds，shopName等  油补 json串
   
   @Transient

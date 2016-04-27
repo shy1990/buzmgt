@@ -255,7 +255,6 @@ Handlebars.registerHelper('disposeRecordList', function(regionType,regionName,ex
     <span class="location">小桥镇</span>
     <span class="location">小桥镇</span>
     <span class="location">终点<span class="normal-state">家</span></span>*/
-	console.info(regionType+","+regionName+","+exception);
 	//异常
 	var tag="";
 	if (!isEmpty(exception)) {
