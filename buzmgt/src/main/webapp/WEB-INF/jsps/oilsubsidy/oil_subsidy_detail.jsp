@@ -23,6 +23,8 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
 <link rel="stylesheet" type="text/css"
+	href="static/yw-team-member/team-member.css" /> 
+<link rel="stylesheet" type="text/css"
 	href="static/yw-team-member/ywmember.css" />
 <link rel="stylesheet" type="text/css"
 	href="static/abnormal/abnormal.css" />
@@ -31,26 +33,9 @@
 <link rel="stylesheet" type="text/css" href="static/oil-subsidy/oil_subsidy_detail.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script id="detailList-table-template" type="text/x-handlebars-template">
-	{{#each oilRecordList}}
-		<tr>
-      <td>
-				{{{addOne @index }}}
-      </td>
-      <td>{{regionName}}</td>
-      <td>{{type}}</td>
-      <td>{{time}}</td>
-    </tr>
-	{{/each}}
-</script>
-<script id="record-sort-table-template" type="text/x-handlebars-template">
-	{{#each oilRecordList}}
-		{{{disposeRecordList type regionName}}}
-	{{/each}}
-</script>
 <script type="text/javascript">
 var	base='<%=basePath%>';
-var detialData='${oilCostJson }';
+var oilCostId='${oilCost.id}';
 </script>
 </head>
 
@@ -68,17 +53,20 @@ var detialData='${oilCostJson }';
                     <span id="renduAbnormal"></span>
                     <c:forEach var="record" items="${oilCost.oilRecordList }" varStatus="status">
 	                    <c:choose>
-	                    	<c:when test="${status.index == 0 && record.regionName != '异常'}">
+	                    	<c:when test="${status.index == 0 && empty record.exception }">
 	    	                	<span>起点<span class="normal-state">${record.regionName }</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.index == 0 && record.regionName=='异常'}">
-	    	                	<span>起点<span class="abnormal-state">${record.regionName }</span></span>
+	                    	<c:when test="${status.index == 0 && not empty record.exception}">
+	    	                	<span>起点<span class="abnormal-state">异常</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.last && record.regionName != '异常'}">
+	                    	<c:when test="${status.last && empty record.exception}">
 			                    <span class="location">终点<span class="normal-state">${record.regionName }</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.last && record.regionName=='异常'}">
-			                    <span class="location">终点<span class="abnormal-state">${record.regionName }</span></span>
+	                    	<c:when test="${status.last && not empty record.exception}">
+			                    <span class="location">终点<span class="abnormal-state">异常</span></span>
+	                    	</c:when>
+	                    	<c:when test="${status.index != 0 && !status.last && not empty record.exception}">
+			                    <span class="location">${record.regionName }<span class="abnormal-state">异常</span></span>
 	                    	</c:when>
 	                    	<c:otherwise>
 			                    <span class="location">${record.regionName }</span>
@@ -136,8 +124,8 @@ var detialData='${oilCostJson }';
 							     							  </c:choose>
 														      </td>
 														      <td>${record.regionName}</td>
-														      <td>${record.type}</td>
-														      <td>${record.time}</td>
+														      <td>${record.missName}</td>
+														      <td>${record.missTime}</td>
 														    </tr>
                                 </c:forEach>
                             </table>

@@ -12,7 +12,6 @@ function goSearch() {
 	//初始化月份string
 	var arr=month.split("-");
 	var monthSet=Number(arr[1]);
-	var monthTime =arr[0]+"-"+monthSet+"-0";
 	if (!checkEmpty(month)) {
 		//new Date(2016,02,0) 实际-->2016年03月
 		var day=new Date(arr[0],monthSet,0).getDate();
@@ -28,16 +27,18 @@ function goSearch() {
 $('.table-export').on(
 		'click',
 		function() {
-			var tab = findTab();
-			var startTime = $('#startTime').val();
-			var endTime = $('#endTime').val();
-			if (checkDate(startTime, endTime)) {
-				SearchData['sc_GTE_dateTime'] = startTime;
-				SearchData['sc_LTE_dateTime'] = endTime;
-//				window.location.href = base + "receiptRemark/export?type="
-//						+ tab + "&"+ conditionProcess();
+			var month = $('#monthDate').val();
+			//初始化月份string
+			
+			var arr=month.split("-");
+			var monthSet=Number(arr[1]);
+			if (!checkEmpty(month)) {
+				var day=new Date(arr[0],monthSet,0).getDate();
+				SearchData['sc_GTE_dateTime'] = month+"-01";
+				SearchData['sc_LTE_dateTime'] = month+"-"+day;
 			}
 
+			window.location.href = base + "oilCost/export/record?" + conditionProcess();
 		});
 /**
  * 处理检索条件
@@ -103,7 +104,7 @@ function createOilCostRecordList(data) {
 	$('#oilCostRecordList').html(myTemplate(data));
 }
 /**
- * 报备的分页
+ * 油补记录的分页
  * @param data
  */
 function oilCostRecordPaging(data) {

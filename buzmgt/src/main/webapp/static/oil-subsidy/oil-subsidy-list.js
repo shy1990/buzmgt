@@ -112,14 +112,14 @@ $('.table-export').on('click',function() {
 				switch (tab) {
 				case "all":
 					
+					window.location.href = base + "oilCost/export/statistics?" + conditionProcess();
 					break;
 
 				default:
 					
+					window.location.href = base + "oilCost/export/abnormalCoord?" + conditionProcess();
 					break;
 				}
-//				window.location.href = base + "receiptRemark/export?type="
-//						+ tab + "&"+ conditionProcess();
 			}
 
 		});
@@ -244,22 +244,31 @@ Handlebars.registerHelper('formDate', function(value) {
  * v2:regionName
  * 
  */
-Handlebars.registerHelper('disposeRecordList', function(type,regionName) {
+Handlebars.registerHelper('disposeRecordList', function(regionType,regionName,exception) {
 	var html = "";
-//	
-//    <span class="location">{{regionName}}</span>
-//    <span class="location">终点<span class="normal-state">家</span></span>
-	if (regionName.indexOf("异常") >= 0) {
-		regionName = '<span class="abnormal-state">'+regionName+'</span>';
+//	数据格式
+/*	<span>起点<span class="abnormal-state">异常</span></span>
+    <span class="location">大桥镇</span>
+    <span class="location">小桥镇</span>
+    <span class="location">小桥镇</span>
+    <span class="location">小桥镇</span>
+    <span class="location">小桥镇</span>
+    <span class="location">小桥镇</span>
+    <span class="location">终点<span class="normal-state">家</span></span>*/
+	console.info(regionType+","+regionName+","+exception);
+	//异常
+	var tag="";
+	if (!isEmpty(exception)) {
+		tag = '<span class="abnormal-state">异常</span>';
+	}else if (regionName.indexOf("家") >= 0) {
+		tag = '<span class="normal-state">'+regionName+'</span>';
 	}
-	if (regionName.indexOf("家") >= 0) {
-		regionName = '<span class="normal-state">'+regionName+'</span>';
-	}
-	if (type==="上班") {
-		regionName = '<span>起点'+regionName+'</span>';
-	}
-	if (type==="下班") {
-		regionName = '<span class="location">终点'+regionName+'</span>';
+	if (regionType==="0") {
+		regionName = '<span>起点'+tag+'</span>';
+	}else if (regionType==="3") {
+		regionName = '<span class="location">终点'+tag+'</span>';
+	}else {
+		regionName = '<span class="location">'+regionName+tag+'</span>';
 	}
 	html += regionName;
 	return html;
@@ -330,7 +339,7 @@ function findByOrderNo(){
  * @param value
  * @returns 为空返回true 不为空返回false
  */
-function checkEmpty(value){
+function isEmpty(value){
 	return value ==""||value==null;
 } 
 

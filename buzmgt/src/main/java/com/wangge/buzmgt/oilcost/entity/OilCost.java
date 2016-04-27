@@ -75,7 +75,7 @@ public class OilCost implements Serializable{
   private String recordSort;//握手顺序
   
   private String parentId;
-  @Column(name="regionids")
+  @Column(name="region_ids")
   private String regionIds;
   
   
