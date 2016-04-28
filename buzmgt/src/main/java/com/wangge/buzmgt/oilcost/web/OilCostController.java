@@ -229,8 +229,8 @@ public class OilCostController {
       ExcelExport.doExcelExport("油补记录.xls", oilCostlist, gridTitles_, coloumsKey_, request, response);
       break;
     case "detail":
-      String[] gridTitles_1 = { "握手镇","动作", "握手时间"};
-      String[] coloumsKey_1 = { "regionName", "missName", "missTime"};
+      String[] gridTitles_1 = { "握手镇","动作","店铺", "握手时间"};
+      String[] coloumsKey_1 = { "regionName", "missName", "shopName", "missTime"};
       Long oilCostId=Long.valueOf(oilId);
       OilCost oc = oilCostService.findOne(oilCostId);
       
