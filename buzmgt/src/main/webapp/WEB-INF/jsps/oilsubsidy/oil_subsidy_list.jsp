@@ -57,7 +57,7 @@
         <img width="50" height="50" src="static/img/abnormal/user-head.png" class="img-circle" />
         <span class="yw-name"><b>{{salesManPart.truename}}</b>({{salesManPart.organizeName}})</span>
       </td>
-      <td>
+      <td class="normal">
 			{{#each oilRecordList}}
 				{{{disposeRecordList regionType regionName exception}}}
 			{{/each}}

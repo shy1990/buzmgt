@@ -114,8 +114,8 @@ var SearchData = {
 								<ul id="receiptOrderStatus" class="nav nav-tabs">
 									<li class="active" data-tital="reported"><a href="#box_tab1" data-toggle="tab"><span
 											class="">报备</span></a></li>
-									<li data-tital="cash"><a href="#box_tab2" data-toggle="tab"><span
-											class="">收现金</span></a></li>
+									<!-- <li data-tital="cash"><a href="#box_tab2" data-toggle="tab"><span
+											class="">收现金</span></a></li> -->
 									<li data-tital="notreported"><a href="#box_tab3" data-toggle="tab"><span
 											class="">未报备</span></a></li>
 								</ul>
