@@ -69,6 +69,7 @@ public class SalesMan implements Serializable {
 	private Date regdate;
 	
 	private int isOldSalesman;
+	private int isPrimaryAccount;
 	public SalesMan() {
 		super();
 	}
@@ -176,6 +177,14 @@ public class SalesMan implements Serializable {
 
   public void setIsOldSalesman(int isOldSalesman) {
     this.isOldSalesman = isOldSalesman;
+  }
+
+  public int getIsPrimaryAccount() {
+    return isPrimaryAccount;
+  }
+
+  public void setIsPrimaryAccount(int isPrimaryAccount) {
+    this.isPrimaryAccount = isPrimaryAccount;
   }
 
   

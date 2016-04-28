@@ -161,6 +161,7 @@ public class TeamMembersController {
       }
       salesman.setRegdate(new Date());
       salesman.setUser(u);
+      salesman.setIsPrimaryAccount(1);
       salesManService.addSalesman(salesman);
     //  return "redirect:/salesman/salesManList";
       

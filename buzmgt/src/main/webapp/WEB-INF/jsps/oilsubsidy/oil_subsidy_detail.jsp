@@ -123,7 +123,9 @@ var oilCostId='${oilCost.id}';
 								     							  </c:otherwise>
 							     							  </c:choose>
 														      </td>
-														      <td>${record.regionName}</td>
+														      <td>${record.regionName}
+														      <c:if test="${empty record.exception }">(异常)</c:if>
+														      </td>
 														      <td>${record.missName}</td>
 														      <td>${record.missTime}</td>
 														    </tr>
