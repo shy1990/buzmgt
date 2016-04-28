@@ -1,101 +1,104 @@
 .ico-account-manage{
-	background: url(../img/icon/account-manage/zhgl.png) no-repeat;
+  background: url(../img/icon/account-manage/zhgl.png) no-repeat;
+}
+
+.ico-account-manage-oil{
+  background: url(../img/icon/left-mean/jcsz1.png) no-repeat;
 }
 .btn-default,
 .btn-default:hover,
 .btn-default:focus{
-	border: 1px solid #DDD;
-	background: #FFF;
-	color: #6D6D6D;
-	font-weight: bold;
+  border: 1px solid #DDD;
+  background: #FFF;
+  color: #6D6D6D;
+  font-weight: bold;
 }
 .ico-province{
-	background: url(../img/icon/team-member/list/qyxz_tb.png) no-repeat;
+  background: url(../img/icon/team-member/list/qyxz_tb.png) no-repeat;
 }
 .icon-role{
-	background: url(../img/icon/team-member/add/zw.png) no-repeat;
+  background: url(../img/icon/team-member/add/zw.png) no-repeat;
 }
 .ico-upd{
-	background: url(../img/icon/account-manage/xiugai1.png) no-repeat;
+  background: url(../img/icon/account-manage/xiugai1.png) no-repeat;
 }
 .ico-upd:hover{
-	background: url(../img/icon/account-manage/xiugai2.png) no-repeat;
+  background: url(../img/icon/account-manage/xiugai2.png) no-repeat;
 }
 .ico-delete{
-	background: url(../img/icon/account-manage/shanchu1.png) no-repeat;
+  background: url(../img/icon/account-manage/shanchu1.png) no-repeat;
 }
 .ico-delete:hover{
-	background: url(../img/icon/account-manage/shanchu2.png) no-repeat;
+  background: url(../img/icon/account-manage/shanchu2.png) no-repeat;
 }
 .account-list table{
-	border-bottom: 1px solid #DDD;
-	border-left: 1px solid #DDD;
-	border-right: 1px solid #DDD;
+  border-bottom: 1px solid #DDD;
+  border-left: 1px solid #DDD;
+  border-right: 1px solid #DDD;
 }
 
 .account-list table tr th,
 .account-list table tr td{
-	padding-left:26px ;
-	
+  padding-left:26px ;
+  
 }
 .account-list table tr th{
-	background: #555555;
-	color: #FFF;
+  background: #555555;
+  color: #FFF;
 }
 .account-list .box-title{
-	padding-bottom: 0;
+  padding-bottom: 0;
 }
 .nav-job{
-	font-size: 10px;
+  font-size: 10px;
 }
 .nav-job > li{
-	float: left;
+  float: left;
 }
 .nav-job > li>a{
-	color: #636363;
-	border: 1px solid #FFF;
-	padding: 0 5px;
-	margin: 0 10px;
-	font-size: 14px;
+  color: #636363;
+  border: 1px solid #FFF;
+  padding: 0 5px;
+  margin: 0 10px;
+  font-size: 14px;
 }
 .nav-job > li.active >a{
-	border-radius: 3px;
-	border: 1px solid #DDD;
-	background: #F1F1F1;
+  border-radius: 3px;
+  border: 1px solid #DDD;
+  background: #F1F1F1;
 }
 .nav-job > li.active >a:hover,
 .nav-job > li.active >a:focus,
 .nav-job > li.active >a:active{
-	background: #F1F1F1;
-	color: #636363;	
+  background: #F1F1F1;
+  color: #636363; 
 }
 .nav-job > li>a:hover,
 .nav-job > li>a:focus,
 .nav-job > li>a:active{
-	background: none;
-	color: #3894C7;
+  background: none;
+  color: #3894C7;
 }
 /*操作*/
 .operation >a{
-	color: #3BA2DC;
-	padding: 4px 2px;
-	margin: 0 10px;
+  color: #3BA2DC;
+  padding: 4px 2px;
+  margin: 0 10px;
 }
 .operation >a.text-danger{
-	color: red;
+  color: red;
 }
 .operation >a.text-danger:hover,
 .operation >a.text-danger:active{
-	border-bottom: 1px solid red;
+  border-bottom: 1px solid red;
 }
 .operation >a:first-child{
-	margin-left: 0;
+  margin-left: 0;
 }
 .operation >a:hover,
 .operation >a:active{
-	border-bottom: 1px solid #3BA2DC;
+  border-bottom: 1px solid #3BA2DC;
 }
-
 
 .icon-user{
   background: url("../img/addcode/xm.png");
@@ -109,14 +112,13 @@
   background: url("../img/addcode/lk.png");
   margin-right: 0px;
 }
-
-
-
-
-
-
-
-
+.marg-b-10{
+	margin-bottom: 10px;
+}
+.tab-box-border{
+	border: 1px solid #EEEEEE; 
+	padding-bottom: 50px;
+}
 
 
 
