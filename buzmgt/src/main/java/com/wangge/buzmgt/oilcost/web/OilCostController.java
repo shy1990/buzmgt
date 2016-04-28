@@ -217,7 +217,7 @@ public class OilCostController {
       ExcelExport.doExcelExport("油补统计"+startTime+"--"+endTime+".xls", oilCostlist, gridTitles, coloumsKey, request, response);
       break;
     case "abnormalCoord":
-      searchParams.put("LIKE_oilRecord", "异常");
+      searchParams.put("LIKE_oilRecord", "exception");
       
     case "record":
       String[] gridTitles_ = { "业务名称","油补握手顺序","公里数","金额","日期"};
