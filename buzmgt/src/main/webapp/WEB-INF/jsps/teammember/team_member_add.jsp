@@ -16,7 +16,7 @@
 <link rel="stylesheet" type="text/css"
 	href="/static/yw-team-member/team-member.css" />
 <script src="/static/js/jquery/jquery.min.js" type="text/javascript"
-		charset="utf-8"></script>
+	charset="utf-8"></script>
 <script src='/static/js/common.js'></script>
 <!-- 		 <script type="text/javascript" src="../static/zTree/js/jquery.ztree.all-3.5.min.js"></script>  -->
 <style type="text/css">
@@ -43,8 +43,8 @@
 <body>
 	<div class="main">
 		<h4 class="page-header">
-			<i class="icon team-member-add-icon"></i>添加成员 
-			<a href="/teammember/salesManList" class="btn btn-blue member-add-btn"
+			<i class="icon team-member-add-icon"></i>添加成员 <a
+				href="/teammember/salesManList" class="btn btn-blue member-add-btn"
 				type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
 				返回列表
 			</a>
@@ -58,7 +58,8 @@
 					<div class="box-body">
 						<!-- -->
 						<div class="member-from col-md-6 col-md-offset-2 col-sm-10">
-							<form id = "addSalesManForm" name="regForm" class="member-from-box form-horizontal"
+							<form id="addSalesManForm" name="regForm"
+								class="member-from-box form-horizontal"
 								action="/teammember/addTeamMember" method="post"
 								onsubmit="javascript:return checkForm()">
 								<div class="form-group">
@@ -66,8 +67,9 @@
 									<div class="input-group col-sm-9">
 										<span class="input-group-addon" id="basic-addon1"><i
 											class="member-icon member-name-icon"></i></span> <input type="text"
-											class="form-control" id="username" name="username"  value="${userName}"
-											placeholder="请填写5-20位字符的用户名" onblur="checkUsername()" />
+											class="form-control" id="username" name="username"
+											value="${userName}" placeholder="请填写5-20位字符的用户名"
+											onblur="checkUsername()" />
 									</div>
 									<label class="pull-right col-md-6 control-label msg-error">请填写用户名,5-20位字符</label>
 								</div>
@@ -75,9 +77,10 @@
 									<label class="col-sm-3 control-label">姓名:</label>
 									<div class="input-group col-sm-9">
 										<span class="input-group-addon" id="basic-addon1"><i
-											class="member-icon member-name-icon"></i></span>
-										<input type="text" class="form-control" id="truename" value="${salesman.truename}"
-											name="truename" placeholder="请填写个人真实姓名" onblur="checkName()">
+											class="member-icon member-name-icon"></i></span> <input type="text"
+											class="form-control" id="truename"
+											value="${salesman.truename}" name="truename"
+											placeholder="请填写个人真实姓名" onblur="checkName()">
 									</div>
 									<label class="pull-right col-md-6 control-label msg-error">请填写个人真实姓名</label>
 								</div>
@@ -111,8 +114,9 @@
 									<div class="input-group col-sm-9 ">
 										<span class="input-group-addon" id="basic-addon1"><i
 											class="member-icon job-number-icon"></i></span> <input type="text"
-											class="form-control" id="jobNum" name="jobNum" value="${salesman.jobNum}"
-											placeholder="请填写个人共工号" onblur="checkJobNum()">
+											class="form-control" id="jobNum" name="jobNum"
+											value="${salesman.jobNum}" placeholder="请填写个人共工号"
+											onblur="checkJobNum()">
 									</div>
 									<label class="pull-right col-md-3 control-label msg-error">请填写个人共工号</label>
 								</div>
@@ -121,8 +125,9 @@
 									<div class="input-group col-sm-9 ">
 										<span class="input-group-addon" id="basic-addon1"><i
 											class="member-icon member-phone-icon"></i></span> <input type="text"
-											class="form-control" id="mobile" name="mobile" value="${salesman.mobile}"
-											placeholder="请填写电话号码" onblur="checkMobile()">
+											class="form-control" id="mobile" name="mobile"
+											value="${salesman.mobile}" placeholder="请填写电话号码"
+											onblur="checkMobile()">
 									</div>
 									<label class="pull-right col-md-3 control-label msg-error">请填写个人电话</label>
 								</div>
@@ -146,11 +151,11 @@
 									<label for="inputPassword" class="col-sm-3 control-label">是否老业务:</label>
 									<div class="input-group col-sm-9 ">
 										<span class="input-group-addon"><i
-											class="member-icon member-role-icon"></i></span>
-										<select id="isOldSalesman" class="form-control" name="isOldSalesman">
+											class="member-icon member-role-icon"></i></span> <select
+											id="isOldSalesman" class="form-control" name="isOldSalesman">
 											<option selected="selected" value="">请选择</option>
-											<option  value="0">新业务</option>
-											<option  value="1">老业务</option>
+											<option value="0">新业务</option>
+											<option value="1">老业务</option>
 										</select>
 									</div>
 									<label class="pull-right col-md-6 control-label msg-error">请选择角色权限</label>
@@ -164,7 +169,7 @@
 								    </div> -->
 								<div class="form-group">
 									<div class="input-group col-sm-9 col-sm-offset-4">
-										<button class="btn btn-blue col-sm-3 "  type="submit">确定保存</button>
+										<button class="btn btn-blue col-sm-3 " type="submit">确定保存</button>
 									</div>
 								</div>
 							</form>
@@ -178,7 +183,7 @@
 	</div>
 	<!-- 自定义弹出窗 -->
 	<!------------------------------------------------------------------------------------------------------------------------ -->
-	<%@include file="/static/js/alert/alert.html" %>
+	<%@include file="/static/js/alert/alert.html"%>
 	<script src="/static/zTree/js/jquery.ztree.all-3.5.js"
 		type="text/javascript" charset="utf-8"></script>
 	<script src="/static/yw-team-member/team-memberAdd.js"
