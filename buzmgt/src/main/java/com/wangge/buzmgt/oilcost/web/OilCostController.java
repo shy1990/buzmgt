@@ -204,19 +204,20 @@ public class OilCostController {
    */
   @RequestMapping("/export/{type}")
   public void excelExport(@PathVariable String type,HttpServletRequest request, HttpServletResponse response) {
-    String[] gridTitles = { "业务名称","负责区域","累计公里数", "累计油补金额","日期"};
-    String[] coloumsKey = { "salesManPart.truename","salesManPart.regionName", "totalDistance", "oilTotalCost", "dateTime"};
+    String[] gridTitles = { "业务名称","负责区域","累计公里数", "累计油补金额"};
+    String[] coloumsKey = { "salesManPart.truename","salesManPart.regionName", "totalDistance", "oilTotalCost"};
     String oilId= request.getParameter("oilCostId");
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     List<OilCost> oilCostlist=null;
     switch (type) {
     case "statistics":
       oilCostlist = oilCostService.findGroupByUserId(searchParams);
-      
-      ExcelExport.doExcelExport("油补统计.xls", oilCostlist, gridTitles, coloumsKey, request, response);
+      String startTime=(String) searchParams.get("GTE_dateTime");
+      String endTime=(String) searchParams.get("LTE_dateTime");
+      ExcelExport.doExcelExport("油补统计"+startTime+"--"+endTime+".xls", oilCostlist, gridTitles, coloumsKey, request, response);
       break;
     case "abnormalCoord":
-      searchParams.put("LIKE_oilRecord", "异常");
+      searchParams.put("LIKE_oilRecord", "exception");
       
     case "record":
       String[] gridTitles_ = { "业务名称","油补握手顺序","公里数","金额","日期"};
@@ -228,8 +229,8 @@ public class OilCostController {
       ExcelExport.doExcelExport("油补记录.xls", oilCostlist, gridTitles_, coloumsKey_, request, response);
       break;
     case "detail":
-      String[] gridTitles_1 = { "握手镇","动作", "握手时间"};
-      String[] coloumsKey_1 = { "regionName", "missName", "missTime"};
+      String[] gridTitles_1 = { "握手镇","动作","店铺", "握手时间"};
+      String[] coloumsKey_1 = { "regionName", "missName", "shopName", "missTime"};
       Long oilCostId=Long.valueOf(oilId);
       OilCost oc = oilCostService.findOne(oilCostId);
       

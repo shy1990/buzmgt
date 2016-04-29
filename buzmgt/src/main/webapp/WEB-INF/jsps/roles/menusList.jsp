@@ -18,6 +18,7 @@
 <!--div 滚动条-->
 <link rel="stylesheet" type="text/css"
 	href="../static/js/jquery/scroller/jquery.mCustomScrollbar.css" />
+<link rel="stylesheet" type="text/css" href="static/task/task.css" />
 <script src="../static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <title>菜单管理</title>
@@ -36,42 +37,44 @@
 			<!-- start:col -->
 			<div class="col-md-12">
 				<!-- start： 列表 -->
-				<div class="character table-responsive">
-					<table id="table_report"
-						class="menu-table table table-bordered table-condensed table-hover table-responsive">
-						<thead>
-							<th width="20%" class="center">序号</th>
-							<th width="20%" class="center">菜单名称</th>
-							<th width="20%" class="center">菜单url</th>
-							<th width="20%" class="center">操作</th>
-						</thead>
-						<tbody>
-							<c:choose>
-								<c:when test="${not empty menus}">
-									<c:forEach var="menu" items="${menus}" varStatus="s">
-										<tr class="am-active">
-											<td width="20%" class="center">${s.index+1}</td>
-											<td width="20%">${menu.name}</td>
-											<td width="20%">${menu.url}</td>
-											<td style="width: 10px;"><a
-												href="javascript:removeMenu(${menu.id});"
-												class=" btn-success">删除</a></td>
+				<div class="tab-box-border">
+					<div class="table-responsive table-overflow">
+						<table id="table_report"
+							class="menu-table table table-hover new-table abnormal-order-table">
+							<thead>
+								<th width="20%" class="center">序号</th>
+								<th width="20%" class="center">菜单名称</th>
+								<th width="20%" class="center">菜单url</th>
+								<th width="20%" class="center">操作</th>
+							</thead>
+							<tbody>
+								<c:choose>
+									<c:when test="${not empty menus}">
+										<c:forEach var="menu" items="${menus}" varStatus="s">
+											<tr class="am-active">
+												<td width="20%" class="center">${s.index+1}</td>
+												<td width="20%">${menu.name}</td>
+												<td width="20%">${menu.url}</td>
+												<td style="width: 10px;" class="operation"><a
+													href="javascript:removeMenu(${menu.id});" >删除</a>
+												</td>
+											</tr>
+										</c:forEach>
+									</c:when>
+									<c:otherwise>
+										<tr>
+											<td colspan="100">没有相关数据</td>
 										</tr>
-									</c:forEach>
-								</c:when>
-								<c:otherwise>
-									<tr>
-										<td colspan="100">没有相关数据</td>
-									</tr>
-								</c:otherwise>
-							</c:choose>
-						</tbody>
-					</table>
-				</div>
-				<div id="pageNav" class="scott" align="center">
-					<font color="#88af3f">共${totalCount} 条数据，
-						共${totalPage} 页</font> 
-					<div class="page-link" >${pageNav}</div>
+									</c:otherwise>
+								</c:choose>
+							</tbody>
+						</table>
+					</div>
+					<div id="pageNav" class="scott" align="center">
+						<font color="#88af3f">共${totalCount} 条数据，
+							共${totalPage} 页</font> 
+						<div class="page-link" >${pageNav}</div>
+					</div>
 				</div>
 				<!-- start： 弹窗 -->
 				<div class="j_create_role add-role modal fade" id="menu_modal" tabindex="-1"
