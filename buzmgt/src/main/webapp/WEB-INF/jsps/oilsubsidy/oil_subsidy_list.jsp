@@ -85,7 +85,7 @@ var SearchData = {
 	<div class="content main">
     <h4 class="page-header ">
         <i class="ico icon-oil"></i>油补统计
-        <a class="btn btn-setting" href="javascript:;"><i class="icon-ratio"></i>设置</a>
+        <a class="btn btn-setting" href="/oil/toOilSetList"><i class="icon-ratio"></i>设置</a>
         <!--区域选择按钮-->
         <div class="area-choose">
             选择区域：<span>${regionName }</span>
