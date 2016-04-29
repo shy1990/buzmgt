@@ -211,10 +211,30 @@
 				</table>
 			</div>
 		</div>
-		<div id="pageNav" class="scott" align="center">
+		<%-- <div id="pageNav" class="scott" align="center">
 			<font color="#88af3f">共${totalCount} 条数据， 共${totalPage} 页</font>
 			<div class="page-link">${pageNav}</div>
-		</div>
+		</div> --%>
+		<c:if test="${totalPage > 1}">
+						<div style="text-align: center; padding-bottom: 20px">
+							<ul class="pagination box-page-ul">
+								<li><a href="?page=${currentPage > 1 ?currentPage-1 : 1}">&laquo;</a></li>
+								<!-- 1.total<=7 -->
+								<c:forEach var="s" begin="1" end="${totalPage}" step="1">
+									<c:choose>
+										<c:when test="${currentPage == s }">
+											<li class="active"><a href="?page=${s}">${s}</a></li>
+										</c:when>
+										<c:otherwise>
+											<li><a href="?page=${s}">${s}</a></li>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+								<li><a
+									href="?page=${currentPage == totalPage ? totalPage : currentPage+1 }">&raquo;</a></li>
+							</ul>
+						</div>
+					</c:if>
 	<!-- tab-content -->
 	</div>
 	</div>

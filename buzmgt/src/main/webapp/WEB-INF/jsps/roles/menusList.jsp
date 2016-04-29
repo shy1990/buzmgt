@@ -56,8 +56,7 @@
 												<td width="20%">${menu.name}</td>
 												<td width="20%">${menu.url}</td>
 												<td style="width: 10px;" class="operation"><a
-													href="javascript:removeMenu(${menu.id});" >删除</a>
-												</td>
+													href="javascript:removeMenu(${menu.id});">删除</a></td>
 											</tr>
 										</c:forEach>
 									</c:when>
@@ -70,15 +69,34 @@
 							</tbody>
 						</table>
 					</div>
-					<div id="pageNav" class="scott" align="center">
-						<font color="#88af3f">共${totalCount} 条数据，
-							共${totalPage} 页</font> 
-						<div class="page-link" >${pageNav}</div>
-					</div>
+					<%-- <div id="pageNav" class="scott" align="center">
+						<font color="#88af3f">共${totalCount} 条数据， 共${totalPage} 页</font>
+						<div class="page-link">${pageNav}</div>
+					</div> --%>
+					<c:if test="${totalPage > 1}">
+						<div style="text-align: center; padding-bottom: 20px">
+							<ul class="pagination box-page-ul">
+								<li><a href="?page=${currentPage > 1 ?currentPage-1 : 1}">&laquo;</a></li>
+								<!-- 1.total<=7 -->
+								<c:forEach var="s" begin="1" end="${totalPage}" step="1">
+									<c:choose>
+										<c:when test="${currentPage == s }">
+											<li class="active"><a href="?page=${s}">${s}</a></li>
+										</c:when>
+										<c:otherwise>
+											<li><a href="?page=${s}">${s}</a></li>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+								<li><a
+									href="?page=${currentPage == totalPage ? totalPage : currentPage+1 }">&raquo;</a></li>
+							</ul>
+						</div>
+					</c:if>
 				</div>
 				<!-- start： 弹窗 -->
-				<div class="j_create_role add-role modal fade" id="menu_modal" tabindex="-1"
-					role="dialog" aria-labelledby="exampleModalLabel">
+				<div class="j_create_role add-role modal fade" id="menu_modal"
+					tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
@@ -96,7 +114,7 @@
 										<label for="inputPassword" class="col-sm-3 control-label">父菜单
 										</label>
 										<div class="col-sm-9 ">
-											<select class="form-control" name="parentid"  id="parentid">
+											<select class="form-control" name="parentid" id="parentid">
 												<c:forEach items="${menuList}" var="u">
 													<option value="${u.id }"
 														<c:if test="${user.user_id==u.id}"><c:out value="selected"/></c:if>>
@@ -138,7 +156,7 @@
 		</div>
 		<!-- end:row -->
 	</div>
-	<%@include file="/static/js/alert/alert.html" %>
+	<%@include file="/static/js/alert/alert.html"%>
 </body>
 
 <!-- 引入 -->
@@ -164,9 +182,9 @@
 			$.post(url, function(data) {
 				if (data === 'suc') {
 					myAlert("删除成功!");
-					setTimeout(function(){
-		        		location.reload()
-		        		},3000);
+					setTimeout(function() {
+						location.reload()
+					}, 3000);
 				} else {
 					myAlert("请先移除相关角色下该菜单的权限!");
 				}
@@ -174,13 +192,13 @@
 		}
 	}
 	function addMenu() {
-		var $_name=$('#name');
-		if($_name.val()==null||$_name.val()==""){
+		var $_name = $('#name');
+		if ($_name.val() == null || $_name.val() == "") {
 			$_name.parents('.form-group').addClass('has-error');
 			return false;
 		}
-		var $_prentid=$("#parentid");
-		if($_prentid.val()==null||$_prentid.val()==""){
+		var $_prentid = $("#parentid");
+		if ($_prentid.val() == null || $_prentid.val() == "") {
 			$_prentid.parents('.form-group').addClass('has-error');
 			return false;
 		}
@@ -190,12 +208,13 @@
 			if (data === 'suc') {
 				$('#menu_modal').modal('hide');
 				myAlert("添加成功");
-				setTimeout(function(){ location.reload() },2000);
+				setTimeout(function() {
+					location.reload()
+				}, 2000);
 			} else {
 				myAlert("添加失败!");
 			}
 		});
 	}
-
 </script>
 </html>
