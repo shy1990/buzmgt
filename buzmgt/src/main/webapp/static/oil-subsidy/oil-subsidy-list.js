@@ -255,7 +255,6 @@ Handlebars.registerHelper('disposeRecordList', function(regionType,regionName,ex
     <span class="location">小桥镇</span>
     <span class="location">小桥镇</span>
     <span class="location">终点<span class="normal-state">家</span></span>*/
-	console.info(regionType+","+regionName+","+exception);
 	//异常
 	var tag="";
 	if (!isEmpty(exception)) {
@@ -277,7 +276,7 @@ Handlebars.registerHelper('disposeRecordList', function(regionType,regionName,ex
  * parentId userId
  */
 Handlebars.registerHelper('whatUserId', function(parentId, userId) {
-	if (parentId !=null||parentId !="") {
+	if (!isEmpty(parentId)) {
 		return parentId;
 	}
 	return userId;
@@ -340,7 +339,7 @@ function findByOrderNo(){
  * @returns 为空返回true 不为空返回false
  */
 function isEmpty(value){
-	return value ==""||value==null;
+	return value ==undefined || value ==""||value==null ;
 } 
 
 function turnRecord(userId,oilTotalCost,totalDistance){

@@ -46,9 +46,9 @@ public class OilCost implements Serializable{
   @Column(name = "user_id",insertable=false,updatable=false)
   private String userId;//业务id
   
-//  @Transient
-  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
-  @JoinColumn(name= "user_id")
+  @Transient
+//  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+//  @JoinColumn(name= "user_id")
   @JSONField(serialize = false)
   private SalesMan salesMan;
   // private String Coordinates;//坐标集合
@@ -63,6 +63,7 @@ public class OilCost implements Serializable{
   @Transient
   private Float  totalDistance;//某一时间段的总里程数
   @Lob
+  @JSONField(serialize = false)//禁止序列化
   private String  oilRecord;//Coordinates,regionIds，shopName等  油补 json串
   
   @Transient

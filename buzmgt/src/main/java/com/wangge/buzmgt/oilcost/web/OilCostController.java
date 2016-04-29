@@ -2,15 +2,21 @@ package com.wangge.buzmgt.oilcost.web;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,19 +28,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wangge.buzmgt.oilcost.entity.OilCost;
+import com.wangge.buzmgt.oilcost.entity.OilRecord;
 import com.wangge.buzmgt.oilcost.service.OilCostService;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
+import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.ExcelExport;
 
 @RequestMapping("/oilCost")
@@ -192,31 +204,33 @@ public class OilCostController {
    */
   @RequestMapping("/export/{type}")
   public void excelExport(@PathVariable String type,HttpServletRequest request, HttpServletResponse response) {
-    String[] gridTitles = { "业务名称","负责区域","累计公里数", "累计油补金额","日期"};
-    String[] coloumsKey = { "salesManPart.truename","salesManPart.regionName", "totalDistance", "oilTotalCost", "dateTime"};
+    String[] gridTitles = { "业务名称","负责区域","累计公里数", "累计油补金额"};
+    String[] coloumsKey = { "salesManPart.truename","salesManPart.regionName", "totalDistance", "oilTotalCost"};
     String oilId= request.getParameter("oilCostId");
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     List<OilCost> oilCostlist=null;
     switch (type) {
     case "statistics":
       oilCostlist = oilCostService.findGroupByUserId(searchParams);
-      
-      ExcelExport.doExcelExport("油补统计.xls", oilCostlist, gridTitles, coloumsKey, request, response);
+      String startTime=(String) searchParams.get("GTE_dateTime");
+      String endTime=(String) searchParams.get("LTE_dateTime");
+      ExcelExport.doExcelExport("油补统计"+startTime+"--"+endTime+".xls", oilCostlist, gridTitles, coloumsKey, request, response);
       break;
     case "abnormalCoord":
-      searchParams.put("LIKE_oilRecord", "异常");
+      searchParams.put("LIKE_oilRecord", "exception");
       
     case "record":
       String[] gridTitles_ = { "业务名称","油补握手顺序","公里数","金额","日期"};
       String[] coloumsKey_ = { "salesManPart.truename","recordSort", "distance", "oilCost", "dateTime"};
       
       oilCostlist = oilCostService.findAll(searchParams);
-      
+      //处理
+      oilCostService.recordSortUtil(oilCostlist);
       ExcelExport.doExcelExport("油补记录.xls", oilCostlist, gridTitles_, coloumsKey_, request, response);
       break;
     case "detail":
-      String[] gridTitles_1 = { "握手镇","动作", "握手时间"};
-      String[] coloumsKey_1 = { "regionName", "missName", "missTime"};
+      String[] gridTitles_1 = { "握手镇","动作","店铺", "握手时间"};
+      String[] coloumsKey_1 = { "regionName", "missName", "shopName", "missTime"};
       Long oilCostId=Long.valueOf(oilId);
       OilCost oc = oilCostService.findOne(oilCostId);
       

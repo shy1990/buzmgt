@@ -58,6 +58,8 @@ public class OilCostServiceImpl implements OilCostService {
 
   @Autowired
   private RegionService regionService;
+  @Autowired
+  private SalesManService salesManService;
 
   @Override
   public List<OilCost> findAll() {
@@ -140,13 +142,6 @@ public class OilCostServiceImpl implements OilCostService {
     return regionArr;
   }
   /**
-   * 处理salesMan信息
-   */
-  public void disposeSalesMan(SalesMan salesMan){
-    salesMan.setRegion(null);
-    salesMan.setUser(null);
-  }
-  /**
    * 处理oilCostlist
    * @param list
    */
@@ -160,20 +155,23 @@ public class OilCostServiceImpl implements OilCostService {
   @Override
   public void disposeOilCostRecord(OilCost l){
     if(l!=null){
+      String parentId=l.getParentId();
+      String userId=StringUtils.isEmpty(parentId)?l.getUserId(): parentId ;
+      SalesMan salesMan=salesManService.findById(userId);
+      l.setSalesMan(salesMan);
       
       String oilRecord=l.getOilRecord();
       l.setOilRecordList(JSONUtil.stringArrtoJsonList(oilRecord, OilRecord.class));
-      l.setOilRecord("");
+//      l.setOilRecord("");
       String orgName="";
       String regName="";
       String turename="";
       String id ="";
       try {
-        SalesMan salesman=l.getSalesMan();
-        id=salesman.getId();
-        orgName=salesman.getUser().getOrganization().getName();
-        regName=salesman.getRegion().getName();
-        turename=salesman.getTruename();
+        id=salesMan.getId();
+        orgName=salesMan.getUser().getOrganization().getName();
+        regName=salesMan.getRegion().getName();
+        turename=salesMan.getTruename();
       } catch (Exception e) {
         e.getMessage();
       }
@@ -208,13 +206,9 @@ public class OilCostServiceImpl implements OilCostService {
       String userId = StringUtils.isNotEmpty(parentId)? parentId: action.getUserId();
       OilCost o = oilCostMap.get(userId);
       if(o==null){
-//        if(number*size <= total && total < (number+1)*size){
-          //添加条数
           action.setTotalDistance(action.getDistance());
           action.setOilTotalCost(action.getOilCost());
           oilCostMap.put(userId, action);
-//        }
-//        total++;
       }else{
         //操作数据
         Float totalDistance = o.getTotalDistance();
@@ -246,6 +240,26 @@ public class OilCostServiceImpl implements OilCostService {
     oc=oilCostRepository.findOne(id);
     disposeOilCostRecord(oc);
     return oc;
+  }
+  @Override
+  public void recordSortUtil(List<OilCost> oilCostlist) {
+    oilCostlist.forEach(oilCost->{
+      List<OilRecord> orl= oilCost.getOilRecordList();
+      oilCost.setRecordSort(OilRecordUtil(orl));
+    });
+    
+  }
+  public String OilRecordUtil(List<OilRecord> orl){
+    String recordSort="";
+    for(OilRecord or:orl){
+      recordSort+=or.getRegionName();
+      if(StringUtils.isNotEmpty(or.getException())){
+        recordSort+="（异常）";
+      }
+      recordSort+=">";
+    }
+    recordSort=recordSort.substring(0, recordSort.length()-1);
+    return recordSort;
   }
   private static <T> Specification<OilCost> oilCostSearchFilter(final Collection<SearchFilter> filters,
       final Class<OilCost> entityClazz) {
@@ -419,5 +433,6 @@ public class OilCostServiceImpl implements OilCostService {
       }
     };
   }
+
 
 }
