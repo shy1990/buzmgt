@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +32,11 @@ import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.receipt.service.OrderReceiptService;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.util.ExcelExport;
 
 @Controller
@@ -39,15 +46,35 @@ public class ReceiptRemarkController {
   private static final String SEARCH_OPERTOR = "sc_";
   
   private static final Logger logger = Logger.getLogger(ReceiptRemarkController.class);
-  @Resource
+  @Autowired
   private OrderReceiptService orderReceiptService; 
   
-  @Resource
+  @Autowired
   private OrderSignforService orderSignforService;
+  @Autowired
+  private ManagerService managerService;
   
   @RequestMapping(value="/show",method=RequestMethod.GET)
-  public String showReceiptRemark(){
-    
+  public String showReceiptRemark(Model model){
+    Subject subject = SecurityUtils.getSubject();
+    User user=(User) subject.getPrincipal();
+    Manager manager = managerService.getById(user.getId());
+    model.addAttribute("regionName", manager.getRegion().getName());
+    model.addAttribute("regionId", manager.getRegion().getId());
+    model.addAttribute("regionType", manager.getRegion().getType());
+    return "receipt/receipt_remark";
+  }
+  /**
+   * 选择区域后回调方法
+   * @param model
+   * @param region
+   * @return
+   */
+  @RequestMapping("getRemarkList/{regionId}")
+  public String getRemarkByRegion(Model model,@PathVariable(value="regionId")Region region){
+    model.addAttribute("regionName",region.getName());
+    model.addAttribute("regionId",region.getId());
+    model.addAttribute("regionType",region.getType());
     return "receipt/receipt_remark";
   }
   @RequestMapping(value="/allOrderList",method=RequestMethod.GET)

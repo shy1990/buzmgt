@@ -30,6 +30,7 @@
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <script id="oilCost-table-template" type="text/x-handlebars-template">
+	{{#if content}}
 	{{#each content}}
 		<tr>
       <td>
@@ -49,8 +50,14 @@
       </td>
     </tr>      
 	{{/each}}
+	{{else}}
+	<tr>
+		<td colspan="100">没有相关数据</td>
+	</tr>
+	{{/if}}
 </script>
 <script id="abnormalCoord-table-template" type="text/x-handlebars-template">
+{{#if content}}
 	{{#each content}}
    <tr>
       <td class="">
@@ -71,6 +78,11 @@
       </td>
     </tr>
 	{{/each}}
+	{{else}}
+	<tr>
+		<td colspan="100">没有相关数据</td>
+	</tr>
+	{{/if}}
 </script>
 <script type="text/javascript">
 var	base='<%=basePath%>';
@@ -93,7 +105,6 @@ var SearchData = {
            	<input type="hidden" id="regionId" value="${regionId }">
            	<input type="hidden" id="regionType" value="${regionType }">
         </div>
-
         <!--/区域选择按钮-->
     </h4>
     <div class="row">
