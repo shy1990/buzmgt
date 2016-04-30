@@ -2,6 +2,7 @@ var remarkedTotal = 0;// 报备总条数
 var notRemarkedTotal = 0;// 未报备总条数
 $(function() {
 	nowTime();//初始化日期
+	DispositRegionId();//区域选择数据处理
 	findRemarked();
 	findNOTRemarked();
 })
@@ -36,6 +37,23 @@ function deleteStatus() {
 	delete SearchData['sc_EQ_status'];
 	delete SearchData['sc_GTE_status'];
 }
+/**
+ * 选择区域
+ * @param id
+ */
+function getRegion(id){
+	window.location.href='/region/getPersonalRegion?id='+id+'&flag=nuPayRemark';
+}
+/**
+ * TODO 处理区域ID 根据Regiontype 
+ */
+function DispositRegionId(){
+	var regionId=$('#regionId').val();
+	var regionType=$('#regionType').val();
+	SearchData['sc_regionId'] = regionId;
+	SearchData['sc_regionType'] = regionType;
+}
+
 $('#startTime').datetimepicker({
 	format : "yyyy-mm-dd",
 	language : 'zh-CN',

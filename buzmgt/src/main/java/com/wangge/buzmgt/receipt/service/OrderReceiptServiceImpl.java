@@ -29,6 +29,9 @@ import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.receipt.entity.RemarkStatusEnum;
 import com.wangge.buzmgt.receipt.repository.OrderReceiptRepository;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
+import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 
@@ -42,6 +45,8 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
 
   @Autowired
   private OrderSignforService orderSignforService;
+  @Autowired
+  private RegionService regionService;
 
   // @Override
   // public ReceiptRemark findByOrder(OrderSignfor orderNo) {
@@ -60,6 +65,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
 
   @Override
   public List<ReceiptRemark> findAll(Map<String, Object> searchParams) {
+    disposeSearchParams(searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<ReceiptRemark> spec = orderReceiptSearchFilter(filters.values(), ReceiptRemark.class);
     List<ReceiptRemark> remarkedList = orderReceiptRepository.findAll(spec);
@@ -71,6 +77,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
 
   @Override
   public Page<ReceiptRemark> getReceiptRemarkList(Map<String, Object> searchParams, Pageable pageRequest) {
+    disposeSearchParams(searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<ReceiptRemark> spec = orderReceiptSearchFilter(filters.values(), ReceiptRemark.class);
 
@@ -82,6 +89,66 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
     return receiptRemarkPage;
   }
 
+  /**
+   * 处理条件参数
+   * 区域选择（油补统计）
+   * @param searchParams
+   */
+  public void disposeSearchParams(Map<String, Object> searchParams){
+    String regionId = (String) searchParams.get("regionId");
+    String regionType = (String) searchParams.get("regionType");
+//    COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他")
+    //TODO 整理查询出来的regionID列表
+    String regionArr="";
+    if(StringUtils.isNotEmpty(regionType)){
+      
+      switch (regionType) {
+      case "COUNTRY":
+        break;
+      case "PARGANA":
+        
+      case "PROVINCE":
+        regionArr = disposeRegionId(regionId);
+        regionArr=regionArr.substring(0, regionArr.length()-1);
+        break;
+      case "AREA":
+        regionArr = regionId.substring(0, 4);
+        break;
+        
+      default:
+        regionArr =regionId;
+        break;
+      }
+    }
+    searchParams.put("ORMLK_salesmanId", regionArr);
+    searchParams.remove("regionId");
+    searchParams.remove("regionType");
+    
+  }
+  /**
+   * 根据每一个regionType判断 regionId截取的位数
+   * type-->count:国家-->all
+   * 
+   * 
+   * @param regionList
+   * @return String 格式 "3701,3702,xxxx,xxx"
+   */
+  public String disposeRegionId(String regionId){
+    //3701,
+    String regionArr="";
+    List<Region> regionList=regionService.findByRegion(regionId); 
+    for(int n=0;n<regionList.size();n++){
+      Region region= regionList.get(n);
+      String regionId1=region.getId();
+      if(RegionType.AREA.equals(region.getType())){
+        regionArr+=regionId1.substring(0, 4)+",";
+        continue;
+      }
+      regionArr+=disposeRegionId(regionId1);
+    }
+      
+    return regionArr;
+  }
   private static <T> Specification<ReceiptRemark> orderReceiptSearchFilter(final Collection<SearchFilter> filters,
       final Class<ReceiptRemark> entityClazz) {
 
@@ -223,27 +290,32 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
 
               break;
             case NOTEQ:
-              if (javaTypeName.equals(TYPE_ORDERSIGNFOR_TYPE)) {
-
+              
                 predicates.add(cb.notEqual(expression, filter.value));
-              } else {
-                predicates.add(cb.notEqual(expression, filter.value));
-              }
 
               break;
             case ISNULL:
-              if (javaTypeName.equals(TYPE_ORDERSIGNFOR_TYPE)) {
-
+              
                 predicates.add(cb.isNull(expression));
-              }
-
               break;
             case NOTNULL:
-              if (javaTypeName.equals(TYPE_ORDERSIGNFOR_TYPE)) {
-
                 predicates.add(cb.isNull(expression));
-              }
 
+              break;
+            case ORMLK:
+              /**
+               * sc_ORMLK_userId = 370105,3701050,3701051
+               * 用于区域选择
+               */
+              String[] parameterValue = ((String) filter.value).split(",");
+              Predicate[] pl=new Predicate[parameterValue.length];
+              
+              for(int n=0;n<parameterValue.length;n++){
+                pl[n]=(cb.like(expression, "%"+parameterValue[n]+"%"));
+              }
+              
+              Predicate p_ = cb.or(pl);
+              predicates.add(p_);
               break;
 
             }
@@ -274,11 +346,14 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
     String startTime = "";
     String endTime = "";
     String orderNo ="";
+    String regionId ="";
+    disposeSearchParams(searchParams);
     startTime = (String) searchParams.get("GTE_createTime");
     endTime = (String) searchParams.get("LTE_createTime");
     status = (String) searchParams.get("EQ_status");
     orderNo =(String) searchParams.get("EQ_orderNo");
-    List<OrderSignfor> list = orderSignforService.getReceiptNotRemarkList(status, startTime, endTime,orderNo);
+    regionId=(String) searchParams.get("ORMLK_salesmanId");
+    List<OrderSignfor> list = orderSignforService.getReceiptNotRemarkList(status, startTime, endTime,orderNo,regionId);
     List<OrderSignfor> notRemarkList = new ArrayList<OrderSignfor>();
     String timesGap = "24:00";
     String[] timesGapAry = timesGap.split(":");

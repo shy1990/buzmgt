@@ -237,9 +237,9 @@ public class OrderSignforServiceImpl implements OrderSignforService {
     };
   }
   @Override
-  public List<OrderSignfor> getReceiptNotRemarkList(String status, String startTime, String endTime,String orderNo) {
+  public List<OrderSignfor> getReceiptNotRemarkList(String status, String startTime, String endTime, String orderNo,String regionId) {
     // TODO Auto-generated method stub
-    List<OrderSignfor> list= orderSignforRepository.getReceiptNotRemarkList(status, startTime, endTime, orderNo);
+    List<OrderSignfor> list= orderSignforRepository.getReceiptNotRemarkList(status, startTime, endTime, orderNo,regionId);
     try {
       list.forEach(notRemarklist->{
         notRemarklist.setSalesMan(salesManService.findByUserId(notRemarklist.getUserId()));

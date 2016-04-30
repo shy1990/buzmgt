@@ -192,9 +192,11 @@
 }
 .delete-icon:hover span.delete-text{
 	display: block;
+	border-bottom: 1px solid #3893C7; 
 }
 .query-icon:hover span.query-text{
 	display: block;
+	border-bottom: 1px solid #3893C7; 
 }
 .marg-l-10{
 	margin-left: 26px;
