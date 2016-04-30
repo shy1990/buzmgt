@@ -52,9 +52,8 @@ function ajaxSearch(searchData) {
 
 function initPaging(){
 	var totalCount = totalElements; //总条数 
-	showCount = totalPages, //显示分页个数
-	limit =  2;//每页条数
-	//createTable(1, limit, totalCount);
+	var showCount = 10, //显示分页个数
+	limit =  13;//每页条数
 	$('#callBackPager').extendPagination({
 	totalCount : totalCount, 
 	showCount : showCount,
@@ -64,7 +63,6 @@ function initPaging(){
 		searchData['page'] = curr - 1;
 		searchData['size'] = limit;
 		ajaxSearch(searchData);
-//			createTable(1, limit, totalCount); //生成列表
 	}
 	});
 }
@@ -97,3 +95,7 @@ Handlebars.registerHelper('Convert', function(value) {
 	subsitename = changeDateToString(new Date(value));
 	return subsitename;
 });
+
+function seeDetails(visitId){
+	window.location.href = "/visit/visitDetPage?visitId="+visitId;
+}

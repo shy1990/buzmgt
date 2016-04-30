@@ -109,7 +109,7 @@ public class VisitTaskController {
   
   /**
    * 
-    * shopList:(获取店铺统计数据地图显示). <br/> 
+    * shopMap:(获取店铺统计数据地图显示). <br/> 
     * @author peter 
     * @param request
     * @return Page
