@@ -110,15 +110,6 @@
 	background: #FFF;
 }
 
-/* 边框*/
-.tab-content{
-
-	height: 780px;
-	padding-top:30px;
-	border: 1px solid #ebebeb;
-	padding-bottom:200px;
-}
-
 
 .page-turn{
    display:table-cell;

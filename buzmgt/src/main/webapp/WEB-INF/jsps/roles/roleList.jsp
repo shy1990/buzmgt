@@ -39,6 +39,7 @@
 			<!-- start:col -->
 			<div class="col-md-12 ">
 				<!-- start： 列表 -->
+				<div class="tab-box-border">
 				<div class="table-responsive table-overflow">
 					<table id="table_report"
 						class="menu table table-hover new-table abnormal-order-table">
@@ -97,6 +98,7 @@
 						</ul>
 					</div>
 				</c:if>
+				</div>
 				<!-- end 列表 -->
 				<!-- start： 弹窗 -->
 				<div class="j_create_role add-role modal fade " id="exampleModal"

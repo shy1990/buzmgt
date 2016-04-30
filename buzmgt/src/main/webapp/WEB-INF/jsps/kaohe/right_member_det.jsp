@@ -9,6 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <title>考核详情</title>
+<link rel="stylesheet" type="text/css" href="/static/kaohe/kaohe-det.css" />
 <!-- Bootstrap -->
 <script src="/static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>

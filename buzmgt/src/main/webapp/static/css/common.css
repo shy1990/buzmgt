@@ -700,3 +700,7 @@ a.table-export:hover, a.table-export:focus {
 	width: 100%;
 	height: 100%;
 }
+.tab-box-border{
+	border: 1px solid #ebebeb;
+	background: #FFF;
+}
