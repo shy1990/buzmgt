@@ -1,0 +1,106 @@
+
+.icon-task-detail {
+    background: url(../img/task/xm.png) no-repeat;
+}
+
+.icon-task-send {
+    background: url(../img/task/z2.png) no-repeat;
+}
+
+.icon-task-sz {
+    background: url(../img/icon/saojie/set/sjsz.png) no-repeat;
+}
+.icon-finds{
+    background: url(../img/icon/team-member/list/sousuo1.png) no-repeat;
+}
+.text-blue {
+    color: #1087cb;
+    font-weight: 600;
+}
+
+.text-bule {
+    color: #2483b9;
+    font-size: 12px;
+}
+
+/*文本设置距离*/
+.text-jl {
+    padding-left: 40px;
+    margin-top: 8px;
+    width: 167px;
+}
+
+/*图片设置距离*/
+.pic-jl {
+    padding: 0 0 0 0;
+}
+
+
+.text-body {
+    font-weight: 100;
+    font-size: 12px;
+}
+
+.text-red {
+    color: #ff5757;
+}
+
+.text-wz {
+    padding-top: 20px;
+}
+
+.table-my-- > tbody > tr > th {
+    vertical-align: middle;
+}
+
+/*jl距离 */
+.date-jl {
+    float: left;
+    width: 300px;
+    height: 30px;
+}
+
+.date-jll {
+    float: left;
+    padding-left: 20px;
+}
+
+.date-jlll {
+    float: left;
+    padding-left: 60px;
+    margin-top: 5px;
+}
+
+
+.date-wzz {
+    padding-bottom: 8px;
+    position: relative;
+}
+
+.btn-sz {
+    padding: 1px 5px;
+    font-size: 3px;
+    margin-left: 30px;
+}
+
+.text-gery {
+    color: #cccccc;
+    font-size: 12px;
+}
+
+.text-block {
+    color: #606060;
+    font-size: 12px;
+}
+
+.row-h{
+    width: auto;
+    height:35px;
+}
+/*搜索栏中按钮的样式*/
+.input-in  {
+    height: 30px;
+}
+.input-ini{
+    padding: 0;
+}

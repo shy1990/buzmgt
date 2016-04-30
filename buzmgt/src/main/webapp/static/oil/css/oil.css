@@ -1,0 +1,68 @@
+/*日期位置*/
+.date-wz{
+    width:20%;
+    padding-bottom:8px ;
+    position: relative;
+}
+
+/*油补红色的字体*/
+.text-right-red {
+    text-align: right;
+    color: #FF4847;
+    font-weight: 800;
+}
+
+.text-wz{
+   position:absolute;
+    top: 3px;
+    right: -50px;;
+    height: 0px;
+
+}
+
+
+.text-bt{
+    font-size: 130px;
+}
+.table-wz{
+    padding-top: 10px;
+}
+
+
+.text-sx{
+    color: #ffffff;
+}
+/*文字异常*/
+
+.text-abnormal{
+    color:#fbd051;
+    font-weight: 800;
+}
+/*翻页*/
+.page-turn{
+    display:table-cell;
+    width:1700px;
+    height:500px;
+    vertical-align:middle;
+    text-align:center;
+    *font-size:200px;
+    *line-height:1;
+}
+/*个人资料*/
+
+/*公里系数*/
+.ratio-box{
+    display: inline-block;
+    width: 100%;
+    padding: 15px;
+    padding-left: 25px;
+    border:1px solid #ddd;
+}
+.ratio-box-dd{
+    display: inline-block;
+    position: relative;
+}
+.cl-padd{
+    padding-left: 0;
+    padding-right: 0;
+}
