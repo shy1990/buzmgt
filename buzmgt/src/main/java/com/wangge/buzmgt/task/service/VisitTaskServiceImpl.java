@@ -49,14 +49,14 @@ public class VisitTaskServiceImpl implements VisitTaskService {
     }
     
     Query q = em.createNativeQuery(hql);
-    List customer = q.getResultList();
-    int count=customer.size();
+    int count=q.getResultList().size();
     q.setFirstResult(pageNum* limit);
     q.setMaxResults(limit);
     List<CustomerVo> list = new ArrayList<CustomerVo>();
-    if(customer != null && count > 0){
-      for(int i = 0;i < count;i++){
-        Object[] o = (Object[])customer.get(i);
+    List<Object> ls = q.getResultList();
+    if(ls != null){
+      for(int i = 0;i < ls.size();i++){
+        Object[] o = (Object[])ls.get(i);
         CustomerVo cus = new CustomerVo();
         cus.setRegistId(((BigDecimal)o[0]).intValue());
         cus.setUserId(o[1]+"");
@@ -68,7 +68,12 @@ public class VisitTaskServiceImpl implements VisitTaskService {
           cus.setPeriod("无记录");
         }
         cus.setCoordinate(o[4]+"");
-        cus.setAvgOrderNum(((BigDecimal)o[5]).intValue());
+        p = (BigDecimal)o[5];
+        if(p != null && !"".equals(p)){
+          cus.setAvgOrderNum((p).intValue());
+        }else{
+          cus.setAvgOrderNum(0);
+        }
         cus.setOrderTimes(((BigDecimal)o[6]));
         cus.setAddress(o[7]+"");
         Date date = (Date)o[8];

@@ -37,6 +37,7 @@ import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.vo.OrderVo;
+import com.wangge.buzmgt.task.entity.Visit;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
@@ -91,6 +92,15 @@ public class AssessController {
     return "kaohe/kaohe_set";
   }
   
+  /**
+   * 
+    * gainAuditTown:(获取考核阶段设置的地区). <br/> 
+    * 
+    * @author Administrator 
+    * @param id
+    * @return 
+    * @since JDK 1.8
+   */
   @RequestMapping(value = "/gainAuditTown",method = RequestMethod.POST)
   @ResponseBody
   public List<Region> gainAuditTown(@RequestParam("id") String id){
@@ -124,6 +134,9 @@ public class AssessController {
       assess.setAssessStage("1");
     }
     if(stage == 1){
+      Assess a = assessService.findByStageAndSalesman("1",assess.getSalesman().getId());//查第一阶段的考核
+      assess.setActiveNum(assess.getActiveNum()+a.getActiveNum());//累加第一阶段活跃客户
+      assess.setOrderNum(assess.getOrderNum()+a.getOrderNum());//累加第一阶段提货量
       assess.setAssessStage("2");
     }
     if(stage == 2){
@@ -145,12 +158,7 @@ public class AssessController {
   
   /**
    * 
-    * assessList:(这里用一句话描述这个方法的作用). <br/> 
-    * TODO(这里描述这个方法适用条件 – 可选).<br/> 
-    * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
-    * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
-    * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
-    * 
+    * assessList:(获取考核列表). <br/> 
     * @author Administrator 
     * @param assessList
     * @param model
@@ -228,11 +236,7 @@ public class AssessController {
   
   /**
    * 
-    * toAccessDet:(这里用一句话描述这个方法的作用). <br/> 
-    * TODO(这里描述这个方法适用条件 – 可选).<br/> 
-    * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
-    * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
-    * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
+    * toAccessDet:(跳转到考核详情页). <br/> 
     * 
     * @author Administrator 
     * @param salesmanId
@@ -249,21 +253,16 @@ public class AssessController {
     * @since JDK 1.8
    */
   @RequestMapping("/toAccessDet")
-  public String toAccessDet(String salesmanId,@RequestParam("asssessid") Assess assess,String page,String regionid,String begin,String end,String baifen,Integer active,Integer orderNum,Model model){
-    int pageNum = Integer.parseInt(page != null ? page : "0");
+  public String toAccessDet(String salesmanId,@RequestParam("asssessid") Assess assess,String regionid,String baifen,Integer active,Integer orderNum,Model model){
     SalesMan salesman = salesManService.findByUserId(salesmanId.trim());
 //    Assess assess=assessService.findAssess(Long.parseLong(asssessid.trim()));
     model.addAttribute("assess", assess);
     model.addAttribute("salesman", salesman);
     List<Region> list = saojieService.findRegionById(salesmanId.trim());
     model.addAttribute("regionList", list);
-    Page<OrderVo> statistics = assessService.getOrderStatistics(salesmanId.trim(),regionid,pageNum,begin,end);
-    model.addAttribute("statistics",statistics);
     model.addAttribute("regionId",regionid != null ? regionid : "");
     model.addAttribute("startDate", DateUtil.date2String(assess.getAssessTime()));
     model.addAttribute("endDate", DateUtil.date2String(assess.getAssessEndTime()));
-    model.addAttribute("begin",begin);
-    model.addAttribute("end",end);
     try {
       int timing = DateUtil.daysBetween(assess.getAssessTime(), assess.getAssessEndTime());
       model.addAttribute("timing",timing);
@@ -275,6 +274,15 @@ public class AssessController {
     model.addAttribute("orderNum",orderNum);
     return "kaohe/kaohe_det";
   } 
+  
+  @ResponseBody
+  @RequestMapping(value = "/getOrderStatistics",method = RequestMethod.GET)
+  public Page<OrderVo> getOrderStatistics(String salesmanId,String regionId,String begin,String end,String page,String size){
+    int pageNum = Integer.parseInt(page != null ? page : "0");
+    int limit = Integer.parseInt(size);
+    Page<OrderVo> statistics = assessService.getOrderStatistics(salesmanId.trim(),regionId,pageNum,begin,end,limit);
+    return statistics;
+  }
   
   /**
    * 
