@@ -32,4 +32,8 @@ public interface SaojieRepository extends JpaRepository<Saojie, Long>{
   List<Region> findRegionById(String id);
 
   Saojie findByOrderAndSalesman(int ordernum, SalesMan salesman);
+  
+
+  
+  
 }

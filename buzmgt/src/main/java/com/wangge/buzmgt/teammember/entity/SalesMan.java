@@ -1,4 +1,5 @@
 package com.wangge.buzmgt.teammember.entity;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -23,37 +24,36 @@ import com.wangge.buzmgt.sys.entity.User;
 
 /**
  * 
-* @ClassName: Salesman
-* @Description: TODO(这里用一句话描述这个类的作用)
-* @author SongBaoZhen
-* @date 2015年12月29日 上午11:33:20
-*
+ * @ClassName: Salesman
+ * @Description: TODO(这里用一句话描述这个类的作用)
+ * @author SongBaoZhen
+ * @date 2015年12月29日 上午11:33:20
+ *
  */
 @Entity
 @Table(name = "SYS_SALESMAN")
-@JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class SalesMan implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	@Id
 	@GeneratedValue(generator = "foreign")
 	@GenericGenerator(name = "foreign", strategy = "foreign", parameters = {
-	@Parameter(name = "property", value = "user") })
+			@Parameter(name = "property", value = "user") })
 	@Column(name = "user_id")
 	private String id;
-	
+
 	private String simId;
-	
-  private SalesmanStatus status = SalesmanStatus.saojie;
+
+	private SalesmanStatus status = SalesmanStatus.saojie;
 	private String truename;
-	
+
 	private String jobNum;
-	
+
 	@Column(name = "ASSESS_STAGE")
-  private String assessStage;
-	
+	private String assessStage;
+
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
 	private Region region;
@@ -61,18 +61,19 @@ public class SalesMan implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-	
+
 	private String towns;
-	
+
 	private String mobile;
 	@Temporal(TemporalType.DATE)
 	private Date regdate;
-	
+
 	private int isOldSalesman;
+
 	public SalesMan() {
 		super();
 	}
-	
+
 	public String getTruename() {
 		return truename;
 	}
@@ -85,24 +86,19 @@ public class SalesMan implements Serializable {
 		return jobNum;
 	}
 
-
-
 	public void setJobNum(String jobNum) {
 		this.jobNum = jobNum;
 	}
 
+	public SalesmanStatus getStatus() {
+		return status;
+	}
 
+	public void setStatus(SalesmanStatus status) {
+		this.status = status;
+	}
 
-
-  public SalesmanStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(SalesmanStatus status) {
-    this.status = status;
-  }
-
-  public Region getRegion() {
+	public Region getRegion() {
 		return region;
 	}
 
@@ -134,49 +130,44 @@ public class SalesMan implements Serializable {
 		this.simId = simId;
 	}
 
-
-
 	public String getTowns() {
 		return towns;
 	}
-
-
 
 	public void setTowns(String towns) {
 		this.towns = towns;
 	}
 
-  public String getMobile() {
-    return mobile;
-  }
+	public String getMobile() {
+		return mobile;
+	}
 
-  public void setMobile(String mobile) {
-    this.mobile = mobile;
-  }
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
 
-  public Date getRegdate() {
-    return regdate;
-  }
+	public Date getRegdate() {
+		return regdate;
+	}
 
-  public void setRegdate(Date regdate) {
-    this.regdate = regdate;
-  }
+	public void setRegdate(Date regdate) {
+		this.regdate = regdate;
+	}
 
-  public String getAssessStage() {
-    return assessStage;
-  }
+	public String getAssessStage() {
+		return assessStage;
+	}
 
-  public void setAssessStage(String assessStage) {
-    this.assessStage = assessStage;
-  }
+	public void setAssessStage(String assessStage) {
+		this.assessStage = assessStage;
+	}
 
-  public int getIsOldSalesman() {
-    return isOldSalesman;
-  }
+	public int getIsOldSalesman() {
+		return isOldSalesman;
+	}
 
-  public void setIsOldSalesman(int isOldSalesman) {
-    this.isOldSalesman = isOldSalesman;
-  }
+	public void setIsOldSalesman(int isOldSalesman) {
+		this.isOldSalesman = isOldSalesman;
+	}
 
-  
 }
