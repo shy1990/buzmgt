@@ -4,7 +4,6 @@
   String path = request.getContextPath();
 			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 					+ path + "/";
-			System.out.print(basePath);
 %>
 <!DOCTYPE html>
 <html>
@@ -30,7 +29,7 @@
 	var number = '';//当前页数（从零开始）
 	var totalPages = '';//总页数(个数)
 	var searchData = {
-		"size" : "2",
+		"size" : "13",
 		"page" : "0",
 	}
 	var totalElements;//总条数
@@ -43,9 +42,9 @@
 		<td>{{shopAddress }}</td>
 		<td>{{Convert expiredTime }}</td>
 		<td class="text-strong">{{{WhatStatus visitStatus}}}</td>
-		<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a></td>
-		<!--<td><a class="btn btn-red btn-sm" href="javascrip:;">警告</a>
-		<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>-->
+		<td><a class="btn btn-blue btn-sm" href="javascript:;" onclick="seeDetails('{{id}}')">查看</a></td>
+		<!--<td><a class="btn btn-red btn-sm" href="javascript:;">警告</a>
+		<a class="btn btn-yellow btn-sm" href="javascript:;">扣罚</a></td>-->
 	</tr>
 {{else}}
 <div style="text-align: center;">

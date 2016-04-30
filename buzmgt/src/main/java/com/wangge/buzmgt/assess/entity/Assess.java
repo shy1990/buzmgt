@@ -57,7 +57,7 @@ public class Assess implements Serializable {
 	@Column(name = "ASSESS_ID")
 	private Long id;
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USER_ID")
 	private SalesMan salesman;
 	@Column(name = "ASSESS_AREA")
