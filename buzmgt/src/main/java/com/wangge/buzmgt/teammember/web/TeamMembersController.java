@@ -262,7 +262,11 @@ public class TeamMembersController {
     * @since JDK 1.8
    */
   @RequestMapping(value = "/toSalesManInfo", method = RequestMethod.GET)
-  public String getSalesManInfo(@RequestParam(value = "saojieId",required = false)Saojie saojie,String flag, Model model){
+  public String getSalesManInfo(@RequestParam(value = "saojieId",required = false)Saojie saojie,String flag,String regionId, Model model){
+	   //根据SalesMan获取saojie
+	   System.out.println("****************"+regionId);
+	   saojie = saojieService.findByregion(regionService.getRegionById(regionId.trim()));
+	  
        SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
        List<Region> rList = regionService.getListByIds(salesMan);
        model.addAttribute("salesMan", salesMan);
