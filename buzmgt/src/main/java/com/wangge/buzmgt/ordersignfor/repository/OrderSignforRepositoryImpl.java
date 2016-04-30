@@ -16,7 +16,7 @@ public class OrderSignforRepositoryImpl implements OrderSignforRepositoryCustom 
   private EntityManager em;
   
   @Override
-  public List<OrderSignfor> getReceiptNotRemarkList(String status, String startTime, String endTime, String orderNo) {
+  public List<OrderSignfor> getReceiptNotRemarkList(String status, String startTime, String endTime, String orderNo,String regionId) {
     // TODO Auto-generated method stub
     
     String sql="select a.* from BIZ_ORDER_SIGNFOR a left JOIN BIZ_UNPAYMENT_REMARK b on a.ORDER_NO=b.ORDERNO where b.ORDERNO is null and a.YEWU_SIGNFOR_TIME is not null and a.ORDER_STATUS in (0,2,3) ";
@@ -31,6 +31,19 @@ public class OrderSignforRepositoryImpl implements OrderSignforRepositoryCustom 
     if(StringUtils.isNotEmpty(orderNo)){
       sql+="and a.ORDER_NO='%s'";
       sql =String.format(sql, orderNo);
+    }
+    if(StringUtils.isNotEmpty(regionId)){
+      sql+="and (";
+      String[] regionIdarr=regionId.split(",");
+      for(int i=0;i<regionIdarr.length;i++){
+        if(i==0){
+          sql+="a.USER_ID like '%s' ";
+        }else{
+          sql+="or a.USER_ID like '%s' ";
+        }
+      }
+      sql+=") ";
+      sql =String.format(sql, regionIdarr);
     }
     if("UnPay".equals(status)){
       sql+="and a.CUSTOM_SIGNFOR_TIME is null";

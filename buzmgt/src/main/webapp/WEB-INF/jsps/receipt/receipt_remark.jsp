@@ -30,6 +30,7 @@
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <script id="remarked-table-template" type="text/x-handlebars-template">
+	{{#if content}}
 	{{#each content}}
       <tr>
         <td class="">
@@ -54,8 +55,14 @@
           </td>
       </tr>
 	{{/each}}
+	{{else}}
+	<tr>
+		<td colspan="100">没有相关数据</td>
+	</tr>
+	{{/if}}
 </script>
 <script id="notremarked-table-template" type="text/x-handlebars-template">
+	{{#if content}}
 	{{#each content}}
     <tr>
       <td class="">{{#with salesMan}}{{truename}}{{/with}}</td>
@@ -81,6 +88,11 @@
         <a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
     </tr>
 	{{/each}}
+	{{else}}
+	<tr>
+		<td colspan="100">没有相关数据</td>
+	</tr>
+	{{/if}}
 </script>
 <script type="text/javascript">
 var	base='<%=basePath%>';
@@ -95,13 +107,15 @@ var SearchData = {
 	<div class="content main">
 		<h4 class="page-header">
 			<i class="ico icon-abnormal_order"></i>收款异常订单
-			<!--区域选择按钮-->
-			<div class="area-choose">
-				选择区域：<span>山东省</span> <a class="are-line" href="javascript:;"
-					onclick="">切换</a>
-			</div>
-			<!--/区域选择按钮-->
-		</h4>
+				<!--区域选择按钮-->
+        <div class="area-choose">
+            选择区域：<span>${regionName }</span>
+            <a class="are-line" onclick="getRegion(${regionId});" href="javascript:;">切换</a>
+           	<input type="hidden" id="regionId" value="${regionId }">
+           	<input type="hidden" id="regionType" value="${regionType }">
+        </div>
+        <!--/区域选择按钮-->
+ 		</h4>
 		<div class="row">
 			<div class="col-md-12">
 				<!--box-->

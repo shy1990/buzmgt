@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -61,10 +62,19 @@ public class ReceiptRemark implements Serializable{
   
   private String remark;
   
+  @Column(name="salesman_id",insertable=false,updatable=false)
+  private String salesmanId;
+  
   @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
   @JoinColumn(name = "salesman_id")
   private SalesMan salesMan;
   
+  public String getSalesmanId() {
+    return salesmanId;
+  }
+  public void setSalesmanId(String salesmanId) {
+    this.salesmanId = salesmanId;
+  }
   public Long getId() {
     return id;
   }
