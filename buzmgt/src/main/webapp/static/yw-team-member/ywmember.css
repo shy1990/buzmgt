@@ -136,7 +136,13 @@
 	top: 5px;
 }
 
-
+.icon-abnormal {
+    background: url(../img/abnormal/qsyc.png) no-repeat;
+}
+.icon-oil-record {
+    top: 5px;
+    background: url(../img/icon/oil-subsidy/oil.png) no-repeat;
+} 
 
 
 

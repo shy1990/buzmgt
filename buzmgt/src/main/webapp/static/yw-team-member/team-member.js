@@ -1,7 +1,7 @@
 
 function getPageList(num,regionId){
-	$("#status").val();
-	window.location.href="/teammember/getSalesManList?page="+num+"&regionId="+regionId
+	var status=$("#status").val();
+	window.location.href="/teammember/getSalesManList?salesmanStatus="+status+"&page="+num+"&regionId="+regionId
 }
 
 function getList(param,name,regionId){

@@ -15,7 +15,8 @@
 <link href="/static/yw-team-member/team-memberAdd.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/static/zTree/css/icon.css" />
 <link rel="stylesheet" type="text/css" href="/static/zTree/css/main.css" />
-<link rel="stylesheet" type="text/css" href="/static/zTree/css/zTreeStyle/organzTreeStyle.css" />
+<link rel="stylesheet" type="text/css"
+	href="/static/zTree/css/zTreeStyle/organzTreeStyle.css" />
 <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link rel="stylesheet" type="text/css"
 	href="/static/yw-team-member/team-member.css" />
@@ -24,18 +25,23 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css"
 	href="/static/CloudAdmin/js/fuelux-tree/fuelux.min.css" />
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
- <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
- <script src="../static/js/jquery/jquery-1.11.3.min.js"
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+<script src="../static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
-<script type="text/javascript"src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
- <link rel="stylesheet" type="text/css" href="../static/zTree/css/zTreeStyle/organzTreeStyle.css" />
-<link rel="stylesheet" type="text/css"	href="../static/yw-team-member/team-member.css" />
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="../static/zTree/css/zTreeStyle/organzTreeStyle.css" />
+<link rel="stylesheet" type="text/css"
+	href="../static/yw-team-member/team-member.css" />
 <script type="text/javascript">
 	$(function() {
 		var status = $("#addClass").val();
-		console.info(status);
 		if (status != null && status != '') {
 			$("li[title = '" + status + "']").addClass("active");
 		} else {
@@ -84,8 +90,8 @@
 								<!--菜单栏-->
 								<ul class="nav nav-tabs">
 									<input id="status" type="hidden" value="${Status}">
-									<li title="全部"><a title="全部" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name,${regionId});"
+									<li title="全部"><a title="全部" name="salesmanStatus" href=""
+										onclick="getList(this.title,this.name,${regionId});"
 										data-toggle="tab">全部</a></li>
 									<li title="扫街中"><a title="扫街中" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name,${regionId});"
@@ -99,17 +105,16 @@
 									<li title="已转正"><a title="已转正" name="salesmanStatus"
 										href="" onclick="getList(this.title,this.name,${regionId});"
 										data-toggle="tab">已转正</a></li>
-									<li title="辞退"><a title="辞退" name="salesmanStatus"
-										href="" onclick="getList(this.title,this.name,${regionId});"
+									<li title="辞退"><a title="辞退" name="salesmanStatus" href=""
+										onclick="getList(this.title,this.name,${regionId});"
 										data-toggle="tab">辞退</a></li>
 								</ul>
 								<!--/菜单栏-->
 							</div>
 							<div class="port pull-right">
-								<a class="J_portDis dropdown-toggle" type="button" id="dropdownMenu1"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="true">排序 <span
-									class="caret"></span>
+								<a class="J_portDis dropdown-toggle" type="button"
+									id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="true">排序 <span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 									<li><a href="#">入职时间</a></li>
@@ -140,8 +145,12 @@
 																<td class="project-people"><a href=""><img
 																		alt="image" class="img-circle"
 																		src="../static/img/team-member/a.jpg"></a></td>
-																<td class="project-title"><a
-																	href="javascript:toSalesManInfo('${salesman.id}','salesman');"><strong>${salesman.truename}</strong>(${salesman.user.organization.name})</a>
+																<td class="project-title">
+															<!-- 	<a href="javascript:toSalesManInfo('${salesman.id}','salesman');"> -->
+																<a href="javascript:void(0);">
+																	
+																	
+																	<strong>${salesman.truename}</strong>(${salesman.user.organization.name})</a>
 																	<br /> <span>${salesman.region.name}</span></td>
 																<td class="project-title"><span class="l-h">大桥镇：<strong
 																		class="shop-num">20家</strong></span> <br /> <span>小桥镇：<strong
@@ -153,10 +162,13 @@
 																		<div style="width: 88%;"
 																			class="progress-bar saojie-bar-on"></div>
 																	</div></td>
-																<td class="project-actions"><a
-																	href="javascript:toSalesManInfo('${salesman.id}','salesman');"
+																<td class="project-actions">
+																	<!--<a href="javascript:toSalesManInfo('${salesman.region.id}','${salesman.id}','salesman');"
+																	
 																class="btn btn-white btn-sm"><span class="folder"></span>
-																	查看 </a>
+																	查看 </a>  --> <a href="javascript:void(0);"
+																	class="btn btn-white btn-sm"><span class="folder"></span>
+																		查看 </a>
 																	<div class="btn-group sr-only">
 																		<button type="button"
 																			class="btn btn-white btn-sm dropdown-toggle"
@@ -169,7 +181,8 @@
 																			<li role="separator" class="divider"></li>
 																			<li><a href="#">冻结账户</a></li>
 																		</ul>
-																	</div></td>
+																	</div>
+																</td>
 															</tr>
 														</c:forEach>
 													</tbody>
@@ -283,18 +296,18 @@
 						<i class="icon icon-district"></i>区域
 					</div>
 					<div class="box-body">
-						<div style="height: 290px" id="allmap">
-						</div>
+						<div style="height: 290px" id="allmap"></div>
 						<div class="structure col-xs-12">
 							<i class="icon icon-structure"></i> 组织结构
 						</div>
-						
-						<div class=""  >
-									<div class="role-list"  >
-													<div
-														style="width: 100%; height: 45px; border-right: 1px solid rgb(221, 221, 221);"></div>
-													<ul id="organizationId" class="ztree" style="overflow:auto;overflow-x: auto"></ul>
-									</div>
+
+						<div class="">
+							<div class="role-list">
+								<div
+									style="width: 100%; height: 45px; border-right: 1px solid rgb(221, 221, 221);"></div>
+								<ul id="organizationId" class="ztree"
+									style="overflow: auto; overflow-x: auto"></ul>
+							</div>
 						</div>
 						<!--/组织结构-->
 					</div>
@@ -333,9 +346,11 @@
 	<script src="/static/CloudAdmin/js/jQuery-Cookie/jquery.cookie.min.js"></script>
 	<script src="/static/CloudAdmin/js/script.js"></script>
 	<script src='/static/js/common.js'></script>
-	 <script src="/static/zTree/js/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/static/zTree/js/jquery.ztree.all-3.5.js"
+		type="text/javascript" charset="utf-8"></script>
 	<script src="src/main/webapp/static/yw-team-member/team-member.js"></script>
-	<script src="/static/js/organization/teamOrganizationTree.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/static/js/organization/teamOrganizationTree.js"
+		type="text/javascript" charset="utf-8"></script>
 	<script>
 		jQuery(document).ready(function() {
 			App.setPage("treeview"); //Set current page
@@ -431,8 +446,9 @@
 			window.location.href='/region/getPersonalRegion?id='+id;
 		}
 		/*查找区域 */
-		function toSalesManInfo(id,flag){
-			window.location.href="/teammember/toSalesManInfo?userId="+id+"&flag="+flag;
+		function toSalesManInfo(regionId,id,flag){
+			console.log("regionId         "+regionId);
+			window.location.href="/teammember/toSalesManInfo?userId="+id+"&flag="+flag+"&regionId="+regionId;
 		}
 		
 		function getList(param,name,regionId){

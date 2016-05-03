@@ -399,7 +399,6 @@ button:active {
 .text-primary {
 	color: #3894C7;
 }
-
 /*新图标实现方式*/
 
 .ico {
@@ -487,7 +486,14 @@ a.table-export:focus {
 	white-space: nowrap;
 	vertical-align: middle;
 }
-
+.table-overflow > .table > thead > tr > th.normal,
+.table-overflow > .table > tbody > tr > th.normal,
+.table-overflow > .table > tfoot > tr > th.normal,
+.table-overflow > .table > thead > tr > td.normal,
+.table-overflow > .table > tbody > tr > td.normal,
+.table-overflow > .table > tfoot > tr > td.normal {
+	white-space: normal;
+}
 
 /*new-table 新表格布局*/
 
@@ -655,7 +661,7 @@ a.table-export:hover, a.table-export:focus {
 
 .search-date {
 	display: inline-block;
-	width: 10%;
+	width: 11%;
 	min-width: 100px;
 	position: relative;
 	top: 12px;
@@ -692,4 +698,9 @@ a.table-export:hover, a.table-export:focus {
 }
 .img-box>img{
 	width: 100%;
+	height: 100%;
+}
+.tab-box-border{
+	border: 1px solid #ebebeb;
+	background: #FFF;
 }

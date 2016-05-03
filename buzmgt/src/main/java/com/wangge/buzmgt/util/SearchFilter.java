@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class SearchFilter {
   public enum Operator {
-    EQ, LIKE, GT, LT, GTE, LTE,NOTEQ,ISNULL,NOTNULL
+    EQ, LIKE, GT, LT, GTE, LTE,NOTEQ,ISNULL,NOTNULL,AND,ORE,ORLK,ORMLK
   }
 
   public String fieldName;
@@ -38,7 +38,7 @@ public class SearchFilter {
 
       // 拆分operator与filedAttribute
       String[] names = StringUtils.split(key, "_");
-      if (names.length != 2) {
+      if (names.length > 3) {
         throw new IllegalArgumentException(key
             + " is not a valid search filter name");
       }

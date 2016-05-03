@@ -9,6 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <title>考核详情</title>
+<link rel="stylesheet" type="text/css" href="/static/kaohe/kaohe-det.css" />
 <!-- Bootstrap -->
 <script src="/static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
@@ -18,7 +19,7 @@
 		<!--box-->
 		<!--不同阶段颜色不同1：pink 2：yellow 3:violet 4:-->
 		<c:choose>
-		<c:when test="${salesMan.salesmanStatus.name == '考核中'}">
+		<c:when test="${salesMan.status.name == '考核中'}">
 			<div class="ywmamber-msg box border pink">
 		</c:when>
 		<c:otherwise>
@@ -27,7 +28,7 @@
 		</c:choose>
 			<!--title-->
 			<div class="box-title">
-				<i class="icon icon-time"></i>${salesMan.salesmanStatus.name }
+				<i class="icon icon-time"></i>${salesMan.status.name }
 			</div>
 			<!--box-body-->
 			<div class="box-body">
@@ -44,13 +45,13 @@
 				<!--/ywmamber-body-->
 				<div class="stage">
 				<c:choose>
-				<c:when test="${salesMan.salesmanStatus.name == '考核中' && assess.assessStage == '1'}">
+				<c:when test="${salesMan.status.name == '考核中' && assess.assessStage == '1'}">
 					<span class="kaohe-stage onekaohe-stage">第一阶段:${assess.percent } </span>
 				</c:when>
-				<c:when test="${salesMan.salesmanStatus.name == '考核中' && assess.assessStage == '2'}">
+				<c:when test="${salesMan.status.name == '考核中' && assess.assessStage == '2'}">
 					<span class="kaohe-stage twokaohe-stage">第二阶段:${assess.percent } </span>
 				</c:when>
-				<c:when test="${salesMan.salesmanStatus.name == '考核中' && assess.assessStage == '3'}">
+				<c:when test="${salesMan.status.name == '考核中' && assess.assessStage == '3'}">
 					<span class="kaohe-stage threekaohe-stage">第三阶段:${assess.percent } </span>
 				</c:when>
 				<c:when test="${assess.status == 'AGREE' && assess.assessStage == '3' }">
@@ -60,7 +61,7 @@
 					<span class="kaohe-stage failurekaohe-stage">考核失败</span>
 				</c:when>
 				<c:otherwise>
-					<span class="kaohe-stage default-stage">${salesMan.salesmanStatus.name} ${assess.percent } </span>
+					<span class="kaohe-stage default-stage">${salesMan.status.name} ${assess.percent } </span>
 				</c:otherwise>
 				</c:choose>
 				</div>
@@ -102,6 +103,8 @@
 				href="javascript:;"><i class="icon icon-signin"></i>签收记录</a> <a
 				class="link-oper" href="javascript:;"><i
 				class="icon icon-saojie"></i>扫街记录</a>
+				<a class="link-oper" href="javascript:;"><i class="icon icon-abnormal"></i>异常订单</a>
+				<a class="link-oper" href="javascript:;"><i class="icon icon-oil-record"></i>油补记录</a>
 		</div>
 	</div>
 	<script type="text/javascript">

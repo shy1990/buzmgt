@@ -30,31 +30,39 @@
         } else if (Number(defaults.limit) <= 0)defaults.limit = '5';
         var totalCount = Number(defaults.totalCount), showPage = Number(defaults.showPage),
             limit = Number(defaults.limit), totalPage = Math.ceil(totalCount / limit);
-        if (totalPage > 0) {
+        if (totalPage > 1) {
             var html = [];
-            html.push(' <ul class="pagination">');
-            html.push(' <li class="previous"><a href="#">&laquo;</a></li>');
-            html.push('<li class="disabled hidden"><a href="#">...</a></li>');
+            html.push('<nav style="text-align: center;"><ul class="pagination">');
+            html.push(' <li class="previous"><a href="javascript:;">&laquo;</a></li>');
+            html.push('<li class="firstPage hidden"><a href="javascript:;">1</a></li>')
+            html.push('<li class="disabled hidden"><span href="javascript:;">...</span></li>');
             if (totalPage <= showPage) {
                 for (var i = 1; i <= totalPage; i++) {
-                    if (i == 1) html.push(' <li class="active"><a href="#">' + i + '</a></li>');
-                    else html.push(' <li><a href="#">' + i + '</a></li>');
+                    if (i == 1) html.push(' <li class="active"><a href="javascript:;">' + i + '</a></li>');
+                    else html.push(' <li><a href="javascript:;">' + i + '</a></li>');
                 }
             } else {
                 for (var j = 1; j <= showPage; j++) {
-                    if (j == 1) html.push(' <li class="active"><a href="#">' + j + '</a></li>');
-                    else html.push(' <li><a href="#">' + j + '</a></li>');
+                    if (j == 1) html.push(' <li class="active"><a href="javascript:;">' + j + '</a></li>');
+                    else html.push(' <li><a href="javascript:;">' + j + '</a></li>');
                 }
             }
-            html.push('<li class="disabled hidden"><a href="#">...</a></li>');
-            html.push('<li class="next"><a href="#">&raquo;</a></li></ul>');
+            html.push('<li class="disabled hidden"><span >...</span></li>');
+//            html.push('<li class="lastPage"><a href="javascript:;">' + totalPage + '</a></li>');
+            html.push('<li class="next"><a href="javascript:;">&raquo;</a></li></ul>');
             
             //扩展插件
-            html.push('<p class="page-totle">共计：<span class="text-blue">'+totalPage+'</span> 页, '+
-					 '<span class="text-blue">'+totalCount+'</span> 条记录,'+
-            		'第<input id="currtPage" class="currtPage" onkeyup="this.value=this.value.replace(/\\D/g,\'\')" '+
-            		'onafterpaste="this.value=this.value.replace(/\\D/g,\'\')"'+
-						 'name="currtpage" type="text" value="1"> 页<a class="goto" href="javascript:;">  跳转</a>  </p>')
+            if(totalPage>showPage){
+            	
+            	html.push(
+            	'<div class="turn-page-box pagination">'+
+                '<input id="currtPage" class="form-control "onkeyup="this.value=this.value.replace(/\\D/g,\'\')"'+
+            	'onafterpaste="this.value=this.value.replace(/\\D/g,\'\')"'+
+            	'name="currtpage" type="text" value="1" placeholder="跳转">'+
+                '<a class="goto" href="javascript:;"><i class="ico icon-search-page"></i></a></div>' );
+            			
+            }
+           	html.push('</nav>');
             
             
             

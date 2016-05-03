@@ -21,6 +21,9 @@
 <script type="text/javascript"src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
  <link rel="stylesheet" type="text/css" href="../static/zTree/css/zTreeStyle/organzTreeStyle.css" />
 <link rel="stylesheet" type="text/css"	href="../static/yw-team-member/team-member.css" />
+<style type="text/css">
+p{margin-left:5px; font-size:14px;}
+</style>
 <script type="text/javascript">
 	$(function() {
 		var status = $("#addClass").val();
@@ -121,31 +124,39 @@
 																	src="../static/img/saojie/a.jpg"></a></td>
 															<td class="project-title"><a href="javascript:toSalesManInfo('${saojie.id}','saojie');"><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
 																<br /> <span>${saojie.salesman.region.name}</span></td>
-															<c:if test="${saojie.status == 'PENDING' }">
+															<c:if test="${saojie.status == 'PENDING' or saojie.status == 'NOTSTARTED'}">
 																<td class="project-status"><span class="status-ing">${saojie.status.name}</span></td>
 															</c:if>
-															<c:if test="${saojie.status == 'AGREE' }">
+															<c:if test="${saojie.status == 'AGREE' or saojie.status == 'COMMIT'}">
 																<td class="project-status"><span
 																	class="status-finish">扫街完成</span></td>
+															</c:if>
+															<c:if test="${saojie.status == 'NOTSTARTED' }">
+																<td class="project-status"><span
+																	class="status-ing">未进行</span></td>
 															</c:if>
 															<td class="project-title"><span class="l-h">${saojie.region.name}：<strong
 																	class="shop-num">${saojie.minValue}家</strong></span></td>
 															<td class="project-completion">
-																<div>
-																	<span class="completion-ing">当前进度：${saojie.percent}</span> <span
-																		class="time-down"> 倒计时：${saojie.timing }天</span>
-																</div>
-																<div class="progress progress-mini">
-																	<div style="width: <c:if test="${saojie.percent>='100%'}">100%;</c:if>
-																	<c:if test="${saojie.percent<'100%'}">${saojie.percent};</c:if>
-																		" class="progress-bar"></div>
-																</div> <!-- 100%的用这个 --> <!-- <div>
-																		<span class="completion-ing">当前进度： 100%</span> <span
-																			class="time-finish"> 通过</span>
+																<c:if test="${saojie.status == 'PENDING' or saojie.status == 'NOTSTARTED'}">
+																	<div>
+																		<span class="completion-ing">当前进度：${saojie.percent}</span> <span
+																			class="time-down"> 倒计时：${saojie.timing }天</span>
 																	</div>
 																	<div class="progress progress-mini">
-                                                    					<div style="width: 100%;" class="progress-finish"></div>
-                                                					</div>-->
+																		<div style="width:${saojie.percent}" class="progress-bar"></div>
+																	</div>
+																</c:if>
+																<!-- 100%的用这个 --> 
+																<c:if test="${saojie.status == 'AGREE' or saojie.status == 'COMMIT'}">
+																<div>
+																	<span class="completion-ing">当前进度： 100%</span> <span
+																		class="time-finish"> 通过</span>
+																</div>
+																<div class="progress progress-mini">
+																	<div style="width: 100%;" class="progress-finish"></div>
+																</div>
+																</c:if>
 															</td>
 															<td class="project-actions"><a href="projects.html#"
 																class="btn btn-white btn-sm"><span class="folder"></span>
@@ -389,12 +400,51 @@
 			}); 
 		<%}%>
 		
-	
+			
+		// 定义一个控件类,即function
+		function ZoomControl(){
+		  // 默认停靠位置和偏移量
+		  this.defaultAnchor = BMAP_ANCHOR_BOTTOM_RIGHT;
+		  this.defaultOffset = new BMap.Size(10, 10);
+		}
+
+		// 通过JavaScript的prototype属性继承于BMap.Control
+		ZoomControl.prototype = new BMap.Control();
+
+		// 自定义控件必须实现自己的initialize方法,并且将控件的DOM元素返回
+		// 在本方法中创建个div元素作为控件的容器,并将其添加到地图容器中
+		ZoomControl.prototype.initialize = function(map){
+		  // 创建一个DOM元素
+		  var div = document.createElement("div");
+		  // 添加文字说明
+		  div.appendChild(document.createTextNode("查看完整地图"));
+		  // 设置样式
+		  div.style.cursor = "pointer";
+		  div.style.border = "1px solid gray";
+		  div.style.backgroundColor = "white";
+		  // 绑定事件,点击一次放大两级
+		  div.onclick = function(e){
+			  window.location.href='/business/tobusinessMap';
+		  }
+		  // 添加DOM元素到地图中
+		  map.getContainer().appendChild(div);
+		  // 将DOM元素返回
+		  return div;
+		}
+		// 创建控件
+		var myZoomCtrl = new ZoomControl();
+		// 添加到地图当中
+		map.addControl(myZoomCtrl);
+		
+		
+		
+		
 	
 		/*区域 */
 		function getRegion(id){
 			window.location.href='/region/getPersonalRegion?id='+id+"&flag=saojie";
 		}
+		
 	</script>
 </body>
 </html>

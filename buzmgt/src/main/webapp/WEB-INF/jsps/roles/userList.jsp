@@ -13,6 +13,7 @@
 		<link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="../static/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="../static/purview-setting/character.css" />
+		<link rel="stylesheet" type="text/css" href="../static/purview-setting/purview-setting.css" />
 		<script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	<body>
@@ -25,10 +26,10 @@
 			</h4>
 			<div class="row">
 			    <div class="col-md-12">
-					<div class="character  box border blue">
+					<div class=" box border blue">
 						<div class="box-title"><i class="icon role-icon"></i>${name}</div>
-						<div class="box-body">
-							<table class="table">
+						<div class="box-body table-responsive table-overflow">
+							<table class="table table-hover new-table">
 								<thead>
 									<th width="20%" class="center">序号</th>
 									<th width="20%" class="center" >匹配人员</th>

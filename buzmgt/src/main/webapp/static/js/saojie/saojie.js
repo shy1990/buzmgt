@@ -14,10 +14,7 @@ $(function() {
                     	saojieMan.append("<option value = '"+obj[i][0]+"'>"+obj[i][1]+"</option>");
 					}
 				}else {
-//					alert(obj.length);
-//					for(var i=0;i<obj.length;i++){
-//						alert(obj[i].name);
-//					}
+					
 				};
 		 }
 		});
@@ -30,7 +27,7 @@ function queryTown(){
 	var len = $("#btType");
 	len.prevAll().remove();
 	$("#btn").show();
-	var userId = document.getElementById("saojieMan").value;
+	var userId = $("#saojieMan  option:selected").val();
 	var map = new BMap.Map("allmap");    // 创建Map实例
 	$.ajax({
 		   type:"post",
@@ -69,6 +66,19 @@ function queryTown(){
 	        		polygon.setFillColor("red");
 	        		polygon.setStrokeOpacity(0.5);
 	        		map.addOverlay(polygon);   //增加多边形
+	        		
+	        		
+	        		var name=obj[i].name;
+	        		var centerPoint=obj[i].centerPoint;
+	        		
+	        		if(null!=centerPoint){
+						var lng = centerPoint.split("-")[0];//经度 
+						var lat = centerPoint.split("-")[1];//纬度%>
+						var secRingCenter = new BMap.Point(lng,lat);
+						var secRingLabel2 = new BMap.Label(name,{offset: new BMap.Size(10,-30), position: secRingCenter});
+						secRingLabel2.setStyle({"line-height": "20px", "text-align": "center", "width": "80px", "height": "29px", "border": "none", "padding": "2px","background": "url(http://jixingjx.com/mapapi/ac.gif) no-repeat",});
+						map.addOverlay(secRingLabel2);
+	        		}
 	        	}
 			}
 	}
@@ -80,7 +90,15 @@ function queryTown(){
 		   url:"/saojie/getRegionName",
 		   data: {"id":userId},
 		   success : function(obj){
-			   map.centerAndZoom(obj, 13);  // 初始化地图,设置中心点坐标和地图级别
+			  if(null!=obj.split("|")[1]&&"null"!=obj.split("|")[1]){
+				  	//var[] listCoordinates=obj.split("|")[1].split("=");
+				  	var jlng=obj.split("|")[1].split("=")[0].split("-")[0];
+					var jlat=obj.split("|")[1].split("=")[0].split("-")[1];
+					map.centerAndZoom(new BMap.Point(jlng,jlat), 13);
+			  }else{
+				  map.centerAndZoom(obj.split("|")[0], 13);  // 初始化地图,设置中心点坐标和地图级别
+			  }
+			   
 			   map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
 			   map.setCurrentCity(obj);          // 设置地图显示的城市 此项是必须设置的
 			   map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
@@ -237,7 +255,6 @@ function getSaojieList(param,name,regionId){
     	var value = $("#param").val();
     	window.location.href="/saojie/getSaojieList?salesman.truename="+value+"&salesman.jobNum="+value+"&regionid="+regionId;
     }else if(name == "status"){
-    	alert(param);
     	window.location.href="/saojie/getSaojieList?saojieStatus="+param+"&regionid="+regionId;
     }
 }

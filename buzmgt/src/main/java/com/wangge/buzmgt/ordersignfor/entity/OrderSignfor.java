@@ -19,13 +19,12 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 //@JsonInclude(Include.NON_EMPTY)
 @Entity
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
-@Table(name = "SYS_ORDER_SIGNFOR")
+@Table(name = "BIZ_ORDER_SIGNFOR")
 public class OrderSignfor implements Serializable {
 
   /**
@@ -53,7 +52,7 @@ public class OrderSignfor implements Serializable {
   }
   
   public static enum OrderPayType{
-    ONLINE("线上支付"),POS("POS"),CASH("现金") ;
+    ONLINE("线上支付"),POS("POS"),CASH("现金"),NUPANTEBT("未支付") ;
     
     private String name;
     
@@ -78,12 +77,13 @@ public class OrderSignfor implements Serializable {
   //业务签收异常标记
   @Transient
   private String ywSignforTag;
+  @Transient
+  private String goodNum;
   
-//  private String userId;
+  @Column(name="user_id",insertable=false,updatable=false)
+  private String userId;
 //  private String truename;
-//  @Transient
 //  private String ywName;//业务名称;
- 
  
   @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
   @JoinColumn(name = "user_id")
@@ -93,22 +93,47 @@ public class OrderSignfor implements Serializable {
   private String shopName;
   private Float orderPrice;
   private Integer phoneCount;
-  private Date creatTime;
+  @Column(name="CREAT_TIME")
+  private Date createTime;
+
   private Date yewuSignforTime; 
   private Date customSignforTime;
   @Enumerated(EnumType.ORDINAL)
   private OrderStatus orderStatus;
   
   @Enumerated(EnumType.ORDINAL)
-  private OrderPayType orderPayType;
+  private OrderPayType orderPayType = OrderPayType.NUPANTEBT;
   private String yewuSignforGeopoint;
   private String customSignforGeopoint;
   private Integer customSignforException;
-  private int partsCount;
+  private Integer partsCount;
   private Date fastmailTime;
   private String customUnSignRemark;
   
+
+  public String getGoodNum() {
+    return goodNum;
+  }
+
+  public void setGoodNum(String goodNum) {
+    this.goodNum = goodNum;
+  }
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
   
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
   public String getYwSignforTag() {
     return ywSignforTag;
   }
@@ -126,14 +151,7 @@ public class OrderSignfor implements Serializable {
     this.aging = aging;
   }
 
-  public Date getCreatTime() {
-    return creatTime;
-  }
-
-  public void setCreatTime(Date creatTime) {
-    this.creatTime = creatTime;
-  }
-
+ 
   public SalesMan getSalesMan() {
     return salesMan;
   }
@@ -218,7 +236,7 @@ public class OrderSignfor implements Serializable {
     this.orderStatus = orderStatus;
   }
   public String getOrderPayType() {
-    return orderPayType == null ? "":orderPayType.getName();
+    return orderPayType == null ? OrderPayType.NUPANTEBT.getName():orderPayType.getName();
   }
   public void setOrderPayType(OrderPayType orderPayType) {
     this.orderPayType = orderPayType;
@@ -258,11 +276,11 @@ public class OrderSignfor implements Serializable {
     this.customUnSignRemark = customUnSignRemark;
   }
 
-  public int getPartsCount() {
+  public Integer getPartsCount() {
     return partsCount;
   }
 
-  public void setPartsCount(int partsCount) {
+  public void setPartsCount(Integer partsCount) {
     this.partsCount = partsCount;
   }
 

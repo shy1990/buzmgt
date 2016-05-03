@@ -239,7 +239,7 @@ public class RegionController {
 	 */
 	@RequestMapping(value = "/addPoints", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean addPoints(String  points,String parentid,String name) {
+	public boolean addPoints(String  points,String parentid,String name,String centerPoint) {
 		JSONArray jsonArr = JSONArray .fromObject(points);
 		StringBuffer pointbuf=new StringBuffer();
 		for(int i=0;i<jsonArr.size();i++){
@@ -251,6 +251,7 @@ public class RegionController {
 		Region entity=new Region(String.valueOf(maxid+1),name,RegionUtil.getTYpe(region));
 		entity.setCoordinates(pointbuf.toString());
 		entity.setParent(regionService.findListRegionbyid(parentid));
+		entity.setCenterPoint(centerPoint);
 		regionService.saveRegion(entity);
 		return true;
 		
@@ -288,7 +289,7 @@ public class RegionController {
 		} else {
 			if (region.getChildren().size() > 0) {
 				for (Region reg : region.getChildren()) {
-					if (maxid < Integer.parseInt(reg.getId())) {
+					if (maxid < Long.parseLong(reg.getId())) {
 						maxid = Long.parseLong(reg.getId());
 					}
 				}

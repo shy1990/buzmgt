@@ -19,6 +19,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,18 +30,22 @@ import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.SearchFilter;
 
 @Service
 public class OrderSignforServiceImpl implements OrderSignforService {
 
- 
+ private static final Logger logger = Logger.getLogger(OrderSignforServiceImpl.class);
 
   @PersistenceContext  
   private EntityManager em; 
   @Autowired
   private OrderSignforRepository orderSignforRepository;
   
+  @Autowired
+  private SalesManService salesManService;
   
   @Override
   public void updateOrderSignfor(OrderSignfor xlsOrder) {
@@ -212,7 +217,7 @@ public class OrderSignforServiceImpl implements OrderSignforService {
             case NOTNULL:
               if (javaTypeName.equals(TYPE_RED_ENVELOP_TYPE)) {
                 
-                predicates.add(cb.isNull(expression));
+                predicates.add(cb.isNotNull(expression));
               }
               
               break;
@@ -230,6 +235,26 @@ public class OrderSignforServiceImpl implements OrderSignforService {
         return cb.conjunction();
       }
     };
+  }
+  @Override
+  public List<OrderSignfor> getReceiptNotRemarkList(String status, String startTime, String endTime, String orderNo,String regionId) {
+    // TODO Auto-generated method stub
+    List<OrderSignfor> list= orderSignforRepository.getReceiptNotRemarkList(status, startTime, endTime, orderNo,regionId);
+    try {
+      list.forEach(notRemarklist->{
+        notRemarklist.setSalesMan(salesManService.findByUserId(notRemarklist.getUserId()));
+        if(notRemarklist.getSalesMan()!=null){
+          notRemarklist.getSalesMan().setUser(null);
+          notRemarklist.getSalesMan().setRegion(null);
+        }else{
+          notRemarklist.setSalesMan(new SalesMan());
+        }
+      });
+    } catch (Exception e) {
+      logger.error(e.getMessage());
+      return list;
+    }
+    return list;
   }
   
 

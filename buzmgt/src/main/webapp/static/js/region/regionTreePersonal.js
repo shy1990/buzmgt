@@ -132,12 +132,25 @@ function zTreeOnClick(event, treeId, treeNode) {
 //	 document.getElementById("iframepage").src = "area/right?id=" +	 treeNode.id;
 	
 	var flag=$("#flag").val();
-	if(null===flag||""===flag){
-		window.location.href='/teammember/getSalesManList?regionId='+treeNode.id;
-	}else if("account" == flag){
-		window.location.href='/accountManage?regionId='+treeNode.id;
-	}else{
+	switch (flag) {
+	case "saojie":
 		window.location.href='/saojie/getSaojieList?regionid='+treeNode.id;
+		break;
+	case "oilCost":
+		window.location.href='/oilCost/getOilCostList/'+treeNode.id;
+		break;
+	case "account":
+		window.location.href='/accountManage?regionId='+treeNode.id;
+		break;
+	case "nuPayRemark":
+		window.location.href='receiptRemark/getRemarkList/'+treeNode.id;
+		break;
+	case "kaohe":
+		window.location.href='/assess/getAssessList/?regionid='+treeNode.id;
+		break;
+	default:
+		window.location.href='/teammember/getSalesManList?regionId='+treeNode.id;
+		break;
 	}
 
 }
@@ -502,10 +515,18 @@ $(document).ready(function() {
 function findRegionByName(){
 	var regionName=$("#regionName").val();
 	var flag=$("#flag").val();
-	if(null===flag||""===flag){
-		window.location.href='/salesman/getSalesManList?regionName='+regionName;
-	}else{
+	switch (flag) {
+	case "saojie":
 		window.location.href='/saojie/getSaojieList?regionName='+regionName;
+		break;
+	//油补统计
+	case "oilcost":
+		window.location.href='/oilCost/list?regionName='+regionName;
+		break;
+
+	default:
+		window.location.href='/salesman/getSalesManList?regionName='+regionName;
+		break;
 	}
 	
 }

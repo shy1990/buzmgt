@@ -21,4 +21,13 @@ public interface OrderSignforService {
   public Page<OrderSignfor> getOrderSingforList(Map<String, Object> searchParams, Pageable pageRequest);
 
   public List<OrderSignfor> findAll(Map<String, Object> searchParams);
+
+  /**
+   * 查询未报备订单
+   * @param status
+   * @param startTime
+   * @param endTime
+   * @return
+   */
+  List<OrderSignfor> getReceiptNotRemarkList(String status, String startTime, String endTime, String orderNo,String regionId);
 }

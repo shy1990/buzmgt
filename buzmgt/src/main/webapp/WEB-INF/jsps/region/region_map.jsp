@@ -127,15 +127,9 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 							<%
 								String jlng=listCoordinates[0].split("-")[0];
 								String jlat=listCoordinates[0].split("-")[1];
-							
 							%>
 			 				map.centerAndZoom(new BMap.Point(<%=jlng%>, <%=jlat%>), 12);
 			 				map.enableScrollWheelZoom(true); 
-//			 				polygon.addEventListener('click',function(e) {
-//			 				   var  point=JSON.stringify(e.pixel);
-//								  alert(point);
-	<%-- 								  alert(<%=coordinates%>); --%>
-//							});
 							<%
 		}else{%>
 			var bdary = new BMap.Boundary();
@@ -164,6 +158,8 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 		 		for(Region region:listRegion){
 		 			//JSONObject obj=JSONObject.fromObject(jsonArr.get(i));
 					String coordinates=region.getCoordinates();
+					String centerPoint=region.getCenterPoint();
+					String name=region.getName();
 					if(null!=coordinates){
 		 			String[] listCoordinates=coordinates.split("=");
 		 			
@@ -188,17 +184,22 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 						}%>
 						], {strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
 		 				map.addOverlay(polygon); 	
-//		 				polygon.addEventListener('click',function(e) {
-//		 				   var  point=JSON.stringify(e.pixel);
-//							  alert(point);
-<%-- 								  alert(<%=coordinates%>); --%>
-//						});
 						<%
 						 
-		 			}
-		 		}
+		 			}%>
+					
+					
+		 			//色块上的文字shuomi
+	 				<%		
+	 					if(null!=centerPoint){
+							double lng = Double.parseDouble(centerPoint.split("-")[0]);//经度 
+							double lat = Double.parseDouble(centerPoint.split("-")[1]);//纬度%>
+							var secRingCenter = new BMap.Point(<%=lng%>,<%=lat%>)
+							var secRingLabel2 = new BMap.Label("<%=name%>",{offset: new BMap.Size(10,-30), position: secRingCenter});
+							secRingLabel2.setStyle({"line-height": "20px", "text-align": "center", "width": "80px", "height": "29px", "border": "none", "padding": "2px","background": "url(http://jixingjx.com/mapapi/ac.gif) no-repeat",});
+							map.addOverlay(secRingLabel2);
+		 		<%}}
 		 		}%>
-// 	}
 	
 	
 	

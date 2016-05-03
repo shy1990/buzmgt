@@ -87,6 +87,7 @@ public class AssessController {
     model.addAttribute("regionData",regionService.findByRegion(salesman.getRegion().getId()));
     List<Object> listRegion =  regionList(salesman.getRegion().getId());
     model.addAttribute("listAdminDivision", listRegion);
+    model.addAttribute("pcoordinates", salesman.getRegion().getCoordinates());
     return "kaohe/kaohe_set";
   }
   

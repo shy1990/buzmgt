@@ -60,7 +60,7 @@ public class OrderSignforController {
   @RequestMapping(value="/list",method=RequestMethod.GET)
   @ResponseBody
   public  String OrderSignforList(HttpServletRequest request,
-      @PageableDefault(page = 0,size=10,sort={"creatTime"},direction=Direction.DESC) Pageable pageRequest ){
+      @PageableDefault(page = 0,size=10,sort={"createTime"},direction=Direction.DESC) Pageable pageRequest ){
     String type=request.getParameter("type");
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<OrderSignfor> orderSignforslist=null;
@@ -73,9 +73,8 @@ public class OrderSignforController {
       int total=0;
       int number=pageRequest.getPageNumber();
       int size=pageRequest.getPageSize();
-      System.out.println(number+":"+size);
       for(OrderSignfor order : list){
-        Date ctrateTime = order.getCreatTime();
+        Date ctrateTime = order.getCreateTime();
         Date checkDate=DateUtil.moveDate(ctrateTime, 1);
         checkDate.setHours(Integer.parseInt(times[0]));
         checkDate.setMinutes(Integer.parseInt(times[1]));
@@ -96,7 +95,10 @@ public class OrderSignforController {
       orderSignforslist=os.getOrderSingforList(searchParams, pageRequest);
     }
     String s ="";
-    orderSignforslist.forEach(osfl->{
+    orderSignforslist.getContent().forEach(osfl->{
+      if(osfl.getSalesMan()==null){
+        osfl.setSalesMan(new SalesMan());
+      }
       osfl.getSalesMan().setUser(null);
       osfl.getSalesMan().setRegion(null);
       String DateStr="";
@@ -156,7 +158,7 @@ public class OrderSignforController {
       String timesGap = "9:00";
       String[] times=timesGap.split(":");
       for(OrderSignfor order : list){
-        Date ctrateTime = order.getCreatTime();
+        Date ctrateTime = order.getCreateTime();
         Date checkDate=DateUtil.moveDate(ctrateTime, 1);
         checkDate.setHours(Integer.parseInt(times[0]));
         checkDate.setMinutes(Integer.parseInt(times[1]));
@@ -209,7 +211,7 @@ public class OrderSignforController {
   @RequestMapping(value="/getrecord/{salesManId}",method=RequestMethod.GET)
   @ResponseBody
   public String getRecordList(@PathVariable("salesManId") SalesMan salesMan, HttpServletRequest request,
-      @PageableDefault(page = 0,size=10,sort={"creatTime"},direction=Direction.DESC) Pageable pageRequest ){
+      @PageableDefault(page = 0,size=10,sort={"createTime"},direction=Direction.DESC) Pageable pageRequest ){
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     searchParams.put("EQ_salesMan", salesMan);
     String s ="";

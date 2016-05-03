@@ -68,6 +68,9 @@ public class Region implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
 	private Collection<Region> children;
 
+	@JoinColumn(name = "CENTER_POINT")
+  private String centerPoint;
+	
 	public String getId() {
 		return id;
 	}
@@ -138,4 +141,16 @@ public class Region implements Serializable {
 		this.children = children;
 	}
 
+  public String getCenterPoint() {
+    return centerPoint;
+  }
+
+  public void setCenterPoint(String centerPoint) {
+    this.centerPoint = centerPoint;
+  }
+
+  
+	
+	
+	
 }

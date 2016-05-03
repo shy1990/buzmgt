@@ -320,35 +320,8 @@
 	<script>
 		/*区域 */
 		function getRegion(id){
-			window.location.href='/region/getPersonalRegion?id='+id;
+			window.location.href='/region/getPersonalRegion?id='+id+"&flag=kaohe";
 		}
-//分页生成
-		var regionId = $('#regionId').val();
-        		var job = $('#truename').val();
-        		var name = $('#jobNum').val();
-        		var statu = $('#assessStatus').val();
-		var totalCount = $('#total').val(); //总条数 
-			showCount = 10, //显示分页个数
-			limit =  1;//每页条数
-// 		createTable(1, limit, totalCount);
-		$('#callBackPager').extendPagination({
-			totalCount : totalCount, 
-			showCount : showCount,
-			limit : limit,
-			callback : function(curr, limit, totalCount) {
-				alert("当前是第"+curr+"页,每页"+ limit+"条,总共"+ totalCount+"条");
-					
-		// 		createTable(1, limit, totalCount); //生成列表
-			}
-		});
-		
-		
-		
-		function getAssessDet(){
-			
-			
-		}
-		
 	</script>
 </body>
 </html>

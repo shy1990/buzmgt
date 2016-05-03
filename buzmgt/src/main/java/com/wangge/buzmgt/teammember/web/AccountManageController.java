@@ -15,7 +15,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.base.BaseController;
+import com.wangge.buzmgt.sys.entity.ChildAccount;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.entity.User.UserStatus;
+import com.wangge.buzmgt.sys.service.ChildAccountService;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.RoleService;
 import com.wangge.buzmgt.sys.service.UserService;
@@ -61,6 +62,8 @@ public class AccountManageController  extends BaseController{
   private RoleService ros;
   @Autowired
   private UserService us;
+  @Autowired
+  private ChildAccountService ca;
   /**
    * 
    * @Description: 账号列表
@@ -297,4 +300,76 @@ public class AccountManageController  extends BaseController{
     }
     return "err";
   }
+  
+  /**
+   * 
+    * addChildAccount:添加子账号. <br/> 
+    * @author rebort 
+    * @param truename
+    * @param userId
+    * @param model 
+    * @since JDK 1.8
+   */
+  @RequestMapping(value="/addChildAccount" ,method = RequestMethod.POST)
+  @ResponseBody
+  public String addChildAccount(String truename,String userId,Model model){
+    String firstCh=userId.substring(0, 1);
+    List<ChildAccount> listChildAccount=ca.findChildCountByParentId(userId);
+    String childId=null;
+    if(listChildAccount.size()==0){
+       childId=firstCh+(Long.parseLong(userId.substring(1, userId.length())) +1); 
+    }else{
+      childId=firstCh+(Long.parseLong(listChildAccount.get(0).getChildId().substring(1, listChildAccount.get(0).getChildId().length())) +1);
+    }
+   
+    ChildAccount childAccount=new ChildAccount(childId,userId,truename);
+    ca.save(childAccount);
+    return "suc";
+  }
+  
+  /**
+   * 
+    * findChildAccount:查询子账号列表 <br/> 
+    * @author Administrator 
+    * @param userId
+    * @param model
+    * @return 
+    * @since JDK 1.8
+   */
+  @RequestMapping(value="/findChildAccount" ,method = RequestMethod.GET)
+  public String findChildAccount(String userId,Model model){
+    
+    List<ChildAccount> listChild=ca.findChildCountByParentId(userId);
+    model.addAttribute("listChild", listChild);
+    model.addAttribute("fatherAccount", sm.getSalesmanByUserId(userId));
+    return "account/childAccount_list";
+  }
+  
+  /**
+   * 
+    * mofidyChildAccountStatus:修改子账号. <br/> 
+    * @author Administrator 
+    * @param userid
+    * @param status
+    * @return 
+    * @since JDK 1.8
+   */
+      @RequestMapping(value="/mofidyChildAccountStatus" ,method = RequestMethod.POST)
+      @ResponseBody
+      public String mofidyChildAccountStatus(String userid,String status){
+        try {
+          ChildAccount cAccount=ca.findbyUserId(Long.parseLong(userid));
+          if(status.equals("3")){
+            ca.delete(cAccount);
+          }else{
+            cAccount.setEnable(Integer.parseInt(status));
+            ca.save(cAccount);
+          }
+          return "suc";
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return "err";
+      }
+  
 }
