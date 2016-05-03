@@ -259,6 +259,12 @@ public class SaojieServiceImpl implements SaojieService {
   public Saojie findByOrderAndSalesman(int ordernum, SalesMan salesman) {
     return saojieRepository.findByOrderAndSalesman(ordernum,salesman);
   }
+
+  @Override
+  public Saojie findByStatusAndSalesman(SaojieStatus status, String userId) {
+    return saojieRepository.findByStatusAndSalesman(status,userId);
+  }
+  
 }
   
   

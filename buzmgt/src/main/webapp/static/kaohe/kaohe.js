@@ -25,5 +25,5 @@ function check() {
 
 function getPageList(num,regionId,name,job,statu){
 	
-	window.location.href="/assess/getAssessList?page="+curr+"&regionid="+regionId+"&salesman.jobNum="+job+"&salesman.truename="+name+"&assessStatus="+statu;
+	window.location.href="/assess/getAssessList?page="+num+"&regionid="+regionId+"&salesman.jobNum="+job+"&salesman.truename="+name+"&assessStatus="+statu;
 }

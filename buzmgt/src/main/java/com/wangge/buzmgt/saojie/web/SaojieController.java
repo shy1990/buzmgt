@@ -27,6 +27,7 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.util.DateUtil;
 
 /**
  * 
@@ -236,6 +237,11 @@ public class SaojieController {
 	  if(salesman != null && !"".equals(salesman)){
 	     list = saojieService.findBysalesman(salesman);
 	  }
+	  Saojie saojie = saojieService.findByStatusAndSalesman(SaojieStatus.PENDING,id.trim());
+	  String beginTime = DateUtil.date2String(saojie.getBeginTime());
+	  String endTime = DateUtil.date2String(saojie.getExpiredTime());
+	  model.addAttribute("beginTime",beginTime);
+	  model.addAttribute("endTime",endTime);
 	  model.addAttribute("list",list);
 	  model.addAttribute("salesman",salesman);
 	  model.addAttribute("areaname",salesman.getRegion().getName());

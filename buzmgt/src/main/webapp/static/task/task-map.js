@@ -96,7 +96,6 @@ function ajaxSearch(searchData) {
 				
 				$.each(shopData, function(i,item){
 	                arr = item.coordinate.split("-");
-	                alert(arr);
 	                for (i = 0;i < arr.length;i++){
 	                	pt = new BMap.Point(arr[0],arr[1]);  // 拿到坐标点
 	                }

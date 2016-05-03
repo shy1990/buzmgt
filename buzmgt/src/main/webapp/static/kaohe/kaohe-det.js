@@ -6,7 +6,6 @@ $(function() {
 
 	//加载时根据业务id和考核id查询店铺数据
 	searchData['salesmanId'] = $('.search-box').attr("data-sid");
-	alert(searchData['salesmanId']);
 	searchData['assessId'] = $('.search-box').attr("data-aid");
 	ajaxSearch(searchData);
 });
@@ -49,7 +48,6 @@ function goSearch() { // 业务id，考核id
  */
 function diffTime(beginTime, endTime) {
 	var regionId = $("#regionId  option:selected").val();
-	alert(regionId);
 	searchData['regionId'] = regionId; // 添加数据
 	searchData['begin'] = beginTime;
 	searchData['end'] = endTime;
