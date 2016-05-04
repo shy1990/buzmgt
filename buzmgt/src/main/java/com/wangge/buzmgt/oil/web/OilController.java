@@ -54,7 +54,8 @@ public class OilController {
 		model.addAttribute("lists", lists);
 		model.addAttribute("oilParameter", oilParameter);
 		System.out.println("*********"+manager.getRegion().getId());
-		return "oil/oil_subsidy";
+//		return "oil/oil_subsidy";
+		return "oil/oil_subsidy_xiugai";
 	}
 	/**
 	 * 设置区域公里系数(添加)
