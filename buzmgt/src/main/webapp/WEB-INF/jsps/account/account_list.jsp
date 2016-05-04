@@ -416,7 +416,7 @@
 		}
 		// 重置密码
 		function resetPwd(accountNum){
-			if (confirm("确定要重置密码？	初始密码1234567")) {
+			if (confirm("确定要重置密码？	初始密码123456")) {
 				var url = "resetPwd?id=" + accountNum;
 				$.post(url, function(data) {
 					if (data === 'suc') {

@@ -85,7 +85,7 @@ public class AccountServiceImpl implements AccountService {
   @Override
   @Transactional
   public boolean mofidyPwd(String id) {
-    String sql = "update SYS_USER u set u.password='1234567' where u.user_id='"+id+"' ";
+    String sql = "update SYS_USER u set u.password='123456' where u.user_id='"+id+"' ";
     Query query =  em.createNativeQuery(sql);
     return query.executeUpdate()>0?true:false;
   }

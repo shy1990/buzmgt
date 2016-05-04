@@ -77,7 +77,6 @@ public class AssessServiceImpl implements AssessService {
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
     q.setMaxResults(7);
-    System.out.println(q.getResultList());
     List<Assess> list = new ArrayList<Assess>();
     for(Object obj: q.getResultList()){
       Assess ass = (Assess)obj;

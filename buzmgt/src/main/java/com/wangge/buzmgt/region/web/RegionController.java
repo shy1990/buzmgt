@@ -297,7 +297,16 @@ public class RegionController {
 				maxid = Long.parseLong(pid + "00");
 			}
 		}
-		return maxid;
+		
+		while(1==1){
+		  if(regionService.findByRegion((maxid+1)+"")!=null){
+		      maxid=maxid+1;
+	    }else{
+	      break;
+	    }
+		}
+	
+		return maxid+1;
 	}
 	
   /**
