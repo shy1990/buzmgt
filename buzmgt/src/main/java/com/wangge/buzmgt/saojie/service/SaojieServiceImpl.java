@@ -110,7 +110,6 @@ public class SaojieServiceImpl implements SaojieService {
       hql += " and sj.saojie_status='1' or sj.saojie_status='3'";
     }
     
-
     hql +=" group by sj.user_id,sj.saojie_id) saojie on saojie.saojie_id=t.saojie_id";
     Query q = em.createNativeQuery(hql,Saojie.class);  
     int count=q.getResultList().size();
