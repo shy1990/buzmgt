@@ -1,3 +1,4 @@
+
 package com.wangge.buzmgt.oil.entity;
 
 import java.io.Serializable;
