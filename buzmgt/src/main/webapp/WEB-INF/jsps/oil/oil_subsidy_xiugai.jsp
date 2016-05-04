@@ -108,6 +108,9 @@
 									class="text-gery-hs">系统默认所有区域均为改系数，自定义设置区域除外</span>
 							</div>
 							<!--设置公里系数表-->
+							<%
+							 	int s = 0;
+							%>
 							<div class="bs-example">
 								<div id="acont" class="row">
 									<!-- -------------------------------- -->
@@ -119,7 +122,7 @@
 												<div class="col-sm-3 cl-padd">
 													<div class="ratio-box">
 														<div class="ratio-box-dd">
-															<span class="label  label-blue">${status.count }</span> <span
+															<span class="label  label-blue"><%= ++s %></span> <span
 																class="text-black jll">${oil.region.name }</span> <a
 																class="text-redd jll" href="" data-toggle="modal"
 																data-target="">${oil.kmRatio } 倍</a> <a
@@ -193,6 +196,9 @@
 									class="text-small">系统默认所有区域均为该系数，自定义设置区域除外</span>
 							</div>
 							<!-- 设置油补金额 -->
+							<%
+							 	int i = 0;
+							%>
 							<div class="bs-example">
 								<div id="acontt" class="row">
 									<!-- ----------------------------------------------- -->
@@ -203,7 +209,7 @@
 												<div class="col-sm-3 cl-padd">
 													<div class="ratio-box">
 														<div class="ratio-box-dd">
-															<span class="label  label-blue">${status.count }</span> <span
+															<span class="label  label-blue"><%= ++i%></span> <span
 																class="text-black jll"> ${oil.region.name }</span> <a
 																class="text-redd jll" href="" data-toggle="modal"
 																data-target="">${oil.kmOilSubsidy }元/KM</a> <a
