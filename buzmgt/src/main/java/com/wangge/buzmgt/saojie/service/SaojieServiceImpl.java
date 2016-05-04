@@ -92,7 +92,7 @@ public class SaojieServiceImpl implements SaojieService {
         hql += ""+serHql+" and sj.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
       }else{
-        hql += "and sj.region_id in"
+        hql += " sj.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
       }
     }else{
@@ -110,7 +110,6 @@ public class SaojieServiceImpl implements SaojieService {
       hql += " and sj.saojie_status='1' or sj.saojie_status='3'";
     }
     
-
     hql +=" group by sj.user_id,sj.saojie_id) saojie on saojie.saojie_id=t.saojie_id";
     Query q = em.createNativeQuery(hql,Saojie.class);  
     int count=q.getResultList().size();
@@ -259,6 +258,11 @@ public class SaojieServiceImpl implements SaojieService {
   @Override
   public Saojie findByOrderAndSalesman(int ordernum, SalesMan salesman) {
     return saojieRepository.findByOrderAndSalesman(ordernum,salesman);
+  }
+
+  @Override
+  public List<Saojie> findSaojie(String status, String userId) {
+    return saojieRepository.findSaojie(status, userId);
   }
 }
   

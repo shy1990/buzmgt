@@ -265,7 +265,12 @@ public class SaojieController {
 	@ResponseBody
   public String auditPass(String saojieId,String description,Model model){
     Saojie saojie = saojieService.findById(saojieId);
-    saojie.setStatus(SaojieStatus.AGREE);
+    int maxOrder = saojieService.getOrderNumById(saojie.getSalesman().getId());
+    if(saojie.getOrder() == maxOrder){
+      saojie.setStatus(SaojieStatus.AGREE);//当是最后一个扫街时修改其为完成
+    }else{
+      saojie.setStatus(SaojieStatus.COMMIT);
+    }
     saojie.setDescription(description);
     saojieService.saveSaojie(saojie);
     SalesMan sm=saojie.getSalesman();

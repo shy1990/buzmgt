@@ -1,7 +1,23 @@
 //点击"保存"
 $("#button_bocun").click(function() {
-
-	location.href = '/oilCost/list';
+	
+	var ratio = $("#default_km").val();
+	var regionId = '0';
+	var kmOilSubsidy =$("#default_money").val() ;
+	console.log(ratio+"   "+kmOilSubsidy);
+	$.ajax({
+		url:'/oil/saveDefault',
+		type:'post',
+		data:{
+			kmRatio : ratio,
+			regionId : regionId,
+			kmOilSubsidy : kmOilSubsidy
+		},
+		success : function(result) {
+			alert(result);
+			location.href = '/oil/toOilSetList';
+		}
+	});
 
 });
 
@@ -119,7 +135,7 @@ function changeTo() {
 	$("#xiugai")
 			.replaceWith(
 					' <div class="form-group"> '
-							+ '   <label for="" class="col-sm-4 control-label">公里系数：</label>'
+							+ '   <label for="" class="col-sm-4 control-label">每公里油补金额 ：</label>'
 							+ '  <div class="col-sm-7">'
 							+ '      <div class="input-group are-line">'
 							+ '         <span class="input-group-addon"><i class="icon icon-task-lk"></i></span>'
@@ -235,5 +251,4 @@ function modify_money(id, kmRatio, regionId) {
 
 		});
 	});
-
 }

@@ -14,4 +14,6 @@ public interface AssessRepository extends JpaRepository<Assess, Long>{
   
   public List<Assess> findBysalesman(SalesMan salesman);
   
+  @Query("select a from Assess a where a.assessStage = ?1 and a.salesman.id = ?2")
+  Assess findByStageAndSalesman(String stage,String userId);
 }

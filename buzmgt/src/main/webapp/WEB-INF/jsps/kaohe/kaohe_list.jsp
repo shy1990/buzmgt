@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
 
@@ -176,7 +177,7 @@
 																		class="progress-bar threekaohe-bar"></div>
 																</div></td>
 																</c:if>
-															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=${assess.salesman.id }&asssessid=${assess.id }&percent=${assess.percent }&active=${assess.activeNum}&orderNum=${assess.orderNum}" class="btn btn-white btn-sm "> <span class="folder"></span>
+															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=${assess.salesman.id }&asssessid=${assess.id }&baifen=${fn:substringBefore(assess.percent, "%") }&active=${assess.activeNum}&orderNum=${assess.orderNum}" class="btn btn-white btn-sm "> <span class="folder"></span>
 																	查看
 															</a> <!-- Single button --></td>
 														</tr>
@@ -320,35 +321,8 @@
 	<script>
 		/*区域 */
 		function getRegion(id){
-			window.location.href='/region/getPersonalRegion?id='+id;
+			window.location.href='/region/getPersonalRegion?id='+id+"&flag=kaohe";
 		}
-//分页生成
-		var regionId = $('#regionId').val();
-        		var job = $('#truename').val();
-        		var name = $('#jobNum').val();
-        		var statu = $('#assessStatus').val();
-		var totalCount = $('#total').val(); //总条数 
-			showCount = 10, //显示分页个数
-			limit =  1;//每页条数
-// 		createTable(1, limit, totalCount);
-		$('#callBackPager').extendPagination({
-			totalCount : totalCount, 
-			showCount : showCount,
-			limit : limit,
-			callback : function(curr, limit, totalCount) {
-				alert("当前是第"+curr+"页,每页"+ limit+"条,总共"+ totalCount+"条");
-					
-		// 		createTable(1, limit, totalCount); //生成列表
-			}
-		});
-		
-		
-		
-		function getAssessDet(){
-			
-			
-		}
-		
 	</script>
 </body>
 </html>
