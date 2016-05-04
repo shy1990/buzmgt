@@ -67,9 +67,10 @@
 <body>
 	<div class="container-fluid content main">
 		<h4 class="page-header">
-			<i class="ico ico-account-manage-oil"></i>设置油补系数                   <a href='/oilCost/list'>返回</a>
+			<i class="ico ico-account-manage-oil"></i>设置油补系数 <a
+				href='/oilCost/list'>返回</a>
 		</h4>
-		
+
 		<div>
 			<!-- Nav tabs -->
 			<h4 class="text-hd">公里系数设置：</h4>
@@ -80,15 +81,18 @@
 				<div class="tab-content-main">
 					<div class="tab-pane active">
 						<div class="table-responsive ">
-							<!--公里系数表头-->
 							<div class="text-tx row-d">
-								<span class="text-strong">公里数系数：</span> <select>
+								<span class="text-strong">公里数系数：</span> <select id="default_km">
+								<c:if test="${oilParameter != null }">
+										<option selected="" value="${oilParameter.kmRatio }">${oilParameter.kmRatio }</option>
+									</c:if>
+									<option ></option>
 									<option value="0.5">0.5</option>
 									<option value="0.6">0.6</option>
 									<option value="0.7">0.7</option>
 									<option value="0.8">0.8</option>
 									<option value="0.9">0.9</option>
-									<option selected="" value="1.0">1.0</option>
+									<option value="1.0">1.0</option>
 									<option value="1.1">1.1</option>
 									<option value="1.2">1.2</option>
 									<option value="1.3">1.3</option>
@@ -108,7 +112,7 @@
 									<!-- ------------------------------------------------------- -->
 									<c:if test="${lists.size() > 0 }">
 										<c:forEach var="oil" items="${lists }">
-											<c:if test="${oil.kmRatio !=null }">
+											<c:if test="${oil.kmRatio !=null && oil.region.id != '0'}">
 												<div class="col-sm-3 cl-padd">
 													<div class="ratio-box">
 														<div class="ratio-box-dd">
@@ -150,15 +154,19 @@
 				<div class="tab-content-main">
 					<div class="tab-pane active">
 						<div class="table-responsive ">
-							<!--公里系数表头-->
 							<div class="text-tx row-d">
-								<span class="text-strong">每公里油补金额：</span> <select>
+								<span class="text-strong">每公里油补金额：</span> <select
+									id="default_money">
+									<c:if test="${oilParameter != null }">
+										<option selected="" value="${oilParameter.kmOilSubsidy }">${oilParameter.kmOilSubsidy }</option>
+									</c:if>
+									<option ></option>
 									<option value="0.0">0.0</option>
 									<option value="0.1">0.1</option>
 									<option value="0.15">0.15</option>
 									<option value="0.2">0.2</option>
 									<option value="0.25">0.25</option>
-									<option selected="" value="0.3">0.3</option>
+									<option value="0.3">0.3</option>
 									<option value="0.35">0.35</option>
 									<option value="0.4">0.4</option>
 									<option value="0.45">0.45</option>
@@ -180,7 +188,8 @@
 									<!-- ----------------------------------------------- -->
 									<c:if test="${lists.size() > 0 }">
 										<c:forEach var="oil" items="${lists }">
-											<c:if test="${ oil.kmOilSubsidy != null}">
+											<c:if
+												test="${ oil.kmOilSubsidy != null && oil.region.id != '0'}">
 												<div class="col-sm-3 cl-padd">
 													<div class="ratio-box">
 														<div class="ratio-box-dd">
@@ -334,7 +343,6 @@
 												class="icon icon-task-lk"></i></span> <select name="b" type=""
 												class="form-control input-h" aria-describedby="basic-addon1"
 												id="select">
-												<option></option>
 												<option value="0.5">0.5</option>
 												<option value="0.6">0.6</option>
 												<option value="0.7">0.7</option>
@@ -400,7 +408,6 @@
 										<span class="input-group-addon"><i class="icon icon-lk"></i></span>
 										<select type="" class="form-control input-h"
 											aria-describedby="basic-addon1" id="select_kmOilSubsidy">
-											<option></option>
 											<option value="0.0">0.0</option>
 											<option value="0.1">0.1</option>
 											<option value="0.15">0.15</option>
