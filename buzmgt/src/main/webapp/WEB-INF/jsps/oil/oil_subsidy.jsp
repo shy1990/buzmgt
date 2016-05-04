@@ -22,10 +22,6 @@
 <link href="static/bootstrap/css/bootstrap-switch.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css"
-	href="static/yw-team-member/team-member.css" />
-<link rel="stylesheet" type="text/css"
-	href="static/account-manage/account-list.css" />
 <link rel="stylesheet" type="text/css" href="static/task/task.css" />
 <link rel="stylesheet" type="text/css" href="static/oil/css/oil.css" />
 
@@ -478,7 +474,7 @@
 		 -->
 	<script src="/static/yw-team-member/team-tree.js"
 		type="text/javascript" charset="utf-8"></script>
-	<script src="/static/js/index.js" type="text/javascript"
+	<script src="/static/js/common.js" type="text/javascript"
 		charset="utf-8"></script>
 
 	<script src="/static/oil/js/oil.js" type="text/javascript"
