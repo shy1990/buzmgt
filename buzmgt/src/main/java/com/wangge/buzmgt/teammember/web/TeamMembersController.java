@@ -161,6 +161,7 @@ public class TeamMembersController {
       }
       salesman.setRegdate(new Date());
       salesman.setUser(u);
+      salesman.setIsPrimaryAccount(1);
       salesManService.addSalesman(salesman);
     //  return "redirect:/salesman/salesManList";
       
@@ -265,7 +266,9 @@ public class TeamMembersController {
   public String getSalesManInfo(@RequestParam(value = "saojieId",required = false)Saojie saojie,String flag,String regionId, Model model){
 	   //根据SalesMan获取saojie
 	   System.out.println("****************"+regionId);
-	   saojie = saojieService.findByregion(regionService.getRegionById(regionId.trim()));
+	   if(null!=regionId){
+	     saojie = saojieService.findByregion(regionService.getRegionById(regionId.trim()));
+	   }
 	  
        SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
        List<Region> rList = regionService.getListByIds(salesMan);
@@ -281,6 +284,11 @@ public class TeamMembersController {
        
        if(salesMan.getStatus().equals(SalesmanStatus.kaifa)&&listAssess.size()==0){
          model.addAttribute("salesStatus", "kaifa");
+       }else{
+        List<Saojie> listSaojie=saojieService.findSaojie(Saojie.SaojieStatus.PENDING+"" , salesMan.getId());
+          if(null==listSaojie){
+            model.addAttribute("salesStatus", "kaifa");
+          }
        }
        
        if("saojie".equals(flag)){

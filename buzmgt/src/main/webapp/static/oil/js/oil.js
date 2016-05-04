@@ -251,5 +251,4 @@ function modify_money(id, kmRatio, regionId) {
 
 		});
 	});
-
 }

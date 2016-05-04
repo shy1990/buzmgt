@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -78,7 +77,6 @@ public class AssessServiceImpl implements AssessService {
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
     q.setMaxResults(7);
-    System.out.println(q.getResultList());
     List<Assess> list = new ArrayList<Assess>();
     for(Object obj: q.getResultList()){
       Assess ass = (Assess)obj;
@@ -113,10 +111,16 @@ public class AssessServiceImpl implements AssessService {
         }
       }else{
         if(null!=assStr){
+        Assess a = assessRepository.findByStageAndSalesman("1",ass.getSalesman().getId());//看是否有第一阶段
         for(int i=0; i<assStr.length; i++){
           String sql = "select count(o.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
               "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
-              "where t.member_id=m.id and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
+              "where t.member_id=m.id and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' ";
+          if(a != null && !"".equals(a)){//如果有就从第一阶段开始时间到第二阶段结束时间统计
+            sql += "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+a.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
+          }else{//没有说明是第一阶段
+            sql += "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
+          }
           Query query =  em.createNativeQuery(sql);
           BigDecimal str = null;
           List<BigDecimal>  resultList = query.getResultList();
@@ -129,8 +133,13 @@ public class AssessServiceImpl implements AssessService {
           String sql1 = "select count(*) from (select m.id,count(o.id) total from SYS_REGISTDATA t "+
               "left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
               "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
-              "where t.member_id=m.id and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"' "+
-              "Group by m.id) where total >= 2";
+              "where t.member_id=m.id and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' ";
+              if(a != null && !"".equals(a)){//如果有就从第一阶段开始时间到第二阶段结束时间统计
+                sql1 += "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+a.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
+              }else{//没有说明是第一阶段
+                sql1 += "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
+              }
+              sql1 += "Group by m.id) where total >= 2";
           query =  em.createNativeQuery(sql1);
           BigDecimal big = null;
           resultList = query.getResultList();
@@ -235,7 +244,7 @@ public class AssessServiceImpl implements AssessService {
   }
 
   @Override
-  public Page<OrderVo> getOrderStatistics(String salesmanId,String regionid,int pageNum,String begin,String end) {
+  public Page<OrderVo> getOrderStatistics(String salesmanId,String regionid,int pageNum,String begin,String end,int limit) {
     String hql = "select m.username,count(o.id),sum(oi.nums),sum(o.total_cost) from SJ_BUZMGT.SYS_REGISTDATA t "+
 "left join SJ_BUZMGT.SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
 "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id left join SJZAIXIAN.SJ_TB_ORDER_ITEMS oi on o.id=oi.order_id "+
@@ -250,9 +259,8 @@ public class AssessServiceImpl implements AssessService {
     
     Query q = em.createNativeQuery(hql);
     int count=q.getResultList().size();
-    q.setFirstResult(pageNum* 7);
-    q.setMaxResults(7);
-    System.out.println(q.getResultList());
+    q.setFirstResult(pageNum* limit);
+    q.setMaxResults(limit);
     List<OrderVo> list = new ArrayList<OrderVo>();
     if(q.getResultList() != null && count > 0){
     Iterator it = q.getResultList().iterator();  
@@ -267,13 +275,18 @@ public class AssessServiceImpl implements AssessService {
     }
   }
     
-    Page<OrderVo> page = new PageImpl<OrderVo>(list,new PageRequest(pageNum,7),count);
+    Page<OrderVo> page = new PageImpl<OrderVo>(list,new PageRequest(pageNum,limit),count);
     return page;
   }
 
   @Override
   public RegistData findRegistData(Long registId) {
     return rdr.findRegistDataById(registId);
+  }
+
+  @Override
+  public Assess findByStageAndSalesman(String stage,String userId) {
+    return assessRepository.findByStageAndSalesman(stage,userId);
   }
 	
 }

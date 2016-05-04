@@ -303,7 +303,7 @@ public class AccountManageController  extends BaseController{
   
   /**
    * 
-    * addChildAccount:添加子账号. <br/> 
+    * addChildAccount:添加子账号.
     * @author rebort 
     * @param truename
     * @param userId
@@ -315,13 +315,16 @@ public class AccountManageController  extends BaseController{
   public String addChildAccount(String truename,String userId,Model model){
     String firstCh=userId.substring(0, 1);
     List<ChildAccount> listChildAccount=ca.findChildCountByParentId(userId);
+    if(listChildAccount.size()==9){
+      return "err";
+    }
     String childId=null;
     if(listChildAccount.size()==0){
        childId=firstCh+(Long.parseLong(userId.substring(1, userId.length())) +1); 
     }else{
       childId=firstCh+(Long.parseLong(listChildAccount.get(0).getChildId().substring(1, listChildAccount.get(0).getChildId().length())) +1);
     }
-   
+    
     ChildAccount childAccount=new ChildAccount(childId,userId,truename);
     ca.save(childAccount);
     return "suc";

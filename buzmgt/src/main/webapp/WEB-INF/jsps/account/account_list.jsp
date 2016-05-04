@@ -416,7 +416,7 @@
 		}
 		// 重置密码
 		function resetPwd(accountNum){
-			if (confirm("确定要重置密码？	初始密码1234567")) {
+			if (confirm("确定要重置密码？	初始密码123456")) {
 				var url = "resetPwd?id=" + accountNum;
 				$.post(url, function(data) {
 					if (data === 'suc') {
@@ -525,7 +525,9 @@
         	 $.post(url, function(data) {
 					if (data === 'suc') {
 			        	location.reload();
-					} else {
+					} else if(data === 'err') {
+						alert("超过最大个数");
+					}else {
 						alert("系统异常,请重试");
 					}
 				});

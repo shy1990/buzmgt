@@ -1,3 +1,4 @@
+
 package com.wangge.buzmgt.oil.entity;
 
 import java.io.Serializable;
@@ -8,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -44,6 +44,7 @@ public class OilParameters implements Serializable{
 	
 	@OneToOne
 	@JoinColumn(name = "region_id")//与数据库对应的表的字段名
+//	@Transient
 	private Region region = new Region();
 	
 	

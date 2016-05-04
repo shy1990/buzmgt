@@ -48,8 +48,6 @@ public interface OilRepository extends JpaRepository<OilParameters, Long>{
 	@Modifying
 	@Query("delete  from OilParameters a where a.region.id= ?1")
 	public int deleteByRegionId(String regionId);
-		
-	
 	
 	/*
 	 * 默认 

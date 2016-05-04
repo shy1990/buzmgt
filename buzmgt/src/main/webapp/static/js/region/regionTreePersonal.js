@@ -145,7 +145,9 @@ function zTreeOnClick(event, treeId, treeNode) {
 	case "nuPayRemark":
 		window.location.href='receiptRemark/getRemarkList/'+treeNode.id;
 		break;
-
+	case "kaohe":
+		window.location.href='/assess/getAssessList/?regionid='+treeNode.id;
+		break;
 	default:
 		window.location.href='/teammember/getSalesManList?regionId='+treeNode.id;
 		break;

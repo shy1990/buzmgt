@@ -27,10 +27,10 @@
     <h4 class="page-header">
         <i class="ico ico-account-manage"></i>账号管理
         <!--区域选择按钮-->
-        <div class="area-choose">
-            选择区域：<span>山东省</span>
-            <a class="are-line" href="javascript:;" onclick="">切换</a>
-        </div>
+<!--         <div class="area-choose"> -->
+<!--             选择区域：<span>山东省</span> -->
+<!--             <a class="are-line" href="javascript:;" onclick="">切换</a> -->
+<!--         </div> -->
         <!--/区域选择按钮-->
     </h4>
 
