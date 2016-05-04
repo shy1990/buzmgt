@@ -220,8 +220,8 @@ public class OilCostController {
       searchParams.put("LIKE_oilRecord", "exception");
       
     case "record":
-      String[] gridTitles_ = { "业务名称","油补握手顺序","公里数","金额","日期"};
-      String[] coloumsKey_ = { "salesManPart.truename","recordSort", "distance", "oilCost", "dateTime"};
+      String[] gridTitles_ = { "业务名称","子/主账号","油补握手顺序","公里数","金额","日期"};
+      String[] coloumsKey_ = { "salesManPart.truename","isPrimaryAccount","recordSort", "distance", "oilCost", "dateTime"};
       
       oilCostlist = oilCostService.findAll(searchParams);
       //处理

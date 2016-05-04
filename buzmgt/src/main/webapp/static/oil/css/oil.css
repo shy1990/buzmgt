@@ -1,3 +1,8 @@
+.mian .page-header.bgc {
+    background:#ebebeb;
+}
+
+
 /*日期位置*/
 .date-wz{
     width:20%;
@@ -20,6 +25,18 @@
 
 }
 
+
+.table-bordered.bjc{
+    background-color: #fff;
+}
+
+.text-hd{
+    margin-bottom: 20px;
+    margin-top: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #555555;
+}
 
 .text-bt{
     font-size: 130px;
@@ -55,8 +72,9 @@
     display: inline-block;
     width: 100%;
     padding: 15px;
-    padding-left: 25px;
+    padding-left: 30px;
     border:1px solid #ddd;
+
 }
 .ratio-box-dd{
     display: inline-block;
@@ -65,4 +83,74 @@
 .cl-padd{
     padding-left: 0;
     padding-right: 0;
+}
+/*蓝色标签*/
+.label-blue{
+    display: inline-block;
+    background-color: #2385ff;
+    width:23px;
+    height:23px;
+    padding-top: 6px;
+    padding-left: 5px;
+}
+
+.table-tr{
+    padding-top: 75px;
+}
+
+.text-h{
+    margin-top: 30px;
+}
+
+.bordered-c{
+    border: 1px solid;
+    color: #1a2327;
+    width: auto;
+    height: auto;
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+}
+
+.zdy-h{
+    margin-bottom: 30px;
+}
+
+.row-jl{
+    margin-top: 35px;
+    margin-bottom: 35px;
+}
+.row-low{
+    margin-top: 26px;
+    margin-bottom: 26px;
+}
+
+.text-redd{
+    color: #ff3f3f;
+    font-size: 12px;
+
+}
+
+.text-bluee{
+    color: #5da7d1;
+    font-size: 12px;
+}
+
+.main-all{
+    margin-bottom: 18%;
+
+}
+
+.input-h{
+    height: 36px;
+}
+
+.col-blue-h{
+
+    padding-top: 16px;
+    padding-left: 15px;
+}
+
+.row-dd{
+    padding-top: 4px;
 }
