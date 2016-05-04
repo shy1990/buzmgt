@@ -53,10 +53,15 @@ public class ImportOrderExcel {
   public String upload(@RequestParam("file") MultipartFile file,
       HttpServletRequest request) {
     Json json = new Json();
-    SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd/HH/");
+    String filename = null;
+   
    // String pathdir = "/var/sanji/excel/uploadfile/" + dateformat.format(new Date());// 构件服务器文件保存目录
-    String pathdir = fileUploadDir + dateformat.format(new Date());// 构件本地文件保存目录 // 得到本地图片保存目录的真实路径 http://localhost:80/aaa.jpg
-    String filename = UUID.randomUUID().toString() + FileUtil.getExt(file);// 构建文件名称
+  
+    if(!file.isEmpty()){
+      SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd/HH/");
+      String pathdir = fileUploadDir + dateformat.format(new Date());// 构件本地文件保存目录 // 得到本地图片保存目录的真实路径 http://localhost:80/aaa.jpg
+       filename  = UUID.randomUUID().toString() + FileUtil.getExt(file);// 构建文件名称
+    
    // String fileUploadPath = pathdir+filename;
     try {
       //** 验证文件是否合法 *//*  
@@ -83,7 +88,10 @@ public class ImportOrderExcel {
       request.setAttribute("message", json);
       return "excel/result";
     }
-
+    }
+    json.setMsg("请选择要导入的excel！");
+    request.setAttribute("message", json);
+    return "excel/result";
   }
   
    private  void saveExcelData(String path) throws IOException {
@@ -148,18 +156,18 @@ public class ImportOrderExcel {
                   }
                   System.out.println("==================="+getValue(xy));*/
                  
-                 Cell ordernum = hssfRow.getCell(1);
+                 Cell ordernum = hssfRow.getCell(0);
                   if (ordernum == null) {
                       continue;
                   }
                    orderSignfor.setOrderNo(ExcelUtil.getValue(ordernum).replace("\r\n", "").trim());
-                  Cell fastmailNo = hssfRow.getCell(2);
+                  Cell fastmailNo = hssfRow.getCell(1);
                   if (fastmailNo == null) {
                       continue;
                   }
                   orderSignfor.setFastmailNo(ExcelUtil.getValue(fastmailNo).replace("\r\n", "").trim());
                  // member.setUsername(getFormatName(getValue(username)));
-                  Cell fastmailTime = hssfRow.getCell(5);
+                  Cell fastmailTime = hssfRow.getCell(2);
                   if (fastmailTime == null) {
                       continue;
                   }
