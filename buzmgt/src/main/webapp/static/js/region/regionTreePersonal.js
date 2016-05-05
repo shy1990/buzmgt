@@ -148,6 +148,12 @@ function zTreeOnClick(event, treeId, treeNode) {
 	case "kaohe":
 		window.location.href='/assess/getAssessList/?regionid='+treeNode.id;
 		break;
+	case "task":
+		window.location.href='/task/visitList/?regionid='+treeNode.id;
+		break;
+	case "visit":
+		window.location.href='/visit/visitRecordPage/?regionid='+treeNode.id;
+		break;
 	default:
 		window.location.href='/teammember/getSalesManList?regionId='+treeNode.id;
 		break;

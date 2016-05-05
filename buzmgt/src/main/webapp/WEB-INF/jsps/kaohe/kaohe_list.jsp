@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+  String path = request.getContextPath();
+			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+					+ path + "/";
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
 
@@ -9,6 +14,7 @@
 
 
 <title>业务管理后台项目</title>
+<base href="<%=basePath%>" />
 <meta name="keywords" content="bootstrap响应式后台">
 <meta name="description" content="">
 <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -121,7 +127,7 @@
 														<tr>
 															<td class="project-people"><a href=""><img
 																	alt="image" class="img-circle"
-																	src="../static/img/team-member/a.jpg"></a></td>
+																	src="<%=basePath%>/static/img/team-member/a.jpg"></a></td>
 															<td class="project-title"><a href=""><strong>${assess.salesman.truename}</strong>(${assess.salesman.user.organization.name})</a>
 																<br /> <span>${assess.salesman.region.name}</span></td>
 															<td class="project-title"><span class="l-h">提货量：<strong

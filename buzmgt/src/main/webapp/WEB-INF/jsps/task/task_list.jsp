@@ -62,7 +62,7 @@
 			<!--区域选择按钮-->
 			<div class="area-choose" id="area" data-a="${regionId}">
 				选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;"
-					onclick="getRegion(${regionId});">切换</a>
+					onclick="getRegionChoose(${regionId});">切换</a>
 				<%-- <input id="area" type="hidden" value="${regionId}"> --%>
 			</div>
 			<!--/区域选择按钮-->
@@ -160,6 +160,11 @@
 				$(".J_btn").attr("disabled", 'disabled');
 				if ($_haohe_planw === $_haohe_plan) {
 					$(".J_btn").removeAttr("disabled");
+				}
+				
+				/*区域 */
+				function getRegionChoose(id){
+					window.location.href='/region/getPersonalRegion?id='+id+"&flag=task";
 				}
 			</script>
 </body>
