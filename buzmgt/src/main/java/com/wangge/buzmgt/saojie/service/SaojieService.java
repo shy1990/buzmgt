@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.sys.vo.SaojieDataVo;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
@@ -35,5 +36,5 @@ public interface SaojieService {
   SaojieDataVo getsaojieDataList(String userId, String regionId);
   
   
-  List<Saojie> findSaojie(String  status,String userId);
+  List<Saojie> findSaojie(SaojieStatus  status,String userId);
 }

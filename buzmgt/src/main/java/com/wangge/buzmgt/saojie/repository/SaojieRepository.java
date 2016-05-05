@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 public interface SaojieRepository extends JpaRepository<Saojie, Long>{
@@ -34,7 +35,7 @@ public interface SaojieRepository extends JpaRepository<Saojie, Long>{
   Saojie findByOrderAndSalesman(int ordernum, SalesMan salesman);
   
   @Query("select s from Saojie s where s.status=?1 and s.salesman.id=?2")
-  List<Saojie> findSaojie (String  status,String userId);
+  List<Saojie> findSaojie (SaojieStatus  status,String userId);
 
   
   

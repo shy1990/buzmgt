@@ -285,7 +285,7 @@ public class TeamMembersController {
        if(salesMan.getStatus().equals(SalesmanStatus.kaifa)&&listAssess.size()==0){
          model.addAttribute("salesStatus", "kaifa");
        }else{
-        List<Saojie> listSaojie=saojieService.findSaojie(Saojie.SaojieStatus.PENDING+"" , salesMan.getId());
+        List<Saojie> listSaojie=saojieService.findSaojie(Saojie.SaojieStatus.PENDING, salesMan.getId());
           if(null==listSaojie){
             model.addAttribute("salesStatus", "kaifa");
           }
