@@ -17,7 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="static/CloudAdmin/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
 	<!-- UNIFORM -->
 	<link rel="stylesheet" type="text/css" href="static/CloudAdmin/js/uniform/css/uniform.default.min.css" />
-	<style>
+	<style> 
 	.login-box input{
 		padding-top:8px;
 	}

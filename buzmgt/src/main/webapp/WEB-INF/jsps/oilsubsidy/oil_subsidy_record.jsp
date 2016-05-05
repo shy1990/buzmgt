@@ -32,7 +32,7 @@
 <script id="oilCostRecord-table-template" type="text/x-handlebars-template">
 	{{#each content}}
     <tr>
-      <td>{{salesManPart.truename}}</td>
+      <td>{{salesManPart.truename}}({{isPrimaryAccount}})</td>
       <td class="normal">
 				{{#each oilRecordList}}
 					{{{disposeRecordList regionType regionName exception}}}

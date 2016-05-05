@@ -85,32 +85,31 @@ public class SaojieServiceImpl implements SaojieService {
 //  }
   @Override
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
-    String hql = "SELECT t.* FROM SYS_SAOJIE t right join (select sj.user_id,sj.saojie_id,max(sj.saojie_order) from sys_saojie sj left join sys_salesman s on sj.user_id=s.user_id where ";
-    if(saojie.getSalesman() != null){
-      if((null!=saojie.getSalesman().getJobNum()&&!"".equals(saojie.getSalesman().getJobNum()))||(null!=saojie.getSalesman().getTruename()&&!"".equals(saojie.getSalesman().getTruename()))){
-        String serHql = " s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
-        hql += ""+serHql+" and sj.region_id in"
-            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
-      }else{
-        hql += " sj.region_id in"
-            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
-      }
-    }else{
-      hql += " sj.region_id in"
-          + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
-    }
+    String hql = "SELECT t.* FROM SYS_SAOJIE t right join (select sj.user_id,sj.saojie_id,max(sj.saojie_order) from sys_saojie sj where ";
     if(saojie.getStatus() != null){
       int status = saojie.getStatus().ordinal();
       if(SaojieStatus.PENDING.equals(saojie.getStatus())){
-        hql += " and s.status='0' and sj.saojie_status='"+status+"'";
+        hql += " sj.saojie_status='"+status+"'";
       }else if(SaojieStatus.AGREE.equals(saojie.getStatus())){
-        hql += " and s.status='1' and sj.saojie_status='"+status+"'";
+        hql += " sj.finish_status='1'";//扫街全部完成的
       }
     }else{
-      hql += " and sj.saojie_status='1' or sj.saojie_status='3'";
+      hql += " sj.finish_status='1' or sj.saojie_status='1'";
     }
-    
-    hql +=" group by sj.user_id,sj.saojie_id) saojie on saojie.saojie_id=t.saojie_id";
+    hql +=" group by sj.user_id,sj.saojie_id) saojie on saojie.saojie_id=t.saojie_id LEFT JOIN sys_salesman s ON s.user_id = t.user_id where ";
+    if(saojie.getSalesman() != null){
+      if((null!=saojie.getSalesman().getJobNum()&&!"".equals(saojie.getSalesman().getJobNum()))||(null!=saojie.getSalesman().getTruename()&&!"".equals(saojie.getSalesman().getTruename()))){
+        String serHql = " s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
+        hql += ""+serHql+" and s.region_id in"
+            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
+      }else{
+        hql += " s.region_id in"
+            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
+      }
+    }else{
+      hql += " s.region_id in"
+          + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
+    }
     Query q = em.createNativeQuery(hql,Saojie.class);  
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);

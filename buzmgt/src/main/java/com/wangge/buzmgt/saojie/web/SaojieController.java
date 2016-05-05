@@ -267,10 +267,9 @@ public class SaojieController {
     Saojie saojie = saojieService.findById(saojieId);
     int maxOrder = saojieService.getOrderNumById(saojie.getSalesman().getId());
     if(saojie.getOrder() == maxOrder){
-      saojie.setStatus(SaojieStatus.AGREE);//当是最后一个扫街时修改其为完成
-    }else{
-      saojie.setStatus(SaojieStatus.COMMIT);
+      saojie.setFinishStatus(1);//当是最后一个扫街时设置其完成状态为全部完成
     }
+    saojie.setStatus(SaojieStatus.AGREE);
     saojie.setDescription(description);
     saojieService.saveSaojie(saojie);
     SalesMan sm=saojie.getSalesman();
