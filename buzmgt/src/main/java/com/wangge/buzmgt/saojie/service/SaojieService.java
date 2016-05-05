@@ -37,4 +37,5 @@ public interface SaojieService {
   
   
   List<Saojie> findSaojie(SaojieStatus  status,String userId);
+  Saojie findByStatusAndSalesman(SaojieStatus status,String userId);
 }
