@@ -48,9 +48,14 @@ public class OilController {
 		
 		//查询全部的OilParameters
 		List<OilParameters> lists = oilService.findAll();
+		//查询regionid是0
+		String regionId = "0";
+		OilParameters oilParameter = oilService.findByRegionId(regionId);
 		model.addAttribute("lists", lists);
+		model.addAttribute("oilParameter", oilParameter);
 		System.out.println("*********"+manager.getRegion().getId());
-		return "oil/oil_subsidy";
+//		return "oil/oil_subsidy";
+		return "oil/oil_subsidy_update";
 	}
 	/**
 	 * 设置区域公里系数(添加)
@@ -65,6 +70,7 @@ public class OilController {
 		 */
 		OilParameters oilParameter = new OilParameters();
 		oilParameter.getRegion().setId(regionId);
+//		oilParameter.getRegion().setId("");
 		oilParameter.setKmRatio(Float.parseFloat(ratio));
 		String result = oilService.save(oilParameter);
 		return result;
@@ -121,10 +127,25 @@ public class OilController {
 	 */
 	@RequestMapping(value="/delteOilParameterByRegionId1",method=RequestMethod.POST)
 	public@ResponseBody String delteOilParameterByRegionId1(@RequestParam String regionId){
-		System.out.println("****************************"+regionId);
 		String result  = oilService.deletekmOilSubsidy(regionId);
 		return result;
 		
 	}
 	
+	
+	/**
+	 * 修改/添加默认的
+	 * @return
+	 */
+	@RequestMapping(value="saveDefault",method=RequestMethod.POST)
+	
+	public @ResponseBody String saveDefault(OilParameters oilParameters){ 
+		String regionId = "0";
+		oilParameters.getRegion().setId(regionId);
+		String result = oilService.modifyDefault(oilParameters);
+//		String result = oilService.modify(oilParameters);
+		return result;
+	}
+	
 }
+

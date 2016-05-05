@@ -143,7 +143,7 @@ Handlebars.registerHelper('disposeRecordList', function(regionType,regionName,ex
     <span class="location">终点<span class="normal-state">家</span></span>*/
 	//异常
 	var tag="";
-	if (!isEmpty(exception)) {
+	if (exception === 1) {
 		tag = '<span class="abnormal-state">异常</span>';
 	}else if (regionName.indexOf("家") >= 0) {
 		tag = '<span class="normal-state">'+regionName+'</span>';
@@ -166,6 +166,13 @@ Handlebars.registerHelper('whatUserId', function(parentId, userId) {
 		return parentId;
 	}
 	return userId;
+});
+Handlebars.registerHelper('disAccount', function(value) {
+	var msg="";
+	if (value === 0) {
+		return msg="（主）";
+	}
+	return msg="（子）";
 });
 
 

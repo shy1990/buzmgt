@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
   String path = request.getContextPath();
 			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -182,7 +183,7 @@
 																		class="progress-bar threekaohe-bar"></div>
 																</div></td>
 																</c:if>
-															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=${assess.salesman.id }&asssessid=${assess.id }&percent=${assess.percent }&active=${assess.activeNum}&orderNum=${assess.orderNum}" class="btn btn-white btn-sm "> <span class="folder"></span>
+															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=${assess.salesman.id }&asssessid=${assess.id }&baifen=${fn:substringBefore(assess.percent, "%") }&active=${assess.activeNum}&orderNum=${assess.orderNum}" class="btn btn-white btn-sm "> <span class="folder"></span>
 																	查看
 															</a> <!-- Single button --></td>
 														</tr>

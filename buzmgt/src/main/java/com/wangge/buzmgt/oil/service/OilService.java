@@ -2,6 +2,7 @@ package com.wangge.buzmgt.oil.service;
 
 import java.util.List;
 
+
 import com.wangge.buzmgt.oil.entity.OilParameters;
 
 public interface OilService {
@@ -17,4 +18,9 @@ public interface OilService {
 	public String modify(OilParameters oilParameters);
 	
 	public String deletekmRatio(String regionId);
+	
+	public String modifyDefault(OilParameters oilParameters);
+	
+	public OilParameters findByRegionId(String regionId);
+	
 }

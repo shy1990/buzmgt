@@ -92,7 +92,7 @@ public class SaojieServiceImpl implements SaojieService {
         hql += ""+serHql+" and sj.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
       }else{
-        hql += "and sj.region_id in"
+        hql += " sj.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
       }
     }else{
@@ -260,6 +260,10 @@ public class SaojieServiceImpl implements SaojieService {
     return saojieRepository.findByOrderAndSalesman(ordernum,salesman);
   }
 
+  @Override
+  public List<Saojie> findSaojie(String status, String userId) {
+    return saojieRepository.findSaojie(status, userId);
+  }
 }
   
   

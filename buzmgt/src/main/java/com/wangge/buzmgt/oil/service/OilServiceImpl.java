@@ -2,6 +2,9 @@ package com.wangge.buzmgt.oil.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,7 @@ public class OilServiceImpl implements OilService {
 	private OilRepository oilRepository;
 	@Autowired
 	private RegionRepository regionRepository;
+	
 
 	/*
 	 * 自定义公里系数设置信息
@@ -104,4 +108,34 @@ public class OilServiceImpl implements OilService {
 		oilRepository.deleteByRegionId(regionId);//否则：删除
 		return "删除成功";
 	}
+	
+	/**
+	 * 默认的设置
+	 */
+	@Override
+	public String modifyDefault(OilParameters oilParameters) {
+		
+		OilParameters oilParameters1 = oilRepository.findDefaultOilParameters();
+		if(oilParameters1 != null ){//数据库中存在就是修改
+			oilParameters1.setKmRatio(oilParameters.getKmRatio());
+			oilParameters1.setKmOilSubsidy(oilParameters.getKmOilSubsidy());
+    		oilRepository.save(oilParameters1);
+    		return "修改成功";
+        }
+		oilRepository.save(oilParameters);
+		
+		return "添加成功";
+		
+
+	}
+
+	@Override
+	public OilParameters findByRegionId(String regionId) {
+		OilParameters oilParameters =oilRepository.findOilParametersByRegionId(regionId);
+		return oilParameters;
+	}
+	
+	
+	
+	
 }

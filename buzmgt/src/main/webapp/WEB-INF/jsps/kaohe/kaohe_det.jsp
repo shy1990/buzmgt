@@ -1,25 +1,52 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+  String path = request.getContextPath();
+			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+					+ path + "/";
+%>
 <!DOCTYPE html>
 <html>
 <head>
+<base href="<%=basePath%>" />
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <title>考核详情</title>
 <!-- Bootstrap -->
-<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link href="/static/bootstrap/css/bootstrap-datetimepicker.min.css"
-	rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
-<link rel="stylesheet" type="text/css"
-	href="/static/kaohe/kaohe-det.css" />
-<link rel="stylesheet" type="text/css"
-	href="/static/yw-team-member/ywmember.css" />
-<script src="/static/js/jquery/jquery-1.11.3.min.js"
-	type="text/javascript" charset="utf-8"></script>
+<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="static/css/common.css" />
+<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="static/kaohe/kaohe-det.css" />
+<link rel="stylesheet" type="text/css" href="static/yw-team-member/ywmember.css" />
+<script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var base = "<%=basePath%>";
+	var number = '';//当前页数（从零开始）
+	var totalPages = '';//总页数(个数)
+	var searchData = {
+		"size" : "2",
+		"page" : "0",
+	}
+	var totalElements;//总条数
+</script>
+<script id="table-template" type="text/x-handlebars-template">
+{{#each content}}
+	<tr>
+		<td class="shop-name">{{shopName }}</td>
+		<td class="tihuo-num">{{orderTimes }}次</td>
+		<td class="total-num">{{orderNum }}</td>
+		<td class="sum">{{orderTotalCost }}</td>
+	</tr>
+{{else}}
+<div style="text-align: center;">
+	<tr style="text-align: center;">没有相关数据!</tr>
+</div>
+{{/each}}
+</script>
 </head>
 <body>
 	<div class="content main">
@@ -78,10 +105,10 @@
 								<!--class style 沉寂:progress-bar-later ;活跃：progress-bar-ok ;未提货：-->
 								<!--start 考核进度条-->
 								<div class="J_kaohebar_parents progress progress-sm">
-									<div style="width: 100%;"
+									<div style="width: ${percent }%;"
 										class="J_kaohebar progress-bar bar-kaohe">
 										<div class="tag">
-											<span class="icon-tag tag-kaohe">100%</span>
+											<span class="icon-tag tag-kaohe">${percent }%</span>
 										</div>
 									</div>
 								</div>
@@ -96,14 +123,15 @@
 						<!--/列表头部-->
 						<div class="hr-solid"></div>
 						<!--start 操作区域-->
-						<div class="search-box ">
+						<div class="search-box " data-sid="${salesman.id}",data-aid="${assess.id}">
 							<!--区域选择按钮-->
 							请选择区域：
-							<select id="regionNameid" class="form-control input-xs ad-select" onchange="getSaojieDataList();" style=""><!--  -->
+							<select id="regionId" class="form-control input-xs ad-select" style=""><!--  -->
 								<c:if test="${not empty regionList}">
-									<option value="" selected="selected">${salesman.region.name}</option>
+									<%-- <option value="" selected="selected">${salesman.region.name}</option> --%>
+									<option value="" selected="selected">全部区域</option>
 									<c:forEach var="region" items="${regionList}" varStatus="s">
-										<option value="">${region.name}</option>
+										<option value="${region.id}">${region.name}</option>
 								</c:forEach>
 								</c:if>
 							</select>
@@ -114,20 +142,27 @@
 							<div class="marg-t">
 								请选择时间：
 								<div class="search-date">
-									<div class="input-group input-group-sm">
-										<span class="input-group-addon " id="basic-addon1"><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-										<input type="text" class="form-control form_datetime input-sm" placeholder="开始日期" readonly="readonly">
-									</div>
-								</div> --
-								<div class="search-date">
-									<div class="input-group input-group-sm">
-										<span class="input-group-addon " id="basic-addon1"><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-										<input type="text" class="form-control form_datetime input-sm" placeholder="结束日期" readonly="readonly">
-									</div>	
+								<div class="input-group input-group-sm date form_date_start">
+									<span class="input-group-addon " id="basic-addon1"><i
+										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
+										type="text" class="form-control form_datetime input-sm"
+										placeholder="开始日期" readonly="readonly" id="beginTime">
 								</div>
+							</div>
+							--
+							<div class="search-date">
+								<div class="input-group input-group-sm date form_date_end">
+									<span class="input-group-addon " id="basic-addon1"><i
+										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
+										type="text" class="form-control form_datetime input-sm"
+										placeholder="结束日期" readonly="readonly" id="endTime">
+								</div>
+							</div>
 								<!--考核开始时间-->
+								<%-- <input type="hidden" id="sid" value="${salesman.id}"/>
+								<input type="hidden" id="aid" value="${assess.id}"/> --%>
 								<button class="btn btn-blue btn-sm"
-									onclick="goSearch('${salesman.id}','${assess.id}');">
+									onclick="goSearch();">
 									<i class="ico ico-seach-wiath"></i>检索
 								</button>
 								<a class="link-export pull-right" href="javascript:void(0);">导出excel</a>
@@ -145,109 +180,13 @@
 										<th>累计交易额</th>
 									</tr>
 								</thead>
-								<tbody>
-									<c:if test="${not empty statistics.content}">
-										<c:forEach var="stat" items="${statistics.content}"
-											varStatus="s">
-											<tr>
-												<td class="shop-name">${stat.shopName }</td>
-												<td class="tihuo-num">${stat.orderTimes }次</td>
-												<td class="total-num">${stat.orderNum }</td>
-												<td class="sum">${stat.orderTotalCost }</td>
-											</tr>
-										</c:forEach>
-									</c:if>
+								<tbody id="tableList">
+
 								</tbody>
 							</table>
+							<div id="callBackPager"></div>
 						</div>
 						<!--/列表内容-->
-						<!-- 分页 -->
-						<c:if test="${not empty statistics.content}">
-							<div style="text-align: center; padding-bottom: 20px">
-								<ul class="pagination box-page-ul">
-									<li><a
-										href="javascript:getPageList('${statistics.number > 0 ? statistics.number-1 : 0}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">&laquo;</a></li>
-									<!-- 1.total<=7 -->
-									<c:if test="${statistics.totalPages<=7 }">
-										<c:forEach var="s" begin="1" end="${statistics.totalPages}"
-											step="1">
-											<c:choose>
-												<c:when test="${statistics.number == s-1 }">
-													<li class="active"><a
-														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
-												</c:when>
-												<c:otherwise>
-													<li><a
-														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
-												</c:otherwise>
-											</c:choose>
-										</c:forEach>
-									</c:if>
-									<c:if test="${statistics.totalPages>7 && statistics.number<4 }">
-										<c:forEach var="s" begin="1" end="6" step="1">
-											<c:choose>
-												<c:when test="${statistics.number == s-1 }">
-													<li class="active"><a
-														href="javascript:getPageList('${s-1}','${regionId}',''${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
-												</c:when>
-												<c:otherwise>
-													<li><a
-														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
-												</c:otherwise>
-											</c:choose>
-										</c:forEach>
-										<li><a href="javascript:void(0)">...</a></li>
-									</c:if>
-									<c:if
-										test="${statistics.totalPages>7&&statistics.number>=4&&statistics.totalPages-statistics.number>=3 }">
-										<li><a href="javascript:void(0)">...</a></li>
-										<c:forEach var="s" begin="${statistics.number-2 }"
-											end="${statistics.number+2 }" step="1">
-											<c:choose>
-												<c:when test="${statistics.number == s-1 }">
-													<li class="active"><a
-														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
-												</c:when>
-												<c:otherwise>
-													<li><a
-														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
-												</c:otherwise>
-											</c:choose>
-										</c:forEach>
-										<li><a href="javascript:void(0)">...</a></li>
-									</c:if>
-									<c:if
-										test="${statistics.totalPages>7&&statistics.number>=4&&statistics.totalPages-statistics.number<3 }">
-										<li><a href="javascript:void(0)">...</a></li>
-										<c:forEach var="s" begin="${statistics.totalPages-6 }"
-											end="${statistics.totalPages }" step="1">
-											<c:choose>
-												<c:when test="${statistics.number == s-1 }">
-													<li class="active"><a
-														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
-												</c:when>
-												<c:otherwise>
-													<li><a
-														href="javascript:getPageList('${s-1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">${s}</a></li>
-												</c:otherwise>
-											</c:choose>
-										</c:forEach>
-									</c:if>
-									<li><a
-										href="javascript:getPageList('${statistics.number+1 > statistics.totalPages-1 ? statistics.totalPages-1 : statistics.number+1}','${regionId}','${salesman.id}','${assess.id}','${begin}','${end}')">&raquo;</a></li>
-								</ul>
-							</div>
-						</c:if>
-						<c:if test="${empty statistics.content}">
-							<div style="text-align: center;">
-								<ul class="pagination">
-									<tr>
-										<td colspan="100">没有相关数据</td>
-									</tr>
-								</ul>
-							</div>
-						</c:if>
-						<!-- 分页 -->
 					</div>
 					<!--/box-body-->
 				</div>
@@ -332,15 +271,15 @@
       <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
-		<script src="/static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-		<script src="/static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-		<script src="/static/yw-team-member/team-member.js"
-			type="text/javascript" charset="utf-8"></script>
-		<script src="/static/kaohe/kaohe-det.js" type="text/javascript"
-			charset="utf-8"></script>
-		<script src="/static/js/common.js" type="text/javascript"
-			charset="utf-8"></script>
+		<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
+		<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+		<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+		<script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+		<script src="<%=basePath%>static/js/dateutil.js"></script>
+		<script src="<%=basePath%>static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<%=basePath%>static/kaohe/kaohe-det.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<%=basePath%>static/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 		<script type="text/javascript">
 			$('body input').val('');
 			$(".form_datetime").datetimepicker({
@@ -352,6 +291,7 @@
 				todayHighlight : 1,
 				startView : 2,
 				minView : 2,
+				pickerPosition : "bottom-right",
 				forceParse : 0
 			});
 			var $_haohe_plan = $('.J_kaohebar').width();
@@ -359,11 +299,6 @@
 			$(".J_btn").attr("disabled", 'disabled');
 			if ($_haohe_planw === $_haohe_plan) {
 				$(".J_btn").removeAttr("disabled");
-			}
-
-			function getRegionName(name, id) {
-				$("#regionNameid").text(name);
-				$("#regionNameid").val(id);
 			}
 		</script>
 </body>

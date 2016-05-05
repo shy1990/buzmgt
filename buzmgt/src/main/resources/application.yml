@@ -11,6 +11,7 @@ spring:
     hibernate:
       ddl-auto: none
     open-in-view: true
+    cascade: delete
   datasource:
     url: jdbc:oracle:thin:@115.28.64.224:1521:sanjiDB
     #url: jdbc:oracle:thin:@192.168.2.247:1522:xe

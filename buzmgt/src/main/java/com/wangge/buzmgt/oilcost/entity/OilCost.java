@@ -8,6 +8,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -37,6 +39,24 @@ public class OilCost implements Serializable{
   */
   
   private static final long serialVersionUID = 1L;
+  
+  
+  public static enum OilAcountEnum {
+    //子账号
+    CHILDACCOUNT("子"),PARENTACCOUNT("主");
+    
+    private String name;
+    OilAcountEnum(String name){
+      this.name=name;
+    }
+    
+    public String getName(){
+      return name;
+    }
+    
+  }
+  
+  
   @Id
   @GenericGenerator(name = "idgen",strategy = "increment")
   @GeneratedValue(generator="idgen")
@@ -54,7 +74,8 @@ public class OilCost implements Serializable{
   // private String Coordinates;//坐标集合
   @Temporal(TemporalType.DATE)
   private Date dateTime;//日期
-  private int isPrimaryAccount;//是否主账号
+  @Enumerated(EnumType.ORDINAL)
+  private OilAcountEnum isPrimaryAccount;//是否主账号
   //private String regionIds;//regionId集合
   private Float oilCost;//油补的费用
   private Float  distance;//里程数
@@ -130,10 +151,10 @@ public class OilCost implements Serializable{
   public void setDateTime(Date dateTime) {
     this.dateTime = dateTime;
   }
-  public int getIsPrimaryAccount() {
-    return isPrimaryAccount;
+  public String getIsPrimaryAccount() {
+    return isPrimaryAccount.getName();
   }
-  public void setIsPrimaryAccount(int isPrimaryAccount) {
+  public void setIsPrimaryAccount(OilAcountEnum isPrimaryAccount) {
     this.isPrimaryAccount = isPrimaryAccount;
   }
   public Float getOilCost() {

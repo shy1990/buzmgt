@@ -16,13 +16,15 @@ public interface AssessService {
   Page<Assess> getAssessList(Assess assess,int pageNum,String regionName);
   
   
-  public Assess findAssess(long id);
+  Assess findAssess(long id);
   
   List<Assess> findBysalesman(SalesMan salesman);
   
   int gainMaxStage(String salesmanId);
   
-  Page<OrderVo> getOrderStatistics(String salesmanId,String regionid,int pageNum,String begin,String end);
+  Page<OrderVo> getOrderStatistics(String salesmanId,String regionid,int pageNum,String begin,String end,int limit);
   
   RegistData findRegistData(Long registId);
+  
+  Assess findByStageAndSalesman(String stage,String userId);
 }

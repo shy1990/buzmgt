@@ -99,7 +99,7 @@ public class ExcelUtil {
                 if(HSSFDateUtil.isCellDateFormatted(hssfCell)){
                   short format = hssfCell.getCellStyle().getDataFormat();  
                   SimpleDateFormat sdf = null;  
-                  if(format == 14 || format == 31 || format == 57 || format == 58){  
+                  if(format == 14 || format == 22 || format == 31 || format == 57 || format == 58){  
                       //日期  
                       sdf = new SimpleDateFormat("yyyy/MM/dd");  
                   }else if (format == 20 || format == 32) {  
