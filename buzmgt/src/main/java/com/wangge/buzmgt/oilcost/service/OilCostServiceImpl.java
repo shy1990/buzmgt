@@ -8,10 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -24,8 +20,6 @@ import org.apache.log4j.Logger;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -34,18 +28,12 @@ import com.alibaba.fastjson.JSON;
 import com.wangge.buzmgt.oilcost.entity.OilCost;
 import com.wangge.buzmgt.oilcost.entity.OilRecord;
 import com.wangge.buzmgt.oilcost.repository.OilCostRepository;
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
-import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
-import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.sys.entity.Organization;
-import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesManPart;
 import com.wangge.buzmgt.teammember.service.SalesManService;
-import com.wangge.buzmgt.util.JSONUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 
 @Service
@@ -161,7 +149,7 @@ public class OilCostServiceImpl implements OilCostService {
       l.setSalesMan(salesMan);
       
       String oilRecord=l.getOilRecord();
-      l.setOilRecordList(JSONUtil.stringArrtoJsonList(oilRecord, OilRecord.class));
+      l.setOilRecordList(JSON.parseArray(oilRecord, OilRecord.class));
 //      l.setOilRecord("");
       String orgName="";
       String regName="";
