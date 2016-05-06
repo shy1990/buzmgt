@@ -238,9 +238,10 @@ public class SaojieController {
 	  if(salesman != null && !"".equals(salesman)){
 	     list = saojieService.findBysalesman(salesman);
 	  }
-	  String startTime=DateUtil.date2String(list.get(0).getBeginTime());
-	  String endTime=DateUtil.date2String(list.get(0).getExpiredTime());
-	  model.addAttribute("startTime",startTime);
+	  Saojie saojie = saojieService.findByStatusAndSalesman(SaojieStatus.PENDING,id.trim());
+	  String beginTime = DateUtil.date2String(saojie.getBeginTime());
+	  String endTime = DateUtil.date2String(saojie.getExpiredTime());
+	  model.addAttribute("beginTime",beginTime);
 	  model.addAttribute("endTime",endTime);
 	  model.addAttribute("list",list);
 	  model.addAttribute("salesman",salesman);
@@ -267,10 +268,9 @@ public class SaojieController {
     Saojie saojie = saojieService.findById(saojieId);
     int maxOrder = saojieService.getOrderNumById(saojie.getSalesman().getId());
     if(saojie.getOrder() == maxOrder){
-      saojie.setStatus(SaojieStatus.AGREE);//当是最后一个扫街时修改其为完成
-    }else{
-      saojie.setStatus(SaojieStatus.COMMIT);
+      saojie.setFinishStatus(1);//当是最后一个扫街时设置其完成状态为全部完成
     }
+    saojie.setStatus(SaojieStatus.AGREE);
     saojie.setDescription(description);
     saojieService.saveSaojie(saojie);
     SalesMan sm=saojie.getSalesman();

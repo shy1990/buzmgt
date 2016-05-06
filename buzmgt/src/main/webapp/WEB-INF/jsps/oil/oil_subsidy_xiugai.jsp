@@ -22,6 +22,10 @@
 <link href="static/bootstrap/css/bootstrap-switch.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
+<link rel="stylesheet" type="text/css"
+	href="static/yw-team-member/team-member.css" />
+<link rel="stylesheet" type="text/css"
+	href="static/account-manage/account-list.css" />
 <link rel="stylesheet" type="text/css" href="static/task/task.css" />
 <link rel="stylesheet" type="text/css" href="static/oil/css/oil.css" />
 
@@ -30,6 +34,9 @@
 
 
 
+<!-- ======================== -->
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link rel="stylesheet" type="text/css"
 	href="/static/zTree/css/zTreeStyle/zTreeStyle.css" />
 <script src="/static/js/jquery/jquery.min.js" type="text/javascript"
@@ -48,7 +55,7 @@
 
 .menuContent {
 	width: 100%;
-	padding-right: 50px;
+	padding-right: 61px;
 	display: none;
 	position: absolute;
 	z-index: 800;
@@ -137,10 +144,14 @@
 								</div>
 							</div>
 							<!--  -->
-							<div class="row-jl ">
-									<button class="btn  btn btn-default" type="button"
+							<div class="row show-grid   row-jl ">
+								<div class="col-md-5"></div>
+								<div class="col-md-7 ">
+
+									<button class=" col-sm-3 btn  btn btn-default" type="button"
 										data-toggle="modal" data-target="#zdyqy">自定义设置区域</button>
 
+								</div>
 							</div>
 
 
@@ -157,7 +168,7 @@
 						<div class="table-responsive tb-b">
 							<!--公里系数表头-->
 							<div class="text-tx row-d">
-								<span class="text-gery">每公里油补金额：</span> <select
+								<span class="text-strong">每公里油补金额：</span> <select
 									id="default_money">
 									<c:if test="${oilParameter != null }">
 										<option selected="" value="${oilParameter.kmOilSubsidy }">${oilParameter.kmOilSubsidy }</option>
@@ -181,8 +192,8 @@
 									<option value="0.8">0.8</option>
 									<option value="0.9">0.9</option>
 									<option value="1.0">1.0</option>
-								</select> <span class="text-gery">元/km</span> <span class="text-blue-s jl-">注：</span><span
-									class="text-gery-hs">系统默认所有区域均为该系数，自定义设置区域除外</span>
+								</select> <span class="text-strong">元/km</span> <span class="text-blue">注：</span><span
+									class="text-small">系统默认所有区域均为该系数，自定义设置区域除外</span>
 							</div>
 							<!-- 设置油补金额 -->
 							<%
@@ -199,9 +210,11 @@
 													<div class="ratio-box">
 														<div class="ratio-box-dd">
 															<span class="label  label-blue"><%= ++i%></span> <span
-																class="text-black jll"> ${oil.region.name }</span> <span
-																class="text-redd jll">${oil.kmOilSubsidy }元/KM</span> <a
+																class="text-black jll"> ${oil.region.name }</span> <a
+																class="text-redd jll" href="" data-toggle="modal"
+																data-target="">${oil.kmOilSubsidy }元/KM</a> <a
 																class="text-blue-s jll" href="" data-toggle="modal"
+																data-target=""
 																onclick="modify_money('${oil.id}','${oil.kmRatio}','${oil.region.id }')">修改</a>
 															<a class="text-blue-s jll" href="" data-toggle="modal"
 																data-targ t=""
@@ -216,9 +229,14 @@
 									<!-- ----------------------------------------------- -->
 								</div>
 							</div>
-							<div class="row-jl ">
-									<button class="btn  btn btn-default" type="button"
+							<div class="row show-grid   row-jl ">
+								<div class="col-md-5"></div>
+								<div class="col-md-7 ">
+
+									<button class=" col-sm-3 btn  btn btn-default" type="button"
 										data-toggle="modal" data-target="#zdyqy" onclick='changeTo()'>自定义设置区域</button>
+
+								</div>
 							</div>
 						</div>
 					</div>
@@ -318,7 +336,7 @@
 											<div class="input-group are-line">
 												<span class="input-group-addon"><i
 													class="icon icon-qy"></i></span> <select id="region"
-													class="form-control input-h" name="regionId">
+													class="form-control" name="regionId">
 													<input id="n" type="hidden" value="${regionId}" />
 												</select>
 												<div id="regionMenuContent" class="menuContent">
@@ -476,7 +494,7 @@
 		 -->
 			<script src="/static/yw-team-member/team-tree.js"
 				type="text/javascript" charset="utf-8"></script>
-			<script src="/static/js/common.js" type="text/javascript"
+			<script src="/static/js/index.js" type="text/javascript"
 				charset="utf-8"></script>
 
 			<script src="/static/oil/js/oil.js" type="text/javascript"

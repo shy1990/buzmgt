@@ -43,11 +43,11 @@ public class Manager implements Serializable {
 	
 	private String mobile;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
 	private Region region;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 	@Temporal(TemporalType.DATE)
