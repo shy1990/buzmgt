@@ -55,11 +55,17 @@ function ajaxSearch(searchData) {
 						"application/json; charset=UTF-8");
 			},
 			dataType : "json",
-			success : function(data) {
+			success : function(dataN) {
+				
+				console.log(dataN);
+				return;
+				
+				var data = $.parseJSON(dataN);
+				
+				map.clearOverlays();
 				$(".shopNum").text(data.shopNum);
 				$(".percent").text(data.percent); 
 				$("#percent").width(data.percent);
-				map.clearOverlays();
 				map.centerAndZoom(data.areaName, 13);
 				// map.centerAndZoom("上海",11);
 				// 添加带有定位的导航控件
@@ -91,20 +97,24 @@ function ajaxSearch(searchData) {
 				//扫街数据循环
 				var marker;
 				var arr = new Array(); //创建数组
-				$.each(data.list,function(n,items) {
-					var coor = items.coordinate;
+//				$.each(data.list,function(n,items) 
+				console.log(data.list);
+						for(var l = 0;l < data.list.length;l++){
+					var coor = data.list[l].coordinate;
+					alert(coor);
 					if(coor != null && coor != ""){
 						arr = coor.split("-");
 		                for (var j = 0;j < arr.length;j++){
+		                	alert(arr[0]+","+arr[1]);
 		                	marker = new BMap.Marker(new BMap.Point(arr[0],arr[1]));// 拿到坐标点
 		                }
 	//					var desc="<%=desc%>";
-			  			var content = items.name;
+			  			var content = data.list[l].name;
 			  			map.addOverlay(marker);               // 将标注添加到地图中
 			  			addClickHandler(content,marker);
 			  			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 					}
-				  });
+				  }
 			},
 			error : function() {
 				alert("系统错误，请稍后再试");

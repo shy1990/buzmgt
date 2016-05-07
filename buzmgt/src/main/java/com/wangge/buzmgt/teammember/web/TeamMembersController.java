@@ -21,6 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
@@ -307,15 +312,17 @@ public class TeamMembersController {
     * @param saojie
     * @param regionId
     * @return 
+   * @throws JsonProcessingException 
     * @since JDK 1.8
    */
   @RequestMapping(value = "/getSaojiedataMap", method = RequestMethod.GET)
   @ResponseBody
-  public SaojieDataVo getSaojiedataMap(@RequestParam(value = "saojieId",required = false)Saojie saojie,String regionId){
+  public String getSaojiedataMap(@RequestParam(value = "saojieId",required = false)Saojie saojie,String regionId) throws JsonProcessingException{
     SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
     SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), regionId);
     saojiedatalist.setAreaName(salesMan.getRegion().getName());//设置业务负责区域，用于地图加载
-    return saojiedatalist;
+   
+    return new ObjectMapper().writeValueAsString(saojiedatalist);
   }
   
   /**

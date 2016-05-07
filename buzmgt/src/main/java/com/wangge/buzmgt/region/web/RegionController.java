@@ -299,7 +299,8 @@ public class RegionController {
 		}
 		
 		while(1==1){
-		  if(regionService.findByRegion((maxid+1)+"")!=null){
+		  List<Region> list = regionService.findByRegion((maxid+1)+"");
+		  if(list != null && list.size() > 0){
 		      maxid=maxid+1;
 	    }else{
 	      break;
