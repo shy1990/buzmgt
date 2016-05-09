@@ -201,17 +201,8 @@ public class SaojieServiceImpl implements SaojieService {
   public SaojieDataVo getsaojieDataList(String userId,String regionId) {
     int a = 0;
     SaojieDataVo sdv = new SaojieDataVo();
-    List<Saojie> list = findAll(userId,regionId);
-     for(Saojie s : list){
-       if(s.getSaojiedata() != null ){
-          for(SaojieData data  : s.getSaojiedata()){
-            sdv.getList().add(data);
-          }
-       }
-       a += s.getMinValue();
-     }
-        sdv.addPercent(sdv.getList().size(),a);
-      return sdv;
+    SaojieDataVo list = findAll(userId,regionId);
+    return list;
   }
   
   public List<Saojie> findAll(String userId,String regionId){

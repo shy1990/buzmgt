@@ -279,8 +279,8 @@ public class TeamMembersController {
        List<Region> rList = regionService.getListByIds(salesMan);
        model.addAttribute("salesMan", salesMan);
        model.addAttribute("rList", rList);
-       SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "");
-       model.addAttribute("saojiedatalist", saojiedatalist);
+       /*List<SaojieData> saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "");
+       model.addAttribute("saojiedatalist", saojiedatalist);*/
        model.addAttribute("areaName", salesMan.getRegion().getParent().getName()+salesMan.getRegion().getName());
        model.addAttribute("pcoordinates", salesMan.getRegion().getCoordinates());
        model.addAttribute("saojieId",saojie.getId());
@@ -317,12 +317,11 @@ public class TeamMembersController {
    */
   @RequestMapping(value = "/getSaojiedataMap", method = RequestMethod.GET)
   @ResponseBody
-  public String getSaojiedataMap(@RequestParam(value = "saojieId",required = false)Saojie saojie,String regionId) throws JsonProcessingException{
+  public SaojieDataVo getSaojiedataMap(@RequestParam(value = "saojieId",required = false)Saojie saojie,String regionId) throws JsonProcessingException{
     SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
     SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), regionId);
     saojiedatalist.setAreaName(salesMan.getRegion().getName());//设置业务负责区域，用于地图加载
-   
-    return new ObjectMapper().writeValueAsString(saojiedatalist);
+    return saojiedatalist;
   }
   
   /**
