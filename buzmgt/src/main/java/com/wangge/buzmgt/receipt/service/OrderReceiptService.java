@@ -40,6 +40,13 @@ public interface OrderReceiptService {
    */
   public List<OrderSignfor> getReceiptNotRemark(Map<String, Object> searchParams);
   
+  /**
+   * 查询收现金记录
+   * @param searchParams
+   * @param pageRequest
+   * @return
+   */
+  public Page<OrderSignfor> getCashList(Map<String, Object> searchParams, Pageable pageRequest);
 }
 
   

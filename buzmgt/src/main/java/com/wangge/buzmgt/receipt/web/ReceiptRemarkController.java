@@ -107,6 +107,44 @@ public class ReceiptRemarkController {
     return json;
   }
   /**
+   * 收现金列表
+   * @param request
+   * @param pageRequest
+   * @return
+   */
+  @RequestMapping(value="/cash")
+  @ResponseBody
+  public String getCashList(HttpServletRequest request,
+      @PageableDefault(page = 0,size=10,sort={"createTime"},direction=Direction.DESC) Pageable pageRequest ){
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    searchParams.put("EQ_orderPayType", "CASH");
+    Page<OrderSignfor> cashList=orderSignforService.getOrderSingforList(searchParams, pageRequest);
+    cashList.getContent().forEach(list->{
+      list.getSalesMan().setUser(null);
+      list.getSalesMan().setRegion(null);
+    });
+    String json="";
+    try {
+      json=JSON.toJSONString(cashList, SerializerFeature.DisableCircularReferenceDetect);
+    }
+    catch(Exception e){
+      logger.error(e.getMessage());
+    }
+    return json;
+  }
+  /**
+   * 报备列表
+   * @param request
+   * @param pageRequest
+   * @return
+   */
+  @RequestMapping(value="/cash/{order}")
+  public String getCashById(Model model ,@PathVariable("orderId") OrderSignfor orderSignfor , 
+      HttpServletRequest request){
+    model.addAttribute("cash", orderSignfor);
+    return "receipt/receipt_order_det";
+  }
+  /**
    * 报备列表
    * @param request
    * @param pageRequest
@@ -226,12 +264,12 @@ public class ReceiptRemarkController {
     List<OrderSignfor> notRemarkList = orderReceiptService.getReceiptNotRemark(searchParams);
     try {
       OrderSignfor notRemark=notRemarkList.get(0);
-      model.addAttribute("notRemark", notRemark);
+      model.addAttribute("order", notRemark);
     }
     catch(Exception e){
       logger.error(e.getMessage());
     }
-    return "receipt/receipt_notremark_det";
+    return "receipt/receipt_order_det";
   }
   /**
    * 获取全部订单列表

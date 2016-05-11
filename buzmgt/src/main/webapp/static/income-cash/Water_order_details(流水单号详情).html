@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>流水单号详情</title>
+
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/income-cash.css">
+
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="content main">
+    <h4 class="page-header">
+        <i class="ico icon-water"></i>流水单号详情
+    </h4>
+    <!---选择区域，选择日期-->
+    <div class="row text-time">
+        <span class="text-strong chang-time time-c">选择日期：</span>
+        <div class="search-date">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon " id="basic-addon1"><i
+                        class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+                <input type="text" class="form-control form_datetime input-sm" placeholder="开始日期"
+                       readonly="readonly">
+            </div>
+        </div>
+        --
+        <div class="search-date">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon " id="basic-addon1"><i
+                        class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+                <input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"
+                       readonly="readonly">
+            </div>
+        </div>
+        <!--考核开始时间-->
+        <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
+            检索
+        </button>
+
+        <div class="link-posit-t pull-right exc-hh">
+            <input class="cs-select text-gery-hs" placeholder="  请输入业务员名称">
+            <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
+                检索
+            </button>
+            <a class="table-export" href="javascript:void(0);">导出excel</a>
+        </div>
+
+    </div>
+    <!---选择区域，选择日期-->
+
+    <div class="tab-content">
+
+        <div class="table-task-list new-table-box table-overflow">
+            <table class="table table-hover new-table tb-basin">
+                <thead>
+                <tr>
+                    <th>流水单号</th>
+                    <th>订单编号</th>
+                    <th>需付金额</th>
+                    <th>总金额</th>
+                    <th>状态</th>
+                    <th>日期</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>258796124</td>
+                    <td class="bg-style">20160422655485</td>
+                    <td class="bg-style">2500.00</td>
+                    <td class="bg-style"><span class="text-redd">45000.00</span></td>
+                    <td><img src="img/water-order/ysh.png"></td>
+                    <td>2016.04.23   &nbsp;&nbsp;15:00</td>
+                </tr>
+                <tr>
+                    <td>258796124</td>
+                    <td class="bg-style">
+                        <p>20160422655485</p>
+                        <p>20160422655485</p>
+                        <p>20160422655485</p>
+                        <p>20160422655485</p>
+                        <p>20160422655485</p>
+                    </td>
+                    <td class="bg-style">
+                        <p>2500.00</p>
+                        <p>2500.00</p>
+                        <p>2500.00</p>
+                        <p>2500.00</p>
+                        <p>2500.00</p>
+                    </td>
+                    <td class="bg-style"><span class="text-redd">45000.00</span></td>
+                    <td><img src="img/water-order/dsh.png"></td>
+                    <td>2016.04.23   &nbsp;&nbsp;15:00</td>
+                </tr>
+
+                <tr>
+                    <td>258796124</td>
+                    <td class="bg-style">20160422655485</td>
+                    <td class="bg-style">2500.00</td>
+                    <td class="bg-style"><span class="text-redd">45000.00</span></td>
+                    <td><img src="img/water-order/dsh.png"></td>
+                    <td>2016.04.23   &nbsp;&nbsp;15:00</td>
+                </tr>
+
+                <tr>
+                    <td>258796124</td>
+                    <td class="bg-style">
+                        <p>20160422655485</p>
+                        <p>20160422655485</p>
+                        <p>20160422655485</p>
+                    </td>
+                    <td class="bg-style">
+                        <p>2500.00</p>
+                        <p>2500.00</p>
+                        <p>2500.00</p>
+                    </td>
+                    <td class="bg-style"><span class="text-redd">45000.00</span></td>
+                    <td><img src="img/water-order/dsh.png"></td>
+                    <td>2016.04.23   &nbsp;&nbsp;15:00</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <!--table-box-->
+        <!--油补记录-->
+    </div>
+
+
+</div>
+
+<![endif]-->
+<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $('body input').val('');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        pickerPosition: "bottom-right",
+        forceParse: 0
+    });
+    var $_haohe_plan = $('.J_kaohebar').width();
+    var $_haohe_planw = $('.J_kaohebar_parents').width();
+    $(".J_btn").attr("disabled", 'disabled');
+    if ($_haohe_planw === $_haohe_plan) {
+        $(".J_btn").removeAttr("disabled");
+    }
+
+    function select() {
+        var $listcon = $('.abnormal-table tbody tr'),
+                $unpay = $('.icon-tag-wfk'),
+                $payed = $('.payed'),
+                $timeout = $('.time-out'),
+                $paystatus = $('.J-pay-staus');
+        $paystatus.delegate('li', 'click', function () {
+            var $target = $(this);
+            $paystatus.children('li').removeClass('pay-status-active');
+            $target.addClass('pay-status-active');
+            $listcon.hide();
+            switch ($target.data('item')) {
+                case 'all':
+                    $listcon.show();
+                    break;
+                case 'unpay':
+                    for (var i = 0; i < $unpay.length; i++) {
+                        $($unpay[i]).parents('tr').show();
+                    }
+                    ;
+                    break;
+                case 'timeout':
+                    for (var i = 0; i < $timeout.length; i++) {
+                        $($timeout[i]).parents('tr').show();
+                    }
+                    ;
+                    break;
+                case 'payed':
+                    for (var i = 0; i < $payed.length; i++) {
+                        $($payed[i]).parents('tr').show();
+                    }
+                    ;
+                    break;
+                default:
+                    break;
+            }
+        });
+
+    }
+
+    select();
+</script>
+
+</body>
+</html>
+
+

@@ -1,15 +1,12 @@
-package com.wangge.buzmgt.receipt.service;
+package com.wangge.buzmgt.cash.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -24,66 +21,46 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
-import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
-import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
+import com.wangge.buzmgt.cash.entity.WaterOrderCash;
+import com.wangge.buzmgt.cash.repository.WaterOrderCashRepository;
 import com.wangge.buzmgt.receipt.entity.RemarkStatusEnum;
-import com.wangge.buzmgt.receipt.repository.OrderReceiptRepository;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 
 @Service
-public class OrderReceiptServiceImpl implements OrderReceiptService {
-
-  @PersistenceContext
-  private EntityManager em;
-  @Autowired
-  private OrderReceiptRepository orderReceiptRepository;
+public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
   @Autowired
-  private OrderSignforService orderSignforService;
+  private WaterOrderCashRepository waterOrderCashRepository;
+
   @Autowired
   private RegionService regionService;
 
-  // @Override
-  // public ReceiptRemark findByOrder(OrderSignfor orderNo) {
-  // return orderReceiptRepository.findByOrder(orderNo);
-  // }
 
   @Override
-  public List<ReceiptRemark> findAll() {
-    return orderReceiptRepository.findAll();
+  public List<WaterOrderCash> findAll() {
+    return waterOrderCashRepository.findAll();
   }
 
-  @Override
-  public Long findCount() {
-    return orderReceiptRepository.count();
-  }
 
   @Override
-  public List<ReceiptRemark> findAll(Map<String, Object> searchParams) {
-    disposeSearchParams("salesmanId",searchParams);
+  public List<WaterOrderCash> findAll(Map<String, Object> searchParams) {
+    disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<ReceiptRemark> spec = orderReceiptSearchFilter(filters.values(), ReceiptRemark.class);
-    List<ReceiptRemark> remarkedList = orderReceiptRepository.findAll(spec);
-    remarkedList.forEach(remark -> {
-      remark.setOrder(orderSignforService.findByOrderNo(remark.getOrderno()));
-    });
-    return remarkedList;
+    Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
+    List<WaterOrderCash> waterOrderList = waterOrderCashRepository.findAll(spec);
+    return waterOrderList;
   }
 
   @Override
-  public Page<ReceiptRemark> getReceiptRemarkList(Map<String, Object> searchParams, Pageable pageRequest) {
-    disposeSearchParams("salesmanId",searchParams);
+  public Page<WaterOrderCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
+    disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<ReceiptRemark> spec = orderReceiptSearchFilter(filters.values(), ReceiptRemark.class);
-
-    Page<ReceiptRemark> receiptRemarkPage = orderReceiptRepository.findAll(spec, pageRequest);
+    Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
+    Page<WaterOrderCash> receiptRemarkPage = waterOrderCashRepository.findAll(spec, pageRequest);
     receiptRemarkPage.getContent().forEach(receiptRemark -> {
-      receiptRemark.setOrder(orderSignforService.findByOrderNo(receiptRemark.getOrderno()));
     });
 
     return receiptRemarkPage;
@@ -118,10 +95,10 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
         regionArr =regionId;
         break;
       }
+      searchParams.put("ORMLK_"+userId, regionArr);
+      searchParams.remove("regionId");
+      searchParams.remove("regionType");
     }
-    searchParams.put("ORMLK_"+userId, regionArr);
-    searchParams.remove("regionId");
-    searchParams.remove("regionType");
     
   }
   /**
@@ -148,10 +125,10 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
       
     return regionArr;
   }
-  private static <T> Specification<ReceiptRemark> orderReceiptSearchFilter(final Collection<SearchFilter> filters,
-      final Class<ReceiptRemark> entityClazz) {
+  private static Specification<WaterOrderCash> WaterOrderCashSearchFilter(final Collection<SearchFilter> filters,
+      final Class<WaterOrderCash> entityClazz) {
 
-    return new Specification<ReceiptRemark>() {
+    return new Specification<WaterOrderCash>() {
 
       private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
 
@@ -165,7 +142,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
 
       @SuppressWarnings({ "rawtypes", "unchecked" })
       @Override
-      public Predicate toPredicate(Root<ReceiptRemark> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+      public Predicate toPredicate(Root<WaterOrderCash> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         if (CollectionUtils.isNotEmpty(filters)) {
           List<Predicate> predicates = new ArrayList<Predicate>();
           for (SearchFilter filter : filters) {
@@ -316,6 +293,9 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
               Predicate p_ = cb.or(pl);
               predicates.add(p_);
               break;
+              
+            default:
+              break;
 
             }
           }
@@ -330,71 +310,5 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
       }
     };
   }
-
-  /**
-   * 查询未报备订单列表
-   * 
-   * @param searchParams
-   * @return
-   */
-  @SuppressWarnings("deprecation")
-  @Override
-  public List<OrderSignfor> getReceiptNotRemark(Map<String, Object> searchParams) {
-    String status = "";
-    String startTime = "";
-    String endTime = "";
-    String orderNo ="";
-    String regionId ="";
-    disposeSearchParams("userId",searchParams);
-    startTime = (String) searchParams.get("GTE_createTime");
-    endTime = (String) searchParams.get("LTE_createTime");
-    status = (String) searchParams.get("EQ_status");
-    orderNo =(String) searchParams.get("EQ_orderNo");
-    regionId=(String) searchParams.get("ORMLK_salesmanId");
-    List<OrderSignfor> list = orderSignforService.getReceiptNotRemarkList(status, startTime, endTime,orderNo,regionId);
-    List<OrderSignfor> notRemarkList = new ArrayList<OrderSignfor>();
-    //TODO 
-    String timesGap = "24:00";
-    String[] timesGapAry = timesGap.split(":");
-    // 获取当前时间
-    Date now = new Date();
-    list.forEach(notRemark -> {
-      // 截止时间
-      Date abortTime = notRemark.getYewuSignforTime();
-      abortTime.setHours(Integer.parseInt(timesGapAry[0]));
-      abortTime.setMinutes(Integer.parseInt(timesGapAry[1]));
-      if(notRemark.getCustomSignforTime() != null && notRemark.getYewuSignforTime() != null){
-        notRemark.setAging(DateUtil.getAging(notRemark.getCustomSignforTime().getTime()-notRemark.getYewuSignforTime().getTime()));
-      }
-      if (notRemark.getCustomSignforTime() != null) {
-        // 付款超时
-        if (notRemark.getCustomSignforTime().getTime() > abortTime.getTime()) {
-          notRemarkList.add(notRemark);
-        }
-
-      } else {
-        // 超时未付款
-        if (now.getTime() > abortTime.getTime()) {
-          notRemarkList.add(notRemark);
-        }
-      }
-
-    });
-    return notRemarkList;
-  }
-
-  @Override
-  public Page<OrderSignfor> getCashList(Map<String, Object> searchParams, Pageable pageRequest) {
-    // TODO Auto-generated method stub
-    String status,orderNo;
-    status = (String) searchParams.get("EQ_status");
-    searchParams.remove("EQ_status");
-    orderNo =(String) searchParams.get("EQ_orderNo");
-    List<OrderSignfor> cashList=orderSignforService.getReceiptCashList(searchParams);
-    if(StringUtils.isEmpty(orderNo)){
-      
-    }
-    return null;
-  }
-
+ 
 }

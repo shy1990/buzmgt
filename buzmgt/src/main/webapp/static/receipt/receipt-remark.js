@@ -1,10 +1,12 @@
 var remarkedTotal = 0;// 报备总条数
+var cashTotal = 0;// 总条数
 var notRemarkedTotal = 0;// 未报备总条数
 $(function() {
-	nowTime();//初始化日期
+//	nowTime();//初始化日期
 	DispositRegionId();//区域选择数据处理
-	findRemarked();
-	findNOTRemarked();
+	findRemarked();//报备
+	findNOTRemarked();//未报备
+	findCash();//收现金
 })
 $('.nav-task li').on("click", function() {
 	$(this).addClass('active');
@@ -129,6 +131,9 @@ function goSearch() {
 		case 'notreported':
 			findNOTRemarked();
 			break;
+		case 'cash':
+			findCash();
+			break;
 		default:
 			break;
 		}
@@ -171,7 +176,6 @@ function conditionProcess() {
 function findRemarked(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
-	// delete SearchData['sc_EQ_customSignforException'];
 	$.ajax({
 		url : "/receiptRemark/remarkList",
 		type : "GET",
@@ -191,10 +195,31 @@ function findRemarked(page) {
 		}
 	})
 }
+function findCash(page) {
+	page = page == null || page == '' ? 0 : page;
+	SearchData['page'] = page;
+	$.ajax({
+		url : "/receiptRemark/cash",
+		type : "GET",
+		data : SearchData,
+		dataType : "json",
+		success : function(orderData) {
+			createCashTable(orderData);
+			var searchTotal = orderData.totalElements;
+			if (searchTotal != cashTotal || searchTotal == 0) {
+				cashTotal = searchTotal;
+				
+				cashPaging(orderData);
+			}
+		},
+		error : function() {
+			alert("系统异常，请稍后重试！");
+		}
+	})
+}
 function findNOTRemarked(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
-	// delete SearchData['sc_EQ_customSignforException'];
 	$.ajax({
 		url : "/receiptRemark/notRemarkList",
 		type : "GET",
@@ -223,6 +248,15 @@ function createRemarkedTable(data) {
 	$('#remarkedList').html(myTemplate(data));
 }
 /**
+ * 生成报备列表
+ * @param data
+ */
+
+function createCashTable(data) {
+	var myTemplate = Handlebars.compile($("#cash-table-template").html());
+	$('#cashList').html(myTemplate(data));
+}
+/**
  * 生成未报备列表
  * @param data
  */
@@ -243,6 +277,21 @@ function remarkedPaging(data) {
 		limit : limit,
 		callback : function(curr, limit, totalCount) {
 			findRemarked(curr - 1);
+		}
+	});
+}
+/**
+ * 现金的分页
+ * @param data
+ */
+function cashPaging(data) {
+	var totalCount = data.totalElements, limit = data.size;
+	$('#cashPager').extendPagination({
+		totalCount : totalCount,
+		showCount : 5,
+		limit : limit,
+		callback : function(curr, limit, totalCount) {
+			findCash(curr - 1);
 		}
 	});
 }
@@ -269,6 +318,7 @@ Handlebars.registerHelper('formDate', function(value) {
 });
 Handlebars.registerHelper('whatremarkStatus', function(value) {
 	var html = "";
+	var color= "bule";
 	if (value.indexOf("未付款") >= 0) {
 		html += '<span class="pay-time icon-tag-wfk">未付款</span>';
 	}
@@ -277,7 +327,9 @@ Handlebars.registerHelper('whatremarkStatus', function(value) {
 	}
 	if (value.indexOf("超时") >= 0) {
 		html += '<span class="text-red">超时</span>';
+		color="red";
 	}
+	html+='<br /> <span class="'+color+'">';
 	return html;
 });
 Handlebars.registerHelper('whetherPunish', function(value) {
