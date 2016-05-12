@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+		<title>添加月任务</title>
+		<!-- Bootstrap -->
+		<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
+		<link href="static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="static/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="static/month-task/add-month-task.css">
+		<link rel="stylesheet" type="text/css" href="static/month-task/bootstrap-select.min.css">
+		<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="content main">
+			<h4 class="page-header ">
+				<i class="ico icon-add"></i>添加月任务
+				<!--区域选择按钮-->
+				<div class="area-choose">
+					选择区域：<span>山东省</span> <a class="are-line" href="javascript:;"
+						onclick="">切换</a>
+				</div>
+				<!--/区域选择按钮-->
+			</h4>
+			<!-- person-select -->
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-horizontal" role="form">
+					    <div class="form-group clearfix">
+						    <label for="basic" class="select-label fl">业务员：</label>
+						    <div class="select-area fl">
+							    <select id="basic" class="selectpicker show-tick form-control fl">
+									<option>张三</option>
+									<option>李四</option>
+									<option>王五</option>
+						        </select>
+						    </div>
+						    <button type="button" class="btn btn-blue btn-sm">检索</button>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<!-- person-select -->
+			<!-- content -->
+			<div class="con-wrapper">
+				<!-- row-task-section -->
+				<div class="row">
+					<!-- section1 -->
+					<div class="col-md-4">
+						<div class="section-wrapper">
+							<div class="task-header column-first">
+								<h5><span class="task-num">25</span>次拜访任务设置</h5>
+							</div>
+							<ul>
+								<li class="clearfix">
+									<p class="fl">上个月月均提货天数 ≥ 25天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">上月提货天数 ≥ 25天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">上月拜访次数 ≥ 25天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<div class="fl task-info">
+										<label>本月<span class="task-total">25</span>次拜访商家：</label>
+										<input type="number" value="14">
+									</div>
+									<p class="fr suggestion">系统建议<span>14</span>家</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- section1 -->
+					<!-- section2 -->
+					<div class="col-md-4">
+						<div class="section-wrapper">
+							<div class="task-header column-sec">
+								<h5><span class="task-num">20</span>次拜访任务设置</h5>
+							</div>
+							<ul>
+								<li class="clearfix">
+									<p class="fl">20天 ≤ 月均提货天数 &#60; 25天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">20天 ≤ 上月提货天数 &#60; 25天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">20天 ≤ 上月拜访次数 &#60; 25天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<div class="fl task-info">
+										<label>本月<span class="task-total">20</span>次拜访商家：</label>
+										<input type="number" value="14">
+									</div>
+									<p class="fr suggestion">系统建议<span>14</span>家</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- section2 -->
+					<!-- section3 -->
+					<div class="col-md-4">
+						<div class="section-wrapper">
+							<div class="task-header column-third">
+								<h5><span class="task-num">15</span>次拜访任务设置</h5>
+							</div>
+							<ul>
+								<li class="clearfix">
+									<p class="fl">15天 ≤ 月均提货天数 &#60; 20天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">15天 ≤ 上月提货天数 &#60; 20天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">15天 ≤ 上月拜访次数 &#60; 20天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<div class="fl task-info">
+										<label>本月<span class="task-total">15</span>次拜访商家：</label>
+										<input type="number" value="14">
+									</div>
+									<p class="fr suggestion">系统建议<span>14</span>家</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- section3 -->
+					<!-- section4 -->
+					<div class="col-md-4">
+						<div class="section-wrapper">
+							<div class="task-header column-first">
+								<h5><span class="task-num">10</span>次拜访任务设置</h5>
+							</div>
+							<ul>
+								<li class="clearfix">
+									<p class="fl">10天 ≤ 月均提货天数 &#60; 15天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">10天 ≤ 上月提货天数 &#60; 15天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">10天 ≤ 上月拜访次数 &#60; 15天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<div class="fl task-info">
+										<label>本月<span class="task-total">10</span>次拜访商家：</label>
+										<input type="number" value="14">
+									</div>
+									<p class="fr suggestion">系统建议<span>14</span>家</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- section4 -->
+					<!-- section5 -->
+					<div class="col-md-4">
+						<div class="section-wrapper">
+							<div class="task-header column-sec">
+								<h5><span class="task-num">7</span>次拜访任务设置</h5>
+							</div>
+							<ul>
+								<li class="clearfix">
+									<p class="fl">7天 ≤ 月均提货天数 &#60; 10天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">7天 ≤ 上月提货天数 &#60; 10天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">7天 ≤ 上月拜访次数 &#60; 10天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<div class="fl task-info">
+										<label>本月<span class="task-total">7</span>次拜访商家：</label>
+										<input type="number" value="14">
+									</div>
+									<p class="fr suggestion">系统建议<span>14</span>家</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- section5 -->
+					<!-- section6 -->
+					<div class="col-md-4">
+						<div class="section-wrapper">
+							<div class="task-header column-third">
+								<h5><span class="task-num">4</span>次拜访任务设置</h5>
+							</div>
+							<ul>
+								<li class="clearfix">
+									<p class="fl">4天 ≤ 月均提货天数 &#60; 7天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">4天 ≤ 上月提货天数 &#60; 7天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">4天 ≤ 上月拜访次数 &#60; 7天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<div class="fl task-info">
+										<label>本月<span class="task-total">4</span>次拜访商家：</label>
+										<input type="number" value="14">
+									</div>
+									<p class="fr suggestion">系统建议<span>14</span>家</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- section6 -->
+					<!-- section7 -->
+					<div class="col-md-4">
+						<div class="section-wrapper">
+							<div class="task-header column-first">
+								<h5><span class="task-num">2</span>次拜访任务设置</h5>
+							</div>
+							<ul>
+								<li class="clearfix">
+									<p class="fl">2天 ≤ 月均提货天数 &#60; 4天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">2天 ≤ 上月提货天数 &#60; 4天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<p class="fl">2天 ≤ 上月拜访次数 &#60; 4天</p>
+									<p class="fr"><span class="seller-num">10</span>商家</p>
+								</li>
+								<li class="clearfix">
+									<div class="fl task-info">
+										<label>本月<span class="task-total">2</span>次拜访商家：</label>
+										<input type="number" value="14">
+									</div>
+									<p class="fr suggestion">系统建议<span>14</span>家</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- section7 -->
+				</div>
+				<!--row-task-section -->
+			</div>
+			<!-- content -->
+			<!-- mask -->
+			<div class="mask">
+				<button type="button" class="btn btn-blue save-btn">保存</button>
+				<button type="button" class="btn btn-deep-blue save-btn">发布</button>
+			</div>
+			<!-- mask -->
+
+			<!-- Bootstrap core JavaScript================================================== -->
+			<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+			<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+			<!--[if lt IE 9]>
+      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+			<script src="static/bootstrap/js/bootstrap.min.js"></script>
+			<script src="static/js/bootstrap-select.min.js"></script>
+	</body>
+</html>
