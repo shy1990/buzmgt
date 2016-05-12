@@ -219,6 +219,21 @@ public class DateUtil {
 		 return calendar.getTime(); //这个时间就是日期移动之后的时间
 		
 	}
+	
+	/**
+	 * 得到前一个月的时间
+	 * @param date
+	 * @param  flag 正数为前移,负数为后移
+	 * @return
+	 */
+	public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");// 定义日期显示格式
+	public static String  getPreMonth(Date date,int flag){
+		 Calendar calendar = new GregorianCalendar();
+		 calendar.setTime(date);
+		 calendar.add(Calendar.MONTH,flag);//把月份往前移一个月
+		 return sdf.format(calendar.getTime()); //
+		
+	}
 	/***
 	 * 时间字符串转换成long
 	 * @param strDate

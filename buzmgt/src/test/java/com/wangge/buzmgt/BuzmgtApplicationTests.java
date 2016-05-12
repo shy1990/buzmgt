@@ -18,6 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
+import com.wangge.buzmgt.monthTask.repository.MonthOrdersDataRepository;
+import com.wangge.buzmgt.monthTask.service.MonthTaskService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.service.RegionService;
@@ -30,6 +33,7 @@ import com.wangge.buzmgt.sys.repository.UserRepository;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.SaojieDataVo;
+import com.wangge.buzmgt.task.service.VisitRecordService;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
@@ -59,6 +63,10 @@ public class BuzmgtApplicationTests {
 	private SalesManService salesManService;
    @Resource
   private SaojieService saojieService;
+   @Resource
+   private VisitRecordService monthTaskService;
+   @Resource
+   MonthOrdersDataRepository monthDataRep;
 //	@Test
 //	@Transactional
 //	public void contextLoads() {
@@ -310,5 +318,10 @@ public class BuzmgtApplicationTests {
     String x1 = nf.format(baiy / baiz);
     System.out.println("++++++++++++++++++++++++++++++++++++++"+x1);
 
+  }
+  @Test
+  public void testMonth(){
+	MonthOdersData moth=  monthDataRep.findFirstbySalesmanOrRegionId("A37010504170", "15462", "2016-06");
+	System.out.println(moth.getMonth());
   }
 }
