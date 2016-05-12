@@ -131,7 +131,11 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 			 				map.centerAndZoom(new BMap.Point(<%=jlng%>, <%=jlat%>), 12);
 			 				map.enableScrollWheelZoom(true); 
 							<%
-		}else{%>
+		}else{
+		String parentName = request.getAttribute("parentName").toString();%>
+		var parentname ="<%=parentName%>";
+		map.centerAndZoom(parentname, 12);
+		map.enableScrollWheelZoom(true); 
 			var bdary = new BMap.Boundary();
 			bdary.get(name, function(rs){ //获取行政区域
 			var count = rs.boundaries.length; //行政区域的点有多少个
@@ -142,8 +146,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 			map.addOverlay(ply); //添加覆盖物
 			map.setViewport(ply.getPath()); //调整视野 
 			} 
-			map.centerAndZoom(name, 12);
-			map.enableScrollWheelZoom(true); 
+			
 			}); 
 		<%}%>
 		

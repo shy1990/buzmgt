@@ -55,13 +55,7 @@ function ajaxSearch(searchData) {
 						"application/json; charset=UTF-8");
 			},
 			dataType : "json",
-			success : function(dataN) {
-				
-				console.log(dataN);
-				return;
-				
-				var data = $.parseJSON(dataN);
-				
+			success : function(data) {
 				map.clearOverlays();
 				$(".shopNum").text(data.shopNum);
 				$(".percent").text(data.percent); 

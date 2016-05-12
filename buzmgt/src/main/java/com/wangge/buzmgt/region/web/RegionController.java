@@ -219,6 +219,7 @@ public class RegionController {
 		  name=region.getParent().getName();
 		  pcoordinates=region.getCoordinates();
 		}
+		model.addAttribute("parentName",region.getParent().getName());
  		model.addAttribute("jsonData", listRegion);
  		model.addAttribute("regionName", name);
     model.addAttribute("parentid", parentid);

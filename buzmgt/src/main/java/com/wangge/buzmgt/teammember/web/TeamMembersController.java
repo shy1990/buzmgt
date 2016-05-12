@@ -291,7 +291,7 @@ public class TeamMembersController {
          model.addAttribute("salesStatus", "kaifa");
        }else{
         List<Saojie> listSaojie=saojieService.findSaojie(Saojie.SaojieStatus.PENDING, salesMan.getId());
-          if(null==listSaojie){
+          if(null==listSaojie || listSaojie.isEmpty()){
             model.addAttribute("salesStatus", "kaifa");
           }
        }
