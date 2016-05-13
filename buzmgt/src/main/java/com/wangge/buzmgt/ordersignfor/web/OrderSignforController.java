@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.ordersignfor.web;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -137,7 +136,6 @@ public class OrderSignforController {
     String[] coloumsKey = { "salesMan.truename","shopName", "orderNo", "yewuSignforGeopoint", "yewuSignforTime"};
 
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-    Page<OrderSignfor> orderSignforslist=null;
     String type=request.getParameter("type");
     List<OrderSignfor> ywlist=null;
     List<OrderSignfor> list=os.findAll(searchParams);

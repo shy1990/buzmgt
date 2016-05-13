@@ -122,7 +122,7 @@ public class OilCostController {
   public String getAbnormalCoordList(HttpServletRequest request,
       @PageableDefault(page = 0,size=10,sort={"dateTime"},direction=Direction.DESC) Pageable pageRequest ){
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-    searchParams.put("LIKE_oilRecord", "exception");
+    searchParams.put("LIKE_oilRecord", "exception\":1");
     Page<OilCost> oilCostPage = oilCostService.findAll(searchParams,pageRequest);
     String msg="";
     try {

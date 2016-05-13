@@ -1,63 +1,17 @@
-var oilCostTotal = 0;//油补统计总条数 
-var abnormalCoordTotal = 0;//油补统计总条数 
+var oilCostTotal = 0;// 油补统计总条数
+var abnormalCoordTotal = 0;// 油补统计总条数
 $(function() {
-	nowTime();//初始化日期
-	DispositRegionId();//处理区域ID
-	findOilCostList();//油补统计
-	abnormalCoordList();//异常坐标
+	nowTime();// 初始化日期
+	DispositRegionId();// 处理区域ID
+	findOilCostList();// 油补统计
+	abnormalCoordList();// 异常坐标
 })
-$('#startTime').datetimepicker({
-	format : "yyyy-mm-dd",
-	language : 'zh-CN',
-	endDate : new Date(),
-	weekStart : 1,
-	todayBtn : 1,
-	autoclose : 1,
-	todayHighlight : 1,
-	startView : 2,
-	minView : 2,
-	pickerPosition : "bottom-right",
-	forceParse : 0
-}).on('changeDate', function(ev) {
-	$('.form_date_start').removeClass('has-error');
-	$('.form_date_end').removeClass('has-error');
-	var endInputDateStr = $('#endTime').val();
-	if (endInputDateStr != "" && endInputDateStr != null) {
-		var endInputDate = stringToDate(endInputDateStr).valueOf();
-		if (ev.date.valueOf() - endInputDate > 0) {
-			$('.form_date_start').addClass('has-error');
-		}
-	}
-});
-$('#endTime').datetimepicker({
-	format : "yyyy-mm-dd",
-	language : 'zh-CN',
-	endDate : new Date(),
-	weekStart : 1,
-	todayBtn : 1,
-	autoclose : 1,
-	todayHighlight : 1,
-	startView : 2,
-	minView : 2,
-	pickerPosition : "bottom-right",
-	forceParse : 0
-}).on('changeDate', function(ev) {
-	$('.form_date_start').removeClass('has-error');
-	$('.form_date_end').removeClass('has-error');
-	var startInputDateStr = $('#startTime').val();
-	if (startInputDateStr != "" && startInputDateStr != null) {
-		var startInputDate = stringToDate(startInputDateStr).valueOf();
-		if (ev.date.valueOf() - startInputDate < 0) {
-			$('.form_date_end').addClass('has-error');
-		}
-	}
-});
 
 /**
  * 初始化日期 前1天
  */
 function nowTime() {
-	var newDate=(new Date()).DateAdd('d', -1);
+	var newDate = (new Date()).DateAdd('d', -1);
 	var nowDate = changeDateToString(newDate);
 	var beforeDate = changeDateToString(newDate);
 	SearchData['sc_GTE_dateTime'] = beforeDate;
@@ -67,11 +21,11 @@ function nowTime() {
 }
 
 /**
- * TODO 处理区域ID 根据Regiontype 
+ * TODO 处理区域ID 根据Regiontype
  */
-function DispositRegionId(){
-	var regionId=$('#regionId').val();
-	var regionType=$('#regionType').val();
+function DispositRegionId() {
+	var regionId = $('#regionId').val();
+	var regionType = $('#regionType').val();
 	SearchData['sc_regionId'] = regionId;
 	SearchData['sc_regionType'] = regionType;
 }
@@ -101,29 +55,34 @@ function goSearch() {
 /**
  * 导出
  */
-$('.table-export').on('click',function() {
+$('.table-export').on(
+		'click',
+		function() {
 			var tab = findTab();
 			var startTime = $('#startTime').val();
 			var endTime = $('#endTime').val();
 			if (checkDate(startTime, endTime)) {
-				
+
 				SearchData['sc_GTE_dateTime'] = startTime;
 				SearchData['sc_LTE_dateTime'] = endTime;
 				switch (tab) {
 				case "all":
-					
-					window.location.href = base + "oilCost/export/statistics?" + conditionProcess();
+
+					window.location.href = base + "oilCost/export/statistics?"
+							+ conditionProcess();
 					break;
 
 				default:
-					
-					window.location.href = base + "oilCost/export/abnormalCoord?" + conditionProcess();
+
+					window.location.href = base
+							+ "oilCost/export/abnormalCoord?"
+							+ conditionProcess();
 					break;
 				}
 			}
 
 		});
-function findTab(){
+function findTab() {
 	var tab = $('#oilCostStatus li.active').attr('data-tital');
 	return tab;
 }
@@ -187,6 +146,7 @@ function abnormalCoordList(page) {
 }
 /**
  * 生成油补统计列表
+ * 
  * @param data
  */
 
@@ -196,14 +156,17 @@ function createOilCostTable(data) {
 }
 /**
  * 生成异常坐标列表
+ * 
  * @param data
  */
 function createAbnormalCoordTable(data) {
-	var myTemplate = Handlebars.compile($("#abnormalCoord-table-template").html());
+	var myTemplate = Handlebars.compile($("#abnormalCoord-table-template")
+			.html());
 	$('#abnormalCoordList').html(myTemplate(data));
 }
 /**
  * 报备的分页
+ * 
  * @param data
  */
 function oilCostPaging(data) {
@@ -219,6 +182,7 @@ function oilCostPaging(data) {
 }
 /**
  * 未报备的分页
+ * 
  * @param data
  */
 function abnormalCoordPaging(data) {
@@ -233,41 +197,39 @@ function abnormalCoordPaging(data) {
 	});
 }
 Handlebars.registerHelper('formDate', function(value) {
-	if(value==null||value==""){
+	if (value == null || value == "") {
 		return "----";
 	}
 	return changeTimeToString(new Date(value));
 });
 /**
- * 处理油补握手点
- * v1:type 
- * v2:regionName
+ * 处理油补握手点 v1:type v2:regionName
  * 
  */
-Handlebars.registerHelper('disposeRecordList', function(regionType,regionName,exception) {
+Handlebars.registerHelper('disposeRecordList', function(regionType, regionName,
+		exception) {
 	var html = "";
-//	数据格式
-/*	<span>起点<span class="abnormal-state">异常</span></span>
-    <span class="location">大桥镇</span>
-    <span class="location">小桥镇</span>
-    <span class="location">小桥镇</span>
-    <span class="location">小桥镇</span>
-    <span class="location">小桥镇</span>
-    <span class="location">小桥镇</span>
-    <span class="location">终点<span class="normal-state">家</span></span>*/
-	//异常
-	var tag="";
-	if (exception === '1') {
+	// 数据格式
+	/*
+	 * <span>起点<span class="abnormal-state">异常</span></span> <span
+	 * class="location">大桥镇</span> <span class="location">小桥镇</span> <span
+	 * class="location">小桥镇</span> <span class="location">小桥镇</span> <span
+	 * class="location">小桥镇</span> <span class="location">小桥镇</span> <span
+	 * class="location">终点<span class="normal-state">家</span></span>
+	 */
+	// 异常
+	var tag = "";
+	if (!isEmpty(exception)) {
 		tag = '<span class="abnormal-state">异常</span>';
-	}else if (regionName.indexOf("家") >= 0) {
-		tag = '<span class="normal-state">'+regionName+'</span>';
+	} else if (regionName.indexOf("家") >= 0) {
+		tag = '<span class="normal-state">' + regionName + '</span>';
 	}
-	if (regionType==="0") {
-		regionName = '<span>起点'+tag+'</span>';
-	}else if (regionType==="3") {
-		regionName = '<span class="location">终点'+tag+'</span>';
-	}else {
-		regionName = '<span class="location">'+regionName+tag+'</span>';
+	if (regionType === "0") {
+		regionName = '<span>起点' + tag + '</span>';
+	} else if (regionType === "3") {
+		regionName = '<span class="location">终点' + tag + '</span>';
+	} else {
+		regionName = '<span class="location">' + regionName + tag + '</span>';
 	}
 	html += regionName;
 	return html;
@@ -283,25 +245,27 @@ Handlebars.registerHelper('whatUserId', function(parentId, userId) {
 });
 /**
  * 选择区域
+ * 
  * @param id
  */
-function getRegion(id){
-	window.location.href='/region/getPersonalRegion?id='+id+'&flag=oilCost';
+function getRegion(id) {
+	window.location.href = '/region/getPersonalRegion?id=' + id
+			+ '&flag=oilCost';
 }
 /**
- * 根据订单号查询
+ * 根据流水号查询
  */
-function findByOrderNo(){
-	var tab=findTab();
-	var orderNo=$('#orderNo').val();
+function findByOrderNo() {
+	var tab = findTab();
+	var orderNo = $('#orderNo').val();
 	switch (tab) {
 	case 'reported':
 		$.ajax({
-			url : "/receiptRemark/remarkList?sc_EQ_orderno="+orderNo,
+			url : "/receiptRemark/remarkList?sc_EQ_orderno=" + orderNo,
 			type : "GET",
 			dataType : "json",
 			success : function(orderData) {
-				if(orderData.totalElements<1){
+				if (orderData.totalElements < 1) {
 					alert("报备订单中，未查到地订单！");
 					return false;
 				}
@@ -314,11 +278,11 @@ function findByOrderNo(){
 		break;
 	case 'notreported':
 		$.ajax({
-			url : "/receiptRemark/notRemarkList?sc_EQ_orderNo="+orderNo,
+			url : "/receiptRemark/notRemarkList?sc_EQ_orderNo=" + orderNo,
 			type : "GET",
 			dataType : "json",
 			success : function(orderData) {
-				if(orderData.totalElements<1){
+				if (orderData.totalElements < 1) {
 					alert("未报备订单中，未查到此订单！");
 					return false;
 				}
@@ -335,17 +299,56 @@ function findByOrderNo(){
 }
 /**
  * 判读是否为空
+ * 
  * @param value
  * @returns 为空返回true 不为空返回false
  */
-function isEmpty(value){
-	return value ==undefined || value ==""||value==null ;
-} 
-
-function turnRecord(userId,oilTotalCost,totalDistance){
-	var startTime = $('#startTime').val();
-	var endTime = $('#endTime').val();
-	window.location.href = base+"oilCost/record/"+userId+"?startTime=" +startTime+
-			"&endTime="+endTime+"&oilTotalCost="+oilTotalCost+"&totalDistance="+totalDistance;
-	
+function isEmpty(value) {
+	return value == undefined || value == "" || value == null;
 }
+$('#startTime').datetimepicker({
+	format : "yyyy-mm-dd",
+	language : 'zh-CN',
+	endDate : new Date(),
+	weekStart : 1,
+	todayBtn : 1,
+	autoclose : 1,
+	todayHighlight : 1,
+	startView : 2,
+	minView : 2,
+	pickerPosition : "bottom-right",
+	forceParse : 0
+}).on('changeDate', function(ev) {
+	$('.form_date_start').removeClass('has-error');
+	$('.form_date_end').removeClass('has-error');
+	var endInputDateStr = $('#endTime').val();
+	if (endInputDateStr != "" && endInputDateStr != null) {
+		var endInputDate = stringToDate(endInputDateStr).valueOf();
+		if (ev.date.valueOf() - endInputDate > 0) {
+			$('.form_date_start').addClass('has-error');
+		}
+	}
+});
+$('#endTime').datetimepicker({
+	format : "yyyy-mm-dd",
+	language : 'zh-CN',
+	endDate : new Date(),
+	weekStart : 1,
+	todayBtn : 1,
+	autoclose : 1,
+	todayHighlight : 1,
+	startView : 2,
+	minView : 2,
+	pickerPosition : "bottom-right",
+	forceParse : 0
+}).on('changeDate', function(ev) {
+	$('.form_date_start').removeClass('has-error');
+	$('.form_date_end').removeClass('has-error');
+	var startInputDateStr = $('#startTime').val();
+	if (startInputDateStr != "" && startInputDateStr != null) {
+		var startInputDate = stringToDate(startInputDateStr).valueOf();
+		if (ev.date.valueOf() - startInputDate < 0) {
+			$('.form_date_end').addClass('has-error');
+		}
+	}
+});
