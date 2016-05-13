@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,6 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 
 
 
@@ -32,8 +34,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  *
  */
 @Entity
-@Table(name="SYS_WATER_ORDER_CASH")
-public class WaterOrderCash implements Serializable  {
+@Table(name="SYS_CASH_RECORD")
+public class Cash implements Serializable  {
 
   /**
    * 
@@ -41,10 +43,10 @@ public class WaterOrderCash implements Serializable  {
   private static final long serialVersionUID = 1L;
   
   
-  public enum WaterPayStatusEnum{
+  public enum CashStatusEnum{
     UnPay("未支付"), OverPay("已支付");
     private String name;
-    WaterPayStatusEnum(String name){
+    CashStatusEnum(String name){
       this.name=name;
     }
     public String getName(){
@@ -56,20 +58,16 @@ public class WaterOrderCash implements Serializable  {
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
-  @Column(name="SERIAL_NO",insertable=false,updatable=false)
-  private String serialNo ; //流水单号
-  
+  @Column(name="id",insertable=false,updatable=false)
+  private Long cashId ; //订单id
+//  @Transient
+  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+  @JoinColumn(name="id")
+  private OrderSignfor order;//订单
   private String userId ; //用户id
-  private Float cashMoney  ;//收现金额
-  private Float paymentMoney ;//支付金额
-  private Integer isPunish ;//是否扣罚
-  
-  @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
-  @JoinColumn(name="SERIAL_NO")
-  private List<WaterOrderDetail> orderDetailList;//订单详情
   
   @Enumerated(EnumType.ORDINAL)
-  private WaterPayStatusEnum payStatus;//支付状态
+  private CashStatusEnum status;//支付状态
   
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
@@ -81,23 +79,28 @@ public class WaterOrderCash implements Serializable  {
   private Date payDate  ;//支付时间
   
   
-  public List<WaterOrderDetail> getOrderDetailList() {
-    return orderDetailList;
+  @Transient
+  private String isTimeOut;
+  
+  
+  
+  public String getIsTimeOut() {
+    return isTimeOut;
   }
-  public void setOrderDetailList(List<WaterOrderDetail> orderDetailList) {
-    this.orderDetailList = orderDetailList;
+  public void setIsTimeOut(String isTimeOut) {
+    this.isTimeOut = isTimeOut;
   }
-  public String getPayStatus() {
-    return payStatus.getName();
+  public Long getCashId() {
+    return cashId;
   }
-  public void setPayStatus(WaterPayStatusEnum payStatus) {
-    this.payStatus = payStatus;
+  public void setCashId(Long id) {
+    this.cashId = id;
   }
-  public String getSerialNo() {
-    return serialNo;
+  public OrderSignfor getOrder() {
+    return order;
   }
-  public void setSerialNo(String serialNo) {
-    this.serialNo = serialNo;
+  public void setOrder(OrderSignfor order) {
+    this.order = order;
   }
   public String getUserId() {
     return userId;
@@ -105,23 +108,11 @@ public class WaterOrderCash implements Serializable  {
   public void setUserId(String userId) {
     this.userId = userId;
   }
-  public Float getCashMoney() {
-    return cashMoney;
+  public String getStatus() {
+    return status.getName();
   }
-  public void setCashMoney(Float cashMoney) {
-    this.cashMoney = cashMoney;
-  }
-  public Float getPaymentMoney() {
-    return paymentMoney;
-  }
-  public void setPaymentMoney(Float paymentMoney) {
-    this.paymentMoney = paymentMoney;
-  }
-  public Integer getIsPunish() {
-    return isPunish;
-  }
-  public void setIsPunish(Integer isPunish) {
-    this.isPunish = isPunish;
+  public void setStatus(CashStatusEnum status) {
+    this.status = status;
   }
   public Date getCreateDate() {
     return createDate;
@@ -135,7 +126,8 @@ public class WaterOrderCash implements Serializable  {
   public void setPayDate(Date payDate) {
     this.payDate = payDate;
   }
-
+  
+  
   
 
 }

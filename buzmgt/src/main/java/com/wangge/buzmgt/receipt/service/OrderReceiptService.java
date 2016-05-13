@@ -46,7 +46,7 @@ public interface OrderReceiptService {
    * @param pageRequest
    * @return
    */
-  public Page<OrderSignfor> getCashList(Map<String, Object> searchParams, Pageable pageRequest);
+  public List<OrderSignfor> getCashList(Map<String, Object> searchParams);
 }
 
   

@@ -118,14 +118,25 @@ public class ReceiptRemarkController {
       @PageableDefault(page = 0,size=10,sort={"createTime"},direction=Direction.DESC) Pageable pageRequest ){
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     searchParams.put("EQ_orderPayType", "CASH");
-    Page<OrderSignfor> cashList=orderSignforService.getOrderSingforList(searchParams, pageRequest);
-    cashList.getContent().forEach(list->{
+    List<OrderSignfor> cashListAll=orderReceiptService.getCashList(searchParams);
+    List<OrderSignfor> cashList = new ArrayList<>();
+    cashList.forEach(list->{
       list.getSalesMan().setUser(null);
       list.getSalesMan().setRegion(null);
     });
+    int total=0;
+    int number=pageRequest.getPageNumber();
+    int size=pageRequest.getPageSize();
+    for(OrderSignfor cash:cashListAll){
+      if(number*size <= total && total < (number+1)*size){
+        cashList.add(cash);
+      }
+      total++;
+    };
+    PageImpl<OrderSignfor> page = new PageImpl<OrderSignfor>(cashList,pageRequest,total);
     String json="";
     try {
-      json=JSON.toJSONString(cashList, SerializerFeature.DisableCircularReferenceDetect);
+      json=JSON.toJSONString(page, SerializerFeature.DisableCircularReferenceDetect);
     }
     catch(Exception e){
       logger.error(e.getMessage());
@@ -133,7 +144,7 @@ public class ReceiptRemarkController {
     return json;
   }
   /**
-   * 报备列表
+   * s收现金详情
    * @param request
    * @param pageRequest
    * @return

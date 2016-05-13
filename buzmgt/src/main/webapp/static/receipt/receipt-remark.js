@@ -177,7 +177,7 @@ function findRemarked(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
 	$.ajax({
-		url : "/receiptRemark/remarkList",
+		url : base+"receiptRemark/remarkList",
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
@@ -199,7 +199,7 @@ function findCash(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
 	$.ajax({
-		url : "/receiptRemark/cash",
+		url : base+"cash",
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
@@ -221,7 +221,7 @@ function findNOTRemarked(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
 	$.ajax({
-		url : "/receiptRemark/notRemarkList",
+		url : base+"receiptRemark/notRemarkList",
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
@@ -343,6 +343,31 @@ Handlebars.registerHelper('whatPartsCount', function(value) {
 	if (value== ""||value==null) { return 0; }
 	return value;
 });
+/**
+ * 判断是收现金是否超时
+ */
+Handlebars.registerHelper('isTimeOutPlant', function(isTimeOut,payDate) {
+	var html = "";
+	payDate=isEmpty(payDate)?'':payDate;
+	console.info(isEmpty(payDate));
+	isTimeOut=isEmpty(isTimeOut)?'': isTimeOut;
+	html+='<span class="text-red">'+isTimeOut+'</span> <br /> '
+	var formDate=changeTimeToString(new Date(payDate));
+	if(!isEmpty(payDate)){
+		if(!isEmpty(isTimeOut)){
+			html +='<span class="text-red">'+formDate+'</span>';
+			return html;
+		}
+		html += '<span class="text-bule">'+formDate+'</span>'; 
+	}
+	return html;
+});
+Handlebars.registerHelper('isException', function(value) {
+	var html = "";
+	if (value=== 1) { return '<span class="icon-tag-yc">异常</span>'; }
+	
+	return '<span class="icon-tag-zc">正常</span> ';
+});
 Handlebars.registerHelper('whatCustomSignforStatus', function(value) {
 	var html = "";
 	if (value === 0) {
@@ -362,7 +387,7 @@ function findByOrderNo(){
 	switch (tab) {
 	case 'reported':
 		$.ajax({
-			url : "/receiptRemark/remarkList?sc_EQ_orderno="+orderNo,
+			url : base+"receiptRemark/remarkList?sc_EQ_orderno="+orderNo,
 			type : "GET",
 			dataType : "json",
 			success : function(orderData) {
@@ -379,7 +404,7 @@ function findByOrderNo(){
 		break;
 	case 'notreported':
 		$.ajax({
-			url : "/receiptRemark/notRemarkList?sc_EQ_orderNo="+orderNo,
+			url : base+"receiptRemark/notRemarkList?sc_EQ_orderNo="+orderNo,
 			type : "GET",
 			dataType : "json",
 			success : function(orderData) {
@@ -394,6 +419,24 @@ function findByOrderNo(){
 			}
 		})
 		break;
+	case 'cash':
+		$.ajax({
+			url : base+"cash?sc_EQ_orderNo="+orderNo,
+			type : "GET",
+			dataType : "json",
+			success : function(orderData) {
+				if(orderData.totalElements<1){
+					alert("收款订单中，未查到此订单！");
+					return false;
+				}
+				createCashTable(orderData);
+			},
+			error : function() {
+				alert("系统异常，请稍后重试！");
+			}
+		})
+		break;
+		
 	default:
 		break;
 	}
@@ -404,6 +447,6 @@ function findByOrderNo(){
  * @param value
  * @returns 为空返回true 不为空返回false
  */
-function checkEmpty(value){
-	return value ==""||value==null;
+function isEmpty(value){
+	return value ==""||value==null || value== undefined ;
 } 

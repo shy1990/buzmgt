@@ -167,14 +167,6 @@ Handlebars.registerHelper('whatUserId', function(parentId, userId) {
 	}
 	return userId;
 });
-Handlebars.registerHelper('disAccount', function(value) {
-	var msg="";
-	if (value === 0) {
-		return msg="（主）";
-	}
-	return msg="（子）";
-});
-
 
 /**
  * 判读是否为空

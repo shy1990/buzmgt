@@ -384,17 +384,51 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
   }
 
   @Override
-  public Page<OrderSignfor> getCashList(Map<String, Object> searchParams, Pageable pageRequest) {
+  public List<OrderSignfor> getCashList(Map<String, Object> searchParams) {
     // TODO Auto-generated method stub
     String status,orderNo;
     status = (String) searchParams.get("EQ_status");
     searchParams.remove("EQ_status");
     orderNo =(String) searchParams.get("EQ_orderNo");
     List<OrderSignfor> cashList=orderSignforService.getReceiptCashList(searchParams);
-    if(StringUtils.isEmpty(orderNo)){
+    List<OrderSignfor> cashForParm=new ArrayList<>();
+    if(StringUtils.isEmpty(orderNo) && StringUtils.isNotEmpty(status)){
+//      UnPay("0","未付款"),OverPay("1","已付款"),UnPayLate("2","超时未付款"),OverPayLate
+      switch (status) {
+      case "UnPay":
+        cashList.forEach(cash->{
+          if(cash.getPayDate()==null){
+            cashForParm.add(cash);
+          }
+        });
+        break;
+      case "OverPay":
+        cashList.forEach(cash->{
+          if(cash.getPayDate()!=null){
+            cashForParm.add(cash);
+          }
+        });
+        break;
+      case "UnPayLate":
+      //TODO  某一个时间点（如12:00）拓展后期后台设置;
+        String timesGap = "9:00";
+        String[] times=timesGap.split(":");
+        cashList.forEach(cash->{
+          
+          if(cash.getPayDate()==null){
+            
+            cashForParm.add(cash);
+          }
+        });
+        break;
+
+      default:
+        break;
+      }
+      
       
     }
-    return null;
+    return cashList;
   }
 
 }

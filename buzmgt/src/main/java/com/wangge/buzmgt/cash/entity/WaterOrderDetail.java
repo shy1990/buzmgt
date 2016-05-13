@@ -37,14 +37,15 @@ public class WaterOrderDetail implements Serializable  {
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
   private String id;
+  @Column(name="SERIAL_NO")
   private String serialNo ; //流水单号
   
   @Column(name = "order_no",insertable=false,updatable=false)
   private String orderNo; //订单号
   
-  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
-  @JoinColumn(name = "order_no")
-  private OrderSignfor order; //订单号
+  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+  @JoinColumn(name = "order_no" )
+  private Cash order; //订单号
   
   public String getId() {
     return id;
@@ -64,10 +65,10 @@ public class WaterOrderDetail implements Serializable  {
   public void setOrderNo(String orderNo) {
     this.orderNo = orderNo;
   }
-  public OrderSignfor getOrder() {
+  public Cash getOrder() {
     return order;
   }
-  public void setOrder(OrderSignfor order) {
+  public void setOrder(Cash order) {
     this.order = order;
   }
   

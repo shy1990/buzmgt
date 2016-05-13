@@ -65,22 +65,29 @@
 	{{#if content}}
 	{{#each content}}
     <tr>
+			{{#with order}}
       <td class="">{{#with salesMan}}{{truename}}{{/with}}</td>
       <td class="">{{shopName}}</td>
       <td>{{orderNo}}</td>
       <td>{{orderPrice}}</td>
-      <td><span class="icon-tag-yc">异常</span> <span class="icon-tag-zc">正常</span> 山东省滨州市邹平县大桥镇223号</td>
-      <td>2016.03.12 18:20</td>
+      <td>
+				{{{isException customSignforException}}}
+				{{customSignforGeopoint}}
+			</td>
+			{{/with}}
+      <td>{{formDate createDate}}</td>
       <td>
         <div class="pay-time-box">
-     	    <span class="pay-time icon-tag-wfk">未付款</span> 
+					{{#if payDate}}
 					<span class="pay-time icon-tag-yfk">已付款</span> 
-					<span class="text-red">超时</span> <br /> 
-					<span class="text-bule">2016.03.12 18:20</span> 
-					<span class="text-red">2016.03.12 18:20</span>
+					{{else}}
+     	    <span class="pay-time icon-tag-wfk">未付款</span> 
+					{{/if}}	
+					{{{isTimeOutPlant isTimeOut payDate}}}
+					
      	  </div>
       <td>
-				<a class="btn btn-blue btn-sm" href="/receiptRemark/cash/{{id}}">查看</a>
+				<a class="btn btn-blue btn-sm" href="/receiptRemark/cash/{{cashId}}">查看</a>
     </tr>
 	{{/each}}
 	{{else}}

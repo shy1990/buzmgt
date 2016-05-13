@@ -28,6 +28,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.cash.entity.WaterOrderCash;
+import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
+import com.wangge.buzmgt.cash.service.WaterOrderCashService;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
@@ -52,6 +55,9 @@ public class OrderSignforServiceImpl implements OrderSignforService {
   
   @Autowired
   private SalesManService salesManService;
+  
+  @Autowired
+  private WaterOrderCashService waterOrderCashService;
   @Autowired
   private RegionService regionService;
   
@@ -78,7 +84,7 @@ public class OrderSignforServiceImpl implements OrderSignforService {
 
   @Override
   public List<OrderSignfor> findAll(Map<String, Object> searchParams) {
-    disposeSearchParams("userId",searchParams);
+    regionService.disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<OrderSignfor> spec = orderSignforSearchFilter(filters.values(), OrderSignfor.class);
     return orderSignforRepository.findAll(spec);
@@ -86,73 +92,13 @@ public class OrderSignforServiceImpl implements OrderSignforService {
 
   @Override
   public Page<OrderSignfor> getOrderSingforList(Map<String, Object> searchParams, Pageable pageRequest) {
-    disposeSearchParams("userId",searchParams);
+    regionService.disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<OrderSignfor> spec = orderSignforSearchFilter(filters.values(), OrderSignfor.class);
 
     return orderSignforRepository.findAll(spec,pageRequest);
   }
 
-  /**
-   * 处理条件参数
-   * 区域选择（油补统计）
-   * @param searchParams
-   */
-  public void disposeSearchParams(String userId,Map<String, Object> searchParams){
-    String regionId = (String) searchParams.get("regionId");
-    String regionType = (String) searchParams.get("regionType");
-//    COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他")
-    //TODO 整理查询出来的regionID列表
-    String regionArr="";
-    if(StringUtils.isNotEmpty(regionType)){
-      
-      switch (regionType) {
-      case "COUNTRY":
-        break;
-      case "PARGANA":
-        
-      case "PROVINCE":
-        regionArr = disposeRegionId(regionId);
-        regionArr=regionArr.substring(0, regionArr.length()-1);
-        break;
-      case "AREA":
-        regionArr = regionId.substring(0, 4);
-        break;
-        
-      default:
-        regionArr =regionId;
-        break;
-      }
-    }
-    searchParams.put("ORMLK_"+userId, regionArr);
-    searchParams.remove("regionId");
-    searchParams.remove("regionType");
-    
-  }
-  /**
-   * 根据每一个regionType判断 regionId截取的位数
-   * type-->count:国家-->all
-   * 
-   * 
-   * @param regionList
-   * @return String 格式 "3701,3702,xxxx,xxx"
-   */
-  public String disposeRegionId(String regionId){
-    //3701,
-    String regionArr="";
-    List<Region> regionList=regionService.findByRegion(regionId); 
-    for(int n=0;n<regionList.size();n++){
-      Region region= regionList.get(n);
-      String regionId1=region.getId();
-      if(RegionType.AREA.equals(region.getType())){
-        regionArr+=regionId1.substring(0, 4)+",";
-        continue;
-      }
-      regionArr+=disposeRegionId(regionId1);
-    }
-      
-    return regionArr;
-  }
   
   private static <T> Specification<OrderSignfor> orderSignforSearchFilter(final Collection<SearchFilter> filters,
       final Class<OrderSignfor> entityClazz) {
@@ -289,6 +235,8 @@ public class OrderSignforServiceImpl implements OrderSignforService {
                 predicates.add(cb.isNotNull(expression));
               
               break;
+            default:
+              break;
               
               
             }
@@ -329,7 +277,11 @@ public class OrderSignforServiceImpl implements OrderSignforService {
     List<OrderSignfor> cashList=findAll(searchParams);
     //TODO 查询收现金打款时间
     cashList.forEach(cash->{
-      
+     WaterOrderDetail detail= waterOrderCashService.findByOrderNo(cash.getId().toString());
+     if(detail!=null){
+       WaterOrderCash waterOrder=waterOrderCashService.findBySerialNo(detail.getSerialNo());
+       cash.setPayDate(waterOrder.getPayDate());
+     }
     });
     return cashList;
   }

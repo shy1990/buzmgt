@@ -7,10 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
+import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 
 public interface WaterOrderCashService {
 
-
+  
   public List<WaterOrderCash> findAll();
 
   /**
@@ -27,6 +28,11 @@ public interface WaterOrderCashService {
    * @return
    */
   public Page<WaterOrderCash> findAll(Map<String, Object> searchParams, Pageable pageRequest);
+  
+  
+  public WaterOrderDetail findByOrderNo(String orderNo);
+  
+  public WaterOrderCash findBySerialNo(String serialNo);
 
 }
 

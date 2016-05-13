@@ -12,6 +12,6 @@ public interface WaterOrderCashRepository extends JpaRepository<WaterOrderCash, 
 JpaSpecificationExecutor<WaterOrderCash>{
   public Page<WaterOrderCash> findAll(Pageable pageRequest);
 
-  public WaterOrderCash findByserialNo(String orderNo);
+  public WaterOrderCash findBySerialNo(String orderNo);
   
 }
