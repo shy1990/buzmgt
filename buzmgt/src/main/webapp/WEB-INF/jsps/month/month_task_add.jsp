@@ -271,10 +271,10 @@
 	<!-- content -->
 	<!-- mask -->
 	<div class="mask">
-		<button type="button" class="btn btn-blue save-btn">保存</button>
-		<button type="button" class="btn btn-deep-blue save-btn">发布</button>
+		<button type="button" onclick="submit(0);" class="btn btn-blue save-btn">保存</button>
+		<button type="button" onclick="submit(1);" class="btn btn-deep-blue save-btn">发布</button>
 	</div>
-	<script src="static/js/jquery/jquery.min.js" type="text/javascript"
+	<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript"
 		charset="utf-8"></script>
 	<script src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script src='static/js/common.js'></script>

@@ -1,12 +1,14 @@
 package com.wangge.buzmgt;
 
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.wangge.buzmgt.monthTask.entity.MonthTask;
 import com.wangge.buzmgt.oilcost.entity.OilRecord;
 
 
@@ -30,10 +32,21 @@ public class Test {
 //        list.add(OilRecordJson);
 //        System.out.println(OilRecordJson);
 //      }
-      String regionId="3701,3703,723432,34";
-      String sql=formtStr(regionId);
-      System.out.println(sql);
-      
+//      String regionId="3701,3703,723432,34";
+//      String sql=formtStr(regionId);
+//      System.out.println(sql);
+    	MonthTask t1=new MonthTask(); 
+    	Class<MonthTask> c=MonthTask.class;
+    	Field[] fields=c.getDeclaredFields();
+    	try {
+			c.getDeclaredField("month").getInt(t1);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       for(Field f:fields){
+    	   
+       }
     }
     
     private static String getAging(Long between){
@@ -73,4 +86,5 @@ public class Test {
       return sql;
       
     }
+  
 }

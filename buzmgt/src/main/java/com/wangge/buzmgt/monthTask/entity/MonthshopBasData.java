@@ -2,6 +2,7 @@ package com.wangge.buzmgt.monthTask.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -42,6 +43,7 @@ public class MonthshopBasData implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "salesman_ID")
 	private SalesMan salesman;
+	private int used;
 	public long getId() {
 		return id;
 	}
@@ -124,6 +126,14 @@ public class MonthshopBasData implements Serializable {
 
 	public MonthshopBasData() {
 		super();
+	}
+
+	public int getUsed() {
+		return used;
+	}
+
+	public void setUsed(int used) {
+		this.used = used;
 	}
 
 	public SalesMan getSalesman() {

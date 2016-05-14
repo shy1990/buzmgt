@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
 import com.wangge.buzmgt.monthTask.repository.MonthOrdersDataRepository;
-import com.wangge.buzmgt.sys.vo.OrderHistData;
 import com.wangge.buzmgt.util.DateUtil;
 
 @Service

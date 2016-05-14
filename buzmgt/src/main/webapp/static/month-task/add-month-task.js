@@ -5,8 +5,8 @@ var jbs = [ 20, 15, 10, 7, 4 ];
 function getMonthData(regionId) {
 	var month = new Date().DateAdd('m', 1).format("yyyy-MM");
 	var salemanid = $("#basic").val();
-	if(null==salemanid||salemanid==''){
-		salemanid='0';
+	if (null == salemanid || salemanid == '') {
+		salemanid = '0';
 	}
 	var searchData = {
 		"month" : month,
@@ -43,7 +43,7 @@ function getMonthData(regionId) {
 	});
 }
 /*
- * @Param tagid 标签id @Param jb 级别 1,2,3
+ * 根据tagid和jb从lsdata记录中取得数据 @Param tagid 标签id @Param jb 级别 1,2,3
  */
 function getObjectVal(tagid, jb) {
 	var val = 0;
@@ -62,4 +62,39 @@ function getObjectVal(tagid, jb) {
 		break;
 	}
 	return val;
+}
+var oldSalemanid = "";
+function submit(flag) {
+	var message = "保存";
+	if (flag == 1) {
+		message = "发布";
+	}
+	// lsdata.regionId,lsdata.month,//$("#basic").val(),
+	var task = {
+		"town" : lsdata.regionId,
+		"month" : lsdata.month,
+		"agentid" : $("#basic").val(),
+		"tal7goal" : 0,
+		"tal15goal" : 0,
+		"tal10goal" : 0,
+		"tal20goal" : 0,
+		"tal4goal" : 0,
+		"status" : flag,
+	};
+	$.ajax({
+		url : base + "api/monthTasks",
+		// "/api/monthTasks",
+		type : "post",
+		data : JSON.stringify(task),
+		beforeSend : function(request) {
+			request.setRequestHeader("Content-Type", "application/json");
+		},
+		dataType : "json",
+		success : function(data) {
+			alert("批量任务已成功" + message);
+		},
+		error : function() {
+			alert("系统错误，请稍后再试");
+		}
+	});
 }

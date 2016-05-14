@@ -26,8 +26,10 @@ public class MonthTaskSub implements Serializable {
 	private Long memberid;
 	private int goal;
 	private int done;
-	private Date TaskMonth=new Date();
-	private Date lastTime=new Date();
+	private String TaskMonth;
+	private Date lastTime = new Date();
+
+	private int finish;
 
 	public long getId() {
 		return id;
@@ -40,6 +42,7 @@ public class MonthTaskSub implements Serializable {
 	public String getParentid() {
 		return parentid;
 	}
+	
 
 	public void setParentid(String parentid) {
 		this.parentid = parentid;
@@ -84,13 +87,21 @@ public class MonthTaskSub implements Serializable {
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}
-	
-	public Date getTaskMonth() {
+
+	public String getTaskMonth() {
 		return TaskMonth;
 	}
 
-	public void setTaskMonth(Date taskMonth) {
+	public void setTaskMonth(String taskMonth) {
 		TaskMonth = taskMonth;
+	}
+
+	public int getFinish() {
+		return finish;
+	}
+
+	public void setFinish(int finish) {
+		this.finish = finish;
 	}
 
 	public MonthTaskSub() {
