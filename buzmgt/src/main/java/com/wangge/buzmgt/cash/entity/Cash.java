@@ -56,8 +56,6 @@ public class Cash implements Serializable  {
   
   
   @Id
-  @GenericGenerator(name = "idgen", strategy = "increment")
-  @GeneratedValue(generator = "idgen")
   @Column(name="id",insertable=false,updatable=false)
   private Long cashId ; //订单id
 //  @Transient
@@ -97,6 +95,8 @@ public class Cash implements Serializable  {
     this.cashId = id;
   }
   public OrderSignfor getOrder() {
+    order.getSalesMan().setUser(null);
+    order.getSalesMan().setRegion(null);
     return order;
   }
   public void setOrder(OrderSignfor order) {

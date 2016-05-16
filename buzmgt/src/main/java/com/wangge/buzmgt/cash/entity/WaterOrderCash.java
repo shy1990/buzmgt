@@ -54,8 +54,6 @@ public class WaterOrderCash implements Serializable  {
   
   
   @Id
-  @GenericGenerator(name = "idgen", strategy = "increment")
-  @GeneratedValue(generator = "idgen")
   @Column(name="SERIAL_NO",insertable=false,updatable=false)
   private String serialNo ; //流水单号
   

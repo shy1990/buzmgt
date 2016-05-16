@@ -12,6 +12,6 @@ JpaSpecificationExecutor<WaterOrderDetail>{
 
   public List<WaterOrderDetail> findBySerialNo(String SerialNo);
   
-  public WaterOrderDetail findByOrderNo(String orderNo);
+  public WaterOrderDetail findByCashId(String cashId);
   
 }

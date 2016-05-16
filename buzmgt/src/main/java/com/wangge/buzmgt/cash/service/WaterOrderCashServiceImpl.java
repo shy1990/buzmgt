@@ -61,17 +61,17 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
     regionService.disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
-    Page<WaterOrderCash> receiptRemarkPage = waterOrderCashRepository.findAll(spec, pageRequest);
-    receiptRemarkPage.getContent().forEach(receiptRemark -> {
+    Page<WaterOrderCash> waterOrderPage = waterOrderCashRepository.findAll(spec, pageRequest);
+    waterOrderPage.getContent().forEach(WaterOrder -> {
     });
 
-    return receiptRemarkPage;
+    return waterOrderPage;
   }
 
   
   @Override
-  public WaterOrderDetail findByOrderNo(String orderNo) {
-    return waterOrderDetailRepository.findByOrderNo(orderNo);
+  public WaterOrderDetail findByOrderNo(String cashId) {
+    return waterOrderDetailRepository.findByCashId(cashId);
   }
   
 
