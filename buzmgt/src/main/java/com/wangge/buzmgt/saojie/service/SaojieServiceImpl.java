@@ -85,21 +85,21 @@ public class SaojieServiceImpl implements SaojieService {
 //  }
   @Override
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
-    String hql = "SELECT t.* FROM SYS_SAOJIE t right join (select sj.user_id,sj.saojie_id,max(sj.saojie_order) from sys_saojie sj where ";
+    String hql = " select sj.* from sys_saojie sj  left join sys_salesman s on s.user_id = sj.user_id  where ";
     if(saojie.getStatus() != null){
       int status = saojie.getStatus().ordinal();
       if(SaojieStatus.PENDING.equals(saojie.getStatus())){
-        hql += " sj.saojie_status='"+status+"'";
+        hql += " sj.saojie_status='"+status+"' and";
       }else if(SaojieStatus.AGREE.equals(saojie.getStatus())){
-        hql += " sj.finish_status='1'";//扫街全部完成的
+        hql += " sj.finish_status='1' and";//扫街全部完成的
       }
     }else{
-      hql += " sj.finish_status='1' or sj.saojie_status='1'";
+      hql += " (sj.finish_status='1' or sj.saojie_status='1') and";
     }
-    hql +=" group by sj.user_id,sj.saojie_id) saojie on saojie.saojie_id=t.saojie_id LEFT JOIN sys_salesman s ON s.user_id = t.user_id where ";
+   // hql +=" group by sj.saojie_id)) saojie right JOIN sys_salesman s ON s.user_id = saojie.user_id where ";
     if(saojie.getSalesman() != null){
       if((null!=saojie.getSalesman().getJobNum()&&!"".equals(saojie.getSalesman().getJobNum()))||(null!=saojie.getSalesman().getTruename()&&!"".equals(saojie.getSalesman().getTruename()))){
-        String serHql = " s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
+        String serHql = " (s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"')";
         hql += ""+serHql+" and s.region_id in"
             + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
       }else{
@@ -118,15 +118,18 @@ public class SaojieServiceImpl implements SaojieService {
     List<Saojie> list = new ArrayList<Saojie>();
     for(Object obj: q.getResultList()){
       Saojie sj = (Saojie)obj;
-      sj.addPercent(sj.getSaojiedata().size(), sj.getMinValue());
-      Calendar cal = Calendar.getInstance();
-      cal.setTime(sj.getBeginTime());
-      long time1 = cal.getTimeInMillis();
-      cal.setTime(sj.getExpiredTime());
-      long time2 = cal.getTimeInMillis();
-      long timing=(time2-time1)/(1000*3600*24);
-      sj.setTiming(Integer.parseInt(String.valueOf(timing)));
-      list.add(sj);
+      if(sj != null){
+        sj.addPercent(sj.getSaojiedata().size(), sj.getMinValue());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sj.getBeginTime());
+        long time1 = cal.getTimeInMillis();
+        cal.setTime(sj.getExpiredTime());
+        long time2 = cal.getTimeInMillis();
+        long timing=(time2-time1)/(1000*3600*24);
+        sj.setTiming(Integer.parseInt(String.valueOf(timing)));
+        list.add(sj);
+      }
+      
     }
     
     Page<Saojie> page = new PageImpl<Saojie>(list,new PageRequest(pageNum,7),count);
@@ -173,7 +176,7 @@ public class SaojieServiceImpl implements SaojieService {
     List<SaojieData> sd = new ArrayList<SaojieData>();
      List<Saojie> list = findAll(userId,regionId);
      for(Saojie s : list){
-       if(s.getSaojiedata() != null ){
+       if(s.getStatus().ordinal()  > 0 ){
           for(SaojieData data  : s.getSaojiedata()){
               sd.add(data);
           }
@@ -181,8 +184,8 @@ public class SaojieServiceImpl implements SaojieService {
        a += s.getMinValue();
      }
     sdv.addPercent(sd.size(),a);
-    Page<SaojieData> page;
-    List<SaojieData> sub = new ArrayList<SaojieData>();
+     Page<SaojieData> page;
+   /* List<SaojieData> sub = new ArrayList<SaojieData>();
     if(sd != null && sd.size() > 0){
       int expectedSize = (pageNum + 1)*limit;
       int last = expectedSize - limit;
@@ -191,8 +194,8 @@ public class SaojieServiceImpl implements SaojieService {
       }else{
         sub = sd.subList(pageNum*limit,(pageNum+1)*limit);
       }
-    }
-    page = new PageImpl<SaojieData>(sub,new PageRequest(pageNum,limit),sd.size());
+    }*/
+    page = new PageImpl<SaojieData>(sd,new PageRequest(pageNum,limit),sd.size());
     sdv.setPage(page);
     return sdv;
   }
@@ -213,6 +216,7 @@ public class SaojieServiceImpl implements SaojieService {
         sdv.addPercent(sdv.getList().size(),a);
       return sdv;
   }
+  
   
   public List<Saojie> findAll(String userId,String regionId){
     List<Saojie> list = saojieRepository.findAll(new Specification<Saojie>() {

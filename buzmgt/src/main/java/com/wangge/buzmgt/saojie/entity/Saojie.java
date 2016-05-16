@@ -93,9 +93,9 @@ public class Saojie implements Serializable {
 	@Column(name = "FINISH_STATUS")
 	private Integer finishStatus;//状态为1表示扫街全部完成
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
+	/*@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
 	@OrderBy("saojie_order")
-	private Collection<Saojie> children;
+	private Collection<Saojie> children;*/
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "saojie")
 	private Collection<SaojieData> saojiedata;
 	@Transient
@@ -209,13 +209,13 @@ public class Saojie implements Serializable {
 		this.order = order;
 	}
 
-	public Collection<Saojie> getChildren() {
+	/*public Collection<Saojie> getChildren() {
 		return Collections.unmodifiableCollection(children);
 	}
 
 	public void setChildren(Collection<Saojie> children) {
 		this.children = children;
-	}
+	}*/
 
   public Collection<SaojieData> getSaojiedata() {
     return saojiedata;

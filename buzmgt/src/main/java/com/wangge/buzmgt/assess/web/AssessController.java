@@ -40,6 +40,7 @@ import com.wangge.buzmgt.sys.vo.OrderVo;
 import com.wangge.buzmgt.task.entity.Visit;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
@@ -150,9 +151,11 @@ public class AssessController {
     assess.setAssessEndTime(endDate);
     assess.setAssesszh(getRegionName(assess.getAssessArea()));
     assessService.saveAssess(assess);
+    if("1".equals(assess.getAssessStage())){
+      salesman.setStatus(SalesmanStatus.kaifa);
+    }
     salesman.setAssessStage(assess.getAssessStage());
     salesManService.addSalesman(salesman);
-    System.out.println(assess.getSalesman().getId());
     return "redirect:/assess/assessList";
   }
   
