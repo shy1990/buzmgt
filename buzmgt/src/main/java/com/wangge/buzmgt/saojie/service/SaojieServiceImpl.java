@@ -89,9 +89,9 @@ public class SaojieServiceImpl implements SaojieService {
     if(saojie.getStatus() != null){
       int status = saojie.getStatus().ordinal();
       if(SaojieStatus.PENDING.equals(saojie.getStatus())){
-        hql += " sj.saojie_status='"+status+"'";
+        hql += " sj.saojie_status='"+status+"' and";
       }else if(SaojieStatus.AGREE.equals(saojie.getStatus())){
-        hql += " sj.finish_status='1'";//扫街全部完成的
+        hql += " sj.finish_status='1' and";//扫街全部完成的
       }
     }else{
       hql += " (sj.finish_status='1' or sj.saojie_status='1') and";
