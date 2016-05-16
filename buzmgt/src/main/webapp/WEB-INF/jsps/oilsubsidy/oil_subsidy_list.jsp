@@ -65,14 +65,18 @@
         <span class="yw-name"><b>{{salesManPart.truename}}</b>({{salesManPart.organizeName}})</span>
       </td>
       <td class="normal">
+			{{#if oilRecordList}}
 			{{#each oilRecordList}}
 				{{{disposeRecordList regionType regionName exception}}}
 			{{/each}}
+			{{else}}
+				数据加载错误
+			{{/if}}
       </td>
       <td>
         <p><span class="acu-km">{{distance}}km</span> &#47; <span class="acu-mny">{{oilCost}}元</span></p>
       </td>
-      <td>2016.03.12 18:20</td>
+      <td>{{formDate dateTime}}</td>
       <td>
         <a class="btn btn-blue btn-sm" href="/oilCost/detail/{{id}}">查看</a>
       </td>
