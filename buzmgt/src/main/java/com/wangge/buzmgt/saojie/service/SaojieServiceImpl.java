@@ -263,8 +263,8 @@ public class SaojieServiceImpl implements SaojieService {
     return saojieRepository.findSaojie(status, userId);
   }
   @Override
-  public Saojie findByStatusAndSalesman(SaojieStatus status, String userId) {
-    return saojieRepository.findByStatusAndSalesman(status,userId);
+  public Saojie findByStatusAndUserId(SaojieStatus status, String userId) {
+    return saojieRepository.findByStatusAndUserId(status,userId);
   }
   
 }
