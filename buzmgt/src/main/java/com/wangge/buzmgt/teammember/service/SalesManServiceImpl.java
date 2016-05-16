@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.teammember.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,14 +112,11 @@ public  class SalesManServiceImpl implements SalesManService {
   }
   
   public Page<SalesMan> getSalesmanList(SalesMan salesMan,String salesmanStatus, int pageNum, String regionName,String stage){
-   // String and = "";
-    String whereql = stage!=null && !"".equals(stage.trim()) ? " and "+ stage : "" ;
-    String hql = "select t.* from SYS_SALESMAN t where  t.status = '"+salesMan.getStatus().ordinal()+"' "+whereql+" and  t.region_id in "
-        + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
-    String counthql = "select count(t.user_id) from SYS_SALESMAN t where  t.region_id in "
-        + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
+    String whereql = stage!=null && !"".equals(stage.trim()) ?  stage : "1 = 1" ;
+    String hql = "select t.* from SYS_SALESMAN t where  "+whereql+" and  t.region_id in "
+       + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
     
-    if(null!=salesmanStatus){
+    if(null!=salesmanStatus && !"全部".equals(salesmanStatus)){
       hql+= " and t.status='"+salesMan.getStatus().ordinal()+"'";
     }
     Query q = em.createNativeQuery(hql,SalesMan.class); 
@@ -130,10 +126,10 @@ public  class SalesManServiceImpl implements SalesManService {
     if(salesMan.getJobNum() != null && !"".equals(salesMan.getJobNum())){
       q.setParameter(2, "%"+salesMan.getJobNum()+"%");
     }
-    BigDecimal count= (BigDecimal) em.createNativeQuery(counthql).getSingleResult(); 
+    int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
     q.setMaxResults(7);
-    Page<SalesMan> page = new PageImpl<SalesMan>(q.getResultList(),new PageRequest(pageNum,7),count.intValue());   
+    Page<SalesMan> page = new PageImpl<SalesMan>(q.getResultList(),new PageRequest(pageNum,7),count);   
     return page;  
   }
   
