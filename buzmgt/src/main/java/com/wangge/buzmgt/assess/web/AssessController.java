@@ -135,10 +135,10 @@ public class AssessController {
       assess.setAssessStage("1");
     }
     if(stage == 1){
-      Assess a = assessService.findByStageAndSalesman("1",assess.getSalesman().getId());//查第一阶段的考核
+      /*Assess a = assessService.findByStageAndSalesman("1",assess.getSalesman().getId());//查第一阶段的考核
       assess.setActiveNum(assess.getActiveNum()+a.getActiveNum());//累加第一阶段活跃客户
       assess.setOrderNum(assess.getOrderNum()+a.getOrderNum());//累加第一阶段提货量
-      assess.setAssessStage("2");
+*/      assess.setAssessStage("2");
     }
     if(stage == 2){
       assess.setAssessStage("3");
