@@ -13,6 +13,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -33,6 +36,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @Entity
 @Table(name="SYS_WATER_ORDER_CASH")
+@NamedEntityGraph(name = "graph.WaterOrderCash.orderDetails",
+    attributeNodes=@NamedAttributeNode(value="orderDetails",subgraph = "graph.WaterOrderCash.orderDetails.cash"),
+    subgraphs = {@NamedSubgraph(name = "graph.WaterOrderCash.orderDetails.cash",
+    attributeNodes = @NamedAttributeNode("cash"))})
 public class WaterOrderCash implements Serializable  {
 
   /**
@@ -64,7 +71,7 @@ public class WaterOrderCash implements Serializable  {
   
   @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
   @JoinColumn(name="SERIAL_NO")
-  private List<WaterOrderDetail> orderDetailList;//订单详情
+  private List<WaterOrderDetail> orderDetails;//订单详情
   
   @Enumerated(EnumType.ORDINAL)
   private WaterPayStatusEnum payStatus;//支付状态
@@ -79,11 +86,11 @@ public class WaterOrderCash implements Serializable  {
   private Date payDate  ;//支付时间
   
   
-  public List<WaterOrderDetail> getOrderDetailList() {
-    return orderDetailList;
+  public List<WaterOrderDetail> getOrderDetails() {
+    return orderDetails;
   }
-  public void setOrderDetailList(List<WaterOrderDetail> orderDetailList) {
-    this.orderDetailList = orderDetailList;
+  public void setOrderDetails(List<WaterOrderDetail> orderDetails) {
+    this.orderDetails = orderDetails;
   }
   public String getPayStatus() {
     return payStatus.getName();

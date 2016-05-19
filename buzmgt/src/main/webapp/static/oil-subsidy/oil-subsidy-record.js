@@ -114,7 +114,7 @@ function oilCostRecordPaging(data) {
 		showCount : 5,
 		limit : limit,
 		callback : function(curr, limit, totalCount) {
-			findOilCostList(curr - 1);
+			findOilCostRecord(curr - 1);
 		}
 	});
 }
