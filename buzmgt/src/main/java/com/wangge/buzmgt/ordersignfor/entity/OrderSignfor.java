@@ -52,12 +52,18 @@ public class OrderSignfor implements Serializable {
   }
   
   public static enum OrderPayType{
-    ONLINE("线上支付"),POS("POS"),CASH("现金"),NUPANTEBT("未支付") ;
+    ONLINE("0","线上支付"),POS("1","POS"),CASH("2","现金"),NUPANTEBT("","未支付") ;
     
     private String name;
+    private String value;
     
-    OrderPayType(String name){
+    OrderPayType(String value,String name){
+      this.value=value;
       this.name=name;
+      
+    }
+    public String getValue(){
+      return value;
     }
     public String getName(){
       return name;
@@ -74,6 +80,10 @@ public class OrderSignfor implements Serializable {
   private String orderNo;
   @Transient
   private String aging;//时效
+  @Transient
+  private Date payDate;//支付时间
+  
+
   //业务签收异常标记
   @Transient
   private String ywSignforTag;
@@ -110,7 +120,13 @@ public class OrderSignfor implements Serializable {
   private Date fastmailTime;
   private String customUnSignRemark;
   
+  public Date getPayDate() {
+    return payDate;
+  }
 
+  public void setPayDate(Date payDate) {
+    this.payDate = payDate;
+  }
   public String getGoodNum() {
     return goodNum;
   }
@@ -153,7 +169,7 @@ public class OrderSignfor implements Serializable {
 
  
   public SalesMan getSalesMan() {
-    return salesMan;
+    return salesMan==null?new SalesMan() :salesMan;
   }
 
   public void setSalesMan(SalesMan salesMan) {

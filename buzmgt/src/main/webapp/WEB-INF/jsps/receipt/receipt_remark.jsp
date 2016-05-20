@@ -61,6 +61,41 @@
 	</tr>
 	{{/if}}
 </script>
+<script id="cash-table-template" type="text/x-handlebars-template">
+	{{#if content}}
+	{{#each content}}
+    <tr>
+			{{#with order}}
+      <td class="">{{#with salesMan}}{{truename}}{{/with}}</td>
+      <td class="">{{shopName}}</td>
+      <td>{{orderNo}}</td>
+      <td>{{orderPrice}}</td>
+      <td>
+				{{{isException customSignforException}}}
+				{{customSignforGeopoint}}
+			</td>
+			{{/with}}
+      <td>{{formDate createDate}}</td>
+      <td>
+        <div class="pay-time-box">
+					{{#if payDate}}
+					<span class="pay-time icon-tag-yfk">已付款</span> 
+					{{else}}
+     	    <span class="pay-time icon-tag-wfk">未付款</span> 
+					{{/if}}	
+					{{{isTimeOutPlant isTimeOut payDate}}}
+					
+     	  </div>
+      <td>
+				<a class="btn btn-blue btn-sm" href="/receiptRemark/cash/{{cashId}}">查看</a>
+    </tr>
+	{{/each}}
+	{{else}}
+	<tr>
+		<td colspan="100">没有相关数据</td>
+	</tr>
+	{{/if}}
+</script>
 <script id="notremarked-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
@@ -128,8 +163,8 @@ var SearchData = {
 								<ul id="receiptOrderStatus" class="nav nav-tabs">
 									<li class="active" data-tital="reported"><a href="#box_tab1" data-toggle="tab"><span
 											class="">报备</span></a></li>
-									<!-- <li data-tital="cash"><a href="#box_tab2" data-toggle="tab"><span
-											class="">收现金</span></a></li> -->
+									<li data-tital="cash"><a href="#box_tab2" data-toggle="tab"><span
+											class="">收现金</span></a></li>
 									<li data-tital="notreported"><a href="#box_tab3" data-toggle="tab"><span
 											class="">未报备</span></a></li>
 								</ul>
@@ -233,35 +268,17 @@ var SearchData = {
 												<th>订单号</th>
 												<th>金额</th>
 												<th>客户签收坐标</th>
-												<th>报备时间</th>
+												<th>收现金时间</th>
 												<th>打款时间</th>
 												<th>操作</th>
 											</tr>
 										</thead>
-										<tr>
-											<td class="">易小川</td>
-											<td class="">小米手机专卖店</td>
-											<td>201603041256</td>
-											<td>1232</td>
-											<td><span class="icon-tag-yc">异常</span> <span
-												class="icon-tag-zc">正常</span> 山东省滨州市邹平县大桥镇223号</td>
-											<td>2016.03.12 18:20</td>
-											<td>
-												<div class="pay-time-box">
-													<span class="pay-time icon-tag-wfk">未付款</span> <span
-														class="pay-time icon-tag-yfk">已付款</span> <span
-														class="text-red">超时</span> <br /> <span class="text-bule">2016.03.12
-														18:20</span> <span class="text-red">2016.03.12 18:20</span>
-												</div>
-											</td>
-											<td><a class="btn btn-blue btn-sm" href="javascrip:;">查看</a>
-												<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
-										</tr>
+										<tbody id="cashList"></tbody>
 									</table>
 								</div>
 								<!--table-box-->
 								<!-- 分页 -->
-								<div id="memberPager"></div>
+								<div id="cashPager"></div>
 								<!-- 分页 -->
 							</div>
 							<!--收现金-->

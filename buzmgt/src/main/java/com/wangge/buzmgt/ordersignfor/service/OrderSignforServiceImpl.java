@@ -28,8 +28,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.cash.entity.WaterOrderCash;
+import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
+import com.wangge.buzmgt.cash.service.WaterOrderCashService;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
+import com.wangge.buzmgt.receipt.entity.RemarkStatusEnum;
+import com.wangge.buzmgt.receipt.service.OrderReceiptServiceImpl;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
+import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.SearchFilter;
@@ -46,6 +55,11 @@ public class OrderSignforServiceImpl implements OrderSignforService {
   
   @Autowired
   private SalesManService salesManService;
+  
+  @Autowired
+  private WaterOrderCashService waterOrderCashService;
+  @Autowired
+  private RegionService regionService;
   
   @Override
   public void updateOrderSignfor(OrderSignfor xlsOrder) {
@@ -70,6 +84,7 @@ public class OrderSignforServiceImpl implements OrderSignforService {
 
   @Override
   public List<OrderSignfor> findAll(Map<String, Object> searchParams) {
+    regionService.disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<OrderSignfor> spec = orderSignforSearchFilter(filters.values(), OrderSignfor.class);
     return orderSignforRepository.findAll(spec);
@@ -77,12 +92,13 @@ public class OrderSignforServiceImpl implements OrderSignforService {
 
   @Override
   public Page<OrderSignfor> getOrderSingforList(Map<String, Object> searchParams, Pageable pageRequest) {
+    regionService.disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<OrderSignfor> spec = orderSignforSearchFilter(filters.values(), OrderSignfor.class);
 
     return orderSignforRepository.findAll(spec,pageRequest);
   }
-  
+
   
   private static <T> Specification<OrderSignfor> orderSignforSearchFilter(final Collection<SearchFilter> filters,
       final Class<OrderSignfor> entityClazz) {
@@ -95,7 +111,7 @@ public class OrderSignforServiceImpl implements OrderSignforService {
 
       private final static String TIME_MAX = " 23:59:59 999";
 
-      private final static String TYPE_RED_ENVELOP_TYPE = "com.wangge.buzmgt.ordersignfor.entity.OrderSignfor";
+      private final static String TYPE_ORDER_PAY_TYPE = "com.wangge.buzmgt.ordersignfor.entity.OrderSignfor$OrderPayType";
 
       private final static String TYPE_DATE = "java.util.Date";
 
@@ -128,9 +144,17 @@ public class OrderSignforServiceImpl implements OrderSignforService {
                 } catch (ParseException e) {
                   throw new RuntimeException("日期格式化失败!");
                 }
-              } else if (javaTypeName.equals(TYPE_RED_ENVELOP_TYPE)) {
+              } else if (javaTypeName.equals(TYPE_ORDER_PAY_TYPE)) {
                 String type = filter.value.toString();
-
+                if (OrderPayType.ONLINE.toString().equals(type)) {
+                  filter.value = OrderPayType.ONLINE;
+                }else if (OrderPayType.POS.toString().equals(type)) {
+                  filter.value = OrderPayType.POS;
+                }else if (OrderPayType.CASH.toString().equals(type)) {
+                  filter.value = OrderPayType.CASH;
+                }else if (OrderPayType.NUPANTEBT.toString().equals(type)) {
+                  filter.value = OrderPayType.NUPANTEBT;
+                }
                 predicates.add(cb.equal(expression, filter.value));
               } else {
                 predicates.add(cb.equal(expression, filter.value));
@@ -198,28 +222,20 @@ public class OrderSignforServiceImpl implements OrderSignforService {
 
               break;
             case NOTEQ:
-              if (javaTypeName.equals(TYPE_RED_ENVELOP_TYPE)) {
-                String type = filter.value.toString();
-
                 predicates.add(cb.notEqual(expression, filter.value));
-              } else {
-                predicates.add(cb.notEqual(expression, filter.value));
-              }
 
               break;
             case ISNULL:
-              if (javaTypeName.equals(TYPE_RED_ENVELOP_TYPE)) {
 
                 predicates.add(cb.isNull(expression));
-              }
 
               break;
             case NOTNULL:
-              if (javaTypeName.equals(TYPE_RED_ENVELOP_TYPE)) {
                 
                 predicates.add(cb.isNotNull(expression));
-              }
               
+              break;
+            default:
               break;
               
               
@@ -255,6 +271,19 @@ public class OrderSignforServiceImpl implements OrderSignforService {
       return list;
     }
     return list;
+  }
+  @Override
+  public List<OrderSignfor> getReceiptCashList(Map<String, Object> searchParams) {
+    List<OrderSignfor> cashList=findAll(searchParams);
+    //TODO 查询收现金打款时间
+    cashList.forEach(cash->{
+     WaterOrderDetail detail= waterOrderCashService.findByOrderNo(cash.getId().toString());
+     if(detail!=null){
+       WaterOrderCash waterOrder=waterOrderCashService.findBySerialNo(detail.getSerialNo());
+       cash.setPayDate(waterOrder.getPayDate());
+     }
+    });
+    return cashList;
   }
   
 

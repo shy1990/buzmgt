@@ -43,7 +43,7 @@ public class OilCost implements Serializable{
   
   public static enum OilAcountEnum {
     //子账号
-    CHILDACCOUNT("子"),PARENTACCOUNT("主");
+    PARENTACCOUNT("主"),CHILDACCOUNT("子");
     
     private String name;
     OilAcountEnum(String name){

@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.ordersignfor.web;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,7 +34,7 @@ import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
-import com.wangge.buzmgt.util.ExcelExport;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 
 @Controller
 @RequestMapping(value="/ordersignfor")
@@ -137,7 +136,6 @@ public class OrderSignforController {
     String[] coloumsKey = { "salesMan.truename","shopName", "orderNo", "yewuSignforGeopoint", "yewuSignforTime"};
 
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-    Page<OrderSignfor> orderSignforslist=null;
     String type=request.getParameter("type");
     List<OrderSignfor> ywlist=null;
     List<OrderSignfor> list=os.findAll(searchParams);

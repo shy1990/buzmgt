@@ -1,10 +1,12 @@
 var remarkedTotal = 0;// 报备总条数
+var cashTotal = 0;// 总条数
 var notRemarkedTotal = 0;// 未报备总条数
 $(function() {
-	nowTime();//初始化日期
+//	nowTime();//初始化日期
 	DispositRegionId();//区域选择数据处理
-	findRemarked();
-	findNOTRemarked();
+	findRemarked();//报备
+	findNOTRemarked();//未报备
+	findCash();//收现金
 })
 $('.nav-task li').on("click", function() {
 	$(this).addClass('active');
@@ -129,6 +131,9 @@ function goSearch() {
 		case 'notreported':
 			findNOTRemarked();
 			break;
+		case 'cash':
+			findCash();
+			break;
 		default:
 			break;
 		}
@@ -171,9 +176,8 @@ function conditionProcess() {
 function findRemarked(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
-	// delete SearchData['sc_EQ_customSignforException'];
 	$.ajax({
-		url : "/receiptRemark/remarkList",
+		url : base+"receiptRemark/remarkList",
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
@@ -191,12 +195,33 @@ function findRemarked(page) {
 		}
 	})
 }
+function findCash(page) {
+	page = page == null || page == '' ? 0 : page;
+	SearchData['page'] = page;
+	$.ajax({
+		url : base+"cash",
+		type : "GET",
+		data : SearchData,
+		dataType : "json",
+		success : function(orderData) {
+			createCashTable(orderData);
+			var searchTotal = orderData.totalElements;
+			if (searchTotal != cashTotal || searchTotal == 0) {
+				cashTotal = searchTotal;
+				
+				cashPaging(orderData);
+			}
+		},
+		error : function() {
+			alert("系统异常，请稍后重试！");
+		}
+	})
+}
 function findNOTRemarked(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
-	// delete SearchData['sc_EQ_customSignforException'];
 	$.ajax({
-		url : "/receiptRemark/notRemarkList",
+		url : base+"receiptRemark/notRemarkList",
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
@@ -223,6 +248,15 @@ function createRemarkedTable(data) {
 	$('#remarkedList').html(myTemplate(data));
 }
 /**
+ * 生成报备列表
+ * @param data
+ */
+
+function createCashTable(data) {
+	var myTemplate = Handlebars.compile($("#cash-table-template").html());
+	$('#cashList').html(myTemplate(data));
+}
+/**
  * 生成未报备列表
  * @param data
  */
@@ -243,6 +277,21 @@ function remarkedPaging(data) {
 		limit : limit,
 		callback : function(curr, limit, totalCount) {
 			findRemarked(curr - 1);
+		}
+	});
+}
+/**
+ * 现金的分页
+ * @param data
+ */
+function cashPaging(data) {
+	var totalCount = data.totalElements, limit = data.size;
+	$('#cashPager').extendPagination({
+		totalCount : totalCount,
+		showCount : 5,
+		limit : limit,
+		callback : function(curr, limit, totalCount) {
+			findCash(curr - 1);
 		}
 	});
 }
@@ -269,6 +318,7 @@ Handlebars.registerHelper('formDate', function(value) {
 });
 Handlebars.registerHelper('whatremarkStatus', function(value) {
 	var html = "";
+	var color= "bule";
 	if (value.indexOf("未付款") >= 0) {
 		html += '<span class="pay-time icon-tag-wfk">未付款</span>';
 	}
@@ -277,7 +327,9 @@ Handlebars.registerHelper('whatremarkStatus', function(value) {
 	}
 	if (value.indexOf("超时") >= 0) {
 		html += '<span class="text-red">超时</span>';
+		color="red";
 	}
+	html+='<br /> <span class="'+color+'">';
 	return html;
 });
 Handlebars.registerHelper('whetherPunish', function(value) {
@@ -290,6 +342,31 @@ Handlebars.registerHelper('whetherPunish', function(value) {
 Handlebars.registerHelper('whatPartsCount', function(value) {
 	if (value== ""||value==null) { return 0; }
 	return value;
+});
+/**
+ * 判断是收现金是否超时
+ */
+Handlebars.registerHelper('isTimeOutPlant', function(isTimeOut,payDate) {
+	var html = "";
+	payDate=isEmpty(payDate)?'':payDate;
+	console.info(isEmpty(payDate));
+	isTimeOut=isEmpty(isTimeOut)?'': isTimeOut;
+	html+='<span class="text-red">'+isTimeOut+'</span> <br /> '
+	var formDate=changeTimeToString(new Date(payDate));
+	if(!isEmpty(payDate)){
+		if(!isEmpty(isTimeOut)){
+			html +='<span class="text-red">'+formDate+'</span>';
+			return html;
+		}
+		html += '<span class="text-bule">'+formDate+'</span>'; 
+	}
+	return html;
+});
+Handlebars.registerHelper('isException', function(value) {
+	var html = "";
+	if (value=== 1) { return '<span class="icon-tag-yc">异常</span>'; }
+	
+	return '<span class="icon-tag-zc">正常</span> ';
 });
 Handlebars.registerHelper('whatCustomSignforStatus', function(value) {
 	var html = "";
@@ -310,7 +387,7 @@ function findByOrderNo(){
 	switch (tab) {
 	case 'reported':
 		$.ajax({
-			url : "/receiptRemark/remarkList?sc_EQ_orderno="+orderNo,
+			url : base+"receiptRemark/remarkList?sc_EQ_orderno="+orderNo,
 			type : "GET",
 			dataType : "json",
 			success : function(orderData) {
@@ -327,7 +404,7 @@ function findByOrderNo(){
 		break;
 	case 'notreported':
 		$.ajax({
-			url : "/receiptRemark/notRemarkList?sc_EQ_orderNo="+orderNo,
+			url : base+"receiptRemark/notRemarkList?sc_EQ_orderNo="+orderNo,
 			type : "GET",
 			dataType : "json",
 			success : function(orderData) {
@@ -342,6 +419,24 @@ function findByOrderNo(){
 			}
 		})
 		break;
+	case 'cash':
+		$.ajax({
+			url : base+"cash?sc_EQ_orderNo="+orderNo,
+			type : "GET",
+			dataType : "json",
+			success : function(orderData) {
+				if(orderData.totalElements<1){
+					alert("收款订单中，未查到此订单！");
+					return false;
+				}
+				createCashTable(orderData);
+			},
+			error : function() {
+				alert("系统异常，请稍后重试！");
+			}
+		})
+		break;
+		
 	default:
 		break;
 	}
@@ -352,6 +447,6 @@ function findByOrderNo(){
  * @param value
  * @returns 为空返回true 不为空返回false
  */
-function checkEmpty(value){
-	return value ==""||value==null;
+function isEmpty(value){
+	return value ==""||value==null || value== undefined ;
 } 

@@ -37,7 +37,7 @@ import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
-import com.wangge.buzmgt.util.ExcelExport;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 
 @Controller
 @RequestMapping(value="/receiptRemark")
@@ -105,6 +105,55 @@ public class ReceiptRemarkController {
        logger.error(e.getMessage());
      }
     return json;
+  }
+  /**
+   * 收现金列表
+   * @param request
+   * @param pageRequest
+   * @return
+   */
+  @RequestMapping(value="/cash")
+  @ResponseBody
+  public String getCashList(HttpServletRequest request,
+      @PageableDefault(page = 0,size=10,sort={"createTime"},direction=Direction.DESC) Pageable pageRequest ){
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    searchParams.put("EQ_orderPayType", "CASH");
+    List<OrderSignfor> cashListAll=orderReceiptService.getCashList(searchParams);
+    List<OrderSignfor> cashList = new ArrayList<>();
+    cashList.forEach(list->{
+      list.getSalesMan().setUser(null);
+      list.getSalesMan().setRegion(null);
+    });
+    int total=0;
+    int number=pageRequest.getPageNumber();
+    int size=pageRequest.getPageSize();
+    for(OrderSignfor cash:cashListAll){
+      if(number*size <= total && total < (number+1)*size){
+        cashList.add(cash);
+      }
+      total++;
+    };
+    PageImpl<OrderSignfor> page = new PageImpl<OrderSignfor>(cashList,pageRequest,total);
+    String json="";
+    try {
+      json=JSON.toJSONString(page, SerializerFeature.DisableCircularReferenceDetect);
+    }
+    catch(Exception e){
+      logger.error(e.getMessage());
+    }
+    return json;
+  }
+  /**
+   * s收现金详情
+   * @param request
+   * @param pageRequest
+   * @return
+   */
+  @RequestMapping(value="/cash/{order}")
+  public String getCashById(Model model ,@PathVariable("orderId") OrderSignfor orderSignfor , 
+      HttpServletRequest request){
+    model.addAttribute("cash", orderSignfor);
+    return "receipt/receipt_order_det";
   }
   /**
    * 报备列表
@@ -226,12 +275,12 @@ public class ReceiptRemarkController {
     List<OrderSignfor> notRemarkList = orderReceiptService.getReceiptNotRemark(searchParams);
     try {
       OrderSignfor notRemark=notRemarkList.get(0);
-      model.addAttribute("notRemark", notRemark);
+      model.addAttribute("order", notRemark);
     }
     catch(Exception e){
       logger.error(e.getMessage());
     }
-    return "receipt/receipt_notremark_det";
+    return "receipt/receipt_order_det";
   }
   /**
    * 获取全部订单列表
