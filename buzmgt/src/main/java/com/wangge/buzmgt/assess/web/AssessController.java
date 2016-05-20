@@ -40,6 +40,7 @@ import com.wangge.buzmgt.sys.vo.OrderVo;
 import com.wangge.buzmgt.task.entity.Visit;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
@@ -134,10 +135,10 @@ public class AssessController {
       assess.setAssessStage("1");
     }
     if(stage == 1){
-      Assess a = assessService.findByStageAndSalesman("1",assess.getSalesman().getId());//查第一阶段的考核
+      /*Assess a = assessService.findByStageAndSalesman("1",assess.getSalesman().getId());//查第一阶段的考核
       assess.setActiveNum(assess.getActiveNum()+a.getActiveNum());//累加第一阶段活跃客户
       assess.setOrderNum(assess.getOrderNum()+a.getOrderNum());//累加第一阶段提货量
-      assess.setAssessStage("2");
+*/      assess.setAssessStage("2");
     }
     if(stage == 2){
       assess.setAssessStage("3");
@@ -150,9 +151,11 @@ public class AssessController {
     assess.setAssessEndTime(endDate);
     assess.setAssesszh(getRegionName(assess.getAssessArea()));
     assessService.saveAssess(assess);
+    if("1".equals(assess.getAssessStage())){
+      salesman.setStatus(SalesmanStatus.kaifa);
+    }
     salesman.setAssessStage(assess.getAssessStage());
     salesManService.addSalesman(salesman);
-    System.out.println(assess.getSalesman().getId());
     return "redirect:/assess/assessList";
   }
   

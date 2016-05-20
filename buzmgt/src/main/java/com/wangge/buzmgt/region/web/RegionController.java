@@ -219,6 +219,7 @@ public class RegionController {
 		  name=region.getParent().getName();
 		  pcoordinates=region.getCoordinates();
 		}
+		model.addAttribute("parentName",region.getParent().getName());
  		model.addAttribute("jsonData", listRegion);
  		model.addAttribute("regionName", name);
     model.addAttribute("parentid", parentid);
@@ -299,7 +300,8 @@ public class RegionController {
 		}
 		
 		while(1==1){
-		  if(regionService.findByRegion((maxid+1)+"")!=null){
+		  List<Region> list = regionService.findByRegion((maxid+1)+"");
+		  if(list != null && list.size() > 0){
 		      maxid=maxid+1;
 	    }else{
 	      break;

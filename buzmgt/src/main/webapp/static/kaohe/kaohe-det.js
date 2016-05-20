@@ -87,7 +87,7 @@ function ajaxSearch(searchData) {
 function initPaging(){
 	var totalCount = totalElements; //总条数 
 	showCount = totalPages, //显示分页个数
-	limit =  2;//每页条数
+	limit =  10;//每页条数
 	$('#callBackPager').extendPagination({
 	totalCount : totalCount, 
 	showCount : showCount,
@@ -113,7 +113,18 @@ function seachSuccessTable(data) {
 	
 }
 
-//跳转到考核设置
-function toAssessStage(salesmanId,assessId){
+//跳转到下一阶段考核设置
+function nextStage(){
+	var salesmanId = $('#userId').val();
+	var assessId = $('#assessId').val();
 	window.location.href="/assess/toAssessStage?id="+salesmanId+"&assessId="+assessId;
+}
+
+//确认考核通过并进入下一阶段设置
+function toAssessStage(salesmanId,assessId) {
+	$('#assessPass').modal({
+		keyboard: false
+	})
+	$('#assessId').val(assessId);
+	$('#userId').val(salesmanId);
 }

@@ -126,12 +126,7 @@
 						<div class="saojie-set-map col-sm-10  col-sm-offset-1 col-xs-12">
 							<!--map-title-->
 							<p class="map-tital">
-<<<<<<< HEAD
-								开始时间: ${startTime} <span class="drive-row"></span> 结束时间:
-								 ${endTime}
-=======
 								开始时间: ${beginTime } <span class="drive-row"></span> 结束时间:${endTime }
->>>>>>> refs/heads/peter
 							</p>
 							<!--map-title-->
 							<div class="map-box " id="allmap">

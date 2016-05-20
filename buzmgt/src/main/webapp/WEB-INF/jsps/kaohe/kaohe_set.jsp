@@ -112,7 +112,7 @@
 													
 													
 														<div class="col-sm-4">
-															<a class="J_addDire btn btn-default btn-kaohe-add col-sm-4" href="javascript:;" id="btn"><i class="icon-saojie-add"></i></a>
+															<a class="J_addDire btn btn-default btn-kaohe-add col-sm-4" id="btn"><i class="icon-saojie-add"></i></a>
 														</div>
 													<label class="pull-right col-md-6 control-label msg-error">请选择考核区域</label>
 													</td>

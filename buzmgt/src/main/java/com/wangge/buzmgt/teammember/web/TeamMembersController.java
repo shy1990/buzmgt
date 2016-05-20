@@ -21,6 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
@@ -274,8 +279,8 @@ public class TeamMembersController {
        List<Region> rList = regionService.getListByIds(salesMan);
        model.addAttribute("salesMan", salesMan);
        model.addAttribute("rList", rList);
-       SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "");
-       model.addAttribute("saojiedatalist", saojiedatalist);
+       /*List<SaojieData> saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), "");
+       model.addAttribute("saojiedatalist", saojiedatalist);*/
        model.addAttribute("areaName", salesMan.getRegion().getParent().getName()+salesMan.getRegion().getName());
        model.addAttribute("pcoordinates", salesMan.getRegion().getCoordinates());
        model.addAttribute("saojieId",saojie.getId());
@@ -286,7 +291,7 @@ public class TeamMembersController {
          model.addAttribute("salesStatus", "kaifa");
        }else{
         List<Saojie> listSaojie=saojieService.findSaojie(Saojie.SaojieStatus.PENDING, salesMan.getId());
-          if(null==listSaojie){
+          if(null==listSaojie || listSaojie.isEmpty()){
             model.addAttribute("salesStatus", "kaifa");
           }
        }
@@ -307,11 +312,12 @@ public class TeamMembersController {
     * @param saojie
     * @param regionId
     * @return 
+   * @throws JsonProcessingException 
     * @since JDK 1.8
    */
   @RequestMapping(value = "/getSaojiedataMap", method = RequestMethod.GET)
   @ResponseBody
-  public SaojieDataVo getSaojiedataMap(@RequestParam(value = "saojieId",required = false)Saojie saojie,String regionId){
+  public SaojieDataVo getSaojiedataMap(@RequestParam(value = "saojieId",required = false)Saojie saojie,String regionId) throws JsonProcessingException{
     SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
     SaojieDataVo saojiedatalist  = saojieService.getsaojieDataList(saojie.getSalesman().getId(), regionId);
     saojiedatalist.setAreaName(salesMan.getRegion().getName());//设置业务负责区域，用于地图加载

@@ -158,7 +158,7 @@ p{margin-left:5px; font-size:14px;}
 																</div>
 																</c:if>
 															</td>
-															<td class="project-actions"><a href="projects.html#"
+															<td class="project-actions"><a href="javascript:toSalesManInfo('${saojie.id}','saojie');"
 																class="btn btn-white btn-sm"><span class="folder"></span>
 																	查看 </a>
 																<div class="btn-group"></div> <a

@@ -238,7 +238,8 @@ public class SaojieController {
 	  if(salesman != null && !"".equals(salesman)){
 	     list = saojieService.findBysalesman(salesman);
 	  }
-	  Saojie saojie = saojieService.findByStatusAndSalesman(SaojieStatus.PENDING,id.trim());
+	  int order = saojieService.getOrderNumById(id.trim());
+	  Saojie saojie = saojieService.findByOrderAndUserId(order,id.trim());
 	  String beginTime = DateUtil.date2String(saojie.getBeginTime());
 	  String endTime = DateUtil.date2String(saojie.getExpiredTime());
 	  model.addAttribute("beginTime",beginTime);

@@ -53,19 +53,19 @@ var oilCostId='${oilCost.id}';
                     <span id="renduAbnormal"></span>
                     <c:forEach var="record" items="${oilCost.oilRecordList }" varStatus="status">
 	                    <c:choose>
-	                    	<c:when test="${status.index == 0 && empty record.exception }">
+	                    	<c:when test="${status.index == 0 && record.exception == 0 }">
 	    	                	<span>起点<span class="normal-state">${record.regionName }</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.index == 0 && not empty record.exception}">
+	                    	<c:when test="${status.index == 0 && record.exception == 1}">
 	    	                	<span>起点<span class="abnormal-state">异常</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.last && empty record.exception}">
+	                    	<c:when test="${status.last && record.exception == 0}">
 			                    <span class="location">终点<span class="normal-state">${record.regionName }</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.last && not empty record.exception}">
+	                    	<c:when test="${status.last && record.exception == 1}">
 			                    <span class="location">终点<span class="abnormal-state">异常</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.index != 0 && !status.last && not empty record.exception}">
+	                    	<c:when test="${status.index != 0 && !status.last && record.exception == 1}">
 			                    <span class="location">${record.regionName }<span class="abnormal-state">异常</span></span>
 	                    	</c:when>
 	                    	<c:otherwise>
@@ -124,7 +124,7 @@ var oilCostId='${oilCost.id}';
 							     							  </c:choose>
 														      </td>
 														      <td>${record.regionName}
-														      <c:if test="${empty record.exception }">(异常)</c:if>
+														      <c:if test="${record.exception == 1}">(异常)</c:if>
 														      </td>
 														      <td>${record.shopName }（${record.missName}）</td>
 														      <td>${record.missTime}</td>

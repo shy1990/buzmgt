@@ -28,7 +28,7 @@
 	var number = '';//当前页数（从零开始）
 	var totalPages = '';//总页数(个数)
 	var searchData = {
-		"size" : "2",
+		"size" : "10",
 		"page" : "0",
 	}
 	var totalElements;//总条数
@@ -264,6 +264,43 @@
 				<!--/team-map-->
 			</div>
 		</div>
+		<!--确认审核通过-->
+		<div class="modal-blue modal fade " id="assessPass" tabindex="-1"
+			role="dialog" aria-labelledby="exampleModalLabel">
+			<div class="modal-dialog " style="width:500px;" role="document">
+				<div class="modal-content">
+					<!--modal-header-->
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span class="glyphicon glyphicon-remove" aria-hidden="true">
+								<!--&times;-->
+							</span>
+						</button>
+						<h4 class="modal-top" style="font-size:none" id="exampleModalLabel">
+							温馨提示
+						</h4>
+					</div>
+					<!--modal-header-->
+					<!--modal-body-->
+					<div class="modal-body" style="padding-right:70px">
+					<form class="member-from-box form-horizontal" role="form" id='addForm' type='post'>
+					   <div class="form-group">
+					   <input type="hidden" name="assessId" id="assessId" value="">
+					   <input type="hidden" name="userId" id="userId" value="">
+					      <label for="firstname" class="col-sm-4 control-label">您确定要通过当前阶段考核并进入下一阶段吗？</label>
+					   </div>
+					   <div class="form-group">
+					        <button type="button" class="btn btn-blue" style="width:125px;height:40px;font-weight:bold" onclick="nextStage();">确 定</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						</div>
+					</form>
+					</div>
+					<!--modal-body-->
+				</div>
+			</div>
+		</div>
+		<!--确认审核通过-->
 		<!-- Bootstrap core JavaScript================================================== -->
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -294,12 +331,12 @@
 				pickerPosition : "bottom-right",
 				forceParse : 0
 			});
-			var $_haohe_plan = $('.J_kaohebar').width();
+			/* var $_haohe_plan = $('.J_kaohebar').width();
 			var $_haohe_planw = $('.J_kaohebar_parents').width();
 			$(".J_btn").attr("disabled", 'disabled');
 			if ($_haohe_planw === $_haohe_plan) {
 				$(".J_btn").removeAttr("disabled");
-			}
+			} */
 		</script>
 </body>
 
