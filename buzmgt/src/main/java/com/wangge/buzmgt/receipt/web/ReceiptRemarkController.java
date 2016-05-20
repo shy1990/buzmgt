@@ -37,7 +37,7 @@ import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
-import com.wangge.buzmgt.util.ExcelExport;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 
 @Controller
 @RequestMapping(value="/receiptRemark")

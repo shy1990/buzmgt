@@ -36,8 +36,10 @@ public class BankTrade implements Serializable  {
   @GeneratedValue(generator = "idgen")
   private Integer id ; //订单id
 //  @Transient
-  private String cradName ; //姓名
+  private String userId;
+  private String cardName ; //姓名
   private String cardNo;//卡号
+  private String bankName;//开户行
  
   @Column(name="INCOME_MONEY")
   private Float money; //打款款金额
@@ -57,12 +59,13 @@ public class BankTrade implements Serializable  {
     this.id = id;
   }
 
-  public String getCradName() {
-    return cradName;
+
+  public String getCardName() {
+    return cardName;
   }
 
-  public void setCradName(String cradName) {
-    this.cradName = cradName;
+  public void setCardName(String cardName) {
+    this.cardName = cardName;
   }
 
   public String getCardNo() {
@@ -95,6 +98,22 @@ public class BankTrade implements Serializable  {
 
   public void setPayDate(Date payDate) {
     this.payDate = payDate;
+  }
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
+  public String getBankName() {
+    return bankName;
+  }
+
+  public void setBankName(String bankName) {
+    this.bankName = bankName;
   }
   
   
