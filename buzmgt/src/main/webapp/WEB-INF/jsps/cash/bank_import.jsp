@@ -144,9 +144,9 @@ var	base='<%=basePath%>';
 								<label class="col-sm-2 control-label">选择文件：</label>
 								<div class="col-sm-10">
 										<input id="file-input" name="file-input" class="" type="file">
-										<!-- <input id="file-1" type="file" multiple class="file file-loading"
+										<input id="file-1" type="file" multiple class="file file-loading"
 										 data-show-preview="false" data-allowed-file-extensions='["xls", "xlsx"]'
-										 data-min-file-count="1"> -->
+										 data-min-file-count="1">
 								</div>
 
 							</div>
