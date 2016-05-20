@@ -30,7 +30,7 @@
         } else if (Number(defaults.limit) <= 0)defaults.limit = '5';
         var totalCount = Number(defaults.totalCount), showPage = Number(defaults.showPage),
             limit = Number(defaults.limit), totalPage = Math.ceil(totalCount / limit);
-        if (totalPage > 1) {
+        if (totalPage > 0) {//00000000000000000000000000000000
             var html = [];
             html.push('<nav style="text-align: center;"><ul class="pagination">');
             html.push(' <li class="previous"><a href="javascript:;">&laquo;</a></li>');

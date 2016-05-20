@@ -6,6 +6,7 @@
 	System.out.print(basePath);
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 
@@ -22,10 +23,6 @@
 <link href="static/bootstrap/css/bootstrap-switch.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css"
-	href="static/yw-team-member/team-member.css" />
-<link rel="stylesheet" type="text/css"
-	href="static/account-manage/account-list.css" />
 <link rel="stylesheet" type="text/css" href="static/task/task.css" />
 <link rel="stylesheet" type="text/css" href="static/oil/css/oil.css" />
 
@@ -34,9 +31,6 @@
 
 
 
-<!-- ======================== -->
-<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link rel="stylesheet" type="text/css"
 	href="/static/zTree/css/zTreeStyle/zTreeStyle.css" />
 <script src="/static/js/jquery/jquery.min.js" type="text/javascript"
@@ -55,7 +49,7 @@
 
 .menuContent {
 	width: 100%;
-	padding-right: 61px;
+	padding-right: 50px;
 	display: none;
 	position: absolute;
 	z-index: 800;
@@ -66,14 +60,15 @@
 
 <body>
 <body>
+	<button onclick="deletePunishSet()">ceshi</button>
 
 	<div class="content main">
 		<h4 class="page-header">
-			<i class="ico ico-account-manage-oil"></i>设置油补系数
+			<i class="ico ico-account-manage-oil"></i>扣罚设置
 		</h4>
 		<div>
 			<!-- Nav tabs -->
-			<h4 class="text-hd">公里系数设置：</h4>
+			<h4 class="text-hd">扣罚设置：</h4>
 			<!-- Tab panes -->
 			<!--全部--->
 			<!--公里系数设置-->
@@ -83,94 +78,64 @@
 						<div class="table-responsive tb-b ">
 							<!--公里系数表头-->
 							<div class="text-tx row-d">
-								<span class="text-gery">公里数系数：</span> <select id="default_km">
-									<c:if test="${oilParameter != null }">
-										<option selected="" value="${oilParameter.kmRatio }">${oilParameter.kmRatio }</option>
-									</c:if>
-									<option></option>
-									<option value="0.5">0.5</option>
-									<option value="0.6">0.6</option>
-									<option value="0.7">0.7</option>
-									<option value="0.8">0.8</option>
-									<option value="0.9">0.9</option>
-									<option value="1.0">1.0</option>
-									<option value="1.1">1.1</option>
-									<option value="1.2">1.2</option>
-									<option value="1.3">1.3</option>
-									<option value="1.4">1.4</option>
-									<option value="1.5">1.5</option>
-									<option value="1.6">1.6</option>
-									<option value="1.7">1.7</option>
-									<option value="1.8">1.8</option>
-									<option value="1.9">1.9</option>
-									<option value="2.0">2.0</option>
-								</select> <span class="text-gery ">倍</span> <span class="text-blue-s jl-">注：</span><span
+								<span class="text-gery">扣罚设置系数：</span> <select id="default_set">
+								<c:if test="${punishSet1 != null }">
+								<fmt:formatNumber var="c" value="${punishSet1.punishNumber*100}" pattern="#"/>
+									<option>${c}</option>
+								</c:if>
+									<option value=""></option>
+									<option value="0.1">10</option>
+									<option value="0.2">20</option>
+									<option value="0.3">30</option>
+									<option value="0.4">40</option>
+									<option value="0.5">50</option>
+									<option value="0.6">60</option>
+								</select> <span class="text-gery ">%</span> <span class="text-blue-s jl-">注：</span><span
 									class="text-gery-hs">系统默认所有区域均为改系数，自定义设置区域除外</span>
 							</div>
 							<!--设置公里系数表-->
-							<%
-							 	int s = 0;
-							%>
-							<div class="bs-example">
-								<div id="acont" class="row">
-									<!-- -------------------------------- -->
 
-									<c:if test="${lists.size() > 0 }">
-										<c:forEach var="oil" items="${lists }" varStatus="status">
-											<c:if test="${oil.kmRatio !=null && oil.region.id != '0'}">
+							<c:forEach var="punishSet" items="${list }" varStatus="status">
 
-												<div class="col-sm-3 cl-padd">
-													<div class="ratio-box">
-														<div class="ratio-box-dd">
-															<span class="label  label-blue"><%= ++s %></span> <span
-																class="text-black jll">${oil.region.name }</span> <a
-																class="text-redd jll" href="" data-toggle="modal"
-																data-target="">${oil.kmRatio } 倍</a> <a
-																class="text-blue-s jll" href="" data-toggle="modal"
-																data-target=""
-																onclick="modify('${oil.id}','${oil.kmOilSubsidy}','${oil.region.id }')">修改</a>
-															<a class="text-blue-s jll" href="" data-toggle="modal"
-																data-targt=""
-																onclick="delete_byId('${oil.id}','${oil.region.id }')">删除</a>
-														</div>
-													</div>
-												</div>
-											</c:if>
-
-										</c:forEach>
-									</c:if>
-
-									<!-- -------------------------------- -->
+								<div class="col-sm-3 cl-padd">
+									<div class="ratio-box">
+										<div class="ratio-box-dd">
+											<span class="label  label-blue"> ${status.index+1 }</span> <span
+												class="text-black jll"> ${punishSet.region.name } </span> <a
+												class="text-redd jll" href="" data-toggle="modal"
+												data-target=""> ${punishSet.punishNumber } </a> <a
+												class="text-blue-s jll" href="" data-toggle="modal"
+												data-target="" onclick="modify_punishSet(${punishSet.id })">修改</a>
+											<a class="text-blue-s jll" href="" data-toggle="modal"
+												data-targ t="" onclick="deletePunishSet(${punishSet.id })">删除</a>
+										</div>
+									</div>
 								</div>
-							</div>
-							<!--  -->
-							<div class="row show-grid   row-jl ">
-								<div class="col-md-5"></div>
-								<div class="col-md-7 ">
 
-									<button class=" col-sm-3 btn  btn btn-default" type="button"
-										data-toggle="modal" data-target="#zdyqy">自定义设置区域</button>
-
-								</div>
-							</div>
-
+							</c:forEach>
 
 
 						</div>
 					</div>
 				</div>
 			</div>
-			
+			<div class="show-grid   row-jl ">
+				<div class="col-md-5"></div>
+				<div class="col-md-7  zdy-h ">
+					<button class=" col-sm-3 btn  btn btn-default" type="button"
+						data-toggle="modal" data-target="#zdyqy">添加区域</button>
+				</div>
+			</div>
 			<div class="form-group ">
 				<div class="row">
 					<div class="col-sm-offset-4 col-sm-4" style="margin-top: 20px">
 						<button type="submit" class="col-sm-12 btn btn-primary "
-							id="button_bocun">保存</button>
+							id="button_bocun" onclick="defaultPunishSet()">保存</button>
 					</div>
 				</div>
 			</div>
 
-			<!-- /alert htmlg修改公里系数 -->
+			<!-- /alert 弹出单个修改弹框 -->
 			<div id="changed" class="modal fade" role="dialog">
 				<div class="modal-dialog " role="document">
 					<div class="modal-content modal-blue">
@@ -196,34 +161,24 @@
 													class="form-control input-h"
 													aria-describedby="basic-addon1" id="select_modify">
 													<option></option>
-													<option value="0.5">0.5</option>
-													<option value="0.6">0.6</option>
-													<option value="0.7">0.7</option>
-													<option value="0.8">0.8</option>
-													<option value="0.9">0.9</option>
-													<option selected="" value="1.0">1.0</option>
-													<option value="1.1">1.1</option>
-													<option value="1.2">1.2</option>
-													<option value="1.3">1.3</option>
-													<option value="1.4">1.4</option>
-													<option value="1.5">1.5</option>
-													<option value="1.6">1.6</option>
-													<option value="1.7">1.7</option>
-													<option value="1.8">1.8</option>
-													<option value="1.9">1.9</option>
-													<option value="2.0">2.0</option>
+													<option value="0.1">10</option>
+													<option value="0.2">20</option>
+													<option value="0.3">30</option>
+													<option value="0.4">40</option>
+													<option value="0.5">50</option>
+													<option value="0.6">60</option>
 												</select>
 												<!-- /btn-group -->
 											</div>
 										</div>
 										<div class="col-sm-1 control-label">
-											<span>倍</span>
+											<span>%</span>
 										</div>
 									</div>
 									<div class="form-group">
 										<div class="col-sm-offset-4 col-sm-4 ">
 											<!--  <button type="submit" class="col-sm-12 btn btn-primary " >确定</button>-->
-											<a herf="javascript:return 0;" id="set_a"
+											<a herf="javascript:return 0;" id="sure_update"
 												class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>
 										</div>
 									</div>
@@ -233,7 +188,8 @@
 					</div>
 				</div>
 			</div>
-			<!-- /alert html -->
+
+			<!-- /alert 自定义扣罚弹框 -->
 
 			<div id="zdyqy" class="modal fade" role="dialog">
 				<div class="modal-dialog " role="document">
@@ -247,14 +203,14 @@
 						</div>
 						<div class="modal-body">
 							<div class="container-fluid">
-								<form id="addd" class="form-horizontal">
+								<form id="addForm" class="form-horizontal">
 									<div class="form-group">
 										<label class="col-sm-4 control-label">选择区域：</label>
 										<div class="col-sm-7">
 											<div class="input-group are-line">
 												<span class="input-group-addon"><i
 													class="icon icon-qy"></i></span> <select id="region"
-													class="form-control" name="regionId">
+													class="form-control input-h" name="regionId">
 													<input id="n" type="hidden" value="${regionId}" />
 												</select>
 												<div id="regionMenuContent" class="menuContent">
@@ -268,41 +224,31 @@
 									</div>
 									<div id="xiugai">
 										<div class="form-group">
-											<label class="col-sm-4 control-label">公里系数：</label>
+											<label class="col-sm-4 control-label">扣罚系数：</label>
 											<div class="col-sm-7">
 												<div class="input-group are-line">
 													<span class="input-group-addon"><i
 														class="icon icon-task-lk"></i></span> <select name="b" type=""
 														class="form-control input-h"
 														aria-describedby="basic-addon1" id="select">
-														<option value="0.5">0.5</option>
-														<option value="0.6">0.6</option>
-														<option value="0.7">0.7</option>
-														<option value="0.8">0.8</option>
-														<option value="0.9">0.9</option>
-														<option selected="" value="1.0">1.0</option>
-														<option value="1.1">1.1</option>
-														<option value="1.2">1.2</option>
-														<option value="1.3">1.3</option>
-														<option value="1.4">1.4</option>
-														<option value="1.5">1.5</option>
-														<option value="1.6">1.6</option>
-														<option value="1.7">1.7</option>
-														<option value="1.8">1.8</option>
-														<option value="1.9">1.9</option>
-														<option value="2.0">2.0</option>
+														<option value="0.1">10</option>
+														<option value="0.2">20</option>
+														<option value="0.3">30</option>
+														<option value="0.4">40</option>
+														<option value="0.5">50</option>
+														<option value="0.6">60</option>
 													</select>
 													<!-- /btn-group -->
 												</div>
 											</div>
 											<div class="col-sm-1 control-label">
-												<span>倍</span>
+												<span>%</span>
 											</div>
 										</div>
 
 										<div class="form-group">
 											<div class="col-sm-offset-4 col-sm-4 " id="href_div">
-												<a herf="javascript:return 0;" onclick="addd(this)"
+												<a herf="javascript:return 0;" onclick="addd()"
 													class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>
 											</div>
 										</div>
@@ -313,14 +259,6 @@
 					</div>
 				</div>
 			</div>
-
-			<div id="zdyqyoil" class="modal fade" role="dialog"></div>
-			<div id="changed1" class="modal fade" role="dialog">
-
-			
-			</div>
-
-
 
 
 
@@ -353,13 +291,13 @@
 		 -->
 			<script src="/static/yw-team-member/team-tree.js"
 				type="text/javascript" charset="utf-8"></script>
-			<script src="/static/js/index.js" type="text/javascript"
-				charset="utf-8"></script>
-
-			<script src="/static/oil/js/oil.js" type="text/javascript"
+			<script src="/static/js/common.js" type="text/javascript"
 				charset="utf-8"></script>
 
 
+
+			<!-- <script src="/static/oil/js/oil.js" type="text/javascript"
+				charset="utf-8"></script> -->
 
 			<script type="text/javascript">
 				$(function resetTabullet() {
@@ -390,6 +328,117 @@
 					});
 					resetTabullet();
 				});
+			</script>
+			<script type="text/javascript">
+					/*添加*/
+					function addd(){
+						var o = $("#addForm").serializeArray();
+						var regionId = o[0]["value"].trim();// regionId
+						var punishNumber = o[2]["value"];//punishNumber
+						console.log(o);
+						if (regionId.length > 7) {
+							alert("请您只选择到：要选择区域的最后一级");
+							return location.href = '/punish/punishs';
+						}
+						$.ajax({
+							url : "punish/punishs",
+							type : "post",
+							data : {
+								punishNumber : punishNumber,
+								regionId : regionId
+							},
+							success : function(data) {
+								alert(data);
+								window.location.href = '/punish/punishs';
+							}
+
+						});
+					}
+				/*修改*/
+				function modify_punishSet(id){
+					console.log(id);
+					$('#changed').modal('show').on('shown.bs.modal', function(){
+						$("#sure_update").click(function(){
+							var punishNumber = $("#select_modify").val();
+							console.log(id);
+							console.log(punishNumber);
+							$.ajax({
+								url:'punish/punishs/'+id,
+								type:'put',
+								data:{punishNumber:punishNumber},
+								success:function(data){
+									alert(data);
+									window.location.href='/punish/punishs';
+								}
+								
+							});
+						});
+					})
+				}
+					
+				
+				/*删除*/
+				function deletePunishSet(id){
+					$.ajax({
+						url:'punish/punishs/'+id,
+						type:'delete',
+						success:function(data){
+							alert(data);
+							window.location.href='/punish/punishs';
+						}
+						
+					});
+				}
+				
+				
+				
+				
+				/*设置默认*/
+				function defaultPunishSet(id){
+					var regionId = '0';
+					var punishNumber = $("#default_set").val();
+					console.log(punishNumber);
+					$.ajax({		
+						url:'punish/punishs/modify/'+regionId,
+						data:{punishNumber:punishNumber},
+						type:"post",
+						success:function(data){
+							alert(data);
+							window.location.href='/punish/punishs';
+						}
+								
+					})
+				}
+				
+				
+				
+				
+				
+				
+				/*无用*/
+				function update(){
+					$.ajax({
+						url:'punish/punishs/1',
+						type:'put',
+					//	data:Json.stringify({punishNumber:'4545'}),
+						//data:JSON.stringify({
+							//punishNumber:'ceshi',
+							//email:'6575@qq.com'
+						//}),
+						data:{punishNumber:'0.8888'},
+						//data:JSON.stringify({
+							//punishNumber:'ceshi',
+							//email:'6575@qq.com'
+						//}),
+						//beforeSend:function(request){
+							//request.setRequestHeader("ContentType","application/json");
+						//},
+						success:function(){
+							window.location.href = '/punish/punishs';
+						}
+						
+					});
+				}
 			</script>
 </body>
 

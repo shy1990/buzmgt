@@ -6,6 +6,7 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -41,7 +42,7 @@ public class OilParameters implements Serializable{
 	
 //	@Column(name="REGION_ID")
 //	private String regionId;//区域id
-	
+	//@OneToOne(optional = false, cascade = CascadeType.ALL)
 	@OneToOne
 	@JoinColumn(name = "region_id")//与数据库对应的表的字段名
 //	@Transient
