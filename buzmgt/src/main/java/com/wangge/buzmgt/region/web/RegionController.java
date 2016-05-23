@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
+import com.wangge.buzmgt.saojie.service.SaojieDataService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.teammember.entity.Manager;
@@ -43,7 +45,10 @@ public class RegionController {
 	private UserService userService;
 	@Resource
 	private ManagerService managerService;
-	
+	@Resource
+  private SaojieDataService saojieDateService;
+	@Resource
+	private AssessService assessService;
 	private static final String ONELEAVE="0";
 	
 	/**
@@ -187,7 +192,7 @@ public class RegionController {
 	@ResponseBody
 	public boolean deleteRegionbyId(String id, String pid) {
 		Region region = regionService.findListRegionbyid(id);
-		if(region.getChildren().size()>0){
+		if(region.getChildren().size()>0 || saojieDateService.findByReion(region).size()>0){
 			return false;
 		}
 		regionService.delete(region);
