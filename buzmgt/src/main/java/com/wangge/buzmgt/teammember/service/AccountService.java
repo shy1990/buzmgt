@@ -18,7 +18,7 @@ public interface AccountService {
    * @author changjun
    * @date 2016年2月23日
    */
-  List<AccountBean> selectAccountByPositionAndStatus(String position,String status,String regionName,PageRequest page);
+  List<AccountBean> selectAccountByPositionAndStatus(String position,String status,String regionName,PageRequest page, String searchParam);
   
   boolean mofidyPwd(String id);
 }

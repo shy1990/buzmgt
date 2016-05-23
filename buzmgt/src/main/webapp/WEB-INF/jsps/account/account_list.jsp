@@ -92,8 +92,18 @@
 				</c:choose>
 				<!-- Nav tabs -->
 			</ul>
+			<ul class="nav nav-task" >
+			   <div class="input-group ">
+					<input type="text" class="form-control" placeholder="请输入名称或用户名"
+						id="param" onkeyup="javascript:if(event.keyCode==13){getAccountList()}"> <span class="input-group-addon"
+						id="goSearch"
+						onclick="getAccountList();"><i
+						class="icon icon-finds"></i></span>
+				</div>
+			</ul>
+			
 		</div>
-
+        
 
 		<div class="tab-box-border">
 		<!--tab-content-->
@@ -540,6 +550,11 @@
         	 window.location.href="/findChildAccount?userId="+userId;
          }
          
-         
+         function getAccountList(){
+        	/*  var value = $("#param").val();
+        	 alert(value); */
+        	 window.location.href="/accountManage?searchParam="+ $("#param").val();
+        	 
+         }
 	</script>
 </html>
