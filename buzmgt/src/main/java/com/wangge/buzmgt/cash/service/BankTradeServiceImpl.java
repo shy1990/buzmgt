@@ -86,6 +86,7 @@ public class BankTradeServiceImpl implements BankTradeService {
     // 原始文件名称
     String fileName;
 
+    String fileRealPath="";
     try {
 
       mReq = (MultipartHttpServletRequest) request;
@@ -102,7 +103,7 @@ public class BankTradeServiceImpl implements BankTradeService {
 
       logger.info("原始文件的后缀名:" + suffix);
 
-      if (!"xlsx".equals(suffix)||!"xls".equals(suffix)) {
+      if (!"xlsx".equals(suffix)&&!"xls".equals(suffix)) {
         jsonObject.put("result", "failure");
         jsonObject.put("message", "文件类型错误，请选择xlsx类型的文件");
 
@@ -120,7 +121,7 @@ public class BankTradeServiceImpl implements BankTradeService {
 
         FileUtils.saveFile(fileName, is, fileUploadPath);
 
-        String fileRealPath = fileUploadPath + fileName;
+        fileRealPath = fileUploadPath + fileName;
 
         // 文件上传完成后，读取文件
         Map<Integer, String> excelContent = ExcelImport.readExcelContent(fileRealPath);
@@ -142,7 +143,11 @@ public class BankTradeServiceImpl implements BankTradeService {
       }
 
     } catch (Exception e) {
+      FileUtils.deleteFile(fileRealPath);
       jsonObject.put("result", "failure");
+      logger.info(e.getMessage());
+      e.printStackTrace();
+      
     }
     return jsonObject;
   }
@@ -154,7 +159,8 @@ public class BankTradeServiceImpl implements BankTradeService {
       BankTrade bt=new BankTrade();
       String[] content = s.split("    ");
       bt.setPayDate(DateUtil.string2Date(content[0]));
-      bt.setMoney(new Float(content[1]));
+      Float money=content[1]==""?new Float(0):new Float(content[1]);
+      bt.setMoney(money);
       bt.setCardName(content[2]);
       bt.setCardNo(content[3]);
       bt.setBankName(content[4]);

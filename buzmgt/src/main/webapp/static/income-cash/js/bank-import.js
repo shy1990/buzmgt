@@ -3,34 +3,53 @@ $(function() {
 	nowTime();// 初始化日期
 	findBankTradeList();// 查询列表
 	initFileUpload();
-	$("#file-input").fileinput({
-		language : 'zh',
-		uploadUrl : '/bankTrade/upload?importDate=' + importDate, 
-		allowedFileExtensions : [ 'xls', 'xlsx' ],
-		slugCallback : function(filename) {
-			return filename.replace('(', '_').replace(']', '_');
+
+	var importDate;
+	$('#importDate').datetimepicker({
+		format : "yyyy-mm-dd",
+		language : 'zh-CN',
+		endDate : new Date(),
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 2,
+		minView : 2,
+		pickerPosition : "bottom-right",
+		forceParse : 0
+	}).on('changeDate', function(ev) {
+		var importDate = $('#importDate').val();
+		if (!isEmpty(importDate)) {
+			$("#file-input").fileinput({
+				language : 'zh',
+				uploadUrl : '/bankTrade/upload?importDate='+importDate, 
+				allowedFileExtensions : [ 'xls', 'xlsx' ],
+				uploadAsync: true, //默认异步上传
+				showPreview : false,
+				dropZoneEnabled: false,
+				
+			});
 		}
 	});
 
-	$('#file-input').on('filepreupload',
-			function(event, data, previewId, index) {
-				var importDate = $('#importDate').val();
-				console.info(event);
-				console.info(data);
-				console.info(previewId);
-				console.info(index);
-				if (isEmpty(importDate)) {
-					alert("请选择导入日期");
-					return false;
-				}
-			});
+    $('#file-input').on('fileselect', function(event, numFiles, label) {
+        console.log("change =======> fileselect");
+    });
+	
+	//异步上传返回结果处理
+	$('#file-input').on('fileerror', function(event, data, msg) {
+        console.log(data);
+        // get message
+        alert(msg);
 
+	});
+	//异步数据处理
 	$("#file-input").on("fileuploaded",
 			function(event, data, previewId, index) {
-				$('#daoru').modal('hide');
-				console.info(date);
-				alert("ok");
-			});
+		$('#daoru').modal('hide');
+		console.info(date);
+		alert("ok");
+	});
 })
 
 /**
@@ -226,24 +245,4 @@ $('#searchDate').datetimepicker({
 		}
 	}
 });
-$('#importDate').datetimepicker({
-	format : "yyyy-mm-dd",
-	language : 'zh-CN',
-	endDate : new Date(),
-	weekStart : 1,
-	todayBtn : 1,
-	autoclose : 1,
-	todayHighlight : 1,
-	startView : 2,
-	minView : 2,
-	pickerPosition : "bottom-right",
-	forceParse : 0
-}).on('changeDate', function(ev) {
-	var startInputDateStr = $('#startTime').val();
-	if (startInputDateStr != "" && startInputDateStr != null) {
-		var startInputDate = stringToDate(startInputDateStr).valueOf();
-		if (ev.date.valueOf() - startInputDate < 0) {
-			$('.form_date_end').addClass('has-error');
-		}
-	}
-});
+
