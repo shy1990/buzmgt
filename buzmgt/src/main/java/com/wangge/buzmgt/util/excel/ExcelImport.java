@@ -99,16 +99,19 @@ public class ExcelImport {
         int colNum = row.getPhysicalNumberOfCells();
 
         // 正文内容应该从第二行开始,第一行为表头的标题
-        for (int i = 1; i <= rowNum; i++) {
+        for (int i = 1; i < rowNum; i++) {
             row = sheet.getRow(i);
 
             int j = 0;
 
             while (j < colNum) {
-                sb.append(getCellFormatValue(row.getCell(j)).trim());
+              String colStr=getCellFormatValue(row.getCell(j)).trim();
+//              System.out.println("第"+i+"行，第"+j+"列，col=="+colStr);
+                sb.append(colStr);
 
                 // 用4个空格分割开
-                sb.append("    ");
+//                sb.append("    ");
+                sb.append("-->");
 
                 j++;
             }
@@ -144,19 +147,19 @@ public class ExcelImport {
                 strCell = String.valueOf(cell.getBooleanCellValue());
                 break;
             case HSSFCell.CELL_TYPE_BLANK:
-                strCell = "";
+                strCell = "空";
                 break;
             default:
-                strCell = "";
+                strCell = "空";
                 break;
         }
 
         if (StringUtils.isBlank(strCell)) {
-            return "";
+            return "空";
         }
 
         if (cell == null) {
-            return "";
+            return "空";
         }
 
         return strCell;
@@ -198,14 +201,22 @@ public class ExcelImport {
 
                     // 取得当前的Cell字符串
                     cellValue = cell.getRichStringCellValue().getString();
+                    if(StringUtils.isEmpty(cellValue)){
+                      cellValue = "空";
+                    }
                     break;
+                case Cell.CELL_TYPE_BLANK:
+                  
+                  // 取得当前的Cell字符串
+                  cellValue = "空";
+                  break;
 
                 // 默认的Cell值
                 default:
-                    cellValue = " ";
+                    cellValue = "空";
             }
         } else {
-            cellValue = " ";
+            cellValue = "空";
         }
         return cellValue;
 

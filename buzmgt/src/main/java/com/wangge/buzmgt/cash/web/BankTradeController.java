@@ -41,7 +41,7 @@ public class BankTradeController {
   @RequestMapping(value = "", method = RequestMethod.GET)
   @ResponseBody
   public String getCashList(HttpServletRequest request,
-      @PageableDefault(page = 0, size = 10, sort = { "createDate" }, direction = Direction.DESC) Pageable pageable) {
+      @PageableDefault(page = 0, size = 10, sort = { "createDate","id" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<BankTrade> bankTrades = bankTradeService.findAll(searchParams, pageable);
     String json = "";
@@ -63,7 +63,9 @@ public class BankTradeController {
   @ResponseBody
   public JSONObject upload(HttpServletRequest request,@RequestParam String importDate) {
 
-    return bankTradeService.importExcel(request,importDate);
+    JSONObject json=bankTradeService.importExcel(request,importDate);
+    
+    return json;
   }
 
 }

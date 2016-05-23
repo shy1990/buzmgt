@@ -46,7 +46,7 @@ public class BankTrade implements Serializable  {
   
   
   @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
-  private Date createDate ;//创建日期
+  private Date createDate = new Date();//创建日期
   
   @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
   private Date payDate;
@@ -89,7 +89,7 @@ public class BankTrade implements Serializable  {
   }
 
   public void setCreateDate(Date createDate) {
-    this.createDate = createDate;
+    this.createDate = new Date();
   }
 
   public Date getPayDate() {

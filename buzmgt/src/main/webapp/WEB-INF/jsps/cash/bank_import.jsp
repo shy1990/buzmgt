@@ -134,7 +134,7 @@ var	base='<%=basePath%>';
 										<span class="input-group-addon"><i class="icon icon-rq"></i></span>
 										<input id="importDate" type="text"
 											class="form-control input-hh  form_datetime"
-											type="text" placeholder="请选择年-月-日">
+											type="text" readonly="readonly" placeholder="请选择年-月-日">
 										<!-- /btn-group -->
 									</div>
 								</div>
@@ -146,10 +146,9 @@ var	base='<%=basePath%>';
 <!-- 										<input id="file-input" name="file-input" class="" type="file"> -->
 										<input id="file-input" name="file-input" type="file" class="">
 								</div>
-
 							</div>
 
-							<div class="form-group">
+							<div class="form-group" id="uploadFileDiv" >
 								<div class="col-sm-offset-4 col-sm-4 ">
 									<a herf="javascript:return 0;" id="uploadFile" onclick=""
 										class="Zdy_add  col-sm-12 btn btn-primary">上传文件 </a>
@@ -173,11 +172,11 @@ var	base='<%=basePath%>';
 	<script type="text/javascript" src="static/js/common.js"
 		charset="utf-8"></script>
 	<script type="text/javascript"
-		src="static/bootstrap/js/fileinput.js"></script>
+		src="static/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript"
+		src="/static/bootstrap/js/fileinput.js"></script>
 	<script type="text/javascript"
 		src="static/bootstrap/js/fileinput_locale_zh.js"></script>
-	<script type="text/javascript"
-		src="static/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript"
 		src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 	<script type="text/javascript"
@@ -188,6 +187,9 @@ var	base='<%=basePath%>';
 		charset="utf-8"></script>
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
+<script src="static/js/jqueryfileupload/js/vendor/jquery.ui.widget.js"></script>
+<script src="static/js/jqueryfileupload/js/jquery.iframe-transport.js"></script>
+<script src="static/js/jqueryfileupload/js/jquery.fileupload.js"></script>
 	<script type="text/javascript"
 		src="static/income-cash/js/bank-import.js" charset="utf-8"></script>
 	<script type="text/javascript">

@@ -146,7 +146,7 @@ public class BankTradeServiceImpl implements BankTradeService {
       FileUtils.deleteFile(fileRealPath);
       jsonObject.put("result", "failure");
       logger.info(e.getMessage());
-      e.printStackTrace();
+      return jsonObject;
       
     }
     return jsonObject;
@@ -157,7 +157,7 @@ public class BankTradeServiceImpl implements BankTradeService {
     List<BankTrade> bankTrades =new ArrayList<>();
     excelContent.forEach((integer, s) -> {
       BankTrade bt=new BankTrade();
-      String[] content = s.split("    ");
+      String[] content = s.split("-->");
       bt.setPayDate(DateUtil.string2Date(content[0]));
       Float money=content[1]==""?new Float(0):new Float(content[1]);
       bt.setMoney(money);
