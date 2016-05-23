@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
 import com.wangge.buzmgt.cash.repository.BankTradeRepository;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.salesman.entity.BankCard;
+import com.wangge.buzmgt.salesman.entity.SalesmanData;
+import com.wangge.buzmgt.salesman.service.SalesmanDataService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import com.wangge.buzmgt.util.excel.ExcelImport;
@@ -49,23 +53,24 @@ public class BankTradeServiceImpl implements BankTradeService {
   @Resource
   private BankTradeRepository bankTradeRepository;
   @Resource
+  private SalesmanDataService dataService;
+  @Resource
   private RegionService regionService;
-  
-  
+
   @Override
   public List<BankTrade> findAll(Map<String, Object> searchParams) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<BankTrade> spec = bankTradeSearchFilter(filters.values(), BankTrade.class);
     List<BankTrade> bankTrades = bankTradeRepository.findAll(spec);
     return bankTrades;
-    
+
   }
 
   @Override
   public Page<BankTrade> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<BankTrade> spec = bankTradeSearchFilter(filters.values(), BankTrade.class);
-    Page<BankTrade> bankTradePage = bankTradeRepository.findAll(spec,pageRequest);
+    Page<BankTrade> bankTradePage = bankTradeRepository.findAll(spec, pageRequest);
     return bankTradePage;
   }
 
@@ -74,9 +79,10 @@ public class BankTradeServiceImpl implements BankTradeService {
     // TODO Auto-generated method stub
     return null;
   }
+
   @Override
-  public JSONObject importExcel(HttpServletRequest request,String importDate) {
-    
+  public JSONObject importExcel(HttpServletRequest request, String importDate) {
+
     JSONObject jsonObject = new JSONObject();
 
     MultipartHttpServletRequest mReq;
@@ -86,7 +92,7 @@ public class BankTradeServiceImpl implements BankTradeService {
     // 原始文件名称
     String fileName;
 
-    String fileRealPath="";
+    String fileRealPath = "";
     try {
 
       mReq = (MultipartHttpServletRequest) request;
@@ -103,7 +109,7 @@ public class BankTradeServiceImpl implements BankTradeService {
 
       logger.info("原始文件的后缀名:" + suffix);
 
-      if (!"xlsx".equals(suffix)&&!"xls".equals(suffix)) {
+      if (!"xlsx".equals(suffix) && !"xls".equals(suffix)) {
         jsonObject.put("result", "failure");
         jsonObject.put("message", "文件类型错误，请选择xlsx类型的文件");
 
@@ -127,10 +133,10 @@ public class BankTradeServiceImpl implements BankTradeService {
         Map<Integer, String> excelContent = ExcelImport.readExcelContent(fileRealPath);
 
         // ============读取文件完成后，导入到数据库=============
-        Map<String, Object> searchParams=new HashMap<>();
+        Map<String, Object> searchParams = new HashMap<>();
         searchParams.put("EQ_payDate", importDate);
-        List<BankTrade> bankTrades=this.findAll(searchParams);
-        if(bankTrades.size()>0){
+        List<BankTrade> bankTrades = this.findAll(searchParams);
+        if (bankTrades.size() > 0) {
           this.delete(bankTrades);
         }
         this.save(excelContent);
@@ -147,33 +153,49 @@ public class BankTradeServiceImpl implements BankTradeService {
       jsonObject.put("result", "failure");
       logger.info(e.getMessage());
       return jsonObject;
-      
+
     }
     return jsonObject;
   }
 
   @Override
   public List<BankTrade> save(Map<Integer, String> excelContent) {
-    List<BankTrade> bankTrades =new ArrayList<>();
+    List<BankTrade> bankTrades = new ArrayList<>();
     excelContent.forEach((integer, s) -> {
-      BankTrade bt=new BankTrade();
+      BankTrade bt = new BankTrade();
       String[] content = s.split("-->");
       bt.setPayDate(DateUtil.string2Date(content[0]));
-      Float money=content[1]==""?new Float(0):new Float(content[1]);
+      Float money = content[1] == "" ? new Float(0) : new Float(content[1]);
       bt.setMoney(money);
       bt.setCardName(content[2]);
       bt.setCardNo(content[3]);
       bt.setBankName(content[4]);
-      
-      //TODO 核对业务员打款基表进行核对，添加userId
-      bt.setUserId(null);
-      
+
+      // TODO 核对业务员打款基表进行核对，添加userId
+      setUserIdForBankTrade(bt);
+
       bankTrades.add(bt);
-      
+
     });
     this.save(bankTrades);
-    
+
     return null;
+  }
+
+  public void setUserIdForBankTrade(BankTrade bankTrade) {
+    String userId = null;
+    String CardName = bankTrade.getCardName();
+    String CardNo = bankTrade.getCardNo();
+    SalesmanData s = dataService.findByNameAndCard_cardNumber(CardName,CardNo);
+    if (s != null) {
+      List<BankCard> bankCards = s.getCard();
+      for (BankCard bc : bankCards) {
+        if (CardNo.equals(bc.getCardNumber())) {
+          userId = s.getUserId();
+        }
+      }
+    }
+    bankTrade.setUserId(userId);
   }
 
   @Override
@@ -185,8 +207,6 @@ public class BankTradeServiceImpl implements BankTradeService {
   public void delete(List<BankTrade> bankTrades) {
     bankTradeRepository.delete(bankTrades);
   }
-
-
 
   private static Specification<BankTrade> bankTradeSearchFilter(final Collection<SearchFilter> filters,
       final Class<BankTrade> entityClazz) {
@@ -317,34 +337,33 @@ public class BankTradeServiceImpl implements BankTradeService {
 
               break;
             case NOTEQ:
-              
-                predicates.add(cb.notEqual(expression, filter.value));
+
+              predicates.add(cb.notEqual(expression, filter.value));
 
               break;
             case ISNULL:
-              
-                predicates.add(cb.isNull(expression));
+
+              predicates.add(cb.isNull(expression));
               break;
             case NOTNULL:
-                predicates.add(cb.isNull(expression));
+              predicates.add(cb.isNull(expression));
 
               break;
             case ORMLK:
               /**
-               * sc_ORMLK_userId = 370105,3701050,3701051
-               * 用于区域选择
+               * sc_ORMLK_userId = 370105,3701050,3701051 用于区域选择
                */
               String[] parameterValue = ((String) filter.value).split(",");
-              Predicate[] pl=new Predicate[parameterValue.length];
-              
-              for(int n=0;n<parameterValue.length;n++){
-                pl[n]=(cb.like(expression, "%"+parameterValue[n]+"%"));
+              Predicate[] pl = new Predicate[parameterValue.length];
+
+              for (int n = 0; n < parameterValue.length; n++) {
+                pl[n] = (cb.like(expression, "%" + parameterValue[n] + "%"));
               }
-              
+
               Predicate p_ = cb.or(pl);
               predicates.add(p_);
               break;
-              
+
             default:
               break;
 
@@ -362,8 +381,4 @@ public class BankTradeServiceImpl implements BankTradeService {
     };
   }
 
-
-
- 
-  
 }

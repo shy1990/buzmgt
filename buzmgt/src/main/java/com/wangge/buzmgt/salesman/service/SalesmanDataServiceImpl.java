@@ -85,5 +85,9 @@ public class SalesmanDataServiceImpl implements SalesmanDataService{
 		salesmanDataRepository.deleteById(id);
 		
 	}
+  @Override
+  public SalesmanData findByNameAndCard_cardNumber(String name,String cardNu) {
+    return salesmanDataRepository.findByNameAndCard_cardNumber(name, cardNu);
+  }
 
 }
