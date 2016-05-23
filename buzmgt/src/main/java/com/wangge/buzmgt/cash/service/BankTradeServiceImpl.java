@@ -76,7 +76,6 @@ public class BankTradeServiceImpl implements BankTradeService {
 
   @Override
   public List<BankTrade> findByCreateDate(String createDate) {
-    // TODO Auto-generated method stub
     return null;
   }
 
@@ -139,6 +138,7 @@ public class BankTradeServiceImpl implements BankTradeService {
         if (bankTrades.size() > 0) {
           this.delete(bankTrades);
         }
+        //TODO 查询数据是否已经归档，否则不能经行导入保存。
         this.save(excelContent);
 
         FileUtils.deleteFile(fileRealPath);
@@ -171,7 +171,7 @@ public class BankTradeServiceImpl implements BankTradeService {
       bt.setCardNo(content[3]);
       bt.setBankName(content[4]);
 
-      // TODO 核对业务员打款基表进行核对，添加userId
+      // 核对业务员打款基表进行核对，添加userId
       setUserIdForBankTrade(bt);
 
       bankTrades.add(bt);
