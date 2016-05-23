@@ -192,41 +192,46 @@ public class OilCostServiceImpl implements OilCostService {
   @Override
   public List<OilCost> findGroupByUserId(Map<String, Object> searchParams) {
     //查询所有油补信息
-    List<OilCost> list = findAll(searchParams);
     //存储统计数据
     Map<String, OilCost> oilCostMap = new HashMap<String, OilCost>();
     // 统计后列表
     List<OilCost> oilCostList = new ArrayList<OilCost>();
-    if (list.size() < 1) {
-      return list;
-    }
-   for(OilCost action:list) {
-      String parentId = action.getParentId();
-      String userId = StringUtils.isNotEmpty(parentId)? parentId: action.getUserId();
-      OilCost o = oilCostMap.get(userId);
-      if(o==null){
+    try {
+      List<OilCost> list = findAll(searchParams);
+      if (list.size() < 1) {
+        return list;
+      }
+      for(OilCost action:list) {
+        String parentId = action.getParentId();
+        String userId = StringUtils.isNotEmpty(parentId)? parentId: action.getUserId();
+        OilCost o = oilCostMap.get(userId);
+        if(o==null){
           action.setTotalDistance(action.getDistance());
           action.setOilTotalCost(action.getOilCost());
           oilCostMap.put(userId, action);
-      }else{
-        //操作数据
-        Float totalDistance = o.getTotalDistance();
-        Float distance = action.getDistance();
-        totalDistance += distance;
-        Float oilTotalCost = o.getOilTotalCost();
-        Float oilCost = action.getOilCost();
-        oilTotalCost += oilCost;
-        o.setTotalDistance(totalDistance);
-        o.setOilTotalCost(oilTotalCost);
-
+        }else{
+          //操作数据
+          Float totalDistance = o.getTotalDistance();
+          Float distance = action.getDistance();
+          totalDistance += distance;
+          Float oilTotalCost = o.getOilTotalCost();
+          Float oilCost = action.getOilCost();
+          oilTotalCost += oilCost;
+          o.setTotalDistance(totalDistance);
+          o.setOilTotalCost(oilTotalCost);
+          
+        }
       }
+      //所有油补统计列表
+      Collection<OilCost> coc = oilCostMap.values();
+      //
+      coc.forEach(ocl->{
+        oilCostList.add(ocl);
+      });
+      
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-    //所有油补统计列表
-    Collection<OilCost> coc = oilCostMap.values();
-    //
-    coc.forEach(ocl->{
-      oilCostList.add(ocl);
-    });
 //    page = new PageImpl<OilCost>(oilCostList, pageRequest, total);
     return oilCostList;
   }
