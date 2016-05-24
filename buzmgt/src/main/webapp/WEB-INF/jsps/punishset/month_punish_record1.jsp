@@ -92,14 +92,15 @@
 <body>
 <div class="content main">
     <h4 class="page-header">
-        <i class="ico icon-puish-m"></i>月扣罚设置
+        <i class="ico icon-puish-m"></i>月扣罚记录
 
 
         <!--区域选择按钮-->
-        <div class="area-choose">
+        <%--<div class="area-choose">
             选择区域：<span>山东省</span>
             <a class="are-line" href="javascript:;">切换</a>
-        </div>
+        </div>--%>
+
 
     </h4>
     <!---选择区域，选择日期-->
