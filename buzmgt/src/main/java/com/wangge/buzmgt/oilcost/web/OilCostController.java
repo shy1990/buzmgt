@@ -88,6 +88,8 @@ public class OilCostController {
   @ResponseBody
   public String getOilCostGroupByUserId(HttpServletRequest request,
       @PageableDefault(page = 0,size=10,sort={"dateTime"},direction=Direction.DESC) Pageable pageRequest ){
+    String msg="";
+    try {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     List<OilCost> oilCostlistAll = oilCostService.findGroupByUserId(searchParams);
     List<OilCost> oilCostlist = new ArrayList<>();
@@ -103,8 +105,6 @@ public class OilCostController {
       total++;
     }
     Page<OilCost> oilCostPage = new PageImpl<OilCost>(oilCostlist, pageRequest, total);
-    String msg="";
-    try {
       msg=JSON.toJSONString(oilCostPage,SerializerFeature.DisableCheckSpecialChar);
     } catch (Exception e) {
       logger.error(e.getMessage());
@@ -126,7 +126,7 @@ public class OilCostController {
     Page<OilCost> oilCostPage = oilCostService.findAll(searchParams,pageRequest);
     String msg="";
     try {
-      msg=JSON.toJSONString(oilCostPage,SerializerFeature.DisableCheckSpecialChar);
+      msg=JSON.toJSONString(oilCostPage,SerializerFeature.DisableCheckSpecialChar).replace(" ", "").replace("\n", "");
     } catch (Exception e) {
       logger.error(e.getMessage());
     }

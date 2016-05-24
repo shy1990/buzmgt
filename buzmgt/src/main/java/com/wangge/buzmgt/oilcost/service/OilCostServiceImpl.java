@@ -61,11 +61,18 @@ public class OilCostServiceImpl implements OilCostService {
 
   @Override
   public List<OilCost> findAll(Map<String, Object> searchParams) {
-    disposeSearchParams(searchParams);
-    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<OilCost> spec = oilCostSearchFilter(filters.values(), OilCost.class);
-    List<OilCost> list=oilCostRepository.findAll(spec);
-    disposeOilCostList(list);
+    List<OilCost> list=null;
+    try {
+      
+      disposeSearchParams(searchParams);
+      Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+      Specification<OilCost> spec = oilCostSearchFilter(filters.values(), OilCost.class);
+      list=oilCostRepository.findAll(spec);
+      disposeOilCostList(list);
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+      e.printStackTrace();
+    }
 
     return list;
   }
@@ -182,10 +189,17 @@ public class OilCostServiceImpl implements OilCostService {
   @Override
   public Page<OilCost> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     disposeSearchParams(searchParams);
-    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<OilCost> spec = oilCostSearchFilter(filters.values(), OilCost.class);
-    Page<OilCost> page=oilCostRepository.findAll(spec, pageRequest);
-    disposeOilCostList(page.getContent());
+    Page<OilCost> page=null;
+    try {
+      
+      Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+      Specification<OilCost> spec = oilCostSearchFilter(filters.values(), OilCost.class);
+      page=oilCostRepository.findAll(spec, pageRequest);
+      disposeOilCostList(page.getContent());
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+      e.printStackTrace();
+    }
     return page;
   }
 
