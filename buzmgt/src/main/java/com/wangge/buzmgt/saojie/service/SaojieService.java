@@ -26,7 +26,6 @@ public interface SaojieService {
   Saojie changeOrder(int ordernum,String userId);
   
   int getRegionCount();
-  SaojieDataVo getsaojieDataList(String userId, String regionId,int pageNum,int limit);
   
   int getOrderNumById(String id);
   
@@ -34,9 +33,6 @@ public interface SaojieService {
   
   Saojie findByOrderAndSalesman(int ordernum,SalesMan salesman);
 
-  SaojieDataVo getsaojieDataList(String userId, String regionId);
-  
-  
   List<Saojie> findSaojie(SaojieStatus  status,String userId);
   Saojie findByOrderAndUserId(int order,String userId);
 }
