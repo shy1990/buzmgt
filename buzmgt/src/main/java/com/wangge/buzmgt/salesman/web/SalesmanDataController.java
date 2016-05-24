@@ -1,35 +1,20 @@
 package com.wangge.buzmgt.salesman.web;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import com.wangge.buzmgt.salesman.entity.BankCard;
+import com.wangge.buzmgt.salesman.entity.SalesmanData;
+import com.wangge.buzmgt.salesman.service.BankCardService;
+import com.wangge.buzmgt.salesman.service.SalesmanDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.wangge.buzmgt.salesman.entity.BankCard;
-import com.wangge.buzmgt.salesman.entity.SalesmanData;
-import com.wangge.buzmgt.salesman.repository.BankCardRepository;
-import com.wangge.buzmgt.salesman.service.BankCardService;
-import com.wangge.buzmgt.salesman.service.SalesmanDataService;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * controller
@@ -68,7 +53,7 @@ public class SalesmanDataController {
 			@RequestParam(value = "size", defaultValue = "3") Integer size,
 			String name) {
 		Sort sort = new Sort(Direction.DESC, "id");
-		Pageable pageable = new PageRequest(page, size, sort);
+		Pageable pageable = new PageRequest(0, 2, sort);
 		return service.findAll(name,pageable);
 //		return null;
 	}

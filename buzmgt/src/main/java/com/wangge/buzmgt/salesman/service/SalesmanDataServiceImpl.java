@@ -1,21 +1,18 @@
 package com.wangge.buzmgt.salesman.service;
 
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import com.wangge.buzmgt.salesman.entity.SalesmanData;
+import com.wangge.buzmgt.salesman.repository.SalesmanDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.wangge.buzmgt.salesman.entity.SalesmanData;
-import com.wangge.buzmgt.salesman.repository.SalesmanDataRepository;
-import com.wangge.buzmgt.salesman.service.SalesmanDataService;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 
 @Service
@@ -47,7 +44,6 @@ public class SalesmanDataServiceImpl implements SalesmanDataService{
 	 */
 	@Override
 	public Page<SalesmanData> findAll(String name,Pageable pageable) {
-		
 		if(name != null && !"".equals(name)){
 			// 通常使用 Specification 的匿名内部类
 			Specification<SalesmanData> specification = new Specification<SalesmanData>() {
@@ -64,7 +60,7 @@ public class SalesmanDataServiceImpl implements SalesmanDataService{
 				 */
 				@Override
 				public Predicate toPredicate(Root<SalesmanData> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-					Predicate predicate = cb.like(root.get("name").as(String.class), "%"+name+"%"); 
+					Predicate predicate = cb.like(root.get("name").as(String.class), "%"+name+"%");
 					return predicate;
 				}
 				
