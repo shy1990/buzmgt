@@ -473,7 +473,7 @@ a:hover {
 					$.ajax({
 						url : "salesmanData/listByPage?page=" + p+"&name="+name,
 						type : "post",
-						async : false,
+						async : false,//加载完毕再往下执行，不然也是还没有获得
 						success : function(data) {
 							totalPages1 = data.totalPages;
 							var listSalesData = data.content;//所有的SalesDate

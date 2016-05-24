@@ -42,7 +42,7 @@ public class PunishSetController {
 		PunishSet punishSet = punishSetService.findByRegionId("0");//默认的设置
 		 model.addAttribute("list", list);
 		 model.addAttribute("punishSet1", punishSet);
-		 return "punishset/ceshi";
+		 return "punishset/punish_set";
 	}
 	/**
 	 * 添加资源
@@ -91,7 +91,7 @@ public class PunishSetController {
 	}
 	/**
 	 * 区域默认  增加/修改
-	 * @param punishSet
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(value="/punishs/modify/{regionId}",method=RequestMethod.POST)
