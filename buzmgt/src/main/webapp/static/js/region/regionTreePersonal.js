@@ -157,6 +157,9 @@ function zTreeOnClick(event, treeId, treeNode) {
 	case "taskMap":
 		window.location.href='/task/addVisitMap/?regionid='+treeNode.id;
 		break;
+	case "taskAddList":
+		window.location.href='/task/addVisitList/?regionid='+treeNode.id;
+		break;
 	default:
 		window.location.href='/teammember/getSalesManList?regionId='+treeNode.id;
 		break;

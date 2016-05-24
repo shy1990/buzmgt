@@ -284,7 +284,7 @@ public class BuzmgtApplicationTests {
         System.out.println("========================="+r.getName());
       }
   }
-  @Test
+  /*@Test
   public void testSaojieData(){
     SaojieDataVo sList =  saojieService.getsaojieDataList("B37090301220","37090305",0,0);
      if(sList != null){
@@ -296,7 +296,7 @@ public class BuzmgtApplicationTests {
        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>"+sList.getTaskNum());
      }
      
-  }
+  }*/
   @Test
   public void testAAA(){
     int i = 0;

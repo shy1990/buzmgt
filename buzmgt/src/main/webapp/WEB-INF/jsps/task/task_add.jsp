@@ -62,7 +62,7 @@
 			<!--区域选择按钮-->
 			<div class="area-choose">
 				选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;"
-					onclick="getRegion(${regionId});">切换</a>
+					onclick="getChooseRegion(${regionId});">切换</a>
 				<input id="area" type="hidden" value="${regionId}">
 			</div>
 			<!--/区域选择按钮-->
@@ -208,7 +208,10 @@
 		<script src="<%=basePath%>static/visit/add-visit.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 		<script type="text/javascript">
-			
+		/*区域 */
+		function getChooseRegion(id){
+			window.location.href='/region/getPersonalRegion?id='+id+"&flag=taskAddList";
+		}
 		</script>
 </body>
 </html>
