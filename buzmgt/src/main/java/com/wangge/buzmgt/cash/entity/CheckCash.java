@@ -4,19 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 
@@ -26,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  *
  */
 @Entity
-@Table(name="SYS_BANK_TRADE")
+@Table(name="SYS_CHECK_CASH")
 public class CheckCash implements Serializable  {
 
   /**
@@ -37,91 +30,79 @@ public class CheckCash implements Serializable  {
   
 
   @Id
-  private Integer id ; //订单id
-//  @Transient
-  
+  private Integer rnid;
   private String userId;
-  @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-  @JoinColumn(name="user_Id",referencedColumnName="user_Id",insertable=false,updatable=false)
-  private List<BankTrade> bankTrades;
-  private String cardName ; //姓名
-  private String cardNo;//卡号
-  private String bankName;//开户行
- 
-  @Column(name="INCOME_MONEY")
-  private Float money; //打款款金额
-  
-  
-  @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
-  private Date createDate = new Date();//创建日期
-  
-  @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
   private Date payDate;
+  private String username;
+  
+  @Transient
+  private List<BankTrade> bankTrades;
+  
 
-  public Integer getId() {
-    return id;
+  @Transient
+  private List<WaterOrderCash> cashs;
+
+
+  
+  public Integer getRnid() {
+    return rnid;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+
+  public void setRnid(Integer rnid) {
+    this.rnid = rnid;
   }
 
-
-  public String getCardName() {
-    return cardName;
-  }
-
-  public void setCardName(String cardName) {
-    this.cardName = cardName;
-  }
-
-  public String getCardNo() {
-    return cardNo;
-  }
-
-  public void setCardNo(String cardNo) {
-    this.cardNo = cardNo;
-  }
-
-  public Float getMoney() {
-    return money;
-  }
-
-  public void setMoney(Float money) {
-    this.money = money;
-  }
-
-  public Date getCreateDate() {
-    return createDate;
-  }
-
-  public void setCreateDate(Date createDate) {
-    this.createDate = new Date();
-  }
-
-  public Date getPayDate() {
-    return payDate;
-  }
-
-  public void setPayDate(Date payDate) {
-    this.payDate = payDate;
-  }
 
   public String getUserId() {
     return userId;
   }
 
+
   public void setUserId(String userId) {
     this.userId = userId;
   }
 
-  public String getBankName() {
-    return bankName;
+
+  public Date getPayDate() {
+    return payDate;
   }
 
-  public void setBankName(String bankName) {
-    this.bankName = bankName;
+
+  public void setPayDate(Date payDate) {
+    this.payDate = payDate;
   }
+
+
+  public String getUsername() {
+    return username;
+  }
+
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+
+  public List<BankTrade> getBankTrades() {
+    return bankTrades;
+  }
+
+
+  public void setBankTrades(List<BankTrade> bankTrades) {
+    this.bankTrades = bankTrades;
+  }
+
+
+  public List<WaterOrderCash> getCashs() {
+    return cashs;
+  }
+
+
+  public void setCashs(List<WaterOrderCash> cashs) {
+    this.cashs = cashs;
+  }
+
   
   
   

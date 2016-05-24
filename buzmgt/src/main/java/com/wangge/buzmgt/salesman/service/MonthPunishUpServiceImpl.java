@@ -2,6 +2,7 @@ package com.wangge.buzmgt.salesman.service;
 
 import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
 import com.wangge.buzmgt.salesman.repository.MothPunishUpRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
