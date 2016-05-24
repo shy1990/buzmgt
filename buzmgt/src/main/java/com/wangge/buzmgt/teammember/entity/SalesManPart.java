@@ -83,7 +83,7 @@ public class SalesManPart implements Serializable {
 
 
   public String getTruename() {
-    return truename;
+    return truename.trim();
   }
 
 
