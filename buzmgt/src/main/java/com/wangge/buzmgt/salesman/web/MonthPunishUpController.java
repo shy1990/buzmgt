@@ -51,6 +51,13 @@ public class MonthPunishUpController {
         return "punishset/month_punish_record";
     }
 
+    /**
+     * 暂时用这个
+     * @param page
+     * @param size
+     * @param model
+     * @return
+     */
     @RequestMapping(value="/list2",method = RequestMethod.GET)
     public String findAll1(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                 @RequestParam(value = "size", defaultValue = "3") Integer size,Model model){
