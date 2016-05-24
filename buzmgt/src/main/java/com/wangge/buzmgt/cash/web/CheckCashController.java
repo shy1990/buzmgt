@@ -21,7 +21,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wangge.buzmgt.cash.entity.BankTrade;
+import com.wangge.buzmgt.cash.entity.CheckCash;
 import com.wangge.buzmgt.cash.service.BankTradeService;
+import com.wangge.buzmgt.cash.service.CheckCashService;
 
 @Controller
 @RequestMapping("/checkCash")
@@ -32,40 +34,26 @@ public class CheckCashController {
   private static final Logger logger = Logger.getLogger(CheckCashController.class);
 
   @Autowired
-  private BankTradeService bankTradeService;
+  private CheckCashService checkCashService;
 
-  @RequestMapping(value="/to")
+  @RequestMapping(value="/toCheckPending")
   public String toBankTrades(){
-    return "cash/bank_import";
+    return "cash/check_pending";
   }
   @RequestMapping(value = "", method = RequestMethod.GET)
   @ResponseBody
   public String getCashList(HttpServletRequest request,
-      @PageableDefault(page = 0, size = 10, sort = { "createDate","id" }, direction = Direction.DESC) Pageable pageable) {
+      @PageableDefault(page = 0, size = 10, sort = { "payDate","rnid" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-    Page<BankTrade> bankTrades = bankTradeService.findAll(searchParams, pageable);
+    Page<CheckCash> page= checkCashService.findAll(searchParams, pageable);
     String json = "";
     try {
-      json = JSON.toJSONString(bankTrades, SerializerFeature.DisableCircularReferenceDetect);
+      json = JSON.toJSONString(page, SerializerFeature.DisableCircularReferenceDetect);
     } catch (Exception e) {
       logger.error(e.getMessage());
     }
     return json;
   }
 
-  /**
-   * excel文件上传
-   *
-   * @param request
-   * @return
-   */
-  @RequestMapping(value = "/upload", method = RequestMethod.POST)
-  @ResponseBody
-  public JSONObject upload(HttpServletRequest request,@RequestParam String importDate) {
-
-    JSONObject json=bankTradeService.importExcel(request,importDate);
-    
-    return json;
-  }
 
 }

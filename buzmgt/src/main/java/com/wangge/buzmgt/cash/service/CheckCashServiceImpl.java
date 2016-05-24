@@ -76,35 +76,60 @@ public class CheckCashServiceImpl implements CheckCashService {
   public Page<CheckCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<CheckCash> spec = checkCashSearchFilter(filters.values(), CheckCash.class);
-    Page<CheckCash> checkCashPage = checkCashRepository.findAll(spec, pageRequest);
-    disposeCheckCash(checkCashPage.getContent());
+    Page<CheckCash> checkCashPage=null;
+    try {
+      checkCashPage= checkCashRepository.findAll(spec, pageRequest);
+      disposeCheckCash(checkCashPage.getContent());
+      
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+    }
     return checkCashPage;
   }
 
   public void disposeCheckCash( List<CheckCash> checkCashs){
-    checkCashs.forEach(checkCash->{
-      String userId=checkCash.getUserId();
-      if(StringUtils.isNotEmpty(userId)){
-        
-        String userName=checkCash.getUsername();
-        String payDate=DateUtil.date2String(checkCash.getPayDate());
-        //TODO 查询银行导入数据
-        Map<String, Object> secp=new HashMap<>();
-        
-        secp.put("EQ_userId", userId);
-        secp.put("EQ_payDate", payDate);
-        List<BankTrade> bankTrades =bankTradeService.findAll(secp);
-        secp.remove("EQ_payDate");
-        checkCash.setBankTrades(bankTrades);
-        
-        //TODO 查询流水单号
-        secp.put("EQ_createDate", payDate);
-        List<WaterOrderCash> wocs =cashService.findAll(secp);
-        checkCash.setCashs(wocs);
-        
-        
-      }
-    });
+    try {
+      
+      checkCashs.forEach(checkCash->{
+        String userId=checkCash.getUserId();
+        if(StringUtils.isNotEmpty(userId)){
+          
+          String userName=checkCash.getUsername();
+          String payDate=DateUtil.date2String(checkCash.getPayDate());
+          //TODO 查询银行导入数据
+          Map<String, Object> secp=new HashMap<>();
+          
+          secp.put("EQ_userId", userId);
+          secp.put("EQ_payDate", payDate);
+          List<BankTrade> bankTrades =bankTradeService.findAll(secp);
+          secp.remove("EQ_payDate");
+          checkCash.setBankTrades(bankTrades);
+          
+          //TODO 查询流水单号
+          secp.put("EQ_createDate", payDate);//划分时间
+          List<WaterOrderCash> wocs =cashService.findAll(secp);
+          checkCash.setCashs(wocs);
+          
+          disposeWaterOrderCash(wocs,checkCash);
+          //TODO 查询是否扣罚
+          
+          
+          
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
+    }
+  }
+  //计算流水单号总收现金额
+  public void disposeWaterOrderCash(List<WaterOrderCash> wocs,CheckCash cc){
+    Float payMoney=new Float(0);
+    for(WaterOrderCash woc:wocs){
+      payMoney+=woc.getCashMoney();
+    }
+    cc.setCashMoney(payMoney);
+    
   }
   @Override
   public List<CheckCash> findByCreateDate(String createDate) {
