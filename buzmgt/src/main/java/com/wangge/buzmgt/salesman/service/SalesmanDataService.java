@@ -14,6 +14,7 @@ public interface SalesmanDataService {
 	public Page<SalesmanData> findAll(Specification specification,Pageable pageable);
 	public Page<SalesmanData> findAll(String name,Pageable pageable);
 	public SalesmanData findById(Long id);
+	public SalesmanData findByNameAndCard_cardNumber(String name,String cardNu);
 	public void deleteById(Long id);
 
 }

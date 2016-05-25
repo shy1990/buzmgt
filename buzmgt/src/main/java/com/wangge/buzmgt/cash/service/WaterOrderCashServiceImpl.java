@@ -27,6 +27,7 @@ import com.wangge.buzmgt.cash.repository.WaterOrderCashRepository;
 import com.wangge.buzmgt.cash.repository.WaterOrderDetailRepository;
 import com.wangge.buzmgt.receipt.entity.RemarkStatusEnum;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 
 @Service
@@ -147,7 +148,7 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
               break;
             case LIKE:
               predicates.add(cb.like(expression, "%" + filter.value + "%"));
-
+              
               break;
             case GT:
               if (javaTypeName.equals(TYPE_DATE)) {

@@ -31,9 +31,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wangge.buzmgt.cash.entity.CheckCash;
+import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
-import com.wangge.buzmgt.cash.repository.BankTradeRepository;
+import com.wangge.buzmgt.cash.repository.CheckCashRepository;
+import com.wangge.buzmgt.cash.repository.CheckCashRepository;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.entity.BankCard;
 import com.wangge.buzmgt.salesman.entity.SalesmanData;
@@ -44,174 +47,101 @@ import com.wangge.buzmgt.util.excel.ExcelImport;
 import com.wangge.buzmgt.util.file.FileUtils;
 
 @Service
-public class BankTradeServiceImpl implements BankTradeService {
+public class CheckCashServiceImpl implements CheckCashService {
 
   @Value("${buzmgt.file.fileUploadPath}")
   private String fileUploadPath;
 
-  private static final Logger logger = Logger.getLogger(BankTradeServiceImpl.class);
+  private static final Logger logger = Logger.getLogger(CheckCashServiceImpl.class);
   @Resource
-  private BankTradeRepository bankTradeRepository;
-  @Resource
-  private SalesmanDataService dataService;
+  private CheckCashRepository checkCashRepository;
   @Resource
   private RegionService regionService;
+  @Resource
+  private WaterOrderCashService cashService;
+  @Resource
+  private BankTradeService bankTradeService;
+  
 
   @Override
-  public List<BankTrade> findAll(Map<String, Object> searchParams) {
+  public List<CheckCash> findAll(Map<String, Object> searchParams) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<BankTrade> spec = bankTradeSearchFilter(filters.values(), BankTrade.class);
-    List<BankTrade> bankTrades = bankTradeRepository.findAll(spec);
-    return bankTrades;
+    Specification<CheckCash> spec = checkCashSearchFilter(filters.values(), CheckCash.class);
+    List<CheckCash> checkCashs = checkCashRepository.findAll(spec);
+    return checkCashs;
 
   }
 
   @Override
-  public Page<BankTrade> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
+  public Page<CheckCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<BankTrade> spec = bankTradeSearchFilter(filters.values(), BankTrade.class);
-    Page<BankTrade> bankTradePage = bankTradeRepository.findAll(spec, pageRequest);
-    return bankTradePage;
-  }
-
-  @Override
-  public List<BankTrade> findByCreateDate(String createDate) {
-    return null;
-  }
-
-  @Override
-  public JSONObject importExcel(HttpServletRequest request, String importDate) {
-
-    JSONObject jsonObject = new JSONObject();
-
-    MultipartHttpServletRequest mReq;
-    MultipartFile file;
-    InputStream is;
-
-    // 原始文件名称
-    String fileName;
-
-    String fileRealPath = "";
+    Specification<CheckCash> spec = checkCashSearchFilter(filters.values(), CheckCash.class);
+    Page<CheckCash> checkCashPage=null;
     try {
-
-      mReq = (MultipartHttpServletRequest) request;
-
-      // 获取文件
-      file = mReq.getFile("file-input");
-
-      // 取得文件的原始文件名称
-      fileName = file.getOriginalFilename();
-
-      logger.info("取得原始文件名:" + fileName);
-
-      String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-      logger.info("原始文件的后缀名:" + suffix);
-
-      if (!"xlsx".equals(suffix) && !"xls".equals(suffix)) {
-        jsonObject.put("result", "failure");
-        jsonObject.put("message", "文件类型错误，请选择xlsx类型的文件");
-
-        FileUtils.deleteFile(fileUploadPath + fileName);
-
-        return jsonObject;
-      }
-
-      if (!StringUtils.isEmpty(fileName)) {
-        is = file.getInputStream();
-
-        fileName = FileUtils.reName(fileName);
-
-        logger.info("重新命名后的文件名:" + fileName);
-
-        FileUtils.saveFile(fileName, is, fileUploadPath);
-
-        fileRealPath = fileUploadPath + fileName;
-
-        // 文件上传完成后，读取文件
-        Map<Integer, String> excelContent = ExcelImport.readExcelContent(fileRealPath);
-
-        // ============读取文件完成后，导入到数据库=============
-        Map<String, Object> searchParams = new HashMap<>();
-        searchParams.put("EQ_payDate", importDate);
-        List<BankTrade> bankTrades = this.findAll(searchParams);
-        if (bankTrades.size() > 0) {
-          this.delete(bankTrades);
-        }
-        //TODO 查询数据是否已经归档，否则不能经行导入保存。
-        this.save(excelContent);
-
-        FileUtils.deleteFile(fileRealPath);
-
-        jsonObject.put("result", "success");
-      } else {
-        throw new IOException("文件名为空!");
-      }
-
+      checkCashPage= checkCashRepository.findAll(spec, pageRequest);
+      disposeCheckCash(checkCashPage.getContent());
+      
     } catch (Exception e) {
-      FileUtils.deleteFile(fileRealPath);
-      jsonObject.put("result", "failure");
       logger.info(e.getMessage());
-      return jsonObject;
-
     }
-    return jsonObject;
+    return checkCashPage;
   }
 
+  public void disposeCheckCash( List<CheckCash> checkCashs){
+    try {
+      
+      checkCashs.forEach(checkCash->{
+        String userId=checkCash.getUserId();
+        if(StringUtils.isNotEmpty(userId)){
+          
+          String userName=checkCash.getUsername();
+          String payDate=DateUtil.date2String(checkCash.getPayDate());
+          //TODO 查询银行导入数据
+          Map<String, Object> secp=new HashMap<>();
+          
+          secp.put("EQ_userId", userId);
+          secp.put("EQ_payDate", payDate);
+          List<BankTrade> bankTrades =bankTradeService.findAll(secp);
+          secp.remove("EQ_payDate");
+          checkCash.setBankTrades(bankTrades);
+          
+          //TODO 查询流水单号
+          secp.put("EQ_createDate", payDate);//划分时间
+          List<WaterOrderCash> wocs =cashService.findAll(secp);
+          checkCash.setCashs(wocs);
+          
+          disposeWaterOrderCash(wocs,checkCash);
+          //TODO 查询是否扣罚
+          
+          
+          
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
+    }
+  }
+  //计算流水单号总收现金额
+  public void disposeWaterOrderCash(List<WaterOrderCash> wocs,CheckCash cc){
+    Float payMoney=new Float(0);
+    for(WaterOrderCash woc:wocs){
+      payMoney+=woc.getCashMoney();
+    }
+    cc.setCashMoney(payMoney);
+    
+  }
   @Override
-  public List<BankTrade> save(Map<Integer, String> excelContent) {
-    List<BankTrade> bankTrades = new ArrayList<>();
-    excelContent.forEach((integer, s) -> {
-      BankTrade bt = new BankTrade();
-      String[] content = s.split("-->");
-      bt.setPayDate(DateUtil.string2Date(content[0]));
-      Float money = content[1] == "" ? new Float(0) : new Float(content[1]);
-      bt.setMoney(money);
-      bt.setCardName(content[2]);
-      bt.setCardNo(content[3]);
-      bt.setBankName(content[4]);
-
-      // 核对业务员打款基表进行核对，添加userId
-      setUserIdForBankTrade(bt);
-
-      bankTrades.add(bt);
-
-    });
-    this.save(bankTrades);
-
+  public List<CheckCash> findByCreateDate(String createDate) {
     return null;
   }
 
-  public void setUserIdForBankTrade(BankTrade bankTrade) {
-    String userId = null;
-    String CardName = bankTrade.getCardName();
-    String CardNo = bankTrade.getCardNo();
-    SalesmanData s = dataService.findByNameAndCard_cardNumber(CardName,CardNo);
-    if (s != null) {
-      List<BankCard> bankCards = s.getCard();
-      for (BankCard bc : bankCards) {
-        if (CardNo.equals(bc.getCardNumber())) {
-          userId = s.getUserId();
-        }
-      }
-    }
-    bankTrade.setUserId(userId);
-  }
 
-  @Override
-  public List<BankTrade> save(List<BankTrade> bankTrades) {
-    return bankTradeRepository.save(bankTrades);
-  }
+  
+  private static Specification<CheckCash> checkCashSearchFilter(final Collection<SearchFilter> filters,
+      final Class<CheckCash> entityClazz) {
 
-  @Override
-  public void delete(List<BankTrade> bankTrades) {
-    bankTradeRepository.delete(bankTrades);
-  }
-
-  private static Specification<BankTrade> bankTradeSearchFilter(final Collection<SearchFilter> filters,
-      final Class<BankTrade> entityClazz) {
-
-    return new Specification<BankTrade>() {
+    return new Specification<CheckCash>() {
 
       private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
 
@@ -225,7 +155,7 @@ public class BankTradeServiceImpl implements BankTradeService {
 
       @SuppressWarnings({ "rawtypes", "unchecked" })
       @Override
-      public Predicate toPredicate(Root<BankTrade> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+      public Predicate toPredicate(Root<CheckCash> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         if (CollectionUtils.isNotEmpty(filters)) {
           List<Predicate> predicates = new ArrayList<Predicate>();
           for (SearchFilter filter : filters) {

@@ -27,4 +27,6 @@ public interface SalesmanDataRepository extends PagingAndSortingRepository<Sales
 	public int deleteById(Long id);//根据删除
 	
 	public SalesmanData findById(Long id);
+	public List<SalesmanData> findByName(String name);
+  public SalesmanData findByNameAndCard_cardNumber(String name,String cardNu);
 }

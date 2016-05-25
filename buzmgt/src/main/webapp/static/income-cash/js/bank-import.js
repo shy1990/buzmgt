@@ -1,41 +1,27 @@
 var bankTradeTotal = 0;
+var firstImportDate;
 $(function() {
 	nowTime();// 初始化日期
 	findBankTradeList();// 查询列表
 	initFileUpload();
-	$("#file-input").fileinput();
-    $('#file-input').on('filebrowse', function(event) {
-    	var importDate=$('#importDate').val();
-    	if(isEmpty(importDate)){
-    		alert("请选择导入日期");
-    		return false;
-    	}
-    	
-    	$("#file-input").fileinput({
-    		language: 'zh',
-    		uploadUrl: '/bankTrade/upload?importDate='+importDate, // you must set a valid URL here else you will get an error
-    		allowedFileExtensions : ['xls','xlsx'],
-    		overwriteInitial: false,
-    		showUpload: false, //是否显示上传按钮
-    		showCaption: false,//是否显示标题
-    		slugCallback: function(filename) {
-    			return filename.replace('(', '_').replace(']', '_');
-    		}
-    	});
-    });
-    
-    $('#file-input').on('filepreupload', function(event, data, previewId, index) {
-    	var importDate=$('#importDate').val();
-    	if(isEmpty(importDate)){
-    		alert("请选择导入日期");
-    		return false;
-    	}
-    });
-    
-    $("#file-input").on("fileuploaded",function(event, data, previewId, index){
-    	$('#daoru').model('hide');
-    	alert("ok");
-    });
+
+	$('#importDate').datetimepicker({
+		format : "yyyy-mm-dd",
+		language : 'zh-CN',
+		endDate : '2016-05-22',
+		weekStart : 1,
+		todayBtn : false,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 2,
+		minView : 2,
+		pickerPosition : "bottom-right",
+		forceParse : 0
+	}).on('changeDate', function(ev) {
+		var importDate = $('#importDate').val();
+		firstImportDate=importDate;
+	});
+
 })
 
 /**
@@ -43,32 +29,42 @@ $(function() {
  */
 function initFileUpload() {
     // 文件上传
-//    $('.file').fileupload({
-//        dataType: 'json',
-//        add: function (e, data) {
-//            $("#uploadFileDiv").show();
-//            $("#uploadFile").on("click", function () {
-//                if (!checkDataDate()) {
-//                    alert("请选择数据时间!");
-//                    return;
-//                }
-//
-//                $('#message').text('上传中');
-//
-//                // 修改fileupload插件上传时的url，带参数。
-//                $("#file").fileupload('option', 'url', '/bankTrade/upload?&importDate=' + $("#importDate").val());
-//
-//                data.submit();
-//            });
-//        },
-//        done: function (e, data) {
-//            if (data.result.result == "failure") {
-//                $('#message').text(data.result.message);
-//            }
-//
-//            $('#message').text("上传完成");
-//        }
-//    });
+	$("#file-input").fileinput({
+		language : 'zh',
+		uploadUrl : '/bankTrade/upload?importDate='+importDate, 
+		allowedFileExtensions : [ 'xls', 'xlsx' ],
+		showPreview : false,
+		showUpload: false,
+		dropZoneEnabled: false,
+	});
+    $('#file-input').fileupload({
+        dataType: 'json',
+        add: function (e, data) {
+            $("#uploadFileDiv").show();
+            $("#uploadFile").on("click", function () {
+            	var importDate=$("#importDate").val();
+            	firstImportDate=importDate;
+                if (isEmpty(importDate)) {
+                    alert("请选择数据时间!");
+                    return;
+                }
+                // 修改fileupload插件上传时的url，带参数。
+                $("#file-input").fileupload('option', 'url', '/bankTrade/upload?importDate=' + importDate);
+
+                data.submit();
+            });
+        },
+        done: function (e, data) {
+            if (data.result.result == "failure") {
+                $('#message').text(data.result.message);
+            }
+            $('#file-input').fileinput('clear');
+            $('#daoru').modal('hide');
+            $('#searchDate').val(firstImportDate);
+            goSearch();
+            alert("上传完成");
+        }
+    });
 }
 
 /**
@@ -79,8 +75,8 @@ function nowTime() {
 	var nowDate = changeDateToString(newDate);
 	SearchData['sc_EQ_payDate'] = nowDate;
 	$('#searchDate').val(nowDate)
+	return nowDate;
 }
-
 
 /**
  * 检索
@@ -95,19 +91,16 @@ function goSearch() {
 /**
  * 导出
  */
-$('#table-export').on(
-		'click',
-		function() {
-			var startTime = $('#startTime').val();
-			if (!isEmpty(startTime)) {
+$('#table-export').on('click', function() {
+	var startTime = $('#startTime').val();
+	if (!isEmpty(startTime)) {
 
-				SearchData['sc_EQ_payDate'] = startTime;
+		SearchData['sc_EQ_payDate'] = startTime;
 
-					window.location.href = base + ""
-							+ conditionProcess();
-			}
+		window.location.href = base + "" + conditionProcess();
+	}
 
-		});
+});
 function findTab() {
 	var tab = $('#oilCostStatus li.active').attr('data-tital');
 	return tab;
@@ -186,21 +179,21 @@ Handlebars.registerHelper('formDate', function(value) {
  */
 function findBySalesManName() {
 	var salesmanName = $('#salesmanName').val();
-		$.ajax({
-//			url : base+"/bankTrade?sc_EQ_salesManName=" + salesmanName,
-			type : "GET",
-			dataType : "json",
-			success : function(orderData) {
-				if (orderData.totalElements < 1) {
-					alert("未查到相关信息！");
-					return false;
-				}
-				createBankTradeTable(orderData);
-			},
-			error : function() {
-				alert("系统异常，请稍后重试！");
+	$.ajax({
+		// url : base+"/bankTrade?sc_EQ_salesManName=" + salesmanName,
+		type : "GET",
+		dataType : "json",
+		success : function(orderData) {
+			if (orderData.totalElements < 1) {
+				alert("未查到相关信息！");
+				return false;
 			}
-		})
+			createBankTradeTable(orderData);
+		},
+		error : function() {
+			alert("系统异常，请稍后重试！");
+		}
+	})
 }
 /**
  * 判读是否为空
@@ -234,24 +227,4 @@ $('#searchDate').datetimepicker({
 		}
 	}
 });
-$('#importDate').datetimepicker({
-	format : "yyyy-mm-dd",
-	language : 'zh-CN',
-	endDate : new Date(),
-	weekStart : 1,
-	todayBtn : 1,
-	autoclose : 1,
-	todayHighlight : 1,
-	startView : 2,
-	minView : 2,
-	pickerPosition : "bottom-right",
-	forceParse : 0
-}).on('changeDate', function(ev) {
-	var startInputDateStr = $('#startTime').val();
-	if (startInputDateStr != "" && startInputDateStr != null) {
-		var startInputDate = stringToDate(startInputDateStr).valueOf();
-		if (ev.date.valueOf() - startInputDate < 0) {
-			$('.form_date_end').addClass('has-error');
-		}
-	}
-});
+

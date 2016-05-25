@@ -240,13 +240,10 @@ a:hover {
 										<div class="col-sm-7">
 											<div class="input-group are-line">
 
-												<div class="input-group are-line">
 													<span class="input-group-addon"><i
 														class="icon icon-xm"></i></span> <input name="name" type="text"
 														class="form-control input-h"
 														aria-describedby="basic-addon1"> </input>
-												</div>
-
 											</div>
 										</div>
 									</div>
