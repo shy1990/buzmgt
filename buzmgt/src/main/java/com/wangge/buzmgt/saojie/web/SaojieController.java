@@ -154,7 +154,7 @@ public class SaojieController {
 	@RequestMapping(value = "/gainSaojieMan",method = RequestMethod.POST)
 	@ResponseBody
 	public List<Object> gainSaojieMan(){
-	  List<Object> salesman = salesManService.gainSaojieMan();
+	  List<Object> salesman = salesManService.gainSaojieMan(SalesmanStatus.saojie);
 	  return salesman;
 	}
 	

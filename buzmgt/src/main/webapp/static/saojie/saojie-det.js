@@ -1,5 +1,6 @@
 var total = 0;
 var $_btnText;
+var userId;
 $(function(){
 	$('#callBackPager').hide();
 	//地图和列表切换
@@ -16,9 +17,7 @@ $(function(){
 			$('#callBackPager').show();
 			$('.saojie-list').slideDown(500);
 			//执行列表
-			var userId = $("#userId").html();
 			var regionId = $("#regionId").val();
-			searchData['userId'] = userId;
 			searchData['regionId'] = regionId;
 			
 			ajaxSearchByRegion();
@@ -26,13 +25,15 @@ $(function(){
 	})
 	//先加载地图数据
 	$_btnText = "地图";
+	userId = $("#userId").html();
+	searchData['userId'] = userId;
 	ajaxSearchByRegion();
 });
-
+var regionid;
 //选择地区下拉框触发
 function ajaxSearchByRegion(saojieId){
-	searchData['saojieId'] = $("#saojieId").val();
-	var regionid = $("#regionId  option:selected").val();
+//	searchData['saojieId'] = $("#saojieId").val();
+	regionid = $("#regionId  option:selected").val();
 	searchData['regionId'] = regionid;
 	ajaxSearch(searchData);
 }
@@ -44,8 +45,11 @@ var opts = {
 			enableMessage:true//设置允许信息窗发送短息
 		   };
 var map = new BMap.Map("allmap");
+var areaName = "";
 function ajaxSearch(searchData) {
 	if("地图"===$_btnText){
+		delete searchData['page'];
+		delete searchData['size'];
 		$.ajax({
 			url : base + "teammember/getSaojiedataMap",
 			type : "GET",
@@ -57,9 +61,9 @@ function ajaxSearch(searchData) {
 			dataType : "json",
 			success : function(data) {
 				map.clearOverlays();
-				$(".shopNum").text(data.shopNum);
+				/*$(".shopNum").text(data.shopNum);
 				$(".percent").text(data.percent); 
-				$("#percent").width(data.percent);
+				$("#percent").width(data.percent);*/
 				map.centerAndZoom(data.areaName, 13);
 				// map.centerAndZoom("上海",11);
 				// 添加带有定位的导航控件
@@ -93,9 +97,7 @@ function ajaxSearch(searchData) {
 				var arr = new Array(); //创建数组
 				$.each(data.list,function(n,items){
 					var coor = items.coordinate;
-					alert(coor);
 					if(coor != null && coor != ""){
-						arr = coor.split("-");
 		                for (var j = 0;j < arr.length;j++){
 		                	marker = new BMap.Marker(new BMap.Point(arr[0],arr[1]));// 拿到坐标点
 		                }

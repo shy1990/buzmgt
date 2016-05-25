@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 
 public interface SalesManRepository extends JpaRepository<SalesMan,String>{
 
@@ -19,8 +20,9 @@ public interface SalesManRepository extends JpaRepository<SalesMan,String>{
 
   SalesMan findById(String id);
   
-  //@Query("select s.id,s.truename,s.mobile,s.regdate from SalesMan s where s.SalesmanStatus=1")
   @Query("select s.id,s.truename,s.mobile,s.regdate from SalesMan s")
   List<Object> gainSaojieMan();
   
+  @Query("select s.id,s.truename,s.mobile,s.regdate from SalesMan s where s.status=?1")
+  List<Object> getSaojieMan(SalesmanStatus status);
 }

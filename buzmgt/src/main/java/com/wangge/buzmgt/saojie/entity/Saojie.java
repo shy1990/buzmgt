@@ -29,12 +29,14 @@ import javax.persistence.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Entity
 @Table(name = "SYS_SAOJIE")
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler","fieldHandler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Saojie implements Serializable {
 	private static final long serialVersionUID = 1L;
