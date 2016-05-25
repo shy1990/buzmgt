@@ -22,7 +22,7 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
 <link rel="stylesheet" type="text/css"
-	href="static/income-cash/css/income-cash.css">
+	href="static/incomeCash/css/income-cash.css">
 <link rel="stylesheet" type="text/css"
 	href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
@@ -233,7 +233,7 @@ var	base='<%=basePath%>';
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script type="text/javascript"
-		src="/static/income-cash/js/water-order-list.js" charset="utf-8"></script>
+		src="/static/incomeCash/js/water-order-list.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		
 	</script>

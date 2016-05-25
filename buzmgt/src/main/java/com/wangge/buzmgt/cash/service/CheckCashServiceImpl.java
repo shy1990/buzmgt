@@ -127,10 +127,13 @@ public class CheckCashServiceImpl implements CheckCashService {
   //计算打款总金额
   public void disposeBankTrade(List<BankTrade> bankTrades,CheckCash cc){
     Float incomeMoney=new Float(0);
+    String cardName="";
     for(BankTrade woc:bankTrades){
       incomeMoney+=woc.getMoney();
+      cardName=woc.getCardName();
     }
     cc.setIncomeMoney(incomeMoney);
+    cc.setCardName(cardName);
     
   }
   @Override

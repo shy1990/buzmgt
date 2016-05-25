@@ -36,9 +36,12 @@ public class CheckCash implements Serializable  {
   private String userId;
   private Date createDate;
   private Float cashMoney=new Float(0);//收现金额
-  
+  @Transient
+  private String cardName;
   @Transient
   private Float incomeMoney=new Float(0);//打款金额
+  @Transient
+  private Float shouldPayMoney=new Float(0);//应付金额
   @Transient
   private Float debtMoney=new Float(0);//欠款金额（欠款+扣罚）
   @Transient
@@ -56,6 +59,16 @@ public class CheckCash implements Serializable  {
 
   
   
+  public String getCardName() {
+    return cardName;
+  }
+
+
+  public void setCardName(String cardName) {
+    this.cardName = cardName;
+  }
+
+
   public Float getIncomeMoney() {
     return incomeMoney;
   }
@@ -63,6 +76,17 @@ public class CheckCash implements Serializable  {
 
   public void setIncomeMoney(Float incomeMoney) {
     this.incomeMoney = incomeMoney;
+  }
+
+
+  public Float getShouldPayMoney() {
+    shouldPayMoney=cashMoney+debtMoney;
+    return shouldPayMoney;
+  }
+
+
+  public void setShouldPayMoney(Float shouldPayMoney) {
+    this.shouldPayMoney = shouldPayMoney;
   }
 
 

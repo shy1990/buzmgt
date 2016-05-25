@@ -23,7 +23,7 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
 <link rel="stylesheet" type="text/css"
-	href="static/income-cash/css/income-cash.css">
+	href="static/incomeCash/css/income-cash.css">
 <link rel="stylesheet" type="text/css"
 	href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
@@ -191,7 +191,7 @@ var	base='<%=basePath%>';
 <script src="static/js/jqueryfileupload/js/jquery.iframe-transport.js"></script>
 <script src="static/js/jqueryfileupload/js/jquery.fileupload.js"></script>
 	<script type="text/javascript"
-		src="static/income-cash/js/bank-import.js" charset="utf-8"></script>
+		src="static/incomeCash/js/bank-import.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		
 	</script>
