@@ -78,7 +78,6 @@
                 currentObj = pageObj.find('li').not('.previous,.disabled,.next'),
                 nextObj = pageObj.find('li.next'),gotoObj=$(this).find('a.goto'),
                 firstObj=pageObj.find('li.firstPage'),lastObj=pageObj.find('li.lastPage');
-            	console.info(firstObj+","+lastObj);
             
             function loopPageElement(minPage, maxPage) {
                 var tempObj = preObj.next().next();
@@ -227,6 +226,9 @@
                     }
                 });
             });
+        }else{
+        	//清除原有分页
+        	$(this).html("");
         }
     };
 })(jQuery);

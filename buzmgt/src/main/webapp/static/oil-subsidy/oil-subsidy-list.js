@@ -152,7 +152,9 @@ function findOilCostList(page) {
 		dataType : "json",
 		success : function(orderData) {
 			createOilCostTable(orderData);
-			var searchTotal = orderData.totalElements;
+			var searchTotal = orderData.totalPages;
+			console.info(oilCostTotal);
+			console.info(searchTotal);
 			if (searchTotal != oilCostTotal || searchTotal == 0) {
 				oilCostTotal = searchTotal;
 
@@ -291,47 +293,33 @@ function getRegion(id){
 /**
  * 根据订单号查询
  */
-function findByOrderNo(){
-	var tab=findTab();
-	var orderNo=$('#orderNo').val();
-	switch (tab) {
-	case 'reported':
+function findBySalesmanName(){
+	var sname=$('#salesmanName').val();
+	var userId="";
+	if(!isEmpty(sname)){
 		$.ajax({
-			url : "/receiptRemark/remarkList?sc_EQ_orderno="+orderNo,
-			type : "GET",
-			dataType : "json",
-			success : function(orderData) {
-				if(orderData.totalElements<1){
-					alert("报备订单中，未查到地订单！");
-					return false;
+			url:base+"/teammember/"+sname,
+			type:"GET",
+			dataType:"text",
+			success:function(data){
+				
+				userId=data;
+				if(!isEmpty(userId)){
+					SearchData['sc_EQ_userId']=userId;
+					goSearch();
+					delete SearchData['sc_EQ_userId'];
+				}else{
+					alert("未找到该业务员");
 				}
-				createRemarkedTable(orderData);
 			},
-			error : function() {
-				alert("系统异常，请稍后重试！");
+			error:function(data){
+				alert(data);
 			}
+		
+			
 		})
-		break;
-	case 'notreported':
-		$.ajax({
-			url : "/receiptRemark/notRemarkList?sc_EQ_orderNo="+orderNo,
-			type : "GET",
-			dataType : "json",
-			success : function(orderData) {
-				if(orderData.totalElements<1){
-					alert("未报备订单中，未查到此订单！");
-					return false;
-				}
-				createNotRemarkedTable(orderData);
-			},
-			error : function() {
-				alert("系统异常，请稍后重试！");
-			}
-		})
-		break;
-	default:
-		break;
 	}
+	
 }
 /**
  * 判读是否为空
