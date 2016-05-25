@@ -202,6 +202,7 @@
     select();
 </script>
 <script>
+    <%--js以后加到js文件（注解改完以后）--%>
     $(function(){
         zhixing();
     });
