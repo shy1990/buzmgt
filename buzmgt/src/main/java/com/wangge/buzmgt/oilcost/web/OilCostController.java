@@ -157,7 +157,8 @@ public class OilCostController {
   public String showDetailList(@PathVariable("Id") Long id,Model model,HttpServletRequest request){
 //    oilCostService.disposeOilCostRecord(oilCost);//处理数据
     OilCost oc=oilCostService.findOne(id);
-    SalesMan salesMan= salesManService.findById(oc.getUserId());
+    String parentId= oc.getParentId();
+    SalesMan salesMan= salesManService.findById(parentId==null?oc.getUserId():parentId);
     model.addAttribute("oilCost", oc);
     model.addAttribute("salesMan", salesMan);
     return "oilsubsidy/oil_subsidy_detail";
