@@ -117,12 +117,29 @@ var SearchData = {
             <div class="abnormal-body box border blue">
                 <!--title-->
                 <div class="box-title">
+                	<div class="row">
+                  <div class="col-md-6">
                     <!--菜单栏-->
                     <ul id="oilCostStatus" class="nav nav-tabs">
                         <li class="active" data-tital="all"><a href="#box_tab1" data-toggle="tab"><span class="">全部</span></a></li>
                         <li data-tital="coords"><a href="#box_tab2" data-toggle="tab"><span class="">异常坐标</span></a></li>
                     </ul>
                     <!--/菜单栏-->
+                  </div>  
+                  <div class="col-md-6">
+                  <!-- 搜索输入框 -->
+                    <div class="form-group title-form remark-title">
+											<div class="input-group ">
+												<input type="text" class="form-control"
+													id="salesmanName" placeholder="请输入业务员名称">
+												<a class="input-group-addon"onclick="findBySalesmanName();"> <i
+													class="icon icon-finds"></i>
+												</a>
+											</div>
+										</div>
+                  <!-- 搜索输入框 -->
+                  </div>  
+                	</div>
                 </div>
                 <!--title-->
                 <!--box-body-->
