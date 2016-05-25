@@ -164,17 +164,20 @@ public class BankTradeServiceImpl implements BankTradeService {
     excelContent.forEach((integer, s) -> {
       BankTrade bt = new BankTrade();
       String[] content = s.split("-->");
-      bt.setPayDate(DateUtil.string2Date(content[0]));
-      Float money = content[1] == "" ? new Float(0) : new Float(content[1]);
-      bt.setMoney(money);
-      bt.setCardName(content[2]);
-      bt.setCardNo(content[3]);
-      bt.setBankName(content[4]);
-
-      // 核对业务员打款基表进行核对，添加userId
-      setUserIdForBankTrade(bt);
-
-      bankTrades.add(bt);
+      if(!"空".equals(content[0])){
+        
+        bt.setPayDate(DateUtil.string2Date(content[0]));
+        Float money = content[1] == "" ? new Float(0) : new Float(content[1]);
+        bt.setMoney(money);
+        bt.setCardName(content[2]);
+        bt.setCardNo(content[3]);
+        bt.setBankName(content[4]);
+        
+        // 核对业务员打款基表进行核对，添加userId
+        setUserIdForBankTrade(bt);
+        
+        bankTrades.add(bt);
+      }
 
     });
     this.save(bankTrades);

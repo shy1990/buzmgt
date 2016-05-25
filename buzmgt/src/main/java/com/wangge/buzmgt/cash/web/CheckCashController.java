@@ -43,7 +43,7 @@ public class CheckCashController {
   @RequestMapping(value = "", method = RequestMethod.GET)
   @ResponseBody
   public String getCashList(HttpServletRequest request,
-      @PageableDefault(page = 0, size = 10, sort = { "payDate","rnid" }, direction = Direction.DESC) Pageable pageable) {
+      @PageableDefault(page = 0, size = 10, sort = { "createDate","rnid" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<CheckCash> page= checkCashService.findAll(searchParams, pageable);
     String json = "";

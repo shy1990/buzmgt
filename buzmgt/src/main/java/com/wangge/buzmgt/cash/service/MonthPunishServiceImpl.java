@@ -1,5 +1,7 @@
 package com.wangge.buzmgt.cash.service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,136 +16,71 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.wangge.buzmgt.cash.entity.CheckCash;
-import com.wangge.buzmgt.cash.entity.MonthPunish;
-import com.wangge.buzmgt.cash.entity.WaterOrderCash;
+import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
-import com.wangge.buzmgt.cash.repository.CheckCashRepository;
+import com.wangge.buzmgt.cash.entity.MonthPunish;
+import com.wangge.buzmgt.cash.repository.BankTradeRepository;
+import com.wangge.buzmgt.cash.repository.MonthPunishRepository;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.salesman.entity.BankCard;
+import com.wangge.buzmgt.salesman.entity.SalesmanData;
+import com.wangge.buzmgt.salesman.service.SalesmanDataService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
+import com.wangge.buzmgt.util.excel.ExcelImport;
+import com.wangge.buzmgt.util.file.FileUtils;
 
 @Service
-public class CheckCashServiceImpl implements CheckCashService {
+public class MonthPunishServiceImpl implements MonthPunishService {
 
   @Value("${buzmgt.file.fileUploadPath}")
   private String fileUploadPath;
 
-  private static final Logger logger = Logger.getLogger(CheckCashServiceImpl.class);
+  private static final Logger logger = Logger.getLogger(MonthPunishServiceImpl.class);
   @Resource
-  private CheckCashRepository checkCashRepository;
+  private MonthPunishRepository monthPunishRepository;
+  @Resource
+  private SalesmanDataService dataService;
   @Resource
   private RegionService regionService;
-  @Resource
-  private WaterOrderCashService cashService;
-  @Resource
-  private BankTradeService bankTradeService;
-  @Resource
-  private MonthPunishService monthPunishService;
-  
 
   @Override
-  public List<CheckCash> findAll(Map<String, Object> searchParams) {
+  public List<MonthPunish> findAll(Map<String, Object> searchParams) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<CheckCash> spec = checkCashSearchFilter(filters.values(), CheckCash.class);
-    List<CheckCash> checkCashs = checkCashRepository.findAll(spec);
-    return checkCashs;
+    Specification<MonthPunish> spec = monthPunishSearchFilter(filters.values(), MonthPunish.class);
+    List<MonthPunish> list = monthPunishRepository.findAll(spec);
+    return list;
 
   }
 
   @Override
-  public Page<CheckCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
+  public Page<MonthPunish> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<CheckCash> spec = checkCashSearchFilter(filters.values(), CheckCash.class);
-    Page<CheckCash> checkCashPage=null;
-    try {
-      checkCashPage= checkCashRepository.findAll(spec, pageRequest);
-      disposeCheckCash(checkCashPage.getContent());
-      
-    } catch (Exception e) {
-      logger.info(e.getMessage());
-    }
-    return checkCashPage;
-  }
-
-  public void disposeCheckCash( List<CheckCash> checkCashs){
-    try {
-      
-      checkCashs.forEach(checkCash->{
-        String userId=checkCash.getUserId();
-        if(StringUtils.isNotEmpty(userId)){
-          
-          String payDate=DateUtil.date2String(checkCash.getCreateDate());
-          //TODO 查询银行导入数据
-          Map<String, Object> secp=new HashMap<>();
-          
-          secp.put("EQ_userId", userId);
-          secp.put("EQ_payDate", payDate);
-          List<BankTrade> bankTrades =bankTradeService.findAll(secp);
-          secp.remove("EQ_payDate");
-          checkCash.setBankTrades(bankTrades);
-          disposeBankTrade(bankTrades,checkCash);
-          
-          //TODO 查询流水单号
-          secp.put("EQ_createDate", payDate);//划分时间
-          List<WaterOrderCash> wocs =cashService.findAll(secp);
-          secp.remove("EQ_createDate");
-          checkCash.setCashs(wocs);
-          
-          
-          //TODO 查询是否扣罚
-          secp.put("EQ_status", 0);
-          List<MonthPunish> monthPunishs=monthPunishService.findAll(secp);
-          disposeMonthPunish(monthPunishs,checkCash);
-          
-          
-        }
-      });
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw e;
-    }
-  }
-  //计算扣罚金额
-  private void disposeMonthPunish(List<MonthPunish> monthPunishs, CheckCash cc) {
-    Float debtMoney=new Float(0);
-    for(MonthPunish wp:monthPunishs){
-      debtMoney+=wp.getDebt()+wp.getAmerce();
-    }
-    cc.setDebtMoney(debtMoney);
-  }
-
-  //计算打款总金额
-  public void disposeBankTrade(List<BankTrade> bankTrades,CheckCash cc){
-    Float incomeMoney=new Float(0);
-    for(BankTrade woc:bankTrades){
-      incomeMoney+=woc.getMoney();
-    }
-    cc.setIncomeMoney(incomeMoney);
-    
-  }
-  @Override
-  public List<CheckCash> findByCreateDate(String createDate) {
-    return null;
+    Specification<MonthPunish> spec = monthPunishSearchFilter(filters.values(), MonthPunish.class);
+    Page<MonthPunish> page = monthPunishRepository.findAll(spec, pageRequest);
+    return page;
   }
 
 
-  
-  private static Specification<CheckCash> checkCashSearchFilter(final Collection<SearchFilter> filters,
-      final Class<CheckCash> entityClazz) {
+  private static Specification<MonthPunish> monthPunishSearchFilter(final Collection<SearchFilter> filters,
+      final Class<MonthPunish> entityClazz) {
 
-    return new Specification<CheckCash>() {
+    return new Specification<MonthPunish>() {
 
       private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
 
@@ -157,7 +94,7 @@ public class CheckCashServiceImpl implements CheckCashService {
 
       @SuppressWarnings({ "rawtypes", "unchecked" })
       @Override
-      public Predicate toPredicate(Root<CheckCash> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+      public Predicate toPredicate(Root<MonthPunish> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         if (CollectionUtils.isNotEmpty(filters)) {
           List<Predicate> predicates = new ArrayList<Predicate>();
           for (SearchFilter filter : filters) {

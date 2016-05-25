@@ -34,18 +34,15 @@ public class CheckCash implements Serializable  {
   @Column(name="RNID")
   private Integer rnid;
   private String userId;
-  private Date payDate;
-  @Column(name="card_name")
-  private String username;
-  
-  private Float incomeMoney=new Float(0);//打款金额
+  private Date createDate;
+  private Float cashMoney=new Float(0);//收现金额
   
   @Transient
-  private Float cashMoney=new Float(0);//收现金额
+  private Float incomeMoney=new Float(0);//打款金额
   @Transient
   private Float debtMoney=new Float(0);//欠款金额（欠款+扣罚）
   @Transient
-  private Float stayMoney=cashMoney+debtMoney-incomeMoney;//待收金额
+  private Float stayMoney;//待收金额
   
   @Transient
   private MonthPunish monthPunish ;
@@ -90,6 +87,7 @@ public class CheckCash implements Serializable  {
 
 
   public Float getStayMoney() {
+    stayMoney = cashMoney+debtMoney-incomeMoney;
     return stayMoney;
   }
 
@@ -118,28 +116,17 @@ public class CheckCash implements Serializable  {
     this.userId = userId;
   }
 
-
-  public Date getPayDate() {
-    return payDate;
-  }
-
-
-  public void setPayDate(Date payDate) {
-    this.payDate = payDate;
-  }
-
-
-  public String getUsername() {
-    return username;
-  }
-
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-
   
+  public Date getCreateDate() {
+    return createDate;
+  }
+
+
+  public void setCreateDate(Date createDate) {
+    this.createDate = createDate;
+  }
+
+
   public MonthPunish getMonthPunish() {
     return monthPunish;
   }
