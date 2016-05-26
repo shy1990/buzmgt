@@ -1,9 +1,11 @@
 package com.wangge.buzmgt.cash.service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,10 +30,15 @@ import org.springframework.stereotype.Service;
 import com.wangge.buzmgt.cash.entity.CheckCash;
 import com.wangge.buzmgt.cash.entity.MonthPunish;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
+import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
+import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
 import com.wangge.buzmgt.cash.repository.CheckCashRepository;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.salesman.entity.PunishSet;
+import com.wangge.buzmgt.salesman.service.PunishSetService;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 
@@ -46,18 +54,28 @@ public class CheckCashServiceImpl implements CheckCashService {
   @Resource
   private RegionService regionService;
   @Resource
+  private SalesManService salesManService;
+  @Resource
   private WaterOrderCashService cashService;
   @Resource
   private BankTradeService bankTradeService;
   @Resource
   private MonthPunishService monthPunishService;
+  @Resource
+  private PunishSetService punishSetService;
   
 
   @Override
   public List<CheckCash> findAll(Map<String, Object> searchParams) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<CheckCash> spec = checkCashSearchFilter(filters.values(), CheckCash.class);
-    List<CheckCash> checkCashs = checkCashRepository.findAll(spec);
+    List<CheckCash> checkCashs =null;
+    try {
+      checkCashs = checkCashRepository.findAll(spec);
+      disposeCheckCash(checkCashs);
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+    }
     return checkCashs;
 
   }
@@ -102,9 +120,13 @@ public class CheckCashServiceImpl implements CheckCashService {
           checkCash.setCashs(wocs);
           
           
-          //TODO 查询是否扣罚
-          secp.put("EQ_status", 0);
+          /*
+           * -->查询是否扣罚
+           * 查询前一天是否有扣罚
+           */
+          secp.put("EQ_createDate", DateUtil.date2String(DateUtil.moveDate(checkCash.getCreateDate(),-1)));
           List<MonthPunish> monthPunishs=monthPunishService.findAll(secp);
+          checkCash.setMonthPunishs(monthPunishs);
           disposeMonthPunish(monthPunishs,checkCash);
           
           
@@ -136,6 +158,83 @@ public class CheckCashServiceImpl implements CheckCashService {
     cc.setCardName(cardName);
     
   }
+  
+  /**
+   * 审核过程梳理
+   * 1.查询数据userId+createDate
+   * 2.
+   */
+  @Override
+  @Transactional
+  public JSONObject checkPendingByUserIdAndCreateDate(String userId, String createDate) {
+    Map<String, Object> secp=new HashMap<>();
+    JSONObject json=new JSONObject();
+    secp.put("EQ_userId", userId);
+    secp.put("EQ_createDate", createDate);
+    try {
+      List<CheckCash> list = this.findAll(secp);
+      
+      
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+    }
+    
+    return json;
+  }
+  
+  public void checkWaterOrderCash(CheckCash cc){
+    List<WaterOrderCash> waterOrders = cc.getCashs();
+    if(waterOrders.size()==0)
+      return ;
+    Float stayMoney=cc.getStayMoney();//待付金额
+    Float incomeMoney=cc.getIncomeMoney();//支付金额
+    Float Debt=new Float(0);//欠款金额
+    for(WaterOrderCash order:waterOrders){
+      //总支付金额大于流水单金额
+      Float cashMoney=order.getCashMoney();
+      if(incomeMoney>cashMoney){
+        order.setPaymentMoney(cashMoney);
+      }else{
+       if(incomeMoney<0)
+         order.setPaymentMoney(0f);
+       else
+        order.setPaymentMoney(incomeMoney);
+      }
+      incomeMoney-=cashMoney;
+      
+      
+      order.setPayStatus(WaterPayStatusEnum.OverPay);
+      order.setPayDate(cc.getCreateDate());
+      }
+    //修改原有扣罚状态
+
+    
+    //是否产生扣罚
+      if(stayMoney>0){
+        //产生扣罚，修改流水单号状态
+        WaterOrderCash order= waterOrders.get(0);
+        order.setIsPunish(1);
+        
+        MonthPunish mp=new MonthPunish();
+        String userId=order.getUserId();
+        mp.setDebt(stayMoney);
+        PunishSet punishSet=punishSetService.findByUserId(userId);
+        mp.setAmerce(stayMoney*punishSet.getPunishNumber());//扣罚
+        mp.setStatus(0);//
+        mp.setCreateDate(order.getCreateDate());
+        mp.setSeriaNo(order.getSerialNo());
+        mp.setUserId(userId);
+        monthPunishService.save(mp);
+      }
+      cashService.save(waterOrders);
+      
+  }
+
+  @Override
+  public JSONObject deleteBankTradeByUserIdAndCreateDate(String userId, String createDate) {
+    return null;
+  }
+  
   @Override
   public List<CheckCash> findByCreateDate(String createDate) {
     return null;
@@ -315,5 +414,6 @@ public class CheckCashServiceImpl implements CheckCashService {
       }
     };
   }
+
 
 }

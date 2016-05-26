@@ -7,11 +7,14 @@ import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.salesman.entity.PunishSet;
 import com.wangge.buzmgt.salesman.repository.PunishSetRepository;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 
 @Service
 public class PunishSetServiceImpl implements PunishSetService{
 	@Autowired
 	private PunishSetRepository punishSetRepository;
+	@Autowired
+	private SalesManService salesManService;
 	@Override
 	public void save(PunishSet punishSet) {
 		punishSetRepository.save(punishSet);
@@ -36,5 +39,11 @@ public class PunishSetServiceImpl implements PunishSetService{
 		PunishSet punishSet = punishSetRepository.fingByRegionId(regionId);
 		return punishSet;
 	}
+  @Override
+  public PunishSet findByUserId(String userId) {
+    String regionId=salesManService.getRegionIdByUserId(userId);
+    
+    return this.findByRegionId(regionId);
+  }
 
 }

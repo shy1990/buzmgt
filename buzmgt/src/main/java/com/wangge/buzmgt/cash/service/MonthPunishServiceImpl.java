@@ -17,6 +17,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -76,6 +77,12 @@ public class MonthPunishServiceImpl implements MonthPunishService {
     return page;
   }
 
+
+  @Override
+  @Transactional
+  public void save(MonthPunish mp) {
+    monthPunishRepository.save(mp);
+  }
 
   private static Specification<MonthPunish> monthPunishSearchFilter(final Collection<SearchFilter> filters,
       final Class<MonthPunish> entityClazz) {
@@ -249,5 +256,6 @@ public class MonthPunishServiceImpl implements MonthPunishService {
       }
     };
   }
+
 
 }

@@ -48,7 +48,7 @@ public class CheckCash implements Serializable  {
   private Float stayMoney;//待收金额
   
   @Transient
-  private MonthPunish monthPunish ;
+  private List<MonthPunish> monthPunishs ;
   @Transient
   private List<BankTrade> bankTrades;
   
@@ -151,13 +151,13 @@ public class CheckCash implements Serializable  {
   }
 
 
-  public MonthPunish getMonthPunish() {
-    return monthPunish;
+  public List<MonthPunish> getMonthPunishs() {
+    return monthPunishs;
   }
 
 
-  public void setMonthPunish(MonthPunish monthPunish) {
-    this.monthPunish = monthPunish;
+  public void setMonthPunishs(List<MonthPunish> monthPunishs) {
+    this.monthPunishs = monthPunishs;
   }
 
 

@@ -29,5 +29,7 @@ public interface MonthPunishService {
    */
   public  Page<MonthPunish> findAll(Map<String, Object> searchParams, Pageable pageRequest);
 
+  public void save(MonthPunish mp);
+
   
 }

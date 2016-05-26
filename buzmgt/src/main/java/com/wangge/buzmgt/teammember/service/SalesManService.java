@@ -23,5 +23,7 @@ public interface SalesManService {
   List<Object> gainSaojieMan();
   SalesMan findByUserId(String userId);
 
+  String getRegionIdByUserId(String userId);
+
   
 }
