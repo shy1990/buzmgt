@@ -17,6 +17,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -101,16 +104,18 @@ public class MianTest {
     }
 
     @Test//条件查询
-    public void test2(){
+    public void test2() throws ParseException {
         Sort sort = new Sort(Sort.Direction.DESC, "id");
-        String startTime = "01-5月 -16 07.24.00.996000000 上午";
-        String endTime = "02-5月 -16 07.24.00.996000000 上午";
+        String endTime = "2016-05-26";
+        String startTime = "2016-04-29";
+
         Pageable pageable = new PageRequest(0, 2, sort);
+        System.out.println(startTime+"    "+endTime);
         Page<MonthPunishUp> p = monthPunishUpService.findByPage(startTime,endTime,pageable);
         List<MonthPunishUp> list =  p.getContent();
         for(MonthPunishUp o:list){
 
-            System.out.println(o.getId());
+            System.out.println("**:  "+o.getId());
         }
     }
     @Test//条件查询
@@ -118,5 +123,27 @@ public class MianTest {
         Float a = mothPunishUpRepository.amerceSum();
         System.out.println(a);
     }
+    @Test//条件查询
+    public void test4(){
+        MonthPunishUp p = new MonthPunishUp();
+        p.setCreateDate(new Date());
+        p.setDebt(Float.parseFloat("777"));
+        mothPunishUpRepository.save(p);
+    }
+    @Test
+    public void test5() throws ParseException {
+       System.out.println("*****:  "+getString());
+    }
+    public static Date getDate(String time) throws ParseException {
 
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss SSS");
+        Date date = sf.parse(time);
+        return date;
+    }
+    public static String getString() throws ParseException {
+
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss SSS");
+        String a = sf.format(new Date());
+        return a;
+    }
 }

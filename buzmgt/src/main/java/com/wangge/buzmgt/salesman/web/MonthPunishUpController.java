@@ -69,4 +69,32 @@ public class MonthPunishUpController {
         model.addAttribute("sum",sum);
         return  "punishset/month_punish_record1";
     }
+
+
+
+    /**
+     * 测试模糊查询
+     * @param page
+     * @param size
+     * @param model
+     * @return
+     */
+    @RequestMapping(value="/list3",method = RequestMethod.GET)
+    public String findAll2(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                           @RequestParam(value = "size", defaultValue = "3") Integer size,
+                           @RequestParam(value = "startTime", defaultValue = "2016-01-26")String startTime,
+                           @RequestParam(value = "endTime", defaultValue = "2016-07-26") String endTime,
+                           Model model){
+
+        System.out.println(startTime+"**********"+endTime);
+        model.addAttribute("startTimeFen",startTime);
+        model.addAttribute("endTimeFen",endTime);
+        Float sum = mothPunishUpRepository.amerceSum();
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Pageable pageable = new PageRequest(page, size, sort);
+        model.addAttribute("page", service.findByPage(startTime,endTime,pageable));
+        model.addAttribute("sum",sum);
+        return  "punishset/month_punish_record1";
+
+    }
 }
