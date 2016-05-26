@@ -5,8 +5,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
+import javax.persistence.NamedSubgraph;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -14,6 +21,16 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "sys_monthtask_main")
+
+@NamedEntityGraph(name = "monthData.graph", attributeNodes = {
+		@NamedAttributeNode(value = "monthData", subgraph = "salesman.graph") }
+, subgraphs = {
+				@NamedSubgraph(name = "salesman.graph", attributeNodes = {
+						@NamedAttributeNode(value = "salesman") }) }, subclassSubgraphs = {
+								@NamedSubgraph(name = "user.graph", attributeNodes = @NamedAttributeNode(value = "user", subgraph = "organization.graph")),
+								@NamedSubgraph(name = "region.graph", attributeNodes = @NamedAttributeNode(value = "region", subgraph = "parent.graph")) }
+)
+
 public class MonthTask implements Serializable {
 	/**
 	 * 
@@ -26,25 +43,28 @@ public class MonthTask implements Serializable {
 	private String regionid;
 	private String month;
 	private String agentid;
-	private Integer TAL15goal;
-	private Integer TAL15Done;
-	private Integer TAL10goal;
-	private Integer TAL10done;
-	private Integer TAL7goal;
-	private Integer TAL7done;
-	private Integer TAL4goal;
-	private Integer TAL4done;
-	private Integer TAL20goal;
-	private Integer TAL20done;
-	private Integer TAL20set;
-	private Integer TAL15set;
-	private Integer TAL10set;
-	private Integer TAL7set;
-	private Integer TAL4set;
+	private int tal15goal;
+	private int tal15Done;
+	private int tal10goal;
+	private int tal10done;
+	private int tal7goal;
+	private int tal7done;
+	private int tal4goal;
+	private int tal4done;
+	private int tal20goal;
+	private int tal20done;
+	private int tal20set;
+	private int tal15set;
+	private int tal10set;
+	private int tal7set;
+	private int tal4set;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "basdataid")
+	private MonthOdersData monthData;
 	// 状态0未发布,1已发布
-	private Integer status;
-	//罚款数
-	private Integer punishrate;
+	private int status;
+	// 罚款数
+	private int punishrate;
 	@Transient
 	private Set<MonthTaskSub> subSet = new HashSet<MonthTaskSub>();
 
@@ -80,161 +100,160 @@ public class MonthTask implements Serializable {
 		this.regionid = regionid;
 	}
 
-	public String getAgentid() {
-		return agentid;
+	public int getTal15goal() {
+		return tal15goal;
 	}
 
-	public void setAgentid(String agentid) {
-		this.agentid = agentid;
+	public void setTal15goal(int tal15goal) {
+		this.tal15goal = tal15goal;
 	}
 
-	public Integer getTAL15goal() {
-		return TAL15goal;
+	public int getTal15Done() {
+		return tal15Done;
 	}
 
-	public void setTAL15goal(Integer tAL15goal) {
-		TAL15goal = tAL15goal;
+	public void setTal15Done(int tal15Done) {
+		this.tal15Done = tal15Done;
 	}
 
-	public Integer getTAL15Done() {
-		return TAL15Done;
+	public int getTal10goal() {
+		return tal10goal;
 	}
 
-	public void setTAL15Done(Integer tAL15Done) {
-		TAL15Done = tAL15Done;
+	public void setTal10goal(int tal10goal) {
+		this.tal10goal = tal10goal;
 	}
 
-	public Integer getTAL10goal() {
-		return TAL10goal;
+	public int getTal10done() {
+		return tal10done;
 	}
 
-	public void setTAL10goal(Integer tAL10goal) {
-		TAL10goal = tAL10goal;
+	public void setTal10done(int tal10done) {
+		this.tal10done = tal10done;
 	}
 
-	public Integer getTAL10done() {
-		return TAL10done;
+	public int getTal7goal() {
+		return tal7goal;
 	}
 
-	public void setTAL10done(Integer tAL10done) {
-		TAL10done = tAL10done;
+	public void setTal7goal(int tal7goal) {
+		this.tal7goal = tal7goal;
 	}
 
-	public Integer getTAL7goal() {
-		return TAL7goal;
+	public int getTal7done() {
+		return tal7done;
 	}
 
-	public void setTAL7goal(Integer tAL7goal) {
-		TAL7goal = tAL7goal;
+	public void setTal7done(int tal7done) {
+		this.tal7done = tal7done;
 	}
 
-	public Integer getTAL7done() {
-		return TAL7done;
+	public int getTal4goal() {
+		return tal4goal;
 	}
 
-	public void setTAL7done(Integer tAL7done) {
-		TAL7done = tAL7done;
+	public void setTal4goal(int tal4goal) {
+		this.tal4goal = tal4goal;
 	}
 
-	public Integer getTAL4goal() {
-		return TAL4goal;
+	public int getTal4done() {
+		return tal4done;
 	}
 
-	public void setTAL4goal(Integer tAL4goal) {
-		TAL4goal = tAL4goal;
+	public void setTal4done(int tal4done) {
+		this.tal4done = tal4done;
 	}
 
-	public Integer getTAL4done() {
-		return TAL4done;
+	public int getTal20goal() {
+		return tal20goal;
 	}
 
-	public void setTAL4done(Integer tAL4done) {
-		TAL4done = tAL4done;
+	public void setTal20goal(int tal20goal) {
+		this.tal20goal = tal20goal;
 	}
 
-	public Integer getTAL20goal() {
-		return TAL20goal;
+	public int getTal20done() {
+		return tal20done;
 	}
 
-	public void setTAL20goal(Integer tAL20goal) {
-		TAL20goal = tAL20goal;
+	public void setTal20done(int tal20done) {
+		this.tal20done = tal20done;
 	}
 
-	public Integer getTAL20done() {
-		return TAL20done;
+	public int getTal20set() {
+		return tal20set;
 	}
 
-	public void setTAL20done(Integer tAL20done) {
-		TAL20done = tAL20done;
+	public void setTal20set(int tal20set) {
+		this.tal20set = tal20set;
 	}
 
-	public Integer getStatus() {
+	public int getTal15set() {
+		return tal15set;
+	}
+
+	public void setTal15set(int tal15set) {
+		this.tal15set = tal15set;
+	}
+
+	public int getTal10set() {
+		return tal10set;
+	}
+
+	public void setTal10set(int tal10set) {
+		this.tal10set = tal10set;
+	}
+
+	public int getTal7set() {
+		return tal7set;
+	}
+
+	public void setTal7set(int tal7set) {
+		this.tal7set = tal7set;
+	}
+
+	public int getTal4set() {
+		return tal4set;
+	}
+
+	public void setTal4set(int tal4set) {
+		this.tal4set = tal4set;
+	}
+
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
-	public Integer getTAL20set() {
-		return TAL20set;
-	}
-
-	public void setTAL20set(Integer tAL20set) {
-		TAL20set = tAL20set;
-	}
-
-	public Integer getTAL15set() {
-		return TAL15set;
-	}
-
-	public void setTAL15set(Integer tAL15set) {
-		TAL15set = tAL15set;
-	}
-
-	public Integer getTAL10set() {
-		return TAL10set;
-	}
-
-	public void setTAL10set(Integer tAL10set) {
-		TAL10set = tAL10set;
-	}
-
-	public Integer getTAL7set() {
-		return TAL7set;
-	}
-
-	public void setTAL7set(Integer tAL7set) {
-		TAL7set = tAL7set;
-	}
-
-	public Integer getTAL4set() {
-		return TAL4set;
-	}
-
-	public void setTAL4set(Integer tAL4set) {
-		TAL4set = tAL4set;
-	}
-
-	public Integer getPunishrate() {
+	public int getPunishrate() {
 		return punishrate;
 	}
 
-	public void setPunishrate(Integer punishrate) {
+	public void setPunishrate(int punishrate) {
 		this.punishrate = punishrate;
 	}
 
-	public MonthTask(String regionid, String month, String agentid, Integer tAL15goal, Integer tAL10goal, Integer tAL7goal,
-			Integer tAL4goal, Integer tAL20goal) {
+	public MonthOdersData getMonthData() {
+		return monthData;
+	}
+
+	public void setMonthData(MonthOdersData monthData) {
+		this.monthData = monthData;
+	}
+
+	public MonthTask(String regionid, String month, int tAL15goal, int tAL10goal, int tAL7goal, int tAL4goal,
+			int tAL20goal) {
 		super();
 		this.regionid = regionid;
 		this.month = month;
-		this.agentid = agentid;
-		TAL15goal = tAL15goal;
-		TAL10goal = tAL10goal;
-		TAL7goal = tAL7goal;
-		TAL4goal = tAL4goal;
-		TAL20goal = tAL20goal;
+		tal15goal = tAL15goal;
+		tal10goal = tAL10goal;
+		tal7goal = tAL7goal;
+		tal4goal = tAL4goal;
+		tal20goal = tAL20goal;
 	}
 
 	public MonthTask() {
@@ -246,6 +265,14 @@ public class MonthTask implements Serializable {
 
 	public void setSubSet(Set<MonthTaskSub> subSet) {
 		this.subSet = subSet;
+	}
+
+	public String getAgentid() {
+		return agentid;
+	}
+
+	public void setAgentid(String agentid) {
+		this.agentid = agentid;
 	}
 
 }

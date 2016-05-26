@@ -14,11 +14,11 @@
 .kaohe-det-body .box-title span {
 	font-weight: 400;
 }
-/*图标*/
+/*鍥炬爣*/
 .icon-ywmember {
 	background: url(../img/icon/kaohe/rencheng.png) no-repeat;
 }
-/*列表头部*/
+/*鍒楄〃澶撮儴*/
 .det-head {
 	position: relative;
 }
@@ -27,13 +27,13 @@
 	padding-top: 20px;
 	min-height: 750px;
 }
-/*倒计时*/
+/*鍊掕鏃�*/
 .text-time {
 	color: #D55383;
 	font-weight: 400;
 	font-size: 12px;
 }
-/*考核阶段*/
+/*鑰冩牳闃舵*/
 .kaohe-stage {
 	display:inline-block;
 	width: 120px;
@@ -44,27 +44,27 @@
 .default-stage{
 	background: url(../img/kaohe/default-stage.png) no-repeat;
 }
-/* 一阶段考核 */
+/* 涓�闃舵鑰冩牳 */
 .onekaohe-stage{
 	background: url(../img/kaohe/onekaohe.png) no-repeat;
 }
-/* 二阶段考核 */
+/* 浜岄樁娈佃�冩牳 */
 .twokaohe-stage{
 	background: url(../img/kaohe/twokaohe.png) no-repeat;
 }
-/* 三阶段考核 */
+/* 涓夐樁娈佃�冩牳 */
 .threekaohe-stage{
 	background: url(../img/kaohe/threekaohe.png) no-repeat;
 }
-/* 已转正*/
+/* 宸茶浆姝�*/
 .overkaohe-stage{
 	background: url(../img/kaohe/overkaohe.png) no-repeat;
 }
-/* 考核失败*/
+/* 鑰冩牳澶辫触*/
 .failurekaohe-stage{
 	background: url(../img/kaohe/filkaohe.png) no-repeat;
 }
-/*标签定位*/
+/*鏍囩瀹氫綅*/
 .tag {
 	position: absolute;
 	z-index: 100;
@@ -76,7 +76,7 @@
 	border: 1px solid #D0D0D0;
 	border-radius: 2px;
 }
-/*进度条上的标签*/
+/*杩涘害鏉′笂鐨勬爣绛�*/
 .icon-tag {
 	position: absolute;
 	width: 25px;
@@ -96,7 +96,7 @@
 .tag-kaohe {
 	background: url(../img/icon/kaohe/biaoqian2.png) no-repeat;
 }
-/*倒计时*/
+/*鍊掕鏃�*/
 .icon-countdown {
 	background: url(../img/icon/kaohe/daojishi.png) no-repeat;
 }
@@ -106,12 +106,12 @@
 	display: inline-block;
 	vertical-align: middle;
 }
-/*检索区域*/
+/*妫�绱㈠尯鍩�*/
 .search-box {
 	margin-bottom: 30px;
 	font-size: 12px;
 }
-/*导出*/
+/*瀵煎嚭*/
 .link-export {
 	position: relative;
 	top: 23px; 
@@ -152,7 +152,7 @@ a.link-export:hover, a.link-export:focus {
 	margin-bottom: 5px;
 }
 
-. /*考核进度条*/
+/*鑰冩牳杩涘害鏉�*/
 .bar-kaohe {
 	background: #3993C7;
 }

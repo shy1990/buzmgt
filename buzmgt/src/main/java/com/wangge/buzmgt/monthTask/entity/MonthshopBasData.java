@@ -8,6 +8,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -18,6 +22,13 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Entity
 @Table(name = "sys_Monthshop_Basdata")
+
+@NamedEntityGraphs(value = {
+		@NamedEntityGraph(name = "monthShopBasData.graph", attributeNodes = @NamedAttributeNode(value = "registData", subgraph = "registData.graph"), subgraphs = {
+				@NamedSubgraph(name = "region.graph", attributeNodes = @NamedAttributeNode(value = "region", subgraph = "regionRe.region")) }, subclassSubgraphs = {
+						@NamedSubgraph(name = "regionRe.region", attributeNodes = { @NamedAttributeNode("parent"),
+								@NamedAttributeNode("children") }) }),
+		@NamedEntityGraph(name = "task.graph", attributeNodes = @NamedAttributeNode(value = "monthTaskSub")) })
 public class MonthshopBasData implements Serializable {
 
 	/**
@@ -28,22 +39,33 @@ public class MonthshopBasData implements Serializable {
 	@GenericGenerator(name = "idgen", strategy = "increment")
 	@GeneratedValue(generator = "idgen")
 	private long id;
+	// 镇级区域
 	private String regionId;
-//	private String shopid;
+	// private String shopid;
 	private int lastmonthcount;
 	private int monthAvg;
 	private String month;
 	private int visitCount;
-//	private String salemanId;
-//	private String salemanName;
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGISTDATA_ID")
 	private RegistData registData;
-	
-	@OneToOne(fetch = FetchType.EAGER)
+
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "salesman_ID")
 	private SalesMan salesman;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "task_ID")
+	private MonthTaskSub monthTaskSub;
 	private int used;
+
+	public MonthTaskSub getMonthTaskSub() {
+		return monthTaskSub;
+	}
+
+	public void setMonthTaskSub(MonthTaskSub monthTaskSub) {
+		this.monthTaskSub = monthTaskSub;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -51,7 +73,7 @@ public class MonthshopBasData implements Serializable {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public RegistData getRegistData() {
 		return registData;
 	}
@@ -67,14 +89,6 @@ public class MonthshopBasData implements Serializable {
 	public void setRegionId(String regionId) {
 		this.regionId = regionId;
 	}
-
-//	public String getShopid() {
-//		return shopid;
-//	}
-//
-//	public void setShopid(String shopid) {
-//		this.shopid = shopid;
-//	}
 
 	public int getLastmonthcount() {
 		return lastmonthcount;
@@ -107,22 +121,22 @@ public class MonthshopBasData implements Serializable {
 	public void setVisitCount(int visitCount) {
 		this.visitCount = visitCount;
 	}
-	
-//	public String getSalemanId() {
-//		return salemanId;
-//	}
-//
-//	public void setSalemanId(String salemanId) {
-//		this.salemanId = salemanId;
-//	}
-//
-//	public String getSalemanName() {
-//		return salemanName;
-//	}
-//
-//	public void setSalemanName(String salemanName) {
-//		this.salemanName = salemanName;
-//	}
+
+	// public String getSalemanId() {
+	// return salemanId;
+	// }
+	//
+	// public void setSalemanId(String salemanId) {
+	// this.salemanId = salemanId;
+	// }
+	//
+	// public String getSalemanName() {
+	// return salemanName;
+	// }
+	//
+	// public void setSalemanName(String salemanName) {
+	// this.salemanName = salemanName;
+	// }
 
 	public MonthshopBasData() {
 		super();
@@ -144,7 +158,7 @@ public class MonthshopBasData implements Serializable {
 		this.salesman = salesman;
 	}
 
-	public MonthshopBasData( String regionId, int lastmonthcount, int monthAvg, String month, int visitCount,
+	public MonthshopBasData(String regionId, int lastmonthcount, int monthAvg, String month, int visitCount,
 			RegistData registData, SalesMan salesman) {
 		super();
 		this.regionId = regionId;
@@ -155,9 +169,5 @@ public class MonthshopBasData implements Serializable {
 		this.registData = registData;
 		this.salesman = salesman;
 	}
-
-	
-
-	
 
 }

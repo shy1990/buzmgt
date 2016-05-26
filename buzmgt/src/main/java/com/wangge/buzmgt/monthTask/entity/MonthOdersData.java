@@ -7,6 +7,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -16,6 +19,13 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Entity
 @Table(name = "sys_month_Task_basicdata")
+@NamedEntityGraph(name = "salesman.graph", attributeNodes = { @NamedAttributeNode(value = "salesman") }, subgraphs = {
+		@NamedSubgraph(name = "user.graph", attributeNodes = @NamedAttributeNode(value = "user", subgraph = "organization.graph")),
+		@NamedSubgraph(name = "region.graph", attributeNodes = @NamedAttributeNode(value = "region", subgraph = "parent.graph")) }, subclassSubgraphs = {
+				@NamedSubgraph(name = "organization.graph", attributeNodes = { @NamedAttributeNode("organization") }),
+				@NamedSubgraph(name = "parent.graph", attributeNodes = { @NamedAttributeNode(value = "parent"),
+						@NamedAttributeNode("children") }) })
+
 public class MonthOdersData implements Serializable {
 	/**
 	 * 
@@ -276,8 +286,8 @@ public class MonthOdersData implements Serializable {
 
 	public MonthOdersData(String regionId, String month, int tAL15M1, int tAL15M3, int tAL10M1, int tAL10M3, int tAL7M1,
 			int tAL7M3, int tAL4M1, int tAL4M3, int tAL20M1, int tAL20M3, int visitCount15, int visitCount10,
-			int visitCount7, int visitCount4, int visitCount20, int sysgive15, int sysgive10, int sysgive7, int sysgive4,
-			int sysgive20, SalesMan salesman) {
+			int visitCount7, int visitCount4, int visitCount20, int sysgive15, int sysgive10, int sysgive7,
+			int sysgive4, int sysgive20, SalesMan salesman) {
 		super();
 		this.regionId = regionId;
 		this.month = month;

@@ -29,7 +29,7 @@
 <body>
 	<div class="content main">
 		<h4 class="page-header ">
-			<i class="ico icon-add"></i>添加月任务
+			<i class="ico icon-add"></i><label id='handleTitle'>添加</label>月任务
 			<!--区域选择按钮-->
 			<div class="area-choose">
 				选择区域：<span>${region.name}</span> <a class="are-line"
@@ -285,6 +285,11 @@
 	<script>
 		/*区域 */
 		var base="<%=basePath%>";
+		var taskId="${taskId}";
+		if ( taskId != undefined&&taskId != "" ) {
+			$("#handleTitle").text("修改");
+			getMonthDataById();
+		}
 		function getRegion(id){
 			window.location.href='/region/getPersonalRegion?id='+id+"&flag=monthTask";
 		}

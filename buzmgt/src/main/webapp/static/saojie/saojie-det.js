@@ -56,10 +56,10 @@ function ajaxSearch(searchData) {
 			},
 			dataType : "json",
 			success : function(data) {
+				map.clearOverlays();
 				$(".shopNum").text(data.shopNum);
 				$(".percent").text(data.percent); 
 				$("#percent").width(data.percent);
-				map.clearOverlays();
 				map.centerAndZoom(data.areaName, 13);
 				// map.centerAndZoom("上海",11);
 				// 添加带有定位的导航控件
@@ -91,8 +91,9 @@ function ajaxSearch(searchData) {
 				//扫街数据循环
 				var marker;
 				var arr = new Array(); //创建数组
-				$.each(data.list,function(n,items) {
+				$.each(data.list,function(n,items){
 					var coor = items.coordinate;
+					alert(coor);
 					if(coor != null && coor != ""){
 						arr = coor.split("-");
 		                for (var j = 0;j < arr.length;j++){

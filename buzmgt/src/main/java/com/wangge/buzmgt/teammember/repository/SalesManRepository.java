@@ -27,7 +27,7 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
 	 * @param regionId
 	 * @return
 	 */
-	@Query(value = "select *\n" + "  from sys_salesman s\n" + " where  exists (select 1\n"
+	@Query(value = "select * \n" + "  from sys_salesman s\n" + " where  exists (select 1\n"
 			+ "       from (select * \n" + "                  from sys_region r\n"
 			+ "                 start with r.region_id = ?1 \n"
 			+ "                connect by prior r.region_id = r.parent_id) tmp\n"

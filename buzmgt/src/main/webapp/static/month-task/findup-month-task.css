@@ -24,13 +24,13 @@
 	font-weight: normal;
 }
 .select-area .btn-sm{
-	padding:5px 10px;
+	padding:7px 12px;
 	font-size:12px;
 }
 .visit-times{
 	display: inline-block;
-	margin-right:10px;
-	width:115px;
+	margin-right:22px;
+	width:250px;
 }
 .visit-num{
 	display: inline-block;
@@ -66,3 +66,4 @@
 	position: relative;
 	bottom:1px;
 }
+

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -14,7 +16,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <base href="<%=basePath%>" />
-<title>月任务派发</title>
+<title>月任务</title>
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
@@ -29,7 +31,6 @@
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-
 <script id="task-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
@@ -81,16 +82,18 @@
 <body>
 	<div class="content main">
 		<h4 class="page-header ">
-			<i class="ico icon-task-send"></i>月任务派发
-			<!--区域选择按钮  onclick="addTask();"   href="monthTask/addTask"-->
+			<i class="ico icon-task-send"></i>月任务
+			<!--区域选择按钮-->
+			<a class="btn btn-setting" href="monthTask/punish"><i
+				class="icon-task-sz"></i>设置</a>
+			<!--区域选择按钮-->
 			<div class="area-choose">
-				<a class="btn btn-blue"
-					onclick="javascript:window.location.href='/monthTask/addTask'">
-					<i class="ico icon-add"></i>月任务添加
-				</a>
+				选择区域：<span>${region.name}</span> <a class="are-line"
+					href="javascript:;" onclick="getRegion(${region.id});">切换</a>
 			</div>
-			<!--/区域选择按钮-->
 
+
+			<!--/区域选择按钮-->
 		</h4>
 
 		<div class="container-all">
@@ -100,7 +103,7 @@
 				<div class="box-title">
 					<!--start row-->
 					<div class="row row-h">
-						<div class="col-md-8">
+						<div class="col-md-9 row-a">
 							<div class=" date-jl">
 
 								<div class=" date-wzz">
@@ -113,24 +116,35 @@
 								</div>
 							</div>
 							<div class="date-jll">
-								<a class="btn btn-default btn-sm" onclick="getTask();"
-									href="javascrip:(0);"><span class="text-bule">筛选</span></a>
+								<a class="btn btn-default btn-sm" onclick="getTask(1)"><span
+									class="text-bule">筛选</span></a>
 							</div>
-							<div class="date-jlll">
+
+							<!-- <div class="date-jlll">
 								<span class="text-bai"> 已派发 &nbsp;<span
 									class="text-bai-d">2</span> &nbsp; 个区域
 								</span>
 							</div>
+							-->
 						</div>
 
+						<div class="col-md-2 input-jl ">
+							<div class="input-group ">
+								<input type="text" class="input-in form-control text-gery-s  "
+									name="truename" id="param" placeholder="请输入名称或工号"
+									onkeypress="return check()"> <a
+									class="input-ini input-group-addon " id="goSearch"
+									onclick="getTask(1)"> <i class="icon icon-finds"></i>
+								</a>
+							</div>
 
+						</div>
 					</div>
 					<!--end row-->
 				</div>
 				<!--title-->
 				<!--box-body-->
 				<div class="box-body-a">
-					<!--列表头部-->
 					<div class="bs-example">
 						<table class="table table-hover text-body table-my--">
 							<tbody id="taskList"></tbody>
@@ -156,6 +170,8 @@
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="static/yw-team-member/team-member.js"
+		type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
 		charset="utf-8"></script>
 	<script type="text/javascript"
@@ -163,14 +179,16 @@
 	<script src="static/month-task/month.js"></script>
 
 	<script type="text/javascript">
-		function addTask() {
-			window.location.href = "/monthTask/addTask";
-		}
-		$(function() {
-			initDate();// 初始化日期
-			findTaskList(0);// 初始查询
-		});
+	/*区域 */
+	var base="<%=basePath%>";
+	function getRegion(id){
+		window.location.href='/region/getPersonalRegion?id='+id+"&flag=mainTask";
+	}
+	$(function() {
+		initDate();// 初始化日期
+		findTaskList(0,1);// 初始查询
+	});
+
 	</script>
 </body>
-
 </html>

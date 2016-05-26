@@ -17,11 +17,12 @@ public class DataEventHandler {
 
 	@HandleBeforeCreate
 	public void handlePersonCreate(MonthTask monthTask) {
-		MonthOdersData orda = monthRep.findFirstbySalesmanOrRegionId(monthTask.getAgentid(), monthTask.getTown(),
-				monthTask.getMonth());
+		MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId("",
+				monthTask.getRegionid(), monthTask.getMonth());
 		if (null != orda) {
 			orda.setUsed(1);
 			monthRep.save(orda);
+			monthTask.setMonthData(orda);
 		}
 	}
 

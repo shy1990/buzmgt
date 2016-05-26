@@ -2,6 +2,7 @@ package com.wangge.buzmgt.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -15,8 +16,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		// registry.addViewController("/").setViewName("left");
 	}
 
-	@Bean
-	DataEventHandler taskdataEventHandler() {
-		return new DataEventHandler();
-	}
+	
+	 
 }

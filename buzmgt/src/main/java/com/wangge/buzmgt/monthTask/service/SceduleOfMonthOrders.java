@@ -51,7 +51,7 @@ public class SceduleOfMonthOrders {
 			+ "  and (s.IS_PRIMARY_ACCOUNT !=1 or s.IS_PRIMARY_ACCOUNT is null) ";
 
 	// 每月15号点时分 0 30 1 15 * ?
-	@Scheduled(cron = "20 33 09 * * ? ")
+	@Scheduled(cron = "20 05 14 * * ? ")
 	public void handleMontholdData() {
 		List<Object[]> townList = em.createNativeQuery(townSql).getResultList();
 		for (Object[] towns : townList) {
@@ -146,13 +146,19 @@ public class SceduleOfMonthOrders {
 					regsData, salesman);
 			datlist.add(shopdata);
 		}
-		shopRep.save(datlist);
-		// 结束计算保存每个店铺的数据
-		// 每个地区的数据的保存
-		MonthOdersData monthda = new MonthOdersData(town, month, sum1[0], sum4[0], sum1[1], sum4[1], sum1[2], sum4[2],
-				sum1[3], sum4[3], sum1[4], sum4[4], sum5[0], sum5[1], sum5[2], sum5[3], sum5[4], sum6[0], sum6[1],
-				sum6[2], sum6[3], sum6[4], salesman);
-		monthRep.save(monthda);
+		
+		try {
+			shopRep.save(datlist);
+			// 结束计算保存每个店铺的数据
+			// 每个地区的数据的保存
+			MonthOdersData monthda = new MonthOdersData(town, month, sum1[0], sum4[0], sum1[1], sum4[1], sum1[2],
+					sum4[2], sum1[3], sum4[3], sum1[4], sum4[4], sum5[0], sum5[1], sum5[2], sum5[3], sum5[4], sum6[0],
+					sum6[1], sum6[2], sum6[3], sum6[4], salesman);
+			monthRep.save(monthda);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

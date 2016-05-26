@@ -4,14 +4,27 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "sys_monthtask_sub")
+@NamedEntityGraph(name = "monthTaskSub.monthsd", attributeNodes = {
+		@NamedAttributeNode(value = "monthsd", subgraph = "monthShopD_Regi"),
+		@NamedAttributeNode(value = "monthTask") }, subgraphs = {
+				@NamedSubgraph(name = "monthShopD_Regi", attributeNodes = {
+						@NamedAttributeNode(value = "registData", subgraph = "region.graph") }) }, subclassSubgraphs = {
+								@NamedSubgraph(name = "region.graph", attributeNodes = @NamedAttributeNode(value = "region", subgraph = "regionRe.region")) })
 public class MonthTaskSub implements Serializable {
 	/**
 	 * 
@@ -21,15 +34,20 @@ public class MonthTaskSub implements Serializable {
 	@GenericGenerator(name = "idgen", strategy = "increment")
 	@GeneratedValue(generator = "idgen")
 	private long id;
-	private String parentid;
-	private String memberName;
-	private Long memberid;
-	private int goal;
-	private int done;
-	private String TaskMonth;
-	private Date lastTime = new Date();
+	private Integer goal = 0;
+	private Integer done = 0;
 
-	private int finish;
+	private Date lastTime = new Date();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parentid")
+	MonthTask monthTask;
+	private Integer finish = 0;
+
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "dataId")
+	private MonthshopBasData monthsd;
+	// 是否延期提醒
+	private Integer delay = 0;
 
 	public long getId() {
 		return id;
@@ -39,45 +57,36 @@ public class MonthTaskSub implements Serializable {
 		this.id = id;
 	}
 
-	public String getParentid() {
-		return parentid;
-	}
-	
-
-	public void setParentid(String parentid) {
-		this.parentid = parentid;
+	public MonthTask getMonthTask() {
+		return monthTask;
 	}
 
-	public Long getMemberid() {
-		return memberid;
+	public void setMonthTask(MonthTask monthTask) {
+		this.monthTask = monthTask;
 	}
 
-	public void setMemberid(Long memberid) {
-		this.memberid = memberid;
+	public MonthshopBasData getMonthsd() {
+		return monthsd;
 	}
 
-	public int getGoal() {
+	public void setMonthsd(MonthshopBasData monthsd) {
+		this.monthsd = monthsd;
+	}
+
+	public Integer getGoal() {
 		return goal;
 	}
 
-	public void setGoal(int goal) {
+	public void setGoal(Integer goal) {
 		this.goal = goal;
 	}
 
-	public int getDone() {
+	public Integer getDone() {
 		return done;
 	}
 
-	public void setDone(int done) {
+	public void setDone(Integer done) {
 		this.done = done;
-	}
-
-	public String getMemberName() {
-		return memberName;
-	}
-
-	public void setMemberName(String memberName) {
-		this.memberName = memberName;
 	}
 
 	public Date getLastTime() {
@@ -88,20 +97,20 @@ public class MonthTaskSub implements Serializable {
 		this.lastTime = lastTime;
 	}
 
-	public String getTaskMonth() {
-		return TaskMonth;
-	}
-
-	public void setTaskMonth(String taskMonth) {
-		TaskMonth = taskMonth;
-	}
-
-	public int getFinish() {
+	public Integer getFinish() {
 		return finish;
 	}
 
-	public void setFinish(int finish) {
+	public void setFinish(Integer finish) {
 		this.finish = finish;
+	}
+
+	public Integer getDelay() {
+		return delay == null ? 0 : delay;
+	}
+
+	public void setDelay(Integer delay) {
+		this.delay = delay;
 	}
 
 	public MonthTaskSub() {
