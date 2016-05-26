@@ -33,6 +33,8 @@ public interface WaterOrderCashService {
   public WaterOrderDetail findByOrderNo(String orderNo);
   
   public WaterOrderCash findBySerialNo(String serialNo);
+
+  public void save(List<WaterOrderCash> waterOrders);
   
 }
 

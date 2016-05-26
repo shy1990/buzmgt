@@ -10,6 +10,7 @@ public interface PunishSetService {
 	public PunishSet findById(Long id);
 	public void delete(Long id);
 	public PunishSet findByRegionId(String regionId);
+  public PunishSet findByUserId(String userId);
 	
 
 }

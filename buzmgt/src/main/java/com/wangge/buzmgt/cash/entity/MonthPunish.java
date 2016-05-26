@@ -59,7 +59,17 @@ public class MonthPunish implements Serializable  {
   @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
   private Date createDate ;//创建日期
   
+  private Integer status;
   
+  
+  
+  
+  public Integer getStatus() {
+    return status;
+  }
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
   public Integer getId() {
     return id;
   }

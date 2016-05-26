@@ -78,8 +78,12 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
   @Override
   public WaterOrderCash findBySerialNo(String serialNo) {
-    // TODO Auto-generated method stub
     return waterOrderCashRepository.findBySerialNo(serialNo);
+  }
+  @Override
+  public void save(List<WaterOrderCash> waterOrders) {
+    
+    waterOrderCashRepository.save(waterOrders);
   }
   
   private static Specification<WaterOrderCash> WaterOrderCashSearchFilter(final Collection<SearchFilter> filters,
@@ -267,6 +271,7 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
       }
     };
   }
+
 
 
 

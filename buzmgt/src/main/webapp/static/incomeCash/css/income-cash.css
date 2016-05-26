@@ -123,7 +123,20 @@ html{
 .text-redd{
     color: #ff3f3f;
     font-size: 12px;
+}
 
+.icon-wfk{
+    padding: 2px 10px;
+    background: url(../img/water-order/zc.png) no-repeat;
+    color: #ffffff;
+    font-size: 6px;
+}
+
+.icon-dsh{
+    padding: 2px 10px;
+    background: url(../img/water-order/yc.png) no-repeat;
+    color: #ffffff;
+    font-size: 6px;
 }
 
 .input-h{
@@ -135,7 +148,6 @@ html{
 }
 .input-hh{
     height: 36px;
-    color: #ffffff;
 }
 
 .cl-padd{
@@ -183,6 +195,7 @@ html{
 .cs-select{
     width: 200px;
     height: 30px;
+    padding-left:10px;
     background-color: #ffffff;
     border:1px silver solid;
     border-radius: 3px;
@@ -379,6 +392,7 @@ tr:hover .btn-card-more {
     right: 10%;
     top: 40%;
 }
+
 .wait-page-index{
     width:500px;
     margin:0 auto;

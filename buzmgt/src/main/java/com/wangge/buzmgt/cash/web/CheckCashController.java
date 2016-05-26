@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +44,7 @@ public class CheckCashController {
   @RequestMapping(value = "", method = RequestMethod.GET)
   @ResponseBody
   public String getCashList(HttpServletRequest request,
-      @PageableDefault(page = 0, size = 10, sort = { "payDate","rnid" }, direction = Direction.DESC) Pageable pageable) {
+      @PageableDefault(page = 0, size = 10, sort = { "createDate","rnid" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<CheckCash> page= checkCashService.findAll(searchParams, pageable);
     String json = "";
@@ -53,6 +54,16 @@ public class CheckCashController {
       logger.error(e.getMessage());
     }
     return json;
+  }
+  /**
+   * 审核账单（打款和流水单号）
+   * @return
+   */
+  @RequestMapping(name="/{userId}",method=RequestMethod.POST)
+  public JSONObject auditByUserIdAndCreateDate(@PathVariable("userId") String userId,
+      @RequestParam(value="createDate") String createDate){
+    
+    return checkCashService.checkPendingByUserIdAndCreateDate(userId, createDate);
   }
 
 

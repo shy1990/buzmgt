@@ -14,7 +14,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-<title>银行导出数据</title>
+<title>待审核账单</title>
 
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -22,23 +22,48 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
 <link rel="stylesheet" type="text/css"
-	href="static/income-cash/css/income-cash.css">
+	href="static/incomeCash/css/income-cash.css">
 <link rel="stylesheet" type="text/css"
-	href="static/income-cash/css/check-pending.css">
+	href="static/incomeCash/css/check-pending.css">
 <link rel="stylesheet" type="text/css"
 	href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script id="bankTrade-table-template" type="text/x-handlebars-template">
+<script id="checkPending-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
 		<tr>
-      <td>{{cardName}}</td>
-      <td>{{cardNo}}</td>
-      <td>{{money}}</td>
-      <td>{{formDate payDate}}</td>
-      <td>{{bankName}}</td>
-    </tr>      
+      <td>{{userId}}</td>
+      <td class="border-right-grey">{{cardName}}</td>
+      <td class="multi-row">
+				{{#each bankTrades}}
+        <p>{{cardNo}}</p>
+				{{/each}}	
+      </td>
+      <td class="border-right-grey multi-row">
+				{{#each bankTrades}}
+        <p>{{money}}</p>
+				{{/each}}	
+      </td>
+      <td class="multi-row width-fixed multi-row-p">
+				{{#each cashs}}
+        <p> <span>{{serialNo}}</span> <a href="javascript:;" class="btn btn-sm btn-findup">查看</a> </p>
+				{{/each}}
+      </td>
+      <td class="border-right-grey multi-row multi-row-p">
+				{{#each cashs}}
+        <p>{{cashMoney}}</p>
+				{{/each}}
+      </td>
+      <td>{{debtMoney}}</td>
+      <td>{{shouldPayMoney}}</td>
+      <td>{{incomeMoney}}</td>
+      <td>{{{disposeStayMoney stayMoney}}}</td>
+      <td>{{formDate createDate}}</td>
+      <td>
+        <button class="btn btn-sm btn-blue">确认</button>
+      </td>
+    </tr>
 	{{/each}}
 	{{else}}
 	<tr>
@@ -105,168 +130,11 @@ var	base='<%=basePath%>';
 								<th>业务应付</th>
 								<th>业务实付</th>
 								<th>业务待付</th>
+								<th>操作日期</th>
 								<th>操作</th>
 							</tr>
 						</thead>
-						<tbody id="">
-							<tr class="status-exception">
-								<td>Error!</td>
-								<td class="border-right-grey">李光洙</td>
-								<td>6222****4184</td>
-								<td class="border-right-grey">2500.00</td>
-								<td>无数据</td>
-								<td class="border-right-grey">0.00</td>
-								<td>0.00</td>
-								<td>0.00</td>
-								<td>0.00</td>
-								<td>0.00</td>
-								<td>
-									<button class="btn btn-sm wait-btn-delete">删除</button>
-								</td>
-							</tr>
-							<tr class="status-exception">
-								<td>Error!</td>
-								<td class="border-right-grey">李光洙</td>
-								<td>6222****4184</td>
-								<td class="border-right-grey">2500.00</td>
-								<td>无数据</td>
-								<td class="border-right-grey">0.00</td>
-								<td>0.00</td>
-								<td>0.00</td>
-								<td>0.00</td>
-								<td>0.00</td>
-								<td>
-									<button class="btn btn-sm wait-btn-delete">删除</button>
-								</td>
-							</tr>
-							<tr>
-								<td>28458965</td>
-								<td class="border-right-grey">李光洙</td>
-								<td>6222****4184</td>
-								<td class="border-right-grey">2500.00</td>
-								<td><span>20160507154200704</span> <a href="javascript:;"
-									class="btn btn-sm btn-findup">查看</a></td>
-								<td class="border-right-grey">8000.00</td>
-								<td>9000.00</td>
-								<td>5000.00</td>
-								<td>6500.00</td>
-								<td>0.00</td>
-								<td>
-									<button class="btn btn-sm btn-blue">确认</button>
-								</td>
-							</tr>
-							<tr>
-								<td>28458965</td>
-								<td class="border-right-grey">李光洙</td>
-								<td class="multi-row">
-									<p>6222****4184</p>
-									<p>6422****4167</p>
-								</td>
-								<td class="border-right-grey multi-row">
-									<p>2500.00</p>
-									<p>2500.00</p>
-								</td>
-								<td class="multi-row width-fixed">
-									<p class="border-bottom-grey">
-										<span>20160507154200704</span> <a href="javascript:;"
-											class="btn btn-sm btn-findup">查看</a>
-									</p>
-									<p>
-										<span>20160507154200704</span> <a href="javascript:;"
-											class="btn btn-sm btn-findup">查看</a>
-									</p>
-								</td>
-								<td class="border-right-grey multi-row">
-									<p class="border-bottom-grey">8000.00</p>
-									<p>8000.00</p>
-								</td>
-								<td>9000.00</td>
-								<td>5000.00</td>
-								<td>6500.00</td>
-								<td class="single-exception">200.00</td>
-								<td>
-									<button class="btn btn-sm btn-blue">确认</button>
-								</td>
-							</tr>
-							<tr>
-								<td>28458965</td>
-								<td class="border-right-grey">李光洙</td>
-								<td class="multi-row">
-									<p>6422****4167</p>
-									<p>6422****4167</p>
-									<p>6422****4167</p>
-								</td>
-								<td class="border-right-grey multi-row">
-									<p>2500.00</p>
-									<p>2500.00</p>
-									<p>2500.00</p>
-								</td>
-								<td class="multi-row width-fixed">
-									<p class="border-bottom-grey">
-										<span>20160507154200704</span> <a href="javascript:;"
-											class="btn btn-sm btn-findup">查看</a>
-									</p>
-									<p class="border-bottom-grey">
-										<span class="single-exception">20160507154200704</span> <a
-											href="javascript:;" class="btn btn-sm btn-findup">查看</a>
-									</p>
-									<p class="border-bottom-grey">
-										<span>20160507154200704</span> <a href="javascript:;"
-											class="btn btn-sm btn-findup">查看</a>
-									</p>
-									<p>
-										<span>20160507154200704</span> <a href="javascript:;"
-											class="btn btn-sm btn-findup">查看</a>
-									</p>
-								</td>
-								<td class="border-right-grey multi-row">
-									<p class="border-bottom-grey">8000.00</p>
-									<p class="border-bottom-grey">8000.00</p>
-									<p class="border-bottom-grey">8000.00</p>
-									<p>8000.00</p>
-								</td>
-								<td>9000.00</td>
-								<td>5000.00</td>
-								<td>6500.00</td>
-								<td>0.00</td>
-								<td>
-									<button class="btn btn-sm btn-blue">确认</button>
-								</td>
-							</tr>
-							<tr>
-								<td>28458965</td>
-								<td class="border-right-grey">李光洙</td>
-								<td class="multi-row">
-									<p>6222****4184</p>
-									<p>6422****4167</p>
-								</td>
-								<td class="border-right-grey multi-row">
-									<p>2500.00</p>
-									<p>2500.00</p>
-								</td>
-								<td class="multi-row width-fixed">
-									<p class="border-bottom-grey">
-										<span>20160507154200704</span> <a href="javascript:;"
-											class="btn btn-sm btn-findup">查看</a>
-									</p>
-									<p>
-										<span>20160507154200704</span> <a href="javascript:;"
-											class="btn btn-sm btn-findup">查看</a>
-									</p>
-								</td>
-								<td class="border-right-grey multi-row">
-									<p class="border-bottom-grey">8000.00</p>
-									<p>8000.00</p>
-								</td>
-								<td>9000.00</td>
-								<td>5000.00</td>
-								<td>6500.00</td>
-								<td>200.00</td>
-								<td>
-									<button class="btn btn-sm btn-blue">确认</button>
-								</td>
-							</tr>
-						</tbody>
+						<tbody id="checkPendingList"> </tbody>
 					</table>
 				</div>
 				<!--table-box-->
@@ -339,7 +207,7 @@ var	base='<%=basePath%>';
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script type="text/javascript"
-		src="static/income-cash/js/chech-pending.js" charset="utf-8"></script>
+		src="static/incomeCash/js/chech-pending.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		
 	</script>

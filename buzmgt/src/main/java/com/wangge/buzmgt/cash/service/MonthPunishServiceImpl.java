@@ -1,11 +1,11 @@
 package com.wangge.buzmgt.cash.service;
 
-import java.math.BigDecimal;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -23,229 +24,70 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.wangge.buzmgt.cash.entity.CheckCash;
-import com.wangge.buzmgt.cash.entity.MonthPunish;
-import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
-import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
-import com.wangge.buzmgt.cash.repository.CheckCashRepository;
+import com.wangge.buzmgt.cash.entity.MonthPunish;
+import com.wangge.buzmgt.cash.repository.BankTradeRepository;
+import com.wangge.buzmgt.cash.repository.MonthPunishRepository;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.salesman.entity.PunishSet;
-import com.wangge.buzmgt.salesman.service.PunishSetService;
-import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.salesman.entity.BankCard;
+import com.wangge.buzmgt.salesman.entity.SalesmanData;
+import com.wangge.buzmgt.salesman.service.SalesmanDataService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
+import com.wangge.buzmgt.util.excel.ExcelImport;
+import com.wangge.buzmgt.util.file.FileUtils;
 
 @Service
-public class CheckCashServiceImpl implements CheckCashService {
+public class MonthPunishServiceImpl implements MonthPunishService {
 
   @Value("${buzmgt.file.fileUploadPath}")
   private String fileUploadPath;
 
-  private static final Logger logger = Logger.getLogger(CheckCashServiceImpl.class);
+  private static final Logger logger = Logger.getLogger(MonthPunishServiceImpl.class);
   @Resource
-  private CheckCashRepository checkCashRepository;
+  private MonthPunishRepository monthPunishRepository;
+  @Resource
+  private SalesmanDataService dataService;
   @Resource
   private RegionService regionService;
-  @Resource
-  private SalesManService salesManService;
-  @Resource
-  private WaterOrderCashService cashService;
-  @Resource
-  private BankTradeService bankTradeService;
-  @Resource
-  private MonthPunishService monthPunishService;
-  @Resource
-  private PunishSetService punishSetService;
-  
 
   @Override
-  public List<CheckCash> findAll(Map<String, Object> searchParams) {
+  public List<MonthPunish> findAll(Map<String, Object> searchParams) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<CheckCash> spec = checkCashSearchFilter(filters.values(), CheckCash.class);
-    List<CheckCash> checkCashs =null;
-    try {
-      checkCashs = checkCashRepository.findAll(spec);
-      disposeCheckCash(checkCashs);
-    } catch (Exception e) {
-      logger.info(e.getMessage());
-    }
-    return checkCashs;
+    Specification<MonthPunish> spec = monthPunishSearchFilter(filters.values(), MonthPunish.class);
+    List<MonthPunish> list = monthPunishRepository.findAll(spec);
+    return list;
 
   }
 
   @Override
-  public Page<CheckCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
+  public Page<MonthPunish> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<CheckCash> spec = checkCashSearchFilter(filters.values(), CheckCash.class);
-    Page<CheckCash> checkCashPage=null;
-    try {
-      checkCashPage= checkCashRepository.findAll(spec, pageRequest);
-      disposeCheckCash(checkCashPage.getContent());
-      
-    } catch (Exception e) {
-      logger.info(e.getMessage());
-    }
-    return checkCashPage;
+    Specification<MonthPunish> spec = monthPunishSearchFilter(filters.values(), MonthPunish.class);
+    Page<MonthPunish> page = monthPunishRepository.findAll(spec, pageRequest);
+    return page;
   }
 
-  public void disposeCheckCash( List<CheckCash> checkCashs){
-    try {
-      
-      checkCashs.forEach(checkCash->{
-        String userId=checkCash.getUserId();
-        if(StringUtils.isNotEmpty(userId)){
-          
-          String payDate=DateUtil.date2String(checkCash.getCreateDate());
-          //TODO 查询银行导入数据
-          Map<String, Object> secp=new HashMap<>();
-          
-          secp.put("EQ_userId", userId);
-          secp.put("EQ_payDate", payDate);
-          List<BankTrade> bankTrades =bankTradeService.findAll(secp);
-          secp.remove("EQ_payDate");
-          checkCash.setBankTrades(bankTrades);
-          disposeBankTrade(bankTrades,checkCash);
-          
-          //TODO 查询流水单号
-          secp.put("EQ_createDate", payDate);//划分时间
-          List<WaterOrderCash> wocs =cashService.findAll(secp);
-          secp.remove("EQ_createDate");
-          checkCash.setCashs(wocs);
-          
-          
-          /*
-           * -->查询是否扣罚
-           * 查询前一天是否有扣罚
-           */
-          secp.put("EQ_createDate", DateUtil.date2String(DateUtil.moveDate(checkCash.getCreateDate(),-1)));
-          List<MonthPunish> monthPunishs=monthPunishService.findAll(secp);
-          checkCash.setMonthPunishs(monthPunishs);
-          disposeMonthPunish(monthPunishs,checkCash);
-          
-          
-        }
-      });
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw e;
-    }
-  }
-  //计算扣罚金额
-  private void disposeMonthPunish(List<MonthPunish> monthPunishs, CheckCash cc) {
-    Float debtMoney=new Float(0);
-    for(MonthPunish wp:monthPunishs){
-      debtMoney+=wp.getDebt()+wp.getAmerce();
-    }
-    cc.setDebtMoney(debtMoney);
-  }
 
-  //计算打款总金额
-  public void disposeBankTrade(List<BankTrade> bankTrades,CheckCash cc){
-    Float incomeMoney=new Float(0);
-    String cardName="";
-    for(BankTrade woc:bankTrades){
-      incomeMoney+=woc.getMoney();
-      cardName=woc.getCardName();
-    }
-    cc.setIncomeMoney(incomeMoney);
-    cc.setCardName(cardName);
-    
-  }
-  
-  /**
-   * 审核过程梳理
-   * 1.查询数据userId+createDate
-   * 2.
-   */
   @Override
   @Transactional
-  public JSONObject checkPendingByUserIdAndCreateDate(String userId, String createDate) {
-    Map<String, Object> secp=new HashMap<>();
-    JSONObject json=new JSONObject();
-    secp.put("EQ_userId", userId);
-    secp.put("EQ_createDate", createDate);
-    try {
-      List<CheckCash> list = this.findAll(secp);
-      
-      
-    } catch (Exception e) {
-      logger.info(e.getMessage());
-    }
-    
-    return json;
-  }
-  
-  public void checkWaterOrderCash(CheckCash cc){
-    List<WaterOrderCash> waterOrders = cc.getCashs();
-    if(waterOrders.size()==0)
-      return ;
-    Float stayMoney=cc.getStayMoney();//待付金额
-    Float incomeMoney=cc.getIncomeMoney();//支付金额
-    Float Debt=new Float(0);//欠款金额
-    for(WaterOrderCash order:waterOrders){
-      //总支付金额大于流水单金额
-      Float cashMoney=order.getCashMoney();
-      if(incomeMoney>cashMoney){
-        order.setPaymentMoney(cashMoney);
-      }else{
-       if(incomeMoney<0)
-         order.setPaymentMoney(0f);
-       else
-        order.setPaymentMoney(incomeMoney);
-      }
-      incomeMoney-=cashMoney;
-      
-      
-      order.setPayStatus(WaterPayStatusEnum.OverPay);
-      order.setPayDate(cc.getCreateDate());
-      }
-    //修改原有扣罚状态
-
-    
-    //是否产生扣罚
-      if(stayMoney>0){
-        //产生扣罚，修改流水单号状态
-        WaterOrderCash order= waterOrders.get(0);
-        order.setIsPunish(1);
-        
-        MonthPunish mp=new MonthPunish();
-        String userId=order.getUserId();
-        mp.setDebt(stayMoney);
-        PunishSet punishSet=punishSetService.findByUserId(userId);
-        mp.setAmerce(stayMoney*punishSet.getPunishNumber());//扣罚
-        mp.setStatus(0);//
-        mp.setCreateDate(order.getCreateDate());
-        mp.setSeriaNo(order.getSerialNo());
-        mp.setUserId(userId);
-        monthPunishService.save(mp);
-      }
-      cashService.save(waterOrders);
-      
+  public void save(MonthPunish mp) {
+    monthPunishRepository.save(mp);
   }
 
-  @Override
-  public JSONObject deleteBankTradeByUserIdAndCreateDate(String userId, String createDate) {
-    return null;
-  }
-  
-  @Override
-  public List<CheckCash> findByCreateDate(String createDate) {
-    return null;
-  }
+  private static Specification<MonthPunish> monthPunishSearchFilter(final Collection<SearchFilter> filters,
+      final Class<MonthPunish> entityClazz) {
 
-
-  
-  private static Specification<CheckCash> checkCashSearchFilter(final Collection<SearchFilter> filters,
-      final Class<CheckCash> entityClazz) {
-
-    return new Specification<CheckCash>() {
+    return new Specification<MonthPunish>() {
 
       private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
 
@@ -259,7 +101,7 @@ public class CheckCashServiceImpl implements CheckCashService {
 
       @SuppressWarnings({ "rawtypes", "unchecked" })
       @Override
-      public Predicate toPredicate(Root<CheckCash> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+      public Predicate toPredicate(Root<MonthPunish> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         if (CollectionUtils.isNotEmpty(filters)) {
           List<Predicate> predicates = new ArrayList<Predicate>();
           for (SearchFilter filter : filters) {

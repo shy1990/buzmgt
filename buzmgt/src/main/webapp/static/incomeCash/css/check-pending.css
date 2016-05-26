@@ -16,7 +16,7 @@ html{
 table tr.status-exception td{
     color:#f02c2c;
 }
-.single-exception,table tr td.single-exception{
+.single-exception{
     color:#f02c2c;
     font-weight:bold;
 }
@@ -34,6 +34,12 @@ table tr.status-exception td{
     line-height:33px;
     margin:0;
     padding:8px 20px;
+}
+.multi-row-p>p{
+	border-top: 1px solid #eee;
+}
+.multi-row-p>p:FIRST-CHILD{
+	border-top: none;
 }
 .btn-findup{
     display: none;

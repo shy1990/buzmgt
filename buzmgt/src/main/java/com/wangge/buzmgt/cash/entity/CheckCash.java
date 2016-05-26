@@ -34,21 +34,21 @@ public class CheckCash implements Serializable  {
   @Column(name="RNID")
   private Integer rnid;
   private String userId;
-  private Date payDate;
-  @Column(name="card_name")
-  private String username;
-  
-  private Float incomeMoney=new Float(0);//打款金额
-  
-  @Transient
+  private Date createDate;
   private Float cashMoney=new Float(0);//收现金额
+  @Transient
+  private String cardName;
+  @Transient
+  private Float incomeMoney=new Float(0);//打款金额
+  @Transient
+  private Float shouldPayMoney=new Float(0);//应付金额
   @Transient
   private Float debtMoney=new Float(0);//欠款金额（欠款+扣罚）
   @Transient
-  private Float stayMoney=cashMoney+debtMoney-incomeMoney;//待收金额
+  private Float stayMoney;//待收金额
   
   @Transient
-  private MonthPunish monthPunish ;
+  private List<MonthPunish> monthPunishs ;
   @Transient
   private List<BankTrade> bankTrades;
   
@@ -59,6 +59,16 @@ public class CheckCash implements Serializable  {
 
   
   
+  public String getCardName() {
+    return cardName;
+  }
+
+
+  public void setCardName(String cardName) {
+    this.cardName = cardName;
+  }
+
+
   public Float getIncomeMoney() {
     return incomeMoney;
   }
@@ -66,6 +76,17 @@ public class CheckCash implements Serializable  {
 
   public void setIncomeMoney(Float incomeMoney) {
     this.incomeMoney = incomeMoney;
+  }
+
+
+  public Float getShouldPayMoney() {
+    shouldPayMoney=cashMoney+debtMoney;
+    return shouldPayMoney;
+  }
+
+
+  public void setShouldPayMoney(Float shouldPayMoney) {
+    this.shouldPayMoney = shouldPayMoney;
   }
 
 
@@ -90,6 +111,7 @@ public class CheckCash implements Serializable  {
 
 
   public Float getStayMoney() {
+    stayMoney = cashMoney+debtMoney-incomeMoney;
     return stayMoney;
   }
 
@@ -118,35 +140,24 @@ public class CheckCash implements Serializable  {
     this.userId = userId;
   }
 
-
-  public Date getPayDate() {
-    return payDate;
-  }
-
-
-  public void setPayDate(Date payDate) {
-    this.payDate = payDate;
-  }
-
-
-  public String getUsername() {
-    return username;
-  }
-
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-
   
-  public MonthPunish getMonthPunish() {
-    return monthPunish;
+  public Date getCreateDate() {
+    return createDate;
   }
 
 
-  public void setMonthPunish(MonthPunish monthPunish) {
-    this.monthPunish = monthPunish;
+  public void setCreateDate(Date createDate) {
+    this.createDate = createDate;
+  }
+
+
+  public List<MonthPunish> getMonthPunishs() {
+    return monthPunishs;
+  }
+
+
+  public void setMonthPunishs(List<MonthPunish> monthPunishs) {
+    this.monthPunishs = monthPunishs;
   }
 
 

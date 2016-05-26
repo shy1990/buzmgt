@@ -33,6 +33,19 @@ public interface CheckCashService {
    */
   public  Page<CheckCash> findAll(Map<String, Object> searchParams, Pageable pageRequest);
 
+  /**
+   * 账单审核
+   * @param userId
+   * @param createDate
+   * @return
+   */
+  public JSONObject checkPendingByUserIdAndCreateDate(String userId,String createDate);
   
-  
+  /**
+   * 删除未匹配的银行交易记录
+   * @param userId
+   * @param createDate
+   * @return
+   */
+  public JSONObject deleteBankTradeByUserIdAndCreateDate(String userId,String createDate);
 }

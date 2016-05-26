@@ -2,14 +2,14 @@ var checkPendingTotal = 0;
 $(function() {
 	initDateInput();// 初始化日期
 	findCheckCashList();// 查询列表
-	initExcelExport();//初始化导出excel
+//	initExcelExport();//初始化导出excel
 	
 })
 function initDateInput() {
 	// 初始化日期 前1天
-	var newDate = (new Date()).DateAdd('d', -1);
+	var newDate = (new Date()).DateAdd('d', -2);
 	var nowDate = changeDateToString(newDate);
-	SearchData['sc_EQ_payDate'] = nowDate;
+	SearchData['sc_EQ_createDate'] = nowDate;
 	$('#searchDate').val(nowDate);
 	$('#archivingDate').val(nowDate);
 
@@ -36,7 +36,7 @@ function initDateInput() {
 function goSearch() {
 	var Time = $('#searchDate').val();
 	if (!isEmpty(Time)) {
-		SearchData['sc_EQ_payDate'] = Time;
+		SearchData['sc_EQ_createDate'] = Time;
 		findCheckCashList();
 	}
 }
@@ -48,9 +48,9 @@ function initExcelExport() {
 		var startTime = $('#startTime').val();
 		if (!isEmpty(startTime)) {
 
-			SearchData['sc_EQ_payDate'] = startTime;
+			SearchData['sc_EQ_createDate'] = startTime;
 
-			window.location.href = base + "" + conditionProcess();
+			window.location.href = base + "/export";
 		}
 
 	});
@@ -65,10 +65,10 @@ function findTab() {
  * @returns {String}
  */
 function conditionProcess() {
-	var SearchData_ = "sc_GTE_dateTime="
+	var SearchData_ = "sc_EQ_createDate="
 			+ (SearchData.sc_GTE_dateTime == null ? ''
 					: SearchData.sc_GTE_dateTime)
-			+ "&sc_LTE_dateTime="
+			+ "&sc_EQ_createDate="
 			+ (SearchData.sc_LTE_dateTime == null ? ''
 					: SearchData.sc_LTE_dateTime);
 
@@ -78,18 +78,19 @@ function findCheckCashList(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
 	$.ajax({
-		url : "/cash",
+		url : "/checkCash",
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
 		success : function(orderData) {
-			createBankTradeTable(orderData);
-			var searchTotal = orderData.totalElements;
-			if (searchTotal != checkPendingTotal || searchTotal == 0) {
-				checkPendingTotal = searchTotal;
-
-				checkCashPaging(orderData);
-			}
+			createCheckPendingTable(orderData);
+			console.info(orderData);
+//			var searchTotal = orderData.totalElements;
+//			if (searchTotal != checkPendingTotal || searchTotal == 0) {
+//				checkPendingTotal = searchTotal;
+//
+//				checkPendingPaging(orderData);
+//			}
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");
@@ -102,16 +103,16 @@ function findCheckCashList(page) {
  * @param data
  */
 
-function createBankTradeTable(data) {
-	var myTemplate = Handlebars.compile($("#bankTrade-table-template").html());
-	$('#bankTradeList').html(myTemplate(data));
+function createCheckPendingTable(data) {
+	var myTemplate = Handlebars.compile($("#checkPending-table-template").html());
+	$('#checkPendingList').html(myTemplate(data));
 }
 /**
  * 分页
  * 
  * @param data
  */
-function checkCashPaging(data) {
+function checkPendingPaging(data) {
 	var totalCount = data.totalElements, limit = data.size;
 	$('#checkCashPager').extendPagination({
 		totalCount : totalCount,
@@ -126,7 +127,16 @@ Handlebars.registerHelper('formDate', function(value) {
 	if (value == null || value == "") {
 		return "----";
 	}
-	return changeTimeToString(new Date(value));
+	return changeDateToString(new Date(value));
+});
+/**
+ * 待付金额
+ */
+Handlebars.registerHelper('disposeStayMoney', function(value) {
+	if (value == 0 || value == 0.0 || value == 0.00) {
+		return value;
+	}
+	return '<span class="single-exception">'+value+'</span>';
 });
 /**
  * 根据流水号查询
