@@ -48,7 +48,9 @@ table tr.status-exception td{
     margin-left:10px;
     padding:0 3px;
 }
-.btn-findup:hover{
+.btn-findup:hover,
+.btn-findup:ACTIVE,
+.btn-findup:FOCUS{
     color:#fff;
 }
 tr:hover .btn-findup{

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.persistence.Transient;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -118,6 +119,7 @@ public class CheckCashServiceImpl implements CheckCashService {
           List<WaterOrderCash> wocs =cashService.findAll(secp);
           secp.remove("EQ_createDate");
           checkCash.setCashs(wocs);
+          checkCash.setIsCheck(wocs.get(0).getPayStatus());
           
           
           /*
@@ -157,6 +159,7 @@ public class CheckCashServiceImpl implements CheckCashService {
     cc.setIncomeMoney(incomeMoney);
     cc.setCardName(cardName);
     
+    
   }
   
   /**
@@ -173,43 +176,61 @@ public class CheckCashServiceImpl implements CheckCashService {
     secp.put("EQ_createDate", createDate);
     try {
       List<CheckCash> list = this.findAll(secp);
-      
+      if(list.size()>0){
+        checkWaterOrderCash(list.get(0));
+        json.put("status", "success");
+        json.put("successMsg", "操作成功");
+        return json;
+      }
+      json.put("status", "error");
+      json.put("errorMsg", "未查到该数据");
       
     } catch (Exception e) {
+      json.put("status", "error");
+      json.put("errorMsg", "操作失败");
       logger.info(e.getMessage());
+      return json;
     }
     
     return json;
   }
-  
+  @Transactional
   public void checkWaterOrderCash(CheckCash cc){
-    List<WaterOrderCash> waterOrders = cc.getCashs();
-    if(waterOrders.size()==0)
-      return ;
-    Float stayMoney=cc.getStayMoney();//待付金额
-    Float incomeMoney=cc.getIncomeMoney();//支付金额
-    Float Debt=new Float(0);//欠款金额
-    for(WaterOrderCash order:waterOrders){
-      //总支付金额大于流水单金额
-      Float cashMoney=order.getCashMoney();
-      if(incomeMoney>cashMoney){
-        order.setPaymentMoney(cashMoney);
-      }else{
-       if(incomeMoney<0)
-         order.setPaymentMoney(0f);
-       else
-        order.setPaymentMoney(incomeMoney);
-      }
-      incomeMoney-=cashMoney;
+    try {
+      List<WaterOrderCash> waterOrders = cc.getCashs();
       
-      
-      order.setPayStatus(WaterPayStatusEnum.OverPay);
-      order.setPayDate(cc.getCreateDate());
+      if(waterOrders.size()==0)
+        return ;
+      Float stayMoney=cc.getStayMoney();//待付金额
+      Float incomeMoney=cc.getIncomeMoney();//支付金额
+      Float Debt=new Float(0);//欠款金额
+      for(WaterOrderCash order:waterOrders){
+        //总支付金额大于流水单金额
+        Float cashMoney=order.getCashMoney();
+        if(incomeMoney>cashMoney){
+          order.setPaymentMoney(cashMoney);
+        }else{
+          if(incomeMoney<0)
+            order.setPaymentMoney(0f);
+          else
+            order.setPaymentMoney(incomeMoney);
+        }
+        incomeMoney-=cashMoney;
+        
+        
+        order.setPayStatus(WaterPayStatusEnum.OverPay);
+        order.setPayDate(cc.getCreateDate());
       }
-    //修改原有扣罚状态
-
-    
-    //是否产生扣罚
+      //修改原有扣罚状态
+      List<MonthPunish> monthPunishs=cc.getMonthPunishs();
+      if(monthPunishs.size()>0){
+        monthPunishs.forEach(mp->{
+          mp.setStatus(1);
+        });
+        monthPunishService.save(monthPunishs);
+      }
+      
+      //是否产生扣罚
       if(stayMoney>0){
         //产生扣罚，修改流水单号状态
         WaterOrderCash order= waterOrders.get(0);
@@ -227,6 +248,11 @@ public class CheckCashServiceImpl implements CheckCashService {
         monthPunishService.save(mp);
       }
       cashService.save(waterOrders);
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.info(e.getMessage());
+    }
       
   }
 

@@ -43,23 +43,34 @@ public class CheckCashController {
   }
   @RequestMapping(value = "", method = RequestMethod.GET)
   @ResponseBody
-  public String getCashList(HttpServletRequest request,
+  public Page<CheckCash> getCashList(HttpServletRequest request,
       @PageableDefault(page = 0, size = 10, sort = { "createDate","rnid" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<CheckCash> page= checkCashService.findAll(searchParams, pageable);
-    String json = "";
-    try {
-      json = JSON.toJSONString(page, SerializerFeature.DisableCircularReferenceDetect);
-    } catch (Exception e) {
-      logger.error(e.getMessage());
-    }
-    return json;
+//    String json = "";
+//    try {
+//      json = JSON.toJSONString(page, SerializerFeature.DisableCircularReferenceDetect);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//      logger.error(e.getMessage());
+//    }
+    return page;
+  }
+  
+  /**
+   * 查询 未匹配银行交易记录
+   */
+  @RequestMapping(value="unCheck",method=RequestMethod.GET)
+  public JSONObject getUnCheckBankTrades(HttpServletRequest request){
+//    return checkCashService.getUnCheckBankTrades();
+    return null;
   }
   /**
    * 审核账单（打款和流水单号）
    * @return
    */
-  @RequestMapping(name="/{userId}",method=RequestMethod.POST)
+  @RequestMapping(value="/{userId}",method=RequestMethod.POST)
+  @ResponseBody
   public JSONObject auditByUserIdAndCreateDate(@PathVariable("userId") String userId,
       @RequestParam(value="createDate") String createDate){
     

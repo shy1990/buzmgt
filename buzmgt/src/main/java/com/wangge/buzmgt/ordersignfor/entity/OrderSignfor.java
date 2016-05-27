@@ -90,13 +90,13 @@ public class OrderSignfor implements Serializable {
   @Transient
   private String goodNum;
   
-  @Column(name="user_id",insertable=false,updatable=false)
+  @Column(name="user_id")
   private String userId;
 //  private String truename;
 //  private String ywName;//业务名称;
  
   @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id",insertable=false,updatable=false)
   private SalesMan salesMan;
   
   private String userPhone;

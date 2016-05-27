@@ -42,8 +42,11 @@ public class PunishSetServiceImpl implements PunishSetService{
   @Override
   public PunishSet findByUserId(String userId) {
     String regionId=salesManService.getRegionIdByUserId(userId);
-    
-    return this.findByRegionId(regionId);
+    PunishSet ps= findByRegionId(regionId);
+    if(ps==null){
+      ps=findByRegionId("0");
+    }
+    return ps;
   }
 
 }

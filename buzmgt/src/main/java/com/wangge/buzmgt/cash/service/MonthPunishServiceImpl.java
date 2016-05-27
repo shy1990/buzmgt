@@ -79,9 +79,14 @@ public class MonthPunishServiceImpl implements MonthPunishService {
 
 
   @Override
-  @Transactional
   public void save(MonthPunish mp) {
     monthPunishRepository.save(mp);
+  }
+
+  @Override
+  public void save(List<MonthPunish> monthPunishs) {
+    monthPunishRepository.save(monthPunishs);
+    
   }
 
   private static Specification<MonthPunish> monthPunishSearchFilter(final Collection<SearchFilter> filters,
@@ -256,6 +261,7 @@ public class MonthPunishServiceImpl implements MonthPunishService {
       }
     };
   }
+
 
 
 }

@@ -61,7 +61,7 @@ public class WaterOrderCash implements Serializable  {
   
   
   @Id
-  @Column(name="SERIAL_NO",insertable=false,updatable=false)
+  @Column(name="SERIAL_NO")
   private String serialNo ; //流水单号
   
   private String userId ; //用户id
@@ -70,7 +70,7 @@ public class WaterOrderCash implements Serializable  {
   private Integer isPunish ;//是否扣罚
   
   @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
-  @JoinColumn(name="SERIAL_NO")
+  @JoinColumn(name="SERIAL_NO",insertable=false,updatable=false)
   private List<WaterOrderDetail> orderDetails;//订单详情
   
   @Enumerated(EnumType.ORDINAL)

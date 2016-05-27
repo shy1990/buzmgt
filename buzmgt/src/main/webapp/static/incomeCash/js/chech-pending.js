@@ -139,6 +139,17 @@ Handlebars.registerHelper('disposeStayMoney', function(value) {
 	return '<span class="single-exception">'+value+'</span>';
 });
 /**
+ * 待付金额
+ */
+Handlebars.registerHelper('isCheckStatus', function(isCheck,userId,createDate) {
+	var formcreateDate=changeDateToString(new Date(createDate));
+	var html='<button class="btn btn-sm btn-blue" onClick="checkPending('+userId+','+formcreateDate+')">确认</button>'
+	if (isCheck == '已支付') {
+		return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
+	}
+	return html;
+});
+/**
  * 根据流水号查询
  */
 function findBySalesManName() {
@@ -167,4 +178,26 @@ function findBySalesManName() {
  */
 function isEmpty(value) {
 	return value == undefined || value == "" || value == null;
+}
+/**
+ * 确认审核
+ * @param userId
+ * @param createDate
+ */
+function checkPending(userId,createDate){
+	$.ajax({
+		url:base+"/checkCash/"+userId+"?createDate="+createDate,
+		type:"POST",
+		dataType:"json",
+		success:function(data){
+			if("success"===data.status){
+				alert(data.successMsg);
+				return ;
+			}
+			alert(data.errorMsg);
+		},
+		error:function(data){
+			alert("");
+		}
+	})
 }

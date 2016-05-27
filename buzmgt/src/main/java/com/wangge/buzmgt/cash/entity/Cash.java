@@ -56,11 +56,11 @@ public class Cash implements Serializable  {
   
   
   @Id
-  @Column(name="id",insertable=false,updatable=false)
+  @Column(name="id")
   private Long cashId ; //订单id
 //  @Transient
   @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
-  @JoinColumn(name="id")
+  @JoinColumn(name="id",insertable=false,updatable=false)
   private OrderSignfor order;//订单
   private String userId ; //用户id
   

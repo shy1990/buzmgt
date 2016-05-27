@@ -47,7 +47,7 @@
       </td>
       <td class="multi-row width-fixed multi-row-p">
 				{{#each cashs}}
-        <p> <span>{{serialNo}}</span> <a href="javascript:;" class="btn btn-sm btn-findup">查看</a> </p>
+        <p> <span>{{serialNo}}</span> <a href="javascript:toWaterOrder('{{serialNo}}');" class="btn btn-sm btn-findup">查看</a> </p>
 				{{/each}}
       </td>
       <td class="border-right-grey multi-row multi-row-p">
@@ -61,7 +61,8 @@
       <td>{{{disposeStayMoney stayMoney}}}</td>
       <td>{{formDate createDate}}</td>
       <td>
-        <button class="btn btn-sm btn-blue">确认</button>
+				{{!--是否已审核--}}
+				{{{isCheckStatus isCheck userId createDate}}}
       </td>
     </tr>
 	{{/each}}
