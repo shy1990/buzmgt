@@ -47,7 +47,7 @@
             <div class="input-group input-group-sm">
                 <span class="input-group-addon " id="basic-addon1"><i
                         class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-                <input type="text" class="form-control form_datetime input-sm" placeholder="开始日期"
+                <input id='aaa' type="text" class="form-control form_datetime input-sm" placeholder="开始日期"
                        readonly="readonly">
             </div>
         </div>
@@ -56,12 +56,13 @@
             <div class="input-group input-group-sm">
                 <span class="input-group-addon " id="basic-addon1"><i
                         class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-                <input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"
+                <input id='bbb' type="text" class="form-control form_datetime input-sm" placeholder="结束日期"
                        readonly="readonly">
             </div>
         </div>
         <!--考核开始时间-->
-        <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
+        <%--<button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">--%>
+        <button id="kkk" class="btn btn-blue btn-sm" >
             检索
         </button>
         <!---->
@@ -195,8 +196,11 @@
 <script src="static/salesmanData/jquery.min.js"></script>
 <script src="static/salesmanData/jquery.page.js"></script>
 <script>
+
     //分页
     var p = ${page.number};//当前页从0开始
+    <%--var startTimeFen = ${startTimeFen}--%>
+    <%--var endTimeFen = ${endTimeFen}--%>
     console.log("****:  "+p);
     $(".tcdPageCode").createPage({
         pageCount : ${page.totalPages},//总页数
@@ -204,8 +208,15 @@
         backFn : function(p) {
 //            $("#tbody").empty();
 //            list(p - 1);
-            window.location.href='MonthPunishUp/list2?page='+(p-1);
+            window.location.href='MonthPunishUp/list3?page='+(p-1)+'&startTime='+"${startTimeFen}"+'&endTime='+"${endTimeFen}";
         }
+    });
+    //条件查询
+    $("#kkk").click(function(){
+        var startTime = $("#aaa").val();
+        var endTime = $("#bbb").val();
+        console.log(startTime+":   "+endTime);
+        window.location.href='MonthPunishUp/list3?page='+0+'&startTime='+startTime+'&endTime='+endTime;
     });
 
 </script>
