@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.monthTask;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.core.annotation.HandleAfterSave;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
@@ -24,10 +25,13 @@ public class DataEventHandler {
 			monthRep.save(orda);
 			monthTask.setMonthData(orda);
 		}
+		if(monthTask.getStatus()==1){
+			//TODO 如何调用东西
+		}
 	}
 
-	@HandleBeforeSave
+	@HandleAfterSave
 	public void handleProfileSave(MonthTaskSub monthTasksub) {
-		// … you can now deal with Profile in a type-safe way
+		//TODO 如何调用推送
 	}
 }

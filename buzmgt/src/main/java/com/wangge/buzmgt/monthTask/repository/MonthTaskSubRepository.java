@@ -23,4 +23,8 @@ public interface MonthTaskSubRepository extends JpaRepository<MonthTaskSub, Long
 
 	@EntityGraph("monthTaskSub.monthsd")
 	Page<MonthTaskSub> findByMonthTask_IdAndGoalOrderByGoalDesc(Long id, Integer goal, Pageable page);
+	@Query("select goal, monthsd.registData.shopName  from MonthTaskSub t where t.monthTask.id=?1 order by goal desc")
+	Page<Object> findByMonthTask(Long id, Pageable page);
+	@Query("select goal, monthsd.registData.shopName  from MonthTaskSub t where t.monthTask.id=?1 order by goal desc")
+	List<Object> findByMonthTask(Long id);
 }

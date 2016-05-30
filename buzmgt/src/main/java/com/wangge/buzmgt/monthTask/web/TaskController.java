@@ -12,9 +12,13 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.hadoop.io.nativeio.Errno;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -33,18 +37,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.WebUtils;
 
 import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
 import com.wangge.buzmgt.monthTask.entity.MonthTask;
+import com.wangge.buzmgt.monthTask.entity.MonthTaskPunish;
 import com.wangge.buzmgt.monthTask.entity.MonthTaskSub;
 import com.wangge.buzmgt.monthTask.repository.MonthOrdersDataRepository;
+import com.wangge.buzmgt.monthTask.repository.MonthTaskPunishRepository;
 import com.wangge.buzmgt.monthTask.repository.MonthTaskRepository;
 import com.wangge.buzmgt.monthTask.service.MonthTaskService;
+import com.wangge.buzmgt.oilcost.entity.OilCost;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.repository.RegionRepository;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
+import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.util.ExcelExport;
 
 @Controller
 @RequestMapping("/monthTask")
@@ -59,20 +71,31 @@ public class TaskController {
 	private SalesManRepository salesRep;
 	@Resource
 	MonthOrdersDataRepository monthDataRep;
+	@Autowired
+	private ManagerService managerService;
+	@Autowired
+	MonthTaskPunishRepository monthPunishRep;
+	@Autowired
+	MonthTaskPunishRepository monthTakPuRep;
 	private Log log = LogFactory.getLog(TaskController.class);
 
+
+
 	/**
-	 * 月任务派发页面->修改,发布 月任务派发页面->添加月任务 月任务派发页面->查看月任务设置情况
+	 * 任务查看页面
 	 * 
-	 * @param regoinId
-	 * @param page
+	 * @param task
+	 * @param model
 	 * @return
 	 */
-	@RequestMapping("/list")
-	public String init( Model model) {
-
-		return "month/task_month";
+	@RequestMapping("/lookup/set/{id}")
+	public String lookeTaskSet(@PathVariable("id") MonthTask task, Model model) {
+		monthTaskService.findSalesMan(task, model);
+		model.addAttribute("taskId", task.getId());
+		return "month/mainTask_set_detail";
 	}
+
+
 
 	/**
 	 * 月任务查看页面->子任务设置->子任务执行情况 月任务查看页面->扣罚设置页面
@@ -84,10 +107,45 @@ public class TaskController {
 	@RequestMapping("/lookup/mainTasks")
 	public String findAllMainTasks(String regoinId, Model model) {
 		model.addAttribute("region", monthTaskService.getRegion(regoinId));
-		
+
 		return "month/mainTask";
 	}
+	/**
+	 * 查看任务数据
+	 * 
+	 * @param task
+	 * @param page
+	 * @return
+	 */
+	@RequestMapping("/lookup/setData/{id}")
+	public ResponseEntity<Map<String, Object>> lookeTaskSetData(@PathVariable("id") MonthTask task, Pageable page) {
+		Map<String, Object> smap = new HashMap<String, Object>();
+		smap = monthTaskService.findSetData(task, page);
+		return new ResponseEntity<Map<String, Object>>(smap, HttpStatus.OK);
+	}
 
+	@RequestMapping("/export/{id}")
+	public void excelExport(@PathVariable("id") MonthTask task, @RequestParam("salesId") SalesMan salesman,
+			HttpServletRequest request, HttpServletResponse response) {
+		monthTaskService.ExportSetExcel(task,
+				salesman.getTruename().trim().replace("/n", "").replace("/r", "").replace("/t", ""), request, response);
+
+	}
+	
+	/**
+	 * 月任务派发页面->修改,发布 月任务派发页面->添加月任务 月任务派发页面->查看月任务设置情况
+	 * 
+	 * @param regoinId
+	 * @param page
+	 * @return
+	 */
+	@RequestMapping("/list")
+	public String init(Model model) {
+		//本月已派发的任务
+		model.addAttribute("doneCount", monthTaskService.getIssueTaskCount());
+		return "month/task_month";
+	}
+	
 	/**
 	 * 月任务派发情况查询;主任务数据查询
 	 * 
@@ -96,9 +154,10 @@ public class TaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> handle(String month, Pageable page,@RequestParam MultiValueMap<String, String> parameters) {
+	public ResponseEntity<Map<String, Object>> handle(String month, Pageable page,
+			@RequestParam MultiValueMap<String, String> parameters) {
 		try {
-			return new ResponseEntity<Map<String, Object>>(monthTaskService.getMainTaskList(page, month,parameters),
+			return new ResponseEntity<Map<String, Object>>(monthTaskService.getMainTaskList(page, month, parameters),
 					HttpStatus.OK);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
@@ -217,21 +276,59 @@ public class TaskController {
 	}
 
 	/**
-	 * 月任务扣罚
+	 * 月任务扣罚页面
 	 * 
 	 * @param subTaskId
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/punish", method = RequestMethod.GET)
-	public String punish( Long subTaskId, Model model) {
+	public String punish(Long subTaskId, Model model) {
 		try {
+			Subject subject = SecurityUtils.getSubject();
+			User user = (User) subject.getPrincipal();
+			Manager manager = managerService.getById(user.getId());
+			model.addAttribute("regionId", manager.getRegion().getId());
+			model.addAttribute("punishObj", monthPunishRep.findById(0));
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e);
 		}
 		return "month/punish_set";
-
 	}
 
+	/**月任务扣罚数据查询
+	 * @param page
+	 * @return
+	 */
+	@RequestMapping(value = "/punish/data", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> punishData(Pageable page) {
+		Map<String, Object> smap = new HashMap<String, Object>();
+		try {
+			smap = monthTaskService.getPunishData(page);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.debug(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(smap, HttpStatus.OK);
+	}
+
+	/**月任务扣罚数据新建
+	 * @param newObj
+	 * @return
+	 */
+	@RequestMapping(value = "/punish", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> createPunish(MonthTaskPunish newObj) {
+		Map<String, Object> smap = new HashMap<String, Object>();
+		try {
+			newObj.setRegionName(monthTaskService.getAllName(regoinRep.findById(newObj.getRegionId()), ""));
+			monthTakPuRep.save(newObj);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.debug(e);
+			return new ResponseEntity<Map<String, Object>>(smap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Map<String, Object>>(smap, HttpStatus.OK);
+
+	}
 }

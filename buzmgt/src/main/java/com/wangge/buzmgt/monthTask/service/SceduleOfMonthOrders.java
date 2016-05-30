@@ -51,7 +51,7 @@ public class SceduleOfMonthOrders {
 			+ "  and (s.IS_PRIMARY_ACCOUNT !=1 or s.IS_PRIMARY_ACCOUNT is null) ";
 
 	// 每月15号点时分 0 30 1 15 * ?
-	@Scheduled(cron = "20 05 14 * * ? ")
+	@Scheduled(cron = "20 05 1 15 * ? ")
 	public void handleMontholdData() {
 		List<Object[]> townList = em.createNativeQuery(townSql).getResultList();
 		for (Object[] towns : townList) {

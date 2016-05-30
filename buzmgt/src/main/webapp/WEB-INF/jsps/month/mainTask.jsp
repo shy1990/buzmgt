@@ -170,8 +170,6 @@
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-	<script src="static/yw-team-member/team-member.js"
-		type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
 		charset="utf-8"></script>
 	<script type="text/javascript"

@@ -7,13 +7,17 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.Resource;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -35,19 +39,24 @@ import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
 import com.wangge.buzmgt.monthTask.entity.MonthTask;
 import com.wangge.buzmgt.monthTask.entity.MonthTaskExecution;
+import com.wangge.buzmgt.monthTask.entity.MonthTaskPunish;
 import com.wangge.buzmgt.monthTask.entity.MonthTaskSub;
 import com.wangge.buzmgt.monthTask.entity.MonthshopBasData;
 import com.wangge.buzmgt.monthTask.repository.MonthOrdersDataRepository;
 import com.wangge.buzmgt.monthTask.repository.MonthTaskExecutionRepository;
+import com.wangge.buzmgt.monthTask.repository.MonthTaskPunishRepository;
 import com.wangge.buzmgt.monthTask.repository.MonthTaskRepository;
 import com.wangge.buzmgt.monthTask.repository.MonthTaskSubRepository;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.ExcelExport;
+import com.wangge.buzmgt.util.MapedExcelExport;
 
 @Service
 
@@ -71,6 +80,8 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 	private ManagerService managerService;
 	@Resource
 	private AssessService assessService;
+	@Autowired
+	MonthTaskPunishRepository monthPunishRep;
 	private static Integer[] levels = new Integer[] { 20, 15, 10, 7, 4 };
 
 	// 订单支付状态为1,计算上个月的订单情况
@@ -108,15 +119,18 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 			SecurityException {
 		Map<String, Object> pageMap = new HashMap<String, Object>();
 		Object flag = parameters.getFirst("flag");
-		String saleManName = parameters.getFirst("salesManName") == null ? null : parameters.getFirst("salesManName") + "";
+		String saleManName = parameters.getFirst("salesManName") == null ? null
+				: parameters.getFirst("salesManName") + "";
+		String regionId = getDefaultRegionId();
 		if (null == month || "".equals(month))
 			month = DateUtil.getPreMonth(new Date(), 1);
 		Page<MonthTask> result = null;
+
 		if (null == flag) {
-			result = mtaskRep.findByMonth(month, page);
+			result = mtaskRep.findByMonthAndRegionidLike(month, regionId, page);
 		} else {
-			if (null == saleManName||"".equals(saleManName)) {
-				result = mtaskRep.findByMonthAndStatus(month, 1, page);
+			if (null == saleManName || "".equals(saleManName)) {
+				result = mtaskRep.findByMonthAndStatusAndRegionidLike(month, 1, regionId, page);
 			} else {
 				result = mtaskRep.findByMonthAndStatusAndMonthData_Salesman_TruenameLike(month, 1,
 						"%" + saleManName + "%", page);
@@ -139,6 +153,7 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 			taskMap.put("name", salesman.getTruename());
 			taskMap.put("role", salesman.getUser().getOrganization().getName());
 			Class<? extends MonthTask> mclass = mt.getClass();
+
 			List<Map<String, Object>> dList = new ArrayList<Map<String, Object>>();
 			for (Integer i : levels) {
 				Map<String, Object> datamap = new HashMap<String, Object>();
@@ -157,13 +172,54 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 		return pageMap;
 	}
 
-	// 获取反射的int
+	/**
+	 * 获得用户默认的操作区域; ;0:国家 like '%%' 1:省 like '%37%' 2:市 like '3702%'
+	 * 
+	 * @return
+	 */
+	private String getDefaultRegionId() {
+		Region region = getRegion(null);
+		RegionType type = region.getType();
+		int rgionType = type.ordinal();
+		String regionId = region.getId();
+		switch (rgionType) {
+		case 0:
+			regionId = "%";
+			break;
+		case 1:
+			regionId = regionId.substring(0, 2) + "%";
+			break;
+		case 2:
+			regionId = regionId.substring(0, 4) + "%";
+			break;
+		case 3:
+			regionId = regionId.substring(0, 6) + "%";
+			break;
+		default:
+			break;
+		}
+		return regionId;
+	}
+
+	/**
+	 * 将反射值转为int
+	 * 
+	 * @param o
+	 * @return
+	 */
 	private int getReflectInt(Object o) {
 		return o == null ? 0 : Integer.parseInt(o + "");
 	}
 
-	// 获得县级之上的所有地名
-	private String getAllName(Region r, String name) {
+	/**
+	 * 获得县级及之上的所有地名
+	 * 
+	 * @param r
+	 * @param name
+	 * @return
+	 */
+	@Override
+	public String getAllName(Region r, String name) {
 		if (!r.getName().equals("中国")) {
 			name = r.getName() + name;
 		}
@@ -302,5 +358,142 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 		} else {
 			return regoinRep.findOne(regoinId);
 		}
+	}
+
+	@Override
+	public Map<String, Object> findSetData(MonthTask task, Pageable page) {
+		Map<String, Object> pageMap = new HashMap<String, Object>();
+		Page<Object> resultPage = taskSubrep.findByMonthTask(task.getId(), page);
+		List<Object> dataList = resultPage.getContent();
+		/*
+		 * goal:20 data:{shopName} rate:%;
+		 */
+		List<Map<String, Object>> alList = new ArrayList<Map<String, Object>>();
+		Map<Integer, List<String>> allMap = new HashMap<Integer, List<String>>();
+		for (Object o1 : dataList) {
+			Object[] aArr = (Object[]) o1;
+			Integer level = Integer.parseInt(aArr[0].toString());
+			List<String> nameList = allMap.get(level);
+			if (null == nameList) {
+				nameList = new ArrayList<String>();
+				nameList.add(aArr[1].toString());
+				allMap.put(level, nameList);
+			} else {
+				nameList.add(aArr[1].toString());
+			}
+		}
+		for (Entry<Integer, List<String>> ent : allMap.entrySet()) {
+			Map<String, Object> alMap = new HashMap<String, Object>();
+			int level = ent.getKey();
+			alMap.put("level", ent.getKey());
+			List<String> nameList = ent.getValue();
+			List<Map<String, String>> shopsList = new ArrayList<Map<String, String>>();
+			for (String name : nameList) {
+				Map<String, String> shopMap = new HashMap<String, String>();
+				shopMap.put("name", name);
+				shopsList.add(shopMap);
+			}
+			alMap.put("shops", shopsList);
+			alMap.put("sum", nameList.size());
+			alMap.put("rate", getRate(level, task));
+			alList.add(alMap);
+		}
+		pageMap.put("content", alList);
+		pageMap.put("number", resultPage.getTotalPages());
+		pageMap.put("totalElements", resultPage.getTotalElements());
+		pageMap.put("size", resultPage.getSize());
+		return pageMap;
+	}
+
+	private Object getRate(int level, MonthTask mt) {
+		Class<? extends MonthTask> mclass = mt.getClass();
+		String rate = null;
+		try {
+			double sum = getReflectInt(mclass.getDeclaredMethod("getTal" + level + "goal").invoke(mt));
+			double seted = getReflectInt(mclass.getDeclaredMethod("getTal" + level + "set").invoke(mt));
+			rate = String.format("%10.2f%%", seted / sum).trim().substring(2);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			e.printStackTrace();
+		}
+
+		return rate;
+	}
+
+	@Override
+	public void ExportSetExcel(MonthTask task, String salesName, HttpServletRequest request,
+			HttpServletResponse response) {
+		List<Object> dataList = taskSubrep.findByMonthTask(task.getId());
+		List<Map<String, Object>> alList = new ArrayList<Map<String, Object>>();
+		Map<String, Integer> sumMap = new HashMap<String, Integer>();
+		Map<String, Object> rateMap = new HashMap<String, Object>();
+		for (int level : new Integer[] { 20, 15, 10, 7, 4 }) {
+			rateMap.put(level + "", getRate(level, task));
+		}
+		for (Object o1 : dataList) {
+			Map<String, Object> obMap = new HashMap<String, Object>();
+			Object[] aArr = (Object[]) o1;
+			String level = aArr[0].toString();
+			obMap.put("level", level);
+			obMap.put("shopName", aArr[1]);
+			obMap.put("rate", rateMap.get(level));
+			alList.add(obMap);
+			Integer sum = sumMap.get(level);
+			if (null == sum) {
+				sumMap.put(level, 1);
+			} else {
+				sumMap.put(level, sum + 1);
+			}
+		}
+		List<Map<String, Object>> marginList = new ArrayList<Map<String, Object>>();
+		int start = 0;
+		int end = 0;
+		for (Map.Entry<String, Integer> entry : sumMap.entrySet()) {
+			Map<String, Object> obMap = new HashMap<String, Object>();
+			/*
+			 * int firstRow, int lastRow, int firstCol, int lastCol)
+			 */
+			obMap.put("firstRow", start + 1);
+			end = start + entry.getValue();
+			obMap.put("lastRow", end);
+			obMap.put("firstCol", 0);
+			obMap.put("lastCol", 0);
+			// obMap.put("value", entry.getKey());
+			marginList.add(obMap);
+			Map<String, Object> obMap1 = new HashMap<String, Object>();
+			obMap1.put("firstRow", start + 1);
+			obMap1.put("lastRow", end);
+			obMap1.put("firstCol", 2);
+			obMap1.put("lastCol", 2);
+			// obMap1.put("value", getRate(Integer.parseInt(entry.getKey()),
+			// task));
+			marginList.add(obMap1);
+			start = end;
+		}
+
+		String title = salesName + task.getMonth() + "批量任务设置.xls";
+		String[] gridTitles = new String[] { "拜访次数", "已设置商家", "已设置占比" };
+		String[] keyValues = new String[] { "level", "shopName", "rate" };
+		MapedExcelExport.doExcelExport(title, alList, gridTitles, keyValues, request, response, marginList);
+	}
+
+	@Override
+	public Map<String, Object> getPunishData(Pageable page) {
+		Map<String, Object> pageMap = new HashMap<String, Object>();
+		Page<MonthTaskPunish> resultPage = monthPunishRep.findByIdNot(0, page);
+		List<MonthTaskPunish> dataList = resultPage.getContent();
+		pageMap.put("content", dataList);
+		pageMap.put("number", resultPage.getTotalPages());
+		pageMap.put("totalElements", resultPage.getTotalElements());
+		pageMap.put("size", resultPage.getSize());
+		return pageMap;
+	}
+
+	@Override
+	public Object getIssueTaskCount() {
+		String regionId = getDefaultRegionId();
+		String month = DateUtil.getPreMonth(new Date(), 1);
+		Long sum=monthTaskRep.countByMonthAndStatusAndRegionidLike(month, 1, regionId);
+		return sum;
 	}
 }

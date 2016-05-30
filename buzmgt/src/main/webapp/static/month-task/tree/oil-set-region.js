@@ -32,13 +32,7 @@ $(function(){
 	});
 	getOrgan();
 	getRoles();
-})
-
-/*$(document).ready(function() {
-	getOrgan()
-	getRoles();
-});*/
-
+});
 
 function getOrgan(){
 	$.ajax({

@@ -329,8 +329,8 @@ public class BuzmgtApplicationTests {
 		// monthDataRep.findFirstbySalesmanOrRegionId("A37010504170", "15462",
 		// "2016-06");
 		// System.out.println(moth.getMonth());
-		List<Map<String, Object>> rlist = monTaskRep.findByMonth("2016-06");
-		Map<String, Object> map1=rlist.get(0);
-		System.out.println(rlist.size());
+//		List<Map<String, Object>> rlist = monTaskRep.findByMonth("2016-06");
+//		Map<String, Object> map1=rlist.get(0);
+//		System.out.println(rlist.size());
 	}
 }

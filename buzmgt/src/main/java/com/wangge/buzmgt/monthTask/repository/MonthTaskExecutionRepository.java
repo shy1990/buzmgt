@@ -17,4 +17,5 @@ public interface MonthTaskExecutionRepository extends JpaRepository<MonthTaskExe
 	 */
 	@EntityGraph("monthExecution.graph")
 	List<MonthTaskExecution> findByTaskmonthAndRegistData_idOrderByTimeDesc(String taskMonth, Long memberId);
+	
 }

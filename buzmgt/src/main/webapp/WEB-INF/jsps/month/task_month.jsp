@@ -59,7 +59,7 @@
 		 {{#if status }}  
 							<th class=" text-right btn-jl">
 									<div class="btn-null"></div> <a class="btn btn-blue btn-sm"
-									onclick="javascript:window.location.href='/monthTask/findupTask/{{taskId}}'">查看</a>
+									onclick="javascript:window.location.href='/monthTask/lookup/set/{{taskId}}'">查看</a>
 							</th> 
   		 {{else}} 
 				      
@@ -118,7 +118,7 @@
 							</div>
 							<div class="date-jlll">
 								<span class="text-bai"> 已派发 &nbsp;<span
-									class="text-bai-d">2</span> &nbsp; 个区域
+									class="text-bai-d">${doneCount}</span> &nbsp; 个区域
 								</span>
 							</div>
 						</div>

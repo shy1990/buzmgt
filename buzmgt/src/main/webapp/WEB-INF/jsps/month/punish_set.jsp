@@ -19,11 +19,50 @@
 <link href="static/bootstrap/css/bootstrap-switch.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="static/task/task.css" />
-<link rel="stylesheet" type="text/css" href="static/oil/css/oil.css" />
+<link rel="stylesheet" type="text/css" href="/static/task/task.css" />
+<link rel="stylesheet" type="text/css" href="/static/oil/css/oil.css" />
+<link rel="stylesheet" type="text/css"
+	href="/static/zTree/css/zTreeStyle/zTreeStyle.css" />
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+.ztree {
+	margin-top: 34px;
+	border: 1px solid #ccc;
+	background: #FFF;
+	width: 100%;
+	overflow-y: scroll;
+	overflow-x: auto;
+}
+
+.menuContent {
+	width: 100%;
+	padding-right: 50px;
+	display: none;
+	position: absolute;
+	z-index: 800;
+}
+</style>
+
+<script id="task-table-template" type="text/x-handlebars-template">
+{{#if content}}
+	{{#each content}}
+     <div class="col-sm-3 cl-padd" id="punish{{id}}">
+		<div class="ratio-box">
+			<div class="ratio-box-dd">
+				<span class="label  label-blue">{{addOne @index}} </span> <span
+					class="text-black jll">{{regionName}} </span> <a class="text-redd jll"
+					href="" data-toggle="modal" data-target=""> {{rate}} </a> <a
+					class="text-blue-s jll"  data-toggle="modal"
+					 onclick="modify('{{id}}','{{rate}}')">修改</a>
+ 				<a class="text-blue-s jll" data-toggle="modal" onclick="deletePunish('{{id}}')">删除</a>
+			</div>
+		</div>
+	</div>
+	{{/each}}
+{{/if}}
+</script>
 </head>
 
 <body>
@@ -37,15 +76,16 @@
 			<div class="table-responsive  ">
 				<!--公里系数表头-->
 				<div class="text-tx row-d">
-					<span class="text-gery">缺少一次拜访扣罚：</span> <select>
-						<option>20</option>
-						<option>30</option>
-						<option>40</option>
-						<option>50</option>
+					<span class="text-gery">缺少一次拜访扣罚：</span> <select id="defaultRate">
+						<option value="${punishObj.rate}">${punishObj.rate}</option>
+						<option value="20">20</option>
+						<option value="30">30</option>
+						<option value="40">40</option>
+						<option value="50">50</option>
 					</select> <span class="text-gery ">&nbsp;元</span> <span
-						class="text-blue-s jl-">注：</span><span class="text-gery-hs">统默认所有区域均为改系数，自定义设置区域除外</span>
+						class="text-blue-s jl-">注：</span><span class="text-gery-hs">统默认所有区域均为该系数，自定义设置区域除外</span>
 				</div>
-				<!--设置公里系数表-->
+				<!--设置扣罚系数表-->
 				<div class="bs-example">
 					<div id="acont" class="row"></div>
 				</div>
@@ -55,12 +95,13 @@
 						<button class=" col-sm-3 btn  btn btn-default" type="button"
 							data-toggle="modal" data-target="#zdyqy">添加区域</button>
 					</div>
+					<div id="abnormalCoordPager"></div>
 				</div>
 			</div>
 		</div>
 		<div class="form-group">
 			<div class="col-sm-offset-4 col-sm-4" style="margin-top: 20px">
-				<button type="submit" class="col-sm-12 btn btn-primary ">保存</button>
+				<button type="submit" onclick="saveDefault();" class="col-sm-12 btn btn-primary ">保存</button>
 			</div>
 		</div>
 
@@ -80,17 +121,16 @@
 						<div class="container-fluid">
 							<form class="form-horizontal">
 								<div class="form-group">
-									<label class="col-sm-4 control-label">选择区域：</label>
+									<label class="col-sm-4 control-label">选择扣罚系数：</label>
 									<div class="col-sm-7">
 										<div class="input-group are-line">
 											<span class="input-group-addon"><i
-												class="icon icon-lk"></i></span> <select type=""
-												class="form-control input-h" aria-describedby="basic-addon1">
-												<option></option>
-												<option>10</option>
-												<option>20</option>
-												<option>30</option>
-												<option>40</option>
+												class="icon icon-lk"></i></span> <select
+												class="form-control input-h" id="select_modify" aria-describedby="basic-addon1">
+												<option value="10">10</option>
+												<option value="20">20</option>
+												<option value="30">30</option>
+												<option value="40">40</option>
 											</select>
 											<!-- /btn-group -->
 										</div>
@@ -101,7 +141,7 @@
 								</div>
 								<div class="form-group">
 									<div class="col-sm-offset-4 col-sm-4 ">
-										<button type="submit" class="col-sm-12 btn btn-primary ">确定</button>
+										<button id="set_a" type="submit" class="col-sm-12 btn btn-primary ">确定</button>
 									</div>
 								</div>
 							</form>
@@ -111,6 +151,7 @@
 			</div>
 		</div>
 		<!-- /alert html -->
+
 
 		<div id="zdyqy" class="modal fade" role="dialog">
 			<div class="modal-dialog " role="document">
@@ -130,44 +171,47 @@
 									<div class="col-sm-7">
 										<div class="input-group are-line">
 											<span class="input-group-addon"><i
-												class="icon icon-qy"></i></span> <select name="a" type=""
-												class="form-control input-h" aria-describedby="basic-addon1">
-												<option></option>
-												<option>山东省济南市天桥区</option>
-												<option>山东省莱芜市莱城区</option>
-												<option>山东省青岛市四方区</option>
-												<option>山东省泰安新泰区</option>
+												class="icon icon-qy"></i></span> <select id="region"
+												class="form-control input-h" name="regionId">
 											</select>
+												<input id="n" type="hidden" value="${regionId}" />
+											<div id="regionMenuContent" class="menuContent">
+
+												<ul id="regionTree" class="ztree"></ul>
+											</div>
+											<input type="hidden" id="towns" name="regionPid">
 											<!-- /btn-group -->
 										</div>
 									</div>
 								</div>
-
-								<div class="form-group">
-									<label class="col-sm-4 control-label">扣罚系数：</label>
-									<div class="col-sm-7">
-										<div class="input-group are-line">
-											<span class="input-group-addon"><i
-												class="icon icon-task-je"></i></span> <select name="b" type=""
-												class="form-control input-h" aria-describedby="basic-addon1">
-												<option></option>
-												<option>20</option>
-												<option>30</option>
-												<option>40</option>
-												<option>50</option>
-											</select>
-											<!-- /btn-group -->
+								<div id="xiugai">
+									<div class="form-group">
+										<label class="col-sm-4 control-label">扣罚系数：</label>
+										<div class="col-sm-7">
+											<div class="input-group are-line">
+												<span class="input-group-addon"><i
+													class="icon icon-task-lk"></i></span> <select name="b" type=""
+													class="form-control input-w"
+													aria-describedby="basic-addon1" id="select">
+													<option value="10">10</option>
+													<option value="20">20</option>
+													<option value="30">30</option>
+													<option value="40">40</option>
+													<option value="50">50</option>
+												</select>
+												<!-- /btn-group -->
+											</div>
+										</div>
+										<div class="col-sm-1 control-label">
+											<span>元</span>
 										</div>
 									</div>
-									<div class="col-sm-1 control-label">
-										<span>%</span>
-									</div>
-								</div>
 
-								<div class="form-group">
-									<div class="col-sm-offset-4 col-sm-4 ">
-										<a herf="javascript:return 0;" onclick="addd(this)"
-											class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>
+									<div class="form-group">
+										<div class="col-sm-offset-4 col-sm-4 " id="href_div">
+											<a herf="javascript:return 0;" onclick="addd(this)"
+												class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>
+										</div>
 									</div>
 								</div>
 							</form>
@@ -176,7 +220,6 @@
 				</div>
 			</div>
 		</div>
-
 
 	</div>
 
@@ -188,66 +231,28 @@
 	<script
 		src="static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js"
 		type="text/javascript" charset="utf-8"></script>
+	<!-- 出来区域节点树 -->
+	<script src="/static/zTree/js/jquery.ztree.all-3.5.js"
+		type="text/javascript" charset="utf-8"></script>
+	<script src="/static/month-task/tree/oil-set-region.js"
+		type="text/javascript" charset="utf-8"></script>
+
+	<script src="/static/month-task/tree/team-tree.js"
+		type="text/javascript" charset="utf-8"></script>
+	<script src="/static/js/common.js" type="text/javascript"
+		charset="utf-8"></script>
+		<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
+		charset="utf-8"></script>
+	<script type="text/javascript"
+		src="static/bootStrapPager/js/extendPagination.js"></script>
+	<script src="/static/month-task/month_punish.js" type="text/javascript"
+		charset="utf-8"></script>
+
 	<script type="text/javascript">
-		$(function resetTabullet() {
-			$("#table").tabullet({
-				data : source,
-				action : function(mode, data) {
-					console.dir(mode);
-					if (mode === 'save') {
-						source.push(data);
-					}
-					if (mode === 'edit') {
-						for (var i = 0; i < source.length; i++) {
-							if (source[i].id == data.id) {
-								source[i] = data;
-							}
-						}
-					}
-					if (mode == 'delete') {
-						for (var i = 0; i < source.length; i++) {
-							if (source[i].id == data) {
-								source.splice(i, 1);
-								break;
-							}
-						}
-					}
-					resetTabullet();
-				}
-			});
-			resetTabullet();
-		});
-
-		function addd(toil) {
-			console.log($("#addd").serializeArray());
-			addCustom($("#addd").serializeArray());
-		}
-		var i = 1;
-
-		function addCustom(o) {
-			var qy = o[0]["value"];
-			var glxs = o[1]["value"];
-			var html = '<div class="col-sm-3 cl-padd">'
-					+ '                <div class="ratio-box">'
-					+ '                <div class="ratio-box-dd">'
-					+ '                <span class="label  label-blue">'
-					+ (i++)
-					+ '</span>'
-					+ '                <span class="text-black jll">'
-					+ qy
-					+ '</span>'
-					+ '                <a class="text-redd jll" href="" data-toggle="modal"' +
-                '        data-target="">'
-					+ glxs
-					+ '</a>'
-					+ '        <a class="text-blue-s jll" href="" data-toggle="modal"' +
-                '        data-target="#changed">修改</a>'
-					+ '                <a class="text-blue-s jll" href="" data-toggle="modal" data-targ' +
-                't="">删除</a>'
-					+ '                </div>' + '                </div>'
-					+ '                </div>';
-			$("#acont").append(html);
-		};
+		var defaultRate = "${punishObj.rate}";
+		$("#defaultRate").val(defaultRate);
+		//$("#defaultRate").find("option[value='"+defaultRate+"']").attr("selected",true);
+		findTaskList(0);
 	</script>
 
 </body>

@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 
 import com.wangge.buzmgt.monthTask.entity.MonthTask;
+import com.wangge.buzmgt.monthTask.entity.MonthTaskPunish;
 import com.wangge.buzmgt.region.entity.Region;
 
 public interface MonthTaskService {
@@ -20,7 +23,7 @@ public interface MonthTaskService {
 	 * 
 	 * @param page
 	 * @param month
-	 * @param parameters 
+	 * @param parameters
 	 * @return
 	 * @throws SecurityException
 	 * @throws NoSuchMethodException
@@ -29,8 +32,9 @@ public interface MonthTaskService {
 	 * @throws IllegalAccessException
 	 * 
 	 */
-	Map<String, Object> getMainTaskList(Pageable page, String month, MultiValueMap<String, String> parameters) throws IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException;
+	Map<String, Object> getMainTaskList(Pageable page, String month, MultiValueMap<String, String> parameters)
+			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
+			SecurityException;
 
 	/**
 	 * 得到一个可供解析的MonthTsak类
@@ -68,14 +72,57 @@ public interface MonthTaskService {
 	 * task通过MonthTsk查找业务员信息
 	 * 
 	 * @param task
-	 * @param model 
+	 * @param model
 	 */
 	void findSalesMan(MonthTask task, Model model);
 
-	/**根据用户权限获取用户负责区域
+	/**
+	 * 根据用户权限获取用户负责区域
+	 * 
 	 * @param regoinId
 	 * @return
 	 */
 	Region getRegion(String regoinId);
+
+	/**
+	 * 通过主任务查出任务设置情况
+	 * 
+	 * @param task
+	 * @param page
+	 * @return
+	 */
+	Map<String, Object> findSetData(MonthTask task, Pageable page);
+
+	/**
+	 * 根据主任务导出月任务设置excle
+	 * 
+	 * @param task
+	 * @param salesName
+	 * @param request
+	 * @param response
+	 */
+	void ExportSetExcel(MonthTask task, String salesName, HttpServletRequest request, HttpServletResponse response);
+
+	/**
+	 * 获得县级及之上的所有地名
+	 * 
+	 * @param r
+	 * @param name
+	 * @return
+	 */
+	String getAllName(Region r, String name);
+
+	/**
+	 * @param page
+	 * @return
+	 */
+	Map<String, Object> getPunishData(Pageable page);
+
+	/**
+	 * 本月已派发的任务
+	 * 
+	 * @return
+	 */
+	Object getIssueTaskCount();
 
 }

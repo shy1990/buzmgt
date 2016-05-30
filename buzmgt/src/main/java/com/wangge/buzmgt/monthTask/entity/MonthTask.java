@@ -22,14 +22,12 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "sys_monthtask_main")
 
-@NamedEntityGraph(name = "monthData.graph", attributeNodes = {
-		@NamedAttributeNode(value = "monthData", subgraph = "salesman.graph") }
-, subgraphs = {
-				@NamedSubgraph(name = "salesman.graph", attributeNodes = {
-						@NamedAttributeNode(value = "salesman") }) }, subclassSubgraphs = {
-								@NamedSubgraph(name = "user.graph", attributeNodes = @NamedAttributeNode(value = "user", subgraph = "organization.graph")),
-								@NamedSubgraph(name = "region.graph", attributeNodes = @NamedAttributeNode(value = "region", subgraph = "parent.graph")) }
-)
+@NamedEntityGraph(name = "monthData", attributeNodes = {
+		@NamedAttributeNode(value = "monthData", subgraph = "salesman") }, subgraphs = {
+				@NamedSubgraph(name = "salesman", attributeNodes = {
+						@NamedAttributeNode(value = "salesman", subgraph = "user") }) }, subclassSubgraphs = {
+								@NamedSubgraph(name = "user", attributeNodes = @NamedAttributeNode(value = "user")),
+								@NamedSubgraph(name = "region", attributeNodes = @NamedAttributeNode(value = "region")) })
 
 public class MonthTask implements Serializable {
 	/**

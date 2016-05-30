@@ -59,7 +59,7 @@ public class MonthOdersData implements Serializable {
 	private int sysgive20;
 	// 相应计划是否已生成
 	private int used;
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "salesman_ID")
 	private SalesMan salesman;
 
