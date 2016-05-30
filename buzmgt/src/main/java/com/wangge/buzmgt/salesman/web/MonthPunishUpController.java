@@ -90,7 +90,7 @@ public class MonthPunishUpController {
         model.addAttribute("startTimeFen",startTime);
         model.addAttribute("endTimeFen",endTime);
         Float sum = mothPunishUpRepository.amerceSum();
-        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Sort sort = new Sort(Sort.Direction.DESC, "createDate");
         Pageable pageable = new PageRequest(page, size, sort);
         model.addAttribute("page", service.findByPage(startTime,endTime,pageable));
         model.addAttribute("sum",sum);

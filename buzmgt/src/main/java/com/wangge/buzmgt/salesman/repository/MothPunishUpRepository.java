@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by 神盾局 on 2016/5/21.
  */
-public interface MothPunishUpRepository extends PagingAndSortingRepository<MonthPunishUp,Long> {
+public interface MothPunishUpRepository extends PagingAndSortingRepository<MonthPunishUp,Integer> {
 
     public Page<MonthPunishUp> findAll(Specification specification, Pageable pageable);//分页查询
     @EntityGraph("graph.MonthPunishUp.salesMan")
