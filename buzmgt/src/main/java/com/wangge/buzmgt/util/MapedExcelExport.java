@@ -25,14 +25,12 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 /**
- * excel 导出类 <br />
- * 目前支持普通bean字段，组合类bean字段，Date日期类型转换成yyyy-MM-dd格式输出<br/>
- * ClassName: ExcelExport <br/>
- * date: 2016年1月15日 下午3:07:28 <br/>
+ * 1.本工具主要支持List<Map<String,Object>>类型容器的输出
+ * 2.支持单元格合并:MarginCell;本方法中合并单元格的内容将自动归纳整理,且不可改变;
+ * 3.待测试完善功能:支持List<Map<String,subList>>类型的容器输出;
  * 
- * @author wangjingj
- * @version
- * @since JDK 1.8
+ * @author yangqc
+ *
  */
 public class MapedExcelExport {
 	protected static final Logger logger = Logger.getLogger(MapedExcelExport.class);
@@ -108,11 +106,11 @@ public class MapedExcelExport {
 				int lastRow = (Integer) marginMap.get("lastRow");
 				int firstCol = (Integer) marginMap.get("firstCol");
 				int lastCol = (Integer) marginMap.get("lastCol");
-//				String val = marginMap.get("value") + "";
+				// String val = marginMap.get("value") + "";
 				sheet.addMergedRegion(new CellRangeAddress(firstRow, lastRow, firstCol, lastCol));// 指定合并区域
 				HSSFCell cell1 = sheet.getRow(lastRow).getCell(firstCol);
 				cell1.setCellStyle(style);
-//				cell1.setCellValue(val);
+				// cell1.setCellValue(val);
 			}
 		}
 
@@ -146,7 +144,7 @@ public class MapedExcelExport {
 				for (String key : coloumsKey) {
 					Object obj = dmap.get(key);
 					String val = null;
-					if (obj!=null&&ifList(obj.getClass())) {
+					if (obj != null && ifList(obj.getClass())) {
 						@SuppressWarnings("unchecked")
 						List<Object> list = (List<Object>) obj;
 						for (Object listItem : list) {
