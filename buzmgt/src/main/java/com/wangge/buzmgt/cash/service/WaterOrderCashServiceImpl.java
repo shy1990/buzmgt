@@ -50,7 +50,6 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
   @Override
   public List<WaterOrderCash> findAll(Map<String, Object> searchParams) {
-    regionService.disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
     List<WaterOrderCash> waterOrderList = waterOrderCashRepository.findAll(spec);
@@ -59,12 +58,9 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
   @Override
   public Page<WaterOrderCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
-    regionService.disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
     Page<WaterOrderCash> waterOrderPage = waterOrderCashRepository.findAll(spec, pageRequest);
-    waterOrderPage.getContent().forEach(WaterOrder -> {
-    });
 
     return waterOrderPage;
   }

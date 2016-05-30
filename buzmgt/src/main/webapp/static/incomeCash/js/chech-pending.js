@@ -2,6 +2,7 @@ var checkPendingTotal = 0;
 $(function() {
 	initDateInput();// 初始化日期
 	findCheckCashList();// 查询列表
+	findUnCheckBankTread();//查询未匹配银行打款交易记录 
 //	initExcelExport();//初始化导出excel
 	
 })
@@ -84,13 +85,12 @@ function findCheckCashList(page) {
 		dataType : "json",
 		success : function(orderData) {
 			createCheckPendingTable(orderData);
-			console.info(orderData);
-//			var searchTotal = orderData.totalElements;
-//			if (searchTotal != checkPendingTotal || searchTotal == 0) {
-//				checkPendingTotal = searchTotal;
-//
-//				checkPendingPaging(orderData);
-//			}
+			var searchTotal = orderData.totalElements;
+			if (searchTotal != checkPendingTotal || searchTotal == 0) {
+				checkPendingTotal = searchTotal;
+
+				checkPendingPaging(orderData);
+			}
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");
@@ -106,6 +106,15 @@ function findCheckCashList(page) {
 function createCheckPendingTable(data) {
 	var myTemplate = Handlebars.compile($("#checkPending-table-template").html());
 	$('#checkPendingList').html(myTemplate(data));
+}
+/**
+ * 生成为匹配交易记录
+ * @param data
+ */
+
+function createUnCheckTable(data) {
+	var myTemplate = Handlebars.compile($("#unCheck-table-template").html());
+	$('#unCheckList').html(myTemplate(data));
 }
 /**
  * 分页
@@ -143,7 +152,7 @@ Handlebars.registerHelper('disposeStayMoney', function(value) {
  */
 Handlebars.registerHelper('isCheckStatus', function(isCheck,userId,createDate) {
 	var formcreateDate=changeDateToString(new Date(createDate));
-	var html='<button class="btn btn-sm btn-blue" onClick="checkPending('+userId+','+formcreateDate+')">确认</button>'
+	var html='<button class="btn btn-sm btn-blue" onClick="checkPending(\''+userId+'\',\''+formcreateDate+'\')">确认</button>'
 	if (isCheck == '已支付') {
 		return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
 	}
@@ -153,17 +162,18 @@ Handlebars.registerHelper('isCheckStatus', function(isCheck,userId,createDate) {
  * 根据流水号查询
  */
 function findBySalesManName() {
-	var salesmanName = $('#salesmanName').val();
+	var salesmanName = $('#salesManName').val();
+	var createDate = $('#searchDate').val();
 	$.ajax({
-		// url : base+"/bankTrade?sc_EQ_salesManName=" + salesmanName,
+		url : base+"/checkCash/salesmanName?salesmanName=" + salesmanName+"&createDate="+createDate,
 		type : "GET",
 		dataType : "json",
-		success : function(orderData) {
-			if (orderData.totalElements < 1) {
-				alert("未查到相关信息！");
+		success : function(data) {
+			if (data.status=='success') {
+				console.info(data);
+				createCheckPendingTable(data);
 				return false;
 			}
-			createBankTradeTable(orderData);
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");
@@ -192,6 +202,7 @@ function checkPending(userId,createDate){
 		success:function(data){
 			if("success"===data.status){
 				alert(data.successMsg);
+				findCheckCashList();
 				return ;
 			}
 			alert(data.errorMsg);
@@ -201,3 +212,42 @@ function checkPending(userId,createDate){
 		}
 	})
 }
+/**
+ * 查询未匹配银行打款交易记录
+ */
+function findUnCheckBankTread(){
+	$.ajax({
+		url:base+"/checkCash/unCheck",
+		type:"GET",
+		dataType:"json",
+		success:function(data){
+			createUnCheckTable(data);
+		},
+		error:function(data){
+			alert("查询失败！");
+		}
+	})
+}
+/**
+ * 删除未匹配记录
+ */
+function deleteUnCheck(id){
+	console.info("/checkCash/delete/"+id);
+	$.ajax({
+		url:base+"/checkCash/delete/"+id,
+		type:"GET",
+		dataType:"json",
+		success:function(data){
+			if("success"===data.status){
+				alert(data.successMsg);
+				findUnCheckBankTread();
+				return ;
+			}
+			alert(data.errorMsg);
+		},
+		error:function(data){
+			alert("操作失败");
+		}
+	})
+}
+

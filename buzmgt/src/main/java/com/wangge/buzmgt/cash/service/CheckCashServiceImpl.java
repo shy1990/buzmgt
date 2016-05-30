@@ -31,11 +31,14 @@ import org.springframework.stereotype.Service;
 import com.wangge.buzmgt.cash.entity.CheckCash;
 import com.wangge.buzmgt.cash.entity.MonthPunish;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.cash.entity.BankTrade;
+import com.wangge.buzmgt.cash.entity.Cash;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
 import com.wangge.buzmgt.cash.repository.CheckCashRepository;
+import com.wangge.buzmgt.cash.web.CashController;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.entity.PunishSet;
 import com.wangge.buzmgt.salesman.service.PunishSetService;
@@ -203,7 +206,6 @@ public class CheckCashServiceImpl implements CheckCashService {
         return ;
       Float stayMoney=cc.getStayMoney();//待付金额
       Float incomeMoney=cc.getIncomeMoney();//支付金额
-      Float Debt=new Float(0);//欠款金额
       for(WaterOrderCash order:waterOrders){
         //总支付金额大于流水单金额
         Float cashMoney=order.getCashMoney();
@@ -220,6 +222,14 @@ public class CheckCashServiceImpl implements CheckCashService {
         
         order.setPayStatus(WaterPayStatusEnum.OverPay);
         order.setPayDate(cc.getCreateDate());
+        
+        
+        //修改收现金列表数据
+        order.getOrderDetails().forEach(detail->{
+          Cash cash = detail.getCash();
+          cash.setPayDate(cc.getCreateDate());
+          cash.setStatus(CashStatusEnum.OverPay);
+        });
       }
       //修改原有扣罚状态
       List<MonthPunish> monthPunishs=cc.getMonthPunishs();
@@ -255,17 +265,31 @@ public class CheckCashServiceImpl implements CheckCashService {
     }
       
   }
-
   @Override
-  public JSONObject deleteBankTradeByUserIdAndCreateDate(String userId, String createDate) {
-    return null;
-  }
-  
-  @Override
-  public List<CheckCash> findByCreateDate(String createDate) {
-    return null;
+  public List<BankTrade> getUnCheckBankTrades() {
+    Map<String, Object> spec=new HashMap<>();
+    spec.put("ISNULL_userId","true");
+    return bankTradeService.findAll(spec);
   }
 
+
+
+  @Override
+  @Transactional
+  public JSONObject deleteUnCheckBankTrade(BankTrade bankTrade) {
+    JSONObject json=new JSONObject();
+    try {
+      bankTradeService.delete(bankTrade);
+      json.put("status", "success");
+      json.put("successMsg", "操作成功");
+    } catch (Exception e) {
+      json.put("status", "error");
+      json.put("errorMsg", "操作失败");
+      logger.info(e.getMessage());
+      return json;
+    }
+    return json;
+  }
 
   
   private static Specification<CheckCash> checkCashSearchFilter(final Collection<SearchFilter> filters,

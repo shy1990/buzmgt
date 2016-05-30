@@ -27,54 +27,28 @@
 	href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script id="oilCost-table-template" type="text/x-handlebars-template">
+<script id="table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
 		<tr>
-      <td>
-        <img width="50" height="50" src="static/img/abnormal/user-head.png" class="img-circle" />
-        <span class="yw-name"><b>{{salesManPart.truename}}</b>({{salesManPart.organizeName}})</span>
+      <td>{{serialNo}}</td>
+      <td class="bg-style">
+				{{#each orderDetails}}
+				{{#with cash}}{{#with order}}
+        <p>{{orderNo}}</p>
+				{{/with}}{{/with}}
+				{{/each}}
       </td>
-      <td>{{salesManPart.regionName}}</td>
-      <td>
-        <p class="acu-km">{{totalDistance}}<span> km</span></p>
+      <td class="bg-style">
+        {{#each orderDetails}}
+				{{#with cash}}{{#with order}}
+        <p>{{orderPrice}}</p>
+				{{/with}}{{/with}}
+				{{/each}}
       </td>
-      <td>
-        <p class="acu-mny">{{oilTotalCost}}<span> 元</span></p>
-      </td>
-      <td>
-        <a class="btn btn-blue btn-sm" href="javascript:void(0);" 
-				onclick="turnRecord('{{whatUserId parentId userId}}','{{oilTotalCost}}','{{totalDistance}}');">查看</a>
-      </td>
-    </tr>      
-	{{/each}}
-	{{else}}
-	<tr>
-		<td colspan="100">没有相关数据</td>
-	</tr>
-	{{/if}}
-</script>
-<script id="abnormalCoord-table-template"
-	type="text/x-handlebars-template">
-{{#if content}}
-	{{#each content}}
-   <tr>
-      <td class="">
-        <img width="50" height="50" src="static/img/abnormal/user-head.png" class="img-circle" />
-        <span class="yw-name"><b>{{salesManPart.truename}}</b>({{salesManPart.organizeName}})</span>
-      </td>
-      <td class="normal">
-			{{#each oilRecordList}}
-				{{{disposeRecordList regionType regionName exception}}}
-			{{/each}}
-      </td>
-      <td>
-        <p><span class="acu-km">{{distance}}km</span> &#47; <span class="acu-mny">{{oilCost}}元</span></p>
-      </td>
-      <td>2016.03.12 18:20</td>
-      <td>
-        <a class="btn btn-blue btn-sm" href="/oilCost/detail/{{id}}">查看</a>
-      </td>
+      <td class="bg-style"><span class="text-redd">{{cashMoney}}</span></td>
+      <td>{{{disposePayStatus payStatus}}}</td>
+      <td>{{formDate createDate}}</td>
     </tr>
 	{{/each}}
 	{{else}}
@@ -119,12 +93,12 @@ var	base='<%=basePath%>';
 			</div>
 			<!--考核开始时间-->
 			<button class="btn btn-blue btn-sm"
-				onclick="goSearch('${salesman.id}','${assess.id}');">检索</button>
+				onclick="goSearch();">检索</button>
 
 			<div class="link-posit-t pull-right exc-hh">
-				<input class="cs-select text-gery-hs" placeholder="请输入流水单号">
+				<input class="cs-select text-gery-hs" id="serialNo" value="${serialNo}" placeholder="请输入流水单号">
 				<button class="btn btn-blue btn-sm"
-					onclick="goSearch('${salesman.id}','${assess.id}');">检索</button>
+					onclick="findBySerialNo();">检索</button>
 				<a class="table-export" href="javascript:void(0);">导出excel</a>
 			</div>
 
@@ -145,66 +119,11 @@ var	base='<%=basePath%>';
 							<th>日期</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>258796124</td>
-							<td class="bg-style">20160422655485</td>
-							<td class="bg-style">2500.00</td>
-							<td class="bg-style"><span class="text-redd">45000.00</span></td>
-							<td><span class="icon-dsh">待审核</span></td>
-							<td>2016.04.23 &nbsp;&nbsp;15:00</td>
-						</tr>
-						<tr>
-							<td>258796124</td>
-							<td class="bg-style">
-								<p>20160422655485</p>
-								<p>20160422655485</p>
-								<p>20160422655485</p>
-								<p>20160422655485</p>
-								<p>20160422655485</p>
-							</td>
-							<td class="bg-style">
-								<p>2500.00</p>
-								<p>2500.00</p>
-								<p>2500.00</p>
-								<p>2500.00</p>
-								<p>2500.00</p>
-							</td>
-							<td class="bg-style"><span class="text-redd">45000.00</span></td>
-							<td><span class="icon-dsh">待审核</span></td>
-							<td>2016.04.23 &nbsp;&nbsp;15:00</td>
-						</tr>
-
-						<tr>
-							<td>258796124</td>
-							<td class="bg-style">20160422655485</td>
-							<td class="bg-style">2500.00</td>
-							<td class="bg-style"><span class="text-redd">45000.00</span></td>
-							<td><span class="icon-dsh">待审核</span></td>
-							<td>2016.04.23 &nbsp;&nbsp;15:00</td>
-						</tr>
-
-						<tr>
-							<td>258796124</td>
-							<td class="bg-style">
-								<p>20160422655485</p>
-								<p>20160422655485</p>
-								<p>20160422655485</p>
-							</td>
-							<td class="bg-style">
-								<p>2500.00</p>
-								<p>2500.00</p>
-								<p>2500.00</p>
-							</td>
-							<td class="bg-style"><span class="text-redd">45000.00</span></td>
-							<td><span class="icon-wfk">已审核</span></td>
-							<td>2016.04.23 &nbsp;&nbsp;15:00</td>
-						</tr>
-
-					</tbody>
+					<tbody id="waterOrderList"> </tbody>
 				</table>
 			</div>
 			<!--table-box-->
+			<div id="addPager"></div>
 			<!--油补记录-->
 		</div>
 
@@ -234,9 +153,6 @@ var	base='<%=basePath%>';
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script type="text/javascript"
 		src="/static/incomeCash/js/water-order-list.js" charset="utf-8"></script>
-	<script type="text/javascript">
-		
-	</script>
 </body>
 
 </html>

@@ -50,6 +50,8 @@ public class WaterOrderCashController {
   
   @RequestMapping("/show")
   public String showWaterList(Model model,HttpServletRequest request){
+    String serialNo = request.getParameter("serialNo");
+    model.addAttribute("serialNo", serialNo);
     return "waterorder/list";
   }
   

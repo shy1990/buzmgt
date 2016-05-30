@@ -57,7 +57,7 @@ tr:hover .btn-findup{
     display: inline-block;
 }
 .width-fixed{
-    min-width:220px;
+    min-width:180px;
 }
 .wait-setting{
     margin-left:5px;
@@ -79,7 +79,8 @@ tr:hover .btn-findup{
     color:#fff;
 }
 .gd-btn-sure:hover,
-.wait-btn-delete:hover{
+.wait-btn-delete:hover,
+.wait-btn-delete:FOCUS{
     color:#fff;
 }
 .wait-btn-delete{

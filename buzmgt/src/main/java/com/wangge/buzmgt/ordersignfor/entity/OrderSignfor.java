@@ -12,6 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -25,6 +28,20 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 @Entity
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
 @Table(name = "BIZ_ORDER_SIGNFOR")
+@NamedEntityGraph(
+    name = "graph.OrderSignfor.salesMan",
+    attributeNodes={
+        @NamedAttributeNode(value="salesMan",subgraph = "graph.OrderSignfor.salesMan.user"),
+    },
+    subgraphs = {
+        @NamedSubgraph(
+            name = "graph.OrderSignfor.salesMan.user",
+            attributeNodes = {
+                @NamedAttributeNode("user")
+            }
+        )
+    }
+)
 public class OrderSignfor implements Serializable {
 
   /**

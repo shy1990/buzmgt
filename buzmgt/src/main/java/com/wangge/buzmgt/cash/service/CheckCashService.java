@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.CheckCash;
 
 public interface CheckCashService {
@@ -19,12 +20,6 @@ public interface CheckCashService {
    */
   public  List<CheckCash> findAll(Map<String, Object> searchParams);
   
-  /**
-   * 根据创建日期查询银行交易记录
-   * @param createDate
-   * @return
-   */
-  public List<CheckCash> findByCreateDate(String createDate);
   /**
    * 查询分页银行交易记录列表
    * @param searchParams
@@ -47,5 +42,8 @@ public interface CheckCashService {
    * @param createDate
    * @return
    */
-  public JSONObject deleteBankTradeByUserIdAndCreateDate(String userId,String createDate);
+  public JSONObject deleteUnCheckBankTrade(BankTrade bankTrade);
+
+  public List<BankTrade> getUnCheckBankTrades();
+
 }

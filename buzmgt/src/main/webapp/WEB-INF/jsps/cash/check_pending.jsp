@@ -47,7 +47,7 @@
       </td>
       <td class="multi-row width-fixed multi-row-p">
 				{{#each cashs}}
-        <p> <span>{{serialNo}}</span> <a href="javascript:toWaterOrder('{{serialNo}}');" class="btn btn-sm btn-findup">查看</a> </p>
+        <p> <span>{{serialNo}}</span> <a href="/waterOrder/show?serialNo={{serialNo}}" class="btn btn-sm btn-findup">查看</a> </p>
 				{{/each}}
       </td>
       <td class="border-right-grey multi-row multi-row-p">
@@ -71,6 +71,34 @@
 		<td colspan="100">没有相关数据</td>
 	</tr>
 	{{/if}}
+</script>
+<script id="unCheck-table-template" type="text/x-handlebars-template">
+	{{#each content}}
+		<tr>
+      <td><span class="single-exception"> Error!</span></td>
+      <td class="border-right-grey">{{cardName}}</td>
+      <td class="multi-row">
+        <p>{{cardNo}}</p>
+      </td>
+      <td class="border-right-grey multi-row">
+        <p>{{money}}</p>
+      </td>
+      <td class="multi-row width-fixed multi-row-p">
+				<p><span class="single-exception">匹配失败</span></p>
+      </td>
+      <td class="border-right-grey multi-row multi-row-p">
+				<p><span class="single-exception">匹配失败</span></p>
+      </td>
+      <td>----</td>
+      <td>----</td>
+      <td>{{money}}</td>
+      <td>----</td>
+      <td>{{payDate}}</td>
+      <td>
+				<button onclick="deleteUnCheck({{id}})" class="btn btn-sm wait-btn-delete">删除</button>
+      </td>
+    </tr>
+	{{/each}}
 </script>
 <script type="text/javascript">
 var	base='<%=basePath%>';
@@ -102,12 +130,12 @@ var	base='<%=basePath%>';
 				</div>
 			</div>
 			<button class="btn btn-blue btn-sm"
-				onclick="goSearch('${salesman.id}','${assess.id}');">检索</button>
+				onclick="goSearch();">检索</button>
 			<!---->
 			<div class="pull-right exc-hh">
-				<input class="cs-select salesman-input" placeholder="请输入业务员名称">
+				<input class="cs-select salesman-input" id="salesManName" placeholder="请输入业务员名称">
 				<button class="btn btn-blue btn-sm check-btn"
-					onclick="goSearch('${salesman.id}','${assess.id}');">检索</button>
+					onclick="findBySalesManName();">检索</button>
 				<a class="table-export" href="javascript:void(0);">导出excel</a>
 			</div>
 		</div>
@@ -135,6 +163,7 @@ var	base='<%=basePath%>';
 								<th>操作</th>
 							</tr>
 						</thead>
+						<tbody id="unCheckList"> </tbody>
 						<tbody id="checkPendingList"> </tbody>
 					</table>
 				</div>
