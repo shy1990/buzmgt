@@ -182,7 +182,11 @@
 															<a class="text-danger"
 																href="javascript:mofidyAccount('${ac.accountNum}','2');">辞退</a>
 														</c:otherwise>
-													</c:choose></td>
+													</c:choose>
+													<a
+													href="javascript:mofidyAccount('${ac.accountNum}','4');">
+														清空sim</a>
+													</td>
 											</c:when>
 											<c:otherwise>
 												<td width="20%" class="operation"><a
@@ -197,7 +201,11 @@
 															<a class="text-danger"
 																href="javascript:mofidyAccount('${ac.accountNum}','2');">辞退</a>
 														</c:otherwise>
-													</c:choose></td>
+													</c:choose>
+													<a
+													href="javascript:mofidyAccount('${ac.accountNum}','4');">
+														清空sim</a>
+													</td>
 											</c:otherwise>
 										</c:choose>
 										<c:if test="${org != 'allDis'}">
@@ -274,7 +282,7 @@
 					<button type="button" class="btn btn-success caution"
 						data-dismiss="modal">取消</button>
 					<button type="button" class="btn btn-danger" data-dismiss="modal"
-						onclick="resetPwd('${ac.accountNum}')";>确定</button>
+						onclick="('${ac.accountNum}')";>确定</button>
 				</div>
 			</div>
 		</div>
@@ -311,6 +319,37 @@
 					<button type="button" class="btn btn-danger" data-dismiss="modal">确定辞退</button>
 					<button type="button" class="btn btn-success caution"
 						data-dismiss="modal">以后再说</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /alert html -->
+	<!-- alert cleanSimId html -->
+	<div id="cleanSimModal" class="modal fade" role="dialog"
+		aria-labelledby="cleanSimModalLabel">
+		<div class="modal-dialog " role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h3 class="modal-title" id="cleanSimModalLabel">
+						清空sim
+						</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-12">清空sim卡后将恢复初始状态！</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success caution"
+						data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal"
+						onclick="cleanSim('${ac.accountNum}')";>确定</button>
 				</div>
 			</div>
 		</div>
@@ -440,7 +479,7 @@
 				});
 			}
 		}
-		// 修改账号状态,0正常,1冻结,2辞退,3删除
+		// 修改账号状态,0正常,1冻结,2辞退,3删除,4清空sim卡
 		function mofidyAccount(accountNum,status){
 			if(status=='2'){
 				if (confirm("确定要辞退该员工")) {
@@ -465,6 +504,18 @@
 							alert("系统异常,请重试");
 						}
 					});
+				}
+			}else if(status=='4'){
+				if (confirm("确定要清空该员工sim卡?清空后无法恢复")) {
+					 var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
+					$.post(url, function(data) {
+						if (data === 'suc') {
+							alert("已清空!");
+				        	location.reload();
+						} else {
+							alert("系统异常,请重试");
+						}
+					}); 
 				}
 			}else if(status=='0'){
 				if (confirm("确定要冻结改账号?")) {

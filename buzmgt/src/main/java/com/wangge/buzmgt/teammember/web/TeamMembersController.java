@@ -7,13 +7,17 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.hibernate.annotations.Parameter;
+import org.jboss.logging.annotations.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -253,6 +257,11 @@ public class TeamMembersController {
     salesManService.findByUserId(userId);
     return null;
   } 
+  @RequestMapping("/{truename}")
+  @ResponseBody
+  public String getUserIdByTurename(@PathVariable("truename") String truename){
+    return salesManService.findByTruename(truename);
+  }
   
   /**
    * 

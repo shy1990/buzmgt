@@ -154,5 +154,10 @@ public  class SalesManServiceImpl implements SalesManService {
     return salesManRepository.findById(userId);
   }
 
+  @Override
+  public String findByTruename(String truename) {
+    return salesManRepository.getIdByTurename(truename);
+  }
+
   
 }

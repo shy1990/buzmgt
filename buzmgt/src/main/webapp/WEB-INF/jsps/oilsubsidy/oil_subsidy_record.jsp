@@ -64,6 +64,10 @@ var SearchData = {
     <h4 class="page-header ">
         <i class="ico icon-oil-detail"></i>油补记录
         <input type="hidden" value="${userId}" id="recordUserID">
+        <a href="/oilCost/list" class="btn btn-blue member-add-btn"
+				type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
+				返回列表
+			</a>
     </h4>
     <div class="row">
         <div class="col-md-9">
