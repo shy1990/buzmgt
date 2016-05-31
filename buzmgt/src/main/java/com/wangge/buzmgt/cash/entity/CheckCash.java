@@ -46,6 +46,8 @@ public class CheckCash implements Serializable  {
   private Float debtMoney=new Float(0);//欠款金额（欠款+扣罚）
   @Transient
   private Float stayMoney;//待收金额
+  @Transient
+  private String isCheck;//是否审核
   
   @Transient
   private List<MonthPunish> monthPunishs ;
@@ -59,6 +61,16 @@ public class CheckCash implements Serializable  {
 
   
   
+  public String getIsCheck() {
+    return isCheck;
+  }
+
+
+  public void setIsCheck(String isCheck) {
+    this.isCheck = isCheck;
+  }
+
+
   public String getCardName() {
     return cardName;
   }

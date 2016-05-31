@@ -25,5 +25,7 @@ public interface SalesManRepository extends JpaRepository<SalesMan,String>{
   
   @Query("select s.region.id from SalesMan s where s.id =?1")
   String getRegionIdByUserId(String userId);
+  @Query("select s.id from SalesMan s where s.truename=?1")
+  String getIdByTruename(String truename);
   
 }

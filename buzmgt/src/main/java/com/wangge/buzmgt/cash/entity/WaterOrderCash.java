@@ -36,10 +36,20 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @Entity
 @Table(name="SYS_WATER_ORDER_CASH")
-@NamedEntityGraph(name = "graph.WaterOrderCash.orderDetails",
-    attributeNodes=@NamedAttributeNode(value="orderDetails",subgraph = "graph.WaterOrderCash.orderDetails.cash"),
-    subgraphs = {@NamedSubgraph(name = "graph.WaterOrderCash.orderDetails.cash",
-    attributeNodes = @NamedAttributeNode("cash"))})
+@NamedEntityGraph(
+    name = "graph.WaterOrderCash.orderDetails",
+    attributeNodes={
+        @NamedAttributeNode(value="orderDetails",subgraph = "graph.WaterOrderCash.orderDetails.cash")
+    },
+    subgraphs = {
+        @NamedSubgraph(
+            name = "graph.WaterOrderCash.orderDetails.cash",
+            attributeNodes = {
+                @NamedAttributeNode("cash")
+            }
+        )
+    }
+)
 public class WaterOrderCash implements Serializable  {
 
   /**
@@ -76,13 +86,9 @@ public class WaterOrderCash implements Serializable  {
   @Enumerated(EnumType.ORDINAL)
   private WaterPayStatusEnum payStatus=WaterPayStatusEnum.UnPay;//支付状态
   
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
-  @Temporal(TemporalType.TIMESTAMP)
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone = "GMT+8")  
   private Date createDate ;//创建日期
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
-  @Temporal(TemporalType.TIMESTAMP)
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone = "GMT+8")  
   private Date payDate  ;//支付时间
   
   

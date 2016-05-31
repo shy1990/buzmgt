@@ -78,6 +78,10 @@ public class BankTradeServiceImpl implements BankTradeService {
   public List<BankTrade> findByCreateDate(String createDate) {
     return null;
   }
+  @Override
+  public void delete(BankTrade bankTrade) {
+    bankTradeRepository.delete(bankTrade);
+  }
 
   @Override
   public JSONObject importExcel(HttpServletRequest request, String importDate) {
@@ -345,11 +349,11 @@ public class BankTradeServiceImpl implements BankTradeService {
 
               break;
             case ISNULL:
-
-              predicates.add(cb.isNull(expression));
-              break;
-            case NOTNULL:
-              predicates.add(cb.isNull(expression));
+              boolean value= Boolean.parseBoolean("true");
+              if(value)
+                predicates.add(cb.isNull(expression));
+              else
+                predicates.add(cb.isNotNull(expression));
 
               break;
             case ORMLK:

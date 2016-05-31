@@ -31,5 +31,7 @@ public interface MonthPunishService {
 
   public void save(MonthPunish mp);
 
+  public void save(List<MonthPunish> monthPunishs);
+
   
 }

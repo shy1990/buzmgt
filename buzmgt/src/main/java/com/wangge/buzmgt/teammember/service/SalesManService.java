@@ -25,5 +25,7 @@ public interface SalesManService {
 
   String getRegionIdByUserId(String userId);
 
+  String findByTruename(String salesmanName);
+
   
 }

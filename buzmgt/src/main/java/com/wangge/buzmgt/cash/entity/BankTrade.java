@@ -45,10 +45,10 @@ public class BankTrade implements Serializable  {
   private Float money; //打款款金额
   
   
-  @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
+  @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")  
   private Date createDate = new Date();//创建日期
   
-  @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
+  @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")  
   private Date payDate;
 
   public Integer getId() {

@@ -48,14 +48,16 @@ table tr.status-exception td{
     margin-left:10px;
     padding:0 3px;
 }
-.btn-findup:hover{
+.btn-findup:hover,
+.btn-findup:ACTIVE,
+.btn-findup:FOCUS{
     color:#fff;
 }
 tr:hover .btn-findup{
     display: inline-block;
 }
 .width-fixed{
-    min-width:220px;
+    min-width:180px;
 }
 .wait-setting{
     margin-left:5px;
@@ -77,7 +79,8 @@ tr:hover .btn-findup{
     color:#fff;
 }
 .gd-btn-sure:hover,
-.wait-btn-delete:hover{
+.wait-btn-delete:hover,
+.wait-btn-delete:FOCUS{
     color:#fff;
 }
 .wait-btn-delete{

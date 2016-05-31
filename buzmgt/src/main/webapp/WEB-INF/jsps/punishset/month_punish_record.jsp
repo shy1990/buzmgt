@@ -131,27 +131,11 @@
 </div>
 
 <![endif]-->
-<script src="../static/bootstrap/js/bootstrap.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
 <%--分页工具--%>
 <script src="static/salesmanData/jquery.min.js"></script>
 <script src="static/salesmanData/jquery.page.js"></script>
 <script type="text/javascript">
     $('body input').val('');
-    $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
-        language: 'zh-CN',
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        pickerPosition: "bottom-right",
-        forceParse: 0
-    });
     var $_haohe_plan = $('.J_kaohebar').width();
     var $_haohe_planw = $('.J_kaohebar_parents').width();
     $(".J_btn").attr("disabled", 'disabled');
@@ -204,10 +188,22 @@
 <script>
     <%--js以后加到js文件（注解改完以后）--%>
     $(function(){
+        alert(1123)
         zhixing();
+        $("#ceshi").on("click",function(){
+            console.log("i do")
+            $.ajax({
+                url: 'MonthPunishUp/MonthPunishUps',
+                type: 'get',
+                async: false,//加载完毕再往下执行，不然也是还没有获得
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        });
     });
     function zhixing(){
-        console.log('zou le jin lai');
+        //console.log('zou le jin lai');
         var p = 0;//当前页数
         var totalPages1 = 0;//总页数
         var cntent = 0;
@@ -223,13 +219,15 @@
                 async : false,//加载完毕再往下执行，不然也是还没有获得
                 success: function (data) {
                     console.log(data);
+                    /*
+                    console.log(data);
                     //获取数据
                     totalPages1 = data.totalPages;
                     var MonthPunishUps = data.content;//获取所有的MonthPunishUp数据
-//                var a = MonthPunishUps[0].region.parent();
-//                console.log(a);
-                    console.log("1111111111111:      "+totalPages1);
-                    console.log(MonthPunishUps[0].salesMan.region.parent);
+                    //                var a = MonthPunishUps[0].region.parent();
+                    //                console.log(a);
+                    //                    console.log("1111111111111:      "+totalPages1);
+                    //                    console.log(MonthPunishUps[0].salesMan.region.parent);
                     var str = '';
                     for(var i=0;i<MonthPunishUps.length;i++){
                         var userId = MonthPunishUps[i].salesMan.id;
@@ -248,8 +246,12 @@
                         str +=   '</tr>';
                     }
                     $str = $(str);
-                    $("#tbody").append($str);
+                    $("#tbody").append($str);  */
                 }
+
+
+
+
 
             });
 

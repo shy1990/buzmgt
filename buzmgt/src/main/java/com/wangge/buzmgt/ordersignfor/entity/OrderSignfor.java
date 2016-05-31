@@ -12,6 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -25,6 +28,20 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 @Entity
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
 @Table(name = "BIZ_ORDER_SIGNFOR")
+@NamedEntityGraph(
+    name = "graph.OrderSignfor.salesMan",
+    attributeNodes={
+        @NamedAttributeNode(value="salesMan",subgraph = "graph.OrderSignfor.salesMan.user"),
+    },
+    subgraphs = {
+        @NamedSubgraph(
+            name = "graph.OrderSignfor.salesMan.user",
+            attributeNodes = {
+                @NamedAttributeNode("user")
+            }
+        )
+    }
+)
 public class OrderSignfor implements Serializable {
 
   /**
@@ -90,13 +107,13 @@ public class OrderSignfor implements Serializable {
   @Transient
   private String goodNum;
   
-  @Column(name="user_id",insertable=false,updatable=false)
+  @Column(name="user_id")
   private String userId;
 //  private String truename;
 //  private String ywName;//业务名称;
  
   @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id",insertable=false,updatable=false)
   private SalesMan salesMan;
   
   private String userPhone;
