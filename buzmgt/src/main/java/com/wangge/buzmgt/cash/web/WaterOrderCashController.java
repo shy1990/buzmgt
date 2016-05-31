@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.service.WaterOrderCashService;
+import com.wangge.buzmgt.jsonformat.JSONFormat;
 
 @Controller
 @RequestMapping("/waterOrder")
@@ -33,19 +34,20 @@ public class WaterOrderCashController {
   private WaterOrderCashService waterOrderCashService;
   
   @RequestMapping(value="",method=RequestMethod.GET)
-  @ResponseBody
-  public String getWaterOrderCashList(HttpServletRequest request,
+//  @ResponseBody
+  @JSONFormat(filterField = {"OrderSignfor.salesMan"},nonnull=true,dateFormat="yyyy-MM-dd HH:mm")
+  public Page<WaterOrderCash> getWaterOrderCashList(HttpServletRequest request,
       @PageableDefault(page = 0,size=10,sort={"createDate"},direction=Direction.DESC) Pageable pageRequest ){
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<WaterOrderCash> waterOrderPage=waterOrderCashService.findAll(searchParams, pageRequest);
-    String json="";
-    try { 
-      json=JSON.toJSONString(waterOrderPage, SerializerFeature.DisableCircularReferenceDetect);
-    }
-     catch(Exception e){
-       logger.error(e.getMessage());
-     }
-    return json;
+//    String json="";
+//    try { 
+//      json=JSON.toJSONString(waterOrderPage, SerializerFeature.DisableCircularReferenceDetect);
+//    }
+//     catch(Exception e){
+//       logger.error(e.getMessage());
+//     }
+    return waterOrderPage;
   }
   
   @RequestMapping("/show")

@@ -17,7 +17,7 @@ function initDateInput() {
 	$('.form_datetime').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
-		endDate : newDate,
+		endDate : new Date(),
 		weekStart : 1,
 		todayBtn : 1,
 		autoclose : 1,

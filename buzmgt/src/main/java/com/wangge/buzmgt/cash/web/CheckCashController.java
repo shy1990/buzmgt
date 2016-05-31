@@ -29,6 +29,7 @@ import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.CheckCash;
 import com.wangge.buzmgt.cash.service.BankTradeService;
 import com.wangge.buzmgt.cash.service.CheckCashService;
+import com.wangge.buzmgt.jsonformat.JSONFormat;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 
@@ -50,19 +51,19 @@ public class CheckCashController {
     return "cash/check_pending";
   }
   @RequestMapping(value = "", method = RequestMethod.GET)
-  @ResponseBody
-  public String getCashList(HttpServletRequest request,
+  @JSONFormat(filterField = {"OrderSignfor.salesMan"},nonnull=true,dateFormat="yyyy-MM-dd")
+  public  Page<CheckCash> getCashList(HttpServletRequest request,
       @PageableDefault(page = 0, size = 10, sort = { "createDate","rnid" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<CheckCash> page= checkCashService.findAll(searchParams, pageable);
-    String json = "";
-    try {
-      json = JSON.toJSONString(page, SerializerFeature.DisableCircularReferenceDetect);
-    } catch (Exception e) {
-      e.printStackTrace();
-      logger.error(e.getMessage());
-    }
-    return json;
+//    String json = "";
+//    try {
+//      json = JSON.toJSONString(page, SerializerFeature.DisableCircularReferenceDetect);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//      logger.error(e.getMessage());
+//    }
+    return page;
   }
   @RequestMapping(value="/salesmanName",method=RequestMethod.GET)
   @ResponseBody

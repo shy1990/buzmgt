@@ -67,13 +67,7 @@ public class Cash implements Serializable  {
   @Enumerated(EnumType.ORDINAL)
   private CashStatusEnum status;//支付状态
   
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
-  @Temporal(TemporalType.TIMESTAMP)
   private Date createDate ;//创建日期
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  @JsonFormat(pattern="MM.dd HH:mm",timezone = "GMT+8")  
-  @Temporal(TemporalType.TIMESTAMP)
   private Date payDate  ;//支付时间
   
   
