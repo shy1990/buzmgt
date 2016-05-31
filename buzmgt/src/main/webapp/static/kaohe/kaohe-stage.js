@@ -45,3 +45,24 @@ $('.J_addDire').click(function() {
 function toSubmit(){
 	form.submit();
 }
+
+function passed(salesmanId){
+	$.ajax({
+		type:"GET",
+		url:"/assess/passed",
+		data: {"salesmanId":salesmanId},
+		beforeSend : function(request) {
+			request.setRequestHeader("Content-Type",
+					"application/json; charset=UTF-8");
+		},
+		dataType:"text",
+		success : function(obj){
+			if(obj == "ok"){
+				alert("该业务经理转正成功!");
+				window.location.reload();
+			}
+	 },error : function() {
+			alert("系统错误，请稍后再试");
+	 }
+	});
+}

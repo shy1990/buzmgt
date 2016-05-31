@@ -48,8 +48,8 @@ var map = new BMap.Map("allmap");
 var areaName = "";
 function ajaxSearch(searchData) {
 	if("地图"===$_btnText){
-		delete searchData['page'];
-		delete searchData['size'];
+		/*delete searchData['page'];
+		delete searchData['size'];*/
 		$.ajax({
 			url : base + "teammember/getSaojiedataMap",
 			type : "GET",
@@ -61,8 +61,8 @@ function ajaxSearch(searchData) {
 			dataType : "json",
 			success : function(data) {
 				map.clearOverlays();
-				/*$(".shopNum").text(data.shopNum);
-				$(".percent").text(data.percent); 
+				$(".shopNum").text(data.shopNum);
+				/*$(".percent").text(data.percent); 
 				$("#percent").width(data.percent);*/
 				map.centerAndZoom(data.areaName, 13);
 				// map.centerAndZoom("上海",11);
@@ -98,6 +98,7 @@ function ajaxSearch(searchData) {
 				$.each(data.list,function(n,items){
 					var coor = items.coordinate;
 					if(coor != null && coor != ""){
+						arr = coor.split("-");
 		                for (var j = 0;j < arr.length;j++){
 		                	marker = new BMap.Marker(new BMap.Point(arr[0],arr[1]));// 拿到坐标点
 		                }
@@ -123,13 +124,13 @@ function ajaxSearch(searchData) {
 						"application/json; charset=UTF-8");
 			},
 			dataType : "json",
-			success : function(data) {
-				$(".shopNum").text(data.shopNum);
-				$(".percent").text(data.percent); 
-				$("#percent").width(data.percent);
-					totalElements = data.page.totalElements;
-					totalPages = data.page.totalPages;
-					seachSuccessTable(data.page);
+			success : function(dataPage) {
+				$(".shopNum").text(dataPage.totalElements);
+				/*$(".percent").text(data.percent); 
+				$("#percent").width(data.percent);*/
+					totalElements = dataPage.totalElements;
+					totalPages = 10;
+					seachSuccessTable(dataPage);
 					var searchTotal = totalElements;
 
 		            if (searchTotal != total || searchTotal == 0) {
@@ -159,7 +160,7 @@ function openInfo(content,e){
 }
 
 function initPaging(){
-	var totalCount = totalElements; //总条数 
+	var totalCount = totalElements; //总条数
 	showCount = totalPages, //显示分页个数
 	limit =  6;//每页条数
 	$('#callBackPager').extendPagination({

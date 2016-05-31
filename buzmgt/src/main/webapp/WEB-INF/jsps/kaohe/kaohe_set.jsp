@@ -52,6 +52,8 @@
 						</div>
 						<!--title-->
 						<!--box-body-->
+						<form class="member-from-box form-horizontal"
+									action="/assess/saveAssess/${salesman.id}?stage=+${stage=1 }+" name="form" method="post" onsubmit="javascript:return checkForm()">
 						<div class="box-body form-horizontal">
 							<!--内容-->
 							<div class="form-group">
@@ -59,6 +61,15 @@
 								<div class="col-sm-10" data-aa="${salesman.id}" id="salId">
 									<p class="form-control-static">${salesman.truename }</p>
 								</div>
+							</div>
+							<div class="hr"></div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">考核阶段:</label>
+								<div class="col-sm-2">
+									<input class="form-control input-sm" type="text" name="assessStageSum" id="assessStage" value="" />
+								</div>
+								<label class="" style="padding-top:3px">个</label>
+								<label class="pull-right col-md-8 control-label msg-error">请填写考核阶段</label>
 							</div>
 							<div class="hr"></div>
 							<div class="form-group">
@@ -72,8 +83,6 @@
 								<label class="col-sm-2 control-label">考核设置:</label>
 							</div>
 							<!--考核设置内容-->
-							<form class="member-from-box form-horizontal"
-									action="/assess/saveAssess/${salesman.id}?stage=+${stage=0 }+" name="form" method="post" onsubmit="javascript:return checkForm()">
 							<div class="form-group">
 								<div class="saojie-upd-list col-sm-10  col-sm-offset-2 col-xs-12">
 								<input type="hidden" id="salesmanId" name="salesmanId" value="${salesman.id}"/>

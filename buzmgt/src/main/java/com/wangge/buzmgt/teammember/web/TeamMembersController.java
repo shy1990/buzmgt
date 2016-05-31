@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.druid.util.StringUtils;
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.service.AssessService;
+import com.wangge.buzmgt.jsonformat.JSONFormat;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
@@ -310,10 +311,16 @@ public class TeamMembersController {
     * @since JDK 1.8
    */
   @RequestMapping(value = "/getSaojiedataMap", method = RequestMethod.GET)
-  @ResponseBody
+  @JSONFormat(filterField={"SaojieData.saojie","SaojieData.registData","SalesMan.region","SalesMan.user","Region.children","Region.parent"})
   public SaojieDataVo getSaojiedataMap(@RequestParam(value = "userId",required = false)SalesMan salesMan,String regionId){
     SaojieDataVo saojiedatalist  = sds.getsaojieDataList(salesMan.getId(), regionId);
     saojiedatalist.setAreaName(salesMan.getRegion().getName());//设置业务负责区域，用于地图加载
+    List<SaojieData> list = saojiedatalist.getList();
+    int size = 0;
+    if(list!=null && !list.isEmpty()){
+      size = list.size();
+      saojiedatalist.setShopNum(size);
+    }
     return saojiedatalist;
   }
   
@@ -330,7 +337,7 @@ public class TeamMembersController {
     * @since JDK 1.8
    */
   @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.GET)
-  @ResponseBody
+  @JSONFormat(filterField={"SaojieData.saojie","SaojieData.registData","SalesMan.region","SalesMan.user","Region.children","Region.parent"})
   public Page<SaojieData> getSojieDtaList(String userId, String regionId,String page,String size){
     int pageNum = Integer.parseInt(page != null ? page : "0");
     int limit = Integer.parseInt(size);

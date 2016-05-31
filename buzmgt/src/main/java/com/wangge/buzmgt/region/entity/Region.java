@@ -19,6 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -52,6 +55,7 @@ public class Region implements Serializable {
 	@Column(name = "REGION_ID")
 	private String id;
 	private String name;
+	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column(table = "SYS_COORDINATES", columnDefinition = "CLOB", name = "content",updatable=false)
