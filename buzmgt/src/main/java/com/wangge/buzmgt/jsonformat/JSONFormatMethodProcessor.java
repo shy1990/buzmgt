@@ -6,9 +6,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.HibernateProxyHelper;
-import org.hibernate.proxy.LazyInitializer;
-import org.hibernate.proxy.map.MapLazyInitializer;
 import org.hibernate.proxy.pojo.javassist.JavassistLazyInitializer;
 import org.springframework.core.Conventions;
 import org.springframework.core.MethodParameter;
@@ -51,11 +48,13 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
 
     private final static String GETTER_METHOD_PREFIX = "get";
 
-    private final static String PAGE_RESULT = "result";
+    private final static String PAGE_RESULT = "content";
 
     private final static String PAGE_LAST = "last";
 
     private final static String PAGE_TOTAL_PAGES = "totalPages";
+
+    private final static String PAGE_TOTAL_ELEMENTS = "totalElements";
 
     private final static String PAGE_SORT = "sort";
 
@@ -81,31 +80,43 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
     public void handleReturnValue(Object returnValue, MethodParameter returnType,
                                   ModelAndViewContainer mavContainer, NativeWebRequest
                                           webRequest) throws Exception {
-        Object value;
+
 
         // 获得这个注解
         jsonFormat = returnType.getMethod().getAnnotation(JSONFormat.class);
 
-        if (ObjectUtils.notEqual(returnValue, null)) {
-            int type = getObjectType(returnValue);
-
-            if ((1 == type || 5 == type) && !isProxy(returnValue)) {
-                value = returnValue;
-            } else {
-                value = format(returnValue, type);
-            }
-        } else {
-            value = "";
-        }
+        Object value = go(returnValue);
 
         mavContainer.setRequestHandled(true);
-
-        System.out.println(value);
 
         writeWithMessageConverters(value, returnType, webRequest);
 
     }
 
+    private Object go(Object object) {
+        Object value;
+
+        if (ObjectUtils.notEqual(object, null)) {
+            int type = getObjectType(object);
+
+            if ((1 == type || 5 == type) && !isProxy(object)) {
+                value = object;
+            } else {
+                value = format(object, type);
+            }
+        } else {
+            value = "";
+        }
+
+        return value;
+    }
+
+    /**
+     * 判断这个对象是否是一个Hibernate代理对象
+     *
+     * @param obj 对象
+     * @return true false
+     */
     private boolean isProxy(Object obj) {
         if (!ObjectUtils.notEqual(obj, null)) {
             return false;
@@ -195,6 +206,12 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
         return this.jsonFormat.dateFormat();
     }
 
+    /**
+     * 处理字段
+     *
+     * @param object 所有的
+     * @return map
+     */
     private Map<String, Object> processField(Object object) {
 
         if (!ObjectUtils.notEqual(null, object)) {
@@ -205,15 +222,16 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
 
         Method method;
         Object value;
-        Class cls = object.getClass();
+        Class cls;
 
+        // 如果是Hibernate代理对象,则获得它的target(原始实例),即getImplementation()
         if (isProxy(object)) {
-            // TODO:
             HibernateProxy proxy = (HibernateProxy) object;
             JavassistLazyInitializer li = (JavassistLazyInitializer) proxy.getHibernateLazyInitializer();
             object = li.getImplementation();
-            cls = object.getClass();
         }
+
+        cls = object.getClass();
 
         for (Field field : cls.getDeclaredFields()) {
 
@@ -232,22 +250,14 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
 
                 method = cls.getDeclaredMethod(methodName);
 
-//                if (isProxy(object) && !ObjectUtils.notEqual(null, object)) {
-////                    HibernateProxy proxy = (HibernateProxy) object;
-////                    JavassistLazyInitializer li = (JavassistLazyInitializer) proxy
-////                            .getHibernateLazyInitializer();
-////                    object = li.getImplementation();
-//                    continue;
-//                }
-
                 // 通过反射执行相应的getter方法然后取得该字段的值
                 value = method.invoke(object);
             } catch (NoSuchMethodException e) {
-                throw new RuntimeException("没有找到相应的方法");
+                throw new RuntimeException("没有找到相应的方法: " + e.getMessage());
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("通过反射执行方法异常");
+                throw new RuntimeException("通过反射执行方法异常: " + e.getMessage());
             } catch (InvocationTargetException e) {
-                throw new RuntimeException("通过反射执行方法异常");
+                throw new RuntimeException("通过反射执行方法异常:" + e.getMessage());
             }
 
             if (!ObjectUtils.notEqual(null, value)) {
@@ -262,7 +272,6 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
             switch (fieldType) {
                 // 基本数据类型或者String或者Date
                 case 0:
-
                     if (StringUtils.equals(field.getType().getName(), DATE_CLASS) && null != value) {
                         value = new SimpleDateFormat(this.dateFormat()).format((Date) value);
                     }
@@ -273,13 +282,11 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
                 case 1:
                     // 不过滤集合
                     if (!this.filterCollection()) {
-
                         map.put(fieldName, formatByCollection((Collection) value));
                     }
                     break;
                 // 枚举
                 case 2:
-
                     try {
                         String enumMethodName = getEnumMethodName(value);
 
@@ -362,15 +369,14 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
      * @return map
      */
     private Map<String, Object> formatByObject(Object object) {
-
-//        if (isProxy(object)) {
-//            return formatByProxy(object);
-//        }
         return processField(object);
     }
 
     private Object format(Object object, int objectType) {
         switch (objectType) {
+            // 普通对象
+            case 0:
+                return formatByObject(object);
             // 集合类型
             case 2:
                 return formatByCollection((Collection) object);
@@ -380,8 +386,17 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
             // 分页类型
             case 4:
                 return formatByPage((Page) object);
+            case 6:
+                return formatByMap((Map) object);
         }
         return null;
+    }
+
+    private Map<String, Object> formatByMap(Map object) {
+        Map<String, Object> map = new HashMap();
+        object.forEach((key, value) -> map.put(key.toString(), go(value)));
+
+        return map;
     }
 
     /**
@@ -406,6 +421,7 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
         map.put(PAGE_NUMBER_OF_ELEMENTS, object.getNumberOfElements());
         map.put(PAGE_SIZE, object.getSize());
         map.put(PAGE_NUMBER, object.getNumber());
+        map.put(PAGE_TOTAL_ELEMENTS, object.getTotalElements());
 
         return map;
 
@@ -512,3 +528,4 @@ public class JSONFormatMethodProcessor extends AbstractMessageConverterMethodPro
         return arg;
     }
 }
+
