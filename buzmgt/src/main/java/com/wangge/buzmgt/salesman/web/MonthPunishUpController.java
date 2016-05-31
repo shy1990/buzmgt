@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.salesman.web;
 
+import com.wangge.buzmgt.jsonformat.JSONFormat;
 import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
 import com.wangge.buzmgt.salesman.repository.MothPunishUpRepository;
 import com.wangge.buzmgt.salesman.service.MonthPunishUpService;
@@ -13,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -32,8 +32,13 @@ public class MonthPunishUpController {
     public String toList(){
         return "punishset/month_punish_record";
     }
+
+
+
     @RequestMapping(value="/MonthPunishUps",method= RequestMethod.GET)
-    public @ResponseBody
+//    @JSONFormat(filterField = {"SalesMan.user","region.parent","region.children"})
+    @JSONFormat(filterField = {"SalesMan.user","region.children"})
+    public
     Page<MonthPunishUp> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                 @RequestParam(value = "size", defaultValue = "3") Integer size){
         System.out.println("*************");
@@ -42,6 +47,8 @@ public class MonthPunishUpController {
 
         return  service.findByPage(pageable);
     }
+
+
 
 
     @RequestMapping(value="/list1",method = RequestMethod.GET)
@@ -73,7 +80,7 @@ public class MonthPunishUpController {
 
 
     /**
-     * 测试模糊查询
+     * 模糊查询
      * @param page
      * @param size
      * @param model
