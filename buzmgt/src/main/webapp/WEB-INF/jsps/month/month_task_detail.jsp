@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <base href="<%=basePath%>" />
-<title>月任务查看</title>
+<title>子任务执行详情</title>
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
@@ -58,7 +58,7 @@
 <body>
 	<div class="content main">
 		<h4 class="page-header ">
-			<i class="ico icon-month-task"></i>月任务
+			<i class="ico icon-month-task"></i>子任务执行详情
 		</h4>
 		<div class="row">
 			<div class="col-md-9">

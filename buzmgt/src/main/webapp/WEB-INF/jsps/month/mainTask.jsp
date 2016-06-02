@@ -131,7 +131,7 @@
 						<div class="col-md-2 input-jl ">
 							<div class="input-group ">
 								<input type="text" class="input-in form-control text-gery-s  "
-									name="truename" id="param" placeholder="请输入名称或工号"
+									name="truename" id="param" placeholder="请输入业务员姓名"
 									onkeypress="return check()"> <a
 									class="input-ini input-group-addon " id="goSearch"
 									onclick="getTask(1)"> <i class="icon icon-finds"></i>
@@ -174,7 +174,7 @@
 		charset="utf-8"></script>
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
-	<script src="static/month-task/month.js"></script>
+	<script src="/static/month-task/month.js"></script>
 
 	<script type="text/javascript">
 	/*区域 */

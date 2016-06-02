@@ -127,7 +127,11 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 		Page<MonthTask> result = null;
 
 		if (null == flag) {
-			result = mtaskRep.findByMonthAndRegionidLike(month, regionId, page);
+			if (null == saleManName || "".equals(saleManName)) {
+				result = mtaskRep.findByMonthAndRegionidLike(month, regionId, page);
+			} else {
+				result = mtaskRep.findByMonthAndMonthData_Salesman_TruenameLike(month, "%" + saleManName + "%", page);
+			}
 		} else {
 			if (null == saleManName || "".equals(saleManName)) {
 				result = mtaskRep.findByMonthAndStatusAndRegionidLike(month, 1, regionId, page);
@@ -411,7 +415,11 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 		try {
 			double sum = getReflectInt(mclass.getDeclaredMethod("getTal" + level + "goal").invoke(mt));
 			double seted = getReflectInt(mclass.getDeclaredMethod("getTal" + level + "set").invoke(mt));
-			rate = String.format("%10.2f%%", seted / sum).trim().substring(2);
+			if (sum == seted) {
+				rate = "100%";
+			} else {
+				rate = String.format("%10.2f%%", seted / sum).trim().substring(2);
+			}
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
 			e.printStackTrace();
@@ -445,36 +453,48 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 				sumMap.put(level, sum + 1);
 			}
 		}
-		List<Map<String, Object>> marginList = new ArrayList<Map<String, Object>>();
-		int start = 0;
-		int end = 0;
-		for (Map.Entry<String, Integer> entry : sumMap.entrySet()) {
-			Map<String, Object> obMap = new HashMap<String, Object>();
-			/*
-			 * int firstRow, int lastRow, int firstCol, int lastCol)
-			 */
-			obMap.put("firstRow", start + 1);
-			end = start + entry.getValue();
-			obMap.put("lastRow", end);
-			obMap.put("firstCol", 0);
-			obMap.put("lastCol", 0);
-			// obMap.put("value", entry.getKey());
-			marginList.add(obMap);
-			Map<String, Object> obMap1 = new HashMap<String, Object>();
-			obMap1.put("firstRow", start + 1);
-			obMap1.put("lastRow", end);
-			obMap1.put("firstCol", 2);
-			obMap1.put("lastCol", 2);
-			// obMap1.put("value", getRate(Integer.parseInt(entry.getKey()),
-			// task));
-			marginList.add(obMap1);
-			start = end;
-		}
-
+		List<Map<String, Object>> marginList = getMarginList(sumMap);
 		String title = salesName + task.getMonth() + "批量任务设置.xls";
 		String[] gridTitles = new String[] { "拜访次数", "已设置商家", "已设置占比" };
 		String[] keyValues = new String[] { "level", "shopName", "rate" };
 		MapedExcelExport.doExcelExport(title, alList, gridTitles, keyValues, request, response, marginList);
+	}
+
+	/**
+	 * 得到需要合并的单元格集合 当单元格的个数大于1时合并,为1时不合并,下标+1;判断下一种情况;
+	 * 
+	 * @param sumMap
+	 * @return
+	 */
+	private List<Map<String, Object>> getMarginList(Map<String, Integer> sumMap) {
+		List<Map<String, Object>> marginList = new ArrayList<Map<String, Object>>();
+		int start = 0;
+		int end = 0;
+		for (Map.Entry<String, Integer> entry : sumMap.entrySet()) {
+			int sum = entry.getValue();
+			if (sum > 1) {
+				Map<String, Object> obMap = new HashMap<String, Object>();
+				/*
+				 * int firstRow, int lastRow, int firstCol, int lastCol)
+				 */
+				obMap.put("firstRow", start + 1);
+				end = start + entry.getValue();
+				obMap.put("lastRow", end);
+				obMap.put("firstCol", 0);
+				obMap.put("lastCol", 0);
+				marginList.add(obMap);
+				Map<String, Object> obMap1 = new HashMap<String, Object>();
+				obMap1.put("firstRow", start + 1);
+				obMap1.put("lastRow", end);
+				obMap1.put("firstCol", 2);
+				obMap1.put("lastCol", 2);
+				marginList.add(obMap1);
+				start = end;
+			} else {
+				start++;
+			}
+		}
+		return marginList;
 	}
 
 	@Override
@@ -493,7 +513,7 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 	public Object getIssueTaskCount() {
 		String regionId = getDefaultRegionId();
 		String month = DateUtil.getPreMonth(new Date(), 1);
-		Long sum=monthTaskRep.countByMonthAndStatusAndRegionidLike(month, 1, regionId);
+		Long sum = monthTaskRep.countByMonthAndStatusAndRegionidLike(month, 1, regionId);
 		return sum;
 	}
 }

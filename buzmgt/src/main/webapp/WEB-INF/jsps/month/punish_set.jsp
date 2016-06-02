@@ -53,7 +53,7 @@
 			<div class="ratio-box-dd">
 				<span class="label  label-blue">{{addOne @index}} </span> <span
 					class="text-black jll">{{regionName}} </span> <a class="text-redd jll"
-					href="" data-toggle="modal" data-target=""> {{rate}} </a> <a
+					href="" data-toggle="modal" data-target=""> {{gt rate 10}} </a> <a
 					class="text-blue-s jll"  data-toggle="modal"
 					 onclick="modify('{{id}}','{{rate}}')">修改</a>
  				<a class="text-blue-s jll" data-toggle="modal" onclick="deletePunish('{{id}}')">删除</a>
@@ -241,7 +241,7 @@
 		type="text/javascript" charset="utf-8"></script>
 	<script src="/static/js/common.js" type="text/javascript"
 		charset="utf-8"></script>
-		<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
+	<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
 		charset="utf-8"></script>
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>

@@ -1,9 +1,22 @@
-
 var itemTotal = 0;// 补统计总条数
-var month = '';
+var month = getNextMonth();
 var page = 0;
 var size = 10;
 
+// 得到下一个的月份
+function getNextMonth() {
+	var date = new Date();
+	var month = date.getMonth();
+	var year = date.getFullYear();
+	if (month < 9) {
+		month = "0" + (month + 2);
+	} else {
+		month = (month + 2);
+	}
+	month = year + "-" + month;
+	return month;
+}
+// 初始化时间框
 function initDate() {
 	$('body input').val('');
 	$(".form_datetime").datetimepicker({
@@ -28,38 +41,36 @@ function initDate() {
 // 查询数据
 function getTask(flag) {
 	var time = $('body input').val();
-
-	if (time == '') {
-		alert("请选择月份");
-		return;
-	} else {
+	if (month != null && month != '') {
 		if (time != month) {
 			page = 0;
 		}
 		month = time;
-		findTaskList(page,flag);
 	}
+
+	findTaskList(page, flag);
+
 }
 
 function findTaskList(page, flag) {
 	page = page == null || page == '' ? 0 : page;
 	// SearchData['page'] = page;
 	var searchData = null;
-	var salesManName=$('[name="truename"]').val();
+	var salesManName = $('[name="truename"]').val();
 	if (flag == 1) {
 		searchData = {
 			"page" : page,
 			"size" : size,
-			"salesManName":salesManName,
-			"flag":1
+			"salesManName" : salesManName,
+			"flag" : 1
 		};
 	} else {
 		searchData = {
 			"page" : page,
-			"size" : size
+			"size" : size,
+			"salesManName" : salesManName
 		};
 	}
-	;
 	$.ajax({
 		url : "/monthTask/search?month=" + month,
 		type : "GET",
@@ -79,6 +90,12 @@ function findTaskList(page, flag) {
 	})
 }
 
+/**
+ * 通过handlebar模板得到html片段并输出
+ * 
+ * @Param data
+ *            得到带分页信息的obj对象
+ */
 function createTaskTable(data) {
 	var myTemplate = Handlebars.compile($("#task-table-template").html());
 	$('#taskList').html(myTemplate(data));
@@ -87,7 +104,7 @@ function createTaskTable(data) {
 /**
  * 报备的分页
  * 
- * @param data
+ * @Param data
  */
 function oilCostPaging(data) {
 	var totalCount = data.totalElements, limit = data.size;

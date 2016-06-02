@@ -277,8 +277,8 @@
 	<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript"
 		charset="utf-8"></script>
 	<script src="static/bootStrapPager/js/extendPagination.js"></script>
-	<script src='static/js/common.js'></script>
-	<script src='static/js/dateutil.js'></script>
+	<script src='/static/js/common.js'></script>
+	<script src='/static/js/dateutil.js'></script>
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="static/month-task/add-month-task.js"></script>
 	<script src="static/bootstrap/js/bootstrap-select.min.js"></script>

@@ -1,8 +1,8 @@
 var itemTotal = 0;// 补统计总条数
 var page = 0;
 var size = 10;
-//已自定义区域数组
-var regionArr=new Array();
+// 已自定义区域数组
+var regionArr = new Array();
 function findTaskList(page) {
 	page = page == null || page == '' ? 0 : page;
 	var searchData = {
@@ -31,24 +31,26 @@ function findTaskList(page) {
 }
 /**
  * 初始化区域列表
- * */
-function initRegionArr(punishArr){
-	for(var i=0;i<punishArr.length;i++){
+ */
+function initRegionArr(punishArr) {
+	for (var i = 0; i < punishArr.length; i++) {
 		regionArr.push(punishArr[i].regionId);
 	}
 }
 
 function createTaskTable(data) {
-	var handleHelper = Handlebars.registerHelper("addOne", function(index) {
+	Handlebars.registerHelper("addOne", function(index) {
 		// 返回+1之后的结果
 		return index + 1;
 	});
-	// 解析模版
-	// 64 var handle = Handlebars.compile($("#table-template").html());
-	// 65 //生成html
-	// 66 var html = handle(data);
-	// 67 //插入到页面
-	// 68 $("#tableList").append(html);
+	// 大于
+	Handlebars.registerHelper("gt", function(num1, num2) {
+		if (num1 > num2) {
+			return "是";
+		} else {
+			return "否";
+		}
+	});
 	var myTemplate = Handlebars.compile($("#task-table-template").html());
 	$('#acont').html(myTemplate(data));
 }
@@ -83,7 +85,6 @@ function addd(toil) {
 	addCustom($("#addd").serializeArray());
 }
 
-
 function addCustom(o) {
 	var qy = o[0]["value"];// regionId
 	qy = qy.replace(" ", "");
@@ -92,13 +93,13 @@ function addCustom(o) {
 	if (km_ratio == "") {
 		alert("请设置扣罚系数");
 		return;
-	}else if(qy == ""){
+	} else if (qy == "") {
 		alert("请设置扣罚区域");
 		return;
 	}
-	if(jQuery.inArray(qy,regionArr)>-1){
+	if (jQuery.inArray(qy, regionArr) > -1) {
 		alert("请勿重复添加自定义区域!");
-	}else if (qy.length > 5 && qy.length < 8) {
+	} else if (qy.length > 5 && qy.length < 8) {
 		var num = (qy + "").substring(4);
 		if (num != '00') {
 			oilForm(km_ratio, qy);// 执行添加

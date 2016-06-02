@@ -14,16 +14,61 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import com.wangge.buzmgt.monthTask.entity.MonthTask;
 
 public interface MonthTaskRepository extends JpaRepository<MonthTask, Long> {
+	/**
+	 * 通过区域来获取业务员列表
+	 * 
+	 * @param month
+	 * @param regionId
+	 * @param page
+	 * @return
+	 */
 	@EntityGraph("monthData")
 	Page<MonthTask> findByMonthAndRegionidLike(String month, String regionId, Pageable page);
 
+	/**
+	 * 通过业务员姓名和月份来查找主任务
+	 * 
+	 * @param month
+	 * @param salesManName
+	 * @param page
+	 * @return
+	 */
+	@EntityGraph("monthData")
+	Page<MonthTask> findByMonthAndMonthData_Salesman_TruenameLike(String month, String salesManName, Pageable page);
+
+	/**
+	 * 通过月份,发布状态和区号获取查找列表
+	 * 
+	 * @param month
+	 * @param status
+	 * @param regionId
+	 * @param page
+	 * @return
+	 */
 	@EntityGraph("monthData")
 	Page<MonthTask> findByMonthAndStatusAndRegionidLike(String month, Integer status, String regionId, Pageable page);
 
+	/**
+	 * 通过月份,发布状态,业务员姓名获取列表
+	 * 
+	 * @param month
+	 * @param status
+	 * @param trueName
+	 * @param page
+	 * @return
+	 */
 	@EntityGraph("monthData")
 	Page<MonthTask> findByMonthAndStatusAndMonthData_Salesman_TruenameLike(String month, Integer status,
 			String trueName, Pageable page);
 
+	/**
+	 * 通过状态和业务员姓名查找
+	 * 
+	 * @param status
+	 * @param trueName
+	 * @param page
+	 * @return
+	 */
 	@EntityGraph("monthData")
 	Page<MonthTask> findByStatusAndMonthData_Salesman_TruenameLike(Integer status, String trueName, Pageable page);
 

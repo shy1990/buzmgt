@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +15,13 @@ import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.wangge.buzmgt.monthTask.entity.AppServer;
 import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
 import com.wangge.buzmgt.monthTask.repository.MonthOrdersDataRepository;
 import com.wangge.buzmgt.monthTask.repository.MonthTaskRepository;
@@ -41,6 +44,7 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.util.HttpUtil;
 import com.wangge.buzmgt.util.RegionUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -71,6 +75,7 @@ public class BuzmgtApplicationTests {
 	MonthOrdersDataRepository monthDataRep;
 	@Resource
 	MonthTaskRepository monTaskRep;
+	
 
 	// @Test
 	// @Transactional
@@ -325,12 +330,13 @@ public class BuzmgtApplicationTests {
 
 	@Test
 	public void testMonth() {
-		// MonthOdersData moth=
-		// monthDataRep.findFirstbySalesmanOrRegionId("A37010504170", "15462",
-		// "2016-06");
-		// System.out.println(moth.getMonth());
-//		List<Map<String, Object>> rlist = monTaskRep.findByMonth("2016-06");
-//		Map<String, Object> map1=rlist.get(0);
-//		System.out.println(rlist.size());
+		Map<String, String> talMap = new HashMap<String, String>();
+		talMap.put("mobiles", "18769727652");
+		talMap.put("msg", "下月的月任务已生成");
+		String result = HttpUtil.sendPostJson(AppServer.URL, talMap);
+		if (!result.contains("sucess")) {
+			System.out.println("手机推送月任务出错!!");
+		}
+
 	}
 }

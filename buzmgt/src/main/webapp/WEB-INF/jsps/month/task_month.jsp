@@ -116,6 +116,7 @@
 								<a class="btn btn-default btn-sm" onclick="getTask();"
 									href="javascrip:(0);"><span class="text-bule">筛选</span></a>
 							</div>
+
 							<div class="date-jlll">
 								<span class="text-bai"> 已派发 &nbsp;<span
 									class="text-bai-d">${doneCount}</span> &nbsp; 个区域
@@ -123,7 +124,20 @@
 							</div>
 						</div>
 
+						<div class="col-md-2 input-jl ">
+							<div class="input-group ">
+								<input type="text" class="input-in form-control text-gery-s  "
+									name="truename" id="param" placeholder="请输入业务员姓名"
+									onkeypress="return check()"> <a
+									class="input-ini input-group-addon " id="goSearch"
+									onclick="getTask();"> <i class="icon icon-finds"></i>
+								</a>
+							</div>
 
+
+
+
+						</div>
 					</div>
 					<!--end row-->
 				</div>

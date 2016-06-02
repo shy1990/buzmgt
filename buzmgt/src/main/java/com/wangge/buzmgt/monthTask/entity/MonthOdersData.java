@@ -25,7 +25,6 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 				@NamedSubgraph(name = "organization.graph", attributeNodes = { @NamedAttributeNode("organization") }),
 				@NamedSubgraph(name = "parent.graph", attributeNodes = { @NamedAttributeNode(value = "parent"),
 						@NamedAttributeNode("children") }) })
-
 public class MonthOdersData implements Serializable {
 	/**
 	 * 

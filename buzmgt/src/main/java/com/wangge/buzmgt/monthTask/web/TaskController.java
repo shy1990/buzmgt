@@ -139,7 +139,7 @@ public class TaskController {
 	 * @param page
 	 * @return
 	 */
-	@RequestMapping("/list")
+	@RequestMapping("/handleList")
 	public String init(Model model) {
 		//本月已派发的任务
 		model.addAttribute("doneCount", monthTaskService.getIssueTaskCount());

@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -19,6 +21,7 @@ import org.neo4j.cypher.internal.compiler.v2_1.planner.logical.steps.join;
 import com.alibaba.fastjson.JSON;
 import com.wangge.buzmgt.monthTask.entity.MonthTask;
 import com.wangge.buzmgt.oilcost.entity.OilRecord;
+import com.wangge.buzmgt.util.HttpUtil;
 
 import junit.framework.TestCase;
 
@@ -96,10 +99,14 @@ public class Test extends TestCase {
 		/*
 		 * excle合并区域 CellRangeAddress cre = new CellRangeAddress(0, 0, 0, 4);
 		 */
-		sheet.addMergedRegion(new CellRangeAddress(0, 4, 0, 0));// 指定合并区域
-		HSSFCell cell1 = sheet.getRow(0).getCell(0);
-		cell1.setCellStyle(style);
-		cell1.setCellValue("This is a test of merging");
+		try {
+			sheet.addMergedRegion(new CellRangeAddress(1, 1, 2, 2));// 指定合并区域
+			HSSFCell cell1 = sheet.getRow(0).getCell(0);
+			cell1.setCellStyle(style);
+			cell1.setCellValue("This is a test of merging");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// Write the output to a file
 		FileOutputStream fileOut;
@@ -134,6 +141,15 @@ public class Test extends TestCase {
 
 	public void test() {
 		String[] ar1 = new String[] { "1", "2", "3", "4", "5" };
+
+	}
+
+	public void testJson() {
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("mobiles", "18769727652");
+		params.put("msg", "下月的月任务已生成");
+		String xml = HttpUtil.sendPostJson("http://192.168.1.225:8818/v1/push/mainMonthTask", params);
+		System.out.println(xml);
 
 	}
 }

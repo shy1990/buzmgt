@@ -6,8 +6,28 @@ var oldSalemanid = "";
 var task = null;
 var newed = 0;
 var salemanid = null;
+var date = new Date();
+// forbi();
+function forbi() {
+	var days = date.getDate();
+	if (days < 16 && taskId == '') {
+		alert("本月最终数据还未统计,请16号开始设置");
+		window.location.href = "/monthTask/list";
+	}
+}
+function getNextMonth() {
+	var month = date.getMonth();
+	var year = date.getFullYear();
+	if (month < 9) {
+		month = "0" + (month + 2);
+	} else {
+		month = (month + 2);
+	}
+	month = year + "-" + month;
+	return month;
+}
 function getMonthData(regionId) {
-	var month = new Date().DateAdd('m', 1).format("yyyy-MM");
+	var month = getNextMonth();
 	salemanid = $("#basic").val();
 	if (null == salemanid || salemanid == '') {
 		alert("请选择业务员");
@@ -17,7 +37,6 @@ function getMonthData(regionId) {
 	var searchData = {
 		"month" : month,
 		"salemanid" : salemanid,
-		"regionid" : regionId
 	};
 	$.ajax({
 		url : base + "api/monthdata/search/defaultfinddata",
@@ -44,8 +63,12 @@ function getMonthData(regionId) {
 			}
 			newed = 1;
 		},
-		error : function() {
-			alert("系统错误，请稍后再试");
+		error : function(data) {
+			if (data.status = '404') {
+				alert(month + "月未生成相应的统计数据,请16日之后再试");
+			} else {
+				alert("系统错误，请稍后再试");
+			}
 		}
 	});
 }
@@ -133,7 +156,8 @@ function submit(flag) {
 		}
 	} else {
 		if (newed == 0) {
-			alert("本次查询数据已被使用,请重新查询;");
+			// 本次查询数据已被使用
+			alert("数据未刷新,请重新检索!!");
 			return;
 		}
 		taskObj.monthData = lsdata;
@@ -148,8 +172,12 @@ function submit(flag) {
 		dataType : "json",
 		success : function(data) {
 			alert("批量任务已成功" + message);
-			cleanSelect();
-			newed = 0;
+			if (task != null) {
+				location.href = '/monthTask/handleList';
+			} else {
+				cleanSelect();
+				newed = 0;
+			}
 		},
 		error : function() {
 			alert("系统错误，请稍后再试");
