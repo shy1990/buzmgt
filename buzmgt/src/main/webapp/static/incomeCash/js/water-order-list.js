@@ -43,7 +43,6 @@ function goSearch() {
 $('.table-export').on(
 		'click',
 		function() {
-			var tab = findTab();
 			var startTime = $('#startTime').val();
 			var endTime = $('#endTime').val();
 			if (checkDate(startTime, endTime)) {
@@ -51,7 +50,7 @@ $('.table-export').on(
 				SearchData['sc_GTE_createDate'] = startTime;
 				SearchData['sc_LTE_createDate'] = endTime;
 
-				window.location.href = base + ""
+				window.location.href= base + "waterOrder/export?"
 						+ conditionProcess();
 				}
 		});
@@ -62,11 +61,11 @@ $('.table-export').on(
  */
 function conditionProcess() {
 	var SearchData_ = "sc_GTE_createDate="
-			+ (SearchData.sc_GTE_dateTime == null ? ''
-					: SearchData.sc_GTE_dateTime)
+			+ (SearchData.sc_GTE_createDate == null ? ''
+					: SearchData.sc_GTE_createDate)
 			+ "&sc_LTE_createDate="
-			+ (SearchData.sc_LTE_dateTime == null ? ''
-					: SearchData.sc_LTE_dateTime);
+			+ (SearchData.sc_LTE_createDate == null ? ''
+					: SearchData.sc_LTE_createDate);
 
 	return SearchData_;
 }
@@ -74,7 +73,7 @@ function findList(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
 	$.ajax({
-		url : base+"/waterOrder",
+		url : base+"waterOrder",
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
@@ -147,7 +146,7 @@ Handlebars.registerHelper('formDate', function(value) {
 Handlebars.registerHelper('disposePayStatus', function(payStatus) {
 	var html = '<span class="icon-wfk">已审核</span>';
 	var html_= '<span class="icon-dsh">待审核</span>';
-	if(payStatus=='已支付'){
+	if(payStatus=='已审核'){
 		return html;
 	}
 	return html_;

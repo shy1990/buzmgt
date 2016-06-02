@@ -3,6 +3,9 @@ package com.wangge.buzmgt.cash.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -35,6 +38,9 @@ public interface WaterOrderCashService {
   public WaterOrderCash findBySerialNo(String serialNo);
 
   public void save(List<WaterOrderCash> waterOrders);
+
+  public void ExportSetExcel(List<WaterOrderCash> waterOrders, HttpServletRequest request,
+      HttpServletResponse response);
   
 }
 

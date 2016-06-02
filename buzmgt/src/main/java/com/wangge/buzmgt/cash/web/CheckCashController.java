@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,13 +23,11 @@ import org.springframework.web.util.WebUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.hazelcast.com.eclipsesource.json.JsonObject;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.CheckCash;
-import com.wangge.buzmgt.cash.service.BankTradeService;
 import com.wangge.buzmgt.cash.service.CheckCashService;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.json.JSONFormat;
 
 @Controller
 @RequestMapping("/checkCash")
@@ -50,19 +47,19 @@ public class CheckCashController {
     return "cash/check_pending";
   }
   @RequestMapping(value = "", method = RequestMethod.GET)
-  @ResponseBody
-  public String getCashList(HttpServletRequest request,
+  @JSONFormat(filterField = {"OrderSignfor.salesMan"},nonnull=true,dateFormat="yyyy-MM-dd")
+  public  Page<CheckCash> getCashList(HttpServletRequest request,
       @PageableDefault(page = 0, size = 10, sort = { "createDate","rnid" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<CheckCash> page= checkCashService.findAll(searchParams, pageable);
-    String json = "";
-    try {
-      json = JSON.toJSONString(page, SerializerFeature.DisableCircularReferenceDetect);
-    } catch (Exception e) {
-      e.printStackTrace();
-      logger.error(e.getMessage());
-    }
-    return json;
+//    String json = "";
+//    try {
+//      json = JSON.toJSONString(page, SerializerFeature.DisableCircularReferenceDetect);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//      logger.error(e.getMessage());
+//    }
+    return page;
   }
   @RequestMapping(value="/salesmanName",method=RequestMethod.GET)
   @ResponseBody
@@ -119,6 +116,13 @@ public class CheckCashController {
     
     return checkCashService.deleteUnCheckBankTrade(bankTrade);
   }
+//  @RequestMapping(value="/export",method=RequestMethod.GET)
+//  public void exportExcel(HttpServletRequest request,HttpServletResponse response,
+//      @PageableDefault(page = 0, size = 10, sort = { "createDate","rnid" }, direction = Direction.DESC) Pageable pageable){
+//    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+//    Page<CheckCash> page= checkCashService.findAll(searchParams, pageable);
+//    checkCashService.exportSetExecl(page.getContent(),request,response);
+//  }
   
 
 

@@ -59,7 +59,7 @@ public class WaterOrderCash implements Serializable  {
   
   
   public enum WaterPayStatusEnum{
-    UnPay("未支付"), OverPay("已支付");
+    UnPay("待审核"), OverPay("已审核");
     private String name;
     WaterPayStatusEnum(String name){
       this.name=name;

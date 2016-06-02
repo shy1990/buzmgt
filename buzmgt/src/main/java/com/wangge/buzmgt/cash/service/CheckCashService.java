@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,5 +46,7 @@ public interface CheckCashService {
   public JSONObject deleteUnCheckBankTrade(BankTrade bankTrade);
 
   public List<BankTrade> getUnCheckBankTrades();
+
+  public void exportSetExecl(List<CheckCash> content, HttpServletRequest request, HttpServletResponse response);
 
 }

@@ -55,6 +55,7 @@
         <p>{{cashMoney}}</p>
 				{{/each}}
       </td>
+      <td>{{cashMoney}}</td>
       <td>{{debtMoney}}</td>
       <td>{{shouldPayMoney}}</td>
       <td>{{incomeMoney}}</td>
@@ -89,6 +90,7 @@
       <td class="border-right-grey multi-row multi-row-p">
 				<p><span class="single-exception">匹配失败</span></p>
       </td>
+      <td>----</td>
       <td>----</td>
       <td>----</td>
       <td>{{money}}</td>
@@ -155,6 +157,7 @@ var	base='<%=basePath%>';
 								<th>打款金额</th>
 								<th>流水单号</th>
 								<th>当日收现</th>
+								<th>收现总额</th>
 								<th>昨日累加</th>
 								<th>业务应付</th>
 								<th>业务实付</th>
