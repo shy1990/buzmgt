@@ -472,11 +472,11 @@ public class CheckCashServiceImpl implements CheckCashService {
   public void exportSetExecl(List<CheckCash> checkCashs, HttpServletRequest request, HttpServletResponse response) {
     List<Map<String, Object>> alList = new ArrayList<Map<String, Object>>();
     Map<String, Integer> sumMap = new HashMap<String, Integer>();
-    
     checkCashs.forEach(checkCash->{
       List<BankTrade> bankTrades=checkCash.getBankTrades();
       String userId = checkCash.getUserId();
       String cardName = checkCash.getCardName();
+      Date createDate = checkCash.getCreateDate();
       String cradNo="";
       String incomeMoney="";
       for(BankTrade bankTrade:bankTrades){
@@ -497,8 +497,15 @@ public class CheckCashServiceImpl implements CheckCashService {
         objMap.put("shouldPayMoney", checkCash.getShouldPayMoney());
         objMap.put("incomeMoneyTotal", checkCash.getIncomeMoney());
         objMap.put("stayMoney", checkCash.getStayMoney());
-        objMap.put("createDate", checkCash.getCreateDate());
-        
+        objMap.put("createDate", createDate);
+        alList.add(objMap);
+
+        Integer sum = sumMap.get(userId);
+        if (null == sum) {
+          sumMap.put(userId, 1);
+        } else {
+          sumMap.put(userId, sum + 1);
+        }
       }
       
     });
@@ -544,15 +551,15 @@ public class CheckCashServiceImpl implements CheckCashService {
         Map<String, Object> obMap5 = new HashMap<String, Object>();
         obMap5.put("firstRow", start + 1);
         obMap5.put("lastRow", end);
-        obMap5.put("firstCol", 7);
-        obMap5.put("lastCol", 7);
+        obMap5.put("firstCol", 6);
+        obMap5.put("lastCol", 6);
         marginList.add(obMap5);
         
         Map<String, Object> obMap6 = new HashMap<String, Object>();
         obMap6.put("firstRow", start + 1);
         obMap6.put("lastRow", end);
-        obMap6.put("firstCol", 8);
-        obMap6.put("lastCol", 8);
+        obMap6.put("firstCol", 7);
+        obMap6.put("lastCol", 7);
         marginList.add(obMap6);
         
         Map<String, Object> obMap7 = new HashMap<String, Object>();
@@ -589,8 +596,9 @@ public class CheckCashServiceImpl implements CheckCashService {
     String[] gridTitles_ = { "业务ID", "姓名", "付款卡号", "打款金额", "流水单号", "当日收现", "收现总额", "昨日累加", "业务应付",  "业务实付", "业务待付", "操作日期"};
     String[] coloumsKey_ = { "userId", "cardName", "cradNo", "incomeMoney", "serialNo", "cashMoney", "cashMoneyTotal", 
         "debtMoney", "shouldPayMoney", "incomeMoneyTotal", "stayMoney", "createDate" };
-   
-    MapedExcelExport.doExcelExport("流水单号.xls", alList, gridTitles_, coloumsKey_, request, response, marginList);
+   logger.info(alList);
+   logger.info(marginList);
+    MapedExcelExport.doExcelExport("待审核账单.xls", alList, gridTitles_, coloumsKey_, request, response, marginList);
   }
 
 

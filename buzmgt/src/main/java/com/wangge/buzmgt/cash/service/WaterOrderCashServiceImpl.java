@@ -25,6 +25,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
+import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
 import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 import com.wangge.buzmgt.cash.repository.WaterOrderCashRepository;
 import com.wangge.buzmgt.cash.repository.WaterOrderDetailRepository;
@@ -91,7 +92,7 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
       private final static String TIME_MAX = " 23:59:59 999";
 
-      private final static String TYPE_ORDERSIGNFOR_TYPE = "com.wangge.buzmgt.receipt.entity.RemarkStatusEnum";
+      private final static String TYPE_WATERPAYSTATUS_TYPE = "com.wangge.buzmgt.cash.entity.WaterOrderCash$WaterPayStatusEnum";
 
       private final static String TYPE_DATE = "java.util.Date";
 
@@ -124,19 +125,13 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
                 } catch (ParseException e) {
                   throw new RuntimeException("日期格式化失败!");
                 }
-              } else if (javaTypeName.equals(TYPE_ORDERSIGNFOR_TYPE)) {
+              } else if (javaTypeName.equals(TYPE_WATERPAYSTATUS_TYPE)) {
                 String status = filter.value.toString();
-                if (RemarkStatusEnum.UnPay.toString().equals(status)) {
-                  filter.value = RemarkStatusEnum.UnPay;
+                if (WaterPayStatusEnum.UnPay.toString().equals(status)) {
+                  filter.value = WaterPayStatusEnum.UnPay;
                 }
-                if (RemarkStatusEnum.OverPay.toString().equals(status)) {
-                  filter.value = RemarkStatusEnum.OverPay;
-                }
-                if (RemarkStatusEnum.UnPayLate.toString().equals(status)) {
-                  filter.value = RemarkStatusEnum.UnPayLate;
-                }
-                if (RemarkStatusEnum.OverPayLate.toString().equals(status)) {
-                  filter.value = RemarkStatusEnum.OverPayLate;
+                if (WaterPayStatusEnum.OverPay.toString().equals(status)) {
+                  filter.value = WaterPayStatusEnum.OverPay;
                 }
                 predicates.add(cb.equal(expression, filter.value));
               } else {
@@ -185,22 +180,6 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
                 } catch (ParseException e) {
                   e.printStackTrace();
                 }
-              } else if (javaTypeName.equals(TYPE_ORDERSIGNFOR_TYPE)) {
-                String status = filter.value.toString();
-                if (RemarkStatusEnum.UnPay.toString().equals(status)) {
-                  filter.value = RemarkStatusEnum.UnPay;
-                }
-                if (RemarkStatusEnum.OverPay.toString().equals(status)) {
-                  filter.value = RemarkStatusEnum.OverPay;
-                }
-                if (RemarkStatusEnum.UnPayLate.toString().equals(status)) {
-                  filter.value = RemarkStatusEnum.UnPayLate;
-                }
-                if (RemarkStatusEnum.OverPayLate.toString().equals(status)) {
-                  filter.value = RemarkStatusEnum.OverPayLate;
-                }
-                predicates.add(cb.greaterThanOrEqualTo(expression, (Comparable) filter.value));
-
               } else {
                 predicates.add(cb.greaterThanOrEqualTo(expression, (Comparable) filter.value));
               }

@@ -50,6 +50,20 @@ public class BankTrade implements Serializable  {
   
   @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")  
   private Date payDate;
+  
+  @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")  
+  private Date importDate;
+  
+  private Integer isArchive;//是否归档
+
+  
+  public Integer getIsArchive() {
+    return isArchive;
+  }
+
+  public void setIsArchive(Integer isArchive) {
+    this.isArchive = isArchive;
+  }
 
   public Integer getId() {
     return id;
@@ -114,6 +128,14 @@ public class BankTrade implements Serializable  {
 
   public void setBankName(String bankName) {
     this.bankName = bankName;
+  }
+
+  public Date getImportDate() {
+    return importDate;
+  }
+
+  public void setImportDate(Date importDate) {
+    this.importDate = importDate;
   }
   
   

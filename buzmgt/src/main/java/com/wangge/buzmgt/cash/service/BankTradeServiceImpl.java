@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
+import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
+import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.repository.BankTradeRepository;
+import com.wangge.buzmgt.cash.repository.WaterOrderCashRepository;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.entity.BankCard;
 import com.wangge.buzmgt.salesman.entity.SalesmanData;
@@ -52,6 +56,8 @@ public class BankTradeServiceImpl implements BankTradeService {
   private static final Logger logger = Logger.getLogger(BankTradeServiceImpl.class);
   @Resource
   private BankTradeRepository bankTradeRepository;
+  @Resource
+  private WaterOrderCashService waterOrderCashService;
   @Resource
   private SalesmanDataService dataService;
   @Resource
@@ -78,6 +84,7 @@ public class BankTradeServiceImpl implements BankTradeService {
   public List<BankTrade> findByCreateDate(String createDate) {
     return null;
   }
+
   @Override
   public void delete(BankTrade bankTrade) {
     bankTradeRepository.delete(bankTrade);
@@ -91,6 +98,30 @@ public class BankTradeServiceImpl implements BankTradeService {
     MultipartHttpServletRequest mReq;
     MultipartFile file;
     InputStream is;
+
+    // ============查询是否归档+是否已经审核账单。
+    Map<String, Object> searchParams = new HashMap<>();
+    searchParams.put("EQ_payDate", importDate);
+    searchParams.put("EQ_isArchive", 1);
+    List<BankTrade> bankTrades = this.findAll(searchParams);
+    searchParams.remove("EQ_isArchive");
+
+    // 已归档
+    if (bankTrades.size() > 0) {
+      jsonObject.put("result", "failure");
+      jsonObject.put("message", "已归档不能导入");
+      return jsonObject;
+    }
+
+    // 已审核
+    searchParams.put("EQ_payStatus", WaterPayStatusEnum.OverPay);
+    List<WaterOrderCash> orderCashs = waterOrderCashService.findAll(searchParams);
+    searchParams.remove("EQ_payStatus");
+    if (orderCashs.size() > 0) {
+      jsonObject.put("result", "failure");
+      jsonObject.put("message", "已审核不能导入");
+      return jsonObject;
+    }
 
     // 原始文件名称
     String fileName;
@@ -136,14 +167,12 @@ public class BankTradeServiceImpl implements BankTradeService {
         Map<Integer, String> excelContent = ExcelImport.readExcelContent(fileRealPath);
 
         // ============读取文件完成后，导入到数据库=============
-        Map<String, Object> searchParams = new HashMap<>();
-        searchParams.put("EQ_payDate", importDate);
-        List<BankTrade> bankTrades = this.findAll(searchParams);
+        bankTrades = this.findAll(searchParams);
         if (bankTrades.size() > 0) {
           this.delete(bankTrades);
         }
-        //TODO 查询数据是否已经归档，否则不能经行导入保存。
-        this.save(excelContent);
+        // TODO 查询数据是否已经归档，否则不能经行导入保存。
+        this.save(excelContent, importDate);
 
         FileUtils.deleteFile(fileRealPath);
 
@@ -163,23 +192,25 @@ public class BankTradeServiceImpl implements BankTradeService {
   }
 
   @Override
-  public List<BankTrade> save(Map<Integer, String> excelContent) {
+  public List<BankTrade> save(Map<Integer, String> excelContent, String importDate) {
     List<BankTrade> bankTrades = new ArrayList<>();
+    final Date date = DateUtil.string2Date(importDate);
     excelContent.forEach((integer, s) -> {
       BankTrade bt = new BankTrade();
       String[] content = s.split("-->");
-      if(!"空".equals(content[0])){
-        
+      if (!"空".equals(content[0])) {
+
         bt.setPayDate(DateUtil.string2Date(content[0]));
         Float money = content[1] == "" ? new Float(0) : new Float(content[1]);
         bt.setMoney(money);
         bt.setCardName(content[2]);
         bt.setCardNo(content[3]);
         bt.setBankName(content[4]);
-        
+        bt.setImportDate(date);
+
         // 核对业务员打款基表进行核对，添加userId
         setUserIdForBankTrade(bt);
-        
+
         bankTrades.add(bt);
       }
 
@@ -193,7 +224,7 @@ public class BankTradeServiceImpl implements BankTradeService {
     String userId = null;
     String CardName = bankTrade.getCardName();
     String CardNo = bankTrade.getCardNo();
-    SalesmanData s = dataService.findByNameAndCard_cardNumber(CardName,CardNo);
+    SalesmanData s = dataService.findByNameAndCard_cardNumber(CardName, CardNo);
     if (s != null) {
       List<BankCard> bankCards = s.getCard();
       for (BankCard bc : bankCards) {
@@ -349,8 +380,8 @@ public class BankTradeServiceImpl implements BankTradeService {
 
               break;
             case ISNULL:
-              boolean value= Boolean.parseBoolean("true");
-              if(value)
+              boolean value = Boolean.parseBoolean("true");
+              if (value)
                 predicates.add(cb.isNull(expression));
               else
                 predicates.add(cb.isNotNull(expression));

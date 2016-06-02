@@ -45,6 +45,7 @@ public class MonthPunish implements Serializable  {
   @GeneratedValue(generator = "idgen")
   private Integer id ; //订单id
 //  @Transient
+  @Column(name="user_id")
   private String userId ; //用户id
   
   @Column(name="WATER_NO")

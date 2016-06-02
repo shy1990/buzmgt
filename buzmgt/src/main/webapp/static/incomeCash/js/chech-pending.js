@@ -3,7 +3,7 @@ $(function() {
 	initDateInput();// 初始化日期
 	findCheckCashList();// 查询列表
 	findUnCheckBankTread();//查询未匹配银行打款交易记录 
-//	initExcelExport();//初始化导出excel
+	initExcelExport();//初始化导出excel
 	
 })
 function initDateInput() {
@@ -45,20 +45,35 @@ function goSearch() {
  * 导出excel
  */
 function initExcelExport() {
-	$('#table-export').on('click', function() {
-		var startTime = $('#startTime').val();
+	$('.table-export').on('click', function() {
+		var startTime = $('#searchDate').val();
 		if (!isEmpty(startTime)) {
 
 			SearchData['sc_EQ_createDate'] = startTime;
 
-			window.location.href = base + "/export";
+			window.location.href = base + "checkCash/export?sc_EQ_createDate="+startTime;
 		}
 
 	});
 }
-function findTab() {
-	var tab = $('#oilCostStatus li.active').attr('data-tital');
-	return tab;
+function archiving(){
+	var archivingDate = $('#archivingDate').val();
+	$.ajax({
+		 url:base+'/checkCash/archiving?archivingDate='+archivingDate,
+		 type:"POST",
+		 dataType:"json",
+		 success:function(data){
+			 if(data.result == 'failure'){
+				 alert(data.message);
+				 return false;
+			 }
+			 alert("操作成功");
+			 
+		 },
+		 error:function(data){
+			 alert("操作失败！");
+		 }
+	});
 }
 /**
  * 处理检索条件
@@ -153,7 +168,7 @@ Handlebars.registerHelper('disposeStayMoney', function(value) {
 Handlebars.registerHelper('isCheckStatus', function(isCheck,userId,createDate) {
 	var formcreateDate=changeDateToString(new Date(createDate));
 	var html='<button class="btn btn-sm btn-blue" onClick="checkPending(\''+userId+'\',\''+formcreateDate+'\')">确认</button>'
-	if (isCheck == '已支付') {
+	if (isCheck == '已审核') {
 		return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
 	}
 	return html;
@@ -170,7 +185,6 @@ function findBySalesManName() {
 		dataType : "json",
 		success : function(data) {
 			if (data.status=='success') {
-				console.info(data);
 				createCheckPendingTable(data);
 				return false;
 			}
@@ -232,7 +246,6 @@ function findUnCheckBankTread(){
  * 删除未匹配记录
  */
 function deleteUnCheck(id){
-	console.info("/checkCash/delete/"+id);
 	$.ajax({
 		url:base+"/checkCash/delete/"+id,
 		type:"GET",

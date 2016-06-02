@@ -23,9 +23,8 @@
 <link href="static/bootstrap/css/bootstrap-switch.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="static/task/task.css" />
-<link rel="stylesheet" type="text/css" href="static/oil/css/oil.css" />
-
+<link rel="stylesheet" type="text/css"
+	href="static/incomeCash/css/income-cash.css">
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 
