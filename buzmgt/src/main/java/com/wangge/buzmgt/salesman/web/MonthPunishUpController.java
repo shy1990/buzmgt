@@ -1,9 +1,10 @@
 package com.wangge.buzmgt.salesman.web;
 
-import com.wangge.buzmgt.jsonformat.JSONFormat;
 import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
 import com.wangge.buzmgt.salesman.repository.MothPunishUpRepository;
 import com.wangge.buzmgt.salesman.service.MonthPunishUpService;
+import com.wangge.json.JSONFormat;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

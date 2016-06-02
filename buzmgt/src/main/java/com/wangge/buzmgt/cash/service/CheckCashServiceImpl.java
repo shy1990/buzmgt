@@ -17,6 +17,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -45,6 +47,7 @@ import com.wangge.buzmgt.salesman.service.PunishSetService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
+import com.wangge.buzmgt.util.excel.MapedExcelExport;
 
 @Service
 public class CheckCashServiceImpl implements CheckCashService {
@@ -463,6 +466,131 @@ public class CheckCashServiceImpl implements CheckCashService {
         return cb.conjunction();
       }
     };
+  }
+
+  @Override
+  public void exportSetExecl(List<CheckCash> checkCashs, HttpServletRequest request, HttpServletResponse response) {
+    List<Map<String, Object>> alList = new ArrayList<Map<String, Object>>();
+    Map<String, Integer> sumMap = new HashMap<String, Integer>();
+    
+    checkCashs.forEach(checkCash->{
+      List<BankTrade> bankTrades=checkCash.getBankTrades();
+      String userId = checkCash.getUserId();
+      String cardName = checkCash.getCardName();
+      String cradNo="";
+      String incomeMoney="";
+      for(BankTrade bankTrade:bankTrades){
+        cradNo+=bankTrade.getCardNo()+"    ";
+        incomeMoney+=bankTrade.getMoney().toString()+"    ";
+      }
+      List<WaterOrderCash> orderCashs=checkCash.getCashs();
+      for(WaterOrderCash orderCash:orderCashs){
+        Map<String,Object> objMap=new HashMap<>();
+        objMap.put("userId", userId);
+        objMap.put("cardName", cardName);
+        objMap.put("cradNo", cradNo);
+        objMap.put("incomeMoney", incomeMoney);
+        objMap.put("serialNo", orderCash.getSerialNo());
+        objMap.put("cashMoney", orderCash.getCashMoney());
+        objMap.put("cashMoneyTotal", checkCash.getCashMoney());
+        objMap.put("debtMoney", checkCash.getDebtMoney());
+        objMap.put("shouldPayMoney", checkCash.getShouldPayMoney());
+        objMap.put("incomeMoneyTotal", checkCash.getIncomeMoney());
+        objMap.put("stayMoney", checkCash.getStayMoney());
+        objMap.put("createDate", checkCash.getCreateDate());
+        
+      }
+      
+    });
+    List<Map<String, Object>> marginList = new ArrayList<Map<String, Object>>();
+    int start = 0;
+    int end = 0;
+    for (Map.Entry<String, Integer> entry : sumMap.entrySet()) {
+      // 流水单号合并单元格
+      Map<String, Object> obMap = new HashMap<String, Object>();
+      /*
+       * int firstRow, int lastRow, int firstCol, int lastCol)
+       */
+      end = start + entry.getValue();
+      if (entry.getValue() > 1) {
+        obMap.put("firstRow", start + 1);
+        obMap.put("lastRow", end);
+        obMap.put("firstCol", 0);
+        obMap.put("lastCol", 0);
+        marginList.add(obMap);
+        
+        // 总金额合并
+        Map<String, Object> obMap1 = new HashMap<String, Object>();
+        obMap1.put("firstRow", start + 1);
+        obMap1.put("lastRow", end);
+        obMap1.put("firstCol", 1);
+        obMap1.put("lastCol", 1);
+        marginList.add(obMap1);
+        
+        Map<String, Object> obMap2 = new HashMap<String, Object>();
+        obMap2.put("firstRow", start + 1);
+        obMap2.put("lastRow", end);
+        obMap2.put("firstCol", 2);
+        obMap2.put("lastCol", 2);
+        marginList.add(obMap2);
+        
+        Map<String, Object> obMap3 = new HashMap<String, Object>();
+        obMap3.put("firstRow", start + 1);
+        obMap3.put("lastRow", end);
+        obMap3.put("firstCol", 3);
+        obMap3.put("lastCol", 3);
+        marginList.add(obMap3);
+        
+        Map<String, Object> obMap5 = new HashMap<String, Object>();
+        obMap5.put("firstRow", start + 1);
+        obMap5.put("lastRow", end);
+        obMap5.put("firstCol", 7);
+        obMap5.put("lastCol", 7);
+        marginList.add(obMap5);
+        
+        Map<String, Object> obMap6 = new HashMap<String, Object>();
+        obMap6.put("firstRow", start + 1);
+        obMap6.put("lastRow", end);
+        obMap6.put("firstCol", 8);
+        obMap6.put("lastCol", 8);
+        marginList.add(obMap6);
+        
+        Map<String, Object> obMap7 = new HashMap<String, Object>();
+        obMap7.put("firstRow", start + 1);
+        obMap7.put("lastRow", end);
+        obMap7.put("firstCol", 8);
+        obMap7.put("lastCol", 8);
+        marginList.add(obMap7);
+        
+        Map<String, Object> obMap8 = new HashMap<String, Object>();
+        obMap8.put("firstRow", start + 1);
+        obMap8.put("lastRow", end);
+        obMap8.put("firstCol", 9);
+        obMap8.put("lastCol", 9);
+        marginList.add(obMap8);
+        
+        Map<String, Object> obMap9 = new HashMap<String, Object>();
+        obMap9.put("firstRow", start + 1);
+        obMap9.put("lastRow", end);
+        obMap9.put("firstCol", 10);
+        obMap9.put("lastCol", 10);
+        marginList.add(obMap9);
+        
+        Map<String, Object> obMap4 = new HashMap<String, Object>();
+        obMap4.put("firstRow", start + 1);
+        obMap4.put("lastRow", end);
+        obMap4.put("firstCol", 11);
+        obMap4.put("lastCol", 11);
+        marginList.add(obMap4);
+        
+      }
+      start = end;
+    }
+    String[] gridTitles_ = { "业务ID", "姓名", "付款卡号", "打款金额", "流水单号", "当日收现", "收现总额", "昨日累加", "业务应付",  "业务实付", "业务待付", "操作日期"};
+    String[] coloumsKey_ = { "userId", "cardName", "cradNo", "incomeMoney", "serialNo", "cashMoney", "cashMoneyTotal", 
+        "debtMoney", "shouldPayMoney", "incomeMoneyTotal", "stayMoney", "createDate" };
+   
+    MapedExcelExport.doExcelExport("流水单号.xls", alList, gridTitles_, coloumsKey_, request, response, marginList);
   }
 
 
