@@ -1,6 +1,5 @@
 server:
   port: 8080
-
 spring:
   mvc:
     view:
@@ -13,7 +12,6 @@ spring:
     open-in-view: true
     cascade: delete
   datasource:
-    #url: jdbc:oracle:thin:@192.168.2.190:1522:xe
     url: jdbc:oracle:thin:@115.28.64.224:1521:sanjiDB
     username: sj_buzmgt
     password: sj_buzmgt1688
@@ -26,4 +24,4 @@ spring:
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
-    poolPreparedStatements: true      
+    poolPreparedStatements: true
