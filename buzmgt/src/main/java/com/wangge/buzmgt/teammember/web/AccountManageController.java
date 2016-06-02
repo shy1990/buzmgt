@@ -292,6 +292,8 @@ public class AccountManageController  extends BaseController{
         u.setStatus(UserStatus.LOCKED);
       }else if("1".equals(status)){
         u.setStatus(UserStatus.NORMAL);
+      }else if("4".equals(status)){
+        u.getSalseMan().setSimId("");
       }
       us.addUser(u);
       return "suc";
