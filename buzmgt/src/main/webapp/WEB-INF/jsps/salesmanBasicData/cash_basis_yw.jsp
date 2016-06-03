@@ -454,7 +454,8 @@ a:hover {
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 		<script type="text/javascript">
-		$(function(){
+			var reg = /^(\d{16}|\d{19})$/;
+			$(function(){
 			//页面进来加载全部的数据
 			zhixing();
 		});
@@ -574,6 +575,11 @@ a:hover {
 				var name = o[0]["value"];
 				var userId = o[1]["value"];
 				var cardNumber = o[2]["value"];
+//				var reg = /^(\d{16}|\d{19})$/;
+				if(!reg.test(cardNumber)){
+					alert('请输入正确的银行卡号');
+					return;
+				}
 				var bankName = o[3]["value"];
 				$.ajax({
 					url : 'salesmanData/save',
@@ -693,6 +699,11 @@ a:hover {
 				var bankId = d[1]["value"];
 				var name = d[2]["value"];
 				var cardNumber = d[3]["value"];
+
+				if (!reg.test(cardNumber)){
+					alert('请输入正确的银行卡号');
+					return;
+				}
 				var bankName = d[4]["value"];
 
 				console.log(d);
@@ -720,6 +731,11 @@ a:hover {
 						var s = $("#addCard").serializeArray();
 						var bankName = s[0]['value'];
 						var cardNumber = s[1]['value'];
+//						var reg = /^(\d{16}|\d{19})$/;
+						if ( !reg.test(cardNumber)){
+							alert('请输入正确的银行卡号');
+							return;
+						}
 						console.log(id + "  " + bankName + "  " + cardNumber);
 						$.ajax({
 							url : 'salesmanData/saveBankCard',
