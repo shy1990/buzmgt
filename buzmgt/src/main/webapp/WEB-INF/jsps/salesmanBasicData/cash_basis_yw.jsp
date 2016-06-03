@@ -475,6 +475,7 @@ a:hover {
 						success : function(data) {
 							totalPages1 = data.totalPages;
 							var listSalesData = data.content;//所有的SalesDate
+							console.log(listSalesData);
 							//循环输出所有数据
 							for (var i = 0; i < listSalesData.length; i++) {
 								var id = listSalesData[i].id;

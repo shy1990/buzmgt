@@ -53,7 +53,7 @@ public class SalesmanDataController {
 			@RequestParam(value = "size", defaultValue = "3") Integer size,
 			String name) {
 		Sort sort = new Sort(Direction.DESC, "id");
-		Pageable pageable = new PageRequest(0, 2, sort);
+		Pageable pageable = new PageRequest(page, size, sort);
 		return service.findAll(name,pageable);
 //		return null;
 	}
