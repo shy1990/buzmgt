@@ -64,7 +64,6 @@ public class MonthPunishUpController {
         JSONObject result = new JSONObject();
         result.put("sum",sum);
         result.put("data",service.findByPage(startTime,endTime,pageable));
-
         return result;
     }
 

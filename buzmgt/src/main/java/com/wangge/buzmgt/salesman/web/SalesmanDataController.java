@@ -186,7 +186,8 @@ public class SalesmanDataController {
 
 		// 删除银行卡
 		bankService.delete(bankId);
-		if (salesmanData.getCard().size() <= 1) {
+		if (salesmanData.getCard().size() < 1) {
+			System.out.println("走进if");
 			// 删除基础数据
 			service.deleteById(id);
 		}
