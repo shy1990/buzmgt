@@ -16,8 +16,8 @@ public class PunishSet implements Serializable {
 	private Long id;//奖罚id
 	@Column(name="PUNISH_NUMBER ")
 	private Float punishNumber;//系数
-	@OneToOne
-	//@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+//	@OneToOne
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")//与数据库对应的表的字段名
 	private Region region = new Region();//区域
 	
