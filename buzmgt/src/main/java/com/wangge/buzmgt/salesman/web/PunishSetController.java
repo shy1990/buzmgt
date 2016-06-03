@@ -1,23 +1,14 @@
 package com.wangge.buzmgt.salesman.web;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.salesman.entity.PunishSet;
 import com.wangge.buzmgt.salesman.repository.PunishSetRepository;
 import com.wangge.buzmgt.salesman.service.PunishSetService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-import net.sf.json.JSONObject;
+import java.util.List;
 
 @Controller
 @RequestMapping(value="/punish")
@@ -46,7 +37,7 @@ public class PunishSetController {
 	}
 	/**
 	 * 添加资源
-	 * @param punishSet
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(value="/punishs",method=RequestMethod.POST)
@@ -98,10 +89,12 @@ public class PunishSetController {
 	public @ResponseBody String  defaultPunishSet(@PathVariable("regionId") String regionId,@RequestParam("punishNumber")Float punishNumber){
 		PunishSet punishSet = punishSetService.findByRegionId(regionId);
 		if(punishSet != null){
+			System.out.println("not null");
 			punishSet.setPunishNumber(punishNumber);
 			punishSetService.save(punishSet);
 			return "保存成功";
 		}
+		System.out.println("shi null");
 		punishSet = new PunishSet();
 		punishSet.getRegion().setId(regionId);
 		punishSet.setPunishNumber(punishNumber);
