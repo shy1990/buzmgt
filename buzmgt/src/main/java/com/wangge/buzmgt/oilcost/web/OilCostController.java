@@ -35,7 +35,7 @@ import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
-import com.wangge.buzmgt.util.ExcelExport;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 
 @RequestMapping("/oilCost")
 @Controller

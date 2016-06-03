@@ -1,21 +1,11 @@
 
 package com.wangge.buzmgt.oil.entity;
 
-import java.io.Serializable;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
+import com.wangge.buzmgt.region.entity.Region;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.wangge.buzmgt.region.entity.Region;
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 油补系数
@@ -29,7 +19,7 @@ public class OilParameters implements Serializable{
 	
 	@Id 
 	@GenericGenerator(name="idgen",strategy="increment")
-	@GeneratedValue(generator="idgen")//自定义生成主键策略
+	@GeneratedValue(generator="idgen")   //自定义生成主键策略
 	@Column(name="ID")
 	private Long id;//主键
 	
@@ -41,7 +31,7 @@ public class OilParameters implements Serializable{
 	
 //	@Column(name="REGION_ID")
 //	private String regionId;//区域id
-	
+	//@OneToOne(optional = false, cascade = CascadeType.ALL)
 	@OneToOne
 	@JoinColumn(name = "region_id")//与数据库对应的表的字段名
 //	@Transient

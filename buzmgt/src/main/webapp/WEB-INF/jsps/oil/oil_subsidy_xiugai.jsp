@@ -160,89 +160,7 @@
 					</div>
 				</div>
 			</div>
-			<h4 class="text-hd">每公里油补金额设置：</h4>
-			<!--每公里油补金额设置-->
-			<div class="table-bordered bjc">
-				<div class="tab-content-main">
-					<div class="tab-pane active">
-						<div class="table-responsive tb-b">
-							<!--公里系数表头-->
-							<div class="text-tx row-d">
-								<span class="text-strong">每公里油补金额：</span> <select
-									id="default_money">
-									<c:if test="${oilParameter != null }">
-										<option selected="" value="${oilParameter.kmOilSubsidy }">${oilParameter.kmOilSubsidy }</option>
-									</c:if>
-									<option></option>
-									<option value="0.0">0.0</option>
-									<option value="0.1">0.1</option>
-									<option value="0.15">0.15</option>
-									<option value="0.2">0.2</option>
-									<option value="0.25">0.25</option>
-									<option value="0.3">0.3</option>
-									<option value="0.35">0.35</option>
-									<option value="0.4">0.4</option>
-									<option value="0.45">0.45</option>
-									<option value="0.5">0.5</option>
-									<option value="0.55">0.55</option>
-									<option value="0.6">0.6</option>
-									<option value="0.65">0.65</option>
-									<option value="0.7">0.7</option>
-									<option value="0.75">0.75</option>
-									<option value="0.8">0.8</option>
-									<option value="0.9">0.9</option>
-									<option value="1.0">1.0</option>
-								</select> <span class="text-strong">元/km</span> <span class="text-blue">注：</span><span
-									class="text-small">系统默认所有区域均为该系数，自定义设置区域除外</span>
-							</div>
-							<!-- 设置油补金额 -->
-							<%
-							 	int i = 0;
-							%>
-							<div class="bs-example">
-								<div id="acontt" class="row">
-									<!-- ----------------------------------------------- -->
-									<c:if test="${lists.size() > 0 }">
-										<c:forEach var="oil" items="${lists }" varStatus="status">
-											<c:if
-												test="${ oil.kmOilSubsidy != null && oil.region.id != '0'}">
-												<div class="col-sm-3 cl-padd">
-													<div class="ratio-box">
-														<div class="ratio-box-dd">
-															<span class="label  label-blue"><%= ++i%></span> <span
-																class="text-black jll"> ${oil.region.name }</span> <a
-																class="text-redd jll" href="" data-toggle="modal"
-																data-target="">${oil.kmOilSubsidy }元/KM</a> <a
-																class="text-blue-s jll" href="" data-toggle="modal"
-																data-target=""
-																onclick="modify_money('${oil.id}','${oil.kmRatio}','${oil.region.id }')">修改</a>
-															<a class="text-blue-s jll" href="" data-toggle="modal"
-																data-targ t=""
-																onclick="delete_byId_money('${oil.id}','${oil.region.id }')">删除</a>
-														</div>
-													</div>
-												</div>
-											</c:if>
-
-										</c:forEach>
-									</c:if>
-									<!-- ----------------------------------------------- -->
-								</div>
-							</div>
-							<div class="row show-grid   row-jl ">
-								<div class="col-md-5"></div>
-								<div class="col-md-7 ">
-
-									<button class=" col-sm-3 btn  btn btn-default" type="button"
-										data-toggle="modal" data-target="#zdyqy" onclick='changeTo()'>自定义设置区域</button>
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
+			
 			<div class="form-group ">
 				<div class="row">
 					<div class="col-sm-offset-4 col-sm-4" style="margin-top: 20px">
@@ -399,66 +317,7 @@
 			<div id="zdyqyoil" class="modal fade" role="dialog"></div>
 			<div id="changed1" class="modal fade" role="dialog">
 
-				<div class="modal-dialog " role="document">
-					<div class="modal-content modal-blue">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<h3 class="modal-title">自定义设置区域</h3>
-						</div>
-
-						<div class="modal-body">
-							<div class="container-fluid">
-								<form class="form-horizontal">
-									<div class="form-group">
-										<label for="" class="col-sm-4 control-label">油补金额：</label>
-										<div class="col-sm-7">
-											<div class="input-group are-line">
-												<span class="input-group-addon"><i
-													class="icon icon-lk"></i></span> <select type=""
-													class="form-control input-h"
-													aria-describedby="basic-addon1" id="select_kmOilSubsidy">
-													<option value="0.0">0.0</option>
-													<option value="0.1">0.1</option>
-													<option value="0.15">0.15</option>
-													<option value="0.2">0.2</option>
-													<option value="0.25">0.25</option>
-													<option selected="" value="0.3">0.3</option>
-													<option value="0.35">0.35</option>
-													<option value="0.4">0.4</option>
-													<option value="0.45">0.45</option>
-													<option value="0.5">0.5</option>
-													<option value="0.55">0.55</option>
-													<option value="0.6">0.6</option>
-													<option value="0.65">0.65</option>
-													<option value="0.7">0.7</option>
-													<option value="0.75">0.75</option>
-													<option value="0.8">0.8</option>
-													<option value="0.9">0.9</option>
-													<option value="1.0">1.0</option>
-												</select>
-												<!-- /btn-group -->
-											</div>
-										</div>
-										<div class="col-sm-1 control-label">
-											<span>元/km</span>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-offset-4 col-sm-4 ">
-											<!-- <button  type="submit" class="col-sm-12 btn btn-primary ">确定</button> -->
-
-											<a herf="javascript:return 0;" id="set_b"
-												class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
+			
 			</div>
 
 

@@ -155,6 +155,11 @@ public  class SalesManServiceImpl implements SalesManService {
   }
 
   @Override
+  public String getRegionIdByUserId(String userId) {
+    return salesManRepository.getRegionIdByUserId(userId);
+  }
+
+  @Override
   public String findByTruename(String truename) {
     return salesManRepository.getIdByTurename(truename);
   }

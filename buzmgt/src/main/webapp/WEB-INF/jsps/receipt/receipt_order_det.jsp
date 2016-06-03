@@ -44,17 +44,17 @@
 								<dl class="dl-horizontal">
 									<dt>订单状态:</dt>
 									<dd>
-										<c:if test="${notRemark.orderStatus =='客户签收' }">
+										<c:if test="${order.orderStatus =='客户签收' }">
 										<span class="signed">客户已签收</span>
 										</c:if>
-										<c:if test="${notRemark.orderStatus !='客户签收' }">
+										<c:if test="${order.orderStatus !='客户签收' }">
 										<span class="wait-sign">等待客户签收</span>
 										</c:if>
 									</dd>
 								</dl>
 								<dl class="dl-horizontal">
 									<dt>付款方式:</dt>
-									<dd>${notRemark.orderPayType }</dd>
+									<dd>${order.orderPayType }</dd>
 								</dl>
 								<dl class="dl-horizontal">
 									<dt>所属区域:</dt>
@@ -62,18 +62,18 @@
 								</dl>
 								<dl class="dl-horizontal">
 									<dt>负责人:</dt>
-									<dd>${notRemark.salesMan.truename }</dd>
+									<dd>${order.salesMan.truename }</dd>
 								</dl>
 							</li>
 							<li>
 								<h5>订单明细</h5>
 								<dl class="dl-horizontal">
 									<dt>订单号:</dt>
-									<dd>${notRemark.orderNo }</dd>
+									<dd>${order.orderNo }</dd>
 								</dl>
 								<dl class="dl-horizontal">
 									<dt>商家名称:</dt>
-									<dd>${notRemark.shopName }</dd>
+									<dd>${order.shopName }</dd>
 								</dl>
 								<dl class="dl-horizontal">
 									<dt>商品明细:</dt>
@@ -84,14 +84,14 @@
 								<dl class="dl-horizontal">
 									<dt>数量:</dt>
 									<dd>
-										<p class="fl">手机<span class="num">${notRemark.phoneCount }</span>部</p>
-										<p class="fl">配件<span class="num">${notRemark.partsCount }</span>件</p>
+										<p class="fl">手机<span class="num">${order.phoneCount }</span>部</p>
+										<p class="fl">配件<span class="num">${order.partsCount }</span>件</p>
 									</dd>
 								</dl>
 								<dl class="dl-horizontal">
 									<dt>订单金额:</dt>
 									<dd class="money">
-										<span>${notRemark.orderPrice }元</span>
+										<span>${order.orderPrice }元</span>
 									</dd>
 								</dl>
 							</li>
@@ -99,22 +99,22 @@
 								<h5>订单踪迹</h5>
 								<dl class="dl-horizontal">
 									<dt>下单时间:</dt>
-									<dd>${notRemark.createTime }</dd>
+									<dd>${order.createTime }</dd>
 								</dl>
 								<dl class="dl-horizontal">
 									<dt>发货时间:</dt>
-									<dd>${notRemark.fastmailTime}</dd>
+									<dd>${order.fastmailTime}</dd>
 								</dl>
 								<div class="double-info clearfix">
 									<dl class="dl-horizontal fl">
 										<dt>业务签收时间:</dt>
-										<dd>${notRemark.yewuSignforTime }</dd>
+										<dd>${order.yewuSignforTime }</dd>
 									</dl>
 									<dl class="dl-horizontal fl">
 										<dt>签收地点：</dt>
 										<dd>
-										<c:if test="${empty notRemark.yewuSignforGeopoint }"><span class="temp-no">暂无</span></c:if> 
-										<c:if test="${!empty notRemark.yewuSignforGeopoint }">${notRemark.yewuSignforGeopoint }</c:if> 
+										<c:if test="${empty order.yewuSignforGeopoint }"><span class="temp-no">暂无</span></c:if> 
+										<c:if test="${!empty order.yewuSignforGeopoint }">${order.yewuSignforGeopoint }</c:if> 
 										</dd>
 									</dl>
 								</div>
@@ -133,15 +133,15 @@
 									<dl class="dl-horizontal fl">
 										<dt>客户签收时间:</dt>
 										<dd>
-										<c:if test="${empty notRemark.customSignforTime }"><span class="temp-no">暂无</span></c:if> 
-										<c:if test="${!empty notRemark.customSignforTime }">${notRemark.customSignforTime }</c:if> 
+										<c:if test="${empty order.customSignforTime }"><span class="temp-no">暂无</span></c:if> 
+										<c:if test="${!empty order.customSignforTime }">${order.customSignforTime }</c:if> 
 										</dd>
 									</dl>
 									<dl class="dl-horizontal fl">
 										<dt>签收地点：</dt>
 										<dd>
-										<c:if test="${empty notRemark.customSignforGeopoint }"><span class="temp-no">暂无</span></c:if> 
-										<c:if test="${!empty notRemark.customSignforGeopoint }">${notRemark.customSignforGeopoint }</c:if> 
+										<c:if test="${empty order.customSignforGeopoint }"><span class="temp-no">暂无</span></c:if> 
+										<c:if test="${!empty order.customSignforGeopoint }">${order.customSignforGeopoint }</c:if> 
 										</dd>
 									</dl>
 								</div>
@@ -153,8 +153,8 @@
 									<dl class="dl-horizontal fl">
 										<dt>支付方式：</dt>
 										<dd>
-										<c:if test="${notRemark.orderPayType=='未支付' }"><span class="temp-no">暂无</span></c:if>
-										<c:if test="${notRemark.orderPayType!='未支付' }"><span>${notRemark.orderPayType }</span></c:if>
+										<c:if test="${order.orderPayType=='未支付' }"><span class="temp-no">暂无</span></c:if>
+										<c:if test="${order.orderPayType!='未支付' }"><span>${order.orderPayType }</span></c:if>
 										</dd>
 									</dl>
 								</div>
@@ -163,8 +163,8 @@
 								<dl class="dl-horizontal">
 									<dt>业务送货时效:</dt>
 									<dd>
-									<c:if test="${empty notRemark.aging }"><span class="temp-no">暂无</span></c:if>
-									<c:if test="${!empty notRemark.aging }">${notRemark.aging }</c:if>
+									<c:if test="${empty order.aging }"><span class="temp-no">暂无</span></c:if>
+									<c:if test="${!empty order.aging }">${order.aging }</c:if>
 									</dd>
 								</dl>
 							</li>

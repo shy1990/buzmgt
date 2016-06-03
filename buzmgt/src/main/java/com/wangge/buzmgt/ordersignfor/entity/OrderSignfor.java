@@ -12,6 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -25,6 +28,20 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 @Entity
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
 @Table(name = "BIZ_ORDER_SIGNFOR")
+@NamedEntityGraph(
+    name = "graph.OrderSignfor.salesMan",
+    attributeNodes={
+        @NamedAttributeNode(value="salesMan",subgraph = "graph.OrderSignfor.salesMan.user"),
+    },
+    subgraphs = {
+        @NamedSubgraph(
+            name = "graph.OrderSignfor.salesMan.user",
+            attributeNodes = {
+                @NamedAttributeNode("user")
+            }
+        )
+    }
+)
 public class OrderSignfor implements Serializable {
 
   /**
@@ -52,12 +69,18 @@ public class OrderSignfor implements Serializable {
   }
   
   public static enum OrderPayType{
-    ONLINE("线上支付"),POS("POS"),CASH("现金"),NUPANTEBT("未支付") ;
+    ONLINE("0","线上支付"),POS("1","POS"),CASH("2","现金"),NUPANTEBT("","未支付") ;
     
     private String name;
+    private String value;
     
-    OrderPayType(String name){
+    OrderPayType(String value,String name){
+      this.value=value;
       this.name=name;
+      
+    }
+    public String getValue(){
+      return value;
     }
     public String getName(){
       return name;
@@ -74,19 +97,23 @@ public class OrderSignfor implements Serializable {
   private String orderNo;
   @Transient
   private String aging;//时效
+  @Transient
+  private Date payDate;//支付时间
+  
+
   //业务签收异常标记
   @Transient
   private String ywSignforTag;
   @Transient
   private String goodNum;
   
-  @Column(name="user_id",insertable=false,updatable=false)
+  @Column(name="user_id")
   private String userId;
 //  private String truename;
 //  private String ywName;//业务名称;
  
   @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id",insertable=false,updatable=false)
   private SalesMan salesMan;
   
   private String userPhone;
@@ -110,7 +137,13 @@ public class OrderSignfor implements Serializable {
   private Date fastmailTime;
   private String customUnSignRemark;
   
+  public Date getPayDate() {
+    return payDate;
+  }
 
+  public void setPayDate(Date payDate) {
+    this.payDate = payDate;
+  }
   public String getGoodNum() {
     return goodNum;
   }
@@ -153,7 +186,7 @@ public class OrderSignfor implements Serializable {
 
  
   public SalesMan getSalesMan() {
-    return salesMan;
+    return salesMan==null?new SalesMan() :salesMan;
   }
 
   public void setSalesMan(SalesMan salesMan) {

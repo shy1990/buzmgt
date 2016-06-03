@@ -65,7 +65,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
 
   @Override
   public List<ReceiptRemark> findAll(Map<String, Object> searchParams) {
-    disposeSearchParams(searchParams);
+    disposeSearchParams("salesmanId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<ReceiptRemark> spec = orderReceiptSearchFilter(filters.values(), ReceiptRemark.class);
     List<ReceiptRemark> remarkedList = orderReceiptRepository.findAll(spec);
@@ -77,7 +77,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
 
   @Override
   public Page<ReceiptRemark> getReceiptRemarkList(Map<String, Object> searchParams, Pageable pageRequest) {
-    disposeSearchParams(searchParams);
+    disposeSearchParams("salesmanId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<ReceiptRemark> spec = orderReceiptSearchFilter(filters.values(), ReceiptRemark.class);
 
@@ -94,11 +94,10 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
    * 区域选择（油补统计）
    * @param searchParams
    */
-  public void disposeSearchParams(Map<String, Object> searchParams){
+  public void disposeSearchParams(String userId,Map<String, Object> searchParams){
     String regionId = (String) searchParams.get("regionId");
     String regionType = (String) searchParams.get("regionType");
 //    COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他")
-    //TODO 整理查询出来的regionID列表
     String regionArr="";
     if(StringUtils.isNotEmpty(regionType)){
       
@@ -120,7 +119,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
         break;
       }
     }
-    searchParams.put("ORMLK_salesmanId", regionArr);
+    searchParams.put("ORMLK_"+userId, regionArr);
     searchParams.remove("regionId");
     searchParams.remove("regionType");
     
@@ -341,13 +340,12 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
   @SuppressWarnings("deprecation")
   @Override
   public List<OrderSignfor> getReceiptNotRemark(Map<String, Object> searchParams) {
-    // TODO Auto-generated method stub
     String status = "";
     String startTime = "";
     String endTime = "";
     String orderNo ="";
     String regionId ="";
-    disposeSearchParams(searchParams);
+    disposeSearchParams("userId",searchParams);
     startTime = (String) searchParams.get("GTE_createTime");
     endTime = (String) searchParams.get("LTE_createTime");
     status = (String) searchParams.get("EQ_status");
@@ -355,6 +353,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
     regionId=(String) searchParams.get("ORMLK_salesmanId");
     List<OrderSignfor> list = orderSignforService.getReceiptNotRemarkList(status, startTime, endTime,orderNo,regionId);
     List<OrderSignfor> notRemarkList = new ArrayList<OrderSignfor>();
+    //TODO 
     String timesGap = "24:00";
     String[] timesGapAry = timesGap.split(":");
     // 获取当前时间
@@ -382,6 +381,54 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
 
     });
     return notRemarkList;
+  }
+
+  @Override
+  public List<OrderSignfor> getCashList(Map<String, Object> searchParams) {
+    // TODO Auto-generated method stub
+    String status,orderNo;
+    status = (String) searchParams.get("EQ_status");
+    searchParams.remove("EQ_status");
+    orderNo =(String) searchParams.get("EQ_orderNo");
+    List<OrderSignfor> cashList=orderSignforService.getReceiptCashList(searchParams);
+    List<OrderSignfor> cashForParm=new ArrayList<>();
+    if(StringUtils.isEmpty(orderNo) && StringUtils.isNotEmpty(status)){
+//      UnPay("0","未付款"),OverPay("1","已付款"),UnPayLate("2","超时未付款"),OverPayLate
+      switch (status) {
+      case "UnPay":
+        cashList.forEach(cash->{
+          if(cash.getPayDate()==null){
+            cashForParm.add(cash);
+          }
+        });
+        break;
+      case "OverPay":
+        cashList.forEach(cash->{
+          if(cash.getPayDate()!=null){
+            cashForParm.add(cash);
+          }
+        });
+        break;
+      case "UnPayLate":
+      //TODO  某一个时间点（如12:00）拓展后期后台设置;
+        String timesGap = "9:00";
+        String[] times=timesGap.split(":");
+        cashList.forEach(cash->{
+          
+          if(cash.getPayDate()==null){
+            
+            cashForParm.add(cash);
+          }
+        });
+        break;
+
+      default:
+        break;
+      }
+      
+      
+    }
+    return cashList;
   }
 
 }
