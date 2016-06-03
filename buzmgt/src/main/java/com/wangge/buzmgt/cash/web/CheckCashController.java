@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.CheckCash;
+import com.wangge.buzmgt.cash.service.BankTradeService;
 import com.wangge.buzmgt.cash.service.CheckCashService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.json.JSONFormat;
@@ -39,6 +41,8 @@ public class CheckCashController {
 
   @Autowired
   private CheckCashService checkCashService;
+  @Autowired
+  private BankTradeService bankTradeService;
   @Autowired
   private SalesManService salesManService ;
 
@@ -116,14 +120,46 @@ public class CheckCashController {
     
     return checkCashService.deleteUnCheckBankTrade(bankTrade);
   }
-//  @RequestMapping(value="/export",method=RequestMethod.GET)
-//  public void exportExcel(HttpServletRequest request,HttpServletResponse response,
-//      @PageableDefault(page = 0, size = 10, sort = { "createDate","rnid" }, direction = Direction.DESC) Pageable pageable){
-//    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-//    Page<CheckCash> page= checkCashService.findAll(searchParams, pageable);
-//    checkCashService.exportSetExecl(page.getContent(),request,response);
-//  }
+  @RequestMapping(value="/export",method=RequestMethod.GET)
+  public void exportExcel(HttpServletRequest request,HttpServletResponse response,
+      @PageableDefault(page = 0, size = 10, sort = { "createDate","rnid" }, direction = Direction.DESC) Pageable pageable){
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    Page<CheckCash> page= checkCashService.findAll(searchParams, pageable);
+    checkCashService.exportSetExecl(page.getContent(),request,response);
+  }
   
-
+  /**
+   * 归档修改银行交易记录归档表示符
+   * @param archivingDate
+   * @return
+   */
+  @RequestMapping(value="/archiving",method=RequestMethod.POST)
+  @ResponseBody
+  public JSONObject archiving(@RequestParam String archivingDate){
+    JSONObject json=new JSONObject();
+    try {
+      Map<String, Object> spec=new HashMap<>();
+      spec.put("EQ_payDate", archivingDate);
+      spec.put("EQ_isArchive", 0);
+      List<BankTrade> bankTrades=bankTradeService.findAll(spec);
+      if(bankTrades.size()>0){
+         bankTrades.forEach(bankTrade->{
+           bankTrade.setIsArchive(1);
+         });
+         bankTradeService.save(bankTrades);
+         json.put("result", "success");
+         json.put("message", "操作成功");
+         return json;
+      }
+      json.put("result", "failure");
+      json.put("message", "没有交易记录或已经归档");
+      
+    } catch (Exception e) {
+      json.put("result", "failure");
+      json.put("message", "");
+      return json;
+    }
+    return json;
+  }
 
 }

@@ -39,7 +39,7 @@ public interface BankTradeService {
    * @param excelContent
    * @return
    */
-  public List<BankTrade> save(Map<Integer, String> excelContent);
+  public List<BankTrade> save(Map<Integer, String> excelContent,String importDate);
   
   /**
    * 批量保存数据
@@ -58,6 +58,6 @@ public interface BankTradeService {
   public JSONObject importExcel(HttpServletRequest request, String importDate);
 
   public void delete(BankTrade bankTrade);
-  
+
   
 }

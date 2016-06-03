@@ -36,6 +36,7 @@
       <td>{{cardNo}}</td>
       <td>{{money}}</td>
       <td>{{formDate payDate}}</td>
+      <td>{{formDate importDate}}</td>
       <td>{{bankName}}</td>
     </tr>      
 	{{/each}}
@@ -100,6 +101,7 @@ var	base='<%=basePath%>';
 								<th>银行卡号</th>
 								<th>收入金额</th>
 								<th>交易日期</th>
+								<th>导入日期</th>
 								<th>对方开户行</th>
 							</tr>
 						</thead>

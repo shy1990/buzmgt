@@ -8,7 +8,7 @@ $(function() {
 	$('#importDate').datetimepicker({
 		format : "yyyy-mm-dd",
 		language : 'zh-CN',
-		endDate : '2016-05-22',
+		endDate : new Date(),
 		weekStart : 1,
 		todayBtn : false,
 		autoclose : 1,

@@ -12,7 +12,7 @@ import java.util.Date;
  * Created by 神盾局 on 2016/5/21.
  */
 @Entity
-@Table(name="SYS_MONTH_PUNISH_RECORD_UP")
+@Table(name="SYS_MONTH_PUNISH_RECORD")
 //以后加上 负载图
 @NamedEntityGraph(name = "graph.MonthPunishUp.salesMan",
         attributeNodes = @NamedAttributeNode(value = "salesMan", subgraph = "graph.MonthPunishUp.salesMan" +
@@ -40,7 +40,7 @@ public class MonthPunishUp implements Serializable {
 //    private User user;
 //    @OneToOne
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "user_id",updatable=false,insertable=false)
     private SalesMan salesMan;
 
     @Transient

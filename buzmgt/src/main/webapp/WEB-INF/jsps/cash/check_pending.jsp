@@ -74,6 +74,9 @@
 	{{/if}}
 </script>
 <script id="unCheck-table-template" type="text/x-handlebars-template">
+		<tr>
+			<td colspan="100" class="single-exception">请先处理未匹配交易记录，请不要先审核</td>
+		</tr>
 	{{#each content}}
 		<tr>
       <td><span class="single-exception"> Error!</span></td>
@@ -115,7 +118,7 @@ var	base='<%=basePath%>';
 	<div class="content main">
 		<h4 class="page-header">
 			<i class="ico icon-puish-back"></i>待审核账单 <a class="btn wait-setting"
-				href="javascript:;"><i class="icon-wait-setting"></i>设置</a>
+				href="/punish/punishs"><i class="icon-wait-setting"></i>设置</a>
 			<button class="btn btn-blue" type="button" data-toggle="modal"
 				data-target="#guidang">数据归档</button>
 		</h4>
@@ -185,13 +188,13 @@ var	base='<%=basePath%>';
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h3 class="modal-title">文件归档</h3>
+					<h3 class="modal-title">文件归档<small style="color: #fff">(归档后数据不能再次修改)</small></h3>
 				</div>
 				<div class="modal-body">
 					<div class="container-fluid">
 						<form id="addd" class="form-horizontal">
 							<div class="form-group">
-								<label class="col-sm-4 control-label">归档至：</label>
+								<label class="col-sm-4 control-label">归档日期：</label>
 								<div class="col-sm-7 dialog-calender">
 									<div class="search-date">
 										<div class="input-group input-group-sm">
@@ -206,7 +209,7 @@ var	base='<%=basePath%>';
 							</div>
 							<div class="form-group">
 								<div class="col-sm-offset-4 col-sm-4">
-									<a herf="javascript:;" class="col-sm-12 btn gd-btn-sure"
+									<a herf="javascript:;" onclick="archiving()" class="col-sm-12 btn gd-btn-sure"
 										data-dismiss="modal">确定</a>
 								</div>
 							</div>
