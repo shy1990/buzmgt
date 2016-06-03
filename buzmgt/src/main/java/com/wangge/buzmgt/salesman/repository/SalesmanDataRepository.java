@@ -16,13 +16,12 @@ import com.wangge.buzmgt.salesman.entity.SalesmanData;
  *
  */
 @Transactional
-public interface SalesmanDataRepository extends PagingAndSortingRepository<SalesmanData,Long>{
+public interface SalesmanDataRepository extends  PagingAndSortingRepository<SalesmanData,Long>{
 	public List<SalesmanData> findAll();//查询全部
 	public Page<SalesmanData> findAll(Pageable pageable);//分页查询
 	public Page<SalesmanData> findAll(Specification specification,Pageable pageable);//分页查询
 	public SalesmanData save(SalesmanData salesmanData);//添加
-	public int deleteById(Long id);//根据删除
-	
+	int deleteById(Long id);
 	public SalesmanData findById(Long id);
 	public List<SalesmanData> findByName(String name);
   public SalesmanData findByNameAndCard_cardNumber(String name,String cardNu);
