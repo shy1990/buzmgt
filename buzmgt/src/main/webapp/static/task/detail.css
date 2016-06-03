@@ -1,3 +1,7 @@
+.box-body-a{
+    width: 100%;
+    height: 750px;
+}
 
 .icon-task-detail {
     background: url(../img/task/xm.png) no-repeat;
@@ -8,7 +12,11 @@
 }
 
 .icon-task-sz {
-    background: url(../img/icon/saojie/set/sjsz.png) no-repeat;
+    display: inline-block;
+    margin-right:3px;
+    padding:7px;
+    vertical-align: middle;
+    background: url(../img/icon/oil-subsidy/setting.png) no-repeat;
 }
 .icon-finds{
     background: url(../img/icon/team-member/list/sousuo1.png) no-repeat;
@@ -18,22 +26,49 @@
     font-weight: 600;
 }
 
+
+.btn-setting{
+    margin-left:5px;
+    padding:3px;
+    background-color:#fbfbfb;
+    color:#8c8c8c;
+    border:1px solid #eee;
+    font-size:12px;
+}
+
 .text-bule {
     color: #2483b9;
     font-size: 12px;
 }
 
-/*æ–‡æœ¬è®¾ç½®è·ç¦»*/
+/*ÎÄ±¾ÉèÖÃ¾àÀë*/
 .text-jl {
     padding-left: 40px;
     margin-top: 8px;
     width: 167px;
 }
 
-/*å›¾ç‰‡è®¾ç½®è·ç¦»*/
-.pic-jl {
-    padding: 0 0 0 0;
+.th-with{
+    height: 50px;
+    width: 200px;
 }
+
+.row-a{
+    height: 30px;
+    width:80%;
+}
+
+.btn-jl{
+    margin-right: 10px;
+}
+
+.btn-null{
+    float: left;
+    width: 59px;
+    height: 30px;
+
+}
+
 
 
 .text-body {
@@ -53,7 +88,7 @@
     vertical-align: middle;
 }
 
-/*jlè·ç¦» */
+/*jl¾àÀë */
 .date-jl {
     float: left;
     width: 300px;
@@ -71,6 +106,20 @@
     margin-top: 5px;
 }
 
+.text-bai{
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.text-bai-d {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 900;
+}
+.input-jl{
+    margin-right: 30px;
+}
 
 .date-wzz {
     padding-bottom: 8px;
@@ -88,6 +137,12 @@
     font-size: 12px;
 }
 
+
+.text-gery-s {
+    color: #cccccc;
+    font-size: 12px;
+    font-weight: 400;
+}
 .text-block {
     color: #606060;
     font-size: 12px;
@@ -95,9 +150,9 @@
 
 .row-h{
     width: auto;
-    height:35px;
+    height:30px;
 }
-/*æœç´¢æ ä¸­æŒ‰é’®çš„æ ·å¼*/
+/*ËÑË÷À¸ÖĞ°´Å¥µÄÑùÊ½*/
 .input-in  {
     height: 30px;
 }

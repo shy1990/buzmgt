@@ -1,5 +1,4 @@
-$(function(){
-	
+$(function(){	
 	$("#region").click(function(){
 		var ztreeNodes;
 		var regionObj = $("#region");

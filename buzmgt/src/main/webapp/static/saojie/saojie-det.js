@@ -97,6 +97,7 @@ function ajaxSearch(searchData) {
 				var arr = new Array(); //创建数组
 				$.each(data.list,function(n,items){
 					var coor = items.coordinate;
+					alert(coor);
 					if(coor != null && coor != ""){
 		                for (var j = 0;j < arr.length;j++){
 		                	marker = new BMap.Marker(new BMap.Point(arr[0],arr[1]));// 拿到坐标点

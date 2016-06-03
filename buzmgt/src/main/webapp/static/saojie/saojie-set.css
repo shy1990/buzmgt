@@ -13,7 +13,7 @@
 .saojie-name-input{
 	margin-top: 0;
 }
-@media (max-width: 480px) {
+@media (max-width:480 px) {
 	.saojie-name-input{
 		width: 50%;
 	}
@@ -31,13 +31,13 @@
 .addreass,.td-span{
 	margin: 0 15px;
 }
-@media (min-width:900px ) {
+@media (min-width:900 px) {
 	.set-table{
 		margin-left: 10.2828%;
 	}
 	
 }
-/*审核通过按钮*/
+/*瀹℃牳閫氳繃鎸夐挳*/
 .btn-audit,
 .btn-audit:hover,
 .btn-audit:focus{
@@ -48,11 +48,11 @@
 	font-size: 14px;
 	font-weight: bold;
 }
-/*扫街顺序列表*/
+/*鎵椤哄簭鍒楄〃*/
 .saojie-set-list {
 	position: relative;
 }
-/*调整顺序图标*/
+/*璋冩暣椤哄簭鍥炬爣*/
 .sequence{
 	position: absolute;
 	top: -28px;
@@ -87,7 +87,7 @@
 .saojie-set-list .table>tbody>tr>td>span{
 	font-size: 12px;
 }
-/*箭头*/
+/*绠ご*/
 .icon-arow{
 	cursor: pointer;
 	visibility: hidden;
@@ -97,7 +97,7 @@
 .icon-arow.active{
 	visibility: visible;
 }	
-/*向下*/
+/*鍚戜笅*/
 .arow-down{
 	background: url(../img/icon/saojie/set/arow-down-out.png) no-repeat ;
 }
@@ -108,7 +108,7 @@ tr:last-child .arow-down{
 .arow-down:hover{
 	background: url(../img/icon/saojie/set/arow-down-on.png) no-repeat ;
 }
-/*向上*/
+/*鍚戜笂*/
 .arow-up{
 	background: url(../img/icon/saojie/set/arow-up-out.png) no-repeat ;
 }
@@ -140,7 +140,7 @@ tr:first-child .arow-up{
 	padding: 0 10px;
 	margin-left: 20px;
 }
-/*地图边框*/
+/*鍦板浘杈规*/
 .map-box{
 	border: 1px solid #d43f3a;
 	margin-bottom: 50px;
@@ -152,9 +152,3 @@ tr:first-child .arow-up{
 	border: 1px solid red;
 	margin: 0px 20px 30px 70px;
 }
-
-
-
-
-
-
