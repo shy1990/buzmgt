@@ -89,12 +89,12 @@ public class PunishSetController {
   public @ResponseBody String  defaultPunishSet(@PathVariable("regionId") String regionId,@RequestParam("punishNumber")Float punishNumber){
     PunishSet punishSet = punishSetService.findByRegionId(regionId);
     if(punishSet != null){
-      System.out.println("not null");
+//      System.out.println("not null");
       punishSet.setPunishNumber(punishNumber);
       punishSetService.save(punishSet);
       return "保存成功";
     }
-    System.out.println("shi null");
+//    System.out.println("shi null");
     punishSet = new PunishSet();
     punishSet.getRegion().setId(regionId);
     punishSet.setPunishNumber(punishNumber);

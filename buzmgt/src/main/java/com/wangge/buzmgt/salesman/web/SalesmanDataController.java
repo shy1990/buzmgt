@@ -127,7 +127,7 @@ public class SalesmanDataController {
   @RequestMapping(value = "/save", method = RequestMethod.POST)
   public @ResponseBody String saveSalesmanData(SalesmanData salesmanData, BankCard bankCard) {
 
-    System.out.println(salesmanData + "     " + bankCard);
+//    System.out.println(salesmanData + "     " + bankCard);
 
     // 同时添加银行卡
     if (bankCard != null) {
@@ -165,7 +165,7 @@ public class SalesmanDataController {
 
   @RequestMapping(value = "/saveBankCard", method = RequestMethod.POST)
   public @ResponseBody String saveBankCard(BankCard bankCard, Long id) {
-    System.out.println(bankCard);
+//    System.out.println(bankCard);
     SalesmanData salesmanData = service.findById(id);
     salesmanData.getCard().add(bankCard);
     service.save(salesmanData);
@@ -181,17 +181,17 @@ public class SalesmanDataController {
    */
   @RequestMapping(value = "/delete/salesman/{id}/bankCard/{bankId}", method = RequestMethod.DELETE)
   public @ResponseBody String delete(@PathVariable("id") Long id, @PathVariable("bankId") Long bankId) {
-    System.out.println("**********" + id + "  " + bankId);
+//    System.out.println("**********" + id + "  " + bankId);
     SalesmanData salesmanData = service.findById(id);
 
     // 删除银行卡
     bankService.delete(bankId);
     if (salesmanData.getCard().size() < 1) {
-      System.out.println("走进if");
+//      System.out.println("走进if");
       // 删除基础数据
       service.deleteById(id);
     }
-    System.out.println(id + "  " + bankId);
+//    System.out.println(id + "  " + bankId);
     return "chengong";
   }
 
