@@ -38,7 +38,7 @@
 			<!--/区域选择按钮-->
 		</h4>
 		<!-- person-select -->
-		<div class="row">
+		<div class="row" id='salesmanDiv' >
 			<div class="col-md-12">
 				<form class="form-horizontal" role="form">
 					<div class="form-group clearfix">
@@ -61,7 +61,7 @@
 
 		<!-- row-header -->
 		<!-- content -->
-		<div class="con-wrapper">
+		<div class="con-wrapper" id="taskContent" style="display:none" >
 			<!-- row-task-section -->
 			<div class="row">
 				<div class="col-md-4">
@@ -209,7 +209,7 @@
 							<li class="clearfix">
 								<p class="fl">7天 ≤ 上月拜访天数 &#60; 10天</p>
 								<p class="fr">
-									<span id="7bf" class="">10</span>商家
+									<span id="7bf" class="seller-num">10</span>商家
 								</p>
 							</li>
 							<li class="clearfix">
@@ -237,7 +237,7 @@
 							<li class="clearfix">
 								<p class="fl">4天 ≤ 月均提货天数 &#60; 7天</p>
 								<p class="fr">
-									<span id="4th" class="seller-num">10</span>商家
+									<span id="4sy" class="seller-num">10</span>商家
 								</p>
 							</li>
 							<li class="clearfix">
@@ -280,7 +280,7 @@
 	<script src='/static/js/common.js'></script>
 	<script src='/static/js/dateutil.js'></script>
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
-	<script src="static/month-task/add-month-task.js"></script>
+	<script src="/static/month-task/add-month-task.js"></script>
 	<script src="static/bootstrap/js/bootstrap-select.min.js"></script>
 	<script>
 		/*区域 */
@@ -288,6 +288,7 @@
 		var taskId="${taskId}";
 		if ( taskId != undefined&&taskId != "" ) {
 			$("#handleTitle").text("修改");
+			$("#salesmanDiv").css("display","none");
 			getMonthDataById();
 		}
 		function getRegion(id){

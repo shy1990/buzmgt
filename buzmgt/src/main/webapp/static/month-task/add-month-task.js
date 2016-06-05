@@ -62,6 +62,7 @@ function getMonthData(regionId) {
 				}
 			}
 			newed = 1;
+			$("#taskContent").css("display", "");
 		},
 		error : function(data) {
 			if (data.status = '404') {
@@ -99,6 +100,7 @@ function getMonthDataById() {
 					}
 				}
 			}
+			$("#taskContent").css("display", "");
 		},
 		error : function() {
 			alert("系统错误，请稍后再试");
@@ -176,6 +178,7 @@ function submit(flag) {
 				location.href = '/monthTask/handleList';
 			} else {
 				cleanSelect();
+				$("#taskContent").css("display", "none");
 				newed = 0;
 			}
 		},

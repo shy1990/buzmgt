@@ -313,4 +313,15 @@ public class MonthOdersData implements Serializable {
 		this.salesman = salesman;
 	}
 
+	@Override
+	public String toString() {
+		return "MonthOdersData [id=" + id + ", regionId=" + regionId + ", month=" + month + ", TAL15M1=" + TAL15M1
+				+ ", TAL15M3=" + TAL15M3 + ", TAL10M1=" + TAL10M1 + ", TAL10M3=" + TAL10M3 + ", TAL7M1=" + TAL7M1
+				+ ", TAL7M3=" + TAL7M3 + ", TAL4M1=" + TAL4M1 + ", TAL4M3=" + TAL4M3 + ", TAL20M1=" + TAL20M1
+				+ ", TAL20M3=" + TAL20M3 + ", VisitCount15=" + VisitCount15 + ", VisitCount10=" + VisitCount10
+				+ ", VisitCount7=" + VisitCount7 + ", VisitCount4=" + VisitCount4 + ", VisitCount20=" + VisitCount20
+				+ ", sysgive15=" + sysgive15 + ", sysgive10=" + sysgive10 + ", sysgive7=" + sysgive7 + ", sysgive4="
+				+ sysgive4 + ", sysgive20=" + sysgive20 + ", used=" + used + ", salesman=" + salesman + "]";
+	}
+
 }
