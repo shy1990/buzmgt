@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 public interface SaojieDataRepository extends JpaRepository<SaojieData, Long>{
 
@@ -19,4 +20,8 @@ public interface SaojieDataRepository extends JpaRepository<SaojieData, Long>{
   List<SaojieData> findAll(Specification<SaojieData> specification);
   
   Page<SaojieData> findAll(Specification<SaojieData> spec, Pageable pageable);
+  
+  List<SaojieData> findByregionId(String regionId);
+  
+  List<SaojieData> findBySalesman(SalesMan salesMan);
 }

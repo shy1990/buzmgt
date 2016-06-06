@@ -35,4 +35,6 @@ public interface SaojieService {
 
   List<Saojie> findSaojie(SaojieStatus  status,String userId);
   Saojie findByOrderAndUserId(int order,String userId);
+  
+  Saojie findByregionId(String regionId);
 }

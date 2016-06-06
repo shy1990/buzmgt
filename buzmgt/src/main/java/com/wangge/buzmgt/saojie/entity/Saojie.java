@@ -98,7 +98,7 @@ public class Saojie implements Serializable {
 	/*@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
 	@OrderBy("saojie_order")
 	private Collection<Saojie> children;*/
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "saojie")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "saojie")
 	private Collection<SaojieData> saojiedata;
 	@Transient
 	private String percent;

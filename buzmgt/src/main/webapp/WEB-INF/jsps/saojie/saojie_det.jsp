@@ -116,9 +116,9 @@
 		
 							</tbody>
 						</table>
-						<div id="callBackPager"></div>
 						<!--/列表-->
 					</div>
+						<div id="callBackPager"></div>
 					<!--/box-body-->
 				</div>
 				<!--/box-->
