@@ -32,10 +32,32 @@ $(function(){
 var regionid;
 //选择地区下拉框触发
 function ajaxSearchByRegion(saojieId){
+	delete searchData['page'];
 //	searchData['saojieId'] = $("#saojieId").val();
 	regionid = $("#regionId  option:selected").val();
 	searchData['regionId'] = regionid;
+	ajaxSearchPercent(searchData);
 	ajaxSearch(searchData);
+}
+
+function ajaxSearchPercent(regionId,userId){
+	$.ajax({
+		url : base + "teammember/percent",
+		type : "GET",
+		data : searchData,
+		beforeSend : function(request) {
+			request.setRequestHeader("Content-Type",
+					"application/json; charset=UTF-8");
+		},
+		dataType : "text",
+		success : function(data) {
+			$(".percent").text(data); 
+			$("#percent").width(data);
+		},
+		error : function() {
+			alert("系统错误，请稍后再试");
+		}
+	});
 }
 
 var opts = {
@@ -62,8 +84,6 @@ function ajaxSearch(searchData) {
 			success : function(data) {
 				map.clearOverlays();
 				$(".shopNum").text(data.shopNum);
-				/*$(".percent").text(data.percent); 
-				$("#percent").width(data.percent);*/
 				map.centerAndZoom(data.areaName, 13);
 				// map.centerAndZoom("上海",11);
 				// 添加带有定位的导航控件
@@ -124,13 +144,11 @@ function ajaxSearch(searchData) {
 						"application/json; charset=UTF-8");
 			},
 			dataType : "json",
-			success : function(dataPage) {
-				$(".shopNum").text(dataPage.totalElements);
-				/*$(".percent").text(data.percent); 
-				$("#percent").width(data.percent);*/
-					totalElements = dataPage.totalElements;
+			success : function(data) {
+				$(".shopNum").text(data.totalElements);
+					totalElements = data.totalElements;
 					totalPages = 10;
-					seachSuccessTable(dataPage);
+					seachSuccessTable(data);
 					var searchTotal = totalElements;
 
 		            if (searchTotal != total || searchTotal == 0) {

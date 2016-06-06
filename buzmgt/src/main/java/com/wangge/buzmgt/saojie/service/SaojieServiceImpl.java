@@ -197,6 +197,11 @@ public class SaojieServiceImpl implements SaojieService {
   public Saojie findByOrderAndUserId(int order, String userId) {
     return saojieRepository.findByOrderAndUserId(order,userId);
   }
+
+  @Override
+  public Saojie findByregionId(String regionId) {
+    return saojieRepository.findByregionId(regionId);
+  }
   
 }
   

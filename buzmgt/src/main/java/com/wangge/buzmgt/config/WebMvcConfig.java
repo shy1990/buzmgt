@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.config;
 
-import com.wangge.buzmgt.jsonformat.JSONFormatMethodProcessor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -13,6 +12,8 @@ import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import com.wangge.json.JSONFormatMethodProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
