@@ -88,7 +88,7 @@ public class MonthPunishUpController {
     @RequestMapping(value="/list2",method = RequestMethod.GET)
     public String findAll1(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                 @RequestParam(value = "size", defaultValue = "3") Integer size,Model model){
-        System.out.println("*************");
+//        System.out.println("*************");
         Float sum = mothPunishUpRepository.amerceSum();
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(page, size, sort);
@@ -113,7 +113,7 @@ public class MonthPunishUpController {
                            @RequestParam(value = "endTime", defaultValue = "2016-07-26") String endTime,
                            Model model){
 
-        System.out.println(startTime+"**********"+endTime);
+//        System.out.println(startTime+"**********"+endTime);
         model.addAttribute("startTimeFen",startTime);
         model.addAttribute("endTimeFen",endTime);
         Float sum = mothPunishUpRepository.amerceSum();

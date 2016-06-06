@@ -6,6 +6,9 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * 设置奖罚系数
+ */
 @Entity
 @Table(name="SYS_PUNISHSET")
 public class PunishSet implements Serializable {

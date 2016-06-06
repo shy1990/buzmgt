@@ -20,6 +20,6 @@ public interface MothPunishUpRepository extends PagingAndSortingRepository<Month
     Page<MonthPunishUp> findAll(Pageable pageable);
     public List<MonthPunishUp> findAll();
 
-    @Query(value="select sum(FINE_MONEY) from SYS_MONTH_PUNISH_RECORD_UP",nativeQuery = true)
+    @Query(value="select sum(FINE_MONEY) from SYS_MONTH_PUNISH_RECORD",nativeQuery = true)
     public Float amerceSum();
 }

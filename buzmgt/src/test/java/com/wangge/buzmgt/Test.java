@@ -1,29 +1,16 @@
 package com.wangge.buzmgt;
 
+import com.wangge.buzmgt.util.HttpUtil;
+import junit.framework.TestCase;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.neo4j.cypher.internal.compiler.v2_1.planner.logical.steps.join;
-
-import com.alibaba.fastjson.JSON;
-import com.wangge.buzmgt.monthTask.entity.MonthTask;
-import com.wangge.buzmgt.oilcost.entity.OilRecord;
-import com.wangge.buzmgt.util.HttpUtil;
-
-import junit.framework.TestCase;
 
 public class Test extends TestCase {
 
