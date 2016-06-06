@@ -7,9 +7,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
+import com.wangge.buzmgt.monthTask.entity.AppServer;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Resource;
 import com.wangge.buzmgt.sys.entity.Resource.ResourceType;
@@ -20,6 +22,7 @@ import com.wangge.buzmgt.sys.repository.OrganizationRepository;
 import com.wangge.buzmgt.sys.repository.RoleRepository;
 import com.wangge.buzmgt.sys.repository.UserRepository;
 
+@EnableConfigurationProperties({AppServer.class}) 
 @SpringBootApplication
 public class BuzmgtApplication extends SpringBootServletInitializer {
 	

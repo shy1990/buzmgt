@@ -2,8 +2,11 @@ package com.wangge.buzmgt.teammember.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.task.entity.Visit.VisitStatus;
 
 /**
  * 

@@ -1,10 +1,12 @@
 package com.wangge.buzmgt.teammember.service;
 
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 
 public interface SalesManService {
 
@@ -20,12 +22,14 @@ public interface SalesManService {
   
   SalesMan findById(String id);
   
-  List<Object> gainSaojieMan();
+  List<Object> gainSaojieMan(SalesmanStatus status);
   SalesMan findByUserId(String userId);
+  
+  String findByTruename(String truename);
 
   String getRegionIdByUserId(String userId);
 
-  String findByTruename(String salesmanName);
 
+  
   
 }

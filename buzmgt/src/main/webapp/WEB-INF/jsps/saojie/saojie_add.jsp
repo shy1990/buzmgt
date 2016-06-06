@@ -46,7 +46,7 @@
 							<div class="tab-pane fade in active" id="box_tab1">
 								<!--box-list-->
 								<form class="member-from-box form-horizontal"
-									action="/saojie/saveSaojie" name="form" method="post">
+									action="/saojie/saveSaojie" name="form" method="post" onsubmit="javascript:return checkForm()">
 									<div class="member-from col-md-8 col-md-offset-1 col-sm-10">
 										<div class="form-group">
 											<label for="inputPassword" class="col-sm-2 control-label">姓名:</label>
@@ -58,8 +58,8 @@
 													name="salesman.id" onchange="queryTown()">
 													<option selected="selected" value="">待扫街人员</option>
 												</select>
-												<!-- <input type="hidden" class="form-control" id="pid" value="" name="pid"/> -->
 											</div>
+											<label class="pull-right col-md-6 control-label msg-error">请选择待扫人员</label>
 										</div>
 
 										<div class="form-group"> 
@@ -73,6 +73,7 @@
 												</div>
 												<input type="hidden" name="" value="" id="base"/>
 											</div>
+											<label class="pull-right col-md-6 control-label msg-error" id="msgOrder"></label>
 										</div>
 										<div class="form-group">
 											<label for="dtp_input2" class="col-sm-2 control-label">时间:</label>
@@ -83,7 +84,7 @@
 													id="starttime">
 													<span class="input-group-addon" id="basic-addon1"><i
 														class="member-icon saojie-time-icon"></i></span> <input
-														class="form-control" size="16" type="text"
+														class="form-control" size="16" type="text" id="begin"
 														name="beginTime" value="" readonly placeholder="请选择开始时间" />
 													<span class="input-group-addon"><span
 														class="glyphicon glyphicon-remove"></span></span> <span
@@ -97,7 +98,7 @@
 													id="endtime">
 													<span class="input-group-addon" id="basic-addon1"><i
 														class="member-icon saojie-time-icon"></i></span> <input
-														class="form-control" size="16" type="text"
+														class="form-control" size="16" type="text" id="end"
 														name="expiredTime" value="" readonly placeholder="请选择结束时间" />
 													<span class="input-group-addon"><span
 														class="glyphicon glyphicon-remove"></span></span> <span
@@ -105,6 +106,7 @@
 														class="glyphicon glyphicon-calendar"></span></span> <input
 														type="hidden" id="dtp_input2" value="" /> <br />
 												</div>
+												<label class="pull-right col-md-6 control-label msg-error">请选择时间</label>
 											</div>
 										</div>
 										<div class="form-group">
@@ -139,6 +141,7 @@
 	<script type="text/javascript"
 		src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"
 		charset="UTF-8"></script>
+	<script src="../static/js/dateutil.js"></script>
 	<script src="../static/js/saojie/saojie.js" type="text/javascript"
 		charset="UTF-8"></script>
 	<script src="../static/js/common.js" type="text/javascript"

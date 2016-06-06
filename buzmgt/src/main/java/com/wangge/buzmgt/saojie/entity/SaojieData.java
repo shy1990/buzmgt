@@ -10,6 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,9 +23,12 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**
  * 扫街数据
@@ -32,7 +38,12 @@ import com.wangge.buzmgt.region.entity.Region;
  */
 @Entity
 @Table(name = "SYS_SAOJIEDATA")
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler","fieldHandler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@NamedEntityGraph(name = "graph.SaojieData.region",
+attributeNodes = @NamedAttributeNode(value = "region", subgraph = "graph.SaojieData.region" +
+        ".coordinates"), subgraphs = {@NamedSubgraph(name = "graph.SaojieData.region.coordinates",
+attributeNodes = @NamedAttributeNode("coordinates"))})
 public class SaojieData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -46,7 +57,7 @@ public class SaojieData implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SAOJIE_ID")
 	private Saojie saojie;
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 	private String name;
@@ -62,6 +73,10 @@ public class SaojieData implements Serializable {
 //	@DateTimeFormat(pattern = "yyyy-MM-dd")
   @Temporal(TemporalType.TIMESTAMP)
 	private Date saojieDate;
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "USER_ID")
+  private SalesMan salesman;
 	@Transient
 	private Long registId;
 	@Transient
@@ -181,6 +196,14 @@ public class SaojieData implements Serializable {
 
   public void setSaojieDate(Date saojieDate) {
     this.saojieDate = saojieDate;
+  }
+
+  public SalesMan getSalesman() {
+    return salesman;
+  }
+
+  public void setSalesman(SalesMan salesman) {
+    this.salesman = salesman;
   }
   
 }

@@ -140,8 +140,9 @@ public  class SalesManServiceImpl implements SalesManService {
     return salesManRepository.findById(userId);
   }
   
-  public List<Object> gainSaojieMan() {
-    return salesManRepository.gainSaojieMan();
+  //获取添加扫街业务
+  public List<Object> gainSaojieMan(SalesmanStatus status) {
+    return salesManRepository.getSaojieMan(status);
   }
 
   public SalesMan findById(String id) {
@@ -160,7 +161,7 @@ public  class SalesManServiceImpl implements SalesManService {
 
   @Override
   public String findByTruename(String truename) {
-    return salesManRepository.getIdByTruename(truename);
+    return salesManRepository.getIdByTurename(truename);
   }
 
   

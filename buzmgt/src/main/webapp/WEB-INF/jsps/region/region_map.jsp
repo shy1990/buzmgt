@@ -6,7 +6,6 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	System.out.print(basePath);
 %>
 <!DOCTYPE html>
 <html>
@@ -171,6 +170,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 		 	<%
 						for(int x=0;x<listCoordinates.length;x++){
 							String points=listCoordinates[x];
+						//	System.out.println(points);
 							double lng=Double.parseDouble(points.split("-")[0]);//经度 
 			 		  		double lat=Double.parseDouble(points.split("-")[1]);//纬度 
 			 %>				

@@ -178,13 +178,20 @@ public class VisitTaskController {
     * @since JDK 1.8
    */
   @RequestMapping("/addVisitList")
-  public String addVisitList(String addVisitList, Model model){
+  public String addVisitList(String addVisitList,String regionid,Model model){
     Subject subject = SecurityUtils.getSubject();
     User user=(User) subject.getPrincipal();
     Manager manager = managerService.getById(user.getId());
     model.addAttribute("addVisitList", addVisitList);
-    model.addAttribute("regionName", manager.getRegion().getName());
-    model.addAttribute("regionId", manager.getRegion().getId());
+    Region region=new Region();
+    if(null!=regionid && !"".equals(regionid)){
+      region =regionService.getRegionById(regionid);
+      model.addAttribute("regionName", region.getName());
+      model.addAttribute("regionId", region.getId());
+    }else{
+      model.addAttribute("regionName", manager.getRegion().getName());
+      model.addAttribute("regionId", manager.getRegion().getId());
+    }
     return "task/task_add";
   }
   

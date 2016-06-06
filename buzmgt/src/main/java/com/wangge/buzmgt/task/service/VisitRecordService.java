@@ -22,4 +22,5 @@ public interface VisitRecordService {
   Page<Visit> getVisitYWData(int pageNum,int limit,String userId,String begin,String end);
   
   Visit findById(Long visitId);
+
 }
