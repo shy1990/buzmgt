@@ -109,7 +109,7 @@ public class MonthPunishUpController {
     public String findAll2(@RequestParam(value = "page", defaultValue = "0") Integer page,
                            @RequestParam(value = "size", defaultValue = "3") Integer size,
                            @RequestParam(value = "startTime", defaultValue = "2016-01-26")String startTime,
-                           @RequestParam(value = "endTime", defaultValue = "2016-07-26") String endTime,
+                           @RequestParam(value = "endTime", defaultValue = "2200-07-26") String endTime,
                            Model model){
 
         System.out.println(startTime+"**********"+endTime);
