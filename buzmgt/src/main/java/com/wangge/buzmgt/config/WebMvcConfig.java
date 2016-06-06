@@ -12,13 +12,11 @@ import org.springframework.http.converter.support.AllEncompassingFormHttpMessage
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
-import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.wangge.buzmgt.monthTask.DataEventHandler;
 
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
