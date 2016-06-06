@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -46,28 +48,29 @@ public class SceduleOfMonthOrders {
 
 	@Autowired
 	private MonthshopBasDataRepository shopRep;
-	private static final String townSql = " select r.region_id, s.user_id, s.truename \n" + "  from sys_region r\n"
-			+ "  left  join sys_salesman s on r.region_id = s.region_id\n" + " where r.type = 3 \n"
-			+ "  and (s.IS_PRIMARY_ACCOUNT !=1 or s.IS_PRIMARY_ACCOUNT is null) ";
+	private static final String townSql = " select s.region_id, s.user_id, s.truename   from sys_salesman s ";
 
 	// 每月15号点时分 0 30 1 15 * ?
-	@Scheduled(cron = " 0 30 1 15 * ? ")
+	@Scheduled(cron = " 30 18 16 * * ? ")
 	public void handleMontholdData() {
 		List<Object[]> townList = em.createNativeQuery(townSql).getResultList();
 		for (Object[] towns : townList) {
 			handleOneTownOrders(towns[0] + "", towns[1] + "", towns[2] + "");
 		}
-		// handleOneTownOrders("371402");
+//	 handleOneTownOrders("371502","A3715021250",null);
 	}
 
 	/**
 	 * 计算出每个区域的历史订单值;三月内平均,上月的;
 	 * 
 	 * @param town
+	 * @param salemanid
+	 *            目前通过业务员作为查询条件
+	 * @param salemanName
 	 * @throws NumberFormatException
 	 */
 	private void handleOneTownOrders(String town, String salemanid, String salemanName) throws NumberFormatException {
-		String sql = MonthTaskServiceImpl.lsdatasql.replace("$town", town);
+		String sql = MonthTaskServiceImpl.lsdatasql.replace("$town", salemanid);
 		// 得出三个月的数据sql
 		sql += "union " + sql.replace("'1' month", "'2' month") + " union " + sql.replace("'1' month", "'3' month");
 		Query q = em.createNativeQuery(sql);
@@ -83,18 +86,20 @@ public class SceduleOfMonthOrders {
 		// 上月拜访次数
 		Integer[] sum5 = new Integer[] { 0, 0, 0, 0, 0 };
 		// 系统建议次数
-		Integer[] sum6 = new Integer[] { 0, 0, 0, 0, 0 };
-		Map<String, Map<String, Object>> shopList = new HashMap<String, Map<String, Object>>();
+		Integer[] sum6 = new Integer[] { 14, 14, 14, 14, 14 };
+		Map<String, Map<String, Object>> shipAllMap = new HashMap<String, Map<String, Object>>();
 		for (Object[] arr1 : datalist) {
 			int tal = Integer.parseInt(arr1[2] + "");
 			Map<String, Object> shopMap = new HashMap<String, Object>();
 			int month = Integer.parseInt(arr1[4] + "");
 			String shopId = arr1[0] + "";
 			shopMap.put(month + "", tal + "");
+			String shopReg = arr1[1] + "";
+			shopMap.put("shopReg", shopReg);
 			shopMap.put("shopId", shopId);
 			shopMap.put("shopName", arr1[3] + "");
 			// 存储单个店铺的信息
-			putShopMap(shopList, shopMap, shopId);
+			putShopMap(shipAllMap, shopMap, shopId);
 			if (month == 1) {
 				handleSum(tal, sum1);
 
@@ -109,15 +114,17 @@ public class SceduleOfMonthOrders {
 			int sum = sum1[i] + sum2[i] + sum3[i];
 			sum4[i] = sum % 3 == 0 ? sum / 3 : (sum / 3 + 1);
 		}
-		String vsSql = MonthTaskServiceImpl.lsVisitSql.replace("$town", town);
+		String vsSql = MonthTaskServiceImpl.lsVisitSql.replace("$town", salemanid);
 		List<Object[]> visList = em.createNativeQuery(vsSql).getResultList();
 		for (Object[] vist : visList) {
 			int tal = Integer.parseInt(vist[0] + "");
 			Map<String, Object> shopMap = new HashMap<String, Object>();
 			String shopId = vist[2] + "";
+			String shopReg = vist[3] + "";
+			shopMap.put("shopReg", shopReg);
 			shopMap.put("visitcount", tal);
 			shopMap.put("shopId", shopId);
-			putShopMap(shopList, shopMap, shopId);
+			putShopMap(shipAllMap, shopMap, shopId);
 			handleSum(tal, sum5);
 		}
 		for (int i = 0; i < 5; i++) {
@@ -126,8 +133,8 @@ public class SceduleOfMonthOrders {
 		}
 		String month = DateUtil.getPreMonth(new Date(), 1);
 		// 开始计算保存每个店铺的数据
-		Collection<Map<String, Object>> shopIts = shopList.values();
-		List<MonthshopBasData> datlist = new ArrayList<MonthshopBasData>();
+		Collection<Map<String, Object>> shopIts = shipAllMap.values();
+		Set<MonthshopBasData> datlist = new HashSet<MonthshopBasData>();
 
 		SalesMan salesman = new SalesMan();
 		// salemanid
@@ -142,21 +149,28 @@ public class SceduleOfMonthOrders {
 			if (null != shopMap.get("shopId")) {
 				regsData = regRep.findOne(getLongValfromMap(shopMap, "shopId"));
 			}
-			MonthshopBasData shopdata = new MonthshopBasData(town, getIntValfromMap(shopMap, "1"), avg, month, viscount,
-					regsData, salesman);
+			MonthshopBasData shopdata = new MonthshopBasData(shopMap.get("shopReg").toString(),
+					getIntValfromMap(shopMap, "1"), avg, month, viscount, regsData, salesman);
 			datlist.add(shopdata);
 		}
-		
+
 		try {
 			shopRep.save(datlist);
-			// 结束计算保存每个店铺的数据
-			// 每个地区的数据的保存
-			MonthOdersData monthda = new MonthOdersData(town, month, sum1[0], sum4[0], sum1[1], sum4[1], sum1[2],
-					sum4[2], sum1[3], sum4[3], sum1[4], sum4[4], sum5[0], sum5[1], sum5[2], sum5[3], sum5[4], sum6[0],
-					sum6[1], sum6[2], sum6[3], sum6[4], salesman);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(town + salesman);
+		}
+
+		// 结束计算保存每个店铺的数据
+		// 每个地区的数据的保存
+		MonthOdersData monthda = new MonthOdersData(town, month, sum1[0], sum4[0], sum1[1], sum4[1], sum1[2], sum4[2],
+				sum1[3], sum4[3], sum1[4], sum4[4], sum5[0], sum5[1], sum5[2], sum5[3], sum5[4], sum6[0], sum6[1],
+				sum6[2], sum6[3], sum6[4], salesman);
+		try {
 			monthRep.save(monthda);
 
 		} catch (Exception e) {
+			System.out.println(monthda);
 			e.printStackTrace();
 		}
 	}
@@ -194,15 +208,15 @@ public class SceduleOfMonthOrders {
 	}
 
 	/**
-	 * @param shopList
+	 * @param shipAllMap
 	 * @param shopMap
 	 * @param shopId
 	 */
-	private void putShopMap(Map<String, Map<String, Object>> shopList, Map<String, Object> shopMap, String shopId) {
-		if (null == shopList.get(shopId)) {
-			shopList.put(shopId, shopMap);
+	private void putShopMap(Map<String, Map<String, Object>> shipAllMap, Map<String, Object> shopMap, String shopId) {
+		if (null == shipAllMap.get(shopId)) {
+			shipAllMap.put(shopId, shopMap);
 		} else {
-			shopList.get(shopId).putAll(shopMap);
+			shipAllMap.get(shopId).putAll(shopMap);
 		}
 	}
 
