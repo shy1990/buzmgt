@@ -233,8 +233,7 @@
     }
     initPaging();
     function initPaging() {
-        searchData['startTime'] = $("#aaa").val() ;
-        searchData['endTime'] = $("#bbb").val() ;
+
         $('#callBackPager').extendPagination({
             totalCount: totalCount,//总条数
             showCount: 5,//下面小图标显示的个数
@@ -247,14 +246,16 @@
         });
     }
     $("#kkk").click(function(){
+        searchData['startTime'] = $("#aaa").val() ;
+        searchData['endTime'] = $("#bbb").val() ;
         ajaxSearch(searchData);
         initPaging();
     });
 
-    function list(content) {
+    function list(data) {
         var template = Handlebars.compile($("#content-template").html());//编译模版
         //将json数据用刚刚注册的Handlebars模版封装，得到最终的 html，插入到基础的table中
-        $("#tbody").html(template(content));
+        $("#tbody").html(template(data));
     }
 </script>
 </body>
