@@ -55,7 +55,6 @@ public interface BankTradeService {
    */
   public void delete(List<BankTrade> bankTrades);
 
-  public JSONObject importExcel(HttpServletRequest request, String importDate);
 
   public void delete(BankTrade bankTrade);
 

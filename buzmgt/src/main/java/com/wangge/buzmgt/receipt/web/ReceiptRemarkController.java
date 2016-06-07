@@ -38,6 +38,7 @@ import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.util.excel.ExcelExport;
+import com.wangge.json.JSONFormat;
 
 @Controller
 @RequestMapping(value="/receiptRemark")
@@ -113,7 +114,7 @@ public class ReceiptRemarkController {
    * @return
    */
   @RequestMapping(value="/cash")
-  @ResponseBody
+  @JSONFormat(filterField = {"SalesMan.user","SalesMan.region"},nonnull=true,dateFormat="yyyy-MM-dd")  
   public String getCashList(HttpServletRequest request,
       @PageableDefault(page = 0,size=10,sort={"createTime"},direction=Direction.DESC) Pageable pageRequest ){
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
@@ -149,10 +150,10 @@ public class ReceiptRemarkController {
    * @param pageRequest
    * @return
    */
-  @RequestMapping(value="/cash/{order}")
+  @RequestMapping(value="/cash/{orderId}")
   public String getCashById(Model model ,@PathVariable("orderId") OrderSignfor orderSignfor , 
       HttpServletRequest request){
-    model.addAttribute("cash", orderSignfor);
+    model.addAttribute("order", orderSignfor);
     return "receipt/receipt_order_det";
   }
   /**

@@ -50,8 +50,7 @@ import com.wangge.buzmgt.util.file.FileUtils;
 @Service
 public class BankTradeServiceImpl implements BankTradeService {
 
-  @Value("${buzmgt.file.fileUploadPath}")
-  private String fileUploadPath;
+ 
 
   private static final Logger logger = Logger.getLogger(BankTradeServiceImpl.class);
   @Resource
@@ -90,106 +89,6 @@ public class BankTradeServiceImpl implements BankTradeService {
     bankTradeRepository.delete(bankTrade);
   }
 
-  @Override
-  public JSONObject importExcel(HttpServletRequest request, String importDate) {
-
-    JSONObject jsonObject = new JSONObject();
-
-    MultipartHttpServletRequest mReq;
-    MultipartFile file;
-    InputStream is;
-
-    // ============查询是否归档+是否已经审核账单。
-    Map<String, Object> searchParams = new HashMap<>();
-    searchParams.put("EQ_payDate", importDate);
-    searchParams.put("EQ_isArchive", 1);
-    List<BankTrade> bankTrades = this.findAll(searchParams);
-    searchParams.remove("EQ_isArchive");
-
-    // 已归档
-    if (bankTrades.size() > 0) {
-      jsonObject.put("result", "failure");
-      jsonObject.put("message", "已归档不能导入");
-      return jsonObject;
-    }
-
-    // 已审核
-    searchParams.put("EQ_payStatus", WaterPayStatusEnum.OverPay);
-    List<WaterOrderCash> orderCashs = waterOrderCashService.findAll(searchParams);
-    searchParams.remove("EQ_payStatus");
-    if (orderCashs.size() > 0) {
-      jsonObject.put("result", "failure");
-      jsonObject.put("message", "已审核不能导入");
-      return jsonObject;
-    }
-
-    // 原始文件名称
-    String fileName;
-
-    String fileRealPath = "";
-    try {
-
-      mReq = (MultipartHttpServletRequest) request;
-
-      // 获取文件
-      file = mReq.getFile("file-input");
-
-      // 取得文件的原始文件名称
-      fileName = file.getOriginalFilename();
-
-      logger.info("取得原始文件名:" + fileName);
-
-      String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-      logger.info("原始文件的后缀名:" + suffix);
-
-      if (!"xlsx".equals(suffix) && !"xls".equals(suffix)) {
-        jsonObject.put("result", "failure");
-        jsonObject.put("message", "文件类型错误，请选择xlsx类型的文件");
-
-        FileUtils.deleteFile(fileUploadPath + fileName);
-
-        return jsonObject;
-      }
-
-      if (!StringUtils.isEmpty(fileName)) {
-        is = file.getInputStream();
-
-        fileName = FileUtils.reName(fileName);
-
-        logger.info("重新命名后的文件名:" + fileName);
-
-        FileUtils.saveFile(fileName, is, fileUploadPath);
-
-        fileRealPath = fileUploadPath + fileName;
-
-        // 文件上传完成后，读取文件
-        Map<Integer, String> excelContent = ExcelImport.readExcelContent(fileRealPath);
-
-        // ============读取文件完成后，导入到数据库=============
-        bankTrades = this.findAll(searchParams);
-        if (bankTrades.size() > 0) {
-          this.delete(bankTrades);
-        }
-        // TODO 查询数据是否已经归档，否则不能经行导入保存。
-        this.save(excelContent, importDate);
-
-        FileUtils.deleteFile(fileRealPath);
-
-        jsonObject.put("result", "success");
-      } else {
-        throw new IOException("文件名为空!");
-      }
-
-    } catch (Exception e) {
-      FileUtils.deleteFile(fileRealPath);
-      jsonObject.put("result", "failure");
-      logger.info(e.getMessage());
-      return jsonObject;
-
-    }
-    return jsonObject;
-  }
 
   @Override
   public List<BankTrade> save(Map<Integer, String> excelContent, String importDate) {

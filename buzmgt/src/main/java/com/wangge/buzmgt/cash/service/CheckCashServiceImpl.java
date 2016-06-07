@@ -244,7 +244,7 @@ public class CheckCashServiceImpl implements CheckCashService {
       }
       
       //是否产生扣罚
-      if(stayMoney>0){
+      if(stayMoney!=0){
         //产生扣罚，修改流水单号状态
         WaterOrderCash order= waterOrders.get(0);
         order.setIsPunish(1);
@@ -252,8 +252,12 @@ public class CheckCashServiceImpl implements CheckCashService {
         MonthPunish mp=new MonthPunish();
         String userId=order.getUserId();
         mp.setDebt(stayMoney);
-        PunishSet punishSet=punishSetService.findByUserId(userId);
-        mp.setAmerce(stayMoney*punishSet.getPunishNumber());//扣罚
+        if(stayMoney>0){
+          PunishSet punishSet=punishSetService.findByUserId(userId);
+          mp.setAmerce(stayMoney*punishSet.getPunishNumber());//扣罚
+        }else{
+          mp.setAmerce(new Float(0));//扣罚
+        }
         mp.setStatus(0);//
         mp.setCreateDate(order.getCreateDate());
         mp.setSeriaNo(order.getSerialNo());
