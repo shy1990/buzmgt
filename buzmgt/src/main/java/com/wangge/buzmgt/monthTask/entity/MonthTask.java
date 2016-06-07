@@ -1,8 +1,6 @@
 package com.wangge.buzmgt.monthTask.entity;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,11 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
-import javax.persistence.NamedEntityGraphs;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -41,8 +37,11 @@ public class MonthTask implements Serializable {
 	private String regionid;
 	private String month;
 	private String agentid;
+	// 业务员任务目标达为15的店铺数
 	private int tal15goal;
-	private int tal15Done;
+	// 业务员任务中已达到15目标的完成数
+	private int tal15done;
+
 	private int tal10goal;
 	private int tal10done;
 	private int tal7goal;
@@ -51,6 +50,7 @@ public class MonthTask implements Serializable {
 	private int tal4done;
 	private int tal20goal;
 	private int tal20done;
+	// 20标准子任务的设置数
 	private int tal20set;
 	private int tal15set;
 	private int tal10set;
@@ -63,8 +63,6 @@ public class MonthTask implements Serializable {
 	private int status;
 	// 罚款数
 	private int punishrate;
-	@Transient
-	private Set<MonthTaskSub> subSet = new HashSet<MonthTaskSub>();
 
 	public long getId() {
 		return id;
@@ -74,11 +72,11 @@ public class MonthTask implements Serializable {
 		this.id = id;
 	}
 
-	public String getTown() {
+	public String getRegionid() {
 		return regionid;
 	}
 
-	public void setTown(String regionid) {
+	public void setRegionid(String regionid) {
 		this.regionid = regionid;
 	}
 
@@ -90,12 +88,12 @@ public class MonthTask implements Serializable {
 		this.month = month;
 	}
 
-	public String getRegionid() {
-		return regionid;
+	public String getAgentid() {
+		return agentid;
 	}
 
-	public void setRegionid(String regionid) {
-		this.regionid = regionid;
+	public void setAgentid(String agentid) {
+		this.agentid = agentid;
 	}
 
 	public int getTal15goal() {
@@ -106,12 +104,12 @@ public class MonthTask implements Serializable {
 		this.tal15goal = tal15goal;
 	}
 
-	public int getTal15Done() {
-		return tal15Done;
+	public int getTal15done() {
+		return tal15done;
 	}
 
-	public void setTal15Done(int tal15Done) {
-		this.tal15Done = tal15Done;
+	public void setTal15done(int tal15done) {
+		this.tal15done = tal15done;
 	}
 
 	public int getTal10goal() {
@@ -218,6 +216,14 @@ public class MonthTask implements Serializable {
 		this.tal4set = tal4set;
 	}
 
+	public MonthOdersData getMonthData() {
+		return monthData;
+	}
+
+	public void setMonthData(MonthOdersData monthData) {
+		this.monthData = monthData;
+	}
+
 	public int getStatus() {
 		return status;
 	}
@@ -233,13 +239,8 @@ public class MonthTask implements Serializable {
 	public void setPunishrate(int punishrate) {
 		this.punishrate = punishrate;
 	}
-
-	public MonthOdersData getMonthData() {
-		return monthData;
-	}
-
-	public void setMonthData(MonthOdersData monthData) {
-		this.monthData = monthData;
+	public MonthTask() {
+		super();
 	}
 
 	public MonthTask(String regionid, String month, int tAL15goal, int tAL10goal, int tAL7goal, int tAL4goal,
@@ -254,23 +255,6 @@ public class MonthTask implements Serializable {
 		tal20goal = tAL20goal;
 	}
 
-	public MonthTask() {
-	}
-
-	public Set<MonthTaskSub> getSubSet() {
-		return subSet;
-	}
-
-	public void setSubSet(Set<MonthTaskSub> subSet) {
-		this.subSet = subSet;
-	}
-
-	public String getAgentid() {
-		return agentid;
-	}
-
-	public void setAgentid(String agentid) {
-		this.agentid = agentid;
-	}
+	
 
 }

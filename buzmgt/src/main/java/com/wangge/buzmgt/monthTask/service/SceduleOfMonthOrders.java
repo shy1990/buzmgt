@@ -51,13 +51,13 @@ public class SceduleOfMonthOrders {
 	private static final String townSql = " select s.region_id, s.user_id, s.truename   from sys_salesman s ";
 
 	// 每月15号点时分 0 30 1 15 * ?
-	@Scheduled(cron = " 30 18 16 * * ? ")
+	@Scheduled(cron = "20 18 15 * * ? ")
 	public void handleMontholdData() {
 		List<Object[]> townList = em.createNativeQuery(townSql).getResultList();
 		for (Object[] towns : townList) {
 			handleOneTownOrders(towns[0] + "", towns[1] + "", towns[2] + "");
 		}
-//	 handleOneTownOrders("371502","A3715021250",null);
+		// handleOneTownOrders("371502","A3715021250",null);
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class SceduleOfMonthOrders {
 		Integer[] sum6 = new Integer[] { 14, 14, 14, 14, 14 };
 		Map<String, Map<String, Object>> shipAllMap = new HashMap<String, Map<String, Object>>();
 		for (Object[] arr1 : datalist) {
-			int tal = Integer.parseInt(arr1[2] + "");
+			int tal = null == arr1[2] ? 0 : Integer.parseInt(arr1[2] + "");
 			Map<String, Object> shopMap = new HashMap<String, Object>();
 			int month = Integer.parseInt(arr1[4] + "");
 			String shopId = arr1[0] + "";
@@ -158,7 +158,7 @@ public class SceduleOfMonthOrders {
 			shopRep.save(datlist);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(town + salesman);
+			System.out.println(town + salesman.getTruename());
 		}
 
 		// 结束计算保存每个店铺的数据
@@ -168,7 +168,6 @@ public class SceduleOfMonthOrders {
 				sum6[2], sum6[3], sum6[4], salesman);
 		try {
 			monthRep.save(monthda);
-
 		} catch (Exception e) {
 			System.out.println(monthda);
 			e.printStackTrace();
