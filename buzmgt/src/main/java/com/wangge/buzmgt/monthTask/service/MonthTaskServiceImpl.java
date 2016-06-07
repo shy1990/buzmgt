@@ -105,6 +105,17 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 					+ "              order by days desc) o3 on o3.member_id = m.id\n"
 					+ " where r.user_id like '$town%'";
 	// 上月拜访访情况
+
+	/*
+	 * 正式上线一月后使用,一月之前以sys_visit表的数据进行统计
+	 * "select s.done, d.month, r.registdata_id, r.registdata_id\n" +
+	 * "  from sys_monthtask_sub s\n" +
+	 * "  left join sys_monthshop_basdata d on s.data_id = d.id\n" +
+	 * "  left join sys_registdata r on d.registdata_id = r.registdata_id\n" +
+	 * " where d.month = to_char(sysdate - interval '1' month, 'yyyy-mm')\n" +
+	 * "   and r.user_id = '$town'";
+	 * 
+	 */
 	public static final String lsVisitSql = "select count(1), tmp.month, tmp.registdata_id, tmp.region_id \n"
 			+ "  from (select substr(g.finish_time, 0, 7) month,\n" + "               g.registdata_id,\n"
 			+ "               g.region_id\n"
