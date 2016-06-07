@@ -15,6 +15,10 @@
     background: url("../img/cut-set/bank.png")no-repeat center;
 }
 
+.icon-khcs{
+    background: url("../img/sz.png")no-repeat center;
+}
+
 .icon-rq{
     background: url("../img/cash-bank/rq.png")no-repeat center;
 }
@@ -53,6 +57,11 @@ html{
 .text-gery{
     color:#969696 ;
     font-weight: 800;
+    font-size: 12px;
+}
+
+.text-gray{
+    color:#9d9d9d ;
     font-size: 12px;
 }
 
@@ -103,6 +112,33 @@ html{
     margin-left: 10px;
 }
 
+
+.box-sty{
+    width: 207px;
+    height: 25px;
+    color: #696969;
+    border: 1px solid #c0c0c0;
+    border-radius: 2px;
+    padding-left: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.box-cs{
+    width: 110px;
+    height: 25px;
+    color: #696969;
+    border: 1px solid #c0c0c0;
+    border-radius: 2px;
+    padding-left: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-size: 12px;
+}
+.box-szcs{
+    margin-top: 20px;
+}
+
 .ratio-box{
     display: inline-block;
     width: 100%;
@@ -148,6 +184,7 @@ html{
 }
 .input-hh{
     height: 36px;
+    color: #ffffff;
 }
 
 .cl-padd{
@@ -195,7 +232,6 @@ html{
 .cs-select{
     width: 200px;
     height: 30px;
-    padding-left:10px;
     background-color: #ffffff;
     border:1px silver solid;
     border-radius: 3px;
@@ -367,15 +403,15 @@ html{
 .tb-basin tr>td>p:last-child{
     margin-bottom: -8px;
 }
-tr:hover .btn-card {
+li:hover .btn-card {
     display: block;
 }
 .btn-card {
     display: none;
     padding: 2px 2px;
     position: absolute;
-    right: 10%;
-    top: 12px;
+    right:3px;
+    top: 3px;
 }
 .name-posit{
     position: relative;
@@ -397,4 +433,15 @@ tr:hover .btn-card-more {
     width:500px;
     margin:0 auto;
     text-align: center;
+}
+.tab-content{
+    margin-top: 20px;
+    min-height: 765px;
+    border: 1px solid #EEEEEE;
+    background-color: #ffffff;
+}
+.li-sty{
+    font-size: 12px;
+    border: 1px solid #EEEEEE;
+
 }
