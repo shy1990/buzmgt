@@ -84,7 +84,7 @@
                             <option value="0.2">0.2</option>
                             <option value="0.3">0.3</option>
                             <option value="0.4">0.4</option>
-                            <option value="0.5">0.5"</option>
+                            <option value="0.5">0.5</option>
                             <option value="0.6">0.6</option>
                         </select> <span class="text-gery "></span> <span class="text-blue-s jl-">注：</span><span
                                 class="text-gery-hs">系统默认所有区域均为改系数，自定义设置区域除外</span>
@@ -99,7 +99,7 @@
                                         <span class="label  label-blue"> ${status.index+1 }</span> <span
                                             class="text-black jll"> ${punishSet.region.name } </span> <a
                                             class="text-redd jll" href="" data-toggle="modal"
-                                            data-target=""> ${punishSet.punishNumber }  <span>%</span></a> <a
+                                            data-target=""> ${punishSet.punishNumber }  <span></span></a> <a
                                             class="text-blue-s jll" href="" data-toggle="modal"
                                             data-target="" onclick="modify_punishSet(${punishSet.id })">修改</a>
                                         <a class="text-blue-s jll" href="" data-toggle="modal"
@@ -164,7 +164,7 @@
                                             <option value="0.2">0.2</option>
                                             <option value="0.3">0.3</option>
                                             <option value="0.4">0.4</option>
-                                            <option value="0.5">0.5"</option>
+                                            <option value="0.5">0.5</option>
                                             <option value="0.6">0.6</option>
                                         </select>
                                             <!-- /btn-group -->
@@ -237,7 +237,7 @@
                                                 <option value="0.2">0.2</option>
                                                 <option value="0.3">0.3</option>
                                                 <option value="0.4">0.4</option>
-                                                <option value="0.5">0.5"</option>
+                                                <option value="0.5">0.5</option>
                                                 <option value="0.6">0.6</option>
                                             </select>
                                                 <!-- /btn-group -->
