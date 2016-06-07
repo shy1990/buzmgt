@@ -108,12 +108,21 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 
 	/*
 	 * 正式上线一月后使用,一月之前以sys_visit表的数据进行统计
-	 * "select s.done, d.month, r.registdata_id, r.registdata_id\n" +
-	 * "  from sys_monthtask_sub s\n" +
-	 * "  left join sys_monthshop_basdata d on s.data_id = d.id\n" +
-	 * "  left join sys_registdata r on d.registdata_id = r.registdata_id\n" +
-	 * " where d.month = to_char(sysdate - interval '1' month, 'yyyy-mm')\n" +
-	 * "   and r.user_id = '$town'";
+	 * 
+	 * "select count(1), tmp.month, tmp.registdata_id, tmp.region_id\n" +
+	 * "  from (select substr(g.finish_time, 0, 7) month,\n" +
+	 * "               g.registdata_id,\n" + "               g.region_id\n" +
+	 * "          from (select to_char(v.time, 'yyyy-mm-dd') finish_time,\n" +
+	 * "                       r.registdata_id,\n" +
+	 * "                       r.region_id\n" +
+	 * "                  from sys_monthtask_execution v\n" +
+	 * "                  left join sys_registdata r on v.memberid = r.registdata_id\n"
+	 * + "                 where (to_char(v.time, 'yyyy-mm') =\n" +
+	 * "                       to_char(sysdate - interval '1' month, 'yyyy-mm'))\n"
+	 * + "                   and r.user_id like '$town%') g\n" +
+	 * "         group by g.finish_time, g.registdata_id, g.region_id) tmp\n" +
+	 * " group by tmp.month, tmp.registdata_id, tmp.region_id";
+	 * 
 	 * 
 	 */
 	public static final String lsVisitSql = "select count(1), tmp.month, tmp.registdata_id, tmp.region_id \n"
