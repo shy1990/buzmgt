@@ -21,6 +21,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.wangge.buzmgt.assess.entity.RegistData;
 
+/**月任务执行记录表
+ * @author yangqc
+ *
+ */
 @Entity
 @Table(name = "sys_monthtask_execution")
 @NamedEntityGraph(name = "monthExecution.graph", attributeNodes = @NamedAttributeNode(value = "registData", subgraph = "registData.graph"), subgraphs = {

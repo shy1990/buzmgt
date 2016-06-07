@@ -17,6 +17,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+/**月任务子表
+ * @author yangqc
+ *
+ */
 @Entity
 @Table(name = "sys_monthtask_sub")
 @NamedEntityGraph(name = "monthTaskSub.monthsd", attributeNodes = {

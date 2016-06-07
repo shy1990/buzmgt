@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <base href="<%=basePath%>" />
-<title>子任务执行详情</title>
+<title>子任务执行明细</title>
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
@@ -27,135 +27,117 @@
 	href="static/yw-team-member/ywmember.css" />
 <link rel="stylesheet" type="text/css"
 	href="static/abnormal/abnormal.css" />
-
-<link rel="stylesheet" type="text/css"
-	href="static/month-task/bootstrap-select.min.css">
-<link rel="stylesheet" type="text/css"
-	href="static/month-task/findup-month-task.css">
+<link rel="stylesheet" type="text/css" href="static/visit/visit.css" />
+<link rel="stylesheet" type="text/css" href="static/task/detail.css">
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-
-<script id="task-table-template" type="text/x-handlebars-template">
-
-	{{#if content}}
-	{{#each content}}
-							<tr>
-										<td>{{goal}}次拜访任务</td>
-											<td>{{shopName}}</td>
-											<td>已拜访：<span class="visit-num">{{done}}</span>次
-											</td>
-											<td>{{region}}</td>
-											<td><button onclick="javascript:window.location.href='/monthTask/detail?shopId={{shopId}}&month={{month}}&subTaskId={{subTaskId}}'" class="btn btn-blue btn-sm">查看</button></td>
-							</tr>
-	{{/each}}
-	{{else}}
-	<tr>
-		<td colspan="100">没有相关数据</td>
-	</tr>
-	{{/if}}
-</script>
 </head>
+
 <body>
 	<div class="content main">
 		<h4 class="page-header ">
-			<i class="ico icon-month-task"></i>子任务执行详情
+			<i class="ico icon-task-detail"></i>明细
 		</h4>
 		<div class="row">
 			<div class="col-md-9">
 				<!--box-->
-				<div>
+				<div class="visit-body box border blue">
 					<!--title-->
-					<div class="clearfix">
-						<div class="select-area fl">
-							<label>选择月份：</label>
-							<div class="search-date">
-								<div class="input-group input-group-sm">
-									<span class="input-group-addon " id="basic-addon1"><i
-										class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-										type="text" class="form-control form_datetime input-sm"
-										placeholder="请选择年-月" readonly="readonly">
-								</div>
-							</div>
-							<button type="button" class="btn btn-blue btn-sm">检索</button>
-						</div>
-						<div class="select-area fl">
-							<form class="form-horizontal" role="form">
-								<div class="clearfix">
-									<label for="basic" class="select-label">拜访次数：</label>
-									<div class="visit-times">
-										<select id="basic">
-											<option value="">全部</option>
-											<option value="20">20</option>
-											<option value="15">15</option>
-											<option value="10">10</option>
-											<option value="7">7</option>
-											<option value="4">4</option>
-										</select>
-									</div>
-									<button type="button" class="btn btn-blue btn-sm btn-move"
-										onclick="findTaskList();">检索</button>
-								</div>
-							</form>
-						</div>
+					<div class="box-title">
+						<!--区域选择按钮-->
+						<span class="">${goal}次拜访任务</span>
+						<!--/区域选择按钮-->
 					</div>
+					<!--title-->
+					<!--box-body-->
 					<div class="box-body">
+						<span class="text-blue">${shopName} 已拜访： ${done}次</span>
 						<!--列表内容-->
 						<div class="tab-content">
-							<!--油补记录-->
+							<!--业务揽收异常-->
 							<div class="tab-pane fade in active" id="box_tab1">
 								<!--table-box-->
 								<div class="table-abnormal-list table-overflow">
-									<table class="table table-hover new-table">
+									<table
+										class="table table-hover new-table abnormal-record-table">
 										<thead>
 											<tr>
-												<th>任务次数</th>
+												<th>拜访日期</th>
 												<th>商家名称</th>
-												<th>已完成拜访次数</th>
-												<th>所属区域</th>
-												<th>明细</th>
+												<th>拜访动作</th>
+												<th>拜访时间</th>
 											</tr>
 										</thead>
-										<tbody id="taskList"></tbody>
+										<c:choose>
+											<c:when test="${not empty visitList}">
+												<c:forEach var="vs" items="${visitList}">
+													<tr>
+														<td class="">${vs.day}</td>
+														<td>${vs.shopName}</td>
+														<td><span class="text-bule">${vs.action}</span></td>
+														<td>${vs.time}</td>
+													</tr>
+												</c:forEach>
+											</c:when>
+											<c:otherwise>
+												<tr>
+													<td colspan="100">没有相关任务执行</td>
+												</tr>
+											</c:otherwise>
+										</c:choose>
 									</table>
 								</div>
 								<!--table-box-->
 							</div>
-							<!--油补记录-->
+							<!--业务揽收异常-->
+
 						</div>
 						<!--列表内容-->
-						<!--分页-->
-						<div class="page-index" id="abnormalCoordPager"></div>
-						<!--分页-->
 					</div>
+					<!--box-body-->
 				</div>
 				<!--box-->
 			</div>
 			<!--col-md-9-->
 			<div class="col-md-3">
+				<!--box-->
 				<%@ include file="../kaohe/right_member_det.jsp"%>
 			</div>
-			<!--row-->
-			<!-- Bootstrap core JavaScript================================================== -->
-			<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-			<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-			<!--[if lt IE 9]>
+		</div>
+		<!--row-->
+		<!-- Bootstrap core JavaScript================================================== -->
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
     <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-			<script type="text/javascript">
-				// goal,shopName,done,region,shopId,month,
-				var parentId = "${taskId}";
-				
-			</script>
-			<script src="static/bootstrap/js/bootstrap.min.js"></script>
-			<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-			<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-			<script src="static/bootstrap/js/bootstrap-select.min.js"></script>
-			<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
-				charset="utf-8"></script>
-			<script type="text/javascript"
-				src="static/bootStrapPager/js/extendPagination.js"></script>
-			<script src="static/month-task/month_findup.js"></script>
+		<script src="static/bootstrap/js/bootstrap.min.js"></script>
+		<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+		<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+		<script src="static/yw-team-member/team-member.js"
+			type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$('body input').val('');
+			$(".form_datetime").datetimepicker({
+				format : "yyyy-mm-dd",
+				language : 'zh-CN',
+				weekStart : 1,
+				todayBtn : 1,
+				autoclose : 1,
+				todayHighlight : 1,
+				startView : 2,
+				minView : 2,
+				pickerPosition : "bottom-right",
+				forceParse : 0
+			});
+			var $_haohe_plan = $('.J_kaohebar').width();
+			var $_haohe_planw = $('.J_kaohebar_parents').width();
+			$(".J_btn").attr("disabled", 'disabled');
+			if ($_haohe_planw === $_haohe_plan) {
+				$(".J_btn").removeAttr("disabled");
+			}
+		</script>
 </body>
 
 </html>

@@ -114,10 +114,10 @@ function getObjectVal(tagid, jb) {
 	var val = 0;
 	switch (tagid) {
 	case 'sy':
-		val = lsdata["tal" + jb + "M3"];
+		val = lsdata["tal" + jb + "m3"];
 		break;
 	case 'ly':
-		val = lsdata["tal" + jb + "M1"];
+		val = lsdata["tal" + jb + "m1"];
 		break;
 	case 'bf':
 		val = lsdata["visitCount" + jb];
@@ -194,3 +194,4 @@ function cleanSelect() {
 		salemanid = null;
 	}
 }
+>>>>>>> refs/heads/yangqc0512

@@ -21,6 +21,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.wangge.buzmgt.assess.entity.RegistData;
 
+/**月任务扣罚表
+ * @author yangqc
+ *
+ */
 @Entity
 @Table(name = "sys_month_task_punish")
 public class MonthTaskPunish implements Serializable {
