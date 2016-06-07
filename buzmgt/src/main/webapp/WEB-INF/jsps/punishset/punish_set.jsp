@@ -80,13 +80,13 @@
                                 <%--<fmt:formatNumber var="c" value="${punishSet1.punishNumber*100}" pattern="#"/>--%>
                                 <%--<option>${c}</option>--%>
                             </c:if>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                            <option value="40">40</option>
-                            <option value="50">50</option>
-                            <option value="60">60</option>
-                        </select> <span class="text-gery ">%</span> <span class="text-blue-s jl-">注：</span><span
+                            <option value="0.1">0.1</option>
+                            <option value="0.2">0.2</option>
+                            <option value="0.3">0.3</option>
+                            <option value="0.4">0.4</option>
+                            <option value="0.5">0.5"</option>
+                            <option value="0.6">0.6</option>
+                        </select> <span class="text-gery "></span> <span class="text-blue-s jl-">注：</span><span
                                 class="text-gery-hs">系统默认所有区域均为改系数，自定义设置区域除外</span>
                         </div>
                         <!--设置公里系数表-->
@@ -160,18 +160,18 @@
                                                                                                  aria-describedby="basic-addon1"
                                                                                                  id="select_modify">
                                             <option></option>
-                                            <option value="10">10</option>
-                                            <option value="20">20</option>
-                                            <option value="30">30</option>
-                                            <option value="40">40</option>
-                                            <option value="50">50</option>
-                                            <option value="60">60</option>
+                                            <option value="0.1">0.1</option>
+                                            <option value="0.2">0.2</option>
+                                            <option value="0.3">0.3</option>
+                                            <option value="0.4">0.4</option>
+                                            <option value="0.5">0.5"</option>
+                                            <option value="0.6">0.6</option>
                                         </select>
                                             <!-- /btn-group -->
                                         </div>
                                     </div>
                                     <div class="col-sm-1 control-label">
-                                        <span>%</span>
+                                        <span></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -233,18 +233,18 @@
                                                                                                           class="form-control input-h"
                                                                                                           aria-describedby="basic-addon1"
                                                                                                           id="select">
-                                                <option value="10">10</option>
-                                                <option value="20">20</option>
-                                                <option value="30">30</option>
-                                                <option value="40">40</option>
-                                                <option value="50">50</option>
-                                                <option value="60">60</option>
+                                                <option value="0.1">0.1</option>
+                                                <option value="0.2">0.2</option>
+                                                <option value="0.3">0.3</option>
+                                                <option value="0.4">0.4</option>
+                                                <option value="0.5">0.5"</option>
+                                                <option value="0.6">0.6</option>
                                             </select>
                                                 <!-- /btn-group -->
                                             </div>
                                         </div>
                                         <div class="col-sm-1 control-label">
-                                            <span>%</span>
+                                            <span></span>
                                         </div>
                                     </div>
 
