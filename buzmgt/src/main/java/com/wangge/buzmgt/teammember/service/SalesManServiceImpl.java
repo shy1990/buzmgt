@@ -159,5 +159,9 @@ public  class SalesManServiceImpl implements SalesManService {
     return salesManRepository.getIdByTurename(truename);
   }
 
-  
+  /*@Override
+  public int deleteRegionById(String id) {
+    return salesManRepository.deleteRegionById(id);
+  }*/
+
 }

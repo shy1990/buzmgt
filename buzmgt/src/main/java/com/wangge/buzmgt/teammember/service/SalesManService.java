@@ -27,6 +27,6 @@ public interface SalesManService {
   
   String findByTruename(String truename);
 
-  
+//  int deleteRegionById(String id);
   
 }
