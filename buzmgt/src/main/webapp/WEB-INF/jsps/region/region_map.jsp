@@ -83,6 +83,8 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 				</div>
 			</div>
 				<!-- 创建区域  modalend -->
+				
+				
 </body>
 <script src="static/js/jquery/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src='static/js/common.js' charset="utf-8"></script>
@@ -98,14 +100,14 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 		%>
 	 	var map = new BMap.Map("allmap");
 		var name ="<%=areaname%>";
-		
+		var polygon=null;
 		<%
 		if(null!=request.getAttribute("pcoordinates")){%>
 			<%
 			String pcoordinates=request.getAttribute("pcoordinates").toString();
 			String[] listCoordinates=pcoordinates.split("=");
 			 %> 
-			 			var polygon = new BMap.Polygon([
+			 			 polygon = new BMap.Polygon([
 			 	<%
 							for(int x=0;x<listCoordinates.length;x++){
 								String points=listCoordinates[x];
@@ -140,10 +142,10 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 			var count = rs.boundaries.length; //行政区域的点有多少个
 	
 			for(var i = 0; i < count; i++){
-			var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
-			ply.setStrokeWeight(3);
-			map.addOverlay(ply); //添加覆盖物
-			map.setViewport(ply.getPath()); //调整视野 
+			polygon = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+			polygon.setStrokeWeight(3);
+			map.addOverlay(polygon); //添加覆盖物
+			map.setViewport(polygon.getPath()); //调整视野 
 			} 
 			
 			}); 
@@ -241,9 +243,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	   overlays.push(e.overlay);
        pointStr=JSON.stringify(e.overlay.getPath());
        jQuery.noConflict();
-      
-   	   
-});
+	});
 
    		
    		//中心点坐标
@@ -261,9 +261,87 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	    	   	         return ($(this).width() / 7 );  
 	    	   	       }
 	    	   	    });
+	    	   
 	   		})
+	   		
+	   		
+	   		
 		});
-   
+   		
+   		
+   		var updateFlag=false;
+	   	 $("a[title='编辑']").click(function(){
+	 		//var id = $("#regionId").val();
+	//  		URL='/region/initRegion';
+	//  		 location.replace(URL)   
+	 		  polygon.enableEditing();
+	 		 updateFlag=true;
+	 	 }) 
+   		
+   		
+   		
+	   		//更改区域坐标
+	   		map.addEventListener("dblclick",function(e){
+				//alert(e.point.lng + "," + e.point.lat);
+				alert(1111);
+				polygon.disableEditing();
+				
+				 //实例化鼠标绘制工具
+				   var drawingManager = new BMapLib.DrawingManager(map, {
+				       isOpen: false, //是否开启绘制模式
+				       enableDrawingTool: true, //是否显示工具栏
+				       drawingToolOptions: {
+				           anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+				           offset: new BMap.Size(5, 5), //偏离值
+				       },
+				       circleOptions: styleOptions, //圆的样式
+				       polylineOptions: styleOptions, //线的样式
+				       polygonOptions: styleOptions, //多边形的样式
+				       rectangleOptions: styleOptions //矩形的样式
+				   });  
+				
+				   drawingManager.addEventListener("polygoncomplete", function(e) {
+			   		    alert(e.drawingMode);
+			   		    alert(e.overlay);
+			   		    alert(e.calculate);
+			   		    alert(e.label);
+			   		});
+				
+				
+				
+				centerPoint=e.point.lng + "-" + e.point.lat;
+				pointStr=JSON.stringify(polygon.getPath());
+				 var parentid="<%=parentid%>";
+			 	  var name=$("#regionName").val();
+			   	  $.ajax({
+			 		    url:'region/updateYewuData',
+			 		    data:{    
+			 		    		points:pointStr,
+			 		    		parentid:parentid,
+			 		    		centerPoint:centerPoint
+			 		    },    
+			 		    type:'post',    
+			 		    /* cache:false,
+			 		    dataType:'json',  */   
+			 		    success:function(data) {
+			 		    	$('#exampleModal').modal('hide');
+			 		        if(data===true){
+			 		        	BootstrapDialog.alert('保存区域成功');
+			 		        	setTimeout(function(){
+			 		        		location.reload()
+			 		        		},4000);
+			 		           return;
+			 		        }    
+			 		     },    
+			 		     error : function() {    
+			 		          // view("异常！");
+			 		         BootstrapDialog.alert('请求异常!');
+			 		     }    
+			 		});   
+				
+				
+			});
+   		
    
    
 	   function onConfirm(){
@@ -308,10 +386,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 	  $("a[title='返回']").click(function(){
 		//var id = $("#regionId").val();
 		URL='/region/initRegion';
-		 location.replace(URL)   
-
-		
+		location.replace(URL)   
 	 }) 
-   
 </script>
 </html>

@@ -265,6 +265,30 @@ public class RegionController {
 	
 	
 	
+	
+	@RequestMapping(value = "/updateYewuData", method = RequestMethod.POST)
+  @ResponseBody
+  public boolean updateYewuData(String  points,String parentid,String name,String centerPoint) {
+    JSONArray jsonArr = JSONArray .fromObject(points);
+    StringBuffer pointbuf=new StringBuffer();
+    for(int i=0;i<jsonArr.size();i++){
+      JSONObject jsonObject = JSONObject .fromObject(jsonArr.get(i));
+      pointbuf.append(jsonObject.get("lng")).append("-").append(jsonObject.get("lat")).append("=");
+    }
+    Region region=regionService.findListRegionbyid(parentid);
+//    Long maxid=getMaxId(parentid);
+//    Region entity=new Region(String.valueOf(maxid+1),name,RegionUtil.getTYpe(region));
+//    entity.setCoordinates(pointbuf.toString());
+//    entity.setParent(regionService.findListRegionbyid(parentid));
+//    entity.setCenterPoint(centerPoint);
+    region.setCoordinates(pointbuf.toString());
+    region.setCenterPoint(centerPoint);
+    
+    regionService.saveRegion(region);
+    return true;
+    
+  }
+	
 	/**
 	 * 
 	* @Title: getMaxId 

@@ -4,7 +4,9 @@ BMAP_DRAWING_POLYLINE = "polyline",
 BMAP_DRAWING_CIRCLE = "circle",
 BMAP_DRAWING_RECTANGLE = "rectangle",
 BMAP_DRAWING_POLYGON = "polygon"; 
-BMAP_DRAWING_RETURN = "return";(function() {
+BMAP_DRAWING_RETURN = "return";
+BMAP_DRAWING_EDIT = "edit";
+(function() {
 	var b = b || {
 		guid: "$BAIDU$"
 	}; (function() {
@@ -345,7 +347,7 @@ BMAP_DRAWING_RETURN = "return";(function() {
 				this._bindRectangle();
 				break;
 			case BMAP_DRAWING_RETURN:
-				this._bindReturn();
+				//this._bindReturn();
 				break
 			}
 		}
@@ -360,6 +362,7 @@ BMAP_DRAWING_RETURN = "return";(function() {
 		}
 		if (this._drawingTool) {
 			this._drawingTool.setStyleByDrawingMode("hander")
+			this._drawingTool.setStyleByDrawingMode("edit")
 		}
 	};
 	d.prototype._bindMarker = function() {
@@ -584,7 +587,7 @@ BMAP_DRAWING_RETURN = "return";(function() {
 		this._map = i;
 		var j = this.container = document.createElement("div");
 		var g = this._map.getSize();
-		j.style.cssText = "position:absolute;background:url(about:blank);cursor:crosshair;width:" + g.width + "px;height:" + g.height + "px";
+		j.style.cssText = "position:absolute;background:url(about:blank);cursor:;width:" + g.width + "px;height:" + g.height + "px";
 		this._map.addEventListener("resize",
 		function(k) {
 			h._adjustSize(k.size)
@@ -774,12 +777,14 @@ BMAP_DRAWING_RETURN = "return";(function() {
 		h[BMAP_DRAWING_POLYLINE] = "画折线";
 		h[BMAP_DRAWING_POLYGON] = "画多边形";
 		h[BMAP_DRAWING_RECTANGLE] = "画矩形";
+		h["edit"] = "编辑";
 		h["return"] = "返回";
 		var n = function(o, i) {
 			return '<a class="' + o + '" drawingType="' + i + '" href="javascript:void(0)" title="' + h[i] + '" onfocus="this.blur()"></a>'
 		};
 		var k = [];
 		k.push(n("BMapLib_box BMapLib_hander", "hander"));
+		k.push(n("BMapLib_box BMapLib_edit", "edit"));
 		for (var j = 0,
 		g = this.drawingModes.length; j < g; j++) {
 			var l = "BMapLib_box BMapLib_" + this.drawingModes[j];
@@ -829,7 +834,7 @@ BMAP_DRAWING_RETURN = "return";(function() {
 	a.prototype._bindEventByDraingMode = function(g) {
 		var i = this;
 		var h = this.drawingManager;
-		if (g == "hander") {
+		if (g == "hander" || g == "edit") {
 			h.close();
 			h._map.enableDoubleClickZoom()
 		} else {
