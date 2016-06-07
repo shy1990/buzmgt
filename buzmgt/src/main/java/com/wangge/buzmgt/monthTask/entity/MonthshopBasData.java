@@ -2,7 +2,6 @@ package com.wangge.buzmgt.monthTask.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,6 +19,12 @@ import org.hibernate.annotations.GenericGenerator;
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
+/**
+ * 月任务店铺历史记录表
+ * 
+ * @author yangqc
+ *
+ */
 @Entity
 @Table(name = "sys_Monthshop_Basdata")
 
@@ -58,28 +63,12 @@ public class MonthshopBasData implements Serializable {
 	private MonthTaskSub monthTaskSub;
 	private int used;
 
-	public MonthTaskSub getMonthTaskSub() {
-		return monthTaskSub;
-	}
-
-	public void setMonthTaskSub(MonthTaskSub monthTaskSub) {
-		this.monthTaskSub = monthTaskSub;
-	}
-
 	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public RegistData getRegistData() {
-		return registData;
-	}
-
-	public void setRegistData(RegistData registData) {
-		this.registData = registData;
 	}
 
 	public String getRegionId() {
@@ -122,24 +111,28 @@ public class MonthshopBasData implements Serializable {
 		this.visitCount = visitCount;
 	}
 
-	// public String getSalemanId() {
-	// return salemanId;
-	// }
-	//
-	// public void setSalemanId(String salemanId) {
-	// this.salemanId = salemanId;
-	// }
-	//
-	// public String getSalemanName() {
-	// return salemanName;
-	// }
-	//
-	// public void setSalemanName(String salemanName) {
-	// this.salemanName = salemanName;
-	// }
+	public RegistData getRegistData() {
+		return registData;
+	}
 
-	public MonthshopBasData() {
-		super();
+	public void setRegistData(RegistData registData) {
+		this.registData = registData;
+	}
+
+	public SalesMan getSalesman() {
+		return salesman;
+	}
+
+	public void setSalesman(SalesMan salesman) {
+		this.salesman = salesman;
+	}
+
+	public MonthTaskSub getMonthTaskSub() {
+		return monthTaskSub;
+	}
+
+	public void setMonthTaskSub(MonthTaskSub monthTaskSub) {
+		this.monthTaskSub = monthTaskSub;
 	}
 
 	public int getUsed() {
@@ -149,13 +142,9 @@ public class MonthshopBasData implements Serializable {
 	public void setUsed(int used) {
 		this.used = used;
 	}
-
-	public SalesMan getSalesman() {
-		return salesman;
-	}
-
-	public void setSalesman(SalesMan salesman) {
-		this.salesman = salesman;
+	
+	public MonthshopBasData() {
+		super();
 	}
 
 	public MonthshopBasData(String regionId, int lastmonthcount, int monthAvg, String month, int visitCount,

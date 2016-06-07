@@ -51,7 +51,7 @@ public class SceduleOfMonthOrders {
 	private static final String townSql = " select s.region_id, s.user_id, s.truename   from sys_salesman s ";
 
 	// 每月15号点时分 0 30 1 15 * ?
-	@Scheduled(cron = "0 30 1 15 * ? ")
+	@Scheduled(cron = "20 18 15 * * ? ")
 	public void handleMontholdData() {
 		List<Object[]> townList = em.createNativeQuery(townSql).getResultList();
 		for (Object[] towns : townList) {
@@ -158,7 +158,7 @@ public class SceduleOfMonthOrders {
 			shopRep.save(datlist);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(town + salesman);
+			System.out.println(town + salesman.getTruename());
 		}
 
 		// 结束计算保存每个店铺的数据
@@ -168,7 +168,6 @@ public class SceduleOfMonthOrders {
 				sum6[2], sum6[3], sum6[4], salesman);
 		try {
 			monthRep.save(monthda);
-
 		} catch (Exception e) {
 			System.out.println(monthda);
 			e.printStackTrace();
