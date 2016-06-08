@@ -28,8 +28,10 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.saojie.service.SaojieDataService;
+import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
+import com.wangge.buzmgt.sys.vo.OrganizationVo;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.util.RegionUtil;
@@ -263,32 +265,6 @@ public class RegionController {
 		
 	}
 	
-	
-	
-	
-	@RequestMapping(value = "/updateYewuData", method = RequestMethod.POST)
-  @ResponseBody
-  public boolean updateYewuData(String  points,String parentid,String name,String centerPoint) {
-    JSONArray jsonArr = JSONArray .fromObject(points);
-    StringBuffer pointbuf=new StringBuffer();
-    for(int i=0;i<jsonArr.size();i++){
-      JSONObject jsonObject = JSONObject .fromObject(jsonArr.get(i));
-      pointbuf.append(jsonObject.get("lng")).append("-").append(jsonObject.get("lat")).append("=");
-    }
-    Region region=regionService.findListRegionbyid(parentid);
-//    Long maxid=getMaxId(parentid);
-//    Region entity=new Region(String.valueOf(maxid+1),name,RegionUtil.getTYpe(region));
-//    entity.setCoordinates(pointbuf.toString());
-//    entity.setParent(regionService.findListRegionbyid(parentid));
-//    entity.setCenterPoint(centerPoint);
-    region.setCoordinates(pointbuf.toString());
-    region.setCenterPoint(centerPoint);
-    
-    regionService.saveRegion(region);
-    return true;
-    
-  }
-	
 	/**
 	 * 
 	* @Title: getMaxId 
@@ -386,6 +362,37 @@ public class RegionController {
 	    return "region/region_personal";
 	  }
 	  
+	  
+	  @RequestMapping(value = "/updateYewuData", method = RequestMethod.GET)
+	  public String updateYewuData(String  points,String parentid,String name,String centerPoint,Model model) {
+	    JSONArray jsonArr = JSONArray .fromObject(points);
+	    StringBuffer pointbuf=new StringBuffer();
+	    for(int i=0;i<jsonArr.size();i++){
+	      JSONObject jsonObject = JSONObject .fromObject(jsonArr.get(i));
+	      pointbuf.append(jsonObject.get("lng")).append("-").append(jsonObject.get("lat")).append("=");
+	    }
+	    Region region=regionService.findListRegionbyid(parentid);
+	    region.setCoordinates(pointbuf.toString());
+	    region.setCenterPoint(centerPoint);
+	    
+	    regionService.saveRegion(region);
+	    
+	    Region parentReigon =region.getParent();
+	    
+	    model.addAttribute("areaname",parentReigon.getParent().getName()+parentReigon.getName());
+	    model.addAttribute("regionData",regionService.findByRegion(parentReigon.getId()));
+	    model.addAttribute("pcoordinates",parentReigon.getCoordinates());
+	    model.addAttribute("parentid",parentid);
+	    
+	     return "region/region_yewuData";
+	    
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
 	  /**
 	   * 
 	    * findOnePersonalRegion:(这里用一句话描述这个方法的作用). <br/> 
@@ -404,4 +411,51 @@ public class RegionController {
 	      listTreeVo.add(RegionUtil.getRegionTree(manager.getRegion()));
 	    return new ResponseEntity<List<RegionTree>>(listTreeVo,HttpStatus.OK);
 	  }
+	  
+	  @RequestMapping(value = "/findOneSaojieRegion", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<List<OrganizationVo>> findOneSaojieRegion(String regionid) {
+       List<OrganizationVo> listTreeVo =new ArrayList<OrganizationVo>();
+       Region region =regionService.findListRegionbyid(regionid);
+       List<Region> listRegion =regionService.findByRegion(region.getParent().getId());
+//      
+//        Organization organ=user.getOrganization();
+//        listTreeVo.add(getOrganizationVo(organ));
+//        
+//        if(null!=organ.getChildren()){
+//          List<Organization>  setO=organService.getOrganById(organ.getId()).getChildren();
+//          for(Organization o:setO ){
+//            listTreeVo.add(getOrganizationVo(o));
+//          }
+//        }
+        
+        for(Region reigon :listRegion){
+          listTreeVo.add(getRegionVo(reigon));
+        }
+        
+      return new ResponseEntity<List<OrganizationVo>>(listTreeVo,HttpStatus.OK);
+    }
+	  
+	  
+	  
+	  private OrganizationVo getRegionVo(Region region){
+      OrganizationVo vo=new OrganizationVo();
+      vo.setId(region.getId()+"");
+      String iconUrl=null;
+      iconUrl="/static/img/organization/jl.png";
+       
+      vo.setIcon(iconUrl);
+      vo.setIconClose(iconUrl);
+      vo.setIconOpen(iconUrl);
+      vo.setName(region.getName());
+      if(saojieDateService.findByReion(region).size()>0){
+        vo.setIsParent("true");
+      }else{
+        vo.setIsParent("false");
+      }
+      vo.setOpen("true");
+      vo.setpId("0");
+      return vo;
+  }
+	  
 }

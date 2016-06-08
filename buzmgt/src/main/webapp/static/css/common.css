@@ -248,6 +248,12 @@ button:active {
 	background: url(../img/icon/team-member/list/tjcy_tb.png) no-repeat;
 }
 
+
+.icon-update-saojiedata {
+	background: url(../img/icon/team-member/list/qxgl.png) no-repeat;
+}
+
+
 .icon-list {
 	background: url(../img/icon/saojie/det/liebiao.png) no-repeat;
 	top: 5px;

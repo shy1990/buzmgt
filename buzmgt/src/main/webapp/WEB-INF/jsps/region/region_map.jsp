@@ -31,8 +31,6 @@
 <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
 <link rel="stylesheet" type="text/css" href="static/css/region/purview-region-setting.css" />
 <link rel="stylesheet" type="text/css" href="static/bootstrap/css/bootstrap-dialog.css" />
-<link rel="stylesheet" type="text/css" href="static/css/alert.css" />
-<script type="text/javascript" src="static/js/alert.js"></script>
 <script type="text/javascript" src="static/bootstrap/js/bootstrap-dialog.js"></script>
 <style>
 .top-titile{
@@ -123,7 +121,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 				 		  		%>
 				 <%
 							}%>
-							], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
+							], {strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
 			 				map.addOverlay(polygon);
 							<%
 								String jlng=listCoordinates[0].split("-")[0];
@@ -142,7 +140,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 			var count = rs.boundaries.length; //行政区域的点有多少个
 	
 			for(var i = 0; i < count; i++){
-			polygon = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+			polygon = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "blue", fillColor: "red", fillOpacity: 0.3}); //建立多边形覆盖物
 			polygon.setStrokeWeight(3);
 			map.addOverlay(polygon); //添加覆盖物
 			map.setViewport(polygon.getPath()); //调整视野 
@@ -281,63 +279,47 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
    		
    		
 	   		//更改区域坐标
-	   		map.addEventListener("dblclick",function(e){
+	   		polygon.addEventListener("dblclick",function(e){
 				//alert(e.point.lng + "," + e.point.lat);
-				alert(1111);
 				polygon.disableEditing();
-				
-				 //实例化鼠标绘制工具
-				   var drawingManager = new BMapLib.DrawingManager(map, {
-				       isOpen: false, //是否开启绘制模式
-				       enableDrawingTool: true, //是否显示工具栏
-				       drawingToolOptions: {
-				           anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
-				           offset: new BMap.Size(5, 5), //偏离值
-				       },
-				       circleOptions: styleOptions, //圆的样式
-				       polylineOptions: styleOptions, //线的样式
-				       polygonOptions: styleOptions, //多边形的样式
-				       rectangleOptions: styleOptions //矩形的样式
-				   });  
-				
-				   drawingManager.addEventListener("polygoncomplete", function(e) {
-			   		    alert(e.drawingMode);
-			   		    alert(e.overlay);
-			   		    alert(e.calculate);
-			   		    alert(e.label);
-			   		});
-				
-				
 				
 				centerPoint=e.point.lng + "-" + e.point.lat;
 				pointStr=JSON.stringify(polygon.getPath());
 				 var parentid="<%=parentid%>";
 			 	  var name=$("#regionName").val();
-			   	  $.ajax({
-			 		    url:'region/updateYewuData',
-			 		    data:{    
-			 		    		points:pointStr,
-			 		    		parentid:parentid,
-			 		    		centerPoint:centerPoint
-			 		    },    
-			 		    type:'post',    
-			 		    /* cache:false,
-			 		    dataType:'json',  */   
-			 		    success:function(data) {
-			 		    	$('#exampleModal').modal('hide');
-			 		        if(data===true){
-			 		        	BootstrapDialog.alert('保存区域成功');
-			 		        	setTimeout(function(){
-			 		        		location.reload()
-			 		        		},4000);
-			 		           return;
-			 		        }    
-			 		     },    
-			 		     error : function() {    
-			 		          // view("异常！");
-			 		         BootstrapDialog.alert('请求异常!');
-			 		     }    
-			 		});   
+			 	  
+			 	  
+			 	 URL='/region/updateYewuData?points='+pointStr+'&parentid='+parentid+'&centerPoint='+centerPoint;
+				 location.replace(URL)   
+			 	  
+			 	  
+			 	  
+			 	  
+// 			   	  $.ajax({
+// 			 		    url:'region/updateYewuData',
+// 			 		    data:{    
+// 			 		    		points:pointStr,
+// 			 		    		parentid:parentid,
+// 			 		    		centerPoint:centerPoint
+// 			 		    },    
+// 			 		    type:'post',    
+// 			 		    /* cache:false,
+// 			 		    dataType:'json',  */   
+// 			 		    success:function(data) {
+// 			 		    	$('#exampleModal').modal('hide');
+// 			 		        if(data===true){
+// 			 		        	BootstrapDialog.alert('保存区域成功');
+// 			 		        	setTimeout(function(){
+// 			 		        		location.reload()
+// 			 		        		},4000);
+// 			 		           return;
+// 			 		        }    
+// 			 		     },    
+// 			 		     error : function() {    
+// 			 		          // view("异常！");
+// 			 		         BootstrapDialog.alert('请求异常!');
+// 			 		     }    
+// 			 		});   
 				
 				
 			});
