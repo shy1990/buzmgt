@@ -658,13 +658,13 @@ a:focus .kucun{
 .menu-second a:focus .renwu{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_rw2.png) no-repeat;
 }
-/* 签收记录 */
-.qianshouyichang{
+/* 异常签收 */
+.yichangqianshou{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_qsjl1.png) no-repeat;
 }
-.menu-second .active .qianshouyichang,
-.menu-second a:hover .qianshouyichang,
-.menu-second a:focus .qianshouyichang{
+.menu-second .active .yichangqianshou,
+.menu-second a:hover .yichangqianshou,
+.menu-second a:focus .yichangqianshou{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_qsjl2.png) no-repeat;
 }
 /* 调价申请 */
@@ -761,7 +761,7 @@ a:focus .kucun{
 }
 /* 关联审核 */
 .guanlianshenhe{
-	background: url(../img/icon/left-mean/khmanage/khgl_glkh1.png.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_glkh1.png) no-repeat;
 }
 .menu-second .active .guanlianshenhe,
 .menu-second a:hover .guanlianshenhe,
@@ -780,12 +780,12 @@ a:focus .kucun{
 	background: url(../img/icon/left-mean/statistics/tj_sjfx2.png) no-repeat;
 }
 /* 产品分析 */
-.chanpinfenxi{
+.liushuidanhao{
 	background: url(../img/icon/left-mean/statistics/tj_cpfx1.png) no-repeat;
 }
-.menu-second .active .chanpinfenxi,
-.menu-second a:hover .chanpinfenxi,
-.menu-second a:focus .chanpinfenxi{
+.menu-second .active .liushuidanhao,
+.menu-second a:hover .liushuidanhao,
+.menu-second a:focus .liushuidanhao{
 	background: url(../img/icon/left-mean/statistics/tj_cpfx2.png) no-repeat;
 }
 /*============end 统计================*/
