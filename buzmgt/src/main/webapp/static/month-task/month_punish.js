@@ -24,7 +24,7 @@ function findTaskList(page) {
 				oilCostPaging(orderData);
 			}
 		},
-		error : function() {
+		error : function(data) {
 			alert("系统异常，请稍后重试！");
 		}
 	})
@@ -127,12 +127,17 @@ function oilForm(km_ratio, qy) {
 		url : 'monthTask/punish',// 添加公里系数设置区域
 		type : 'post',
 		data : newPunish,
+		dataType : "json",
 		success : function(result) {
 			alert("已成功添加");
 			location.href = '/monthTask/punish';
 		},
-		error : function() {
-			alert("系统异常，请稍后重试！");
+		error : function(data) {
+			if (500 == data.status) {
+				alert("系统异常，请稍后重试！");
+			} else {
+				location.href = '/monthTask/punish';
+			}
 		}
 	});
 

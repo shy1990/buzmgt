@@ -53,7 +53,7 @@
 			<div class="ratio-box-dd">
 				<span class="label  label-blue">{{addOne @index}} </span> <span
 					class="text-black jll">{{regionName}} </span> <a class="text-redd jll"
-					href="" data-toggle="modal" data-target=""> {{gt rate 10}} </a> <a
+					href="" data-toggle="modal" data-target=""> {{rate}} </a> <a
 					class="text-blue-s jll"  data-toggle="modal"
 					 onclick="modify('{{id}}','{{rate}}')">修改</a>
  				<a class="text-blue-s jll" data-toggle="modal" onclick="deletePunish('{{id}}')">删除</a>
