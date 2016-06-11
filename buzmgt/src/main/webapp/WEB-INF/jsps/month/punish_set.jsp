@@ -77,7 +77,6 @@
 				<!--公里系数表头-->
 				<div class="text-tx row-d">
 					<span class="text-gery">缺少一次拜访扣罚：</span> <select id="defaultRate">
-						<option value="${punishObj.rate}">${punishObj.rate}</option>
 						<option value="20">20</option>
 						<option value="30">30</option>
 						<option value="40">40</option>
