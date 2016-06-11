@@ -105,13 +105,12 @@ function addCustom(o) {
 			oilForm(km_ratio, qy);// 执行添加
 		} else {
 			alert("请选择县级区域!!");
+			location.href = '/monthTask/punish';
 		}
-
 	} else {
 		alert("请选择县级区域!!");
+		location.href = '/monthTask/punish';
 	}
-
-	location.href = '/monthTask/punish';
 
 }
 /*
