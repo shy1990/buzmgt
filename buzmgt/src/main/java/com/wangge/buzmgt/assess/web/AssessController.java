@@ -384,5 +384,33 @@ public class AssessController {
         return objecArraytList.toString().substring(1, objecArraytList.toString().length()-1);
       }
       
+      /**
+       * 跳转到考核次数设置页面
+       *
+       * @return
+       */
+      @RequestMapping(value = "/assessTimeList", method = RequestMethod.GET)
+      public String toassessTimeList() {
+          return "kaohe/check_time";
+      }
+
+      /**
+       * 分页查询
+       * 用ResponseEntity<JsonResponse>返回的的方式
+       * resetful方式
+       *
+       * @return
+       */
+      /*@RequestMapping(value = "/salesmanDatas", method = RequestMethod.GET)
+      public
+      @ResponseBody
+      ResponseEntity<JsonResponse> getEntryByParams1(
+              @RequestParam(value = "page", defaultValue = "0") Integer page,
+              @RequestParam(value = "size", defaultValue = "3") Integer size,
+              String name) {
+          Sort sort = new Sort(Direction.DESC, "id");
+          Pageable pageable = new PageRequest(page, size, sort);
+          return new ResponseEntity<JsonResponse>(new JsonResponse(service.findAll(name, pageable)), HttpStatus.OK);
+      }*/
       
 }
