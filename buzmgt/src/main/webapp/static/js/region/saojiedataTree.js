@@ -5,7 +5,7 @@ var rMenu;
 var setting = {
 	async : {
 		enable : true,
-		url : "organization/findOrganizationByid",
+		url : "findSaojieDataByid",
 		autoParam : [ "id" ]
 	},
 	check : {
@@ -29,7 +29,7 @@ var setting = {
 	},
 	view : {
 		expandSpeed : "",
-		addHoverDom : addHoverDom,
+		//addHoverDom : addHoverDom,
 		removeHoverDom : removeHoverDom,
 		fontCss : {'font-weight': "bolder"}
 		//addDiyDom : addDiyDom
@@ -110,13 +110,13 @@ function beforeExpand(treeId, treeNode) {
  * @return
  */
 function onAsyncSuccess(event, treeId, treeNode, msg) {
-	if (!msg || msg.length == 0) {
-		return;
-	}
-	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-	treeNode.icon = "";
-	zTree.updateNode(treeNode);// 更新树结构
-	zTree.selectNode(treeNode.children[0]);// 设置为第一个子节点为选中状态
+//	if (!msg || msg.length == 0) {
+//		return;
+//	}
+//	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+//	treeNode.icon = "";
+//	zTree.updateNode(treeNode);// 更新树结构
+//	zTree.selectNode(treeNode.children[0]);// 设置为第一个子节点为选中状态
 }
 function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus,
 		errorThrown) {
@@ -256,7 +256,7 @@ function zTreeOnRename(event, treeId, treeNode, isCancel) {
  * @return
  */
 function showRemoveBtn(treeId, treeNode) {
-	return true;
+	return false;
 }
 /**
  * 功能：设置是否显示编辑名称按钮。[setting.edit.enable = true 时生效]
@@ -267,7 +267,7 @@ function showRemoveBtn(treeId, treeNode) {
  * @return
  */
 function showRenameBtn(treeId, treeNode) {
-	return true;
+	return false;
 }
 
 
@@ -458,6 +458,7 @@ function beforeDragOpen(treeId, treeNode) {
 }
 
 function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
+	alert(treeNodes[0].id+"**"+ treeNodes[0].pId);
 	$.ajax({
 		async : true, // 是否异步
 		cache : false, // 是否使用缓存
@@ -467,7 +468,7 @@ function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
 			pid : treeNodes[0].pId,
 		},
 		dataType : "text", // 数据传输格式
-		url : "region/dragRegion" // 请求链接
+		url : "dragSaojieData" // 请求链接
 	});
 }
 

@@ -280,5 +280,11 @@ public class AssessServiceImpl implements AssessService {
   public Assess findByStageAndSalesman(String stage,String userId) {
     return assessRepository.findByStageAndSalesman(stage,userId);
   }
+
+  @Override
+  public void saveRegistData(RegistData registData) {
+    // TODO Auto-generated method stub
+    rdr.save(registData);
+  }
 	
 }

@@ -27,4 +27,7 @@ public interface AssessService {
   RegistData findRegistData(Long registId);
   
   Assess findByStageAndSalesman(String stage,String userId);
+  
+  
+  void saveRegistData(RegistData registData);
 }

@@ -22,4 +22,5 @@ public interface SaojieDataRepository extends JpaRepository<SaojieData, Long>{
   List<SaojieData> findAll(Specification<SaojieData> specification);
   
   Page<SaojieData> findAll(Specification<SaojieData> spec, Pageable pageable);
+  
 }
