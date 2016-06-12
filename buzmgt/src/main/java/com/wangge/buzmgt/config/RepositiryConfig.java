@@ -15,10 +15,9 @@ import com.wangge.buzmgt.monthTask.entity.MonthTask;
 public class RepositiryConfig extends RepositoryRestConfigurerAdapter {
 	@Override
 	public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-		config.exposeIdsFor(MonthOdersData.class,MonthTask.class);
-		config.findRepositoryMappingForPath("**/monthTask/*");
+		config.exposeIdsFor(MonthOdersData.class, MonthTask.class);
 	}
-	
+
 	@Bean
 	DataEventHandler taskdataEventHandler() {
 		return new DataEventHandler();
