@@ -188,8 +188,14 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 			for (Integer i : levels) {
 				Map<String, Object> datamap = new HashMap<String, Object>();
 				datamap.put("level", i + "");
-				datamap.put("goal", getReflectInt(mclass.getDeclaredMethod("getTal" + i + "goal").invoke(mt)));
-				datamap.put("set", getReflectInt(mclass.getDeclaredMethod("getTal" + i + "set").invoke(mt)));
+				if (null == flag) {
+					datamap.put("goal", getReflectInt(mclass.getDeclaredMethod("getTal" + i + "goal").invoke(mt)));
+					datamap.put("set", getReflectInt(mclass.getDeclaredMethod("getTal" + i + "set").invoke(mt)));
+				} else {
+					datamap.put("goal", getReflectInt(mclass.getDeclaredMethod("getTal" + i + "goal").invoke(mt)));
+					datamap.put("done", getReflectInt(mclass.getDeclaredMethod("getTal" + i + "done").invoke(mt)));
+
+				}
 				dList.add(datamap);
 			}
 			taskMap.put("detail", dList);

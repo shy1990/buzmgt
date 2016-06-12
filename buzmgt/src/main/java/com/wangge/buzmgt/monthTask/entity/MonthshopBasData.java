@@ -46,7 +46,6 @@ public class MonthshopBasData implements Serializable {
 	private long id;
 	// 镇级区域
 	private String regionId;
-	// private String shopid;
 	private int lastmonthcount;
 	private int monthAvg;
 	private String month;
