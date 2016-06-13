@@ -106,6 +106,7 @@ public class BankTradeServiceImpl implements BankTradeService {
         bt.setCardNo(content[3]);
         bt.setBankName(content[4]);
         bt.setImportDate(date);
+        bt.setIsArchive(0);
 
         // 核对业务员打款基表进行核对，添加userId
         setUserIdForBankTrade(bt);
