@@ -18,7 +18,33 @@
     <link href="static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="static/css/common.css">
     <link rel="stylesheet" type="text/css" href="static/kaohe/income-cash.css">
-    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var base = "<%=basePath%>";
+	var number = '';//当前页数（从零开始）
+	var totalPages = '';//总页数(个数)
+	var searchData = {
+		"size" : "",
+		"page" : "",
+	}
+	var totalElements;//总条数
+</script>
+<script id="table-template" type="text/x-handlebars-template">
+{{#each content}}
+	<tr>
+       <td>山东省</td>
+       <td>10次</td>
+       <td>2016.06.01</td>
+       <td>
+        <button class="btn btn-blue btn-bn-style">查看更多</button>
+       </td>
+   </tr>
+{{else}}
+<div style="text-align: center;">
+	<tr style="text-align: center;">没有相关数据!</tr>
+</div>
+{{/each}}
+</script>
 </head>
 <body>
 <div class="content main">
@@ -28,10 +54,10 @@
     <!---选择地区-->
     <div>
         <span class="text-gray">选择大区：</span>
-        <select class="box-sty" >
-            <option>山东省</option>
-            <option>上海市</option>
-            <option>北京市</option>
+        <select class="box-sty" id="regionId">
+            <c:forEach var="region" items="${regionList}" varStatus="s">
+				<option value="${region.id}" >${region.name}</option>
+			</c:forEach>
         </select>
     </div>
     <!---选择地区-->
@@ -40,7 +66,7 @@
     <div class="box-szcs">
         <span class="text-gray">设置次数：</span>
         <input class="box-cs" type="text" placeholder="5"> &nbsp;次
-        <button class="btn btn-blue btn-b-style">确定</button>
+        <button class="btn btn-blue btn-b-style" onclick="saveTimes();">确定</button>
     </div>
     <!---设置次数-->
 
@@ -59,80 +85,11 @@
                         <th>操作</th>
                     </tr>
                     </thead>
-                    <tr>
-                        <td>山东省</td>
-                        <td>10次</td>
-                        <td>2016.06.01</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看更多</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>山东省</td>
-                        <td>10次</td>
-                        <td>2016.06.01</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看更多</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>山东省</td>
-                        <td>10次</td>
-                        <td>2016.06.01</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style ">查看更多</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>山东省</td>
-                        <td>10次</td>
-                        <td>2016.06.01</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style ">查看更多</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>山东省</td>
-                        <td>10次</td>
-                        <td>2016.06.01</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style ">查看更多</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>山东省</td>
-                        <td>10次</td>
-                        <td>2016.06.01</td>
-                        <td>
-                            <button class="btn btn-blue  btn-bn-style">查看更多</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>山东省</td>
-                        <td>10次</td>
-                        <td>2016.06.01</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看更多</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>山东省</td>
-                        <td>10次</td>
-                        <td>2016.06.01</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看更多</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>山东省</td>
-                        <td>10次</td>
-                        <td>2016.06.01</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看更多</button>
-                        </td>
-                    </tr>
+                    <tbody id="tableList">
 
+					</tbody>
                 </table>
+                <div id="callBackPager"></div>
             </div>
             <!--table-box-->
         </div>
@@ -205,63 +162,8 @@
 <script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="<%=basePath%>static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript">
-    $('body input').val('');
-    $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
-        language: 'zh-CN',
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        pickerPosition: "bottom-right",
-        forceParse: 0
-    });
-
-    function select() {
-        var $listcon = $('.abnormal-table tbody tr'),
-                $unpay = $('.icon-tag-wfk'),
-                $payed = $('.payed'),
-                $timeout = $('.time-out'),
-                $paystatus = $('.J-pay-staus');
-        $paystatus.delegate('li', 'click', function () {
-            var $target = $(this);
-            $paystatus.children('li').removeClass('pay-status-active');
-            $target.addClass('pay-status-active');
-            $listcon.hide();
-            switch ($target.data('item')) {
-                case 'all':
-                    $listcon.show();
-                    break;
-                case 'unpay':
-                    for (var i = 0; i < $unpay.length; i++) {
-                        $($unpay[i]).parents('tr').show();
-                    }
-                    ;
-                    break;
-                case 'timeout':
-                    for (var i = 0; i < $timeout.length; i++) {
-                        $($timeout[i]).parents('tr').show();
-                    }
-                    ;
-                    break;
-                case 'payed':
-                    for (var i = 0; i < $payed.length; i++) {
-                        $($payed[i]).parents('tr').show();
-                    }
-                    ;
-                    break;
-                default:
-                    break;
-            }
-        });
-
-    }
-
-    select();
-</script>
+<script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
+<script src="<%=basePath%>static/kaohe/check-time.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

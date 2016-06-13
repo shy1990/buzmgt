@@ -31,8 +31,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.entity.Assess.AssessStatus;
+import com.wangge.buzmgt.assess.entity.AssessTime;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
@@ -390,8 +392,25 @@ public class AssessController {
        * @return
        */
       @RequestMapping(value = "/assessTimeList", method = RequestMethod.GET)
-      public String toassessTimeList() {
-          return "kaohe/check_time";
+      public String toAssessTimeList(Model model) {
+        List<Region> regionList = regionService.findByTypeOrderById(RegionType.PROVINCE);
+        model.addAttribute("regionList",regionList);
+        return "kaohe/check_time";
+      }
+      
+      @RequestMapping(value = "/saveAssessTime/{regionId}", method = RequestMethod.POST)
+      public
+      @ResponseBody
+      String saveBankCard(@PathVariable(value = "regionId")Region region,Integer times) {
+        AssessTime at = assessService.findAssessTimeByRegion(region);
+        if(at == null){
+          at = new AssessTime();
+        }
+        at.setAssessStageSum(times);
+        at.setCreateTime(new Date());
+        at.setRegion(region);
+        at = assessService.saveAssessTime(at);
+        return "ok";
       }
 
       /**

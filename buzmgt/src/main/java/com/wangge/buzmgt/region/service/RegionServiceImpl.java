@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
@@ -103,6 +104,10 @@ public class RegionServiceImpl implements RegionService {
         regonList = regionRepository.findByParentId(salesman.getRegion().getId()) ;
      }
     return regonList;
+  }
+  @Override
+  public List<Region> findByTypeOrderById(RegionType type) {
+    return regionRepository.findByTypeOrderById(type);
   }
 
 

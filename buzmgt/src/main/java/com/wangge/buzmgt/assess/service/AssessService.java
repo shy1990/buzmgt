@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.wangge.buzmgt.assess.entity.Assess;
+import com.wangge.buzmgt.assess.entity.AssessTime;
 import com.wangge.buzmgt.assess.entity.RegistData;
+import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.vo.OrderVo;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
@@ -27,4 +29,8 @@ public interface AssessService {
   RegistData findRegistData(Long registId);
   
   Assess findByStageAndSalesman(String stage,String userId);
+  
+  AssessTime findAssessTimeByRegion(Region region);
+  
+  AssessTime saveAssessTime(AssessTime at);
 }

@@ -19,8 +19,10 @@ import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.entity.Assess.AssessStatus;
+import com.wangge.buzmgt.assess.entity.AssessTime;
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.repository.AssessRepository;
+import com.wangge.buzmgt.assess.repository.AssessTimeRepository;
 import com.wangge.buzmgt.assess.repository.RegistDataRepository;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
@@ -48,6 +50,8 @@ public class AssessServiceImpl implements AssessService {
   private RegionRepository regionRepository;
   @Resource
   private RegistDataRepository rdr;
+  @Resource
+  private AssessTimeRepository aTRepository;
   
   @Override
   public void saveAssess(Assess assess) {
@@ -279,6 +283,16 @@ public class AssessServiceImpl implements AssessService {
   @Override
   public Assess findByStageAndSalesman(String stage,String userId) {
     return assessRepository.findByStageAndSalesman(stage,userId);
+  }
+
+  @Override
+  public AssessTime findAssessTimeByRegion(Region region) {
+    return aTRepository.findAssessTimeByRegion(region);
+  }
+
+  @Override
+  public AssessTime saveAssessTime(AssessTime at) {
+    return aTRepository.save(at);
   }
 	
 }

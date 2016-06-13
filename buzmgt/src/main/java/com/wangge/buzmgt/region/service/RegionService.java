@@ -3,6 +3,7 @@ package com.wangge.buzmgt.region.service;
 import java.util.List;
 
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
@@ -30,4 +31,5 @@ public interface RegionService {
 
   public List<Region> getListByIds(SalesMan salesman);
 
+  public List<Region> findByTypeOrderById(RegionType type);
 }
