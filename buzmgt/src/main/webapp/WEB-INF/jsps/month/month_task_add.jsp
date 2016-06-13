@@ -93,7 +93,7 @@
 							<li class="clearfix">
 								<div class="fl task-info">
 									<label>本月<span class="task-total">20</span>次拜访商家：
-									</label> <input id="20goal" type="number" value="14">
+									</label> <input id="20goal" type="number" value="14"  onchange="just(this)">
 								</div>
 								<p class="fr suggestion">
 									系统建议<span id="20sysgive">14</span>家
@@ -133,7 +133,7 @@
 							<li class="clearfix">
 								<div class="fl task-info">
 									<label>本月<span class="task-total">15</span>次拜访商家：
-									</label> <input id="15goal" type="number" value="14">
+									</label> <input id="15goal" type="number" value="14"  onchange="just(this)"  onchange="just(this)" onchange="just(this)">
 								</div>
 								<p class="fr suggestion">
 									系统建议<span id="15sysgive">14</span>家
@@ -175,7 +175,7 @@
 							<li class="clearfix">
 								<div class="fl task-info">
 									<label>本月<span class="task-total">10</span>次拜访商家：
-									</label> <input id="10goal" type="number" value="14">
+									</label> <input id="10goal" type="number" value="14"  onchange="just(this)">
 								</div>
 								<p class="fr suggestion">
 									系统建议<span id="10sysgive">14</span>家
@@ -215,7 +215,7 @@
 							<li class="clearfix">
 								<div class="fl task-info">
 									<label>本月<span class="task-total">7</span>次拜访商家：
-									</label> <input id="7goal" type="number" value="14">
+									</label> <input id="7goal" type="number" value="14"  onchange="just(this)">
 								</div>
 								<p class="fr suggestion">
 									系统建议<span id="7sysgive">14</span>家
@@ -255,7 +255,7 @@
 							<li class="clearfix">
 								<div class="fl task-info">
 									<label>本月<span  class="task-total">4</span>次拜访商家：
-									</label> <input id="4goal" type="number" value="14">
+									</label> <input id="4goal" type="number" value="14"  onchange="just(this)">
 								</div>
 								<p class="fr suggestion">
 									系统建议<span id="4sysgive">14</span>家
@@ -290,6 +290,12 @@
 			$("#handleTitle").text("修改");
 			$("#salesmanDiv").css("display","none");
 			getMonthDataById();
+		}
+		function just(input){
+			if(input.value<0){
+				alert("值必须>0");
+				input.value=0;
+			}
 		}
 		function getRegion(id){
 			window.location.href='/region/getPersonalRegion?id='+id+"&flag=monthTask";
