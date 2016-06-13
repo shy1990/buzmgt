@@ -2,12 +2,12 @@
 <configuration>
     <!-- 将日志记录到文件中 -->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/var/log/sanji/buzmgt.log</file>
-        <append>true</append>
-        <encoder>
-            <pattern>时间: %date{yyyy-MM-dd HH:mm:ss.SSS} 耗时: %-4relative 毫秒 线程名称: [%thread] %logger{35} - %msg %n
-            </pattern>
-        </encoder>
+<!--         <file>/var/log/sanji/buzmgt.log</file> -->
+<!--         <append>true</append> -->
+<!--         <encoder> -->
+<!--             <pattern>时间: %date{yyyy-MM-dd HH:mm:ss.SSS} 耗时: %-4relative 毫秒 线程名称: [%thread] %logger{35} - %msg %n -->
+<!--             </pattern> -->
+<!--         </encoder> -->
     </appender>
 
     <!-- 将日志打印到控制台 -->
