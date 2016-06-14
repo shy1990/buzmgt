@@ -247,7 +247,7 @@ public class CheckCashServiceImpl implements CheckCashService {
       if(stayMoney!=0){
         //产生扣罚，修改流水单号状态
         WaterOrderCash order= waterOrders.get(0);
-        order.setIsPunish(1);
+//        order.setIsPunish(1);//修改扣罚位置-->在产生流水订单号时进行
         
         MonthPunish mp=new MonthPunish();
         String userId=order.getUserId();

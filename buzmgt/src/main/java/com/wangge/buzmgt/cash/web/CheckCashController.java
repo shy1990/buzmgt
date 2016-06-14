@@ -56,13 +56,6 @@ public class CheckCashController {
       @PageableDefault(page = 0, size = 10, sort = { "createDate","rnid" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<CheckCash> page= checkCashService.findAll(searchParams, pageable);
-//    String json = "";
-//    try {
-//      json = JSON.toJSONString(page, SerializerFeature.DisableCircularReferenceDetect);
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//      logger.error(e.getMessage());
-//    }
     return page;
   }
   @RequestMapping(value="/salesmanName",method=RequestMethod.GET)

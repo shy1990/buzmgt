@@ -114,7 +114,7 @@
 							</div>
 							<div class="date-jll">
 								<a class="btn btn-default btn-sm" onclick="getTask();"
-									href="javascrip:(0);"><span class="text-bule">筛选</span></a>
+									><span class="text-bule">筛选</span></a>
 							</div>
 
 							<div class="date-jlll">

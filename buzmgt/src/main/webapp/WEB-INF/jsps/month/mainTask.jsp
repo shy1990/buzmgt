@@ -54,21 +54,14 @@
       {{#each detail}}
                             <th class="text-right text-body ">
                                     {{level}} 次拜访： <span class="text-bule">{{goal}}</span> 家<br>
-                            	    已设置： <span class="text-red">{{set}}</span> 家
+                            	    已完成： <span class="text-red">{{done}}</span> 家
                             </th>
          {{/each}}     
-		 {{#if status }}  
-							<th class=" text-right btn-jl">
+					<th class=" text-right btn-jl">
 									<div class="btn-null"></div> <a class="btn btn-blue btn-sm"
 									onclick="javascript:window.location.href='/monthTask/findupTask/{{taskId}}'">查看</a>
-							</th> 
-  		 {{else}} 
-				      
-                            <th class="text-right " >
-                                <a class="btn btn-success btn-sm btn-jl" onclick="javascript:window.location.href='/monthTask/addTask?taskId={{taskId}}'">修改</a>
-                                <a class="btn btn-blue btn-sm  "  onclick="issueTask({{taskId}})">发布</a>
-                            </th>			                
-  		 {{/if}}
+				    </th> 
+  		
     </tr>
 	{{/each}}
 	{{else}}
