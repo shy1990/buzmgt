@@ -25,6 +25,10 @@ public class MonthPunishUpController {
     @Autowired
     private MothPunishUpRepository mothPunishUpRepository;
 
+    /**
+     * 模糊查询（button写的注解方式返回）
+     * @return
+     */
     @RequestMapping(value="/list",method = RequestMethod.GET)
     public String toList(){
         return "punishset/month_punish_record2";
@@ -36,7 +40,6 @@ public class MonthPunishUpController {
                                 @RequestParam(value = "startTime", defaultValue = "2016-01-26")String startTime,
                                 @RequestParam(value = "endTime", defaultValue = "2016-07-26") String endTime
                                 ){
-        System.out.println("*************");
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(page, size, sort);
         Float sum = mothPunishUpRepository.amerceSum();
@@ -45,10 +48,6 @@ public class MonthPunishUpController {
         monthPunishUpResult.setSum(sum);
         return monthPunishUpResult;
     }
-
-
-
-
     /**
      * 暂时用这个
      * 模糊查询
@@ -64,7 +63,6 @@ public class MonthPunishUpController {
                            @RequestParam(value = "endTime", defaultValue = "2200-07-26") String endTime,
                            Model model){
 
-        System.out.println(startTime+"**********"+endTime);
         model.addAttribute("startTimeFen",startTime);
         model.addAttribute("endTimeFen",endTime);
         Float sum = mothPunishUpRepository.amerceSum();

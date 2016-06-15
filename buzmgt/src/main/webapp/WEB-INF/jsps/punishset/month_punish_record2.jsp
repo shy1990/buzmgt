@@ -225,7 +225,6 @@
                 totalCount = data.totalElements;
                 limit = data.size;
                 content = data.content;
-                console.log(content);
                 list(result);
                 if (totalCount != total || totalCount == 0) {
                     total = totalCount;
@@ -248,12 +247,13 @@
             }
         });
     }
+    /**
+     * 根据日期查询
+     */
     $("#kkk").click(function(){
         searchData['startTime'] = $("#aaa").val() ;
         searchData['endTime'] = $("#bbb").val() ;
-        console.log(searchData.startTime+'............. '+searchData.endTime);
         ajaxSearch(searchData);
-        initPaging();
     });
 
     function list(result) {
