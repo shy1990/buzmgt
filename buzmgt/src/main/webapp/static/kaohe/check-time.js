@@ -36,9 +36,12 @@ function ajaxSearch(searchData) {
 		},
 		dataType : "json",
 		success : function(data) {
-			totalElements = data.totalElements;
-			totalPages = data.totalPages;
-			seachSuccessTable(data);
+			totalElements = data.result.totalElements;
+			totalPages = data.result.totalPages;
+			searchData["size"] = data.result.size;
+			alert(searchData["size"]);
+			alert(totalElements);
+			seachSuccessTable(data.result);
 			var searchTotal = totalElements;
 
             if (searchTotal != total || searchTotal == 0) {
@@ -56,7 +59,7 @@ function ajaxSearch(searchData) {
 function initPaging(){
 	var totalCount = totalElements; //总条数 
 	showCount = 10, //显示分页个数
-	limit =  10;//每页条数
+	limit =  searchData["size"];//每页条数
 	$('#callBackPager').extendPagination({
 	totalCount : totalCount, 
 	showCount : showCount,

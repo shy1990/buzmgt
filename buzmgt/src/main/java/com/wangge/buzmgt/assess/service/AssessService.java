@@ -3,6 +3,7 @@ package com.wangge.buzmgt.assess.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.entity.AssessTime;
@@ -33,4 +34,9 @@ public interface AssessService {
   AssessTime findAssessTimeByRegion(Region region);
   
   AssessTime saveAssessTime(AssessTime at);
+  
+  /**
+   * 查询考核次数列表
+   */
+  Page<AssessTime> findAll(Pageable pageable);
 }

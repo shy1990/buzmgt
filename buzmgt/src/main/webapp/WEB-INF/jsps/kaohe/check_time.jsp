@@ -32,9 +32,9 @@
 <script id="table-template" type="text/x-handlebars-template">
 {{#each content}}
 	<tr>
-       <td>山东省</td>
-       <td>10次</td>
-       <td>2016.06.01</td>
+       <td>{{region.name}}</td>
+       <td>{{assessStageSum}}次</td>
+       <td>{{createTime}}</td>
        <td>
         <button class="btn btn-blue btn-bn-style">查看更多</button>
        </td>

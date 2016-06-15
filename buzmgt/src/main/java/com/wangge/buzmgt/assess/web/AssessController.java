@@ -21,6 +21,12 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,6 +52,8 @@ import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.JsonResponse;
+import com.wangge.json.JSONFormat;
 
 /**
   * ClassName: AssessController <br/> 
@@ -147,7 +155,6 @@ public class AssessController {
     assessService.saveAssess(assess);
     if("1".equals(assess.getAssessStage())){
       salesman.setStatus(SalesmanStatus.kaifa);
-      salesman.setAssessStageSum(Integer.parseInt(request.getParameter("assessStageSum")));
     }
     salesman.setAssessStage(assess.getAssessStage());
     salesManService.addSalesman(salesman);
@@ -286,11 +293,20 @@ public class AssessController {
     return statistics;
   }
   
+  /**
+   * 
+    * passed:(考核通过进入维护模式). <br/> 
+    * 
+    * @author peter 
+    * @param salesmanId
+    * @return 
+    * @since JDK 1.8
+   */
   @ResponseBody
   @RequestMapping(value = "/passed",method = RequestMethod.GET)
   public String passed(String salesmanId){
     SalesMan salesman = salesManService.findById(salesmanId);
-    salesman.setStatus(SalesmanStatus.zhuanzheng);
+    salesman.setStatus(SalesmanStatus.weihu);//修改业务状态为维护
     salesManService.addSalesman(salesman);
     return "ok";
   }
@@ -318,6 +334,11 @@ public class AssessController {
     }
     assess.setStatus(AssessStatus.AGREE);
     assessService.saveAssess(assess);
+    String regionId = salesman.getRegion().getId();
+    regionId = regionId.substring(0, 2);
+    Region region = regionService.getRegionById(regionId+"0000");
+    AssessTime at = assessService.findAssessTimeByRegion(region);//按省份查找次数
+    model.addAttribute("assessStageSum",at.getAssessStageSum());
     model.addAttribute("stage",stage);
     model.addAttribute("list", list);
     model.addAttribute("salesman", salesman);
@@ -393,7 +414,7 @@ public class AssessController {
        */
       @RequestMapping(value = "/assessTimeList", method = RequestMethod.GET)
       public String toAssessTimeList(Model model) {
-        List<Region> regionList = regionService.findByTypeOrderById(RegionType.PROVINCE);
+        List<Region> regionList = regionService.findByTypeOrderById(RegionType.PARGANA);
         model.addAttribute("regionList",regionList);
         return "kaohe/check_time";
       }
@@ -414,22 +435,22 @@ public class AssessController {
       }
 
       /**
-       * 分页查询
+       * 分页查询考核次数设置信息
        * 用ResponseEntity<JsonResponse>返回的的方式
        * resetful方式
        *
        * @return
        */
-      /*@RequestMapping(value = "/salesmanDatas", method = RequestMethod.GET)
-      public
-      @ResponseBody
-      ResponseEntity<JsonResponse> getEntryByParams1(
+      @RequestMapping(value = "/assessTimes", method = RequestMethod.GET)
+      @JSONFormat(filterField={"Region.children","Region.parent"})
+      public JsonResponse getAssessTimes(
               @RequestParam(value = "page", defaultValue = "0") Integer page,
-              @RequestParam(value = "size", defaultValue = "3") Integer size,
-              String name) {
-          Sort sort = new Sort(Direction.DESC, "id");
+              @RequestParam(value = "size", defaultValue = "3") Integer size) {
+          Sort sort = new Sort(Direction.DESC, "createTime");
           Pageable pageable = new PageRequest(page, size, sort);
-          return new ResponseEntity<JsonResponse>(new JsonResponse(service.findAll(name, pageable)), HttpStatus.OK);
-      }*/
+          Page<AssessTime> result = assessService.findAll(pageable);
+          JsonResponse json = new JsonResponse(result);
+          return json;
+      }
       
 }
