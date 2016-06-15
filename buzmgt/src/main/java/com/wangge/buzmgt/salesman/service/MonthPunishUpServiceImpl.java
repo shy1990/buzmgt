@@ -12,6 +12,7 @@ import javax.persistence.criteria.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by 神盾局 on 2016/5/21.
@@ -62,6 +63,13 @@ public class MonthPunishUpServiceImpl implements MonthPunishUpService{
             return  mothPunishUpRepository.findAll(specification1,pageable);
         }
         return mothPunishUpRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<MonthPunishUp> findAllExport() {
+//       List<MonthPunishUp> list =  mothPunishUpRepository.findAll();
+        List<MonthPunishUp> list =  mothPunishUpRepository.findByOrderByCreateDateDesc();
+        return list;
     }
 
     public static Date getDate(String time) throws ParseException {

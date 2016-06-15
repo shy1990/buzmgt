@@ -67,7 +67,7 @@
         </button>
         <!---->
         <div class="link-posit-t pull-right exc-hh">
-            <a class="table-export" href="javascript:void(0);">导出excel</a>
+            <a class="table-export"  href="<%=basePath%>MonthPunishUp/export">导出excel</a>
         </div>
 
     </div>

@@ -1,8 +1,10 @@
 package com.wangge.buzmgt.salesman.web;
 
+import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
 import com.wangge.buzmgt.salesman.entity.MonthPunishUpResult;
 import com.wangge.buzmgt.salesman.repository.MothPunishUpRepository;
 import com.wangge.buzmgt.salesman.service.MonthPunishUpService;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 import com.wangge.json.JSONFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +15,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Created by 神盾局 on 2016/5/21.
@@ -72,5 +78,20 @@ public class MonthPunishUpController {
         model.addAttribute("sum",sum);
         return  "punishset/month_punish_record1";
 
+    }
+
+    /**
+     * 导出表
+     * @return
+     */
+    @RequestMapping(value = "export")
+    public void exportExcel( HttpServletRequest request, HttpServletResponse response){
+        List<MonthPunishUp> list = service.findAllExport();
+        list.forEach(MonthPunishUp ->{
+            MonthPunishUp.setRegionName(MonthPunishUp.getSalesMan().getRegion().getName());
+        });
+        String[] title_ = new String[]{ "业务ID","姓名","区域","欠款", "扣罚", "日期"};
+        String[] coloumsKey_ = new String[]{"salesMan.id","salesMan.truename","regionName","debt", "amerce","createDate"};
+        ExcelExport.doExcelExport("月扣罚.xls",list,title_,coloumsKey_,request,response);
     }
 }

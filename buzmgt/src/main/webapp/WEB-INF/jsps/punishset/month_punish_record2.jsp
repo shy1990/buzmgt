@@ -28,19 +28,9 @@
 <div class="content main">
     <h4 class="page-header">
         <i class="ico icon-puish-m"></i>月扣罚记录
-
-        <!--区域选择按钮-->
-        <%--<div class="area-choose">
-            选择区域：<span>山东省</span>
-            <a class="are-line" href="javascript:;">切换</a>
-        </div>--%>
-
-
     </h4>
     <!---选择区域，选择日期-->
     <div class="row text-time">
-
-
         <span class="text-strong chang-time time-c">选择日期：</span>
         <div class="search-date">
             <div class="input-group input-group-sm">
@@ -66,7 +56,7 @@
         </button>
         <!---->
         <div class="link-posit-t pull-right exc-hh">
-            <a class="table-export" href="javascript:void(0);">导出excel</a>
+            <a class="table-export" href="<%=basePath%>MonthPunishUp/export" >导出excel</a>
         </div>
 
     </div>
@@ -261,6 +251,11 @@
         //将json数据用刚刚注册的Handlebars模版封装，得到最终的 html，插入到基础的table中
         $("#tbody").html(template(result));
     }
+
+    $("#exportExcel").click(function(){
+        console.log(125255  );
+        $.get("MonthPunishUp/export");
+    });
 </script>
 </body>
 </html>

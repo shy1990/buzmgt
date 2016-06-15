@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -19,6 +20,8 @@ public interface MothPunishUpRepository extends PagingAndSortingRepository<Month
     @EntityGraph("graph.MonthPunishUp.salesMan")
     Page<MonthPunishUp> findAll(Pageable pageable);
     public List<MonthPunishUp> findAll();
+
+    List<MonthPunishUp> findByOrderByCreateDateDesc();
 
     @Query(value="select sum(FINE_MONEY) from SYS_MONTH_PUNISH_RECORD",nativeQuery = true)
     public Float amerceSum();
