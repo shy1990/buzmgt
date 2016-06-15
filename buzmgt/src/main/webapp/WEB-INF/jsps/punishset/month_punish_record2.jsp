@@ -178,7 +178,7 @@
 <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 <!-- 这是自定义显示数据的模板 -->
 <script id="content-template" type="text/x-handlebars-template">
-    {{#each data.content}}
+    {{#each page.content}}
         <tr>
             <td>{{salesMan.id}}</td>
             <td>{{salesMan.truename}}</td>
@@ -203,7 +203,7 @@
 
 
 <script>
-
+    var total;
     var totalCount = 0;
     var limit = 0;
     var searchData = {
@@ -221,17 +221,20 @@
             async: false,
             success: function (result) {
                 console.log(result);
-                var data = result.data;
-//                console.log(result.data);
+                var data = result.page;
                 totalCount = data.totalElements;
                 limit = data.size;
                 content = data.content;
                 console.log(content);
                 list(result);
+                if (totalCount != total || totalCount == 0) {
+                    total = totalCount;
+                    initPaging();
+                }
             }
         });
     }
-    initPaging();
+//    initPaging();
     function initPaging() {
 
         $('#callBackPager').extendPagination({
@@ -248,14 +251,15 @@
     $("#kkk").click(function(){
         searchData['startTime'] = $("#aaa").val() ;
         searchData['endTime'] = $("#bbb").val() ;
+        console.log(searchData.startTime+'............. '+searchData.endTime);
         ajaxSearch(searchData);
         initPaging();
     });
 
-    function list(data) {
+    function list(result) {
         var template = Handlebars.compile($("#content-template").html());//编译模版
         //将json数据用刚刚注册的Handlebars模版封装，得到最终的 html，插入到基础的table中
-        $("#tbody").html(template(data));
+        $("#tbody").html(template(result));
     }
 </script>
 </body>

@@ -1,9 +1,9 @@
 package com.wangge.buzmgt.salesman.web;
 
-import com.alibaba.fastjson.JSONObject;
-import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
+import com.wangge.buzmgt.salesman.entity.MonthPunishUpResult;
 import com.wangge.buzmgt.salesman.repository.MothPunishUpRepository;
 import com.wangge.buzmgt.salesman.service.MonthPunishUpService;
+import com.wangge.json.JSONFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 /**
  * Created by 神盾局 on 2016/5/21.
@@ -32,73 +29,28 @@ public class MonthPunishUpController {
     public String toList(){
         return "punishset/month_punish_record2";
     }
-
-
-
-//    @RequestMapping(value="/MonthPunishUps",method= RequestMethod.GET)
-////    @JSONFormat(filterField = {"SalesMan.user","region.parent","region.children"})
-//    @JSONFormat(filterField = {"SalesMan.user","region.children"})
-//    public
-//    Page<MonthPunishUp> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
-//                                @RequestParam(value = "size", defaultValue = "3") Integer size){
-//        System.out.println("*************");
-//        Sort sort = new Sort(Sort.Direction.DESC, "id");
-//        Pageable pageable = new PageRequest(page, size, sort);
-//
-//        return  service.findByPage(pageable);
-//    }
-
-
     @RequestMapping(value="/MonthPunishUps",method= RequestMethod.GET)
-//    @JSONFormat(filterField = {"SalesMan.user","region.parent","region.children"})
-//    @JSONFormat(filterField = {"SalesMan.user","region.children"})
-    public @ResponseBody JSONObject findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                       @RequestParam(value = "size", defaultValue = "3") Integer size,
-                       @RequestParam(value = "startTime", defaultValue = "2016-01-26")String startTime,
-                       @RequestParam(value = "endTime", defaultValue = "2016-07-26") String endTime
+    @JSONFormat(filterField = {"SalesMan.user","region.parent","region.children"})
+    public  MonthPunishUpResult findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                @RequestParam(value = "size", defaultValue = "3") Integer size,
+                                @RequestParam(value = "startTime", defaultValue = "2016-01-26")String startTime,
+                                @RequestParam(value = "endTime", defaultValue = "2016-07-26") String endTime
                                 ){
         System.out.println("*************");
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(page, size, sort);
         Float sum = mothPunishUpRepository.amerceSum();
-        JSONObject result = new JSONObject();
-        result.put("sum",sum);
-        result.put("data",service.findByPage(startTime,endTime,pageable));
-        return result;
+        MonthPunishUpResult monthPunishUpResult = new MonthPunishUpResult();
+        monthPunishUpResult.setPage(service.findByPage(startTime,endTime,pageable));
+        monthPunishUpResult.setSum(sum);
+        return monthPunishUpResult;
     }
 
-
-
-
-    @RequestMapping(value="/list1",method = RequestMethod.GET)
-    public String ceshi(Model model){
-        List<MonthPunishUp> list = mothPunishUpRepository.findAll();
-        model.addAttribute("list",list);
-        return "punishset/month_punish_record";
-    }
-
-    /**
-     * 暂时用这个
-     * @param page
-     * @param size
-     * @param model
-     * @return
-     */
-    @RequestMapping(value="/list2",method = RequestMethod.GET)
-    public String findAll1(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                @RequestParam(value = "size", defaultValue = "3") Integer size,Model model){
-        System.out.println("*************");
-        Float sum = mothPunishUpRepository.amerceSum();
-        Sort sort = new Sort(Sort.Direction.DESC, "id");
-        Pageable pageable = new PageRequest(page, size, sort);
-        model.addAttribute("page", service.findByPage(pageable));
-        model.addAttribute("sum",sum);
-        return  "punishset/month_punish_record1";
-    }
 
 
 
     /**
+     * 暂时用这个
      * 模糊查询
      * @param page
      * @param size

@@ -45,7 +45,6 @@ public class MonthPunishUpServiceImpl implements MonthPunishUpService{
                 public Predicate toPredicate(Root<MonthPunishUp> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                     String timeStartUp =   timeStart+TIME_MIN;
                     String timeEndUp =  timeEnd+TIME_MAX;
-                    System.out.println("go if.....");
                     Date time = null;
                     Date time1 = null;
                     try {
