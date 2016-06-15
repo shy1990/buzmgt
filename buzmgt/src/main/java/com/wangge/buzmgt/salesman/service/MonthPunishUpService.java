@@ -14,4 +14,5 @@ public interface MonthPunishUpService {
     public Page<MonthPunishUp> findByPage(Pageable pageable);
     public Page<MonthPunishUp> findByPage(String timeStrat, String timeEnd, Pageable pageable);
     public List<MonthPunishUp> findAllExport();
+    public Float sum();
 }

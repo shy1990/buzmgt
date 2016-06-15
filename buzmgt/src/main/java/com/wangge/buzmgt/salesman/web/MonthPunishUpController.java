@@ -2,7 +2,6 @@ package com.wangge.buzmgt.salesman.web;
 
 import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
 import com.wangge.buzmgt.salesman.entity.MonthPunishUpResult;
-import com.wangge.buzmgt.salesman.repository.MothPunishUpRepository;
 import com.wangge.buzmgt.salesman.service.MonthPunishUpService;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 import com.wangge.json.JSONFormat;
@@ -28,9 +27,6 @@ public class MonthPunishUpController {
 
     @Autowired
     private MonthPunishUpService service;
-    @Autowired
-    private MothPunishUpRepository mothPunishUpRepository;
-
     /**
      * 模糊查询（button写的注解方式返回）
      * @return
@@ -48,7 +44,7 @@ public class MonthPunishUpController {
                                 ){
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(page, size, sort);
-        Float sum = mothPunishUpRepository.amerceSum();
+        Float sum = service.sum();
         MonthPunishUpResult monthPunishUpResult = new MonthPunishUpResult();
         monthPunishUpResult.setPage(service.findByPage(startTime,endTime,pageable));
         monthPunishUpResult.setSum(sum);
@@ -71,7 +67,7 @@ public class MonthPunishUpController {
 
         model.addAttribute("startTimeFen",startTime);
         model.addAttribute("endTimeFen",endTime);
-        Float sum = mothPunishUpRepository.amerceSum();
+        Float sum = service.sum();
         Sort sort = new Sort(Sort.Direction.DESC, "createDate");
         Pageable pageable = new PageRequest(page, size, sort);
         model.addAttribute("page", service.findByPage(startTime,endTime,pageable));

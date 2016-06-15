@@ -72,6 +72,12 @@ public class MonthPunishUpServiceImpl implements MonthPunishUpService{
         return list;
     }
 
+    @Override
+    public Float sum() {
+        Float sum = mothPunishUpRepository.amerceSum();
+        return sum;
+    }
+
     public static Date getDate(String time) throws ParseException {
 
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss SSS");
