@@ -11,6 +11,8 @@ import java.util.Map;
  */
 public interface SalaryService {
     public Page<Salary> findByPage(Pageable pageable, String startTime, String endTime);
+    public Page<Salary> findByPage(Pageable pageable, String startTime, String endTime,String name);
+
 
     public void save(Map<Integer, String> map);
 }

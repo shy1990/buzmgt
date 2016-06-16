@@ -242,6 +242,7 @@
     $("#kkk").click(function(){
         searchData['startTime'] = $("#aaa").val() ;
         searchData['endTime'] = $("#bbb").val() ;
+        searchData['page'] = 0;
         ajaxSearch(searchData);
     });
 

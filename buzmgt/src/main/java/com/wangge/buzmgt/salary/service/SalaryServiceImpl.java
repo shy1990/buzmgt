@@ -48,8 +48,8 @@ public class SalaryServiceImpl implements SalaryService {
                     }catch(ParseException e){
                         logger.info(e.getMessage());
                     }
-                    Predicate predicate = cb.greaterThan(root.get("createTime").as(Date.class),time);//查询全部有"ce"
-                    Predicate predicate1 = cb.lessThan(root.get("createTime").as(Date.class),time1);//查询全部有"ce"
+                    Predicate predicate = cb.greaterThanOrEqualTo(root.get("createTime").as(Date.class),time);//查询全部有"ce"
+                    Predicate predicate1 = cb.lessThanOrEqualTo(root.get("createTime").as(Date.class),time1);//查询全部有"ce"
                     Predicate p = cb.and(predicate,predicate1);
                     return p;
                 }
@@ -58,6 +58,43 @@ public class SalaryServiceImpl implements SalaryService {
 
         }
 
+        return salaryRespository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Salary> findByPage(Pageable pageable, String startTime, String endTime, String name) {
+        if(name !=null && !"".equals(name)){
+            Specification<Salary> specification = new Specification<Salary>() {
+                @Override
+                public Predicate toPredicate(Root<Salary> root, CriteriaQuery<?>query, CriteriaBuilder cb) {
+                    Predicate predicate =  cb.like(root.get("name").as(String.class),"%"+name+"%");
+                    return predicate;
+                }
+            };
+            return salaryRespository.findAll(specification,pageable);
+        }
+        if(startTime != null && !"".equals(startTime) && endTime != null && !"".equals(endTime)){
+            Specification<Salary> specification = new Specification<Salary>() {
+                @Override
+                public Predicate toPredicate(Root<Salary> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    Date time = null;
+                    Date time1 = null;
+                    try{
+                        time = getDate(startTime+TIME_MIN);
+                        time1 = getDate(endTime+TIME_MAX);
+                        logger.info(time+"::::::::::"+time1);
+                    }catch(ParseException e){
+                        logger.info(e.getMessage());
+                    }
+                    Predicate predicate = cb.greaterThanOrEqualTo(root.get("createTime").as(Date.class),time);//查询全部有"ce"
+                    Predicate predicate1 = cb.lessThanOrEqualTo(root.get("createTime").as(Date.class),time1);//查询全部有"ce"
+                    Predicate p = cb.and(predicate,predicate1);
+                    return p;
+                }
+            };
+            return salaryRespository.findAll(specification,pageable);
+
+        }
         return salaryRespository.findAll(pageable);
     }
 

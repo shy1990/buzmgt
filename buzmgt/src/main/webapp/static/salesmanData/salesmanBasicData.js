@@ -234,5 +234,6 @@ function sure_add_card() {
 function goSearch(){
     var name = $("#search").val();
     searchData['name'] = name;
+    searchData['page'] = 0;
     list(searchData);
 }

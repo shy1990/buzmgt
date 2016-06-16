@@ -38,7 +38,7 @@
                 <div class="input-group input-group-sm">
                 <span class="input-group-addon " id="basic-addon1"><i
                         class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-                    <input type="text" class="form-control form_datetime input-sm" placeholder="开始日期"
+                    <input id="startTime" type="text" class="form-control form_datetime input-sm" placeholder="开始日期"
                            readonly="readonly">
                 </div>
             </div>
@@ -47,13 +47,12 @@
                 <div class="input-group input-group-sm">
                         <span class="input-group-addon " id="basic-addon1"><i
                                 class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-                    <input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"
+                    <input id="endTime" type="text" class="form-control form_datetime input-sm" placeholder="结束日期"
                            readonly="readonly">
                 </div>
             </div>
             <!--考核开始时间-->
-            <button class="btn btn-blue btn-sm" style="height: 30px;margin-left: 10px"
-                    onclick="goSearch('${salesman.id}','${assess.id}');">
+            <button class="btn btn-blue btn-sm" style="height: 30px;margin-left: 10px" id="goSearch">
                 筛选
             </button>
 
@@ -234,6 +233,13 @@
 <script type="text/javascript">
     $(function () {
         salary.detail.init();
+        $('#goSearch').click(function(){
+            salary.searchData.startTime = $("#startTime").val();
+            salary.searchData.endTime = $("#endTime").val();
+            salary.searchData.page = 0;
+            console.log(salary.searchData);
+            salary.findByDate(salary.searchData);
+        });
 
     });
     /**
@@ -246,9 +252,10 @@
          */
         searchData: {
             startTime: '2015-05-05',
-            endTime: '2017-05-06',
+            endTime: '2200-05-06',
             size: "4",
-            page: "0"
+            page: "0",
+            name:''
         },
         /**
          * 分页参数
@@ -288,7 +295,7 @@
             });
         },
         /**
-         * 分页
+         * 分页工具
          */
         initPaging: function () {
             $('#callBackPager').extendPagination({
@@ -309,6 +316,13 @@
             var driver_template = Handlebars.compile($("#tbody-template").html());//注册
             $("#tbody").html(driver_template(content));
         },
+        findByDate:function(searchData){
+            salary.findAll(searchData);
+        },
+        findByName:function(searchData){
+            salary.findAll(searchData);
+        },
+
         /**
          * 页面初始化
          */

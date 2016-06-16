@@ -48,10 +48,12 @@ public class SalaryController {
     public Page<Salary> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                 @RequestParam(value = "size", defaultValue = "3") Integer size,
                                 @RequestParam(value = "startTime", defaultValue = "2000-01-26")String startTime,
-                                @RequestParam(value = "endTime", defaultValue = "2200-07-26") String endTime){
+                                @RequestParam(value = "endTime", defaultValue = "2200-07-26") String endTime,
+                                @RequestParam String name
+    ){
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(page, size, sort);
-        return salaryService.findByPage(pageable,startTime,endTime);
+        return salaryService.findByPage(pageable,startTime,endTime,name);
     }
 
 
