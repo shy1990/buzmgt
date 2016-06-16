@@ -91,4 +91,15 @@ public class SaojieDataServiceImpl implements SaojieDataService {
     sdv.getList().addAll(list);
     return sdv;
   }
+
+  @Override
+  public SaojieData findById(Long id) {
+    return saojieDateRepository.findOne(id);
+  }
+
+  @Override
+  public void saveSaojieData(SaojieData saojieData) {
+
+    saojieDateRepository.save(saojieData);
+  }
 }
