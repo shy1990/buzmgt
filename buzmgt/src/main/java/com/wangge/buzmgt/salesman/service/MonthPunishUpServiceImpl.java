@@ -54,8 +54,8 @@ public class MonthPunishUpServiceImpl implements MonthPunishUpService{
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    Predicate predicate = cb.greaterThan(root.get("createDate").as(Date.class),time);//查询全部有"ce"
-                    Predicate predicate1 = cb.lessThan(root.get("createDate").as(Date.class),time1);//查询全部有"ce"
+                    Predicate predicate = cb.greaterThanOrEqualTo(root.get("createDate").as(Date.class),time);//查询全部有"ce"
+                    Predicate predicate1 = cb.lessThanOrEqualTo(root.get("createDate").as(Date.class),time1);//查询全部有"ce"
                     Predicate p = cb.and(predicate,predicate1);
                     return p;
                 }

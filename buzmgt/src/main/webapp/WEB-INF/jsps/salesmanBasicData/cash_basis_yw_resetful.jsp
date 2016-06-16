@@ -79,10 +79,11 @@
 
                 </tbody>
             </table>
-            <div id="callBackPager"></div>
 
 
         </div>
+        <%--分页--%>
+        <div id="callBackPager"></div>
 
 
         <!--table-box-->

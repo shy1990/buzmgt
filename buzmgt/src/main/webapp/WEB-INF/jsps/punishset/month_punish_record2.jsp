@@ -84,12 +84,10 @@
 
 
                 </table>
-                <%--分页--%>
-                <div id="callBackPager"></div>
             </div>
-            <!--table-box-->
+            <%--分页--%>
+            <div id="callBackPager"></div>
         </div>
-        <!--油补记录-->
     </div>
 
 
@@ -242,6 +240,7 @@
     $("#kkk").click(function(){
         searchData['startTime'] = $("#aaa").val() ;
         searchData['endTime'] = $("#bbb").val() ;
+        searchData['page'] = 0;
         ajaxSearch(searchData);
     });
 

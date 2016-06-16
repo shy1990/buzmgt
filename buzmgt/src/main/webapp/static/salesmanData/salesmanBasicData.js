@@ -3,7 +3,7 @@ var total =0;
 var totalCount = 0;
 var limit = 0;
 var searchData = {
-    "size": "4",
+    "size": "3",
     "page": "0",
     "name": ''
 }
@@ -234,5 +234,6 @@ function sure_add_card() {
 function goSearch(){
     var name = $("#search").val();
     searchData['name'] = name;
+    searchData['page'] = 0;
     list(searchData);
 }
