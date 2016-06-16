@@ -23,13 +23,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
+import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.service.SaojieDataService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
+import com.wangge.buzmgt.sys.vo.OrganizationVo;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.util.RegionUtil;
@@ -49,6 +52,7 @@ public class RegionController {
   private SaojieDataService saojieDateService;
 	@Resource
 	private AssessService assessService;
+	
 	private static final String ONELEAVE="0";
 	
 	/**
@@ -263,8 +267,6 @@ public class RegionController {
 		
 	}
 	
-	
-	
 	/**
 	 * 
 	* @Title: getMaxId 
@@ -364,9 +366,51 @@ public class RegionController {
 	  
 	  /**
 	   * 
-	    * findOnePersonalRegion:(这里用一句话描述这个方法的作用). <br/> 
+	    * updateYewuData:更改扫街数据 <br/> 
+	    * @author Administrator 
+	    * @param points
+	    * @param parentid
+	    * @param name
+	    * @param centerPoint
+	    * @param model
+	    * @return 
+	    * @since JDK 1.8
+	   */
+	  @RequestMapping(value = "/updateYewuData", method = RequestMethod.GET)
+	  public String updateYewuData(String  points,String parentid,String name,String centerPoint,Model model) {
+	    JSONArray jsonArr = JSONArray .fromObject(points);
+	    StringBuffer pointbuf=new StringBuffer();
+	    for(int i=0;i<jsonArr.size();i++){
+	      JSONObject jsonObject = JSONObject .fromObject(jsonArr.get(i));
+	      pointbuf.append(jsonObject.get("lng")).append("-").append(jsonObject.get("lat")).append("=");
+	    }
+	    Region region=regionService.findListRegionbyid(parentid);
+	    region.setCoordinates(pointbuf.toString());
+	    region.setCenterPoint(centerPoint);
+	    
+	    regionService.saveRegion(region);
+	    
+	    Region parentReigon =region.getParent();
+	    
+	    model.addAttribute("areaname",parentReigon.getParent().getName()+parentReigon.getName());
+	    model.addAttribute("regionData",regionService.findByRegion(parentReigon.getId()));
+	    model.addAttribute("pcoordinates",parentReigon.getCoordinates());
+	    model.addAttribute("parentid",parentid);
+	    
+	     return "region/region_yewuData";
+	    
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
+	  /**
+	   * 
+	    * findOnePersonalRegion:一级区域 <br/> 
 	    * 
-	    * @author jiabin 
+	    * @author  
 	    * @return 
 	    * @since JDK 1.8
 	   */
@@ -380,4 +424,111 @@ public class RegionController {
 	      listTreeVo.add(RegionUtil.getRegionTree(manager.getRegion()));
 	    return new ResponseEntity<List<RegionTree>>(listTreeVo,HttpStatus.OK);
 	  }
+	  
+	  
+	  /**
+	   * 
+	    * findOneSaojieRegion:一级扫街区域
+	    * @author Administrator 
+	    * @param regionid
+	    * @return 
+	    * @since JDK 1.8
+	   */
+	  @RequestMapping(value = "/findOneSaojieRegion", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<List<OrganizationVo>> findOneSaojieRegion(String regionid) {
+       List<OrganizationVo> listTreeVo =new ArrayList<OrganizationVo>();
+       Region region =regionService.findListRegionbyid(regionid);
+       List<Region> listRegion =regionService.findByRegion(region.getParent().getId());
+       SaojieData saojiedata=null;
+        for(Region reigon :listRegion){
+          listTreeVo.add(getRegionVo(reigon,saojiedata));
+        }
+        
+      return new ResponseEntity<List<OrganizationVo>>(listTreeVo,HttpStatus.OK);
+    }
+	  
+	  
+	  /**
+	   * 
+	    * findSaojieDataByid:扫街信息
+	    * @author Administrator 
+	    * @param id
+	    * @return 
+	    * @since JDK 1.8
+	   */
+	  @RequestMapping(value = "/findSaojieDataByid", method = RequestMethod.POST)
+	  @ResponseBody
+	  public ResponseEntity<List<OrganizationVo>> findSaojieDataByid(String id) {
+	     List<OrganizationVo> listTreeVo =new ArrayList<OrganizationVo>();
+	     List<SaojieData> list =saojieDateService.findByReion(regionService.findListRegionbyid(id));
+	     Region region=null;
+	     for(SaojieData saojiedata:list){
+	       listTreeVo.add(getRegionVo(region, saojiedata));
+	     }
+	     return new ResponseEntity<List<OrganizationVo>>(listTreeVo,HttpStatus.OK);
+	  }
+	  
+	  /**
+	   * 
+	    * dragSaojieData:拖转更改扫街、注册数据信息
+	    * @author Administrator 
+	    * @param id
+	    * @param pid 
+	    * @since JDK 1.8
+	   */
+	  @RequestMapping(value = "/dragSaojieData", method = RequestMethod.POST)
+	  public void dragSaojieData(String id, String pid) {
+	    SaojieData saojiedata=saojieDateService.findById(Long.parseLong(id));
+	    Region region=regionService.findListRegionbyid(pid);
+	    saojiedata.setRegion(region);
+	    saojieDateService.saveSaojieData(saojiedata);
+	    if(null!=saojiedata.getRegistId()&&"".equals(saojiedata.getRegistId())){
+	      RegistData registdata=assessService.findRegistData(saojiedata.getRegistId());
+	      if(null!=registdata){
+	        registdata.setRegion(region);
+	        assessService.saveRegistData(registdata);
+	      }
+	    }
+	   
+	  }
+	  
+	  /**
+	   * 
+	    * getRegionVo:区域扫街树
+	    * @author Administrator 
+	    * @param region
+	    * @param saojiedata
+	    * @return 
+	    * @since JDK 1.8
+	   */
+	  private OrganizationVo getRegionVo(Region region,SaojieData saojiedata){
+	    OrganizationVo vo=new OrganizationVo();
+	    String iconUrl=null;
+	    if(null!=region){
+	      vo.setId(region.getId()+"");
+	      vo.setName(region.getName());
+	      if(saojieDateService.findByReion(region).size()>0){
+	        vo.setIsParent("true");
+	      }else{
+	        vo.setIsParent("false");
+	      }
+	      iconUrl="/static/img/region/xian.png";
+	    }else{
+	      vo.setId(saojiedata.getId()+"");
+	      vo.setName(saojiedata.getName());
+	      vo.setIsParent("false");
+	      iconUrl="/static/img/organization/jl.png";
+	    }
+    
+    
+       
+      vo.setIcon(iconUrl);
+      vo.setIconClose(iconUrl);
+      vo.setIconOpen(iconUrl);
+      vo.setOpen("true");
+      vo.setpId("0");
+      return vo;
+  }
+	  
 }
