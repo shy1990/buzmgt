@@ -42,7 +42,5 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         converters.add(new MappingJackson2HttpMessageConverter());
         return converters;
     }
-
-	
-	 
+ 
 }

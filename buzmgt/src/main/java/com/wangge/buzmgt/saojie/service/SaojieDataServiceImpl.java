@@ -27,6 +27,7 @@ import com.wangge.buzmgt.saojie.repository.SaojieDataRepository;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.repository.SaojieDataRepository;
+import com.wangge.buzmgt.saojie.repository.SaojieRepository;
 import com.wangge.buzmgt.sys.vo.SaojieDataVo;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
@@ -39,11 +40,14 @@ public class SaojieDataServiceImpl implements SaojieDataService {
    
     return saojieDateRepository.findByRegion(r);
   }
+  @Resource
   private SaojieDataRepository sdr;
+  @Resource
+  private SaojieRepository sr;
 
   @Override
   public Page<SaojieData> getsaojieDataList(String userId,String regionId,int pageNum,int limit) {
-    return sdr.findAll(new Specification<SaojieData>() {
+    Page<SaojieData> page = sdr.findAll(new Specification<SaojieData>() {
       public Predicate toPredicate(Root<SaojieData> root, CriteriaQuery<?> query,
           CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<Predicate>();
@@ -63,6 +67,7 @@ public class SaojieDataServiceImpl implements SaojieDataService {
       }
 
     },new PageRequest(pageNum, limit));
+    return page;
   }
   
   @Override
@@ -101,5 +106,14 @@ public class SaojieDataServiceImpl implements SaojieDataService {
   public void saveSaojieData(SaojieData saojieData) {
 
     saojieDateRepository.save(saojieData);
+  }
+  @Override
+   public List<SaojieData> findByregionId(String regionId) {
+    return sdr.findByregionId(regionId);
+  }
+
+  @Override
+  public List<SaojieData> findBySalesman(SalesMan salesMan) {
+    return sdr.findBySalesman(salesMan);
   }
 }

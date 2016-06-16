@@ -164,5 +164,10 @@ public  class SalesManServiceImpl implements SalesManService {
     return salesManRepository.getIdByTurename(truename);
   }
 
+	@Override
+	public SalesMan findSaleamanByRegionId(String regionId) {
+		return salesManRepository.findSaleamanByRegionId(regionId);
+	}
+  
   
 }

@@ -9,6 +9,7 @@ import com.wangge.buzmgt.saojie.entity.SaojieData;
 import org.springframework.data.domain.Page;
 
 import com.wangge.buzmgt.sys.vo.SaojieDataVo;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 public interface SaojieDataService {
   
@@ -22,4 +23,8 @@ public interface SaojieDataService {
     
     
     void saveSaojieData(SaojieData saojieData);
+  
+  List<SaojieData> findByregionId(String regionId);
+  
+  List<SaojieData> findBySalesman(SalesMan salesMan);
 }

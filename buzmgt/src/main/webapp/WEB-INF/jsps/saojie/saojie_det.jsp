@@ -111,12 +111,14 @@
 						</div>
 						<!--/地图-->
 						<!--列表-->
-						<div class="saojie-list active" id="saojiedata">
-							
-						</div>
-						<div id="callBackPager"></div>
+						<table class="table saojie-list">
+							<tbody id="saojiedata">
+		
+							</tbody>
+						</table>
 						<!--/列表-->
 					</div>
+						<div id="callBackPager"></div>
 					<!--/box-body-->
 				</div>
 				<!--/box-->
@@ -234,8 +236,8 @@
 		<script type="text/javascript" src="/static/bootstrap/js/bootstrap-multiselect.js"></script>
 
 		<script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
-        <script src="/static/saojie/saojie-det.js" type="text/javascript" charset="utf-8"></script>
-		<script src="/static/js/common.js" type="text/javascript" charset="utf-8"></script>
+        <script src="<%=basePath%>static/saojie/saojie-det.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<%=basePath%>static/js/common.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 </body>
 

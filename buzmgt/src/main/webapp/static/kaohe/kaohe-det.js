@@ -117,14 +117,20 @@ function seachSuccessTable(data) {
 function nextStage(){
 	var salesmanId = $('#userId').val();
 	var assessId = $('#assessId').val();
-	window.location.href="/assess/toAssessStage?id="+salesmanId+"&assessId="+assessId;
+	var percent = $('#percent').val();
+	window.location.href="/assess/toAssessStage?id="+salesmanId+"&assessId="+assessId+"&percent="+percent;
 }
 
 //确认考核通过并进入下一阶段设置
-function toAssessStage(salesmanId,assessId) {
+function toAssessStage(salesmanId,assessId,percent) {
 	$('#assessPass').modal({
 		keyboard: false
 	})
 	$('#assessId').val(assessId);
 	$('#userId').val(salesmanId);
+	$('#percent').val(percent);
+}
+
+function toAssessDet(salesmanId,assessId,percent){
+	window.location.href="/assess/toAssessStage?id="+salesmanId+"&assessId="+assessId+"&percent="+percent;
 }

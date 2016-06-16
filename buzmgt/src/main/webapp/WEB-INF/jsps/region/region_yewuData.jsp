@@ -1,4 +1,5 @@
-<%@ page language="java" import="java.util.*,com.wangge.buzmgt.region.entity.*"  pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*,com.wangge.buzmgt.region.entity.*,com.wangge.buzmgt.sys.vo.*,com.wangge.buzmgt.saojie.entity.*"  pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
   String path = request.getContextPath();
   String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
@@ -38,7 +39,7 @@
 	<body>
 		<div class="content main">
 			<h4 class="team-member-header page-header ">
-				<i class="icon-update-saojiedata"></i>更改扫街数据
+				<i class="icon-update-saojiedata"></i>更改扫街数据 
 			</h4>
 			<div class="row">
 				<div class="col-md-12">
@@ -46,32 +47,33 @@
 					<div class="saojie-upd-body box border blue">
 						<!--title-->
 						<div class="box-title">
-							<h4>更改扫街数据</h4>
+							<h4>更改扫街数据     ${man}</h4>
 						</div>
 						<!--title-->
 						<!--box-body-->
 						<div class="box-body form-horizontal">
-							<!--内容-->
-							<div class="">
-								<div class="role-list">
-									<div
-										style="width: 100%; height: 32px; border-right: 1px solid rgb(221, 221, 221);"></div>
-									<ul id="saojiedataId" class="ztree"></ul>
-									<input type="hidden" name="regionId" value="${parentid}" id="regionId">
+							<div class="row">
+								<div class="col-sm-4">
+										<!--内容-->
+									<div class="">
+										<div class="role-list">
+											<div
+												style="width: 100%; height: 32px; border-right: 1px solid rgb(221, 221, 221);"></div>
+											<ul id="saojiedataId" class="ztree"></ul>
+											<input type="hidden" name="regionId" value="${parentid}" id="regionId">
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-sm-8">
+									<div class="saojie-set-map col-sm-10  col-sm-offset-1 col-xs-12">
+										<div class="map-box " id="allmap">
+										<input >
+									</div>
 								</div>
 							</div>
-							<div class="hr"></div>
-
-							<!--考核设置内容-->
-
-
-							<!--扫街设置地图-->
-							<div class="saojie-set-map col-sm-10  col-sm-offset-1 col-xs-12">
-								<div class="map-box " id="allmap">
-								<input >
-							</div>
-							<!--/扫街设置地图-->
-							<!--/内容-->
+							
+							
 						</div>
 						<!--/box-body-->
 					</div>
@@ -150,7 +152,7 @@
 			 		var count = rs.boundaries.length; //行政区域的点有多少个
 		
 			 		for(var i = 0; i < count; i++){
-			 		var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "red", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+			 		var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
 			 		map.addOverlay(ply); //添加覆盖物
 			 		map.setViewport(ply.getPath()); //调整视野 
 			 		} 
@@ -187,7 +189,7 @@
 					 
 					 <%}
 							}%>
-								], {strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
+								], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
 				 				map.addOverlay(polygon); 	
 								//色块上的文字shuomi
 				 				<%
@@ -203,6 +205,49 @@
 								}
 					}
 				%>
+		 	}
+		 			var marker;
+		 			var arr = new Array(); //创建数组
+		 	<%
+		 		SaojieDataVo saojiedatalist=(SaojieDataVo)request.getAttribute("saojiedatalist");
+		 		System.out.println(saojiedatalist.getAreaName());
+		 		List<SaojieData> listsaojiedata=saojiedatalist.getList(); 
+		 		
+		 		for(SaojieData saojiedata:listsaojiedata){
+		 			
+		 			String coor = saojiedata.getCoordinate();
+		 			String content=saojiedata.getName();
+					if(coor != null && coor != ""){
+		                for (int j = 0;j < coor.split("-").length;j++){%>
+		                	marker = new BMap.Marker(new BMap.Point(<%=coor.split("-")[0]%>,<%=coor.split("-")[1]%>));// 拿到坐标点
+		           <%     }%>
+					       	var content = '<%=content%>';
+				  			map.addOverlay(marker);               // 将标注添加到地图中
+				  			addClickHandler(content,marker);
+		           
+					<%}
+		 			
+		 		}
+		 	%>
+		 	
+		 	//监听事件
+		 	function addClickHandler(content,marker){
+		 		marker.addEventListener("click",function(e){
+		 			openInfo(content,e)}
+		 		);
+		 	}
+		 	var opts = {
+					width : 250,     // 信息窗口宽度
+					height: 80,     // 信息窗口高度
+					title : "扫街信息" , // 信息窗口标题
+					enableMessage:true//设置允许信息窗发送短息
+				   };
+		 	//开启窗口
+		 	function openInfo(content,e){
+		 		var p = e.target;
+		 		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+		 		var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+		 		map.openInfoWindow(infoWindow,point); //开启信息窗口
 		 	}
 		</script>
 	</body>

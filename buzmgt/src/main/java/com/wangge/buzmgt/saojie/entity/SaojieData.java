@@ -47,7 +47,7 @@ attributeNodes = @NamedAttributeNode("coordinates"))})
 public class SaojieData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+  
 	@Id
 	@GenericGenerator(name = "idgen", strategy = "increment")
 	@GeneratedValue(generator = "idgen")
@@ -57,6 +57,7 @@ public class SaojieData implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SAOJIE_ID")
 	private Saojie saojie;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
@@ -65,7 +66,8 @@ public class SaojieData implements Serializable {
 	private String description = "";
 	private String imageUrl;
 	private String coordinate;
-	@OneToOne(fetch = FetchType.EAGER)
+
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGISTDATA_ID")
 	private RegistData registData;
 	@JsonFormat(pattern="yyyy-MM-dd")
@@ -73,7 +75,7 @@ public class SaojieData implements Serializable {
 //	@DateTimeFormat(pattern = "yyyy-MM-dd")
   @Temporal(TemporalType.TIMESTAMP)
 	private Date saojieDate;
-	@JsonIgnore
+
 	@ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USER_ID")
   private SalesMan salesman;

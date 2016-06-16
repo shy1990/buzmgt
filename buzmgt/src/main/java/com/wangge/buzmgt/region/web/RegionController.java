@@ -8,9 +8,6 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -33,9 +30,16 @@ import com.wangge.buzmgt.saojie.service.SaojieDataService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.OrganizationVo;
+import com.wangge.buzmgt.sys.vo.SaojieDataVo;
 import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.RegionUtil;
+import com.wangge.json.JSONFormat;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping(value = "/region")
@@ -49,9 +53,13 @@ public class RegionController {
 	@Resource
 	private ManagerService managerService;
 	@Resource
-  private SaojieDataService saojieDateService;
+    private SaojieDataService saojieDateService;
 	@Resource
 	private AssessService assessService;
+	@Resource
+	private SaojieDataService sds;
+	@Resource
+	private SalesManService salesmanservice;
 	
 	private static final String ONELEAVE="0";
 	
@@ -391,16 +399,47 @@ public class RegionController {
 	    regionService.saveRegion(region);
 	    
 	    Region parentReigon =region.getParent();
+	     SalesMan man=salesmanservice.findSaleamanByRegionId(region.getParent().getId());
+	     if(man==null){
+	    	 model.addAttribute("man","此区域没有业务员");
+	     }else{
+	    	 model.addAttribute("man",man.getTruename());
+	    	 SaojieDataVo saojiedatalist  = sds.getsaojieDataList(man.getId(),null);
+	 	    List<SaojieData> list = saojiedatalist.getList();
+	 	    int size = 0;
+	 	    if(list!=null && !list.isEmpty()){
+	 	      size = list.size();
+	 	      saojiedatalist.setShopNum(size);
+	 	    }
+	 	    model.addAttribute("saojiedatalist",saojiedatalist);
+	     }
+	   
+	    
 	    
 	    model.addAttribute("areaname",parentReigon.getParent().getName()+parentReigon.getName());
 	    model.addAttribute("regionData",regionService.findByRegion(parentReigon.getId()));
 	    model.addAttribute("pcoordinates",parentReigon.getCoordinates());
 	    model.addAttribute("parentid",parentid);
-	    
+	
 	     return "region/region_yewuData";
 	    
 	  }
 	  
+	  
+	  
+	  @RequestMapping(value = "/getSaojiedataMap", method = RequestMethod.POST)
+	  @JSONFormat(filterField={"SaojieData.saojie","SaojieData.registData","Region.children","Region.parent"})
+	  public SaojieDataVo getSaojiedataMap(String regionid){
+		  System.out.println(regionid);
+	    SaojieDataVo saojiedatalist  = sds.getsaojieDataList(null, regionid);
+	    List<SaojieData> list = saojiedatalist.getList();
+	    int size = 0;
+	    if(list!=null && !list.isEmpty()){
+	      size = list.size();
+	      saojiedatalist.setShopNum(size);
+	    }
+	    return saojiedatalist;
+	  }
 	  
 	  
 	  

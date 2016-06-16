@@ -29,7 +29,7 @@ public interface SalesManService {
 
   String getRegionIdByUserId(String userId);
 
-
+  SalesMan findSaleamanByRegionId(String regionId);
   
   
 }

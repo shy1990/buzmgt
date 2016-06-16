@@ -32,10 +32,32 @@ $(function(){
 var regionid;
 //选择地区下拉框触发
 function ajaxSearchByRegion(saojieId){
+	delete searchData['page'];
 //	searchData['saojieId'] = $("#saojieId").val();
 	regionid = $("#regionId  option:selected").val();
 	searchData['regionId'] = regionid;
+	ajaxSearchPercent(searchData);
 	ajaxSearch(searchData);
+}
+
+function ajaxSearchPercent(regionId,userId){
+	$.ajax({
+		url : base + "teammember/percent",
+		type : "GET",
+		data : searchData,
+		beforeSend : function(request) {
+			request.setRequestHeader("Content-Type",
+					"application/json; charset=UTF-8");
+		},
+		dataType : "text",
+		success : function(data) {
+			$(".percent").text(data); 
+			$("#percent").width(data);
+		},
+		error : function() {
+			alert("系统错误，请稍后再试");
+		}
+	});
 }
 
 var opts = {
@@ -48,8 +70,8 @@ var map = new BMap.Map("allmap");
 var areaName = "";
 function ajaxSearch(searchData) {
 	if("地图"===$_btnText){
-		delete searchData['page'];
-		delete searchData['size'];
+		/*delete searchData['page'];
+		delete searchData['size'];*/
 		$.ajax({
 			url : base + "teammember/getSaojiedataMap",
 			type : "GET",
@@ -61,9 +83,7 @@ function ajaxSearch(searchData) {
 			dataType : "json",
 			success : function(data) {
 				map.clearOverlays();
-				/*$(".shopNum").text(data.shopNum);
-				$(".percent").text(data.percent); 
-				$("#percent").width(data.percent);*/
+				$(".shopNum").text(data.shopNum);
 				map.centerAndZoom(data.areaName, 13);
 				// map.centerAndZoom("上海",11);
 				// 添加带有定位的导航控件
@@ -97,8 +117,8 @@ function ajaxSearch(searchData) {
 				var arr = new Array(); //创建数组
 				$.each(data.list,function(n,items){
 					var coor = items.coordinate;
-					alert(coor);
 					if(coor != null && coor != ""){
+						arr = coor.split("-");
 		                for (var j = 0;j < arr.length;j++){
 		                	marker = new BMap.Marker(new BMap.Point(arr[0],arr[1]));// 拿到坐标点
 		                }
@@ -125,12 +145,10 @@ function ajaxSearch(searchData) {
 			},
 			dataType : "json",
 			success : function(data) {
-				$(".shopNum").text(data.shopNum);
-				$(".percent").text(data.percent); 
-				$("#percent").width(data.percent);
-					totalElements = data.page.totalElements;
-					totalPages = data.page.totalPages;
-					seachSuccessTable(data.page);
+				$(".shopNum").text(data.totalElements);
+					totalElements = data.totalElements;
+					totalPages = 10;
+					seachSuccessTable(data);
 					var searchTotal = totalElements;
 
 		            if (searchTotal != total || searchTotal == 0) {
@@ -160,7 +178,7 @@ function openInfo(content,e){
 }
 
 function initPaging(){
-	var totalCount = totalElements; //总条数 
+	var totalCount = totalElements; //总条数
 	showCount = totalPages, //显示分页个数
 	limit =  6;//每页条数
 	$('#callBackPager').extendPagination({

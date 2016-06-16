@@ -80,16 +80,16 @@
 							<!--bar 布局-->
 							<div class="col-sm-10 clear-p-l">
 								<div class="quiet-days marg-b-30">
-									<c:if test="${assess.assessStage == '1'}">
-										<span class="kaohe-stage onekaohe-stage">第一阶段考核</span> 
+									<c:if test="${salesman.status ne 'zhuanzheng'}">
+										<span class="kaohe-stage onekaohe-stage">第${assess.assessStage}阶段考核</span> 
 									</c:if>
-									<c:if test="${assess.assessStage == '2' }">
+									<%-- <c:if test="${assess.assessStage == '2' }">
 										<span class="kaohe-stage twokaohe-stage ">第二阶段考核</span> 
 									</c:if>
 									<c:if test="${assess.assessStage == '3'}">
 										<span class="kaohe-stage threekaohe-stage">第三阶段考核</span> 
-									</c:if>
-									<c:if test="${assess.assessStage == '3'&& assess.status == 'AGREE'}">
+									</c:if> --%>
+									<c:if test="${salesman.status eq 'zhuanzheng'}">
 										<span class="kaohe-stage overkaohe-stage">已转正</span> 
 									</c:if>
 									<c:if test="${assess.status == 'FAIL'}">
@@ -116,8 +116,36 @@
 							</div>
 							<!--bar 布局-->
 							<div class="col-xs-2 clear-p-r">
-								<button class="J_btn col-xs-12 btn btn-blue marg-t-30"
-									onclick="toAssessStage('${salesman.id}','${assess.id}');">考核通过</button>
+							<c:if test="${salesman.status ne 'zhuanzheng'}">
+								<c:choose>
+									<c:when test="${assess.assessStage eq '1'}">
+										<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+									onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');">考核通过</button>
+									</c:when>
+									<c:when test="${assess.assessStage eq '2'}">
+										<c:if test="${passType ne 1 || percent ge 100}">
+											<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+										onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');">考核通过</button>
+										</c:if>
+										<c:if test="${passType eq 1 && percent lt 100}">
+											<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+										onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');" disabled="disabled">考核通过</button>
+										</c:if>
+									</c:when>
+									<c:when test="${assess.assessStage eq '1'}">
+										<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+									onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');">考核通过</button>
+									</c:when>
+									<c:otherwise>
+										<button class="J_btn col-xs-12 btn btn-blue marg-t-30"
+									onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');">考核通过</button>
+									</c:otherwise>
+								</c:choose>
+							</c:if>
+							<c:if test="${salesman.status eq 'zhuanzheng'}">
+								<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+										onclick="toAssessDet('${salesman.id}','${assess.id}','${percent }');">已转正</button>
+							</c:if>
 							</div>
 						</div>
 						<!--/列表头部-->
@@ -267,39 +295,35 @@
 		<!--确认审核通过-->
 		<div class="modal-blue modal fade " id="assessPass" tabindex="-1"
 			role="dialog" aria-labelledby="exampleModalLabel">
-			<div class="modal-dialog " style="width:500px;" role="document">
-				<div class="modal-content">
-					<!--modal-header-->
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span class="glyphicon glyphicon-remove" aria-hidden="true">
-								<!--&times;-->
-							</span>
-						</button>
-						<h4 class="modal-top" style="font-size:none" id="exampleModalLabel">
-							温馨提示
-						</h4>
-					</div>
-					<!--modal-header-->
-					<!--modal-body-->
-					<div class="modal-body" style="padding-right:70px">
-					<form class="member-from-box form-horizontal" role="form" id='addForm' type='post'>
-					   <div class="form-group">
-					   <input type="hidden" name="assessId" id="assessId" value="">
-					   <input type="hidden" name="userId" id="userId" value="">
-					      <label for="firstname" class="col-sm-4 control-label">您确定要通过当前阶段考核并进入下一阶段吗？</label>
-					   </div>
-					   <div class="form-group">
-					        <button type="button" class="btn btn-blue" style="width:125px;height:40px;font-weight:bold" onclick="nextStage();">确 定</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-						</div>
-					</form>
-					</div>
-					<!--modal-body-->
-				</div>
-			</div>
-		</div>
+		   <div class="modal-dialog">
+		      <div class="modal-content">
+		         <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" 
+		               aria-hidden="true">
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		               	温馨提示
+		            </h4>
+		         </div>
+		         <div class="modal-body">
+		         		<input type="hidden" name="assessId" id="assessId" value="">
+					   	<input type="hidden" name="userId" id="userId" value="">
+					   	<input type="hidden" name="" id="percent" value="">
+		            	<p>您确定要通过当前阶段考核并进入下一阶段吗？</p>
+		            	<br>
+		            	<p style="font-size:11px;font-weight:bold">注意事项:第一和第二阶段有且仅有一次手动审核通通过机会</p>
+		         </div>
+		         <div class="modal-footer">
+		            <button type="button" class="btn btn-default" 
+		               data-dismiss="modal">关闭
+		            </button>
+		            <button type="button" class="btn btn-primary" onclick="nextStage();">
+		               	提交更改
+		            </button>
+		         </div>
+		      </div><!-- /.modal-content -->
+		   </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 		<!--确认审核通过-->
 		<!-- Bootstrap core JavaScript================================================== -->
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -331,12 +355,12 @@
 				pickerPosition : "bottom-right",
 				forceParse : 0
 			});
-			/* var $_haohe_plan = $('.J_kaohebar').width();
+			var $_haohe_plan = $('.J_kaohebar').width();
 			var $_haohe_planw = $('.J_kaohebar_parents').width();
 			$(".J_btn").attr("disabled", 'disabled');
 			if ($_haohe_planw === $_haohe_plan) {
 				$(".J_btn").removeAttr("disabled");
-			} */
+			}
 		</script>
 </body>
 
