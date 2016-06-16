@@ -84,12 +84,10 @@
 
 
                 </table>
-                <%--分页--%>
-                <div id="callBackPager"></div>
             </div>
-            <!--table-box-->
+            <%--分页--%>
+            <div id="callBackPager"></div>
         </div>
-        <!--油补记录-->
     </div>
 
 
