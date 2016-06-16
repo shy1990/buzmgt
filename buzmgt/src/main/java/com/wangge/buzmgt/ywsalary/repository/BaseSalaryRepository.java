@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import com.wangge.buzmgt.ywsalary.entity.BaseSalary;
 
 public interface BaseSalaryRepository extends JpaRepository<BaseSalary, Integer>, 
-JpaSpecificationExecutor<BaseSalary> ,BaseSalaryRepositoryCustom {
+JpaSpecificationExecutor<BaseSalary>{
   
 }

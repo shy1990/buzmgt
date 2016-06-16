@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ import com.wangge.buzmgt.util.SearchFilter;
 import com.wangge.buzmgt.ywsalary.entity.BaseSalary;
 import com.wangge.buzmgt.ywsalary.entity.BaseSalaryUser;
 import com.wangge.buzmgt.ywsalary.repository.BaseSalaryRepository;
+import com.wangge.buzmgt.ywsalary.repository.BaseSalaryUserRepository;
 
 @Service
 public class BaseSalaryServiceImpl implements BaseSalaryService {
@@ -40,6 +42,9 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   @Resource
   private BaseSalaryRepository baseSalaryRepository;
 
+  @Resource
+  private BaseSalaryUserRepository salaryUserRepository;
+  
   @Resource
   private RegionService regionService;
   
@@ -86,7 +91,7 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   @Override
   public List<BaseSalaryUser> getStaySetSalesMan() {
     
-    return baseSalaryRepository.getStaySetSalesMan();
+    return salaryUserRepository.findAll();
   }
 
   private static Specification<BaseSalary> baseSalarySearchFilter(final Collection<SearchFilter> filters,

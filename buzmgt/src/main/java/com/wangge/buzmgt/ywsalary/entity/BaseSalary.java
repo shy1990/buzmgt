@@ -45,11 +45,19 @@ public class BaseSalary implements Serializable  {
   @OneToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
   @JoinColumn(name="USER_ID",insertable=false,updatable=false)
   private SalesMan user;
-  private String name ; //姓名
   private Float salary;//薪资
 
   @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")  
   private Date updateDate;//修改日期
+
+  
+  public SalesMan getUser() {
+    return user;
+  }
+
+  public void setUser(SalesMan user) {
+    this.user = user;
+  }
 
   public Integer getId() {
     return id;
@@ -65,14 +73,6 @@ public class BaseSalary implements Serializable  {
 
   public void setUserId(String userId) {
     this.userId = userId;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public Float getSalary() {

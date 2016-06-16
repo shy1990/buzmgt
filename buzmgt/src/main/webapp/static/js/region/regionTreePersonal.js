@@ -166,6 +166,9 @@ function zTreeOnClick(event, treeId, treeNode) {
 	case "mainTask":
 		window.location.href='/monthTask/mainTasks?regionId='+treeNode.id;
 		break;	
+	case "baseSalary":
+		window.location.href='/baseSalary/show?regionId='+treeNode.id;
+		break;	
 	default:
 		window.location.href='/teammember/getSalesManList?regionId='+treeNode.id;
 		break;
