@@ -38,6 +38,10 @@ public class SalaryController {
     public String provideUploadInfo() {
         return "salary/salary";
     }
+    @RequestMapping(value = "/toSalary",method = RequestMethod.GET)
+    public String toJsp() {
+        return "salary/import_data";
+    }
 
     @RequestMapping(value = "/salarys",method = RequestMethod.GET)
     @ResponseBody

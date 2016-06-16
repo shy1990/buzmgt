@@ -138,7 +138,7 @@
 	            }
 	            activeObj.removeClass('active');
 	            $.each(currentObj, function (index, thiz) {
-	                if ($(thiz).find('a').html() == currPage) {
+	                if ($(thiz).find('a').html() == currPage && !$(thiz).hasClass("hidden")) {
 	                    $(thiz).addClass('active');
 	                    callBack(thiz,currPage);
 	                }
@@ -176,7 +176,7 @@
                 }
                 activeObj.removeClass('active');
                 $.each(currentObj, function (index, thiz) {
-                    if ($(thiz).find('a').html() == currPage) {
+                    if ($(thiz).find('a').html() == currPage && !$(thiz).hasClass("hidden")) {
                         $(thiz).addClass('active');
                         callBack(thiz,currPage);
                     }

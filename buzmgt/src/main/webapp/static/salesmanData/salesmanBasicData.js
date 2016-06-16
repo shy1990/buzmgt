@@ -1,9 +1,9 @@
 var reg = /^(\d{16}|\d{19})$/;
-var total;
+var total =0;
 var totalCount = 0;
 var limit = 0;
 var searchData = {
-    "size": "4",
+    "size": "2",
     "page": "0",
     "name": ''
 }
@@ -26,6 +26,7 @@ function list(searchData) {
                     initPaging();
                 }
             } else {
+                console.log("系统异常");
                 alert('系统异常');
             }
         }
@@ -45,6 +46,7 @@ function initPaging() {
         showCount: 5,//下面小图标显示的个数
         limit: limit,//每页显示的条数
         callback: function (curr, limit, totalCount) {
+            console.log("call back")
             searchData['page'] = curr - 1;
             searchData['size'] = limit;
             list(searchData);

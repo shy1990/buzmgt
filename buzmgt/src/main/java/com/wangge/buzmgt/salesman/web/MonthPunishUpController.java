@@ -36,7 +36,8 @@ public class MonthPunishUpController {
         return "punishset/month_punish_record2";
     }
     @RequestMapping(value="/MonthPunishUps",method= RequestMethod.GET)
-    @JSONFormat(filterField = {"SalesMan.user","region.parent","region.children"})
+//    @JSONFormat(filterField = {"SalesMan.user","region.parent","region.children"})
+    @JSONFormat(filterField = {"SalesMan.user","region.children"})
     public  MonthPunishUpResult findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                 @RequestParam(value = "size", defaultValue = "3") Integer size,
                                 @RequestParam(value = "startTime", defaultValue = "2016-01-26")String startTime,
