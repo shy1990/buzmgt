@@ -3,7 +3,7 @@ var total =0;
 var totalCount = 0;
 var limit = 0;
 var searchData = {
-    "size": "2",
+    "size": "4",
     "page": "0",
     "name": ''
 }
@@ -46,7 +46,6 @@ function initPaging() {
         showCount: 5,//下面小图标显示的个数
         limit: limit,//每页显示的条数
         callback: function (curr, limit, totalCount) {
-            console.log("call back")
             searchData['page'] = curr - 1;
             searchData['size'] = limit;
             list(searchData);
@@ -218,7 +217,6 @@ function sure_add_card() {
         },
         type:'post',
         success:function(data){
-            console.log(data);
             if(data.status == "success"){
                 alert("添加成功");
 //                    window.location.href = 'salesmanData/list1';

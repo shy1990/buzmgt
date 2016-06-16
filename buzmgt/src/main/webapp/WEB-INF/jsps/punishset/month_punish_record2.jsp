@@ -20,7 +20,6 @@
     <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
-    <link rel="stylesheet" type="text/css" href="css/income-cash.css">
     <link href="../static/fenye/css/fenye.css" rel="stylesheet">
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 </head>
@@ -210,7 +209,7 @@
             data: searchData,
             async: false,
             success: function (result) {
-                console.log(result);
+//                console.log(result);
                 var data = result.page;
                 totalCount = data.totalElements;
                 limit = data.size;
