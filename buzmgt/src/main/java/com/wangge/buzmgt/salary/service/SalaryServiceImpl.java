@@ -99,27 +99,31 @@ public class SalaryServiceImpl implements SalaryService {
     }
 
     @Override
-    public void save(Map<Integer, String> map) {
-        map.forEach((Integer,s)->{
-            String[] content = s.split("-->");
-            logger.info("=====================");
-            if(!"姓名".equals(content[0])){
-                Salary salary= new Salary();
-                logger.info(content[0]);
-                logger.info(content[1]);
-                logger.info(content[2]);
-                logger.info(DateUtil.string2Date(content[3]));
-                logger.info(content[4]);
-                salary.setName(content[0]);
-                salary.setSalary(Float.parseFloat(content[1]));
-                salary.setTel(content[2]);
-                salary.setCreateTime(DateUtil.string2Date(content[3]));
-                salary.setMessage(content[4]);
-                salaryRespository.save(salary);
+    public void save(Map<Integer, String> map) throws Exception {
+        try{
+            map.forEach((Integer,s)->{
+                String[] content = s.split("-->");
+                logger.info("=====================");
+                if(!"姓名".equals(content[0])){
+                    Salary salary= new Salary();
+                    logger.info(content[0]);
+                    logger.info(content[1]);
+                    logger.info(content[2]);
+                    logger.info(DateUtil.string2Date(content[3]));
+                    logger.info(content[4]);
+                    salary.setName(content[0]);
+                    salary.setSalary(Float.parseFloat(content[1]));
+                    salary.setTel(content[2]);
+                    salary.setCreateTime(DateUtil.string2Date(content[3]));
+                    salary.setMessage(content[4]);
+                    salaryRespository.save(salary);
+                }
+            });
+        } catch(Exception e){
+            logger.info("+++++++++++++++++"+e.getMessage());
+            throw new Exception("文件格式异常，请您检查上传文件");
+        }
 
-            }
-        });
-        logger.info(map);
     }
     public static Date getDate(String time) throws ParseException {
 

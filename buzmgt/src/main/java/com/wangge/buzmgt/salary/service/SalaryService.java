@@ -14,5 +14,5 @@ public interface SalaryService {
     public Page<Salary> findByPage(Pageable pageable, String startTime, String endTime,String name);
 
 
-    public void save(Map<Integer, String> map);
+    public void save(Map<Integer, String> map) throws Exception;
 }

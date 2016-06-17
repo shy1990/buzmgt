@@ -59,15 +59,13 @@ public class SalaryController {
 
     /**
      * 文件上传
-     * @param name
      * @param file
      * @return
      */
 
     @RequestMapping(value="/upload", method= RequestMethod.POST)
     public @ResponseBody
-    JSONObject excelUpload(@RequestParam("name") String name,
-                           @RequestParam("file") MultipartFile file){
+    JSONObject excelUpload(@RequestParam("file") MultipartFile file){
         logger.info("======fileUploadPath:"+fileUploadPath);
         String fileRealPath = "";
         JSONObject jsonObject = new JSONObject();
