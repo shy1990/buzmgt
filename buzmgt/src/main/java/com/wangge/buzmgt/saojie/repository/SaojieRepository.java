@@ -39,4 +39,7 @@ public interface SaojieRepository extends JpaRepository<Saojie, Long>{
   List<Saojie> findSaojie (SaojieStatus  status,String userId);
   @Query("select s from Saojie s where s.order=?1 and s.salesman.id=?2")
   Saojie findByOrderAndUserId(int order,String userId);
+  
+  @Query("select s from Saojie s where s.region.id=?1")
+  Saojie findByregionId(String regionId);
 }

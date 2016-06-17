@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.annotations.Parameter;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.util.StringUtils;
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
@@ -44,6 +44,7 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.json.JSONFormat;
 
 /**
  * 
@@ -319,10 +320,16 @@ public class TeamMembersController {
     * @since JDK 1.8
    */
   @RequestMapping(value = "/getSaojiedataMap", method = RequestMethod.GET)
-  @ResponseBody
+  @JSONFormat(filterField={"SaojieData.saojie","SaojieData.registData","SalesMan.region","SalesMan.user","Region.children","Region.parent"})
   public SaojieDataVo getSaojiedataMap(@RequestParam(value = "userId",required = false)SalesMan salesMan,String regionId){
     SaojieDataVo saojiedatalist  = sds.getsaojieDataList(salesMan.getId(), regionId);
     saojiedatalist.setAreaName(salesMan.getRegion().getName());//设置业务负责区域，用于地图加载
+    List<SaojieData> list = saojiedatalist.getList();
+    int size = 0;
+    if(list!=null && !list.isEmpty()){
+      size = list.size();
+      saojiedatalist.setShopNum(size);
+    }
     return saojiedatalist;
   }
   
@@ -339,12 +346,32 @@ public class TeamMembersController {
     * @since JDK 1.8
    */
   @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.GET)
-  @ResponseBody
-  public Page<SaojieData> getSojieDtaList(String userId, String regionId,String page,String size){
+  @JSONFormat(filterField={"SaojieData.saojie","SaojieData.registData","SalesMan.region","SalesMan.user","Region.children","Region.parent"})
+  public Page<SaojieData> getSojieDtaList(@RequestParam(value = "userId",required = false)SalesMan salesMan, String regionId,String page,String size){
     int pageNum = Integer.parseInt(page != null ? page : "0");
     int limit = Integer.parseInt(size);
-    Page<SaojieData> dataPage  = sds.getsaojieDataList(userId, regionId,pageNum,limit);
+    Page<SaojieData> dataPage  = sds.getsaojieDataList(salesMan.getId(), regionId,pageNum,limit);
     return dataPage;
+  }
+  
+  @RequestMapping(value = "/percent", method = RequestMethod.GET)
+  @ResponseBody
+  public String getPercent(@RequestParam(value = "userId",required = false)SalesMan salesMan,String regionId){
+    SaojieDataVo sdv  = new SaojieDataVo();
+    if(!StringUtils.isBlank(regionId)){
+      Saojie saojie = saojieService.findByregionId(regionId);
+      List<SaojieData> list = sds.findByregionId(regionId);
+      sdv.addPercent(list.size(), saojie.getMinValue());
+    }else{
+      Integer percent = 0;
+      List<Saojie> saojie = saojieService.findBysalesman(salesMan);
+      List<SaojieData> list = sds.findBySalesman(salesMan);
+      for(Saojie sj: saojie){
+        percent += sj.getMinValue();
+      }
+      sdv.addPercent(list.size(), percent);
+    }
+    return sdv.getPercent();
   }
   
   /**

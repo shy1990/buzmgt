@@ -20,6 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
@@ -57,7 +58,7 @@ public class SalesMan implements Serializable {
 
 	@Column(name = "ASSESS_STAGE")
 	private String assessStage;
-
+	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
 	private Region region;
@@ -74,6 +75,9 @@ public class SalesMan implements Serializable {
 
 	private int isOldSalesman;
 	private int isPrimaryAccount;
+	
+	@Column(name="ASSESS_STAGE_SUM")
+	private Integer assessStageSum;
 
 	public SalesMan() {
 		super();
@@ -181,6 +185,14 @@ public class SalesMan implements Serializable {
 
   public void setIsPrimaryAccount(int isPrimaryAccount) {
     this.isPrimaryAccount = isPrimaryAccount;
+  }
+
+  public Integer getAssessStageSum() {
+    return assessStageSum;
+  }
+
+  public void setAssessStageSum(Integer assessStageSum) {
+    this.assessStageSum = assessStageSum;
   }
 
 }

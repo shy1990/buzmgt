@@ -476,7 +476,6 @@ function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
 function onloadZTree() {
 	var ztreeNodes;
 	var parentid=$("#regionId").val();
-	alert(parentid);
 	$.ajax({
 		async : true, // 是否异步
 		cache : false, // 是否使用缓存
@@ -494,7 +493,47 @@ function onloadZTree() {
 		}
 	});
 }
+function  onloadSaojiedataMap(){
+	alert(111);
+	var parentid=$("#regionId").val();
+	$.ajax({
+		async : true, // 是否异步
+		cache : false, // 是否使用缓存
+		type : 'post', // 请求方式,post
+		dataType : "text", // 数据传输格式
+		url : "/region/getSaojiedataMap?regionid="+parentid, // 请求链接
+		error : function() {
+			BootstrapDialog.alert("访问服务器出错");
+		},
+		success : function(data) {
+			alert(data);
+			//扫街数据循环
+			var marker;
+			var arr = new Array(); //创建数组
+			$.each(data.list,function(n,items){
+				var coor = items.coordinate;
+				if(coor != null && coor != ""){
+					arr = coor.split("-");
+	                for (var j = 0;j < arr.length;j++){
+	                	marker = new BMap.Marker(new BMap.Point(arr[0],arr[1]));// 拿到坐标点
+	                }
+//					var desc="<%=desc%>";
+		  			var content = items.name;
+		  			map.addOverlay(marker);               // 将标注添加到地图中
+		  			addClickHandler(content,marker);
+		  			map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+				}
+			  });
+		},
+		error : function() {
+			alert("系统错误，请稍后再试");
+		}
+	});
+}
+
+
 
 $(document).ready(function() {
 	onloadZTree();
+	//onloadSaojiedataMap();
 });

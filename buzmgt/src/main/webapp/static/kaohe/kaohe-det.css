@@ -152,7 +152,9 @@ a.link-export:hover, a.link-export:focus {
 	margin-bottom: 5px;
 }
 
-/*鑰冩牳杩涘害鏉�*/
+
+. /*鑰冩牳杩涘害鏉�*/
+
 .bar-kaohe {
 	background: #3993C7;
 }
@@ -195,4 +197,29 @@ a.link-export:hover, a.link-export:focus {
 }
 .marg-t{
 	margin-top: 10px;
+}
+
+.member-from-box span.input-group-addon{
+	padding: 0 5px;
+}
+/*杈撳叆妗嗙粍 input 瀹氫綅  input.input-group*/
+.member-from-box .input-group{
+	float: left;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.member-from-box .form-group{
+	margin-bottom: 38px;
+}
+@media (max-width:500px ) {
+	.member-from-box .col-xs-4{
+		width: 100%;
+		margin-bottom: 10px;
+	}
+}
+.member-from-box button{
+	font-size: 16px;
+	font-weight: bold;
+	/*padding-top: 15px;*/
+	/*padding-bottom: 15px;*/
 }

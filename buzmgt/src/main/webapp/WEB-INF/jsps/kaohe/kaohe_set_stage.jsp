@@ -82,15 +82,7 @@
 														<td class="">
 															<div class="col-sm-8">
 																<div class="form-group">
-																	<c:if test="${assess.assessStage =='1' }">
-																		<label class="">第一阶段:</label>
-																	</c:if>
-																	<c:if test="${assess.assessStage =='2' }">
-																		<label class="">第二阶段:</label>
-																	</c:if>
-																	<c:if test="${assess.assessStage =='3' }">
-																		<label class="">第三阶段:</label>
-																	</c:if>
+																	<label class="">第${assess.assessStage }阶段:</label>
 																	<label class="" id="regionlbl">${assess.regionName }</label>
 																</div>
 															</div>
@@ -140,19 +132,13 @@
 						</div>
 						<!--一阶段考核设置内容-->
 						<div class="hr"></div>
-
+						<c:if test="${stage lt salesman.assessStageSum}">
 						<!--考核内容-->
-						<c:if test="${stage eq 1 or stage eq 2 }">
 							<div class="form-group  marg-b-10">
-								<c:if test="${stage eq 1 }">
-									<label class="col-sm-2 control-label">二阶段考核设置:</label>
-								</c:if>
-								<c:if test="${stage eq 2 }">
-									<label class="col-sm-2 control-label">三阶段考核设置:</label>
-								</c:if>
+								<label class="col-sm-2 control-label">第${stage + 1}阶段考核设置:</label>
 							</div>
 							<form class="member-from-box form-horizontal"
-								action="/assess/saveAssess/${salesman.id}?stage=+${stage }+"
+								action="/assess/saveAssess/${salesman.id}?stage=+${stage+1 }+"
 								name="form" method="post">
 								<div class="form-group">
 									<div
@@ -178,9 +164,6 @@
 																	href="javascript:;" id="btn"><i
 																	class="icon-saojie-add"></i></a>
 															</div> 
-															<c:if test="${stage eq 1 }">
-																${assess.regionName }
-															</c:if>
 														</td>
 														<td class="average-tr target form-inline">
 															<div class="col-sm-5">
@@ -242,6 +225,15 @@
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-2 input-group">
 										<button class="btn btn-audit col-sm-2" onclick="toSubmit();">确定</button>
+									</c:if>
+										<c:if test="${salesman.status ne 'zhuanzheng' }">
+											<c:if test="${stage eq salesman.assessStageSum}">
+											<button id="passed" class="btn btn-audit col-sm-2" style="margin-left:150px" onclick="passed('${salesman.id}');">转正</button>
+										</c:if>
+										</c:if>
+										<c:if test="${salesman.status eq 'zhuanzheng' }">
+											<button id="passed" class="btn btn-audit col-sm-2" style="margin-left:150px" disabled="disabled">已转正</button>
+										</c:if>
 									</div>
 								</div>
 								<div class="clearfix"></div>
@@ -254,7 +246,6 @@
 							<!--/内容-->
 					</div>
 					<!--/box-body-->
-					</c:if>
 				</div>
 				<!--/box-->
 			</div>

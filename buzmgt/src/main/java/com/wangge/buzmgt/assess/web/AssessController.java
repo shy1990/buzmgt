@@ -128,21 +128,13 @@ public class AssessController {
     * @since JDK 1.8
    */
   @RequestMapping(value = "/saveAssess/{userId}",method = RequestMethod.POST)
-  public String saveAssess(Assess assess,@PathVariable(value = "userId")SalesMan salesman,int stage){
+  public String saveAssess(Assess assess,@PathVariable(value = "userId")SalesMan salesman,int stage,HttpServletRequest request){
     assess.setSalesman(salesman);
     assess.setStatus(AssessStatus.PENDING);
-    if(stage == 0){
-      assess.setAssessStage("1");
-    }
-    if(stage == 1){
       /*Assess a = assessService.findByStageAndSalesman("1",assess.getSalesman().getId());//查第一阶段的考核
       assess.setActiveNum(assess.getActiveNum()+a.getActiveNum());//累加第一阶段活跃客户
       assess.setOrderNum(assess.getOrderNum()+a.getOrderNum());//累加第一阶段提货量
-*/      assess.setAssessStage("2");
-    }
-    if(stage == 2){
-      assess.setAssessStage("3");
-    }
+*/    assess.setAssessStage(String.valueOf(stage));
     Date startDate=assess.getAssessTime();
     Calendar c = Calendar.getInstance();
     c.setTimeInMillis(startDate.getTime());
@@ -153,6 +145,7 @@ public class AssessController {
     assessService.saveAssess(assess);
     if("1".equals(assess.getAssessStage())){
       salesman.setStatus(SalesmanStatus.kaifa);
+      salesman.setAssessStageSum(Integer.parseInt(request.getParameter("assessStageSum")));
     }
     salesman.setAssessStage(assess.getAssessStage());
     salesManService.addSalesman(salesman);
@@ -272,7 +265,11 @@ public class AssessController {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    model.addAttribute("percent",baifen);
+    if("2".equals(assess.getAssessStage())){
+      Assess firstStage = assessService.findByStageAndSalesman("1", salesmanId.trim());
+      model.addAttribute("passType",firstStage.getPassType());
+    }
+    model.addAttribute("percent",Integer.parseInt(baifen));
     model.addAttribute("active",active);
     model.addAttribute("orderNum",orderNum);
     return "kaohe/kaohe_det";
@@ -287,6 +284,15 @@ public class AssessController {
     return statistics;
   }
   
+  @ResponseBody
+  @RequestMapping(value = "/passed",method = RequestMethod.GET)
+  public String passed(String salesmanId){
+    SalesMan salesman = salesManService.findById(salesmanId);
+    salesman.setStatus(SalesmanStatus.zhuanzheng);
+    salesManService.addSalesman(salesman);
+    return "ok";
+  }
+  
   /**
    * 
     * toAssessSet:(跳转到考核设置页面). <br/> 
@@ -297,10 +303,19 @@ public class AssessController {
     * @since JDK 1.8
    */
   @RequestMapping("/toAssessStage") 
-  public String toAssessStage(@RequestParam("id") String id , Model model,@RequestParam("assessId") Assess assess){
+  public String toAssessStage(@RequestParam("id") String id , Model model,@RequestParam("assessId") Assess assess,String percent){
     SalesMan salesman = salesManService.findByUserId(id.trim());
     List<Assess> list = assessService.findBysalesman(salesman);
     int stage = assessService.gainMaxStage(id.trim());
+    int per = Integer.parseInt(percent);
+    if(stage == 1 && per < 100){//第一阶段且不达标时标记为手工通过
+      assess.setPassType(1);
+    }
+    if(stage == 2 && per < 100){//第二阶段且不达标时通过标记为手工通过
+      assess.setPassType(1);
+    }
+    assess.setStatus(AssessStatus.AGREE);
+    assessService.saveAssess(assess);
     model.addAttribute("stage",stage);
     model.addAttribute("list", list);
     model.addAttribute("salesman", salesman);

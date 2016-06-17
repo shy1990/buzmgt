@@ -57,5 +57,6 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
 	// s.SalesmanStatus=1")
 	@Query("select s.id,s.truename,s.mobile,s.regdate from SalesMan s")
 	List<Object> gainSaojieMan();
-
+	
+	SalesMan findSaleamanByRegionId(String regionId);
 }
