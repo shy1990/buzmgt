@@ -13,7 +13,7 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 public interface SaojieService {
 
-  void saveSaojie(Saojie saojie);
+  Saojie saveSaojie(Saojie saojie);
 
   Page<Saojie> getSaojieList(Saojie saojie,int pageNum,String regionName);
   

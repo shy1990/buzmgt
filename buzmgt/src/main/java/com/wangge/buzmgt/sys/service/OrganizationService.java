@@ -19,7 +19,7 @@ public interface OrganizationService {
 
 	public Organization getOrganById(int id);
 	
-	public void addOrganization(Organization organ);
+	public Organization addOrganization(Organization organ);
 	
 	public void deleteOrganization(Organization organ);
 	
