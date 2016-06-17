@@ -18,6 +18,7 @@
     <title>月扣罚记录</title>
 
     <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/bootStrapPager/css/page.css" />
     <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
     <link href="../static/fenye/css/fenye.css" rel="stylesheet">
