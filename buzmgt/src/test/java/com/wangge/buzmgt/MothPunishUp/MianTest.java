@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Created by 神盾局 on 2016/5/21.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BuzmgtApplication.class)
 @WebAppConfiguration
 public class MianTest {
@@ -91,7 +91,7 @@ public class MianTest {
 //        }
 //
 // }
-    @Test//分页测试
+   // @Test//分页测试
     public void test1(){
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(0, 2, sort);
@@ -103,7 +103,7 @@ public class MianTest {
 
     }
 
-    @Test//条件查询
+    //@Test//条件查询
     public void test2() throws ParseException {
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         String endTime = "2016-05-26";
@@ -118,19 +118,19 @@ public class MianTest {
             System.out.println("**:  "+o.getId());
         }
     }
-    @Test//条件查询
+    //@Test//条件查询
     public void test3(){
         Float a = mothPunishUpRepository.amerceSum();
         System.out.println(a);
     }
-    @Test//条件查询
+   // @Test//条件查询
     public void test4(){
         MonthPunishUp p = new MonthPunishUp();
         p.setCreateDate(new Date());
         p.setDebt(Float.parseFloat("777"));
         mothPunishUpRepository.save(p);
     }
-    @Test
+   // @Test
     public void test5() throws ParseException {
        System.out.println("*****:  "+getString());
     }
