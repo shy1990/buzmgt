@@ -90,8 +90,8 @@
                         <tbody id="tbody">
                         </tbody>
                     </table>
-                    <div id="callBackPager"></div>
                 </div>
+                <div id="callBackPager"></div>
                 <!--table-box-->
             </div>
             <!--待审核账单-->
@@ -248,7 +248,6 @@
                                 salary.handelerbars_register(content);
                                 if (salary._count.totalCount != salary._count.total || salary._count.totalCount == 0) {
                                     salary._count.total = salary._count.totalCount;
-                                    console.log('*********');
                                     salary.initPaging();
                                 }
                             },
