@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -28,6 +29,7 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 import com.wangge.buzmgt.ywsalary.entity.BaseSalary;
 import com.wangge.buzmgt.ywsalary.entity.BaseSalaryUser;
@@ -42,6 +44,8 @@ public class BaseSalaryController {
   private BaseSalaryService baseSalaryService;
   @Resource
   private ManagerService managerService;
+  @Resource
+  private SalesManService salesManService;
 
   private static final String SEARCH_OPERTOR = "sc_";
 
@@ -86,6 +90,23 @@ public class BaseSalaryController {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<BaseSalary> page = baseSalaryService.findAll(searchParams, pageRequest);
 
+    return page;
+  }
+  /**
+   * 获取数据
+   * @param request
+   * @param pageRequest
+   * @return
+   */
+  @RequestMapping(value = "/{truename}", method = RequestMethod.GET)
+  @JSONFormat(filterField = { "Region.children", "Region.parent",
+  "SalesMan.user" }, nonnull = true, dateFormat = "yyyy-MM-dd HH:mm")
+  public Page<BaseSalary> getBaseSalaryByTruename(@PathVariable(value="truename") String name,HttpServletRequest request) {
+    List<String> userIds=salesManService.findByTruename(name);
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    searchParams.put("IN_userId", userIds);
+    List<BaseSalary> list= baseSalaryService.findAll(searchParams);
+    Page<BaseSalary> page =new PageImpl<>(list);
     return page;
   }
   /**
@@ -164,9 +185,9 @@ public class BaseSalaryController {
    * @param request
    * @return
    */
-  @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+  @RequestMapping(value = "/delete", method = RequestMethod.GET)
   @ResponseBody
-  public JSONObject deleteSalary(@PathVariable("Id") BaseSalary baseSalary, HttpServletRequest request) {
+  public JSONObject deleteSalary(@RequestParam("Id") BaseSalary baseSalary, HttpServletRequest request) {
     JSONObject json = new JSONObject();
     try {
       baseSalaryService.delete(baseSalary);

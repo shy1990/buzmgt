@@ -22,7 +22,7 @@ function initModal() {
 		var salary = button.data('salary') // Extract info from data-* attributes
 		var truename = button.data('truename') // Extract info from data-* attributes
 		var modal = $(this)
-		modal.find('.modal-body #delId').text(id);
+		modal.find('.modal-body #delId').val(id);
 		modal.find('.modal-body #delSalary').text(salary);
 		modal.find('.modal-body #delName').text(truename);
 	})
@@ -94,8 +94,8 @@ function deleteSalary(){
 		return false;
 	}
 	$.ajax({
-		url:base+'baseSalary/'+id,
-		type:'DELETE',
+		url:base+'baseSalary/delete?Id='+id,
+		type:'get',
 		dateType:'json',
 		success:function(data){
 			if (data.status != 'failure'){
@@ -112,11 +112,15 @@ function deleteSalary(){
  * 检索
  */
 function goSearch() {
-	var Time = $('#searchDate').val();
-	if (!isEmpty(Time)) {
-		SearchData['sc_EQ_payDate'] = Time;
-		findBankTradeList();
-	}
+	var truename=$('#truename').val();
+	$.ajax({
+		url:base+'baseSalary/'+truename(),
+		type:'GET',
+		dataType:'json',
+		success:function(data){
+			
+		}
+	})
 }
 /**
  * 选择区域

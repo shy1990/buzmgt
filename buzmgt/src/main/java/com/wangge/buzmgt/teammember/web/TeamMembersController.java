@@ -259,7 +259,7 @@ public class TeamMembersController {
   @RequestMapping("/{truename}")
   @ResponseBody
   public String getUserIdByTurename(@PathVariable("truename") String truename){
-    return salesManService.findByTruename(truename);
+    return salesManService.findByTruename(truename).get(0);
   }
   
   /**

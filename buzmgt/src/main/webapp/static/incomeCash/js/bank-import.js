@@ -61,8 +61,9 @@ function initFileUpload() {
             $('#file-input').fileinput('clear');
             $('#daoru').modal('hide');
             $('#searchDate').val(firstImportDate);
-            goSearch();
             alert("上传完成");
+            window.location.reload();
+            goSearch();
         }
     });
 }

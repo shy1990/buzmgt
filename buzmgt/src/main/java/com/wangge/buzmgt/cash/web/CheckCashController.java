@@ -65,9 +65,9 @@ public class CheckCashController {
     String jsonStr="";
     try {
       
-      String userId= salesManService.findByTruename(salesmanName);
+      List<String> userIds= salesManService.findByTruename(salesmanName);
       Map<String, Object> secp=new HashMap<>();
-      secp.put("EQ_userId", userId);
+      secp.put("IN_userId", userIds);
       secp.put("EQ_createDate", createDate);
       List<CheckCash> list = checkCashService.findAll(secp);
       json.put("content", list);

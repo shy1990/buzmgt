@@ -38,15 +38,7 @@ public class JSONUtilTest {
   }
   public static void main(String[] args) {
 
-    String str = "[{\"regionType\":0,\"regionName\":\"家\",\"coordinates\":\"116.99656722742283-36.73533570586392\",\"time\":\"18:46:12\",\"type\":\"上班\"}"
-        + ",{\"regionType\":0,\"regionName\":\"家\",\"coordinates\":\"116.99656722742283-36.73533570586392\",\"time\":\"18:58:22\",\"type\":\"下班\"}"
-        + ",{\"regionType\":0,\"regionName\":\"家\",\"coordinates\":\"116.99656722742283-36.73533570586392\",\"time\":\"18:58:22\",\"type\":\"下班\"}]";
-   List<OilRecord> list = stringArrtoJsonList(str,OilRecord.class);
-   Long l=System.currentTimeMillis();
-   System.out.println(l);;
-   for(OilRecord o:list){
-     System.out.println(o);
-   }
-   System.out.println(System.currentTimeMillis()-l);;
+   String key="ab.asd";
+   System.out.println(key.matches("^[a-zA-Z]*.[a-zA-Z]*.[a-zA-Z]*$"));
   }
 }

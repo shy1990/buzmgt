@@ -84,16 +84,16 @@ var SearchData = {
 		</h4>
 		<div class="row text-time">
 
-			<div class="salesman" style="margin-top: 5px">
+			<!-- <div class="salesman" style="margin-top: 5px">
 				<input class="cs-select  text-gery-hs" placeholder="  请选择区域">
 				<button class="btn btn-blue btn-sm"
-					onclick="goSearch('${salesman.id}','${assess.id}');">检索</button>
-			</div>
+					onclick="">检索</button>
+			</div> -->
 
 			<div class="link-posit-t pull-right export">
-				<input class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
+				<input id="truename" class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
 				<button class="btn btn-blue btn-sm"
-					onclick="goSearch('${salesman.id}','${assess.id}');">检索</button>
+					onclick="goSearch();">检索</button>
 				<a id="table-export" class="table-export" href="javascript:void(0);">导出excel</a>
 			</div>
 

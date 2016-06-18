@@ -160,7 +160,7 @@ public  class SalesManServiceImpl implements SalesManService {
   }
 
   @Override
-  public String findByTruename(String truename) {
+  public List<String> findByTruename(String truename) {
     return salesManRepository.getIdByTurename(truename);
   }
 
