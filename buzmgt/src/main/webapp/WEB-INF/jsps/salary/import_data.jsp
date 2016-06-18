@@ -90,8 +90,8 @@
                         <tbody id="tbody">
                         </tbody>
                     </table>
-                    <div id="callBackPager"></div>
                 </div>
+                <div id="callBackPager"></div>
                 <!--table-box-->
             </div>
             <!--待审核账单-->
@@ -283,12 +283,14 @@
                      *日期检索
                      */
                     findByDate: function (searchData) {
+                        salary._count.total = -1;
                         salary.findAll(searchData);
                     },
                     /**
                      *  姓名检索
                      */
                     findByName: function (searchData) {
+                        salary._count.total = -1;
                         salary.findAll(searchData);
                     },
 
