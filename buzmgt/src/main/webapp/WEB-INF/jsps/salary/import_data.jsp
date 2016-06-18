@@ -248,6 +248,7 @@
                                 salary.handelerbars_register(content);
                                 if (salary._count.totalCount != salary._count.total || salary._count.totalCount == 0) {
                                     salary._count.total = salary._count.totalCount;
+                                    console.log('*********');
                                     salary.initPaging();
                                 }
                             },
@@ -283,12 +284,14 @@
                      *日期检索
                      */
                     findByDate: function (searchData) {
+                        salary._count.total = -1;
                         salary.findAll(searchData);
                     },
                     /**
                      *  姓名检索
                      */
                     findByName: function (searchData) {
+                        salary._count.total = -1;
                         salary.findAll(searchData);
                     },
 

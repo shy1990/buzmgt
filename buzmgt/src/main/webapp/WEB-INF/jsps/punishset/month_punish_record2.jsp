@@ -242,6 +242,7 @@
         searchData['startTime'] = $("#aaa").val() ;
         searchData['endTime'] = $("#bbb").val() ;
         searchData['page'] = 0;
+        total = -1;
         ajaxSearch(searchData);
     });
 
@@ -252,7 +253,6 @@
     }
 
     $("#exportExcel").click(function(){
-        console.log(125255  );
         $.get("MonthPunishUp/export");
     });
 </script>
