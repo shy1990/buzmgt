@@ -188,6 +188,8 @@ html{
 .text-time{
     font-size: 12px;
     color: #636363;
+    margin-top: 35px;
+    margin-bottom: 20px;
 }
 
 .chang-time{
@@ -200,6 +202,7 @@ html{
     background-color: #ffffff;
     border:1px silver solid;
     border-radius: 3px;
+    padding-left: 10px;
 }
 
 .cs-selected{
@@ -335,6 +338,9 @@ html{
 .icon-jcxz{
     background: url("../../ticheng/img/pay/jcxz.png") no-repeat center ;
 }
+.icon-sz-new{
+    background: url("../../ticheng/img/pay/sznew.png") no-repeat center;
+}
 
 .icon-sz{
     background: url("../../ticheng/img/pay/sz.png") no-repeat center;
@@ -353,9 +359,18 @@ html{
     background: url("../../ticheng/img/pay/sy.png") no-repeat center;
 }
 
-.icn-wqs{
-
+.icon-daoru{
+    background: url("../../ticheng/img/pay/daoru.png") no-repeat center;
 }
+.icon-rq{
+    background: url("../../ticheng/img/pay/yue.png") no-repeat center;
+}
+
+.icon-wj{
+    background: url("../../ticheng/img/pay/wj.png") no-repeat center;
+}
+
+
 
 .tb-basin tr>td>p{
     margin-left: -20px;
@@ -417,19 +432,17 @@ tr:hover .btn-card-more {
 }
 
 .tab-content-new{
-    margin-top: 20px;
+    /*margin-top: 20px;*/
     min-height: 765px;
     background-color: #ffffff;
-    padding-top: 35px;
     border: 1px solid #EEEEEE;
 }
 
 .tab-null{
     min-height: 200px;
     background-color: #ffffff;
-    border-top: 1px solid #EEEEEE;
-    border-left: 1px solid #EEEEEE;
-    border-right: 1px solid #EEEEEE;
+    border: 1px solid #eeeeee;
+
     margin-bottom: -20px;
 }
 
@@ -452,6 +465,7 @@ tr:hover .btn-card-more {
     float: right;
     margin-top: -25px;
     margin-right: -20px;
+    margin-bottom: 20px;
 }
 
 
@@ -461,46 +475,43 @@ tr:hover .btn-card-more {
     margin-right: -20px;
 }
 /*nav-task*/
-.nav-task{
+.nav-task-xs{
     position: relative;
     top: 7px;
     display: inline-block;
-    border: 1px solid #EEE;
+    border: 1px solid #6aa8cb;
     border-left: none;
     margin-top: 22px;
-    margin-bottom: -25px;
-    height: 30px;
 }
-.nav-task>li{
+.nav-task-xs>li{
     float: left;
 }
-.nav-task>li>a{
+.nav-task-xs>li>a{
     color: #767676;
     font-size: 14px;
     font-weight: bold;
-    border-left: 1px solid #EEE;
+    border-left: 1px solid #6aa8cb;
     background: #FFF;
 }
-.nav-task>li.active>a:hover,
-.nav-task>li.active>a{
+.nav-task-xs>li.active>a:hover,
+.nav-task-xs>li.active>a{
     background: #3893c7;
     color: #FFF;
     border-left-color: #3893c7;
 }
 
-.nav-task>li>a:hover{
+.nav-task-xs>li>a:hover{
     color: #3893c7;
     background: #FFF;
 }
 
-.nav-task>li>.active{
+.nav-task-xs>li>.active{
     background: #3893c7;
 }
 .text-yqs{
     color: #EEEEEE;
     text-align: center;
     padding: 20px 30px 20px 20px ;
-
     background: url("../../ticheng/img/pay/yqs.png") no-repeat center;
 }
 .text-wsk{
@@ -518,4 +529,8 @@ tr:hover .btn-card-more {
     padding-left: 40px;
     margin-top: 8px;
     width: 167px;
+}
+
+.text-line{
+    text-decoration: underline;
 }

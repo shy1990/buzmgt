@@ -31,16 +31,14 @@
             <div class="abnormal-body box border ">
                 <!--title-->
                 <select class="box-sty-s">
-                    <option>山东省</option>
+                    <option>省-市-县</option>
                     <option>上海市</option>
                     <option>北京市</option>
                 </select>
                 <div class="search-date">
                     <div class="input-group input-group-sm">
-                <span class="input-group-addon " id="basic-addon1"><i
-                        class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-                        <input type="text" class="form-control form_datetime input-sm" placeholder="开始日期"
-                               readonly="readonly">
+                        <span class="input-group-addon " id="basic-addon1"><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+                        <input type="text" class="form-control form_datetime input-sm" placeholder="开始日期" readonly="readonly">
                     </div>
                 </div>
                 --
@@ -59,14 +57,13 @@
                 </button>
 
                 <div>
-                    <span class="text-gray ">订单状态：</span>
-                    <ul class="J_status nav nav-task">
+                    <ul class=" nav nav-task-xs">
                         <li class="active"><a href="javascript:;" style="padding: 7px 20px 7px 20px">全部</a></li>
-                        <li class=""><a href="javascript:;" style="padding: 7px 20px 7px 20px">签收</a></li>
-                        <li class=""><a href="javascript:;" style="padding: 7px 20px 7px 20px">未签收</a></li>
+                        <li class=""><a href="javascript:;" style="padding: 7px 20px 7px 20px">已签收</a></li>
+                        <li class=""><a href="javascript:;" style="padding: 7px 20px 7px 20px">已退货</a></li>
                     </ul>
-                    <script>
-                        $('.J_status li').on("click", function () {
+                    <script type="text/javascript">
+                        $('.nav-nav-task-xs li').click(function(){
                             $(this).addClass('active');
                             $(this).siblings('li').removeClass('active');
                         });
@@ -111,7 +108,7 @@
                         <tr>
                             <td >山东省滨州市邹平县</td>
                             <td>邹平市魅族专卖旗舰店</td>
-                            <td><a>124854648646</a></td>
+                            <td ><a>124854648646</a></td>
                             <td >
                                <span class="text-wsk">已拒收</span>
                             </td>
@@ -121,7 +118,7 @@
                         <tr>
                             <td >山东省滨州市邹平县</td>
                             <td>邹平市魅族专卖旗舰店</td>
-                            <td><a href="">124854648646</a></td>
+                            <td class="text-line"><a href="">124854648646</a></td>
                             <td>
                                 <span class="text-yqs">已签收</span>
                             </td>
@@ -165,6 +162,32 @@
                                 <span class="text-wsk">已拒收</span>
                             </td>
                             <td>2016.11.12</td>
+                        </tr>
+
+                        <tr>
+                            <td >山东省滨州市邹平县</td>
+                            <td>邹平市魅族专卖旗舰店</td>
+                            <td><a>124854648646</a></td>
+                            <td >
+                                <span class="text-wsk">已拒收</span>
+                            </td>
+                            <td>2016.11.12</td>
+                        </tr>
+
+
+
+
+                        <tr>
+                            <td ></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                            </td>
+                            <th>
+                                <span >总计：</span>
+                                <span class="text-red">2300.00</span>
+                                <span>元</span>
+                            </th>
                         </tr>
                         </tbody>
                     </table>
