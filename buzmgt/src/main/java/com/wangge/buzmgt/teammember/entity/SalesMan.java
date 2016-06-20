@@ -195,4 +195,14 @@ public class SalesMan implements Serializable {
     this.assessStageSum = assessStageSum;
   }
 
+  @Override
+  public String toString() {
+    return "SalesMan [id=" + id + ", simId=" + simId + ", status=" + status
+        + ", truename=" + truename + ", jobNum=" + jobNum + ", assessStage="
+        + assessStage + ", towns=" + towns + ", mobile=" + mobile
+        + ", regdate=" + regdate + ", isOldSalesman=" + isOldSalesman
+        + ", isPrimaryAccount=" + isPrimaryAccount + ", assessStageSum="
+        + assessStageSum + "]";
+  }
+
 }

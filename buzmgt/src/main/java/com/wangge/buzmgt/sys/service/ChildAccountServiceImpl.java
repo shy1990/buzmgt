@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.sys.entity.ChildAccount;
 import com.wangge.buzmgt.sys.repository.ChildAccountRepository;
 
@@ -14,10 +16,14 @@ import com.wangge.buzmgt.sys.repository.ChildAccountRepository;
 public class ChildAccountServiceImpl implements ChildAccountService {
   @Autowired
   private ChildAccountRepository childAccountRepository;
+  @Autowired
+  private LogService logService;
+  
   @Override
   @Transactional
   public void save(ChildAccount childAccount) {
-    childAccountRepository.save(childAccount);
+    childAccount = childAccountRepository.save(childAccount);
+    logService.log(null, childAccount, EventType.UPDATE);
   }
   @Override
   public int findChildCount(String id) {
@@ -36,6 +42,7 @@ public class ChildAccountServiceImpl implements ChildAccountService {
   @Override
   public void delete(ChildAccount childAccount) {
     childAccountRepository.delete(childAccount);
+    logService.log(childAccount, null, EventType.DELETE);
   }
 	
   

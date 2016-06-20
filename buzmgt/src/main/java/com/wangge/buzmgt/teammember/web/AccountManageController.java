@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.base.BaseController;
@@ -64,6 +66,8 @@ public class AccountManageController  extends BaseController{
   private UserService us;
   @Autowired
   private ChildAccountService ca;
+  @Autowired
+  private LogService logService;
   /**
    * 
    * @Description: 账号列表
@@ -295,7 +299,8 @@ public class AccountManageController  extends BaseController{
       }else if("4".equals(status)){
         u.getSalseMan().setSimId("");
       }
-      us.addUser(u);
+      User user = us.addUser(u);
+      logService.log(u, user, EventType.UPDATE);
       return "suc";
     } catch (Exception e) {
       e.printStackTrace();
