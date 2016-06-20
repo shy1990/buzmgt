@@ -303,6 +303,7 @@
 			columns: 1,
 			placeholder: '请选择姓名',
 			search: true,
+			maxHeight:400,
 			selectGroup: true
 		});
 	</script>
