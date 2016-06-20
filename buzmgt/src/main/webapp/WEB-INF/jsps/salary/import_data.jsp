@@ -15,8 +15,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>提成导入表</title>
 
-    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/bootStrapPager/css/page.css" />
+    <link href="/static/bootstrap/css/fileinput.css" rel="stylesheet">
+    <link href="/static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
 
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
@@ -58,8 +60,8 @@
 
             <div class="H-daochu">
                 <div class="salesman">
-                    <input class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
-                    <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
+                    <input id="SearchName" class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
+                    <button class="btn btn-blue btn-sm" id="goSearchByName">
                         检索
                     </button>
                 </div>
@@ -86,255 +88,273 @@
                         </tr>
                         </thead>
                         <tbody id="tbody">
-                        <%--<tr>--%>
-                            <%--<td>胡老大</td>--%>
-                            <%--<td>山东省济南市天桥一区</td>--%>
-                            <%--<td>18855525544</td>--%>
-                            <%--<td><span class="text-redd">100.00</span></td>--%>
-                            <%--<td>无</td>--%>
-                            <%--<td>2016.06.01</td>--%>
-                        <%--</tr>--%>
                         </tbody>
                     </table>
-                    <div id="callBackPager"></div>
                 </div>
+                <div id="callBackPager"></div>
                 <!--table-box-->
             </div>
             <!--待审核账单-->
         </div>
-        <%--<div class="wait-page-index">--%>
-            <%--<ul class="pagination">--%>
-                <%--<li>--%>
-                    <%--<a href="#" aria-label="Previous">--%>
-                        <%--<span aria-hidden="true">&laquo;</span>--%>
-                    <%--</a>--%>
-                <%--</li>--%>
-                <%--<li><a href="#">1</a></li>--%>
-                <%--<li><a href="#">2</a></li>--%>
-                <%--<li><a href="#">3</a></li>--%>
-                <%--<li><a href="#">4</a></li>--%>
-                <%--<li><a href="#">5</a></li>--%>
-                <%--<li>--%>
-                    <%--<a href="#" aria-label="Next">--%>
-                        <%--<span aria-hidden="true">&raquo;</span>--%>
-                    <%--</a>--%>
-                <%--</li>--%>
-            <%--</ul>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-<%--</div>--%>
-<div id="daoru" class="modal fade" role="dialog">
-    <div class="modal-dialog fang" role="document">
-        <div class="modal-content modal-blue yuan ">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title">导入表格</h3>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <form id="addd" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">选择日期：</label>
-                            <div class="col-sm-7">
-                                <div class="input-group are-line">
-                                    <span class="input-group-addon"><i class="icon icon-rq"></i></span>
-                                    <select type="" class="form-control input-h"
-                                            aria-describedby="basic-addon1">
-                                        <option>年-月</option>
-                                        <option>20</option>
-                                        <option>30</option>
-                                        <option>40</option>
-                                        <option>50</option>
-                                    </select>
-
-                                    <!-- /btn-group -->
+        <div id="daoru" class="modal fade bs-example-modal-lg" role="dialog">
+            <div class="modal-dialog fang modal-lg" role="document">
+                <div class="modal-content modal-blue yuan ">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h3 class="modal-title">导入表格</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <form enctype="multipart/form-data" class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">选择文件：</label>
+                                    <div class="col-sm-10">
+                                        <input id="file-input" name="file" type="file" class="">
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">选择文件：</label>
-                            <div class="col-sm-7">
-                                <div class="input-group are-line">
-                                    <span class="input-group-addon"><i class="icon icon-wj"></i></span>
-                                    <select type="" class="form-control input-h"
-                                            aria-describedby="basic-addon1">
-                                        <option>选择导入文件</option>
-                                        <option>20</option>
-                                        <option>30</option>
-                                        <option>40</option>
-                                        <option>50</option>
-                                    </select>
-                                    <!-- /btn-group -->
+                                <div class="form-group" id="uploadFileDiv">
+                                    <div class="col-sm-offset-4 col-sm-4 ">
+                                        <a herf="javascript:return 0;" id="uploadFile" onclick=""
+                                           class="Zdy_add  col-sm-12 btn btn-primary">上传文件 </a>
+                                    </div>
                                 </div>
-                            </div>
-
+                            </form>
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-offset-4 col-sm-4 ">
-                                <a herf="javascript:return 0;" onclick="addd(this)"
-                                   class="Zdy_add  col-sm-12 btn btn-primary">确定
-                                </a>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<![endif]-->
-<script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-<script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-<script src="../static/bootstrap/js/bootstrap.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+            <![endif]-->
+            <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
+            <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+            <script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+            <script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+            <script type="text/javascript"
+                    src="/static/bootstrap/js/fileinput.js"></script>
+            <script type="text/javascript"
+                    src="/static/bootstrap/js/fileinput_locale_zh.js"></script>
+            <script src="/static/js/jqueryfileupload/js/vendor/jquery.ui.widget.js"></script>
+            <script src="/static/js/jqueryfileupload/js/jquery.iframe-transport.js"></script>
+            <script src="/static/js/jqueryfileupload/js/jquery.fileupload.js"></script>
+            <script id="tbody-template" type="text/x-handlebars-template">
+                {{#each this}}
+                <tr>
+                    <td>{{name}}</td>
+                    <td>{{salary}}</td>
+                    <td>{{tel}}</td>
+                    <td>{{message}}</td>
+                    <td>{{createTime}}</td>
+                </tr>
+                {{/each}}
+            </script>
+            <script type="text/javascript">
+                $('body input').val('');
+                $(".form_datetime").datetimepicker({
+                    format: "yyyy-mm-dd",
+                    language: 'zh-CN',
+                    weekStart: 1,
+                    todayBtn: 1,
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 2,
+                    minView: 2,
+                    pickerPosition: "bottom-right",
+                    forceParse: 0
+                });
+                var $_haohe_plan = $('.J_kaohebar').width();
+                var $_haohe_planw = $('.J_kaohebar_parents').width();
+                $(".J_btn").attr("disabled", 'disabled');
+                if ($_haohe_planw === $_haohe_plan) {
+                    $(".J_btn").removeAttr("disabled");
+                }
+            </script>
+            <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+            <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
+            <script type="text/javascript">
+                $(function () {
+                    //初始化
+                    salary.detail.init();
+                    //日期检索
+                    $('#goSearch').click(function () {
+                        salary.searchData.startTime = $("#startTime").val();
+                        salary.searchData.endTime = $("#endTime").val();
+                        salary.searchData.name = '';
+                        salary.searchData.page = 0;
+                        console.log(salary.searchData);
+                        salary.findByDate(salary.searchData);
+                    });
+                    /**
+                     *姓名检索
+                     */
+                    $('#goSearchByName').click(function () {
+                        salary.searchData.name = $("#SearchName").val();
+                        salary.searchData.page = 0;
+                        console.log(salary.searchData);
+                        salary.findByDate(salary.searchData);
+                    });
 
+                    initFileUpload();
 
+                });
 
+                /**
+                 * 模块化的写法
+                 * @type {{url: {all: salary.url.all}}}
+                 */
+                var salary = {
+                    /**
+                     * 查询条件
+                     */
+                    searchData: {
+                        startTime: '2015-05-05',
+                        endTime: '2200-05-06',
+                        size: "4",
+                        page: "0",
+                        name: ''
+                    },
+                    /**
+                     * 分页参数
+                     */
+                    _count: {
+                        totalCount: 0,
+                        limit: 0,
+                        total: -1
+                    },
+                    url: {
+                        all: function () {
+                            return '/salary/salarys';
+                        },
+                        uploadUrl:function(){
+                            return '/salary/upload';
+                        }
+                    },
+                    /**
+                     * 分页查询
+                     * @param searchData
+                     */
+                    findAll: function (searchData) {
+                        $.ajax({
+                            url: salary.url.all(),
+                            data: searchData,
+                            success: function (result) {
+                                var content = result.content;
+                                salary._count.totalCount = result.totalElements;
+                                salary._count.limit = result.size;
+                                salary.handelerbars_register(content);
+                                if (salary._count.totalCount != salary._count.total || salary._count.totalCount == 0) {
+                                    salary._count.total = salary._count.totalCount;
+                                    salary.initPaging();
+                                }
+                            },
+                            error: function () {
+                                alert('系统错误');
+                            }
 
-<script id="tbody-template" type="text/x-handlebars-template">
-    {{#each this}}
-        <tr>
-            <td>{{name}}</td>
-            <td>{{salary}}</td>
-            <td>{{tel}}</td>
-            <td>{{message}}</td>
-            <td>{{createTime}}</td>
-        </tr>
-    {{/each}}
-</script>
-<script type="text/javascript">
-    $('body input').val('');
-    $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
-        language: 'zh-CN',
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        pickerPosition: "bottom-right",
-        forceParse: 0
-    });
-    var $_haohe_plan = $('.J_kaohebar').width();
-    var $_haohe_planw = $('.J_kaohebar_parents').width();
-    $(".J_btn").attr("disabled", 'disabled');
-    if ($_haohe_planw === $_haohe_plan) {
-        $(".J_btn").removeAttr("disabled");
-    }
-</script>
-<script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
-<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
-<script type="text/javascript">
-    $(function () {
-        salary.detail.init();
-        $('#goSearch').click(function(){
-            salary.searchData.startTime = $("#startTime").val();
-            salary.searchData.endTime = $("#endTime").val();
-            salary.searchData.page = 0;
-            console.log(salary.searchData);
-            salary.findByDate(salary.searchData);
-        });
+                        });
+                    },
+                    /**
+                     * 分页工具
+                     */
+                    initPaging: function () {
+                        $('#callBackPager').extendPagination({
+                            totalCount: salary._count.totalCount,//总条数
+                            showCount: 5,//下面小图标显示的个数
+                            limit: salary._count.limit,//每页显示的条数
+                            callback: function (curr, limit, totalCount) {
+                                salary.searchData.page = curr - 1;
+                                salary.searchData.size = limit;
+                                salary.findAll(salary.searchData);
+                            }
+                        });
+                    },
+                    /**
+                     * handerlebars填充数据
+                     */
+                    handelerbars_register: function (content) {
+                        var driver_template = Handlebars.compile($("#tbody-template").html());//注册
+                        $("#tbody").html(driver_template(content));
+                    },
+                    /**
+                     *日期检索
+                     */
+                    findByDate: function (searchData) {
+                        salary._count.total = -1;
+                        salary.findAll(searchData);
+                    },
+                    /**
+                     *  姓名检索
+                     */
+                    findByName: function (searchData) {
+                        salary._count.total = -1;
+                        salary.findAll(searchData);
+                    },
 
-    });
-    /**
-     * 模块化的写法
-     * @type {{url: {all: salary.url.all}}}
-     */
-    var salary = {
-        /**
-         * 查询条件
-         */
-        searchData: {
-            startTime: '2015-05-05',
-            endTime: '2200-05-06',
-            size: "4",
-            page: "0",
-            name:''
-        },
-        /**
-         * 分页参数
-         */
-        _count: {
-            totalCount: 0,
-            limit: 0,
-            total: -1
-        },
-        url: {
-            all: function () {
-                return '/salary/salarys';
-            }
-        },
-        /**
-         * 分页查询
-         * @param searchData
-         */
-        findAll: function (searchData) {
-            $.ajax({
-                url: salary.url.all(),
-                data: searchData,
-                success: function (result) {
-                    var content = result.content;
-                    salary._count.totalCount = result.totalElements;
-                    salary._count.limit = result.size;
-                    salary.handelerbars_register(content);
-                    if (salary._count.totalCount != salary._count.total || salary._count.totalCount == 0) {
-                        salary._count.total = salary._count.totalCount;
-                        salary.initPaging();
+                    /**
+                     * 页面初始化
+                     */
+                    detail: {
+                        init: function (args) {
+                            salary.findAll(salary.searchData);
+//                            initFileUpload();
+
+                        }
                     }
-                },
-                error: function () {
-                    alrt('系统错误');
+
+                };
+
+                /**
+                 * 初始化文件上传
+                 */
+                function initFileUpload() {
+                    // 文件上传
+                    $("#file-input").fileinput({
+                        language : 'zh',
+                        uploadUrl :salary.url.uploadUrl(),
+                        allowedFileExtensions : [ 'xls', 'xlsx' ],
+                        showPreview : false,
+                        showUpload: false,
+                        dropZoneEnabled: false,
+                    });
+                    $('#file-input').fileupload({
+                        dataType: 'json',
+                        add: function (e, data) {
+                            $("#uploadFileDiv").show();
+                            $("#uploadFile").on("click", function () {
+                                // 修改fileupload插件上传时的url，带参数。
+                                $("#file-input").fileupload('option', 'url',salary.url.uploadUrl());
+
+                                data.submit();
+                            });
+                        },
+                        done: function (e, data) {
+                            console.log(e);
+                            console.log(data);
+                            if (data.result.message != '上传成功') {
+                                alert(data.result.message);
+                                window.location.reload();
+                                return;
+                            }
+                            $('#file-input').fileinput('clear');
+                            $('#daoru').modal('hide');
+                            salary.searchData.startTime = '2015-05-05';
+                            salary.searchData.endTime = '2200-05-05';
+                            salary.searchData.page = '0',
+                            salary.searchData.size = '4',
+                            salary.searchData.name = ''
+//                            salary.findAll(salary.searchData);
+                            alert("上传完成");
+//                            window.location.href = "/salary/toSalary";
+                            window.location.reload();
+                        }
+                    });
                 }
 
-            });
-        },
-        /**
-         * 分页工具
-         */
-        initPaging: function () {
-            $('#callBackPager').extendPagination({
-                totalCount: salary._count.totalCount,//总条数
-                showCount: 5,//下面小图标显示的个数
-                limit: salary._count.limit,//每页显示的条数
-                callback: function (curr, limit, totalCount) {
-                    salary.searchData.page = curr - 1;
-                    salary.searchData.size = limit;
-                    salary.findAll(salary.searchData);
-                }
-            });
-        },
-        /**
-         * handerlebars填充数据
-         */
-        handelerbars_register:function(content){
-            var driver_template = Handlebars.compile($("#tbody-template").html());//注册
-            $("#tbody").html(driver_template(content));
-        },
-        findByDate:function(searchData){
-            salary.findAll(searchData);
-        },
-        findByName:function(searchData){
-            salary.findAll(searchData);
-        },
-
-        /**
-         * 页面初始化
-         */
-        detail: {
-            init: function (args) {
-                salary.findAll(salary.searchData);
-            }
-        }
-
-    };
-
-</script>
+            </script>
 </body>
 </html>
 

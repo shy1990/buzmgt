@@ -84,6 +84,8 @@ public class MonthPunishUpController {
     @RequestMapping(value = "export")
     public void exportExcel( HttpServletRequest request, HttpServletResponse response){
         List<MonthPunishUp> list = service.findAllExport();
+
+        System.out.println(list.size());
         list.forEach(MonthPunishUp ->{
             MonthPunishUp.setRegionName(MonthPunishUp.getSalesMan().getRegion().getName());
         });

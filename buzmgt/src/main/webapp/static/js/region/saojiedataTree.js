@@ -458,7 +458,6 @@ function beforeDragOpen(treeId, treeNode) {
 }
 
 function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
-	alert(treeNodes[0].id+"**"+ treeNodes[0].pId);
 	$.ajax({
 		async : true, // 是否异步
 		cache : false, // 是否使用缓存
@@ -494,7 +493,6 @@ function onloadZTree() {
 	});
 }
 function  onloadSaojiedataMap(){
-	alert(111);
 	var parentid=$("#regionId").val();
 	$.ajax({
 		async : true, // 是否异步

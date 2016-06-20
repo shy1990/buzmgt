@@ -18,6 +18,7 @@
     <title>月扣罚记录</title>
 
     <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/bootStrapPager/css/page.css" />
     <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
     <link href="../static/fenye/css/fenye.css" rel="stylesheet">
@@ -241,6 +242,7 @@
         searchData['startTime'] = $("#aaa").val() ;
         searchData['endTime'] = $("#bbb").val() ;
         searchData['page'] = 0;
+        total = -1;
         ajaxSearch(searchData);
     });
 
@@ -251,7 +253,6 @@
     }
 
     $("#exportExcel").click(function(){
-        console.log(125255  );
         $.get("MonthPunishUp/export");
     });
 </script>
