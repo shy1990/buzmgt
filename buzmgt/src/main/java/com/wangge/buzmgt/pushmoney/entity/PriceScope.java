@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class PriceScope implements Serializable{
 
   /**
-   * 
+   * 价格区间
    */
   private static final long serialVersionUID = 1L;
   @Id

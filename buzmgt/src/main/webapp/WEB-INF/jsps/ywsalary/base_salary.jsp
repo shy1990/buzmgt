@@ -19,7 +19,6 @@
 
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link href="static/bootstrap/css/fileinput.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
