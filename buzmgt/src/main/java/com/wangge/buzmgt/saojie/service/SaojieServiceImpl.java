@@ -39,8 +39,8 @@ public class SaojieServiceImpl implements SaojieService {
   private SaojieRepository saojieRepository;
   
   @Override
-  public void saveSaojie(Saojie saojie) {
-    saojieRepository.save(saojie);
+  public Saojie saveSaojie(Saojie saojie) {
+    return saojieRepository.save(saojie);
   }
 
 //  @Override

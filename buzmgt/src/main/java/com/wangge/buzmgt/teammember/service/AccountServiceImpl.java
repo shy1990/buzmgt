@@ -14,9 +14,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
+import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.ChildAccountService;
+import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.teammember.vo.AccountBean;
-import com.wangge.buzmgt.util.DateUtil;
 
 @Repository
 public class AccountServiceImpl implements AccountService {
@@ -27,6 +30,10 @@ public class AccountServiceImpl implements AccountService {
   private ChildAccountService childaccountService;
   @PersistenceContext  
   private EntityManager em; 
+  @Resource
+  private UserService userService;
+  @Resource
+  private LogService logService;
   
   @Override
  public List<AccountBean> selectAccountByPositionAndStatus(String orgName,String status,String regionName,PageRequest page, String searchParam) {
@@ -92,6 +99,8 @@ public class AccountServiceImpl implements AccountService {
   public boolean mofidyPwd(String id) {
     String sql = "update SYS_USER u set u.password='123456' where u.user_id='"+id+"' ";
     Query query =  em.createNativeQuery(sql);
+    User user = userService.getById(id);
+    logService.log(null, user, EventType.UPDATE);
     return query.executeUpdate()>0?true:false;
   }
 

@@ -4,18 +4,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -32,12 +27,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.entity.Assess.AssessStatus;
 import com.wangge.buzmgt.assess.service.AssessService;
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.vo.OrderVo;
-import com.wangge.buzmgt.task.entity.Visit;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
@@ -67,6 +63,8 @@ public class AssessController {
   private AssessService assessService;
   @Resource
   private ManagerService managerService;
+  @Resource
+  private LogService logService;
   @Autowired
   private EntityManagerFactory emf;
   /**
@@ -142,7 +140,8 @@ public class AssessController {
     Date endDate= new Date(c.getTimeInMillis());
     assess.setAssessEndTime(endDate);
     assess.setAssesszh(getRegionName(assess.getAssessArea()));
-    assessService.saveAssess(assess);
+    Assess ass = assessService.saveAssess(assess);
+    logService.log(null, ass, EventType.SAVE);
     if("1".equals(assess.getAssessStage())){
       salesman.setStatus(SalesmanStatus.kaifa);
       salesman.setAssessStageSum(Integer.parseInt(request.getParameter("assessStageSum")));
@@ -288,7 +287,7 @@ public class AssessController {
   @RequestMapping(value = "/passed",method = RequestMethod.GET)
   public String passed(String salesmanId){
     SalesMan salesman = salesManService.findById(salesmanId);
-    salesman.setStatus(SalesmanStatus.zhuanzheng);
+    salesman.setStatus(SalesmanStatus.weihu);
     salesManService.addSalesman(salesman);
     return "ok";
   }
@@ -315,7 +314,8 @@ public class AssessController {
       assess.setPassType(1);
     }
     assess.setStatus(AssessStatus.AGREE);
-    assessService.saveAssess(assess);
+    Assess ass = assessService.saveAssess(assess);
+    logService.log(assess, ass, EventType.UPDATE);
     model.addAttribute("stage",stage);
     model.addAttribute("list", list);
     model.addAttribute("salesman", salesman);

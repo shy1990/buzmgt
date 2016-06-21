@@ -75,7 +75,7 @@ public class Resource implements Serializable {
 //	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,	CascadeType.MERGE}, mappedBy = "menus")
 //	private Set<RoleEntity> roles;
 	
-	@OneToMany(mappedBy="parent",cascade ={CascadeType.PERSIST})
+	@OneToMany(fetch = FetchType.LAZY,mappedBy="parent",cascade ={CascadeType.PERSIST})
 	private Collection<Resource> children = new HashSet<Resource>();
 
 	@ManyToOne
@@ -190,7 +190,14 @@ public class Resource implements Serializable {
 		this.children = children;
 	}
 
-	
+  @Override
+  public String toString() {
+    return "Resource [id=" + id + ", name=" + name + ", type=" + type
+        + ", permission=" + permission + ", url=" + url + ", priority="
+        + priority + ", createTime=" + createTime + ", icon=" + icon
+        + ", roles=" + roles
+        + "]";
+  }
 
 
 }

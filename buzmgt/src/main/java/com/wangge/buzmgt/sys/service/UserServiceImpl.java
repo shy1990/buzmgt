@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Resource;
 import com.wangge.buzmgt.sys.entity.Role;
@@ -36,6 +38,9 @@ public class UserServiceImpl implements UserService {
 		this.resourceRepository = resourceRepository;
 		this.organizationRepository=organizationRepository;
 	}
+	
+	@Autowired
+  private LogService logService;
 
 	@Override
 	public Optional<User> getByUsername(String username) {
@@ -76,12 +81,16 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void saveRole(Role role) {
-		roleRepository.save(role);
+	  role = roleRepository.save(role);
+		logService.log(null, role, EventType.SAVE);
 	}
 
 	@Override
+	@Transactional
 	public void delRole(Long id) {
+	  Role role = roleRepository.findOne(id);
 		roleRepository.delete(id);
+		logService.log(role, null, EventType.DELETE);
 	}
 
 	@Override
@@ -105,7 +114,9 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public User addUser(User u) {
-    return userRepository.save(u);
+    User user = userRepository.save(u);
+    logService.log(null, user, EventType.SAVE);
+    return user;
   }
 
   @Override

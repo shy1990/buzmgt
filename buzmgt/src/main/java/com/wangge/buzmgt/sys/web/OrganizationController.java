@@ -2,7 +2,6 @@ package com.wangge.buzmgt.sys.web;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.OrganizationService;
@@ -38,6 +39,8 @@ public class OrganizationController {
 	private OrganizationService organService;
 	@Resource
 	private UserService userService;
+	@Resource
+	private LogService logService;
 	
 	
 	/**
@@ -210,7 +213,9 @@ public class OrganizationController {
 	    o.setName(name);
 	    o.setParent(organ);
 	    o.setLev(organ.getLev()+1);
-	    organService.addOrganization(o);
+	    Organization organization = organService.addOrganization(o);
+	    
+	    logService.log(null, organization, EventType.SAVE);
 	    
 	    return new ResponseEntity<OrganizationVo>(getOrganizationVo(o),HttpStatus.OK);
 	  }
@@ -237,7 +242,8 @@ public class OrganizationController {
 	  public ResponseEntity<OrganizationVo>   editOrganization(String id,String pid,String name) {
   	    Organization organ=organService.getOrganById(Integer.parseInt(id));
   	    organ.setName(name);
-        organService.addOrganization(organ);
+  	    Organization organization = organService.addOrganization(organ);
+        logService.log(organ, organization, EventType.UPDATE);
 	    return new ResponseEntity<OrganizationVo>(getOrganizationVo(organ),HttpStatus.OK);
 	  }
 	  
@@ -250,6 +256,7 @@ public class OrganizationController {
 	      return false;
 	    }
 	    organService.deleteOrganization(o);
+	    logService.log(o, null, EventType.DELETE);
 	    return true;
 	  }
 	  
@@ -307,7 +314,7 @@ public class OrganizationController {
         }
         vo.setOpen("true");
         if(null!=organ.getParent()){
-          vo.setpId(organ.getParent().getId()+"");;
+          vo.setpId(organ.getParent().getId()+"");
         }
     	  return vo;
   	}

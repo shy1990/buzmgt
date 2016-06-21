@@ -2,13 +2,9 @@ package com.wangge.buzmgt.sys.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -20,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.sys.entity.Resource;
 import com.wangge.buzmgt.sys.entity.Resource.ResourceType;
 import com.wangge.buzmgt.sys.entity.Role;
@@ -35,6 +33,9 @@ public class ResourceServiceImpl implements ResourceService {
 	private RoleRepository roleRepository;
 	
 	private ResourceRepository resourceRepository;
+	
+	@Autowired
+  private LogService logService;
 
 	@Autowired
 	public ResourceServiceImpl(ResourceRepository resourceRepository) {
@@ -90,8 +91,10 @@ public class ResourceServiceImpl implements ResourceService {
 	}
 
 	@Override
-	public void saveRes(Resource res) {
-		resourceRepository.save(res);
+	public Resource saveRes(Resource res) {
+	  Resource resource = resourceRepository.save(res);
+	  logService.log(null, resource, EventType.SAVE);
+		return resource;
 	}
 
 	@Override
@@ -223,7 +226,8 @@ public class ResourceServiceImpl implements ResourceService {
 		roleEntity.setResource(menus);
 		
 		try {
-			roleRepository.save(roleEntity);
+		  roleEntity = roleRepository.save(roleEntity);
+		  logService.log(null, roleEntity, EventType.SAVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -235,7 +239,9 @@ public class ResourceServiceImpl implements ResourceService {
 	@Override
 	@Transactional
 	public void delResource(Long id) {
+	  Resource r = this.getResourceById(id);
 		resourceRepository.delete(id);
+		logService.log(r, null, EventType.DELETE);
 	}
 
 	@Override

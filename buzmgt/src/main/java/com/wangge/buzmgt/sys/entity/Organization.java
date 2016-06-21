@@ -107,6 +107,11 @@ public class Organization implements Serializable {
   public void setLev(int lev) {
     this.lev = lev;
   }
-	
+
+  @Override
+  public String toString() {
+    return "Organization [id=" + id + ", name=" + name + ", description="
+        + description + ", lev=" + lev + "]";
+  }
 	
 }

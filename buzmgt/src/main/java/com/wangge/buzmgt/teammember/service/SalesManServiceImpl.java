@@ -22,6 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
 import com.wangge.buzmgt.sys.entity.User;
@@ -36,6 +38,8 @@ public  class SalesManServiceImpl implements SalesManService {
 	private SalesManRepository salesManRepository;
 	@Resource
 	private SaojieRepository SaojieRepository;
+	@Resource
+	private LogService logService;
 	
 	 @PersistenceContext  
 	  private EntityManager em; 
@@ -48,7 +52,8 @@ public  class SalesManServiceImpl implements SalesManService {
 	@Override
 	public void addSalesman(SalesMan salesman) {
 		
-		salesManRepository.save(salesman);
+		salesman = salesManRepository.save(salesman);
+		logService.log(null, salesman, EventType.UPDATE);
 	}
 	
   /*
