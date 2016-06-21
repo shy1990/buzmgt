@@ -114,7 +114,9 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public User addUser(User u) {
-    return userRepository.save(u);
+    User user = userRepository.save(u);
+    logService.log(null, user, EventType.SAVE);
+    return user;
   }
 
   @Override

@@ -50,8 +50,8 @@ public class AssessServiceImpl implements AssessService {
   private RegistDataRepository rdr;
   
   @Override
-  public void saveAssess(Assess assess) {
-    assessRepository.save(assess);
+  public Assess saveAssess(Assess assess) {
+    return assessRepository.save(assess);
   }
 
   @Override

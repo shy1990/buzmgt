@@ -10,7 +10,7 @@ import com.wangge.buzmgt.salesman.entity.SalesmanData;
 
 public interface SalesmanDataService {
 	public List<SalesmanData> findAll();
-	public void save(SalesmanData salesmanData);
+	public SalesmanData save(SalesmanData salesmanData);
 	public Page<SalesmanData> findAll(Specification specification,Pageable pageable);
 	public Page<SalesmanData> findAll(String name,Pageable pageable);
 	public SalesmanData findById(Long id);

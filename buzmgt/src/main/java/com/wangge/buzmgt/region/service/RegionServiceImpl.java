@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.repository.RegionRepository;
@@ -22,6 +24,8 @@ import com.wangge.buzmgt.util.RegionUtil;
 public class RegionServiceImpl implements RegionService {
 	@Autowired
 	private RegionRepository regionRepository;
+	@Autowired
+	private LogService logService;
 	
 	@Override
 	public List<RegionTree> findTreeRegion(String id) {
@@ -71,14 +75,16 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	@Transactional
 	public void saveRegion(Region region) {
-		regionRepository.save(region);
+		region = regionRepository.save(region);
+		logService.log(null, region, EventType.UPDATE);
 	}
 
 	@Override
 	public void delete(Region region) {
 		regionRepository.delete(region);
-		
+		logService.log(region, null,EventType.DELETE);
 	}
+	
   @Override
   public Region findByNameLike(String regionName) {
     return regionRepository.findByNameLike(regionName);
