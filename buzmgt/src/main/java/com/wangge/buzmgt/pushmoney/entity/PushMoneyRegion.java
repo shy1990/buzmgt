@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="SYS_PUSH_MONEY_REGION")
-public class pushMoneyRegion implements Serializable{
+public class PushMoneyRegion implements Serializable{
 
   /**
    * 
@@ -28,9 +28,9 @@ public class pushMoneyRegion implements Serializable{
   
   private Integer pushMoneyId;
   
-  private Float money;
-  
   private String regionId;
+  
+  private Float money;
   
   private Date createDate;
 

@@ -32,7 +32,7 @@ public class PushMoney implements Serializable{
   @GeneratedValue(generator = "idgen")
   private Integer id;
   
-  private Integer type;
+  private Integer type;//提成类型 0-种类，1-品牌
   
   private Float money;
   
@@ -52,7 +52,7 @@ public class PushMoney implements Serializable{
   
   @JoinColumn(name="id")
   @OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
-  private List<pushMoneyRegion> pushMoneyRegions;
+  private List<PushMoneyRegion> pushMoneyRegions;
   
   private Date createDate;
 
@@ -112,11 +112,11 @@ public class PushMoney implements Serializable{
     this.priceScopeId = priceScopeId;
   }
 
-  public List<pushMoneyRegion> getPushMoneyRegions() {
+  public List<PushMoneyRegion> getPushMoneyRegions() {
     return pushMoneyRegions;
   }
 
-  public void setPushMoneyRegions(List<pushMoneyRegion> pushMoneyRegions) {
+  public void setPushMoneyRegions(List<PushMoneyRegion> pushMoneyRegions) {
     this.pushMoneyRegions = pushMoneyRegions;
   }
 

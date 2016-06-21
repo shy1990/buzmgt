@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import com.wangge.buzmgt.pushmoney.entity.Category;
 import com.wangge.buzmgt.pushmoney.entity.PriceScope;
 import com.wangge.buzmgt.pushmoney.entity.PushMoney;
+import com.wangge.buzmgt.pushmoney.entity.PushMoneyRegion;
 
 public interface PushMoneyService {
 
@@ -44,10 +45,21 @@ public interface PushMoneyService {
    * @return
    */
   PushMoney save(PushMoney pushMoney);
-  
-  // TODO 设置区域属性
-  void delete (Integer id);
 
+  /**
+   * 删除
+   * @param id
+   */
+  void delete (Integer id);
+  // TODO 设置区域属性
+
+  /**
+   * 生成提成区域
+   * @param pushMoneyRegion
+   * @return
+   */
+  PushMoneyRegion save(PushMoneyRegion pushMoneyRegion);
+  
   
   
   

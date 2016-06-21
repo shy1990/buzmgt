@@ -1,4 +1,46 @@
+.icon-puish-record{
+    background: url("../img/cut-set/jcsz1.png") no-repeat center;
+}
+.icon-task-je{
+    background:url("../img/cut-set/lk.png") no-repeat center;
+}
+.icon-qy{
+    background: url("../img/cut-set/qy.png")no-repeat center;
+}
 
+.icon-puish-m{
+    background: url("../img/cut-set/ykf.png")no-repeat center;
+}
+.icon-puish-back{
+    background: url("../img/cut-set/bank.png")no-repeat center;
+}
+
+.icon-khcs{
+    background: url("../img/sz.png")no-repeat center;
+}
+
+.icon-rq{
+    background: url("../img/cash-bank/rq.png")no-repeat center;
+}
+
+.icon-wj{
+    background: url("../img/cash-bank/wj.png")no-repeat center;
+}
+
+.icon-water{
+    background: url("../img/water-order/ls.png")no-repeat center;
+}
+
+.icon-yw{
+    background: url("../img/basin_yw/bt.png") no-repeat center;
+}
+.icon-jcxz{
+     background: url("../img/pay/jcxz.png") no-repeat center;
+ }
+
+.icon-tcsz{
+    background: url("../img/pay/tcsz.png") no-repeat center;
+}
 html{
     background-color: #fafafa;
 }

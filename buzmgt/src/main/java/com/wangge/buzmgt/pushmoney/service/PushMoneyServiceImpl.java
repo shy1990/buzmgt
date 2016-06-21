@@ -28,8 +28,10 @@ import org.springframework.stereotype.Service;
 import com.wangge.buzmgt.pushmoney.entity.Category;
 import com.wangge.buzmgt.pushmoney.entity.PriceScope;
 import com.wangge.buzmgt.pushmoney.entity.PushMoney;
+import com.wangge.buzmgt.pushmoney.entity.PushMoneyRegion;
 import com.wangge.buzmgt.pushmoney.repository.CategoryRepository;
 import com.wangge.buzmgt.pushmoney.repository.PriceScopeRepository;
+import com.wangge.buzmgt.pushmoney.repository.PushMoneyRegionRepository;
 import com.wangge.buzmgt.pushmoney.repository.PushMoneyRepository;
 import com.wangge.buzmgt.util.SearchFilter;
 
@@ -39,6 +41,9 @@ public class PushMoneyServiceImpl implements PushMoneyService {
   private Logger logger = Logger.getLogger(PushMoneyServiceImpl.class);
   @Resource
   private PushMoneyRepository pushMoneyRepository;
+  
+  @Resource
+  private PushMoneyRegionRepository pushMoneyRegionRepository;
 
   @Resource
   private PriceScopeRepository priceScopeRepository;
@@ -224,6 +229,13 @@ public class PushMoneyServiceImpl implements PushMoneyService {
         return cb.conjunction();
       }
     };
+  }
+
+  @Override
+  public PushMoneyRegion save(PushMoneyRegion pushMoneyRegion) {
+    pushMoneyRegion.setCreateDate(new Date());
+    
+    return pushMoneyRegionRepository.save(pushMoneyRegion);
   }
 
 }
