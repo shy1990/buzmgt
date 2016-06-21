@@ -147,7 +147,6 @@
 				}else{%>
 		 		
 			 		var bdary = new BMap.Boundary();
-			 		
 			 		bdary.get(name, function(rs){ //获取行政区域
 			 		var count = rs.boundaries.length; //行政区域的点有多少个
 		
@@ -197,7 +196,7 @@
 										double lng = Double.parseDouble(centerPoint.split("-")[0]);//经度 
 										double lat = Double.parseDouble(centerPoint.split("-")[1]);//纬度%>
 										var secRingCenter = new BMap.Point(<%=lng%>,<%=lat%>)
-										var secRingLabel2 = new BMap.Label("<%=name%>",{offset: new BMap.Size(10,-30), position: secRingCenter});
+										var secRingLabel2 = new BMap.Label(name,{offset: new BMap.Size(10,-30), position: secRingCenter});
 										secRingLabel2.setStyle({"line-height": "20px", "text-align": "center", "width": "80px", "height": "29px", "border": "none", "padding": "2px","background": "url(http://jixingjx.com/mapapi/ac.gif) no-repeat",});
 										map.addOverlay(secRingLabel2);
 								<%}
