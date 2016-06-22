@@ -39,6 +39,8 @@ public interface OrderSignforService {
    * @return
    */
   List<OrderSignfor> getReceiptCashList(Map<String, Object> searchParams);
+
+  void save(List<OrderSignfor> list);
   
   
   
