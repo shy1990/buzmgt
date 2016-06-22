@@ -70,13 +70,12 @@ public class CheckCashServiceImpl implements CheckCashService {
   private MonthPunishService monthPunishService;
   @Resource
   private PunishSetService punishSetService;
-  
 
   @Override
   public List<CheckCash> findAll(Map<String, Object> searchParams) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<CheckCash> spec = checkCashSearchFilter(filters.values(), CheckCash.class);
-    List<CheckCash> checkCashs =null;
+    List<CheckCash> checkCashs = null;
     try {
       checkCashs = checkCashRepository.findAll(spec);
       disposeCheckCash(checkCashs);
@@ -91,53 +90,50 @@ public class CheckCashServiceImpl implements CheckCashService {
   public Page<CheckCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<CheckCash> spec = checkCashSearchFilter(filters.values(), CheckCash.class);
-    Page<CheckCash> checkCashPage=null;
+    Page<CheckCash> checkCashPage = null;
     try {
-      checkCashPage= checkCashRepository.findAll(spec, pageRequest);
+      checkCashPage = checkCashRepository.findAll(spec, pageRequest);
       disposeCheckCash(checkCashPage.getContent());
-      
+
     } catch (Exception e) {
       logger.info(e.getMessage());
     }
     return checkCashPage;
   }
 
-  public void disposeCheckCash( List<CheckCash> checkCashs){
+  public void disposeCheckCash(List<CheckCash> checkCashs) {
     try {
-      
-      checkCashs.forEach(checkCash->{
-        String userId=checkCash.getUserId();
-        if(StringUtils.isNotEmpty(userId)){
-          
-          String payDate=DateUtil.date2String(checkCash.getCreateDate());
-          //TODO 查询银行导入数据
-          Map<String, Object> secp=new HashMap<>();
-          
+
+      checkCashs.forEach(checkCash -> {
+        String userId = checkCash.getUserId();
+        if (StringUtils.isNotEmpty(userId)) {
+
+          String payDate = DateUtil.date2String(checkCash.getCreateDate());
+          // TODO 查询银行导入数据
+          Map<String, Object> secp = new HashMap<>();
+
           secp.put("EQ_userId", userId);
           secp.put("EQ_payDate", payDate);
-          List<BankTrade> bankTrades =bankTradeService.findAll(secp);
+          List<BankTrade> bankTrades = bankTradeService.findAll(secp);
           secp.remove("EQ_payDate");
           checkCash.setBankTrades(bankTrades);
-          disposeBankTrade(bankTrades,checkCash);
-          
-          //TODO 查询流水单号
-          secp.put("EQ_createDate", payDate);//划分时间
-          List<WaterOrderCash> wocs =cashService.findAll(secp);
+          disposeBankTrade(bankTrades, checkCash);
+
+          // TODO 查询流水单号
+          secp.put("EQ_createDate", payDate);// 划分时间
+          List<WaterOrderCash> wocs = cashService.findAll(secp);
           secp.remove("EQ_createDate");
           checkCash.setCashs(wocs);
           checkCash.setIsCheck(wocs.get(0).getPayStatus());
-          
-          
+
           /*
-           * -->查询是否扣罚
-           * 查询前一天是否有扣罚
+           * -->查询是否扣罚 查询前一天是否有扣罚
            */
-          secp.put("EQ_createDate", DateUtil.date2String(DateUtil.moveDate(checkCash.getCreateDate(),-1)));
-          List<MonthPunish> monthPunishs=monthPunishService.findAll(secp);
+          secp.put("EQ_createDate", DateUtil.date2String(DateUtil.moveDate(checkCash.getCreateDate(), -1)));
+          List<MonthPunish> monthPunishs = monthPunishService.findAll(secp);
           checkCash.setMonthPunishs(monthPunishs);
-          disposeMonthPunish(monthPunishs,checkCash);
-          
-          
+          disposeMonthPunish(monthPunishs, checkCash);
+
         }
       });
     } catch (Exception e) {
@@ -145,44 +141,42 @@ public class CheckCashServiceImpl implements CheckCashService {
       throw e;
     }
   }
-  //计算扣罚金额
+
+  // 计算扣罚金额
   private void disposeMonthPunish(List<MonthPunish> monthPunishs, CheckCash cc) {
-    Float debtMoney=new Float(0);
-    for(MonthPunish wp:monthPunishs){
-      debtMoney+=wp.getDebt()+wp.getAmerce();
+    Float debtMoney = new Float(0);
+    for (MonthPunish wp : monthPunishs) {
+      debtMoney += wp.getDebt() + wp.getAmerce();
     }
     cc.setDebtMoney(debtMoney);
   }
 
-  //计算打款总金额
-  public void disposeBankTrade(List<BankTrade> bankTrades,CheckCash cc){
-    Float incomeMoney=new Float(0);
-    String cardName="";
-    for(BankTrade woc:bankTrades){
-      incomeMoney+=woc.getMoney();
-      cardName=woc.getCardName();
+  // 计算打款总金额
+  public void disposeBankTrade(List<BankTrade> bankTrades, CheckCash cc) {
+    Float incomeMoney = new Float(0);
+    String cardName = "";
+    for (BankTrade woc : bankTrades) {
+      incomeMoney += woc.getMoney();
+      cardName = woc.getCardName();
     }
     cc.setIncomeMoney(incomeMoney);
     cc.setCardName(cardName);
-    
-    
+
   }
-  
+
   /**
-   * 审核过程梳理
-   * 1.查询数据userId+createDate
-   * 2.
+   * 审核过程梳理 1.查询数据userId+createDate 2.
    */
   @Override
   @Transactional
   public JSONObject checkPendingByUserIdAndCreateDate(String userId, String createDate) {
-    Map<String, Object> secp=new HashMap<>();
-    JSONObject json=new JSONObject();
+    Map<String, Object> secp = new HashMap<>();
+    JSONObject json = new JSONObject();
     secp.put("EQ_userId", userId);
     secp.put("EQ_createDate", createDate);
     try {
       List<CheckCash> list = this.findAll(secp);
-      if(list.size()>0){
+      if (list.size() > 0) {
         checkWaterOrderCash(list.get(0));
         json.put("status", "success");
         json.put("successMsg", "操作成功");
@@ -190,73 +184,72 @@ public class CheckCashServiceImpl implements CheckCashService {
       }
       json.put("status", "error");
       json.put("errorMsg", "未查到该数据");
-      
+
     } catch (Exception e) {
       json.put("status", "error");
       json.put("errorMsg", "操作失败");
       logger.info(e.getMessage());
       return json;
     }
-    
+
     return json;
   }
+
   @Transactional
-  public void checkWaterOrderCash(CheckCash cc){
+  public void checkWaterOrderCash(CheckCash cc) {
     try {
       List<WaterOrderCash> waterOrders = cc.getCashs();
-      
-      if(waterOrders.size()==0)
-        return ;
-      Float stayMoney=cc.getStayMoney();//待付金额
-      Float incomeMoney=cc.getIncomeMoney();//支付金额
-      for(WaterOrderCash order:waterOrders){
-        //总支付金额大于流水单金额
-        Float cashMoney=order.getCashMoney();
-        if(incomeMoney>cashMoney){
+
+      if (waterOrders.size() == 0)
+        return;
+      Float stayMoney = cc.getStayMoney();// 待付金额
+      Float incomeMoney = cc.getIncomeMoney();// 支付金额
+      for (WaterOrderCash order : waterOrders) {
+        // 总支付金额大于流水单金额
+        Float cashMoney = order.getCashMoney();
+        if (incomeMoney > cashMoney) {
           order.setPaymentMoney(cashMoney);
-        }else{
-          if(incomeMoney<0)
+        } else {
+          if (incomeMoney < 0)
             order.setPaymentMoney(0f);
           else
             order.setPaymentMoney(incomeMoney);
         }
-        incomeMoney-=cashMoney;
-        
-        
+        incomeMoney -= cashMoney;
+
         order.setPayStatus(WaterPayStatusEnum.OverPay);
         order.setPayDate(cc.getCreateDate());
-        
-        
-        //修改收现金列表数据
-        order.getOrderDetails().forEach(detail->{
+
+        // 修改收现金列表数据
+        order.getOrderDetails().forEach(detail -> {
           Cash cash = detail.getCash();
           cash.setPayDate(cc.getCreateDate());
           cash.setStatus(CashStatusEnum.OverPay);
         });
       }
-      //修改原有扣罚状态
-      List<MonthPunish> monthPunishs=cc.getMonthPunishs();
-      if(monthPunishs.size()>0){
-        monthPunishs.forEach(mp->{
+      // 修改原有扣罚状态
+      List<MonthPunish> monthPunishs = cc.getMonthPunishs();
+      if (monthPunishs.size() > 0) {
+        monthPunishs.forEach(mp -> {
           mp.setStatus(1);
         });
         monthPunishService.save(monthPunishs);
       }
-      
-      //是否产生扣罚
-      if(stayMoney!=0){
-        //产生扣罚，修改流水单号状态
-        WaterOrderCash order= waterOrders.get(0);
-//        order.setIsPunish(1);//修改扣罚位置-->在产生流水订单号时进行
-        
-        MonthPunish mp=new MonthPunish();
-        String userId=order.getUserId();
+
+      // 是否产生扣罚
+      if (stayMoney != 0) {
+        // 产生扣罚，修改流水单号状态
+        WaterOrderCash order = waterOrders.get(0);
+        // order.setIsPunish(1);//修改扣罚位置-->在产生流水订单号时进行
+
+        MonthPunish mp = new MonthPunish();
+        String userId = order.getUserId();
         mp.setDebt(stayMoney);
-        if(stayMoney>0){
-          PunishSet punishSet=punishSetService.findByUserId(userId);
-          mp.setAmerce(stayMoney*punishSet.getPunishNumber());//扣罚
-        }else{
-          mp.setAmerce(new Float(0));//扣罚
+        if (stayMoney > 0) {
+          PunishSet punishSet = punishSetService.findByUserId(userId);
+          mp.setAmerce(stayMoney * punishSet.getPunishNumber());// 扣罚
+        } else {
+          mp.setAmerce(new Float(0));// 扣罚
         }
         mp.setStatus(0);//
         mp.setCreateDate(order.getCreateDate());
@@ -265,26 +258,25 @@ public class CheckCashServiceImpl implements CheckCashService {
         monthPunishService.save(mp);
       }
       cashService.save(waterOrders);
-      
+
     } catch (Exception e) {
       e.printStackTrace();
       logger.info(e.getMessage());
     }
-      
+
   }
+
   @Override
   public List<BankTrade> getUnCheckBankTrades() {
-    Map<String, Object> spec=new HashMap<>();
-    spec.put("ISNULL_userId","true");
+    Map<String, Object> spec = new HashMap<>();
+    spec.put("ISNULL_userId", "true");
     return bankTradeService.findAll(spec);
   }
-
-
 
   @Override
   @Transactional
   public JSONObject deleteUnCheckBankTrade(BankTrade bankTrade) {
-    JSONObject json=new JSONObject();
+    JSONObject json = new JSONObject();
     try {
       bankTradeService.delete(bankTrade);
       json.put("status", "success");
@@ -298,7 +290,6 @@ public class CheckCashServiceImpl implements CheckCashService {
     return json;
   }
 
-  
   private static Specification<CheckCash> checkCashSearchFilter(final Collection<SearchFilter> filters,
       final Class<CheckCash> entityClazz) {
 
@@ -476,20 +467,20 @@ public class CheckCashServiceImpl implements CheckCashService {
   public void exportSetExecl(List<CheckCash> checkCashs, HttpServletRequest request, HttpServletResponse response) {
     List<Map<String, Object>> alList = new ArrayList<Map<String, Object>>();
     Map<String, Integer> sumMap = new HashMap<String, Integer>();
-    checkCashs.forEach(checkCash->{
-      List<BankTrade> bankTrades=checkCash.getBankTrades();
+    checkCashs.forEach(checkCash -> {
+      List<BankTrade> bankTrades = checkCash.getBankTrades();
       String userId = checkCash.getUserId();
       String cardName = checkCash.getCardName();
       Date createDate = checkCash.getCreateDate();
-      String cradNo="";
-      String incomeMoney="";
-      for(BankTrade bankTrade:bankTrades){
-        cradNo+=bankTrade.getCardNo()+"    ";
-        incomeMoney+=bankTrade.getMoney().toString()+"    ";
+      String cradNo = "";
+      String incomeMoney = "";
+      for (BankTrade bankTrade : bankTrades) {
+        cradNo += bankTrade.getCardNo() + "    ";
+        incomeMoney += bankTrade.getMoney().toString() + "    ";
       }
-      List<WaterOrderCash> orderCashs=checkCash.getCashs();
-      for(WaterOrderCash orderCash:orderCashs){
-        Map<String,Object> objMap=new HashMap<>();
+      List<WaterOrderCash> orderCashs = checkCash.getCashs();
+      for (WaterOrderCash orderCash : orderCashs) {
+        Map<String, Object> objMap = new HashMap<>();
         objMap.put("userId", userId);
         objMap.put("cardName", cardName);
         objMap.put("cradNo", cradNo);
@@ -511,7 +502,7 @@ public class CheckCashServiceImpl implements CheckCashService {
           sumMap.put(userId, sum + 1);
         }
       }
-      
+
     });
     List<Map<String, Object>> marginList = new ArrayList<Map<String, Object>>();
     int start = 0;
@@ -529,7 +520,7 @@ public class CheckCashServiceImpl implements CheckCashService {
         obMap.put("firstCol", 0);
         obMap.put("lastCol", 0);
         marginList.add(obMap);
-        
+
         // 总金额合并
         Map<String, Object> obMap1 = new HashMap<String, Object>();
         obMap1.put("firstRow", start + 1);
@@ -537,73 +528,202 @@ public class CheckCashServiceImpl implements CheckCashService {
         obMap1.put("firstCol", 1);
         obMap1.put("lastCol", 1);
         marginList.add(obMap1);
-        
+
         Map<String, Object> obMap2 = new HashMap<String, Object>();
         obMap2.put("firstRow", start + 1);
         obMap2.put("lastRow", end);
         obMap2.put("firstCol", 2);
         obMap2.put("lastCol", 2);
         marginList.add(obMap2);
-        
+
         Map<String, Object> obMap3 = new HashMap<String, Object>();
         obMap3.put("firstRow", start + 1);
         obMap3.put("lastRow", end);
         obMap3.put("firstCol", 3);
         obMap3.put("lastCol", 3);
         marginList.add(obMap3);
-        
+
         Map<String, Object> obMap5 = new HashMap<String, Object>();
         obMap5.put("firstRow", start + 1);
         obMap5.put("lastRow", end);
         obMap5.put("firstCol", 6);
         obMap5.put("lastCol", 6);
         marginList.add(obMap5);
-        
+
         Map<String, Object> obMap6 = new HashMap<String, Object>();
         obMap6.put("firstRow", start + 1);
         obMap6.put("lastRow", end);
         obMap6.put("firstCol", 7);
         obMap6.put("lastCol", 7);
         marginList.add(obMap6);
-        
+
         Map<String, Object> obMap7 = new HashMap<String, Object>();
         obMap7.put("firstRow", start + 1);
         obMap7.put("lastRow", end);
         obMap7.put("firstCol", 8);
         obMap7.put("lastCol", 8);
         marginList.add(obMap7);
-        
+
         Map<String, Object> obMap8 = new HashMap<String, Object>();
         obMap8.put("firstRow", start + 1);
         obMap8.put("lastRow", end);
         obMap8.put("firstCol", 9);
         obMap8.put("lastCol", 9);
         marginList.add(obMap8);
-        
+
         Map<String, Object> obMap9 = new HashMap<String, Object>();
         obMap9.put("firstRow", start + 1);
         obMap9.put("lastRow", end);
         obMap9.put("firstCol", 10);
         obMap9.put("lastCol", 10);
         marginList.add(obMap9);
-        
+
         Map<String, Object> obMap4 = new HashMap<String, Object>();
         obMap4.put("firstRow", start + 1);
         obMap4.put("lastRow", end);
         obMap4.put("firstCol", 11);
         obMap4.put("lastCol", 11);
         marginList.add(obMap4);
-        
+
       }
       start = end;
     }
-    String[] gridTitles_ = { "业务ID", "姓名", "付款卡号", "打款金额", "流水单号", "当日收现", "收现总额", "昨日累加", "业务应付",  "业务实付", "业务待付", "操作日期"};
-    String[] coloumsKey_ = { "userId", "cardName", "cradNo", "incomeMoney", "serialNo", "cashMoney", "cashMoneyTotal", 
+    String[] gridTitles_ = { "业务ID", "姓名", "付款卡号", "打款金额", "流水单号", "当日收现", "收现总额", "昨日累加", "业务应付", "业务实付", "业务待付",
+        "操作日期" };
+    String[] coloumsKey_ = { "userId", "cardName", "cradNo", "incomeMoney", "serialNo", "cashMoney", "cashMoneyTotal",
         "debtMoney", "shouldPayMoney", "incomeMoneyTotal", "stayMoney", "createDate" };
-   logger.info(alList);
-   logger.info(marginList);
+    logger.info(alList);
+    logger.info(marginList);
     MapedExcelExport.doExcelExport("待审核账单.xls", alList, gridTitles_, coloumsKey_, request, response, marginList);
   }
 
+  /**
+   * 查询没有流水单号的交易
+   * @param createDate 正常的查询日期
+   * @return
+   */
+  @Override
+  public List<CheckCash> getDebtChecks(String createDate) {
+    Map<String, Object> spec = new HashMap<>();
+    List<CheckCash> checkCashs =null;
+    try {
+      //正常搜索日期
+      spec.put("EQ_createDate", createDate);
+      spec.put("status", 0);
+      checkCashs= findCheckCashByDebt(spec);
+
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+      return checkCashs;
+    }
+    return checkCashs;
+  }
+  /**
+   * 查询核对信息，
+   * 拼装信息
+   * @param spec
+   * @return
+   */
+  public List<CheckCash> findCheckCashByDebt( Map<String, Object> spec){
+    
+    List<CheckCash> checkCashs=new ArrayList<>();
+    //查询前一天是否有扣罚记录
+    String createDate =(String) spec.get("EQ_createDate");
+    spec.put("EQ_createDate", DateUtil.moveDate(createDate ,-1));
+    List<MonthPunish> monthPunishs = monthPunishService.findAll(spec);
+    
+    spec.remove("status");
+    if (monthPunishs.size() > 0) {
+      for (MonthPunish monthPunish : monthPunishs) {
+        CheckCash cash = new CheckCash();
+        String userId = monthPunish.getUserId();
+        
+        
+        cash.setUserId(userId);
+        cash.setDebtMoney(monthPunish.getDebt() + monthPunish.getAmerce());
+        
+        cash.setCardName("");
+        cash.setCashMoney(new Float(0));
+        cash.setCreateDate(DateUtil.string2Date(DateUtil.moveDate(createDate,1)));
+        
+        spec.put("EQ_userId", userId);
+        spec.put("EQ_createDate", DateUtil.moveDate(createDate,1));
+        List<BankTrade> bankTrades = bankTradeService.findAll(spec);
+        if (bankTrades.size() > 0) {
+          Float incomeMoney = new Float(0);
+          for (BankTrade bankTrade : bankTrades) {
+            incomeMoney += bankTrade.getMoney();
+          }
+          cash.setIncomeMoney(incomeMoney);
+
+          cash.setBankTrades(bankTrades);
+        }
+        checkCashs.add(cash);
+      }
+      return checkCashs;
+    }
+    return null;
+  }
+  @Override
+  @Transactional
+  public JSONObject auditDebtCheck(String userId, String createDate) {
+    Map<String, Object> spec = new HashMap<>();
+    JSONObject json = new JSONObject();
+    
+    spec.put("EQ_userId", userId);
+    spec.put("EQ_createDate", createDate);
+    
+    try {
+      // 修改原有扣罚状态
+      List<CheckCash> list = this.findCheckCashByDebt(spec);
+      if (list.size() > 0) {
+        checkDebtOrder(list.get(0));
+        
+        json.put("status", "success");
+        json.put("successMsg", "操作成功");
+        return json;
+      }
+      json.put("status", "error");
+      json.put("errorMsg", "未查到该数据");
+
+    } catch (Exception e) {
+      json.put("status", "error");
+      json.put("errorMsg", "操作失败");
+      logger.info(e.getMessage());
+      return json;
+    }
+
+    return json;
+  }
+  public void checkDebtOrder(CheckCash cash){
+    List<MonthPunish> monthPunishs=cash.getMonthPunishs();
+    if(monthPunishs.size()>0){
+      
+      monthPunishs.forEach(mp -> {
+        mp.setStatus(1);
+      });
+      monthPunishService.save(monthPunishs);
+    }
+    Float stayMoney = cash.getStayMoney();
+    // 是否产生扣罚
+    if (stayMoney != 0) {
+      // 产生扣罚，修改流水单号状态
+
+      MonthPunish mp = new MonthPunish();
+      String userId = cash.getUserId();
+      mp.setDebt(stayMoney);
+      if (stayMoney > 0) {
+        PunishSet punishSet = punishSetService.findByUserId(userId);
+        mp.setAmerce(stayMoney * punishSet.getPunishNumber());// 扣罚
+      } else {
+        mp.setAmerce(new Float(0));// 扣罚
+      }
+      mp.setStatus(0);//
+      mp.setCreateDate(cash.getCreateDate());
+      mp.setSeriaNo("");
+      mp.setUserId(userId);
+      monthPunishService.save(mp);
+    }
+  }
 
 }

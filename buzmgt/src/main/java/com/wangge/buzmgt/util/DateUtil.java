@@ -18,6 +18,7 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.sparta.xpath.ThisNodeTest;
 import com.wangge.buzmgt.exception.MyRuntimeException;
 
 
@@ -218,6 +219,20 @@ public class DateUtil {
 		 calendar.add(calendar.DATE,move);//把日期往后增加一天.整数往后推,负数往前移动
 		 return calendar.getTime(); //这个时间就是日期移动之后的时间
 		
+	}
+	/**
+	 * 前后移动日期
+	 * @param date
+	 * @param move -1:向前移动一天，1:向后移动一天
+	 * @return
+	 */
+	public static String moveDate(String date,int move){
+	  Date date_=string2Date(date);
+	  Calendar calendar = new GregorianCalendar();
+	  calendar.setTime(date_);
+	  calendar.add(calendar.DATE,move);//把日期往后增加一天.整数往后推,负数往前移动
+	  return date2String(calendar.getTime()); //这个时间就是日期移动之后的时间
+	  
 	}
 	
 	/**

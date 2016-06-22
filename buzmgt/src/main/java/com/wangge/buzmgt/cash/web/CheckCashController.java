@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.cash.web;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,11 +26,13 @@ import org.springframework.web.util.WebUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.hazelcast.com.eclipsesource.json.JsonObject;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.CheckCash;
 import com.wangge.buzmgt.cash.service.BankTradeService;
 import com.wangge.buzmgt.cash.service.CheckCashService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.json.JSONFormat;
 
 @Controller
@@ -90,6 +94,21 @@ public class CheckCashController {
     List<BankTrade> bankTrades = checkCashService.getUnCheckBankTrades();
     json.put("content", bankTrades);
     return json;
+  }
+  @RequestMapping(value="/debtCheck",method=RequestMethod.GET)
+  public JSONObject getDebtCheck(String createDate){
+    if("".equals(createDate)){
+      createDate=DateUtil.date2String(new Date());
+    }
+    JSONObject json=new JSONObject();
+    List<CheckCash> debtCheckList=checkCashService.getDebtChecks(createDate);
+    json.put("content", debtCheckList);
+    return json;
+  }
+  @RequestMapping(value="/debtCheck",method=RequestMethod.POST)
+  public JSONObject auditDebtCheck(String userId,String createDate){
+    JSONObject json = new JSONObject();
+    return checkCashService.auditDebtCheck(userId, createDate);
   }
   /**
    * 审核账单（打款和流水单号）
