@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.repository.ManagerRepository;
 
@@ -15,9 +17,13 @@ public class ManagerServiceImpl implements ManagerService {
 
 	@Resource
 	private ManagerRepository managerRepository;
+	@Resource
+	private LogService logService;
+	
 	@Override
 	public void addManager(Manager m) {
-		managerRepository.save(m);
+		m = managerRepository.save(m);
+		logService.log(null, m, EventType.SAVE);
 	}
 	@Override
 	public List<Manager> findByReginId(String regionId) {

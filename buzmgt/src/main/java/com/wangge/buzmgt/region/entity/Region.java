@@ -156,8 +156,10 @@ public class Region implements Serializable {
     this.centerPoint = centerPoint;
   }
 
-  
-	
-	
-	
+  @Override
+  public String toString() {
+    return "Region [id=" + id + ", name=" + name + ", coordinates="
+        + coordinates + ", type=" + type + ", centerPoint=" + centerPoint + "]";
+  }
+
 }

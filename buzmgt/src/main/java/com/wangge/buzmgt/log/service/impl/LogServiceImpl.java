@@ -36,7 +36,7 @@ public class LogServiceImpl implements LogService {
 
         log.setOrigin(ObjectUtils.isEmpty(origin) ? "" : origin.toString()); // 先用 entity.toString方法来作为参数,现在阶段的entity关系太复杂,很有可能出现栈溢出
 
-        log.setNow(ObjectUtils.isEmpty(now) ? "" : origin.toString()); // 先用 entity.toString方法来作为参数,现在阶段的entity关系太复杂,很有可能出现栈溢出
+        log.setNow(ObjectUtils.isEmpty(now) ? "" : now.toString()); // 先用 entity.toString方法来作为参数,现在阶段的entity关系太复杂,很有可能出现栈溢出
 
         this.logRepository.save(log);
 

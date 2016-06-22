@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.monthTask.entity.MonthTask;
 import com.wangge.buzmgt.monthTask.entity.MonthTaskPunish;
 import com.wangge.buzmgt.monthTask.repository.MonthOrdersDataRepository;
@@ -64,6 +66,8 @@ public class TaskController {
 	MonthTaskPunishRepository monthPunishRep;
 	@Autowired
 	MonthTaskPunishRepository monthTakPuRep;
+	@Autowired
+	private LogService logService;
 	private Log log = LogFactory.getLog(TaskController.class);
 
 
@@ -309,7 +313,8 @@ public class TaskController {
 		Map<String, Object> smap = new HashMap<String, Object>();
 		try {
 			newObj.setRegionName(monthTaskService.getAllName(regoinRep.findById(newObj.getRegionId()), ""));
-			monthTakPuRep.save(newObj);
+			newObj = monthTakPuRep.save(newObj);
+			logService.log(null, newObj, EventType.SAVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e);

@@ -120,7 +120,7 @@ public interface ResourceService {
 	 * @author changjun
 	 * @date 2015年12月22日
 	 */
-	public void saveRes(Resource res);
+	public Resource saveRes(Resource res);
 	/**
 	 * 
 	 * @Description: id查找

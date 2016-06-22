@@ -1,10 +1,8 @@
 package com.wangge.buzmgt.salesman.web;
 
-import com.wangge.buzmgt.salesman.entity.BankCard;
-import com.wangge.buzmgt.salesman.entity.SalesmanData;
-import com.wangge.buzmgt.salesman.service.BankCardService;
-import com.wangge.buzmgt.salesman.service.SalesmanDataService;
-import com.wangge.buzmgt.util.JsonResponse;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,10 +11,19 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
+import com.wangge.buzmgt.salesman.entity.BankCard;
+import com.wangge.buzmgt.salesman.entity.SalesmanData;
+import com.wangge.buzmgt.salesman.service.BankCardService;
+import com.wangge.buzmgt.salesman.service.SalesmanDataService;
+import com.wangge.buzmgt.util.JsonResponse;
 
 /**
  * controller
@@ -32,6 +39,9 @@ public class SalesmanDataController {
 
     @Autowired
     private BankCardService bankService;
+    
+    @Autowired
+    LogService logService;
 
 //以下是代码修改成resetful
 
@@ -102,7 +112,8 @@ public class SalesmanDataController {
             card.add(bankCard);
             salesmanData.setCard(card);
         }
-        service.save(salesmanData);
+        salesmanData = service.save(salesmanData);
+        logService.log(null, salesmanData, EventType.SAVE);
         return new ResponseEntity<JsonResponse>(new JsonResponse("添加成功"), HttpStatus.OK);
     }
 
@@ -128,7 +139,8 @@ public class SalesmanDataController {
         bankCard.setBankName(bankCardUp.getBankName());
         bankCard.setCardNumber(bankCardUp.getCardNumber());
         salesmanData.getCard().add(bankCard);
-        service.save(salesmanData);
+        SalesmanData sd = service.save(salesmanData);
+        logService.log(salesmanData, sd, EventType.UPDATE);
         return new ResponseEntity<JsonResponse>(new JsonResponse("添加成功"), HttpStatus.OK);
     }
 
@@ -147,13 +159,15 @@ public class SalesmanDataController {
     ResponseEntity<JsonResponse> delete1(@PathVariable("id") Long id, @PathVariable("bankId") Long bankId) {
     System.out.println("**********" + id + "  " + bankId);
         SalesmanData salesmanData = service.findById(id);
-
+        BankCard bc = bankService.findById(bankId);
         // 删除银行卡
         bankService.delete(bankId);
+        logService.log(bc, null, EventType.DELETE);
         if (salesmanData.getCard().size() < 1) {
 //      System.out.println("走进if");
             // 删除基础数据
             service.deleteById(id);
+            logService.log(salesmanData, null, EventType.DELETE);
         }
 //    System.out.println(id + "  " + bankId);
         return new ResponseEntity<JsonResponse>(new JsonResponse("删除成功"),HttpStatus.OK);

@@ -109,6 +109,11 @@ public class Manager implements Serializable {
   public void setRegdate(Date regdate) {
     this.regdate = regdate;
   }
-	
+
+  @Override
+  public String toString() {
+    return "Manager [id=" + id + ", truename=" + truename + ", jobNum="
+        + jobNum + ", mobile=" + mobile + ", regdate=" + regdate + "]";
+  }
 	
 }

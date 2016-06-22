@@ -3,18 +3,9 @@ package com.wangge.buzmgt.sys.web;
 import java.util.Date;
 import java.util.Set;
 
+import javax.annotation.Resources;
 import javax.servlet.http.HttpServletRequest;
 
-//import net.sf.json.JSONArray;
-
-
-
-
-
-
-
-
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.sys.base.BaseController;
 import com.wangge.buzmgt.sys.entity.Resource;
 import com.wangge.buzmgt.sys.service.ResourceService;
@@ -33,6 +26,11 @@ import com.wangge.buzmgt.sys.util.Chinese2English;
 import com.wangge.buzmgt.sys.util.PageData;
 import com.wangge.buzmgt.sys.util.PageNavUtil;
 import com.wangge.buzmgt.sys.util.SortUtil;
+
+import com.wangge.json.JSONFormat;
+
+//import net.sf.json.JSONArray;
+import org.apache.log4j.Logger;
 
 @Controller
 @RequestMapping(value = "/res")
@@ -86,7 +84,7 @@ public class ResourceController extends BaseController {
 		r.setIcon(Chinese2English.converterToSpell(name));
 		r.setParent(res.getResourceById(Long.parseLong(pid)));
 		try {
-			res.saveRes(r);
+		  res.saveRes(r);
 			return "suc";
 		} catch (Exception e) {
 			LOG.error(e);
