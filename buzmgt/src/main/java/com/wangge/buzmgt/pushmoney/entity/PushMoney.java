@@ -11,6 +11,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -19,6 +22,14 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="SYS_PUSH_MONEY")
+@NamedEntityGraph(
+    name = "graph.PushMoney.category",
+    attributeNodes={
+        @NamedAttributeNode(value="category"),
+        @NamedAttributeNode(value="priceScope"),
+        @NamedAttributeNode(value="pushMoneyRegions")
+    }
+)
 public class PushMoney implements Serializable{
 
   /**
@@ -27,7 +38,6 @@ public class PushMoney implements Serializable{
   private static final long serialVersionUID = 1L;
   
   @Id
-  @Column(name = "SIGNID")
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
   private Integer id;

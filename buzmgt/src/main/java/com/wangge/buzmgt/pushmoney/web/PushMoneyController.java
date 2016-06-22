@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ import com.wangge.buzmgt.pushmoney.entity.PriceScope;
 import com.wangge.buzmgt.pushmoney.entity.PushMoney;
 import com.wangge.buzmgt.pushmoney.entity.PushMoneyRegion;
 import com.wangge.buzmgt.pushmoney.service.PushMoneyService;
+import com.wangge.json.JSONFormat;
 
 @Controller
 @RequestMapping("/pushMoney")
@@ -36,7 +39,7 @@ public class PushMoneyController {
   
   private static final String SEARCH_OPERTOR = "sc_";
   
-  @RequestMapping("show")
+  @RequestMapping("/show")
   public String toPushMoneySet(Model model){
     List<PriceScope> list=pushMoneyService.findPriceScopeAll();
     List<Category> categories=pushMoneyService.findCategoryAll();
@@ -45,8 +48,10 @@ public class PushMoneyController {
     return "ywsalary/push_money_set";
   }
   @RequestMapping(value="",method=RequestMethod.GET)
+  @JSONFormat(filterField = { "Region.children", "Region.parent",
+  "SalesMan.user" }, nonnull = true, dateFormat = "yyyy-MM-dd HH:mm")
   public Page<PushMoney> getPushMoney(HttpServletRequest request,
-      Pageable pageable){
+     @PageableDefault(page=0, size=10,sort={"createDate"},direction=Direction.DESC) Pageable pageable){
     Map<String, Object> searchParams=WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<PushMoney> page=pushMoneyService.findAll(searchParams, pageable);
     return page;
@@ -57,7 +62,6 @@ public class PushMoneyController {
   public JSONObject add(PushMoney pushMoney){
     JSONObject json=new JSONObject();
     try {
-      pushMoney.setType(0);
       pushMoneyService.save(pushMoney);
       json.put("status", "success");
       json.put("successMsg", "操作成功！");

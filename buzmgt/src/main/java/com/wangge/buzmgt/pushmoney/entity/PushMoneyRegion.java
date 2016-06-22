@@ -21,7 +21,6 @@ public class PushMoneyRegion implements Serializable{
   private static final long serialVersionUID = 1L;
   
   @Id
-  @Column(name = "SIGNID")
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
   private Integer id;
