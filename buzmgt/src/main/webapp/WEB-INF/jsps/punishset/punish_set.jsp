@@ -92,12 +92,11 @@
 							<!--设置公里系数表-->
 
 							<c:forEach var="punishSet" items="${list }" varStatus="status">
-
 								<div class="col-sm-3 cl-padd">
 									<div class="ratio-box">
 										<div class="ratio-box-dd">
 											<span class="label  label-blue"> ${status.index+1 }</span> <span
-												class="text-black jll"> ${punishSet.region.name } </span> <a
+												class="text-black jll"> ${punishSet.region.parent.parent.parent.parent.name}${punishSet.region.parent.parent.parent.name}${punishSet.region.parent.parent.name}${punishSet.region.parent.name}${punishSet.region.name } </span> <a
 												class="text-redd jll" href="" data-toggle="modal"
 												data-target=""> ${punishSet.punishNumber } <span></span></a>
 											<a class="text-blue-s jll" href="" data-toggle="modal"
