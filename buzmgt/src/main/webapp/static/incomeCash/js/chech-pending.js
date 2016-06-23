@@ -275,7 +275,7 @@ function checkPending(userId,createDate){
  */
 function checkDebt(userId,createDate){
 	$.ajax({
-		url:base+"/checkCash/debtCheck/"+userId+"?createDate="+createDate,
+		url:base+"checkCash/debtCheck/"+userId+"?createDate="+createDate,
 		type:"POST",
 		dataType:"json",
 		success:function(data){

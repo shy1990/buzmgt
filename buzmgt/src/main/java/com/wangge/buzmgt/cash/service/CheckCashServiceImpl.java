@@ -648,7 +648,6 @@ public class CheckCashServiceImpl implements CheckCashService {
           cash.setIsCheck("已审核");
         spec.put("EQ_userId", userId);
         spec.put("EQ_createDate", createDate);
-        spec.put("ISNULL_seriaNo", "true");
         List<BankTrade> bankTrades = bankTradeService.findAll(spec);
         if (bankTrades.size() > 0) {
           Float incomeMoney = new Float(0);
@@ -679,6 +678,7 @@ public class CheckCashServiceImpl implements CheckCashService {
     
     spec.put("EQ_userId", userId);
     spec.put("EQ_createDate", createDate);
+    spec.put("EQ_status", 0);
     
     try {
       // 修改原有扣罚状态
