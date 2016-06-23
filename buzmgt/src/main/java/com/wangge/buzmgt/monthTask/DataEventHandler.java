@@ -28,13 +28,15 @@ public class DataEventHandler {
 	 */
 	@HandleBeforeCreate
 	public void handlePersonCreate(MonthTask monthTask) throws Exception {
-		MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId(null,monthTask.getRegionid(), monthTask.getMonth());
-		if (null != orda) {
-			orda.setUsed(1);
-			monthRep.save(orda);
-			monthTask.setMonthData(orda);
-		}
 		try {
+			MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId(monthTask.getAgentid(), null,
+					monthTask.getMonth());
+			if (null != orda) {
+				orda.setUsed(1);
+				monthRep.save(orda);
+				monthTask.setMonthData(orda);
+			}
+
 			// handlePush(monthTask, orda);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,11 +65,12 @@ public class DataEventHandler {
 
 	@HandleBeforeSave
 	public void handleProfileSave(MonthTask monthTask) {
-		MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId(null,monthTask.getAgentid(), monthTask.getMonth());
-		try {
-			// handlePush(monthTask, orda);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId( monthTask.getAgentid(),null,
+//				monthTask.getMonth());
+//		try {
+//			// handlePush(monthTask, orda);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 }
