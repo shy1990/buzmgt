@@ -173,6 +173,4 @@ public  class SalesManServiceImpl implements SalesManService {
 	public SalesMan findSaleamanByRegionId(String regionId) {
 		return salesManRepository.findSaleamanByRegionId(regionId);
 	}
-  
-  
 }

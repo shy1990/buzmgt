@@ -288,6 +288,10 @@ public class AccountManageController  extends BaseController{
     try {
       User u = us.getById(id);
       if("2".equals(status)){
+        //删除该业务所负责区域
+        SalesMan salesman = sm.findById(id);
+        salesman.setRegion(null);
+        sm.addSalesman(salesman);
         u.setStatus(UserStatus.DISMISS);
       }else if("3".equals(status)){
         u.setStatus(UserStatus.DELETE);
