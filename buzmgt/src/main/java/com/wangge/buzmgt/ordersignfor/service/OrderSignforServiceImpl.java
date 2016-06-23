@@ -161,9 +161,13 @@ public class OrderSignforServiceImpl implements OrderSignforService {
               }
 
               break;
+            case IN:
+              predicates.add(cb.in(expression).value(filter.value));
+
+              break;
             case LIKE:
               predicates.add(cb.like(expression, "%" + filter.value + "%"));
-
+              
               break;
             case GT:
               if (javaTypeName.equals(TYPE_DATE)) {
@@ -284,6 +288,10 @@ public class OrderSignforServiceImpl implements OrderSignforService {
      }
     });
     return cashList;
+  }
+  @Override
+  public void save(List<OrderSignfor> list) {
+    orderSignforRepository.save(list);
   }
   
 

@@ -25,9 +25,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.service.AssessService;
+import com.wangge.buzmgt.cash.entity.CheckCash;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.service.RegionService;
@@ -121,6 +123,46 @@ public class OrderSignforController {
     Long orderTotal=os.findCount();//订单总数
     model.addAttribute("totalCount",orderTotal);
     return "abnormal/abnormal_list";
+  }
+  
+  @RequestMapping(value="/fastMail")
+  @ResponseBody
+  public JSONObject createFastMailNo(String orderNo){
+    JSONObject json=new JSONObject();
+    String[] orderNos=orderNo.split(",");
+    List<String> orderNums=new ArrayList<>();
+    orderNums=Arrays.asList(orderNos);
+    Map<String, Object> spec=new HashMap<>();
+    
+    spec.put("IN_orderNo", orderNums);
+    try {
+      // 修改原有扣罚状态
+      List<OrderSignfor> list=os.findAll(spec);
+      //四位随机数字
+      int number=(int) (Math.random()*10000);
+      String fastMailNo=DateUtil.date2String(new Date(), "yyyyMMddHHmmss")+number;
+      
+      if (list.size() > 0) {
+        list.forEach(l->{
+          l.setFastmailNo(fastMailNo);
+        });
+        os.save(list);
+        json.put("fastMailNo", fastMailNo);
+        json.put("status", "success");
+        json.put("successMsg", "操作成功");
+        return json;
+      }
+      json.put("status", "error");
+      json.put("errorMsg", "未查到该数据");
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      json.put("status", "error");
+      json.put("errorMsg", "操作失败");
+      return json;
+    }
+    return json;
+    
   }
   
   /**

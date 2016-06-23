@@ -49,4 +49,20 @@ public interface CheckCashService {
 
   public void exportSetExecl(List<CheckCash> content, HttpServletRequest request, HttpServletResponse response);
 
+  /**
+   * 查询木有流水单号的审核
+   * 
+   * 有扣罚+是否有银行交易记录
+   * @return
+   */
+  public List<CheckCash> getDebtChecks(String createDate);
+
+  /**
+   * 审核没有流水单号的交易记录
+   * @param userId
+   * @param createDate
+   * @return
+   */
+  public JSONObject auditDebtCheck(String userId, String createDate);
+
 }

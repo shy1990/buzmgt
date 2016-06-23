@@ -28,8 +28,8 @@ public class SalesmanDataServiceImpl implements SalesmanDataService{
 	 * 添加
 	 */
 	@Override
-	public void save(SalesmanData salesmanData) {
-		salesmanDataRepository.save(salesmanData);
+	public SalesmanData save(SalesmanData salesmanData) {
+		return salesmanDataRepository.save(salesmanData);
 	}
 	/**
 	 * 分页查询

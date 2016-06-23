@@ -250,5 +250,14 @@ public class Saojie implements Serializable {
   public void setFinishStatus(Integer finishStatus) {
     this.finishStatus = finishStatus;
   }
+
+  @Override
+  public String toString() {
+    return "Saojie [id=" + id + ", name=" + name + ", status=" + status
+        + ", minValue=" + minValue + ", beginTime=" + beginTime
+        + ", expiredTime=" + expiredTime + ", description=" + description
+        + ", order=" + order + ", finishStatus=" + finishStatus + ", percent="
+        + percent + ", timing=" + timing + "]";
+  }
   
 }

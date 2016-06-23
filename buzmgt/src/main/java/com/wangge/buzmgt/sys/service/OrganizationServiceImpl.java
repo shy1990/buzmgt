@@ -61,10 +61,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 	}
 
   @Override
-  public void addOrganization(Organization organ) {
+  public Organization addOrganization(Organization organ) {
     // TODO Auto-generated method stub
     
-     organRepository.save(organ);
+     return organRepository.save(organ);
   }
 
   @Override
