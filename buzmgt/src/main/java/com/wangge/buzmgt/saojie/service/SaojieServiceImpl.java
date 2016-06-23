@@ -39,8 +39,8 @@ public class SaojieServiceImpl implements SaojieService {
   private SaojieRepository saojieRepository;
   
   @Override
-  public void saveSaojie(Saojie saojie) {
-    saojieRepository.save(saojie);
+  public Saojie saveSaojie(Saojie saojie) {
+    return saojieRepository.save(saojie);
   }
 
 //  @Override
@@ -85,32 +85,31 @@ public class SaojieServiceImpl implements SaojieService {
 //  }
   @Override
   public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
-    String hql = "SELECT t.* FROM SYS_SAOJIE t right join (select sj.user_id,sj.saojie_id,max(sj.saojie_order) from sys_saojie sj left join sys_salesman s on sj.user_id=s.user_id where ";
-    if(saojie.getSalesman() != null){
-      if((null!=saojie.getSalesman().getJobNum()&&!"".equals(saojie.getSalesman().getJobNum()))||(null!=saojie.getSalesman().getTruename()&&!"".equals(saojie.getSalesman().getTruename()))){
-        String serHql = " s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"'";
-        hql += ""+serHql+" and sj.region_id in"
-            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
-      }else{
-        hql += " sj.region_id in"
-            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
-      }
-    }else{
-      hql += " sj.region_id in"
-          + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
-    }
+    String hql = " select sj.* from sys_saojie sj  left join sys_salesman s on s.user_id = sj.user_id  where ";
     if(saojie.getStatus() != null){
       int status = saojie.getStatus().ordinal();
       if(SaojieStatus.PENDING.equals(saojie.getStatus())){
-        hql += " and s.status='0' and sj.saojie_status='"+status+"'";
+        hql += " sj.saojie_status='"+status+"' and";
       }else if(SaojieStatus.AGREE.equals(saojie.getStatus())){
-        hql += " and s.status='1' and sj.saojie_status='"+status+"'";
+        hql += " sj.finish_status='1' and";//扫街全部完成的
       }
     }else{
-      hql += " and sj.saojie_status='1' or sj.saojie_status='3'";
+      hql += " (sj.finish_status='1' or sj.saojie_status='1') and";
     }
-    
-    hql +=" group by sj.user_id,sj.saojie_id) saojie on saojie.saojie_id=t.saojie_id";
+   // hql +=" group by sj.saojie_id)) saojie right JOIN sys_salesman s ON s.user_id = saojie.user_id where ";
+    if(saojie.getSalesman() != null){
+      if((null!=saojie.getSalesman().getJobNum()&&!"".equals(saojie.getSalesman().getJobNum()))||(null!=saojie.getSalesman().getTruename()&&!"".equals(saojie.getSalesman().getTruename()))){
+        String serHql = " (s.truename like '%"+saojie.getSalesman().getTruename()+"%' or s.job_num='"+saojie.getSalesman().getJobNum()+"')";
+        hql += ""+serHql+" and s.region_id in"
+            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
+      }else{
+        hql += " s.region_id in"
+            + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
+      }
+    }else{
+      hql += " s.region_id in"
+          + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
+    }
     Query q = em.createNativeQuery(hql,Saojie.class);  
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* 7);
@@ -119,15 +118,18 @@ public class SaojieServiceImpl implements SaojieService {
     List<Saojie> list = new ArrayList<Saojie>();
     for(Object obj: q.getResultList()){
       Saojie sj = (Saojie)obj;
-      sj.addPercent(sj.getSaojiedata().size(), sj.getMinValue());
-      Calendar cal = Calendar.getInstance();
-      cal.setTime(sj.getBeginTime());
-      long time1 = cal.getTimeInMillis();
-      cal.setTime(sj.getExpiredTime());
-      long time2 = cal.getTimeInMillis();
-      long timing=(time2-time1)/(1000*3600*24);
-      sj.setTiming(Integer.parseInt(String.valueOf(timing)));
-      list.add(sj);
+      if(sj != null){
+        sj.addPercent(sj.getSaojiedata().size(), sj.getMinValue());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sj.getBeginTime());
+        long time1 = cal.getTimeInMillis();
+        cal.setTime(sj.getExpiredTime());
+        long time2 = cal.getTimeInMillis();
+        long timing=(time2-time1)/(1000*3600*24);
+        sj.setTiming(Integer.parseInt(String.valueOf(timing)));
+        list.add(sj);
+      }
+      
     }
     
     Page<Saojie> page = new PageImpl<Saojie>(list,new PageRequest(pageNum,7),count);
@@ -168,78 +170,6 @@ public class SaojieServiceImpl implements SaojieService {
   }
   
   @Override
-  public SaojieDataVo getsaojieDataList(String userId,String regionId,int pageNum,int limit) {
-    int a = 0;
-    SaojieDataVo sdv = new SaojieDataVo();
-    List<SaojieData> sd = new ArrayList<SaojieData>();
-     List<Saojie> list = findAll(userId,regionId);
-     for(Saojie s : list){
-       if(s.getSaojiedata() != null ){
-          for(SaojieData data  : s.getSaojiedata()){
-              sd.add(data);
-          }
-       }
-       a += s.getMinValue();
-     }
-    sdv.addPercent(sd.size(),a);
-    Page<SaojieData> page;
-    List<SaojieData> sub = new ArrayList<SaojieData>();
-    if(sd != null && sd.size() > 0){
-      int expectedSize = (pageNum + 1)*limit;
-      int last = expectedSize - limit;
-      if(expectedSize >= sd.size() && last <= sd.size()){
-        sub = sd.subList(last,last + limit - (expectedSize - sd.size()));
-      }else{
-        sub = sd.subList(pageNum*limit,(pageNum+1)*limit);
-      }
-    }
-    page = new PageImpl<SaojieData>(sub,new PageRequest(pageNum,limit),sd.size());
-    sdv.setPage(page);
-    return sdv;
-  }
-  
-  @Override
-  public SaojieDataVo getsaojieDataList(String userId,String regionId) {
-    int a = 0;
-    SaojieDataVo sdv = new SaojieDataVo();
-    List<Saojie> list = findAll(userId,regionId);
-     for(Saojie s : list){
-       if(s.getSaojiedata() != null ){
-          for(SaojieData data  : s.getSaojiedata()){
-            sdv.getList().add(data);
-          }
-       }
-       a += s.getMinValue();
-     }
-        sdv.addPercent(sdv.getList().size(),a);
-      return sdv;
-  }
-  
-  public List<Saojie> findAll(String userId,String regionId){
-    List<Saojie> list = saojieRepository.findAll(new Specification<Saojie>() {
-      public Predicate toPredicate(Root<Saojie> root, CriteriaQuery<?> query,
-          CriteriaBuilder cb) {
-        List<Predicate> predicates = new ArrayList<Predicate>();
-        
-        if (userId != null && !"".equals(userId)) {
-          Join<Saojie, SalesMan> salesManJoin = root.join(root.getModel()
-              .getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
-          predicates.add(cb.equal(salesManJoin.get("id").as(String.class), userId));
-        }
-
-        if (regionId != null && !"".equals(regionId)) {
-          Join<Saojie, Region> regionJoin = root.join(root.getModel()
-              .getSingularAttribute("region", Region.class), JoinType.LEFT);
-          predicates.add(cb.equal(regionJoin.get("id").as(String.class), regionId));
-        }
-        return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-      }
-
-    });
-    return list;
-  }
-  
-  @Override
   public int getOrderNumById(String id) {
     int order = saojieRepository.getOrderNumById(id);
     return order;
@@ -260,10 +190,19 @@ public class SaojieServiceImpl implements SaojieService {
     return saojieRepository.findByOrderAndSalesman(ordernum,salesman);
   }
 
-  @Override
-  public List<Saojie> findSaojie(String status, String userId) {
+  public List<Saojie> findSaojie(SaojieStatus status, String userId) {
     return saojieRepository.findSaojie(status, userId);
   }
+  @Override
+  public Saojie findByOrderAndUserId(int order, String userId) {
+    return saojieRepository.findByOrderAndUserId(order,userId);
+  }
+
+  @Override
+  public Saojie findByregionId(String regionId) {
+    return saojieRepository.findByregionId(regionId);
+  }
+  
 }
   
   

@@ -35,7 +35,7 @@ import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
-import com.wangge.buzmgt.util.ExcelExport;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 
 @RequestMapping("/oilCost")
 @Controller
@@ -88,6 +88,8 @@ public class OilCostController {
   @ResponseBody
   public String getOilCostGroupByUserId(HttpServletRequest request,
       @PageableDefault(page = 0,size=10,sort={"dateTime"},direction=Direction.DESC) Pageable pageRequest ){
+    String msg="";
+    try {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     List<OilCost> oilCostlistAll = oilCostService.findGroupByUserId(searchParams);
     List<OilCost> oilCostlist = new ArrayList<>();
@@ -103,8 +105,6 @@ public class OilCostController {
       total++;
     }
     Page<OilCost> oilCostPage = new PageImpl<OilCost>(oilCostlist, pageRequest, total);
-    String msg="";
-    try {
       msg=JSON.toJSONString(oilCostPage,SerializerFeature.DisableCheckSpecialChar);
     } catch (Exception e) {
       logger.error(e.getMessage());
@@ -122,11 +122,11 @@ public class OilCostController {
   public String getAbnormalCoordList(HttpServletRequest request,
       @PageableDefault(page = 0,size=10,sort={"dateTime"},direction=Direction.DESC) Pageable pageRequest ){
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-    searchParams.put("LIKE_oilRecord", "exception");
+    searchParams.put("LIKE_oilRecord", "exception\":1");
     Page<OilCost> oilCostPage = oilCostService.findAll(searchParams,pageRequest);
     String msg="";
     try {
-      msg=JSON.toJSONString(oilCostPage,SerializerFeature.DisableCheckSpecialChar);
+      msg=JSON.toJSONString(oilCostPage,SerializerFeature.DisableCheckSpecialChar).replace(" ", "").replace("\n", "");
     } catch (Exception e) {
       logger.error(e.getMessage());
     }
@@ -157,7 +157,8 @@ public class OilCostController {
   public String showDetailList(@PathVariable("Id") Long id,Model model,HttpServletRequest request){
 //    oilCostService.disposeOilCostRecord(oilCost);//处理数据
     OilCost oc=oilCostService.findOne(id);
-    SalesMan salesMan= salesManService.findById(oc.getUserId());
+    String parentId= oc.getParentId();
+    SalesMan salesMan= salesManService.findById(parentId==null?oc.getUserId():parentId);
     model.addAttribute("oilCost", oc);
     model.addAttribute("salesMan", salesMan);
     return "oilsubsidy/oil_subsidy_detail";

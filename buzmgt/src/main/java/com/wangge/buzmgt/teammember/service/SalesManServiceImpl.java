@@ -22,6 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
 import com.wangge.buzmgt.sys.entity.User;
@@ -36,6 +38,8 @@ public  class SalesManServiceImpl implements SalesManService {
 	private SalesManRepository salesManRepository;
 	@Resource
 	private SaojieRepository SaojieRepository;
+	@Resource
+	private LogService logService;
 	
 	 @PersistenceContext  
 	  private EntityManager em; 
@@ -48,7 +52,8 @@ public  class SalesManServiceImpl implements SalesManService {
 	@Override
 	public void addSalesman(SalesMan salesman) {
 		
-		salesManRepository.save(salesman);
+		salesman = salesManRepository.save(salesman);
+		logService.log(null, salesman, EventType.UPDATE);
 	}
 	
   /*
@@ -112,14 +117,11 @@ public  class SalesManServiceImpl implements SalesManService {
   }
   
   public Page<SalesMan> getSalesmanList(SalesMan salesMan,String salesmanStatus, int pageNum, String regionName,String stage){
-   // String and = "";
-    String whereql = stage!=null && !"".equals(stage.trim()) ? " and "+ stage : "" ;
-//    String hql = "select t.* from SYS_SALESMAN t where  t.status = '"+salesMan.getStatus().ordinal()+"' "+whereql+" and  t.region_id in "
-//        + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
-    String hql = "select t.* from SYS_SALESMAN t where  t.region_id in "
-        + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";
+    String whereql = stage!=null && !"".equals(stage.trim()) ?  stage : "1 = 1" ;
+    String hql = "select t.* from SYS_SALESMAN t where  "+whereql+" and  t.region_id in "
+       + "(SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)";  
     
-    if(null!=salesmanStatus){
+    if(null!=salesmanStatus && !"全部".equals(salesmanStatus)){
       hql+= " and t.status='"+salesMan.getStatus().ordinal()+"'";
     }
     Query q = em.createNativeQuery(hql,SalesMan.class); 
@@ -143,8 +145,9 @@ public  class SalesManServiceImpl implements SalesManService {
     return salesManRepository.findById(userId);
   }
   
-  public List<Object> gainSaojieMan() {
-    return salesManRepository.gainSaojieMan();
+  //获取添加扫街业务
+  public List<Object> gainSaojieMan(SalesmanStatus status) {
+    return salesManRepository.getSaojieMan(status);
   }
 
   public SalesMan findById(String id) {
@@ -156,5 +159,20 @@ public  class SalesManServiceImpl implements SalesManService {
     return salesManRepository.findById(userId);
   }
 
+  @Override
+  public String getRegionIdByUserId(String userId) {
+    return salesManRepository.getRegionIdByUserId(userId);
+  }
+
+  @Override
+  public String findByTruename(String truename) {
+    return salesManRepository.getIdByTurename(truename);
+  }
+
+	@Override
+	public SalesMan findSaleamanByRegionId(String regionId) {
+		return salesManRepository.findSaleamanByRegionId(regionId);
+	}
+  
   
 }

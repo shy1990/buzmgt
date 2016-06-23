@@ -2,6 +2,11 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+  String path = request.getContextPath();
+			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+					+ path + "/";
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
 
@@ -10,6 +15,7 @@
 
 
 <title>业务管理后台项目</title>
+<base href="<%=basePath%>" />
 <meta name="keywords" content="bootstrap响应式后台">
 <meta name="description" content="">
 <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -122,7 +128,7 @@
 														<tr>
 															<td class="project-people"><a href=""><img
 																	alt="image" class="img-circle"
-																	src="../static/img/team-member/a.jpg"></a></td>
+																	src="<%=basePath%>/static/img/team-member/a.jpg"></a></td>
 															<td class="project-title"><a href=""><strong>${assess.salesman.truename}</strong>(${assess.salesman.user.organization.name})</a>
 																<br /> <span>${assess.salesman.region.name}</span></td>
 															<td class="project-title"><span class="l-h">提货量：<strong
@@ -131,16 +137,19 @@
 															<td class="project-completion"><span
 																class="completion-ing">业务指标： ${assess.percent }</span> 
 																<span><i class="ico ico-time-down"></i> 倒计时：<span class="">${assess.timing }天</span></span>
-																<c:if test="${assess.status == 'PENDING' && assess.assessStage == '1' }">
-																<span class="kaohe-status onekaohe-status-on">一阶段考核中</span>
+																<c:if test="${assess.status == 'PENDING' && assess.salesman.status ne 'zhuanzheng'}">
+																<span class="kaohe-status onekaohe-status-on">${assess.assessStage }阶段考核中</span>
 																</c:if>
-																<c:if test="${assess.status == 'AGREE' && assess.assessStage == '1' }">
-																<span class="kaohe-status onekaohe-status-out">一阶段考核通过</span>
+																<c:if test="${assess.status == 'AGREE' && assess.salesman.status ne 'zhuanzheng'}">
+																<span class="kaohe-status onekaohe-status-out">${assess.assessStage }阶段考核通过</span>
 																</c:if>
-																<c:if test="${assess.status == 'FAIL' && assess.assessStage == '1' }">
-																<span class="kaohe-status bustkaohe-status">一阶段考核失败</span>
+																<c:if test="${assess.status == 'FAIL' && assess.salesman.status ne 'zhuanzheng'}">
+																<span class="kaohe-status bustkaohe-status">${assess.assessStage }阶段考核失败</span>
 																</c:if>
-																<c:if test="${assess.status == 'PENDING' && assess.assessStage == '2' }">
+																<c:if test="${assess.status == 'AGREE' && assess.salesman.status == 'zhuanzheng' }">
+																<span class="kaohe-status overkaohe-status-on">已转正</span>
+																</c:if>
+																<%-- <c:if test="${assess.status == 'PENDING' && assess.assessStage == '2' }">
 																<span class="kaohe-status twokaohe-status-on">二阶段考核中</span>
 																</c:if>
 																<c:if test="${assess.status == 'AGREE' && assess.assessStage == '2' }">
@@ -152,20 +161,14 @@
 																<c:if test="${assess.status == 'PENDING' && assess.assessStage == '3' }">
 																<span class="kaohe-status threekaohe-status-on">三阶段考核中</span>
 																</c:if>
-																<c:if test="${assess.status == 'AGREE' && assess.assessStage == '3' }">
-																<span class="kaohe-status overkaohe-status-on">已转正</span>
-																</c:if>
 																<c:if test="${assess.status == 'FAIL' && assess.assessStage == '3' }">
 																<span class="kaohe-status bustkaohe-status">三阶段考核失败</span>
-																</c:if>
-																<c:if test="${assess.assessStage == '1' }">
-																
+																</c:if> --%>
 																<div class="progress progress-mini">
 																	<div style="width: ${assess.percent };"
 																		class="progress-bar onekaohe-bar"></div>
 																</div></td>
-																</c:if>
-																<c:if test="${assess.assessStage == '2' }">
+																<%-- <c:if test="${assess.assessStage == '2' }">
 																<div class="progress progress-mini">
 																	<div style="width: ${assess.percent };"
 																		class="progress-bar twokaohe-bar"></div>
@@ -176,8 +179,10 @@
 																	<div style="width: ${assess.percent };"
 																		class="progress-bar threekaohe-bar"></div>
 																</div></td>
-																</c:if>
-															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=${assess.salesman.id }&asssessid=${assess.id }&baifen=${fn:substringBefore(assess.percent, '%') }&active=${assess.activeNum}&orderNum=${assess.orderNum}" class="btn btn-white btn-sm "> <span class="folder"></span>
+
+																</c:if> --%>
+															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=${assess.salesman.id }&asssessid=${assess.id }&baifen=${fn:substringBefore(assess.percent, "%") }&active=${assess.activeNum}&orderNum=${assess.orderNum}" class="btn btn-white btn-sm "> <span class="folder"></span>
+
 																	查看
 															</a> <!-- Single button --></td>
 														</tr>

@@ -50,8 +50,8 @@ public class AssessServiceImpl implements AssessService {
   private RegistDataRepository rdr;
   
   @Override
-  public void saveAssess(Assess assess) {
-    assessRepository.save(assess);
+  public Assess saveAssess(Assess assess) {
+    return assessRepository.save(assess);
   }
 
   @Override
@@ -87,9 +87,9 @@ public class AssessServiceImpl implements AssessService {
       double orderNum = 0;//提货量
       double active = 0;//活跃家数
       if("3".equals(ass.getAssessStage()) && ass.getStatus().equals(AssessStatus.AGREE)){
-        String sql = "select count(o.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
-            "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
-            "where t.member_id=m.id and o.pay_status='1' and o.createtime >=TRUNC(SYSDATE, 'MM') and o.createtime<=last_day(SYSDATE)";
+        String sql = "select count(oi.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
+            "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id left join SJZAIXIAN.SJ_TB_ORDER_ITEMS oi on o.id = oi.order_id "+
+            "where t.member_id=m.id and oi.target_type='sku' and o.pay_status='1' and o.createtime >=TRUNC(SYSDATE, 'MM') and o.createtime<=last_day(SYSDATE)";
         Query query =  em.createNativeQuery(sql);
         BigDecimal str = null;
         List<BigDecimal>  resultList = query.getResultList();
@@ -111,16 +111,12 @@ public class AssessServiceImpl implements AssessService {
         }
       }else{
         if(null!=assStr){
-        Assess a = assessRepository.findByStageAndSalesman("1",ass.getSalesman().getId());//看是否有第一阶段
+//        Assess a = assessRepository.findByStageAndSalesman("2",ass.getSalesman().getId());//看是否有第二阶段
         for(int i=0; i<assStr.length; i++){
-          String sql = "select count(o.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
-              "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
-              "where t.member_id=m.id and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' ";
-          if(a != null && !"".equals(a)){//如果有就从第一阶段开始时间到第二阶段结束时间统计
-            sql += "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+a.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
-          }else{//没有说明是第一阶段
-            sql += "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
-          }
+          String sql = "select count(oi.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
+              "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id left join SJZAIXIAN.SJ_TB_ORDER_ITEMS oi on o.id = oi.order_id "+
+              "where t.member_id=m.id and oi.target_type='sku' and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' ";
+          sql += "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
           Query query =  em.createNativeQuery(sql);
           BigDecimal str = null;
           List<BigDecimal>  resultList = query.getResultList();
@@ -133,13 +129,9 @@ public class AssessServiceImpl implements AssessService {
           String sql1 = "select count(*) from (select m.id,count(o.id) total from SYS_REGISTDATA t "+
               "left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
               "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
-              "where t.member_id=m.id and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' ";
-              if(a != null && !"".equals(a)){//如果有就从第一阶段开始时间到第二阶段结束时间统计
-                sql1 += "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+a.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
-              }else{//没有说明是第一阶段
-                sql1 += "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
-              }
-              sql1 += "Group by m.id) where total >= 2";
+              "where t.member_id=m.id and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' "+
+              "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"' "+
+              "Group by m.id) where total >= 2";
           query =  em.createNativeQuery(sql1);
           BigDecimal big = null;
           resultList = query.getResultList();
@@ -248,7 +240,7 @@ public class AssessServiceImpl implements AssessService {
     String hql = "select m.username,count(o.id),sum(oi.nums),sum(o.total_cost) from SJ_BUZMGT.SYS_REGISTDATA t "+
 "left join SJ_BUZMGT.SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
 "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id left join SJZAIXIAN.SJ_TB_ORDER_ITEMS oi on o.id=oi.order_id "+
-"where t.member_id=m.id and oi.target_type='sku' and t.user_id='"+salesmanId+"'";
+"where t.member_id=m.id and o.pay_status='1' and oi.target_type='sku' and t.user_id='"+salesmanId+"'";
     if(regionid != null && !"".equals(regionid)){
       hql += " and t.REGION_ID='"+regionid+"'";
     }
@@ -287,6 +279,12 @@ public class AssessServiceImpl implements AssessService {
   @Override
   public Assess findByStageAndSalesman(String stage,String userId) {
     return assessRepository.findByStageAndSalesman(stage,userId);
+  }
+
+  @Override
+  public void saveRegistData(RegistData registData) {
+    // TODO Auto-generated method stub
+    rdr.save(registData);
   }
 	
 }

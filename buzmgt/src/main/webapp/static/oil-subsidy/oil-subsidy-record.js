@@ -70,7 +70,7 @@ function findOilCostRecord(page) {
 			var searchTotal = oilCostData.totalElements;
 			if (searchTotal != oilCostRecordTotal || searchTotal == 0) {
 				oilCostRecordTotal = searchTotal;
-				totalRecord();
+//				totalRecord();
 				oilCostRecordPaging(oilCostData);
 			}
 		},

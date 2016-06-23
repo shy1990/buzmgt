@@ -12,16 +12,26 @@ public class OilRecord implements Serializable {
   public OilRecord() {
     super();
   }
-  public OilRecord(String regionType, String regionName, String coordinates, String time, String type) {
+  
+
+
+  public OilRecord(String regionType, String regionName, String coordinates, String time, String shopName,
+      String missTime, String missName, String exception, String type, String $ref) {
     super();
     this.regionType = regionType;
     this.regionName = regionName;
     this.coordinates = coordinates;
     this.time = time;
+    this.shopName = shopName;
+    this.missTime = missTime;
+    this.missName = missName;
+    this.exception = exception;
     this.type = type;
+    this.$ref = $ref;
   }
 
-  
+
+
 
 
   @Override
@@ -42,7 +52,16 @@ public class OilRecord implements Serializable {
   private String missName;
   private String exception;
   private String type;
+  private String $ref;
   
+  
+  
+  public String get$ref() {
+    return $ref;
+  }
+  public void set$ref(String $ref) {
+    this.$ref = $ref;
+  }
   public String getMissName() {
     return missName;
   }

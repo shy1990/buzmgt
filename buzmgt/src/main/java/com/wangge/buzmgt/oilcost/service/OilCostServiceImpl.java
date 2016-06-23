@@ -8,10 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -24,8 +20,6 @@ import org.apache.log4j.Logger;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -34,18 +28,12 @@ import com.alibaba.fastjson.JSON;
 import com.wangge.buzmgt.oilcost.entity.OilCost;
 import com.wangge.buzmgt.oilcost.entity.OilRecord;
 import com.wangge.buzmgt.oilcost.repository.OilCostRepository;
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
-import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
-import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.sys.entity.Organization;
-import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesManPart;
 import com.wangge.buzmgt.teammember.service.SalesManService;
-import com.wangge.buzmgt.util.JSONUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 
 @Service
@@ -73,11 +61,18 @@ public class OilCostServiceImpl implements OilCostService {
 
   @Override
   public List<OilCost> findAll(Map<String, Object> searchParams) {
-    disposeSearchParams(searchParams);
-    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<OilCost> spec = oilCostSearchFilter(filters.values(), OilCost.class);
-    List<OilCost> list=oilCostRepository.findAll(spec);
-    disposeOilCostList(list);
+    List<OilCost> list=null;
+    try {
+      
+      disposeSearchParams(searchParams);
+      Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+      Specification<OilCost> spec = oilCostSearchFilter(filters.values(), OilCost.class);
+      list=oilCostRepository.findAll(spec);
+      disposeOilCostList(list);
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+      e.printStackTrace();
+    }
 
     return list;
   }
@@ -155,79 +150,102 @@ public class OilCostServiceImpl implements OilCostService {
   @Override
   public void disposeOilCostRecord(OilCost l){
     if(l!=null){
-      String parentId=l.getParentId();
-      String userId=StringUtils.isEmpty(parentId)?l.getUserId(): parentId ;
-      SalesMan salesMan=salesManService.findById(userId);
-      l.setSalesMan(salesMan);
-      
-      String oilRecord=l.getOilRecord();
-      l.setOilRecordList(JSONUtil.stringArrtoJsonList(oilRecord, OilRecord.class));
-//      l.setOilRecord("");
-      String orgName="";
-      String regName="";
-      String turename="";
-      String id ="";
       try {
+        String parentId=l.getParentId();
+        String userId=StringUtils.isEmpty(parentId)?l.getUserId(): parentId ;
+        SalesMan salesMan=salesManService.findById(userId);
+        l.setSalesMan(salesMan);
+        
+       
+  //      l.setOilRecord("");
+        String orgName="";
+        String regName="";
+        String turename="";
+        String id ="";
         id=salesMan.getId();
         orgName=salesMan.getUser().getOrganization().getName();
         regName=salesMan.getRegion().getName();
         turename=salesMan.getTruename();
+        l.setSalesManPart(new SalesManPart(id,turename,regName,orgName));
+        oilRecordJsonToArray(l);
       } catch (Exception e) {
-        e.getMessage();
+        logger.info(e.getMessage());
       }
-      l.setSalesManPart(new SalesManPart(id,turename,regName,orgName));
     }
   
   }
+  public void oilRecordJsonToArray(OilCost l){
+    try {
+      
+      String oilRecord=l.getOilRecord();
+      l.setOilRecordList(JSON.parseArray(oilRecord, OilRecord.class));
+    } catch (Exception e) {
+      logger.info("包含错误数据，无法解析油补记录id为"+l.getId());
+      
+    }
+  }
+  
   
   @Override
   public Page<OilCost> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     disposeSearchParams(searchParams);
-    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<OilCost> spec = oilCostSearchFilter(filters.values(), OilCost.class);
-    Page<OilCost> page=oilCostRepository.findAll(spec, pageRequest);
-    disposeOilCostList(page.getContent());
+    Page<OilCost> page=null;
+    try {
+      
+      Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+      Specification<OilCost> spec = oilCostSearchFilter(filters.values(), OilCost.class);
+      page=oilCostRepository.findAll(spec, pageRequest);
+      disposeOilCostList(page.getContent());
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+      e.printStackTrace();
+    }
     return page;
   }
 
   @Override
   public List<OilCost> findGroupByUserId(Map<String, Object> searchParams) {
     //查询所有油补信息
-    List<OilCost> list = findAll(searchParams);
     //存储统计数据
     Map<String, OilCost> oilCostMap = new HashMap<String, OilCost>();
     // 统计后列表
     List<OilCost> oilCostList = new ArrayList<OilCost>();
-    if (list.size() < 1) {
-      return list;
-    }
-   for(OilCost action:list) {
-      String parentId = action.getParentId();
-      String userId = StringUtils.isNotEmpty(parentId)? parentId: action.getUserId();
-      OilCost o = oilCostMap.get(userId);
-      if(o==null){
+    try {
+      List<OilCost> list = findAll(searchParams);
+      if (list.size() < 1) {
+        return list;
+      }
+      for(OilCost action:list) {
+        String parentId = action.getParentId();
+        String userId = StringUtils.isNotEmpty(parentId)? parentId: action.getUserId();
+        OilCost o = oilCostMap.get(userId);
+        if(o==null){
           action.setTotalDistance(action.getDistance());
           action.setOilTotalCost(action.getOilCost());
           oilCostMap.put(userId, action);
-      }else{
-        //操作数据
-        Float totalDistance = o.getTotalDistance();
-        Float distance = action.getDistance();
-        totalDistance += distance;
-        Float oilTotalCost = o.getOilTotalCost();
-        Float oilCost = action.getOilCost();
-        oilTotalCost += oilCost;
-        o.setTotalDistance(totalDistance);
-        o.setOilTotalCost(oilTotalCost);
-
+        }else{
+          //操作数据
+          Float totalDistance = o.getTotalDistance();
+          Float distance = action.getDistance();
+          totalDistance += distance;
+          Float oilTotalCost = o.getOilTotalCost();
+          Float oilCost = action.getOilCost();
+          oilTotalCost += oilCost;
+          o.setTotalDistance(totalDistance);
+          o.setOilTotalCost(oilTotalCost);
+          
+        }
       }
+      //所有油补统计列表
+      Collection<OilCost> coc = oilCostMap.values();
+      //
+      coc.forEach(ocl->{
+        oilCostList.add(ocl);
+      });
+      
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-    //所有油补统计列表
-    Collection<OilCost> coc = oilCostMap.values();
-    //
-    coc.forEach(ocl->{
-      oilCostList.add(ocl);
-    });
 //    page = new PageImpl<OilCost>(oilCostList, pageRequest, total);
     return oilCostList;
   }

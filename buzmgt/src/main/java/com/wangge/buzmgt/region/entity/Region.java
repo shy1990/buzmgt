@@ -21,6 +21,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -55,9 +58,10 @@ public class Region implements Serializable {
 	@Column(name = "REGION_ID")
 	private String id;
 	private String name;
+	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
-	@Column(table = "SYS_COORDINATES", columnDefinition = "CLOB", name = "content",updatable=false)
+	@Column(table = "SYS_COORDINATES", columnDefinition = "CLOB", name = "content",updatable=true)
 	private String coordinates;
 
 	@Enumerated(EnumType.ORDINAL)
@@ -152,8 +156,10 @@ public class Region implements Serializable {
     this.centerPoint = centerPoint;
   }
 
-  
-	
-	
-	
+  @Override
+  public String toString() {
+    return "Region [id=" + id + ", name=" + name + ", coordinates="
+        + coordinates + ", type=" + type + ", centerPoint=" + centerPoint + "]";
+  }
+
 }

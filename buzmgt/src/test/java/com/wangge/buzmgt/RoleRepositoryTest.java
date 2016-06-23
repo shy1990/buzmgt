@@ -19,7 +19,7 @@ import com.wangge.buzmgt.sys.service.ResourceService;
 import com.wangge.buzmgt.sys.service.ResourceService.Menu;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BuzmgtApplication.class)
 public class RoleRepositoryTest {
 	@Autowired
@@ -51,7 +51,7 @@ public class RoleRepositoryTest {
 //		rr.delete(360448L);
 ////		rs.delResource(360448L);
 //	}
-	@Test
+	//@Test
 	private void queryRegion(){
 	  System.out.println(res.findOne("370209").getName());
 	}

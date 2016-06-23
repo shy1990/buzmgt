@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.saojie.web;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.entity.Saojie;
@@ -52,6 +53,8 @@ public class SaojieController {
   private SaojieService saojieService;
   @Resource
   private ManagerService managerService;
+  @Resource
+  private LogService logService;
   
   /**
    * 
@@ -154,7 +157,7 @@ public class SaojieController {
 	@RequestMapping(value = "/gainSaojieMan",method = RequestMethod.POST)
 	@ResponseBody
 	public List<Object> gainSaojieMan(){
-	  List<Object> salesman = salesManService.gainSaojieMan();
+	  List<Object> salesman = salesManService.gainSaojieMan(SalesmanStatus.saojie);
 	  return salesman;
 	}
 	
@@ -215,7 +218,8 @@ public class SaojieController {
 	    Region region = regionService.getRegionById(strArray[i]);
 	    sj.setRegion(region);
 	    sj.setSalesman(saojie.getSalesman());
-	    saojieService.saveSaojie(sj);
+	    saojie = saojieService.saveSaojie(sj);
+	    logService.log(null, saojie, EventType.SAVE);
 	  }
 	  
 	  return "redirect:/saojie/saojieList";
@@ -238,9 +242,11 @@ public class SaojieController {
 	  if(salesman != null && !"".equals(salesman)){
 	     list = saojieService.findBysalesman(salesman);
 	  }
-	  String startTime=DateUtil.date2String(list.get(0).getBeginTime());
-	  String endTime=DateUtil.date2String(list.get(0).getExpiredTime());
-	  model.addAttribute("startTime",startTime);
+	  int order = saojieService.getOrderNumById(id.trim());
+	  Saojie saojie = saojieService.findByOrderAndUserId(order,id.trim());
+	  String beginTime = DateUtil.date2String(saojie.getBeginTime());
+	  String endTime = DateUtil.date2String(saojie.getExpiredTime());
+	  model.addAttribute("beginTime",beginTime);
 	  model.addAttribute("endTime",endTime);
 	  model.addAttribute("list",list);
 	  model.addAttribute("salesman",salesman);
@@ -267,18 +273,19 @@ public class SaojieController {
     Saojie saojie = saojieService.findById(saojieId);
     int maxOrder = saojieService.getOrderNumById(saojie.getSalesman().getId());
     if(saojie.getOrder() == maxOrder){
-      saojie.setStatus(SaojieStatus.AGREE);//当是最后一个扫街时修改其为完成
-    }else{
-      saojie.setStatus(SaojieStatus.COMMIT);
+      saojie.setFinishStatus(1);//当是最后一个扫街时设置其完成状态为全部完成
     }
+    saojie.setStatus(SaojieStatus.AGREE);
     saojie.setDescription(description);
-    saojieService.saveSaojie(saojie);
+    Saojie sj = saojieService.saveSaojie(saojie);
+    logService.log(saojie, sj, EventType.UPDATE);
     SalesMan sm=saojie.getSalesman();
     //更改下一个扫街地区为进行中
     saojie = saojieService.findByOrderAndSalesman(saojie.getOrder() + 1,sm);
     if(null!=saojie){
       saojie.setStatus(SaojieStatus.PENDING);
-      saojieService.saveSaojie(saojie);
+      Saojie newSJ = saojieService.saveSaojie(saojie);
+      logService.log(saojie, newSJ, EventType.UPDATE);
     }
   //更改业务工作模式
     List<Saojie> listSaojie= saojieService.findBysalesman(sm);

@@ -31,11 +31,15 @@
 <link rel="stylesheet" type="text/css"
 	href="static/bootStrapPager/css/page.css" />
 <link rel="stylesheet" type="text/css" href="static/oil-subsidy/oil_subsidy_detail.css" />
-<script src="static/js/jquery/jquery-1.11.3.min.js"
+<script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sxIvKHAtqdjggD4rK07WnHUT"></script>
 <script type="text/javascript">
 var	base='<%=basePath%>';
 var oilCostId='${oilCost.id}';
+var jsonstr = '${oilCost.oilRecord }';
+var regionName = '${oilCost.salesMan.region.name}';
+var pcoordinates = '${oilCost.salesMan.region.coordinates}';
 </script>
 </head>
 
@@ -53,19 +57,19 @@ var oilCostId='${oilCost.id}';
                     <span id="renduAbnormal"></span>
                     <c:forEach var="record" items="${oilCost.oilRecordList }" varStatus="status">
 	                    <c:choose>
-	                    	<c:when test="${status.index == 0 && empty record.exception }">
+	                    	<c:when test="${status.index == 0 && record.exception == 0 }">
 	    	                	<span>起点<span class="normal-state">${record.regionName }</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.index == 0 && not empty record.exception}">
+	                    	<c:when test="${status.index == 0 && record.exception == 1}">
 	    	                	<span>起点<span class="abnormal-state">异常</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.last && empty record.exception}">
+	                    	<c:when test="${status.last && record.exception == 0}">
 			                    <span class="location">终点<span class="normal-state">${record.regionName }</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.last && not empty record.exception}">
+	                    	<c:when test="${status.last && record.exception == 1}">
 			                    <span class="location">终点<span class="abnormal-state">异常</span></span>
 	                    	</c:when>
-	                    	<c:when test="${status.index != 0 && !status.last && not empty record.exception}">
+	                    	<c:when test="${status.index != 0 && !status.last && record.exception == 1}">
 			                    <span class="location">${record.regionName }<span class="abnormal-state">异常</span></span>
 	                    	</c:when>
 	                    	<c:otherwise>
@@ -124,7 +128,7 @@ var oilCostId='${oilCost.id}';
 							     							  </c:choose>
 														      </td>
 														      <td>${record.regionName}
-														      <c:if test="${empty record.exception }">(异常)</c:if>
+														      <c:if test="${record.exception == 1}">(异常)</c:if>
 														      </td>
 														      <td>${record.shopName }（${record.missName}）</td>
 														      <td>${record.missTime}</td>
@@ -135,15 +139,14 @@ var oilCostId='${oilCost.id}';
                         <!--table-box-->
                     </div>
                     <!--油补明细-->
-                    <!-- <div class="map">
+                    <div class="map">
                         <div class="clearfix">
                             <h2>地图显示</h2>
-                            <a class="find-up" href="#">查看轨迹 &gt;</a>
+                            <a class="find-up" href="javascript:void(0);" onclick="window.run();">查看轨迹 &gt;</a>
                         </div>
-                        <div class="map-wrapper">
-                            <img src="./static/img/oilSubsidy/map.jpg" alt="map">
+                        <div class="map-wrapper" id="allmap" style="height:600px;">
                         </div>
-                    </div> -->
+                    </div>
                 </div>
                 <!--列表内容-->
             </div>

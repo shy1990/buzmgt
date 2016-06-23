@@ -43,11 +43,20 @@
 	background-position:-195px -52px
 }
 .BMapLib_Drawing .BMapLib_return {
-	background-position:-395px 0
+	background-position:-455px 0
 }
 .BMapLib_Drawing .BMapLib_return_hover {
-	background-position:-395px -52px
+	background-position:-455px -52px
 }
+
+.BMapLib_Drawing .BMapLib_edit {
+	background-position:-390px 0
+}
+.BMapLib_Drawing .BMapLib_edit_hover {
+	background-position:-390px -52px
+}
+
+
 
 .BMapLib_Drawing .BMapLib_polygon {
 	background-position:-260px 0

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 
 public interface SalesManRepository extends JpaRepository<SalesMan, String> {
 
@@ -18,6 +19,14 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
 
 	Page<SalesMan> findAll(Specification<SalesMan> spec, Pageable pageable);
 
+  
+  @Query("select s.id,s.truename,s.mobile,s.regdate from SalesMan s where s.status=?1")
+  List<Object> getSaojieMan(SalesmanStatus status);
+  @Query("select s.id from SalesMan s where s.truename = ?1")
+  String getIdByTurename(String truename);
+  @Query("select s.region.id from SalesMan s where s.id =?1")
+  String getRegionIdByUserId(String userId);
+  
 	SalesMan findById(String id);
 
 	//
@@ -48,5 +57,6 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
 	// s.SalesmanStatus=1")
 	@Query("select s.id,s.truename,s.mobile,s.regdate from SalesMan s")
 	List<Object> gainSaojieMan();
-
+	
+	SalesMan findSaleamanByRegionId(String regionId);
 }

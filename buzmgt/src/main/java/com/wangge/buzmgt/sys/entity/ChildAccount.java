@@ -106,8 +106,11 @@ public class ChildAccount {
     this.id = id;
   }
 
+  @Override
+  public String toString() {
+    return "ChildAccount [id=" + id + ", childId=" + childId + ", parentId="
+        + parentId + ", simId=" + simId + ", truename=" + truename
+        + ", enable=" + enable + "]";
+  }
 
-
-  
- 
 }

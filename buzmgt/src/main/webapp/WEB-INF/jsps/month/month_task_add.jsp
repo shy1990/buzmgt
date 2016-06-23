@@ -18,13 +18,11 @@
 <title>添加月任务</title>
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
-	rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css"
-	href="static/month-task/add-month-task.css"  >
-<link rel="stylesheet" type="text/css"
-	href="static/month-task/bootstrap-select.min.css">
+		<link href="static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="static/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="static/month-task/add-month-task.css">
+		<link rel="stylesheet" type="text/css" href="static/month-task/bootstrap-select.min.css">
+		<link rel="stylesheet" href="/static/multiselect/css/jquery.multiselect.css">
 </head>
 <body>
 	<div class="content main">
@@ -44,7 +42,7 @@
 					<div class="form-group clearfix">
 						<label for="basic" class="select-label fl">业务员：</label>
 						<div class="select-area fl">
-							<select id="basic" class="show-tick form-control fl">
+							<select id="basic" name="basic[]" multiple="multiple" class="demo2">
 								<c:if test="${not empty salesList}">
 									<c:forEach var="sales" items="${salesList}">
 										<option value="${sales.id}">${sales.truename}</option>
@@ -277,6 +275,7 @@
 	<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript"
 		charset="utf-8"></script>
 	<script src="static/bootStrapPager/js/extendPagination.js"></script>
+	<script src="static/multiselect/js/jquery.multiselect.js"></script>
 	<script src='/static/js/common.js'></script>
 	<script src='/static/js/dateutil.js'></script>
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
@@ -300,6 +299,14 @@
 		function getRegion(id){
 			window.location.href='/region/getPersonalRegion?id='+id+"&flag=monthTask";
 		}
+		$('select[multiple].demo2').multiselect({
+			columns: 1,
+			placeholder: '请选择姓名',
+			search: true,
+			maxHeight:400,
+			selectGroup: true
+		});
 	</script>
+	
 </body>
 </html>

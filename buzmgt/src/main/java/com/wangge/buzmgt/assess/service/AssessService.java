@@ -11,7 +11,7 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 public interface AssessService {
 	
-  void saveAssess(Assess assess);
+  Assess saveAssess(Assess assess);
   
   Page<Assess> getAssessList(Assess assess,int pageNum,String regionName);
   
@@ -27,4 +27,7 @@ public interface AssessService {
   RegistData findRegistData(Long registId);
   
   Assess findByStageAndSalesman(String stage,String userId);
+  
+  
+  void saveRegistData(RegistData registData);
 }

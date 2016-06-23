@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.data.domain.Page;
@@ -55,12 +56,19 @@ public class VisitTaskController {
     * @since JDK 1.8
    */
   @RequestMapping("/visitList")
-  public String visitList(String visitList, Model model){
+  public String visitList(String visitList,String regionid, Model model){
     Subject subject = SecurityUtils.getSubject();
     User user=(User) subject.getPrincipal();
     Manager manager = managerService.getById(user.getId());
-    model.addAttribute("regionName", manager.getRegion().getName());
-    model.addAttribute("regionId", manager.getRegion().getId());
+    Region region=new Region();
+    if(null!=regionid && !"".equals(regionid)){
+      region =regionService.getRegionById(regionid);
+      model.addAttribute("regionName", region.getName());
+      model.addAttribute("regionId", region.getId());
+    }else{
+      model.addAttribute("regionName", manager.getRegion().getName());
+      model.addAttribute("regionId", manager.getRegion().getId());
+    }
     model.addAttribute("visitList", visitList);
     return "task/task_list";
   }
@@ -97,12 +105,19 @@ public class VisitTaskController {
     * @since JDK 1.8
    */
   @RequestMapping("/addVisitMap")
-  public String addVisitMap(String addVisitMap, Model model){
+  public String addVisitMap(String addVisitMap,String regionid, Model model){
     Subject subject = SecurityUtils.getSubject();
     User user=(User) subject.getPrincipal();
     Manager manager = managerService.getById(user.getId());
-    model.addAttribute("regionName", manager.getRegion().getName());
-    model.addAttribute("regionId", manager.getRegion().getId());
+    Region region=new Region();
+    if(null!=regionid && !"".equals(regionid)){
+      region =regionService.getRegionById(regionid);
+      model.addAttribute("regionName", region.getName());
+      model.addAttribute("regionId", region.getId());
+    }else{
+      model.addAttribute("regionName", manager.getRegion().getName());
+      model.addAttribute("regionId", manager.getRegion().getId());
+    }
     model.addAttribute("addVisitMap", addVisitMap);
     return "task/task_add-map";
   }
@@ -163,13 +178,20 @@ public class VisitTaskController {
     * @since JDK 1.8
    */
   @RequestMapping("/addVisitList")
-  public String addVisitList(String addVisitList, Model model){
+  public String addVisitList(String addVisitList,String regionid,Model model){
     Subject subject = SecurityUtils.getSubject();
     User user=(User) subject.getPrincipal();
     Manager manager = managerService.getById(user.getId());
     model.addAttribute("addVisitList", addVisitList);
-    model.addAttribute("regionName", manager.getRegion().getName());
-    model.addAttribute("regionId", manager.getRegion().getId());
+    Region region=new Region();
+    if(null!=regionid && !"".equals(regionid)){
+      region =regionService.getRegionById(regionid);
+      model.addAttribute("regionName", region.getName());
+      model.addAttribute("regionId", region.getId());
+    }else{
+      model.addAttribute("regionName", manager.getRegion().getName());
+      model.addAttribute("regionId", manager.getRegion().getId());
+    }
     return "task/task_add";
   }
   
@@ -221,7 +243,11 @@ public class VisitTaskController {
       visit.setRegistData(rd);
       visit.setSalesman(sm);
       visit.setBeginTime(new Date());
-      visit.setExpiredTime(DateUtil.string2Date(expiredTime));
+      if(StringUtils.isBlank(expiredTime)){
+        visit.setExpiredTime(DateUtil.moveDate(DateUtil.string2Date(expiredTime), 2));
+      }else{
+        visit.setExpiredTime(DateUtil.string2Date(expiredTime));
+      }
       visit.setStatus(VisitStatus.PENDING);
       visit.setTaskName(taskName);
       visitTaskService.addVisit(visit);

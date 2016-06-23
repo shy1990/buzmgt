@@ -21,8 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.wangge.buzmgt.customTask.entity.CustomTask;
-import com.wangge.buzmgt.customTask.repository.CustomTaskRepository;
 import com.wangge.buzmgt.monthTask.entity.AppServer;
 import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
 import com.wangge.buzmgt.monthTask.repository.MonthOrdersDataRepository;
@@ -77,8 +75,7 @@ public class BuzmgtApplicationTests {
 	MonthOrdersDataRepository monthDataRep;
 	@Resource
 	MonthTaskRepository monTaskRep;
-	@Resource
-	CustomTaskRepository customTaskRep;
+	
 
 	// @Test
 	// @Transactional
@@ -333,7 +330,7 @@ public class BuzmgtApplicationTests {
 
 	@Test
 	public void testMonth() {
-		Map<String, Object> talMap = new HashMap<String, Object>();
+		Map<String, String> talMap = new HashMap<String, String>();
 		talMap.put("mobiles", "18769727652");
 		talMap.put("msg", "下月的月任务已生成");
 		String result = HttpUtil.sendPostJson(AppServer.URL, talMap);
@@ -341,13 +338,5 @@ public class BuzmgtApplicationTests {
 			System.out.println("手机推送月任务出错!!");
 		}
 
-	}
-	
-	@Test
-	public void testTask() {
-		List<CustomTask> alist= customTaskRep.findAll();
-		for(CustomTask c:alist){
-			System.out.println(c.getSalesmanSet().size());
-		}
 	}
 }

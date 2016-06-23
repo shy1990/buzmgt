@@ -1,11 +1,13 @@
 package com.wangge.buzmgt;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 import com.wangge.buzmgt.oilcost.entity.OilRecord;
+import com.wangge.buzmgt.util.DateUtil;
 
 /**
  * 将String类型的json数据格式的数组[]
@@ -38,15 +40,18 @@ public class JSONUtilTest {
   }
   public static void main(String[] args) {
 
-    String str = "[{\"regionType\":0,\"regionName\":\"家\",\"coordinates\":\"116.99656722742283-36.73533570586392\",\"time\":\"18:46:12\",\"type\":\"上班\"}"
-        + ",{\"regionType\":0,\"regionName\":\"家\",\"coordinates\":\"116.99656722742283-36.73533570586392\",\"time\":\"18:58:22\",\"type\":\"下班\"}"
-        + ",{\"regionType\":0,\"regionName\":\"家\",\"coordinates\":\"116.99656722742283-36.73533570586392\",\"time\":\"18:58:22\",\"type\":\"下班\"}]";
-   List<OilRecord> list = stringArrtoJsonList(str,OilRecord.class);
-   Long l=System.currentTimeMillis();
-   System.out.println(l);;
-   for(OilRecord o:list){
-     System.out.println(o);
-   }
-   System.out.println(System.currentTimeMillis()-l);;
+    int number=(int) (Math.random()*10000);
+    String fastMailNo=DateUtil.date2String(new Date(), "yyyyMMddHHmmss")+number;
+      
+//    String str = "[{\"regionType\":0,\"regionName\":\"家\",\"coordinates\":\"116.99656722742283-36.73533570586392\",\"time\":\"18:46:12\",\"type\":\"上班\"}"
+//        + ",{\"regionType\":0,\"regionName\":\"家\",\"coordinates\":\"116.99656722742283-36.73533570586392\",\"time\":\"18:58:22\",\"type\":\"下班\"}"
+//        + ",{\"regionType\":0,\"regionName\":\"家\",\"coordinates\":\"116.99656722742283-36.73533570586392\",\"time\":\"18:58:22\",\"type\":\"下班\"}]";
+//   List<OilRecord> list = stringArrtoJsonList(str,OilRecord.class);
+//   Long l=System.currentTimeMillis();
+//   System.out.println(l);;
+//   for(OilRecord o:list){
+//     System.out.println(o);
+//   }
+   System.out.println(number+","+fastMailNo);;
   }
 }

@@ -65,14 +65,18 @@
         <span class="yw-name"><b>{{salesManPart.truename}}</b>({{salesManPart.organizeName}})</span>
       </td>
       <td class="normal">
+			{{#if oilRecordList}}
 			{{#each oilRecordList}}
 				{{{disposeRecordList regionType regionName exception}}}
 			{{/each}}
+			{{else}}
+				数据加载错误
+			{{/if}}
       </td>
       <td>
         <p><span class="acu-km">{{distance}}km</span> &#47; <span class="acu-mny">{{oilCost}}元</span></p>
       </td>
-      <td>2016.03.12 18:20</td>
+      <td>{{formDate dateTime}}</td>
       <td>
         <a class="btn btn-blue btn-sm" href="/oilCost/detail/{{id}}">查看</a>
       </td>
@@ -113,12 +117,29 @@ var SearchData = {
             <div class="abnormal-body box border blue">
                 <!--title-->
                 <div class="box-title">
+                	<div class="row">
+                  <div class="col-md-6">
                     <!--菜单栏-->
                     <ul id="oilCostStatus" class="nav nav-tabs">
                         <li class="active" data-tital="all"><a href="#box_tab1" data-toggle="tab"><span class="">全部</span></a></li>
                         <li data-tital="coords"><a href="#box_tab2" data-toggle="tab"><span class="">异常坐标</span></a></li>
                     </ul>
                     <!--/菜单栏-->
+                  </div>  
+                  <div class="col-md-6">
+                  <!-- 搜索输入框 -->
+                    <div class="form-group title-form remark-title">
+											<div class="input-group ">
+												<input type="text" class="form-control"
+													id="salesmanName" placeholder="请输入业务员名称">
+												<a class="input-group-addon"onclick="findBySalesmanName();"> <i
+													class="icon icon-finds"></i>
+												</a>
+											</div>
+										</div>
+                  <!-- 搜索输入框 -->
+                  </div>  
+                	</div>
                 </div>
                 <!--title-->
                 <!--box-body-->

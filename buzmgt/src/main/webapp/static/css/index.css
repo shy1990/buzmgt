@@ -597,8 +597,20 @@ a:hover .kucun,
 a:focus .kucun{
 	background:  url(../img/icon/left-mean/kc2.png) no-repeat ;
 }
-
-
+/* 收现金 */
+.shouxianjin {
+    background: url(../incomeCash/img/icon/sxj2.png) no-repeat;
+}
+.active .shouxianjin, a:hover .shouxianjin, a:focus .shouxianjin {
+    background: url(../incomeCash/img/icon/sxj.png) no-repeat;
+}
+/* 任务 */
+.renwu {
+    background: url(../img/icon/left-mean/ywmanage/ywgl_rw1.png) no-repeat;
+}
+.active .renwu, a:hover .renwu, a:focus .renwu {
+    background: url(../img/icon/left-mean/ywmanage/ywgl_rw2.png) no-repeat;
+}
 /* ==========end 一级菜单=========== */
 /* ==========start 业务管理=============== */
 /* 团队成员 */
@@ -646,13 +658,13 @@ a:focus .kucun{
 .menu-second a:focus .renwu{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_rw2.png) no-repeat;
 }
-/* 签收记录 */
-.qianshouyichang{
+/* 异常签收 */
+.yichangqianshou{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_qsjl1.png) no-repeat;
 }
-.menu-second .active .qianshouyichang,
-.menu-second a:hover .qianshouyichang,
-.menu-second a:focus .qianshouyichang{
+.menu-second .active .yichangqianshou,
+.menu-second a:hover .yichangqianshou,
+.menu-second a:focus .yichangqianshou{
 	background: url(../img/icon/left-mean/ywmanage/ywgl_qsjl2.png) no-repeat;
 }
 /* 调价申请 */
@@ -749,7 +761,7 @@ a:focus .kucun{
 }
 /* 关联审核 */
 .guanlianshenhe{
-	background: url(../img/icon/left-mean/khmanage/khgl_glkh1.png.png) no-repeat;
+	background: url(../img/icon/left-mean/khmanage/khgl_glkh1.png) no-repeat;
 }
 .menu-second .active .guanlianshenhe,
 .menu-second a:hover .guanlianshenhe,
@@ -768,12 +780,12 @@ a:focus .kucun{
 	background: url(../img/icon/left-mean/statistics/tj_sjfx2.png) no-repeat;
 }
 /* 产品分析 */
-.chanpinfenxi{
+.liushuidanhao{
 	background: url(../img/icon/left-mean/statistics/tj_cpfx1.png) no-repeat;
 }
-.menu-second .active .chanpinfenxi,
-.menu-second a:hover .chanpinfenxi,
-.menu-second a:focus .chanpinfenxi{
+.menu-second .active .liushuidanhao,
+.menu-second a:hover .liushuidanhao,
+.menu-second a:focus .liushuidanhao{
 	background: url(../img/icon/left-mean/statistics/tj_cpfx2.png) no-repeat;
 }
 /*============end 统计================*/
@@ -815,7 +827,53 @@ a:focus .kucun{
 	background: url(../img/icon/left-mean/basic-settings/jcsz_zzjg2.png);
 }
 /* ===========end 系统设置============ */
+/* ===========start 收现金============ */
+.yewuduizhang {
+    background: url(../incomeCash/img/icon/ywdz2.png);
+}
+.menu-second .active .yewuduizhang, .menu-second a:hover .yewuduizhang, .menu-second a:focus .yewuduizhang {
+    background: url(../incomeCash/img/icon/ywdz.png);
+}
+.yinxingliushuimingxi {
+    background: url(../incomeCash/img/icon/ywyhlsmx2.png);
+}
+.menu-second .active .yinxingliushuimingxi, .menu-second a:hover .yinxingliushuimingxi, .menu-second a:focus .yinxingliushuimingxi {
+    background: url(../incomeCash/img/icon/ywyhlsmx.png);
+}
+.yewuyuanjichushuju {
+    background: url(../incomeCash/img/icon/ywjcsj2.png);
+}
+.menu-second .active .yewuyuanjichushuju, .menu-second a:hover .yewuyuanjichushuju, .menu-second a:focus .yewuyuanjichushuju {
+    background: url(../incomeCash/img/icon/ywjcsj.png);
+}
+.yuekoufajilu {
+    background: url(../incomeCash/img/icon/ykfjl2.png);
+}
+.menu-second .active .yuekoufajilu, .menu-second a:hover .yuekoufajilu, .menu-second a:focus .yuekoufajilu {
+    background: url(../incomeCash/img/icon/ykfj.png);
+}
 
+/* ===========end 收现金============ */
+/* ===========start 任务============ */
+.yuerenwupaifa {
+    background: url(../img/icon/left-mean/month-task/yrwpf.png) no-repeat;
+}
+.menu-second .active .yuerenwupaifa, .menu-second a:hover .yuerenwupaifa, .menu-second a:focus .yuerenwupaifa {
+    background: url(../img/icon/left-mean/month-task/yrwpf2.png) no-repeat;
+}
+/* ===========end 任务============ */
+.yuerenwu {
+    background: url(../img/icon/left-mean/month-task/yrw.png) no-repeat;
+}
+.menu-second .active .yuerenwu, .menu-second a:hover .yuerenwu, .menu-second a:focus .yuerenwu {
+    background: url(../img/icon/left-mean/month-task/yrw2.png) no-repeat;
+}
+.baifangrenwu {
+    background: url(../img/icon/left-mean/month-task/bfrw.png) no-repeat;
+}
+.menu-second .active .baifangrenwu, .menu-second a:hover .baifangrenwu, .menu-second a:focus .baifangrenwu {
+    background: url(../img/icon/left-mean/month-task/bfrw2.png) no-repeat;
+}
 /*PAGE-HEADER*/
 .main .page-header {
 	position: relative;

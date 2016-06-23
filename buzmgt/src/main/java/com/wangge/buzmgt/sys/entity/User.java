@@ -140,5 +140,11 @@ public class User implements Serializable {
   public void setSalseMan(SalesMan salseMan) {
     this.salseMan = salseMan;
   }
+
+  @Override
+  public String toString() {
+    return "User [id=" + id + ", username=" + username + ", password="
+        + password + ", status=" + status + "]";
+  }
 	
 }

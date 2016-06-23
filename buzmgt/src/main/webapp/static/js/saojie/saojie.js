@@ -106,6 +106,7 @@ function queryTown(){
 	   });	
 }
 var orderNum;
+var intNewApp;
 function AddOrder(btType) {
 	var userId = document.getElementById("saojieMan").value;
 	if (!userId)
@@ -118,7 +119,6 @@ function AddOrder(btType) {
 	if (intLen <= 30) {
 		intLen++;
 		orderNum++;
-		var intNewApp;
 		if (intLen != 1) {
 			var intAppId = $("div[id^='selOrder']:last").attr("id");
 			var intAppNum = intAppId.substring(8);
@@ -200,13 +200,6 @@ $(function() {
 				}).on('changeDate', function(ev) {
 					var starttime = $('#starttime').val();
 					var endtime = $('#endtime').val();
-					if (starttime != "" && endtime != "") {
-						if (!checkEndTime(starttime, endtime)) {
-							$('#endtime').val('');
-							alert("开始时间大于结束时间!");
-							return;
-						}
-					}
 					$('#starttime').datetimepicker('setEndDate', endtime);
 					$('#starttime').datetimepicker('hide');
 				});
@@ -232,6 +225,59 @@ $(function() {
 			}
 function toSubmit(){
 	form.submit();
+}
+
+function checkForm(){
+	var saojieMan = $("#saojieMan").val()
+	var town = $("#town").val()
+	var begin = $("#begin").val()
+	var end = $("#end").val()
+	var minValue = $("#minValue" + intNewApp + "").val()
+	
+	if (saojieMan == null || saojieMan.trim() == "") {
+		errorMsgShow($("#saojieMan"));
+		return false;
+	}
+	if(typeof(town) == "undefined"){
+		alert("请先选择扫街区域!");
+		return false;
+	}
+	if (town == null || town.trim() == "") {
+		$("#msgOrder").text("区域不能为空");
+		errorMsgShow($("#town"));
+		return false;
+	}
+	if (minValue == null || minValue.trim() == "") {
+		$("#msgOrder").text("指标不能为空");
+		errorMsgShow($("#minValue" + intNewApp + ""));
+		return false;
+	}
+	if (begin == null || begin.trim() == "") {
+		errorMsgShow($("#begin"));
+		return false;
+	}
+	if (end == null || end.trim() == "") {
+		errorMsgShow($("#end"));
+		return false;
+	}
+	// 判断日期是否正确
+	if (stringToDate(end).valueOf()
+			- stringToDate(begin).valueOf() < 0) {
+		alert("开始时间不得大于结束时间!");
+		return false;
+	}
+	return true;
+}
+
+function errorMsgShow($option,msg){
+	if($option==null||$option==""){
+		$option=$(this);
+	}
+	$option.parents('.form-group').addClass('has-error');
+	console.info(msg);
+	if(msg!=null&&msg!=""){
+		$option.parents('.form-group').find('.msg-error').html(msg);
+	}
 }
 
 /*enter键*/

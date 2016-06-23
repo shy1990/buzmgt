@@ -30,4 +30,18 @@ public interface OrderSignforService {
    * @return
    */
   List<OrderSignfor> getReceiptNotRemarkList(String status, String startTime, String endTime, String orderNo,String regionId);
+  
+  /**
+   * 查询收现金订单
+   * @param status
+   * @param startTime
+   * @param endTime
+   * @return
+   */
+  List<OrderSignfor> getReceiptCashList(Map<String, Object> searchParams);
+
+  void save(List<OrderSignfor> list);
+  
+  
+  
 }

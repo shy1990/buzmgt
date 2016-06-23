@@ -6,7 +6,6 @@ $(function() {
 
 	//加载时根据业务id和考核id查询店铺数据
 	searchData['salesmanId'] = $('.search-box').attr("data-sid");
-	alert(searchData['salesmanId']);
 	searchData['assessId'] = $('.search-box').attr("data-aid");
 	ajaxSearch(searchData);
 });
@@ -49,7 +48,6 @@ function goSearch() { // 业务id，考核id
  */
 function diffTime(beginTime, endTime) {
 	var regionId = $("#regionId  option:selected").val();
-	alert(regionId);
 	searchData['regionId'] = regionId; // 添加数据
 	searchData['begin'] = beginTime;
 	searchData['end'] = endTime;
@@ -89,7 +87,7 @@ function ajaxSearch(searchData) {
 function initPaging(){
 	var totalCount = totalElements; //总条数 
 	showCount = totalPages, //显示分页个数
-	limit =  2;//每页条数
+	limit =  10;//每页条数
 	$('#callBackPager').extendPagination({
 	totalCount : totalCount, 
 	showCount : showCount,
@@ -115,7 +113,24 @@ function seachSuccessTable(data) {
 	
 }
 
-//跳转到考核设置
-function toAssessStage(salesmanId,assessId){
-	window.location.href="/assess/toAssessStage?id="+salesmanId+"&assessId="+assessId;
+//跳转到下一阶段考核设置
+function nextStage(){
+	var salesmanId = $('#userId').val();
+	var assessId = $('#assessId').val();
+	var percent = $('#percent').val();
+	window.location.href="/assess/toAssessStage?id="+salesmanId+"&assessId="+assessId+"&percent="+percent;
+}
+
+//确认考核通过并进入下一阶段设置
+function toAssessStage(salesmanId,assessId,percent) {
+	$('#assessPass').modal({
+		keyboard: false
+	})
+	$('#assessId').val(assessId);
+	$('#userId').val(salesmanId);
+	$('#percent').val(percent);
+}
+
+function toAssessDet(salesmanId,assessId,percent){
+	window.location.href="/assess/toAssessStage?id="+salesmanId+"&assessId="+assessId+"&percent="+percent;
 }

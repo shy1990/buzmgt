@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.base.BaseController;
@@ -64,6 +66,8 @@ public class AccountManageController  extends BaseController{
   private UserService us;
   @Autowired
   private ChildAccountService ca;
+  @Autowired
+  private LogService logService;
   /**
    * 
    * @Description: 账号列表
@@ -76,7 +80,7 @@ public class AccountManageController  extends BaseController{
    * @date 2016年2月24日
    */
   @RequestMapping(value = "/accountManage")
-  public String accountList(Integer page, Model model,HttpServletRequest req,String regionId){
+  public String accountList(Integer page, Model model,HttpServletRequest req,String regionId,String searchParam){
     page = page== null ? 1 : page<1 ? 1 : page;
     int pageSize = 10;
     PageRequest pageRequest = SortUtil.buildPageRequest(page, pageSize,null);
@@ -102,9 +106,9 @@ public class AccountManageController  extends BaseController{
       model.addAttribute("regionId", rId);
       if(null==req.getParameter("orgName")){
         if(null != req.getSession().getAttribute("orgName")){
-          accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", "used",rName, pageRequest);
+          accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", "used",rName, pageRequest, searchParam);
         }else{
-          accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
+          accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest, searchParam);
         }
       
         
@@ -114,9 +118,9 @@ public class AccountManageController  extends BaseController{
     
        String status = req.getParameter("status");
        if(null != req.getSession().getAttribute("orgName")){
-         accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", status,rName, pageRequest);
+         accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", status,rName, pageRequest, searchParam);
        }else{
-         accList = as.selectAccountByPositionAndStatus("all", status,rName, pageRequest);
+         accList = as.selectAccountByPositionAndStatus("all", status,rName, pageRequest, searchParam);
        }
 //       accList = as.selectAccountByPositionAndStatus(orgName, status,rName, pageRequest);
      }
@@ -135,18 +139,18 @@ public class AccountManageController  extends BaseController{
       model.addAttribute("regionId", rId);
       if(null==req.getParameter("orgName")){
         if(null != req.getSession().getAttribute("orgName")){
-          accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", "used",rName, pageRequest);
+          accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", "used",rName, pageRequest, searchParam);
         }else{
-          accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
+          accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest, searchParam);
         }
 //        accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
      }else {
        String orgName = req.getParameter("orgName");
        String status = req.getParameter("status");
        if(null != req.getSession().getAttribute("orgName")){
-         accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"",status,rName, pageRequest);
+         accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"",status,rName, pageRequest, searchParam);
        }else{
-         accList = as.selectAccountByPositionAndStatus("all", status,rName, pageRequest);
+         accList = as.selectAccountByPositionAndStatus("all", status,rName, pageRequest, searchParam);
        }
   //     accList = as.selectAccountByPositionAndStatus(orgName, status,rName, pageRequest);
      }
@@ -292,8 +296,11 @@ public class AccountManageController  extends BaseController{
         u.setStatus(UserStatus.LOCKED);
       }else if("1".equals(status)){
         u.setStatus(UserStatus.NORMAL);
+      }else if("4".equals(status)){
+        u.getSalseMan().setSimId("");
       }
-      us.addUser(u);
+      User user = us.addUser(u);
+      logService.log(u, user, EventType.UPDATE);
       return "suc";
     } catch (Exception e) {
       e.printStackTrace();
@@ -321,6 +328,9 @@ public class AccountManageController  extends BaseController{
     String childId=null;
     if(listChildAccount.size()==0){
        childId=firstCh+(Long.parseLong(userId.substring(1, userId.length())) +1); 
+       SalesMan man=sm.findByUserId(userId);
+       man.setIsPrimaryAccount(1);
+       sm.addSalesman(man);
     }else{
       childId=firstCh+(Long.parseLong(listChildAccount.get(0).getChildId().substring(1, listChildAccount.get(0).getChildId().length())) +1);
     }
@@ -364,6 +374,11 @@ public class AccountManageController  extends BaseController{
           ChildAccount cAccount=ca.findbyUserId(Long.parseLong(userid));
           if(status.equals("3")){
             ca.delete(cAccount);
+            if(ca.findChildCountByParentId(cAccount.getChildId()).size()==0){
+              SalesMan man=sm.findByUserId(cAccount.getChildId());
+              man.setIsPrimaryAccount(1);
+              sm.addSalesman(man);
+            }
           }else{
             cAccount.setEnable(Integer.parseInt(status));
             ca.save(cAccount);

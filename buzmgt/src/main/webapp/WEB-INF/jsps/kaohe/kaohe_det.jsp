@@ -28,7 +28,7 @@
 	var number = '';//当前页数（从零开始）
 	var totalPages = '';//总页数(个数)
 	var searchData = {
-		"size" : "2",
+		"size" : "10",
 		"page" : "0",
 	}
 	var totalElements;//总条数
@@ -80,16 +80,16 @@
 							<!--bar 布局-->
 							<div class="col-sm-10 clear-p-l">
 								<div class="quiet-days marg-b-30">
-									<c:if test="${assess.assessStage == '1'}">
-										<span class="kaohe-stage onekaohe-stage">第一阶段考核</span> 
+									<c:if test="${salesman.status ne 'zhuanzheng'}">
+										<span class="kaohe-stage onekaohe-stage">第${assess.assessStage}阶段考核</span> 
 									</c:if>
-									<c:if test="${assess.assessStage == '2' }">
+									<%-- <c:if test="${assess.assessStage == '2' }">
 										<span class="kaohe-stage twokaohe-stage ">第二阶段考核</span> 
 									</c:if>
 									<c:if test="${assess.assessStage == '3'}">
 										<span class="kaohe-stage threekaohe-stage">第三阶段考核</span> 
-									</c:if>
-									<c:if test="${assess.assessStage == '3'&& assess.status == 'AGREE'}">
+									</c:if> --%>
+									<c:if test="${salesman.status eq 'zhuanzheng'}">
 										<span class="kaohe-stage overkaohe-stage">已转正</span> 
 									</c:if>
 									<c:if test="${assess.status == 'FAIL'}">
@@ -116,8 +116,36 @@
 							</div>
 							<!--bar 布局-->
 							<div class="col-xs-2 clear-p-r">
-								<button class="J_btn col-xs-12 btn btn-blue marg-t-30"
-									onclick="toAssessStage('${salesman.id}','${assess.id}');">考核通过</button>
+							<c:if test="${salesman.status ne 'zhuanzheng'}">
+								<c:choose>
+									<c:when test="${assess.assessStage eq '1'}">
+										<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+									onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');">考核通过</button>
+									</c:when>
+									<c:when test="${assess.assessStage eq '2'}">
+										<c:if test="${passType ne 1 || percent ge 100}">
+											<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+										onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');">考核通过</button>
+										</c:if>
+										<c:if test="${passType eq 1 && percent lt 100}">
+											<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+										onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');" disabled="disabled">考核通过</button>
+										</c:if>
+									</c:when>
+									<c:when test="${assess.assessStage eq '1'}">
+										<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+									onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');">考核通过</button>
+									</c:when>
+									<c:otherwise>
+										<button class="J_btn col-xs-12 btn btn-blue marg-t-30"
+									onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');">考核通过</button>
+									</c:otherwise>
+								</c:choose>
+							</c:if>
+							<c:if test="${salesman.status eq 'zhuanzheng'}">
+								<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+										onclick="toAssessDet('${salesman.id}','${assess.id}','${percent }');">已转正</button>
+							</c:if>
 							</div>
 						</div>
 						<!--/列表头部-->
@@ -264,6 +292,39 @@
 				<!--/team-map-->
 			</div>
 		</div>
+		<!--确认审核通过-->
+		<div class="modal-blue modal fade " id="assessPass" tabindex="-1"
+			role="dialog" aria-labelledby="exampleModalLabel">
+		   <div class="modal-dialog">
+		      <div class="modal-content">
+		         <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" 
+		               aria-hidden="true">
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		               	温馨提示
+		            </h4>
+		         </div>
+		         <div class="modal-body">
+		         		<input type="hidden" name="assessId" id="assessId" value="">
+					   	<input type="hidden" name="userId" id="userId" value="">
+					   	<input type="hidden" name="" id="percent" value="">
+		            	<p>您确定要通过当前阶段考核并进入下一阶段吗？</p>
+		            	<br>
+		            	<p style="font-size:11px;font-weight:bold">注意事项:第一和第二阶段有且仅有一次手动审核通通过机会</p>
+		         </div>
+		         <div class="modal-footer">
+		            <button type="button" class="btn btn-default" 
+		               data-dismiss="modal">关闭
+		            </button>
+		            <button type="button" class="btn btn-primary" onclick="nextStage();">
+		               	提交更改
+		            </button>
+		         </div>
+		      </div><!-- /.modal-content -->
+		   </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		<!--确认审核通过-->
 		<!-- Bootstrap core JavaScript================================================== -->
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

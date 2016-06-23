@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.util;
+package com.wangge.buzmgt.util.excel;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

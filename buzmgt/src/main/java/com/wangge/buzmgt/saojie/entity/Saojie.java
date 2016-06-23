@@ -29,12 +29,14 @@ import javax.persistence.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Entity
 @Table(name = "SYS_SAOJIE")
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler","fieldHandler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Saojie implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -90,11 +92,13 @@ public class Saojie implements Serializable {
 
 	@Column(name = "SAOJIE_ORDER")
 	private Integer order;
+	@Column(name = "FINISH_STATUS")
+	private Integer finishStatus;//状态为1表示扫街全部完成
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
+	/*@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
 	@OrderBy("saojie_order")
-	private Collection<Saojie> children;
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "saojie")
+	private Collection<Saojie> children;*/
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "saojie")
 	private Collection<SaojieData> saojiedata;
 	@Transient
 	private String percent;
@@ -207,13 +211,13 @@ public class Saojie implements Serializable {
 		this.order = order;
 	}
 
-	public Collection<Saojie> getChildren() {
+	/*public Collection<Saojie> getChildren() {
 		return Collections.unmodifiableCollection(children);
 	}
 
 	public void setChildren(Collection<Saojie> children) {
 		this.children = children;
-	}
+	}*/
 
   public Collection<SaojieData> getSaojiedata() {
     return saojiedata;
@@ -238,4 +242,22 @@ public class Saojie implements Serializable {
   public void setTiming(int timing) {
     this.timing = timing;
   }
+
+  public Integer getFinishStatus() {
+    return finishStatus;
+  }
+
+  public void setFinishStatus(Integer finishStatus) {
+    this.finishStatus = finishStatus;
+  }
+
+  @Override
+  public String toString() {
+    return "Saojie [id=" + id + ", name=" + name + ", status=" + status
+        + ", minValue=" + minValue + ", beginTime=" + beginTime
+        + ", expiredTime=" + expiredTime + ", description=" + description
+        + ", order=" + order + ", finishStatus=" + finishStatus + ", percent="
+        + percent + ", timing=" + timing + "]";
+  }
+  
 }

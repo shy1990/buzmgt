@@ -43,11 +43,11 @@ public class Manager implements Serializable {
 	
 	private String mobile;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
 	private Region region;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 	@Temporal(TemporalType.DATE)
@@ -109,6 +109,11 @@ public class Manager implements Serializable {
   public void setRegdate(Date regdate) {
     this.regdate = regdate;
   }
-	
+
+  @Override
+  public String toString() {
+    return "Manager [id=" + id + ", truename=" + truename + ", jobNum="
+        + jobNum + ", mobile=" + mobile + ", regdate=" + regdate + "]";
+  }
 	
 }

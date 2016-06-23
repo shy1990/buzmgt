@@ -57,7 +57,7 @@ public class Assess implements Serializable {
 	@Column(name = "ASSESS_ID")
 	private Long id;
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
 	private SalesMan salesman;
 	@Column(name = "ASSESS_AREA")
@@ -84,6 +84,8 @@ public class Assess implements Serializable {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
   @Temporal(TemporalType.TIMESTAMP)
 	private Date assessEndTime;
+	@Column(name="PASS_TYPE")
+	private Integer passType;
 	@Transient
 	private String regionName;
 	@Transient
@@ -250,6 +252,14 @@ public class Assess implements Serializable {
 
   public void setAssesszh(String assesszh) {
     this.assesszh = assesszh;
+  }
+
+  public Integer getPassType() {
+    return passType;
+  }
+
+  public void setPassType(Integer passType) {
+    this.passType = passType;
   }
   
 }

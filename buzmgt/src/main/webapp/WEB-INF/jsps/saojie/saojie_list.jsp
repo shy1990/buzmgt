@@ -124,7 +124,7 @@ p{margin-left:5px; font-size:14px;}
 																	src="../static/img/saojie/a.jpg"></a></td>
 															<td class="project-title"><a href="javascript:toSalesManInfo('${saojie.id}','saojie');"><strong>${saojie.salesman.truename}</strong>(${saojie.salesman.user.organization.name})</a>
 																<br /> <span>${saojie.salesman.region.name}</span></td>
-															<c:if test="${saojie.status == 'PENDING' or saojie.status == 'NOTSTARTED'}">
+															<c:if test="${saojie.status == 'PENDING'}">
 																<td class="project-status"><span class="status-ing">${saojie.status.name}</span></td>
 															</c:if>
 															<c:if test="${saojie.status == 'AGREE' or saojie.status == 'COMMIT'}">
@@ -158,7 +158,7 @@ p{margin-left:5px; font-size:14px;}
 																</div>
 																</c:if>
 															</td>
-															<td class="project-actions"><a href="projects.html#"
+															<td class="project-actions"><a href="javascript:toSalesManInfo('${saojie.id}','saojie');"
 																class="btn btn-white btn-sm"><span class="folder"></span>
 																	查看 </a>
 																<div class="btn-group"></div> <a

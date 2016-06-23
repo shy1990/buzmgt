@@ -5,7 +5,6 @@
   String path = request.getContextPath();
 			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 					+ path + "/";
-			System.out.print(basePath);
 %>
 <!DOCTYPE html>
 <html>
@@ -58,7 +57,7 @@
 			<!--区域选择按钮-->
 			<div class="area-choose" id="area" data-a="${regionId}">
 				选择区域：<span>${regionName}</span> <a class="are-line" href="javascript:;"
-					onclick="getRegion(${regionId});">切换</a>
+					onclick="getChooseRegion(${regionId});">切换</a>
 				<input id="regionid" type="hidden" value="">
 			</div>
 			<!--/区域选择按钮-->
@@ -186,6 +185,12 @@
 		<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 		<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 		<script src="<%=basePath%>static/task/task-map.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			/*区域 */
+			function getChooseRegion(id){
+				window.location.href='/region/getPersonalRegion?id='+id+"&flag=taskMap";
+			}
+		</script>
 </body>
 
 </html>

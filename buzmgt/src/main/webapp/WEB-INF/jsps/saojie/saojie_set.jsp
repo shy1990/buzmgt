@@ -83,10 +83,8 @@
 													id="${saojie.id }"></span> <span class="icon-arow arow-up"
 													id="${saojie.id }"></span></td>
 											</c:if>
-											<c:if test="${saojie.status == 'AGREE' }">
-												<td><span></span> <span></span></td>
-											</c:if>
-											<c:if test="${saojie.status == 'PENDING' }">
+
+											<c:if test="${saojie.status == 'AGREE' || saojie.status == 'COMMIT' || saojie.status == 'PENDING'}">
 												<td><span></span> <span></span></td>
 											</c:if>
 											<!--箭头-->
@@ -100,9 +98,14 @@
 														onclick="agree('${saojie.id}');">审核通过</button>
 												</td>
 											</c:if>
-											<c:if test="${saojie.status == 'AGREE' }">
+											<c:if test="${saojie.status == 'AGREE' || saojie.status == 'COMMIT'}">
 												<td>
 													<button class="btn btn-audit">已通过</button>
+												</td>
+											</c:if>
+											<c:if test="${saojie.status == 'NOTSTARTED' }">
+												<td>
+													
 												</td>
 											</c:if>
 										</tr>
@@ -123,8 +126,7 @@
 						<div class="saojie-set-map col-sm-10  col-sm-offset-1 col-xs-12">
 							<!--map-title-->
 							<p class="map-tital">
-								开始时间: ${startTime} <span class="drive-row"></span> 结束时间:
-								 ${endTime}
+								开始时间: ${beginTime } <span class="drive-row"></span> 结束时间:${endTime }
 							</p>
 							<!--map-title-->
 							<div class="map-box " id="allmap">
