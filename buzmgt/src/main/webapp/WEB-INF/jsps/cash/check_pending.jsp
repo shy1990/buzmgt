@@ -73,6 +73,40 @@
 	</tr>
 	{{/if}}
 </script>
+<script id="checkDebt-table-template" type="text/x-handlebars-template">
+	{{#each content}}
+		<tr>
+      <td>{{userId}}</td>
+      <td class="border-right-grey">{{cardName}}</td>
+      <td class="multi-row">
+				{{#each bankTrades}}
+        <p>{{cardNo}}</p>
+				{{/each}}	
+      </td>
+      <td class="border-right-grey multi-row">
+				{{#each bankTrades}}
+        <p>{{money}}</p>
+				{{/each}}	
+      </td>
+      <td class="multi-row width-fixed multi-row-p">
+        <p>暂无</p>
+      </td>
+      <td class="border-right-grey multi-row multi-row-p">
+        <p>暂无</p>
+      </td>
+      <td>{{cashMoney}}</td>
+      <td>{{debtMoney}}</td>
+      <td>{{shouldPayMoney}}</td>
+      <td>{{incomeMoney}}</td>
+      <td>{{{disposeStayMoney stayMoney}}}</td>
+      <td>{{formDate createDate}}</td>
+      <td>
+				{{!--是否已审核--}}
+				{{{isCheckDebtStatus isCheck userId createDate}}}
+      </td>
+    </tr>
+	{{/each}}
+</script>
 <script id="unCheck-table-template" type="text/x-handlebars-template">
 		<tr>
 			<td colspan="100" class="single-exception">请先处理未匹配交易记录，请不要先审核</td>
@@ -170,6 +204,7 @@ var	base='<%=basePath%>';
 							</tr>
 						</thead>
 						<tbody id="unCheckList"> </tbody>
+						<tbody id="checkDebtList"> </tbody>
 						<tbody id="checkPendingList"> </tbody>
 					</table>
 				</div>

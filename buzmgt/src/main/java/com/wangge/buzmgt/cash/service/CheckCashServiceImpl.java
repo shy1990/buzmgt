@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.cash.service;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.persistence.Transient;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -30,20 +28,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.wangge.buzmgt.cash.entity.CheckCash;
-import com.wangge.buzmgt.cash.entity.MonthPunish;
-import com.wangge.buzmgt.cash.entity.WaterOrderCash;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.Cash;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
+import com.wangge.buzmgt.cash.entity.CheckCash;
+import com.wangge.buzmgt.cash.entity.MonthPunish;
+import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
 import com.wangge.buzmgt.cash.repository.CheckCashRepository;
-import com.wangge.buzmgt.cash.web.CashController;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.entity.PunishSet;
 import com.wangge.buzmgt.salesman.service.PunishSetService;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
@@ -227,14 +224,14 @@ public class CheckCashServiceImpl implements CheckCashService {
           cash.setStatus(CashStatusEnum.OverPay);
         });
       }
-      // 修改原有扣罚状态
-      List<MonthPunish> monthPunishs = cc.getMonthPunishs();
+      // 修改原有扣罚状态 放在app-server接口产生流水单号时进行修改
+     /* List<MonthPunish> monthPunishs = cc.getMonthPunishs();
       if (monthPunishs.size() > 0) {
         monthPunishs.forEach(mp -> {
           mp.setStatus(1);
         });
         monthPunishService.save(monthPunishs);
-      }
+      }*/
 
       // 是否产生扣罚
       if (stayMoney != 0) {
@@ -609,10 +606,11 @@ public class CheckCashServiceImpl implements CheckCashService {
     try {
       //正常搜索日期
       spec.put("EQ_createDate", createDate);
-      spec.put("status", 0);
+      spec.put("NOTEQ_status", 1);//扣罚状态 0-没有流水单匹配，1-有流水单匹配，2-没有流水单匹配审核后的状态
       checkCashs= findCheckCashByDebt(spec);
 
     } catch (Exception e) {
+      e.printStackTrace();
       logger.info(e.getMessage());
       return checkCashs;
     }
@@ -632,22 +630,25 @@ public class CheckCashServiceImpl implements CheckCashService {
     spec.put("EQ_createDate", DateUtil.moveDate(createDate ,-1));
     List<MonthPunish> monthPunishs = monthPunishService.findAll(spec);
     
-    spec.remove("status");
+    spec.remove("EQ_status");
+    spec.remove("NOTEQ_status");
     if (monthPunishs.size() > 0) {
       for (MonthPunish monthPunish : monthPunishs) {
         CheckCash cash = new CheckCash();
         String userId = monthPunish.getUserId();
         
-        
         cash.setUserId(userId);
         cash.setDebtMoney(monthPunish.getDebt() + monthPunish.getAmerce());
-        
-        cash.setCardName("");
+        cash.setMonthPunishs(monthPunishs);
         cash.setCashMoney(new Float(0));
-        cash.setCreateDate(DateUtil.string2Date(DateUtil.moveDate(createDate,1)));
-        
+        cash.setCreateDate(DateUtil.string2Date(createDate));
+        if(monthPunish.getStatus()==0){
+          cash.setIsCheck("未审核");
+        }else
+          cash.setIsCheck("已审核");
         spec.put("EQ_userId", userId);
-        spec.put("EQ_createDate", DateUtil.moveDate(createDate,1));
+        spec.put("EQ_createDate", createDate);
+        spec.put("ISNULL_seriaNo", "true");
         List<BankTrade> bankTrades = bankTradeService.findAll(spec);
         if (bankTrades.size() > 0) {
           Float incomeMoney = new Float(0);
@@ -657,6 +658,12 @@ public class CheckCashServiceImpl implements CheckCashService {
           cash.setIncomeMoney(incomeMoney);
 
           cash.setBankTrades(bankTrades);
+          cash.setCardName(bankTrades.get(0).getCardName());
+        }else{
+          //查询truename
+          SalesMan s=salesManService.findByUserId(userId);
+          cash.setCardName(s.getTruename());
+          
         }
         checkCashs.add(cash);
       }
@@ -700,7 +707,7 @@ public class CheckCashServiceImpl implements CheckCashService {
     if(monthPunishs.size()>0){
       
       monthPunishs.forEach(mp -> {
-        mp.setStatus(1);
+        mp.setStatus(2);//修改状态没有流水单审核后状态
       });
       monthPunishService.save(monthPunishs);
     }
@@ -720,7 +727,6 @@ public class CheckCashServiceImpl implements CheckCashService {
       }
       mp.setStatus(0);//
       mp.setCreateDate(cash.getCreateDate());
-      mp.setSeriaNo("");
       mp.setUserId(userId);
       monthPunishService.save(mp);
     }

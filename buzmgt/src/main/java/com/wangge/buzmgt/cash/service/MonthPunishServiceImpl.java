@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,6 @@ public class MonthPunishServiceImpl implements MonthPunishService {
     Specification<MonthPunish> spec = monthPunishSearchFilter(filters.values(), MonthPunish.class);
     List<MonthPunish> list = monthPunishRepository.findAll(spec);
     return list;
-
   }
 
   @Override
@@ -223,11 +223,11 @@ public class MonthPunishServiceImpl implements MonthPunishService {
 
               break;
             case ISNULL:
-
-              predicates.add(cb.isNull(expression));
-              break;
-            case NOTNULL:
-              predicates.add(cb.isNull(expression));
+              boolean value = Boolean.parseBoolean((String) filter.value);
+              if (value)
+                predicates.add(cb.isNull(expression));
+              else
+                predicates.add(cb.isNotNull(expression));
 
               break;
             case ORMLK:
@@ -260,6 +260,15 @@ public class MonthPunishServiceImpl implements MonthPunishService {
         return cb.conjunction();
       }
     };
+  }
+
+  @Override
+  public List<MonthPunish> findAllISNotCash(Map<String, Object> spec) {
+    String createDate=(String) spec.get("EQ_createDate");
+    Date minDate=DateUtil.string2Date(createDate+" 00:00:00 000");
+    Date maxDate=DateUtil.string2Date(createDate+" 23:59:59 999");
+//    return monthPunishRepository.findAllISNotCash(minDate,maxDate);
+    return null;
   }
 
 

@@ -2,6 +2,7 @@ var checkPendingTotal = 0;
 $(function() {
 	initDateInput();// 初始化日期
 	findCheckCashList();// 查询列表
+	findCheckDebtList();//查询为没有流水单号的审核记录
 	findUnCheckBankTread();//查询未匹配银行打款交易记录 
 	initExcelExport();//初始化导出excel
 	
@@ -39,6 +40,7 @@ function goSearch() {
 	if (!isEmpty(Time)) {
 		SearchData['sc_EQ_createDate'] = Time;
 		findCheckCashList();
+		findCheckDebtList();
 	}
 }
 /**
@@ -112,6 +114,27 @@ function findCheckCashList(page) {
 		}
 	})
 }
+function findCheckDebtList() {
+	var createDate = $('#searchDate').val();
+	$.ajax({
+		url : "/checkCash/debtCheck?createDate="+createDate,
+		type : "GET",
+		data : SearchData,
+		dataType : "json",
+		success : function(orderData) {
+			createCheckDebtTable(orderData);
+			var searchTotal = orderData.totalElements;
+			if (searchTotal != checkPendingTotal || searchTotal == 0) {
+				checkPendingTotal = searchTotal;
+				
+				checkDebtPaging(orderData);
+			}
+		},
+		error : function() {
+			alert("系统异常，请稍后重试！");
+		}
+	})
+}
 /**
  * 生成油补统计列表
  * 
@@ -121,6 +144,14 @@ function findCheckCashList(page) {
 function createCheckPendingTable(data) {
 	var myTemplate = Handlebars.compile($("#checkPending-table-template").html());
 	$('#checkPendingList').html(myTemplate(data));
+}
+/**
+ * 
+ * @param data
+ */
+function createCheckDebtTable(data) {
+	var myTemplate = Handlebars.compile($("#checkDebt-table-template").html());
+	$('#checkDebtList').html(myTemplate(data));
 }
 /**
  * 生成为匹配交易记录
@@ -168,6 +199,17 @@ Handlebars.registerHelper('disposeStayMoney', function(value) {
 Handlebars.registerHelper('isCheckStatus', function(isCheck,userId,createDate) {
 	var formcreateDate=changeDateToString(new Date(createDate));
 	var html='<button class="btn btn-sm btn-blue" onClick="checkPending(\''+userId+'\',\''+formcreateDate+'\')">确认</button>'
+	if (isCheck == '已审核') {
+		return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
+	}
+	return html;
+});
+/**
+ * 审核没有流水单号的交易记录
+ */
+Handlebars.registerHelper('isCheckDebtStatus', function(isCheck,userId,createDate) {
+	var formcreateDate=changeDateToString(new Date(createDate));
+	var html='<button class="btn btn-sm btn-blue" onClick="checkDebt(\''+userId+'\',\''+formcreateDate+'\')">确认</button>'
 	if (isCheck == '已审核') {
 		return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
 	}
@@ -223,6 +265,29 @@ function checkPending(userId,createDate){
 		},
 		error:function(data){
 			alert("");
+		}
+	})
+}
+/**
+ * 确认审核木有流水单号的记录
+ * @param userId
+ * @param createDate
+ */
+function checkDebt(userId,createDate){
+	$.ajax({
+		url:base+"/checkCash/debtCheck/"+userId+"?createDate="+createDate,
+		type:"POST",
+		dataType:"json",
+		success:function(data){
+			if("success"===data.status){
+				alert(data.successMsg);
+				findCheckDebtList();
+				return ;
+			}
+			alert(data.errorMsg);
+		},
+		error:function(data){
+			alert("系统异常，稍后重试！");
 		}
 	})
 }
