@@ -198,7 +198,7 @@ body, html,#allmap,.container-fluid,.row{width: 100%;height:100%; overflow: hidd
 							double lng = Double.parseDouble(centerPoint.split("-")[0]);//经度 
 							double lat = Double.parseDouble(centerPoint.split("-")[1]);//纬度%>
 							var secRingCenter = new BMap.Point(<%=lng%>,<%=lat%>)
-							var secRingLabel2 = new BMap.Label(name,{offset: new BMap.Size(10,-30), position: secRingCenter});
+							var secRingLabel2 = new BMap.Label('<%=name%>',{offset: new BMap.Size(10,-30), position: secRingCenter});
 							secRingLabel2.setStyle({"line-height": "20px", "text-align": "center", "width": "80px", "height": "29px", "border": "none", "padding": "2px","background": "url(http://jixingjx.com/mapapi/ac.gif) no-repeat",});
 							map.addOverlay(secRingLabel2);
 		 		<%}}

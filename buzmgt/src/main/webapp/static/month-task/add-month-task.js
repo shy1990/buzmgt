@@ -39,9 +39,7 @@ function getMonthData(regionId) {
 		"salemanid" : salemanid,
 	};
 	$.ajax({
-		url : base + "api/monthdata/search/defaultfinddata",
-		type : "GET",
-		data : searchData,
+		url : base + "api/monthdata/search/defaultfinddata?month="+month+"&salemanid="+salemanid,
 		beforeSend : function(request) {
 			request.setRequestHeader("Content-Type",
 					"application/json; charset=UTF-8");
@@ -164,6 +162,9 @@ function submit(flag) {
 		}
 		taskObj.monthData = lsdata;
 	}
+	alert(taskObj);
+	alert(JSON.stringify(taskObj));
+	console.log(JSON.stringify(taskObj));
 	$.ajax({
 		url : url,
 		type : type,

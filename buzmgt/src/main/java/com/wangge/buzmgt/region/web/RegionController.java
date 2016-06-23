@@ -186,7 +186,8 @@ public class RegionController {
 		Region newRegion=new Region(region.getId(),region.getName(),RegionUtil.getTYpe(regionService.findListRegionbyid(pid)));
 		newRegion.setParent(region);
 		newRegion.setParent(regionService.findListRegionbyid(pid));
-		regionService.saveRegion(newRegion);
+		region.setParent(regionService.findListRegionbyid(pid));
+		regionService.saveRegion(region);
 	}
 	
 	

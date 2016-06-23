@@ -158,7 +158,7 @@ public class TaskController {
 	}
 
 	// 子任务数据查询
-	@RequestMapping(value = "/mainTasks/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/mainTasks/{id}", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, Object>> findById(@PathVariable Long id) {
 		Map<String, Object> smap = new HashMap<String, Object>();
 		try {

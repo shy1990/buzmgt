@@ -51,7 +51,7 @@ public class SceduleOfMonthOrders {
 	private static final String townSql = " select s.region_id, s.user_id, s.truename   from sys_salesman s ";
 
 	// 每月15号点时分 0 30 1 15 * ?
-	@Scheduled(cron = " 0 30 1 15 * ? ")
+	@Scheduled(cron = " 0 30 1 15 * ?")
 	public void handleMontholdData() {
 		List<Object[]> townList = em.createNativeQuery(townSql).getResultList();
 		for (Object[] towns : townList) {
