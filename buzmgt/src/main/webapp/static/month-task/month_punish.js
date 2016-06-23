@@ -99,6 +99,7 @@ function addCustom(o) {
 	}
 	if (jQuery.inArray(qy, regionArr) > -1) {
 		alert("请勿重复添加自定义区域!");
+		location.href = '/monthTask/punish';
 	} else if (qy.length > 5 && qy.length < 8) {
 		var num = (qy + "").substring(4);
 		if (num != '00') {
