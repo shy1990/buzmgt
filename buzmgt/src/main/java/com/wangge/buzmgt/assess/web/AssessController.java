@@ -445,7 +445,7 @@ public class AssessController {
       @JSONFormat(filterField={"Region.children","Region.parent"})
       public JsonResponse getAssessTimes(
               @RequestParam(value = "page", defaultValue = "0") Integer page,
-              @RequestParam(value = "size", defaultValue = "3") Integer size) {
+              @RequestParam(value = "size", defaultValue = "10") Integer size) {
           Sort sort = new Sort(Direction.DESC, "createTime");
           Pageable pageable = new PageRequest(page, size, sort);
           Page<AssessTime> result = assessService.findAll(pageable);
