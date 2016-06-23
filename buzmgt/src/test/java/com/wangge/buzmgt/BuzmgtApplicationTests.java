@@ -301,15 +301,15 @@ public class BuzmgtApplicationTests {
 
 	@Test
 	public void testSaojieData() {
-		SaojieDataVo sList = saojieService.getsaojieDataList("B37090301220", "37090305", 0, 0);
-		if (sList != null) {
-			for (SaojieData d : sList.getList()) {
-				System.out.println("========================" + d.getName());
-			}
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>" + sList.getPercent());
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>" + sList.getShopNum());
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>" + sList.getTaskNum());
-		}
+//		SaojieDataVo sList = saojieService.getsaojieDataList("B37090301220", "37090305", 0, 0);
+//		if (sList != null) {
+//			for (SaojieData d : sList.getList()) {
+//				System.out.println("========================" + d.getName());
+//			}
+//			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>" + sList.getPercent());
+//			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>" + sList.getShopNum());
+//			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>" + sList.getTaskNum());
+//		}
 
 	}
 
@@ -330,7 +330,7 @@ public class BuzmgtApplicationTests {
 
 	@Test
 	public void testMonth() {
-		Map<String, String> talMap = new HashMap<String, String>();
+		Map<String, Object> talMap = new HashMap<String, Object>();
 		talMap.put("mobiles", "18769727652");
 		talMap.put("msg", "下月的月任务已生成");
 		String result = HttpUtil.sendPostJson(AppServer.URL, talMap);
