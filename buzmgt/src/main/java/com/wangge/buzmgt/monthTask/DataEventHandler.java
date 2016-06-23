@@ -51,10 +51,10 @@ public class DataEventHandler {
 	private void handlePush(MonthTask monthTask, MonthOdersData orda) {
 		if (monthTask.getStatus() == 1) {
 			String phone = orda.getSalesman().getMobile();
-			Map<String, String> talMap = new HashMap<String, String>();
+			Map<String, Object> talMap = new HashMap<String, Object>();
 			talMap.put("mobiles", phone);
 			talMap.put("msg", "下月的月任务已生成");
-			String result = HttpUtil.sendPostJson(AppServer.URL, talMap);
+			String result = HttpUtil.sendPostJson(AppServer.URL+"mainMonthTask", talMap);
 			if (!result.contains("true")) {
 				log.debug("手机推送月任务出错!!" + monthTask);
 			}

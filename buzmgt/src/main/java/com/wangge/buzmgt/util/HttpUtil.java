@@ -122,9 +122,9 @@ public class HttpUtil {
 		return result;
 	}
 
-	public static String sendPostJson(String url, Map<String, String> params) {
+	public static String sendPostJson(String url, Map<String, Object> talMap) {
 		JSONObject obj = new JSONObject();
-		for (Map.Entry<String, String> entry : params.entrySet()) {
+		for (Map.Entry<String, Object> entry : talMap.entrySet()) {
 			obj.put(entry.getKey(), entry.getValue());
 		}
 		String param = obj.toString();
