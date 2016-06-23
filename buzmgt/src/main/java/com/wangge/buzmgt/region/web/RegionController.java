@@ -163,7 +163,8 @@ public class RegionController {
 		Long maxid=Long.parseLong(id);
 		Region newRegion=new Region(String.valueOf(maxid),name,RegionUtil.getTYpe(region));
 		newRegion.setParent(region);
-		regionService.saveRegion(newRegion);
+		region.setName(name);
+		regionService.saveRegion(region);
 		logger.debug(region);
 		return new ResponseEntity<Region>(newRegion,HttpStatus.OK);
 	}
