@@ -16,12 +16,12 @@
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <title>添加任务</title>
 <!-- Bootstrap -->
-<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
+<link href="<%=basePath%>static/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="<%=basePath%>static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="static/task/task.css" />
-<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>static/css/common.css" />
+<link rel="stylesheet" type="text/css" href="<%=basePath%>static/task/task.css" />
+<link href="<%=basePath%>static/bootStrapPager/css/page.css" rel="stylesheet">
 <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">

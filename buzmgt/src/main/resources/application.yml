@@ -6,14 +6,14 @@ spring:
       prefix: /WEB-INF/jsps/
       suffix: .jsp
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: none
     open-in-view: true
   datasource:
-    url: jdbc:oracle:thin:@115.28.64.224:1521:sanjiDB
+   #url: jdbc:oracle:thin:@115.28.64.224:1521:sanjiDB
    #url: jdbc:oracle:thin:@192.168.2.190:1522:xe
-   #url: jdbc:oracle:thin:@115.28.92.73:1521:xe
+    url: jdbc:oracle:thin:@115.28.92.73:1521:xe
     username: sj_buzmgt
     password: sj_buzmgt1688
     initial-size: 1

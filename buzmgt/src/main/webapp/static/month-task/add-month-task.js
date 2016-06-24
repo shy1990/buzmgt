@@ -28,19 +28,20 @@ function getNextMonth() {
 }
 function getMonthData(regionId) {
 	var month = getNextMonth();
-	var salemanids = $("#basic").val();
-	if (null == salemanids || salemanids == [] || salemanids == "") {
+	salemanid = $("#basic").val();
+	if (null == salemanid || salemanid == '') {
 		alert("请选择业务员");
-		return;
+		reurn;
 	}
-	salemanid = salemanids[0];
+
 	var searchData = {
 		"month" : month,
 		"salemanid" : salemanid,
-		"regionid" : ""
 	};
 	$.ajax({
-		url : base + "api/monthdata/search/defaultfinddata?month="+month+"&salemanid="+salemanid,
+		url : base + "api/monthdata/search/defaultfinddata",
+		type : "GET",
+		data : searchData,
 		beforeSend : function(request) {
 			request.setRequestHeader("Content-Type",
 					"application/json; charset=UTF-8");
@@ -137,7 +138,7 @@ function submit(flag) {
 	var taskObj = {
 		"regionid" : lsdata.regionId,
 		"month" : lsdata.month,
-		"agentid" : $("#basic").val()[0],
+		"agentid" : $("#basic").val(),
 		"tal7goal" : $("#7goal").val(),
 		"tal15goal" : $("#15goal").val(),
 		"tal10goal" : $("#10goal").val(),
@@ -161,10 +162,8 @@ function submit(flag) {
 			alert("数据未刷新,请重新检索!!");
 			return;
 		}
+		taskObj.monthData = lsdata;
 	}
-	alert(taskObj);
-	alert(JSON.stringify(taskObj));
-	console.log(JSON.stringify(taskObj));
 	$.ajax({
 		url : url,
 		type : type,
@@ -183,7 +182,7 @@ function submit(flag) {
 				newed = 0;
 			}
 		},
-		error : function(data) {
+		error : function() {
 			alert("系统错误，请稍后再试");
 		}
 	});

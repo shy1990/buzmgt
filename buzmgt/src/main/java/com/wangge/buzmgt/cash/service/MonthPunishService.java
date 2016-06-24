@@ -33,5 +33,7 @@ public interface MonthPunishService {
 
   public void save(List<MonthPunish> monthPunishs);
 
+  public List<MonthPunish> findAllISNotCash(Map<String, Object> spec);
+
   
 }

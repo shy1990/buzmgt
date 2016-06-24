@@ -68,7 +68,7 @@ public class Region implements Serializable {
 	private RegionType type;
 
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "PARENT_ID")
 	private Region parent;
 

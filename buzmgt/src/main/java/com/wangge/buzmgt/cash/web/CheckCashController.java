@@ -96,6 +96,7 @@ public class CheckCashController {
     return json;
   }
   @RequestMapping(value="/debtCheck",method=RequestMethod.GET)
+  @ResponseBody
   public JSONObject getDebtCheck(String createDate){
     if("".equals(createDate)){
       createDate=DateUtil.date2String(new Date());
@@ -105,9 +106,9 @@ public class CheckCashController {
     json.put("content", debtCheckList);
     return json;
   }
-  @RequestMapping(value="/debtCheck",method=RequestMethod.POST)
-  public JSONObject auditDebtCheck(String userId,String createDate){
-    JSONObject json = new JSONObject();
+  @RequestMapping(value="/debtCheck/{userId}",method=RequestMethod.POST)
+  @ResponseBody
+  public JSONObject auditDebtCheck(@PathVariable("userId") String userId,String createDate){
     return checkCashService.auditDebtCheck(userId, createDate);
   }
   /**

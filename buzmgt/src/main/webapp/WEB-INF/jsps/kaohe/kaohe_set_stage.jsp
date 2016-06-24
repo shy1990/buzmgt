@@ -132,7 +132,7 @@
 						</div>
 						<!--一阶段考核设置内容-->
 						<div class="hr"></div>
-						<c:if test="${stage lt assessStageSum}">
+						<c:if test="${stage lt salesman.assessStageSum}">
 						<!--考核内容-->
 							<div class="form-group  marg-b-10">
 								<label class="col-sm-2 control-label">第${stage + 1}阶段考核设置:</label>
@@ -226,12 +226,12 @@
 									<div class="col-sm-9 col-sm-offset-2 input-group">
 										<button class="btn btn-audit col-sm-2" onclick="toSubmit();">确定</button>
 									</c:if>
-										<c:if test="${salesman.status ne 'weihu' }">
-											<c:if test="${stage eq assessStageSum}">
+										<c:if test="${salesman.status ne 'zhuanzheng' }">
+											<c:if test="${stage eq salesman.assessStageSum}">
 											<button id="passed" class="btn btn-audit col-sm-2" style="margin-left:150px" onclick="passed('${salesman.id}');">转正</button>
 										</c:if>
 										</c:if>
-										<c:if test="${salesman.status eq 'weihu' }">
+										<c:if test="${salesman.status eq 'zhuanzheng' }">
 											<button id="passed" class="btn btn-audit col-sm-2" style="margin-left:150px" disabled="disabled">已转正</button>
 										</c:if>
 									</div>

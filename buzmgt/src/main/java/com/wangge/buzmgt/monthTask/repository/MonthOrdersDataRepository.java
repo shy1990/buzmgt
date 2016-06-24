@@ -10,6 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
+
 @RepositoryRestResource(path = "/monthdata")
 public interface MonthOrdersDataRepository extends JpaRepository<MonthOdersData, Long> {
 	/**

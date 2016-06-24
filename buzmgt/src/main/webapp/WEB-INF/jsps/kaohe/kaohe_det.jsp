@@ -142,7 +142,7 @@
 									</c:otherwise>
 								</c:choose>
 							</c:if>
-							<c:if test="${salesman.status eq 'weihu'}">
+							<c:if test="${salesman.status eq 'zhuanzheng'}">
 								<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
 										onclick="toAssessDet('${salesman.id}','${assess.id}','${percent }');">已转正</button>
 							</c:if>

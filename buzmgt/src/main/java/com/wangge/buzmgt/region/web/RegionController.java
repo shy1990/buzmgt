@@ -404,12 +404,7 @@ public class RegionController {
 	    	 model.addAttribute("man","此区域没有业务员");
 	     }else{
 	    	 model.addAttribute("man",man.getTruename());
-	    	 SaojieDataVo saojiedatalist =new SaojieDataVo();
-	    	 for(Region Childregion:man.getRegion().getChildren()){
-	    		 saojiedatalist.getList().addAll(sds.getsaojieDataList(null,Childregion.getId()).getList());
-	    	 }
-	    	  
-	    	
+	    	 SaojieDataVo saojiedatalist  = sds.getsaojieDataList(man.getId(),null);
 	 	    List<SaojieData> list = saojiedatalist.getList();
 	 	    int size = 0;
 	 	    if(list!=null && !list.isEmpty()){
