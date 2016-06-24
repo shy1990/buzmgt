@@ -159,14 +159,15 @@ public class RegionController {
 	public ResponseEntity<Region>   editRegion(String id,String pid,String name) {
 		logger.debug(pid+name);
 		
-		Region region=regionService.findListRegionbyid(pid);
+		Region region=regionService.findListRegionbyid(id);
 		Long maxid=Long.parseLong(id);
 		Region newRegion=new Region(String.valueOf(maxid),name,RegionUtil.getTYpe(region));
 		newRegion.setParent(region);
 		region.setName(name);
+		region.setParent(regionService.findListRegionbyid(pid));
 		regionService.saveRegion(region);
 		logger.debug(region);
-		return new ResponseEntity<Region>(newRegion,HttpStatus.OK);
+		return new ResponseEntity<Region>(region,HttpStatus.OK);
 	}
 	
 	
@@ -184,9 +185,6 @@ public class RegionController {
 	@RequestMapping(value = "/dragRegion", method = RequestMethod.POST)
 	public void dragRegion(String id, String pid) {
 		Region region = regionService.findListRegionbyid(id);
-		Region newRegion=new Region(region.getId(),region.getName(),RegionUtil.getTYpe(regionService.findListRegionbyid(pid)));
-		newRegion.setParent(region);
-		newRegion.setParent(regionService.findListRegionbyid(pid));
 		region.setParent(regionService.findListRegionbyid(pid));
 		regionService.saveRegion(region);
 	}
