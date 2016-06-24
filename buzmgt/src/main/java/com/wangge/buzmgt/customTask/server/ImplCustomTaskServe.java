@@ -92,6 +92,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 		for (CustomTask task : cList) {
 			Map<String, Object> datamap = new HashMap<String, Object>();
+			datamap.put("id", task.getId());
 			datamap.put("title", task.getTitle());
 			datamap.put("type", task.getType());
 			datamap.put("typeName", TASKTYPEARR[task.getType()]);			
@@ -125,6 +126,12 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 			mapList.add(datamap);
 		}
 		return mapList;
+	}
+
+	@Override
+	public Set<String> getSaleSet(CustomTask customTask) {
+		
+		return null;
 	}
 
 }

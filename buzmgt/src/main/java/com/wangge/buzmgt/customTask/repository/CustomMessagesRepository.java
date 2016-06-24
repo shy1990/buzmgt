@@ -13,4 +13,6 @@ public interface CustomMessagesRepository extends JpaRepository<CustomMessages, 
 			+ "                and t.status = 0\n"
 			+ "                and t.roletype = 1) t1 on 1 = 1", nativeQuery = true)
 	Object countByRoleType(Long customtaskId);
+	@Query("")
+	Long countBySalesmanId();
 }

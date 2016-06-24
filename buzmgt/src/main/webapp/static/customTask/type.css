@@ -114,3 +114,18 @@ body{
     border:1px silver solid;
     border-radius: 3px;
 }
+.sj-ms-btn-ok>button{
+	padding-right: 19px;
+	padding-left: 19px;
+	background-color: #fff;
+	border: 1px solid #aaaaaa;
+	color: #555555;
+	margin-left:60px
+}
+ul{
+	list-style: none;
+}
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}

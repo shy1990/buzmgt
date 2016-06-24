@@ -21,12 +21,13 @@
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="static/customTask/type.css">
-<link href="/static/customTask/searchSelect/css/jquery.multiselect.css"
-	type="text/css" rel="stylesheet" />
+
 <script src="/static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-
+<link rel="stylesheet" type="text/css"
+		href="static/customTask/type.css">
+	<link href="/static/customTask/searchSelect/css/jquery.multiselect.css"
+		type="text/css" rel="stylesheet" />
 </head>
 <body>
 	<div class="content main">
@@ -54,8 +55,8 @@
 							<label class="col-sm-2 control-label">标题：</label>
 							<div class="col-sm-3 input-group left">
 								<span class="input-group-addon"><i class="icon ico-bt"></i></span>
-								<input type="text" id="title" class="form-control" placeholder="请输入标题"
-									aria-describedby="basic-addon1">
+								<input type="text" id="title" class="form-control"
+									placeholder="请输入标题" aria-describedby="basic-addon1">
 							</div>
 							<div style="float: left; margin-top: -35px; margin-left: 43%">
 								<p class="form-control-static">
@@ -69,7 +70,8 @@
 							<label class="col-sm-2 control-label">新建类型：</label>
 							<div class="col-sm-3 input-group left">
 								<span class="input-group-addon" style=""><i
-									class="icon ico-xinjian"></i></span> <select id="Customtype" class="form-control">
+									class="icon ico-xinjian"></i></span> <select id="Customtype"
+									class="form-control">
 									<option value="">---请选择类型---</option>
 									<option value="0">店铺注册</option>
 									<option value="1">售后拜访</option>
@@ -83,8 +85,8 @@
 							<label class="col-sm-2 control-label">扣罚金额：</label>
 							<div class="col-sm-3 input-group left">
 								<span class="input-group-addon"><i class="icon icon-jine"></i></span>
-								<input type="number" id="punish" class="form-control" placeholder="请输入金额"
-									aria-describedby="basic-addon1">
+								<input type="number" id="punish" class="form-control"
+									placeholder="请输入金额" aria-describedby="basic-addon1">
 							</div>
 						</div>
 						<div class="hr"></div>
@@ -93,7 +95,8 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label">消息内容：</label>
 							<div class="col-sm-3 input-group left">
-								<textarea id="content" class="form-control" rows="10" placeholder="请输入内容"></textarea>
+								<textarea id="content" class="form-control" rows="10"
+									placeholder="请输入内容"></textarea>
 							</div>
 						</div>
 						<div class="hr"></div>
@@ -102,7 +105,7 @@
 							<label class="col-sm-2 control-label">接收人：</label>
 							<div class="col-sm-2 input-group left">
 								<div id="salesList" class="input-group">
-								<!-- 	<input type="text" id="saleInput0" class="form-control" placeholder="胡老大"
+									<!-- 	<input type="text" id="saleInput0" class="form-control" placeholder="胡老大"
 										> <span
 										class="input-group-addon" id="saleSpan0"><i class="icon icon-close" onclick="deletediv(0);"></i></span>
 								<input type="text" id="saleInput1" class="form-control" placeholder="胡老大"
@@ -168,7 +171,7 @@
 
 							<div class="form-group">
 								<div class="col-sm-offset-4 col-sm-4 ">
-									<a  onclick="addSales();"
+									<a onclick="addSales();"
 										class="Zdy_add  col-sm-12 btn btn-primary">保存 </a>
 								</div>
 							</div>
@@ -182,8 +185,10 @@
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-	<script type="text/javascript" src="/static/customTask/searchSelect/searchSelect.js"></script>
-	<script type="text/javascript"	src="/static/customTask/add.js"></script>
+	<script type="text/javascript"
+		src="/static/customTask/searchSelect/searchSelect.js"></script>
+	
+	<script type="text/javascript" src="/static/customTask/add.js"></script>
 	<script type="text/javascript">
 		$('select#salesName').multiselect({
 			columns : 1,

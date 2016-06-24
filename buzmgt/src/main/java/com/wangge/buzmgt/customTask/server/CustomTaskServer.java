@@ -2,6 +2,7 @@ package com.wangge.buzmgt.customTask.server;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
 
@@ -32,4 +33,10 @@ public interface CustomTaskServer {
 	 * @return
 	 */
 	public List<Map<String, Object>> findAll(Pageable page, Map<String, Object> searchParams);
+
+	/**通过自定义任务获取相关的业务员ids
+	 * @param customTask
+	 * @return
+	 */
+	public Set<String> getSaleSet(CustomTask customTask);
 }

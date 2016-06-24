@@ -105,9 +105,10 @@ public class CustomTaskController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
 	public String detail(@PathVariable("id") CustomTask customTask, HttpServletRequest request, Model model) {
 		model.addAttribute("task", customTask);
+		Set<String> idSet= customServ.getSaleSet(customTask);
 		return "customTask/detail";
 	}
 

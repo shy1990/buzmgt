@@ -30,7 +30,7 @@
 
 	{{#if content}}
 		{{#each content}}
-					<tr>
+					<tr ondblclick="openDetail({{id}});">
 						<td><span class="icon-{{qfType type}}">{{typeName}}</span> {{title}}</td>
 						<td class="ssh" title="">
                              <p>
@@ -183,6 +183,9 @@ p {
 		}
 		
 		findTaskList(0);
+		function openDetail(id){
+			window.location.href="<%=basePath%>customTask/details/"+id;
+		}
 	</script>
 </body>
 </html>
