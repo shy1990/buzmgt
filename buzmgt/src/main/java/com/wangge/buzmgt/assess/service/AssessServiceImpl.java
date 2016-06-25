@@ -15,17 +15,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.entity.Assess.AssessStatus;
+import com.wangge.buzmgt.assess.entity.AssessTime;
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.repository.AssessRepository;
+import com.wangge.buzmgt.assess.repository.AssessTimeRepository;
 import com.wangge.buzmgt.assess.repository.RegistDataRepository;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.sys.vo.OrderVo;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 
 /**
  * 
@@ -48,10 +52,12 @@ public class AssessServiceImpl implements AssessService {
   private RegionRepository regionRepository;
   @Resource
   private RegistDataRepository rdr;
+  @Resource
+  private AssessTimeRepository aTRepository;
   
   @Override
-  public Assess saveAssess(Assess assess) {
-    return assessRepository.save(assess);
+  public void saveAssess(Assess assess) {
+    assessRepository.save(assess);
   }
 
   @Override
@@ -80,13 +86,9 @@ public class AssessServiceImpl implements AssessService {
     List<Assess> list = new ArrayList<Assess>();
     for(Object obj: q.getResultList()){
       Assess ass = (Assess)obj;
-      String[] assStr=null;
-      if(null !=ass.getDefineArea()){
-        assStr = ass.getDefineArea().split(",");
-      }
       double orderNum = 0;//提货量
       double active = 0;//活跃家数
-      if("3".equals(ass.getAssessStage()) && ass.getStatus().equals(AssessStatus.AGREE)){
+      if(SalesmanStatus.weihu.equals(ass.getSalesman().getStatus()) && AssessStatus.AGREE.equals(ass.getStatus())){
         String sql = "select count(oi.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
             "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id left join SJZAIXIAN.SJ_TB_ORDER_ITEMS oi on o.id = oi.order_id "+
             "where t.member_id=m.id and oi.target_type='sku' and o.pay_status='1' and o.createtime >=TRUNC(SYSDATE, 'MM') and o.createtime<=last_day(SYSDATE)";
@@ -110,12 +112,10 @@ public class AssessServiceImpl implements AssessService {
             active = big.doubleValue();
         }
       }else{
-        if(null!=assStr){
 //        Assess a = assessRepository.findByStageAndSalesman("2",ass.getSalesman().getId());//看是否有第二阶段
-        for(int i=0; i<assStr.length; i++){
           String sql = "select count(oi.id) from SYS_REGISTDATA t left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
               "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id left join SJZAIXIAN.SJ_TB_ORDER_ITEMS oi on o.id = oi.order_id "+
-              "where t.member_id=m.id and oi.target_type='sku' and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' ";
+              "where t.member_id=m.id and oi.target_type='sku' and o.pay_status='1' and t.user_id='"+ass.getSalesman().getId()+"' ";
           sql += "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"'";
           Query query =  em.createNativeQuery(sql);
           BigDecimal str = null;
@@ -129,7 +129,7 @@ public class AssessServiceImpl implements AssessService {
           String sql1 = "select count(*) from (select m.id,count(o.id) total from SYS_REGISTDATA t "+
               "left join SYS_Assess a on t.user_id=a.user_id left join SJZAIXIAN.SJ_TB_MEMBERS m "+
               "on t.member_id=m.id left join SJZAIXIAN.SJ_TB_ORDER o on m.id=o.member_id "+
-              "where t.member_id=m.id and o.pay_status='1' and t.REGION_ID='"+assStr[i]+"' "+
+              "where t.member_id=m.id and o.pay_status='1' and t.user_id='"+ass.getSalesman().getId()+"' "+
               "and to_char(o.createtime,'yyyy-mm-dd hh24:mi:ss') BETWEEN '"+ass.getAssessTime()+"' AND '"+ass.getAssessEndTime()+"' "+
               "Group by m.id) where total >= 2";
           query =  em.createNativeQuery(sql1);
@@ -140,8 +140,6 @@ public class AssessServiceImpl implements AssessService {
               double num = big.doubleValue();
               active += num;
           }
-        }
-        }
       }
       double activeNum = active / Integer.parseInt(ass.getAssessActivenum());//活跃家数占的比例
       double orderCount = orderNum / Integer.parseInt(ass.getAssessOrdernum());//提货量占的比例
@@ -282,9 +280,18 @@ public class AssessServiceImpl implements AssessService {
   }
 
   @Override
-  public void saveRegistData(RegistData registData) {
-    // TODO Auto-generated method stub
-    rdr.save(registData);
+  public AssessTime findAssessTimeByRegion(Region region) {
+    return aTRepository.findAssessTimeByRegion(region);
+  }
+
+  @Override
+  public AssessTime saveAssessTime(AssessTime at) {
+    return aTRepository.save(at);
+  }
+
+  @Override
+  public Page<AssessTime> findAll(Pageable pageable) {
+    return aTRepository.findAll(pageable);
   }
 	
 }

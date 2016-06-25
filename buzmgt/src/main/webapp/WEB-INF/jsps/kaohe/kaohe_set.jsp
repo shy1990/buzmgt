@@ -62,7 +62,7 @@
 									<p class="form-control-static">${salesman.truename }</p>
 								</div>
 							</div>
-							<div class="hr"></div>
+							<!-- <div class="hr"></div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label">考核阶段:</label>
 								<div class="col-sm-2">
@@ -70,7 +70,7 @@
 								</div>
 								<label class="" style="padding-top:3px">个</label>
 								<label class="pull-right col-md-8 control-label msg-error">请填写考核阶段</label>
-							</div>
+							</div> -->
 							<div class="hr"></div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label">负责区域:</label>

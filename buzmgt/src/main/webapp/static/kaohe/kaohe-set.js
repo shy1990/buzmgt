@@ -44,17 +44,11 @@ function toSubmit(){
 }
 
 function checkForm(){
-	var assessStage = $("#assessStage").val()
 	var activeNum = $("#activeNum").val()
 	var orderNum = $("#orderNum").val()
 	var assessCycle = $("#assessCycle").val()
 	var assessTime = $("#assessTime").val()
 	var town = $("#town").val()
-	
-	if (assessStage == null || assessStage.trim() == "") {
-		errorMsgShow($("#assessStage"));
-		return false;
-	}
 	
 	if (activeNum == null || activeNum.trim() == "") {
 		errorMsgShow($("#activeNum"));
