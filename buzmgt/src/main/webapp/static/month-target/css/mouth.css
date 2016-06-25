@@ -340,27 +340,27 @@ html{
 }
 
 .icon-set{
-    background: url("../../yuezhibiao/image/set.png") no-repeat center ;
+    background: url("../../img/yuezhibiao/set.png") no-repeat center ;
 }
 
 .icon-yue{
-    background: url("../../yuezhibiao/image/yue.png") no-repeat center ;
+    background: url("../../img/yuezhibiao/yue.png") no-repeat center ;
 }
 .icon-xiug{
-    background: url("../../yuezhibiao/image/xiug.png") no-repeat center ;
+    background: url("../../img/yuezhibiao/xiug.png") no-repeat center ;
 }
 
 .icon-ywtc{
-    background: url("../../yuezhibiao/image/ywqs.png") no-repeat center ;
+    background: url("../../img/yuezhibiao/ywqs.png") no-repeat center ;
 }
 
 .icon-sx{
-    background: url("../../yuezhibiao/image/sxx.png") no-repeat center ;
+    background: url("../../img/yuezhibiao/sxx.png") no-repeat center ;
 
 }
 
 .icon-sx-a{
-    background: url("../../yuezhibiao/image/xss.png") no-repeat center ;
+    background: url("../../img/yuezhibiao/xss.png") no-repeat center ;
     margin-left: -10px;
 }
 .btn-setting{
@@ -375,7 +375,7 @@ html{
     display: inline-block;
     margin-right:3px;
     padding:7px;
-    background:url("../../yuezhibiao/image/setting.png") no-repeat;
+    background:url("../../img/yuezhibiao/setting.png") no-repeat;
     vertical-align: middle;
 }
 

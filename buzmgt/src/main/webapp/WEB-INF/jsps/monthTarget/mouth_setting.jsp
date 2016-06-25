@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<base href="<%=basePath%>" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,8 +24,16 @@
 <div class="content main">
     <h4 class="page-header">
         <i class="ico icon-set"></i>月指标设置
+        <div class="area-choose">
+
+        </div>
+        <!--/区域选择按钮-->
+        <a href="/monthTarget/toUpdate" onclick="toUpdate();" class="btn btn-blue"
+           data-toggle="modal" data-target="#xzyw" data-whatever="@mdo">
+            <i class="ico icon-add"></i>添加
+        </a>
     </h4>
-    <a class="btn btn-setting" href="/monthTarget/monthTargetAdd"><i class="icon-ratio"></i>月指标设置</a>
+    
     <!---选择地区-->
     <div>
         <span class="text-gray">选择月份：</span>
