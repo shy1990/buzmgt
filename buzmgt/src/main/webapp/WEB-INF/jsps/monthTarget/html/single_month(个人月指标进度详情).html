@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>个人月指标进度详情</title>
+    <!-- Bootstrap -->
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/kaohe/kaohe-det.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/yw-team-member/team-member.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/yw-team-member/ywmember.css"/>
+    <link rel="stylesheet" type="text/css" href="css/mouth.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/task/task.css">
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+<div class="content main">
+    <h4 class="page-header ">
+        <i class="ico icon-ywtc"></i>个人销售提成详情
+    </h4>
+    <div class="row">
+        <div class="col-md-9">
+            <!--box-->
+            <div class="abnormal-body box border ">
+                <!--指标表头-->
+                <div class="head-box">
+                    <div class="head-blue"></div>
+                    <div class="box-infor">
+                        <div class="box-left">
+                            <div class="box-center">
+                                <p><span class="text-box-in">4月</span></p>
+                                <p><span class="text-box-in">指标</span></p>
+                            </div>
+
+                            <div class="box-text">
+                                <p>提货量指标： &nbsp; <span>500 台&nbsp;&nbsp;</span> &nbsp; &nbsp;已达成： 450台</p>
+                                <p>活跃商家指标： <span class="text-blue">30 家&nbsp;</span> &nbsp;&nbsp;&nbsp; 已达成：<span
+                                        class="text-blue"> 25家</span></p>
+
+                            </div>
+
+                            <div class="box-plan">
+                                <p class="p-height ">完成进度：85% <span class="text-blue text-right-s">85%</span> /100%</p>
+                                <p>
+                                <div class="progress" style="width: 100%">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                         aria-valuemax="100" style="width: 85%; background-color: #00b7ee">
+                                    </div>
+                                </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--日期、筛选、导出-->
+                <div class="input-m">
+                    <div class="search-date" style="width: 187px ">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon " id="basic-addon1"><i
+                                    class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+                            <input type="text" class="form-control form_datetime input-sm" placeholder="选择日期"
+                                   readonly="readonly" style="background-color: #FFFFFF">
+                        </div>
+                    </div>
+                    <button class="btn btn-sx " style="padding:  3px 12px 3px 10px">筛选</button>
+                </div>
+
+
+                <div class="link-posit-t pull-right export" style="margin-top: -55px">
+                    <input class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
+                    <button class="btn btn-sx " style="padding:  3px 12px 3px 10px"onclick="goSearch('${salesman.id}','${assess.id}');">
+                        检索
+                    </button>
+                    <a class="table-export" href="javascript:void(0);">导出excel</a>
+                </div>
+
+
+                <div class="clearfix"></div>
+
+                <div class="table-task-list new-table-box table-overflow">
+                    <table class="table table-hover new-table">
+                        <thead>
+                        <tr>
+                            <th>商家名称</th>
+                            <th>提货量 <i class="ico  icon-sx icon-sx"></i> <i class="ico  icon-sx-a "></i> </th>
+                            <th>提货次数 <i class="ico  icon-sx icon-sx"></i> <i class="ico  icon-sx-a "></i></th>
+                            <th>联系方式</th>
+                            <th>所属区域</th>
+                            <th>日期</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+                        <tr>
+                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
+                            <td>200</td>
+                            <td>2</td>
+                            <td>
+                                18855514445
+                            </td>
+                            <td>历下区泉城路</td>
+                            <td>2016.06.01-2016.07.05</td>
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+                <!--title-->
+                <!--box-body-->
+                <div class="box-body-new">
+
+                </div>
+                <!--box-body-->
+            </div>
+            <!--box-->
+        </div>
+        <!--col-md-9-->
+        <div class="col-md-3">
+            <!--box-->
+            <!--不同阶段颜色不同1：pink 2：yellow 3:violet 4:-->
+            <div class="ywmamber-msg box border pink">
+                <!--title-->
+                <div class="box-title">
+                    <i class="icon icon-time"></i>考核中
+                </div>
+                <!--box-body-->
+                <div class="box-body">
+                    <!--ywmamber-body-->
+                    <div class="ywmamber-body">
+                        <img width="80" src="../static/img/background/user-head.png" alt="..." class="img-circle">
+                        <div class="msg-text">
+                            <h4>易小星</h4>
+                            <p>ID: A236743252</p>
+                            <p>电话: 12547346455</p>
+                        </div>
+                    </div>
+                    <!--/ywmamber-body-->
+                    <div class="stage">
+                        <span class="kaohe-stage onekaohe-stage">第一阶段:60% </span>
+                    </div>
+                    <div class="progress progress-sm">
+                        <div style="width: 60%;" class="progress-bar bar-kaohe"></div>
+                    </div>
+                    <div class="operation">
+                        <a href="saojie_upd.html" class="">考核设置</a>
+                        <a href="kaohe_det.html" class="pull-right">查看</a>
+                    </div>
+                    <div class="yw-text">
+                        入职时间:<span> 2015.09.21</span>
+                        <br/> 负责区域:
+                        <span>山东省滨州市邹平县</span>
+                    </div>
+                    <!--拜访任务-->
+                    <div class="visit">
+                        <button class="col-xs-12 btn btn-visit" href="javascript:;"><i class="ico icon-add"></i>拜访任务
+                        </button>
+                    </div>
+                    <!--拜访任务-->
+                    <!--操作-->
+                    <div class="operation">
+                        <a href="javascript:;" class="">账户设置</a>
+                        <a href="javascript:;">冻结账户</a>
+                    </div>
+                    <!--操作-->
+                </div>
+                <!--box-body-->
+            </div>
+            <!--box-->
+            <!--业务外部链接-->
+            <div class="yw-link">
+                <a class="link-oper" href="javascript:;"><i class="icon icon-user"></i>个人资料</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-income"></i>收益</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-task"></i>任务</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-log"></i>日志</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-footprint"></i>足迹</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-signin"></i>签收记录</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-saojie"></i>扫街记录</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--row-->
+<!-- Bootstrap core JavaScript================================================== -->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $('body input').val('');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        pickerPosition: "bottom-right",
+        forceParse: 0
+    });
+    var $_haohe_plan = $('.J_kaohebar').width();
+    var $_haohe_planw = $('.J_kaohebar_parents').width();
+    $(".J_btn").attr("disabled", 'disabled');
+    if ($_haohe_planw === $_haohe_plan) {
+        $(".J_btn").removeAttr("disabled");
+    }
+
+</script>
+</body>
+
+</html>
