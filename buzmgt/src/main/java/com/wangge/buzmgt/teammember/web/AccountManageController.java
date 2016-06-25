@@ -374,9 +374,9 @@ public class AccountManageController  extends BaseController{
           ChildAccount cAccount=ca.findbyUserId(Long.parseLong(userid));
           if(status.equals("3")){
             ca.delete(cAccount);
-            if(ca.findChildCountByParentId(cAccount.getChildId()).size()==0){
-              SalesMan man=sm.findByUserId(cAccount.getChildId());
-              man.setIsPrimaryAccount(1);
+            if(ca.findChildCountByParentId(cAccount.getParentId()).size()==0){
+              SalesMan man=sm.findByUserId(cAccount.getParentId());
+              man.setIsPrimaryAccount(0);
               sm.addSalesman(man);
             }
           }else{
