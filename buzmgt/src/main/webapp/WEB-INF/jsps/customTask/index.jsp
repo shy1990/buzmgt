@@ -30,14 +30,14 @@
 
 	{{#if content}}
 		{{#each content}}
-					<tr ondblclick="openDetail({{id}});">
+					<tr>
 						<td><span class="icon-{{qfType type}}">{{typeName}}</span> {{title}}</td>
 						<td class="ssh" title="">
                              <p>
 								<span> {{salesMan}}</span>
 							</p>
 						</td>									
-						<td>{{content}}</td>
+						<td  onclick="openDetail({{id}},{{recieve}});">{{content}}</td>
 						<td>{{time}}</td>  
 						<td>{{recieve}}</td>  
 					</tr>
@@ -183,8 +183,8 @@ p {
 		}
 		
 		findTaskList(0);
-		function openDetail(id){
-			window.location.href="<%=basePath%>customTask/details/"+id;
+		function openDetail(id,recieve){
+			window.location.href="<%=basePath%>customTask/details/"+id+"?recieve="+recieve;
 		}
 	</script>
 </body>

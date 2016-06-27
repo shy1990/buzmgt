@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.ui.Model;
 
+import com.wangge.buzmgt.customTask.entity.CustomMessages;
 import com.wangge.buzmgt.customTask.entity.CustomTask;
 
 
@@ -32,11 +34,29 @@ public interface CustomTaskServer {
 	 * @param searchParams
 	 * @return
 	 */
-	public List<Map<String, Object>> findAll(Pageable page, Map<String, Object> searchParams);
+	public Map<String, Object> findAll(Pageable page, Map<String, Object> searchParams);
 
-	/**通过自定义任务获取相关的业务员ids
+	/**通过自定义任务有回执和无回执的业务员id
 	 * @param customTask
+	 * @param model 
 	 * @return
 	 */
-	public Set<String> getSaleSet(CustomTask customTask);
+	public void getSaleSet(CustomTask customTask, Model model);
+
+	/**通过customid来获取消息列表
+	 * @param customTask
+	 * @param pageReq 
+	 */
+	public Map<String,Object> getMessage(CustomTask customTask, Pageable pageReq);
+
+	/**保存message消息列表
+	 * @param messages
+	 */
+	public void saveMessage(Map<String, Object> messages);
+
+	/**查找最新的消息id
+	 * @param taskId
+	 * @return
+	 */
+	public Object findlastId(Long taskId);
 }

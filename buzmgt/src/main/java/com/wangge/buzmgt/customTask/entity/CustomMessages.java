@@ -8,9 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.wangge.buzmgt.util.DateUtil;
 
 @Entity
 @Table(name = "sys_custom_message")
@@ -26,13 +29,13 @@ public class CustomMessages {
 	// 谈话内容
 	private String content;
 	// 0:消息发起者;1业务员
-	private int Roletype;
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Temporal(TemporalType.DATE)
-	private Date time;
+	private int roletype;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date time=new Date();
 	// 信息读取状态,0未读,1已读
 	private int status;
-
+	@Transient
+	private  String ctime;
 	public Long getId() {
 		return id;
 	}
@@ -65,12 +68,13 @@ public class CustomMessages {
 		this.content = content;
 	}
 
+	
 	public int getRoletype() {
-		return Roletype;
+		return roletype;
 	}
 
 	public void setRoletype(int roletype) {
-		Roletype = roletype;
+		this.roletype = roletype;
 	}
 
 	public Date getTime() {
@@ -92,4 +96,23 @@ public class CustomMessages {
 	public CustomMessages() {
 	}
 
+	public String getCtime() {
+		return ctime;
+	}
+
+	public void setCtime(String ctime) {
+		this.ctime = ctime;
+	}
+	
+	public void setCtime(){
+		this.ctime=DateUtil.date2String(this.time, "MM-dd HH:mm");
+	}
+
+	public CustomMessages(long customtaskId, String salesmanId, String content) {
+		super();
+		this.customtaskId = customtaskId;
+		this.salesmanId = salesmanId;
+		this.content = content;
+	}
+	
 }

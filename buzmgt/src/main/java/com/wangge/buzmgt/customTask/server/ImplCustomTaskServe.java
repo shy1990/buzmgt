@@ -21,7 +21,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
+import com.wangge.buzmgt.customTask.entity.CustomMessages;
 import com.wangge.buzmgt.customTask.entity.CustomTask;
 import com.wangge.buzmgt.customTask.repository.CustomMessagesRepository;
 import com.wangge.buzmgt.customTask.repository.CustomTaskRepository;
@@ -39,7 +41,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 	CustomMessagesRepository messageRep;
 	@Autowired
 	SalesManRepository salesmanRep;
-	private static final String[] TASKTYPEARR = new String[] { "注册", "售后", "扣罚" };
+	public static final String[] TASKTYPEARR = new String[] { "注册", "售后", "扣罚" };
 
 	@Override
 	public Map<String, Object> getList(String salesmanId, Pageable page) {
@@ -70,7 +72,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 	}
 
 	@Override
-	public List<Map<String, Object>> findAll(Pageable page, Map<String, Object> searchParams) {
+	public Map<String,Object> findAll(Pageable page, Map<String, Object> searchParams) {
 		String salesName = searchParams.get("salesName") == null ? "" : searchParams.get("salesName").toString();
 		searchParams.remove("salesName");
 		Page<CustomTask> cpage = customRep.findAll(new Specification<CustomTask>() {
@@ -89,16 +91,17 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 			}
 		}, page);
 		List<CustomTask> cList = cpage.getContent();
+		Map<String,Object> allMap=new HashMap<String,Object>();
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 		for (CustomTask task : cList) {
 			Map<String, Object> datamap = new HashMap<String, Object>();
 			datamap.put("id", task.getId());
 			datamap.put("title", task.getTitle());
 			datamap.put("type", task.getType());
-			datamap.put("typeName", TASKTYPEARR[task.getType()]);			
+			datamap.put("typeName", TASKTYPEARR[task.getType()]);
 			datamap.put("content", task.getContent());
 			datamap.put("time", task.getCreateTime());
-			 Set<SalesMan> saleList = task.getSalesmanSet();
+			Set<SalesMan> saleList = task.getSalesmanSet();
 			String saleNames = "";
 			for (SalesMan man : saleList) {
 				saleNames += man.getTruename() + " ";
@@ -106,32 +109,175 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 			if (saleNames.length() > 1)
 				saleNames = saleNames.substring(0, saleNames.length() - 1);
 			datamap.put("salesMan", saleNames);
-			int status=task.getStatus();
-			if(status==0){
-				datamap.put("recieve","业务员未读" );
-			}else{
-				datamap.put("recieve","有回执" );
-			}
-			if(saleList.size()>0&&status==1){
-				Object[] sum= (Object[]) messageRep.countByRoleType(task.getId());
-				int allsum= Integer.parseInt(sum[1].toString());
-				int unsum=Integer.parseInt(sum[0].toString());
-				if(allsum==1&&saleList.size()==1&&unsum==0){
-					datamap.put("recieve","回执已读");	
-				}
-				else if(allsum>1){
-					datamap.put("recieve",unsum+"/"+allsum );
-				}
-			}
+			getCustomRecieve(task, datamap, saleList);
 			mapList.add(datamap);
 		}
-		return mapList;
+		allMap.put("content", mapList);
+		allMap.put("size", cpage.getSize());
+		allMap.put("totalElements", cpage.getTotalElements());
+		return allMap;
+	}
+
+	/**获取单个customtask的recieve数据
+	 * @param task
+	 * @param datamap
+	 * @param saleList 业务员列表
+	 * @throws NumberFormatException
+	 */
+	private Object getCustomRecieve(CustomTask task, Map<String, Object> datamap, Set<SalesMan> saleList)
+			throws NumberFormatException {
+		int status = task.getStatus();
+		if (status == 0) {
+			datamap.put("recieve", "业务员未读");
+		} else {
+			datamap.put("recieve", "有回执");
+		}
+		if (saleList.size() > 0 && status == 1) {
+			Object[] sum = (Object[]) messageRep.countByRoleType(task.getId());
+			int allsum = Integer.parseInt(sum[1].toString());
+			int unsum = Integer.parseInt(sum[0].toString());
+			if (allsum == 1 && saleList.size() == 1 && unsum == 0) {
+				datamap.put("recieve", "回执已读");
+			} else if (allsum > 1) {
+				datamap.put("recieve", unsum + "/" + allsum);
+			}
+		}
+		return datamap.get("recieve");
 	}
 
 	@Override
-	public Set<String> getSaleSet(CustomTask customTask) {
+	public void getSaleSet(CustomTask customTask, Model model) {
+		Set<String> reSet = messageRep.findByCustomtaskId(customTask.getId());
+		Set<SalesMan> salesmanSet = customTask.getSalesmanSet();
+		List<SalesMan> reList = salesmanRep.findAll(reSet);
+		salesmanSet.removeAll(reList);
+		Set<SalesMan> unreSet = salesmanSet;
+	
+		model.addAttribute("reSet", reList);
+		model.addAttribute("unreSet", unreSet);
+		if (reSet.size() > 0) {
+			String ids = "";
+			for (String s : reSet) {
+				ids += s + ",";
+			}
+			model.addAttribute("resalSet", ids.substring(0, ids.length() - 1));
+		} else {
+			model.addAttribute("resalSet", "null");
+		}
+		if (salesmanSet.size() > 0) {
+			String ids = "";
+			for (SalesMan s : salesmanSet) {
+				ids += s.getId() + ",";
+			}
+			model.addAttribute("unresalSet", ids.substring(0, ids.length() - 1));
+		} else {
+			model.addAttribute("unresalSet", "null");
+		}
+	}
+
+	@Override
+	public Map<String, Object> getMessage(CustomTask customTask, Pageable pageReq) {
 		
-		return null;
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		getCustomRecieve(customTask, returnMap, customTask.getSalesmanSet());
+		
+		Long customId = customTask.getId();
+		Set<String> reSet = messageRep.findbyRoleType(customId);
+		int size = pageReq.getPageSize();
+		int page = pageReq.getPageNumber();
+		int startNum = size * page;
+		int ArrSize = reSet.size() > size * (page + 1) ? size : reSet.size() - startNum;
+		String[] subSet = reSet.toArray(new String[] {});
+		String[] idArr = new String[ArrSize];
+		for (int i = 0; i < ArrSize; i++) {
+			idArr[i] = subSet[startNum + i];
+		}
+		List<CustomMessages> msList = messageRep.findByCustomtaskIdAndSalesmanIdInOrderByTimeAsc(customId, idArr);
+		List<Map<String, Object>> contList = new ArrayList<Map<String, Object>>();
+		Map<String, List<CustomMessages>> remap = new HashMap<String, List<CustomMessages>>();
+		// 聚合分组消息列表
+		for (CustomMessages message : msList) {
+			message.setCtime();
+			String saleid = message.getSalesmanId();
+			List<CustomMessages> mList = remap.get(saleid);
+			if (null == mList) {
+				mList = new ArrayList<CustomMessages>();
+			}
+			mList.add(message);
+			remap.put(saleid, mList);
+		}
+		// 处理分组
+		for (Map.Entry<String, List<CustomMessages>> entry : remap.entrySet()) {
+			Map<String, Object> singleSaleMap = new HashMap<String, Object>();
+			SalesMan man = salesmanRep.findById(entry.getKey());
+			List<CustomMessages> mesageList = entry.getValue();
+			singleSaleMap.put("name", man.getTruename());
+			singleSaleMap.put("salesId", entry.getKey());
+			singleSaleMap.put("size", mesageList.size());
+			singleSaleMap.put("unsize", countUnreadSize(mesageList));
+			singleSaleMap.put("mesList", mesageList);
+			contList.add(singleSaleMap);
+		}
+		returnMap.put("content", contList);
+		returnMap.put("number", reSet.size());
+		returnMap.put("newId", findlastId(customId));
+		returnMap.put("size", size);
+		return returnMap;
+	}
+
+	/**
+	 * 统计每个list中有多少条没有阅读的信息
+	 * 
+	 * @param mesageList
+	 * @return
+	 */
+	private Object countUnreadSize(List<CustomMessages> mesageList) {
+		List<Long> idList = new ArrayList<Long>();
+		int i = 0;
+		for (CustomMessages c : mesageList) {
+			if (c.getRoletype() == 1 && c.getStatus() == 0) {
+				i++;
+				idList.add(c.getId());
+			}
+		}
+		if (idList.size() > 0) {
+			messageRep.updateStatusById(idList);
+		}
+		return i;
+	}
+
+	@Override
+	public void saveMessage(Map<String,Object> messages) {
+		/*"customtaskId" : taskId,
+		"salesmanId" : salesmanIds,
+		"content" : content*/
+		Long customtaskId=Long.parseLong(messages.get("customtaskId").toString());
+		String content=messages.get("content").toString();
+		@SuppressWarnings("unchecked")
+		List<String> salesids=(List<String>) messages.get("salesmanId");
+		List<CustomMessages> mlist=new ArrayList<CustomMessages>();
+		for(String saleid:salesids){
+			CustomMessages message=new CustomMessages(customtaskId,saleid,content);
+			mlist.add(message);
+		}
+		messageRep.save(mlist);
+		Map<String, Object> talMap = new HashMap<String, Object>();
+		List<SalesMan> salesList=salesmanRep.findAll(salesids);
+		String phone="";
+		for(SalesMan man:salesList){
+			phone+=man.getMobile()+",";
+		}
+		talMap.put("mobiles", phone.substring(0,phone.length()-1));
+		talMap.put("msg", "您有新的自定义回复消息");
+		talMap.put("Id", customtaskId);
+		
+		HttpUtil.sendPostJson(AppServer.URL + "customTask", talMap);
+	}
+
+	@Override
+	public Object findlastId(Long taskId) {
+		
+		return messageRep.CountbyCustomtaskId(taskId);
 	}
 
 }

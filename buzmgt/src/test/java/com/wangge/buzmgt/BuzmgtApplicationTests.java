@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.wangge.buzmgt.customTask.repository.CustomMessagesRepository;
 import com.wangge.buzmgt.monthTask.entity.AppServer;
 import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
 import com.wangge.buzmgt.monthTask.repository.MonthOrdersDataRepository;
@@ -75,8 +76,8 @@ public class BuzmgtApplicationTests {
 	MonthOrdersDataRepository monthDataRep;
 	@Resource
 	MonthTaskRepository monTaskRep;
-	
-
+	@Resource
+	CustomMessagesRepository cMesRep;
 	// @Test
 	// @Transactional
 	// public void contextLoads() {
@@ -338,5 +339,10 @@ public class BuzmgtApplicationTests {
 			System.out.println("手机推送月任务出错!!");
 		}
 
+	}
+	@Test
+	public void testD(){
+	Object s=	cMesRep.CountbyCustomtaskId(13);
+	System.out.println(s);
 	}
 }

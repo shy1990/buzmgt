@@ -24,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.WebUtils;
 
+import com.wangge.buzmgt.customTask.entity.CustomMessages;
 import com.wangge.buzmgt.customTask.entity.CustomTask;
 import com.wangge.buzmgt.customTask.server.CustomTaskServer;
+import com.wangge.buzmgt.customTask.server.ImplCustomTaskServe;
 import com.wangge.buzmgt.monthTask.service.MonthTaskService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
@@ -50,7 +52,9 @@ public class CustomTaskController {
 		return "customTask/index";
 	}
 
-	/**查询数据
+	/**
+	 * 查询数据
+	 * 
 	 * @param request
 	 * @param pageRequest
 	 * @return
@@ -61,8 +65,7 @@ public class CustomTaskController {
 		Map<String, Object> repMap = new HashMap<String, Object>();
 		repMap.put("code", "1");
 		try {
-			List<Map<String, Object>> alList = customServ.findAll(pageRequest,searchParams);
-			repMap.put("content", alList);
+			repMap.putAll(customServ.findAll(pageRequest, searchParams));
 		} catch (Exception e) {
 			e.printStackTrace();
 			repMap.put("code", "0");
@@ -74,22 +77,23 @@ public class CustomTaskController {
 
 	}
 
-
-	/**查询单个任务 
+	/**
+	 * 查询单个任务
+	 * 
 	 * @param customTask
 	 * @param request
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> pointdetail(@PathVariable("id") CustomTask customTask, HttpServletRequest request,
-			Model model) {
-
+	@RequestMapping(value = "/messages/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Object> pointdetail(@PathVariable("id") CustomTask customTask, Pageable pageReq,
+			HttpServletRequest request) {
+		Map<String, Object> repMap = new HashMap<String, Object>();
 		try {
-			return new ResponseEntity<Object>(customTask, HttpStatus.OK);
+			repMap = customServ.getMessage(customTask, pageReq);
+			return new ResponseEntity<Object>(repMap, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Map<String, Object> repMap = new HashMap<String, Object>();
 			repMap.put("code", "0");
 			repMap.put("msg", "数据服务器错误");
 			log.debug(e.getStackTrace());
@@ -106,9 +110,11 @@ public class CustomTaskController {
 	 * @return
 	 */
 	@RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
-	public String detail(@PathVariable("id") CustomTask customTask, HttpServletRequest request, Model model) {
+	public String detail(@PathVariable("id") CustomTask customTask, @RequestParam String recieve,
+			HttpServletRequest request, Model model) {
 		model.addAttribute("task", customTask);
-		Set<String> idSet= customServ.getSaleSet(customTask);
+		customServ.getSaleSet(customTask, model);
+		model.addAttribute("taskType", ImplCustomTaskServe.TASKTYPEARR[customTask.getType()]);
 		return "customTask/detail";
 	}
 
@@ -128,7 +134,9 @@ public class CustomTaskController {
 		return "customTask/add";
 	}
 
-	/**保存新建的消息记录
+	/**
+	 * 保存新建的消息记录
+	 * 
 	 * @param customTask
 	 * @return
 	 */
@@ -147,5 +155,28 @@ public class CustomTaskController {
 		}
 		return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.OK);
 
+	}
+
+	@RequestMapping(value = "/messages", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, Object>> createSub(@RequestBody Map<String, Object> messages) {
+		Map<String, Object> repMap = new HashMap<String, Object>();
+		repMap.put("code", "1");
+		try {
+			customServ.saveMessage(messages);
+		} catch (Exception e) {
+			e.printStackTrace();
+			repMap.put("code", "0");
+			repMap.put("msg", e.getMessage());
+			log.debug(e.getStackTrace());
+			return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(value = "/checkUpdate/{taskId}", method = RequestMethod.GET)
+	public ResponseEntity<Object> checkUpdate(@PathVariable("taskId") Long taskId) {
+		Object id = customServ.findlastId(taskId);
+		return new ResponseEntity<Object>(id, HttpStatus.OK);
 	}
 }

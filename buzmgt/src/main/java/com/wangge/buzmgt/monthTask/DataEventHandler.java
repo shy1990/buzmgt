@@ -36,8 +36,7 @@ public class DataEventHandler {
 				monthRep.save(orda);
 				monthTask.setMonthData(orda);
 			}
-
-			// handlePush(monthTask, orda);
+			handlePush(monthTask, orda);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -56,7 +55,7 @@ public class DataEventHandler {
 			Map<String, Object> talMap = new HashMap<String, Object>();
 			talMap.put("mobiles", phone);
 			talMap.put("msg", "下月的月任务已生成");
-			String result = HttpUtil.sendPostJson(AppServer.URL, talMap);
+			String result = HttpUtil.sendPostJson(AppServer.URL+"mainMonthTask", talMap);
 			if (!result.contains("true")) {
 				log.debug("手机推送月任务出错!!" + monthTask);
 			}
