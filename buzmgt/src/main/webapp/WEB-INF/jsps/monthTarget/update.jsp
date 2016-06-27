@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="static/month-target/css/mouth.css">
     <link rel="stylesheet" href="static/multiselect/css/jquery.multiselect.css">
     <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
-    <style>
+ <style>
         ul li{
             list-style-type:none;
         }
@@ -60,7 +60,21 @@
     <!--地区-->
 
     <div class="text-blue text-strong" style="margin-top: 25px; margin-bottom: 25px ">
-        <div style="width: 180px ; float: left;margin-right: 20px">
+
+        <select class="selectpicker demo3" data-live-search="true" >
+            <option data-tokens="ketchup mustard">选择业务员</option>
+            <option data-tokens="mustard">z张花花</option>
+            <option data-tokens="frosting">eee</option>
+            <option data-tokens="frosting">rr</option>
+            <option data-tokens="frosting">ww王ww老豆</option>
+            <option data-tokens="frosting">z张花花</option>
+            <option data-tokens="frosting">z张花花</option>
+            <option data-tokens="frosting">z张花花</option>
+        </select>
+
+
+
+        <!-- <div style="width: 180px ; float: left;margin-right: 20px">
             <form>
                 <select name="basic[]" multiple="multiple" class="demo3" >
 
@@ -73,7 +87,7 @@
                     <option value="WI">槽大小</option>
                 </select>
             </form>
-        </div>
+        </div> -->
 
         <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
             检索
@@ -222,8 +236,6 @@
 
                     </table>
                 </div>
-
-
             </div>
         </div>
         <!--成熟商家-->
@@ -234,9 +246,8 @@
     <div style="text-align: center;background-color: #fafafa">
         <button class="btn btn-primary btn-blue btn-ok" >保存</button>
     </div>
-<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap.min.js"></script>
-<script src="../static/multiselect/js/jquery.multiselect.js"></script>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
+<script src="<%=basePath%>static/multiselect/js/jquery.multiselect.js"></script>
 
 <script>
     $('.menu a,.menu li.active a').click(function () {

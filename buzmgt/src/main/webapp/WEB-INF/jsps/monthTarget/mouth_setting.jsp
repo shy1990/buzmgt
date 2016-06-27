@@ -28,7 +28,7 @@
 
         </div>
         <!--/区域选择按钮-->
-        <a href="/monthTarget/toUpdate" onclick="toUpdate();" class="btn btn-blue"
+        <a href="javascript:;" onclick="toUpdate();" class="btn btn-blue"
            data-toggle="modal" data-target="#xzyw" data-whatever="@mdo">
             <i class="ico icon-add"></i>添加
         </a>
@@ -278,10 +278,11 @@
 <!---alert---->
 
 <![endif]-->
-<script src="../static/bootstrap/js/bootstrap.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="<%=basePath%>static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+<script src="<%=basePath%>static/month-target/js/update.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     $('body input').val('');
     $(".form_datetime").datetimepicker({
@@ -296,12 +297,6 @@
         pickerPosition: "bottom-right",
         forceParse: 0
     });
-    var $_haohe_plan = $('.J_kaohebar').width();
-    var $_haohe_planw = $('.J_kaohebar_parents').width();
-    $(".J_btn").attr("disabled", 'disabled');
-    if ($_haohe_planw === $_haohe_plan) {
-        $(".J_btn").removeAttr("disabled");
-    }
 
     function select() {
         var $listcon = $('.abnormal-table tbody tr'),
