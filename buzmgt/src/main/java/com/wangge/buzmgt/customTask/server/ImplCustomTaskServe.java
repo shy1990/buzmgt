@@ -68,7 +68,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		talMap.put("mobiles", phone);
 		talMap.put("msg", customTask.getTitle());
 		talMap.put("Id", customTask.getId());
-		HttpUtil.sendPostJson(AppServer.URL + "customTask", talMap);
+		HttpUtil.sendPostJson(AppServer.URL + "push/customTask", talMap);
 	}
 
 	@Override
@@ -222,6 +222,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		returnMap.put("number", reSet.size());
 		returnMap.put("newId", findlastId(customId));
 		returnMap.put("size", size);
+		returnMap.put("appUrl", AppServer.URL);
 		return returnMap;
 	}
 

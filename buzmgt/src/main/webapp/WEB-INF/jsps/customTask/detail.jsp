@@ -39,14 +39,15 @@
 							<a data-toggle="collapse" data-parent="#accordion"
 								href="{{dohref salesId}}">
 								<h4 class="panel-title">
-									<span class="text-bluue">{{name}} </span> &nbsp;&nbsp;&nbsp; <i
+						
+			<span class="text-bluue">{{name}} </span> &nbsp;&nbsp;&nbsp; <i
 										class="icon icon-bk pull-right"></i>
 								</h4>
 							</a>
 						</div>
 						<div id="{{salesId}}" class="{{ doCollapse unsize }}"
 							style="padding-bottom: 120px">
-							<span class=" text-or-orange" style="font-size: 12px">回执内容：</span>
+							<span class=" text-or-orange" style="font-size: 12px">会话详情：</span>
 						{{#each mesList}}
 						 {{# compare roletype}}
    							<div class="panel-body">
@@ -202,7 +203,7 @@
 			$("#punish1").css("display", "none");
 		}
 		getMessage(0);
-		window.setInterval(testUpdate,1000*10);
+		window.setInterval(testUpdate,1000*5);
 	</script>
 </body>
 </html>

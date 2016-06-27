@@ -3,6 +3,8 @@ var page = 0;
 var size = 10;
 //判断刷新请求用的
 var newId = "";
+//appserver接口地址
+var appUrl="";
 function getMessage(newPage) {
 	$.ajax({
 		url : '/customTask/messages/' + taskId,
@@ -20,6 +22,7 @@ function getMessage(newPage) {
 			page = newPage;
 			$("#recieve").html(orderData.recieve);
 			newId=orderData.newId;
+			appUrl=orderData.appUrl;
 			var searchTotal = orderData.number;
 
 			if (searchTotal != itemTotal || searchTotal == 0 || page == 0) {
@@ -136,10 +139,11 @@ function postMessage(content, salesmanIds) {
 		}
 	});
 }
+ 
 
 function testUpdate() {
 	$.ajax({
-		url : '/customTask/checkUpdate/' + taskId,
+	url : '/customTask/checkUpdate/' + taskId,
 		type : 'get',
 		dataType : "json",
 		beforeSend : function(request) {
@@ -147,7 +151,7 @@ function testUpdate() {
 		},
 		success : function(id) {
 			if (newId != "") {
-				if (id <newId) {
+				if (id >newId) {
 					newId = id;
 					getMessage(page);
 				}
