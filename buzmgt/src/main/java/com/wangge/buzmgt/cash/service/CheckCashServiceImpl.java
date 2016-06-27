@@ -152,12 +152,20 @@ public class CheckCashServiceImpl implements CheckCashService {
   public void disposeBankTrade(List<BankTrade> bankTrades, CheckCash cc) {
     Float incomeMoney = new Float(0);
     String cardName = "";
-    for (BankTrade woc : bankTrades) {
-      incomeMoney += woc.getMoney();
-      cardName = woc.getCardName();
+    if(bankTrades==null||bankTrades.size()==0){
+      String userId=cc.getUserId();
+      SalesMan salesMan=salesManService.findByUserId(userId);
+      
+      cc.setCardName(salesMan.getTruename());
+    }else{
+      
+      for (BankTrade woc : bankTrades) {
+        incomeMoney += woc.getMoney();
+        cardName = woc.getCardName();
+      }
+      cc.setCardName(cardName);
     }
     cc.setIncomeMoney(incomeMoney);
-    cc.setCardName(cardName);
 
   }
 
