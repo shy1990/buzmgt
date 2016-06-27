@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.teammember.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,4 +31,14 @@ public interface SalesManRepository extends JpaRepository<SalesMan,String>{
   
   /*@Query("ALTER TABLE SalesMan s MODIFY s.region NULL")
   int deleteRegionById(String id);*/
+  
+  /*
+   * 查找某地区下的所有业务
+   */
+  @Query(value = "select * \n" + "  from sys_salesman s\n" + " where  exists (select 1\n"
+      + "       from (select * \n" + "                  from sys_region r\n"
+      + "                 start with r.region_id = ?1 \n"
+      + "                connect by prior r.region_id = r.parent_id) tmp\n"
+      + "         where tmp.region_id = s.region_id)", nativeQuery = true)
+  Set<SalesMan> findForTargetByReginId(String regionId);
 }
