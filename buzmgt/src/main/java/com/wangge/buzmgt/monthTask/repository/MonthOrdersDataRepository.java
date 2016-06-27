@@ -22,8 +22,8 @@ public interface MonthOrdersDataRepository extends JpaRepository<MonthOdersData,
 	 * @return
 	 */
 	@RestResource(path = "defaultfinddata", rel = "defaultfinddata")
-	@Query(" select m from MonthOdersData m where m.month=:month and  (m.salesman.id=:salemanid or m.regionId=:regionid ) "
+	@Query(" select m from MonthOdersData m where m.month=:month and  m.salesman.id=:salemanid   "
 			+ " and m.regionId is not null and m.salesman is not null")
 	public MonthOdersData findFirst1bySalesmanOrRegionId(@Param("salemanid") String salesmanid,
-			@Param("regionid") String regionId, @Param("month") String month);
+			 @Param("month") String month);
 }

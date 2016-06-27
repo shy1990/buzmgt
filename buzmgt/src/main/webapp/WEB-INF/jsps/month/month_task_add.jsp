@@ -42,7 +42,7 @@
 					<div class="form-group clearfix">
 						<label for="basic" class="select-label fl">业务员：</label>
 						<div class="select-area fl">
-							<select id="basic" name="basic[]" multiple="multiple" class="demo2">
+							<select id="basic" name="basic[]" size="5" multiple="multiple" class="demo2">
 								<c:if test="${not empty salesList}">
 									<c:forEach var="sales" items="${salesList}">
 										<option value="${sales.id}">${sales.truename}</option>
@@ -275,7 +275,9 @@
 	<script src="static/js/jquery/jquery-1.11.3.min.js" type="text/javascript"
 		charset="utf-8"></script>
 	<script src="static/bootStrapPager/js/extendPagination.js"></script>
-	<script src="static/multiselect/js/jquery.multiselect.js"></script>
+	<script type="text/javascript"
+		src="/static/customTask/searchSelect/searchSelect.js"></script>
+	
 	<script src='/static/js/common.js'></script>
 	<script src='/static/js/dateutil.js'></script>
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>

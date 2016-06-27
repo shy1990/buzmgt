@@ -16,6 +16,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.SetJoin;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +43,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 	CustomMessagesRepository messageRep;
 	@Autowired
 	SalesManRepository salesmanRep;
+	private Log log = LogFactory.getLog(this.getClass());
 	public static final String[] TASKTYPEARR = new String[] { "注册", "售后", "扣罚" };
 
 	@Override
@@ -50,29 +53,36 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 
 	@Override
 	public void save(CustomTask customTask) throws Exception {
-		Collection<SalesMan> oldSet = customTask.getSalesmanSet();
-		List<String> idList = new ArrayList<String>();
-		for (SalesMan old : oldSet) {
-			idList.add(old.getId());
+		try {
+
+			Collection<SalesMan> oldSet = customTask.getSalesmanSet();
+			List<String> idList = new ArrayList<String>();
+			for (SalesMan old : oldSet) {
+				idList.add(old.getId());
+			}
+			List<SalesMan> newlist = salesmanRep.findAll(idList);
+			customTask.setSalesmanSet(new HashSet<SalesMan>(newlist));
+			customRep.save(customTask);
+			String phone = "";
+			for (SalesMan salesman : newlist) {
+				phone += salesman.getMobile() + ",";
+			}
+			if (phone.length() > 3)
+				phone = phone.substring(0, phone.length() - 1);
+			Map<String, Object> talMap = new HashMap<String, Object>();
+			talMap.put("mobiles", phone);
+			talMap.put("msg", customTask.getTitle());
+			talMap.put("Id", customTask.getId());
+			HttpUtil.sendPostJson(AppServer.URL + "push/customTask", talMap);
+		} catch (Exception e) {
+			log.debug(e);
+			e.printStackTrace();
+			throw e;
 		}
-		List<SalesMan> newlist = salesmanRep.findAll(idList);
-		customTask.setSalesmanSet(new HashSet<SalesMan>(newlist));
-		customRep.save(customTask);
-		String phone = "";
-		for (SalesMan salesman : newlist) {
-			phone += salesman.getMobile() + ",";
-		}
-		if (phone.length() > 3)
-			phone = phone.substring(0, phone.length() - 1);
-		Map<String, Object> talMap = new HashMap<String, Object>();
-		talMap.put("mobiles", phone);
-		talMap.put("msg", customTask.getTitle());
-		talMap.put("Id", customTask.getId());
-		HttpUtil.sendPostJson(AppServer.URL + "push/customTask", talMap);
 	}
 
 	@Override
-	public Map<String,Object> findAll(Pageable page, Map<String, Object> searchParams) {
+	public Map<String, Object> findAll(Pageable page, Map<String, Object> searchParams) {
 		String salesName = searchParams.get("salesName") == null ? "" : searchParams.get("salesName").toString();
 		searchParams.remove("salesName");
 		Page<CustomTask> cpage = customRep.findAll(new Specification<CustomTask>() {
@@ -91,7 +101,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 			}
 		}, page);
 		List<CustomTask> cList = cpage.getContent();
-		Map<String,Object> allMap=new HashMap<String,Object>();
+		Map<String, Object> allMap = new HashMap<String, Object>();
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 		for (CustomTask task : cList) {
 			Map<String, Object> datamap = new HashMap<String, Object>();
@@ -118,10 +128,13 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		return allMap;
 	}
 
-	/**获取单个customtask的recieve数据
+	/**
+	 * 获取单个customtask的recieve数据
+	 * 
 	 * @param task
 	 * @param datamap
-	 * @param saleList 业务员列表
+	 * @param saleList
+	 *            业务员列表
 	 * @throws NumberFormatException
 	 */
 	private Object getCustomRecieve(CustomTask task, Map<String, Object> datamap, Set<SalesMan> saleList)
@@ -152,7 +165,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		List<SalesMan> reList = salesmanRep.findAll(reSet);
 		salesmanSet.removeAll(reList);
 		Set<SalesMan> unreSet = salesmanSet;
-	
+
 		model.addAttribute("reSet", reList);
 		model.addAttribute("unreSet", unreSet);
 		if (reSet.size() > 0) {
@@ -177,10 +190,10 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 
 	@Override
 	public Map<String, Object> getMessage(CustomTask customTask, Pageable pageReq) {
-		
+
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		getCustomRecieve(customTask, returnMap, customTask.getSalesmanSet());
-		
+
 		Long customId = customTask.getId();
 		Set<String> reSet = messageRep.findbyRoleType(customId);
 		int size = pageReq.getPageSize();
@@ -219,7 +232,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 			contList.add(singleSaleMap);
 		}
 		returnMap.put("content", contList);
-		returnMap.put("number", reSet.size());
+		returnMap.put("totalElements", reSet.size());
 		returnMap.put("newId", findlastId(customId));
 		returnMap.put("size", size);
 		returnMap.put("appUrl", AppServer.URL);
@@ -248,36 +261,37 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 	}
 
 	@Override
-	public void saveMessage(Map<String,Object> messages) {
-		/*"customtaskId" : taskId,
-		"salesmanId" : salesmanIds,
-		"content" : content*/
-		Long customtaskId=Long.parseLong(messages.get("customtaskId").toString());
-		String content=messages.get("content").toString();
+	public void saveMessage(Map<String, Object> messages) {
+		/*
+		 * "customtaskId" : taskId, "salesmanId" : salesmanIds, "content" :
+		 * content
+		 */
+		Long customtaskId = Long.parseLong(messages.get("customtaskId").toString());
+		String content = messages.get("content").toString();
 		@SuppressWarnings("unchecked")
-		List<String> salesids=(List<String>) messages.get("salesmanId");
-		List<CustomMessages> mlist=new ArrayList<CustomMessages>();
-		for(String saleid:salesids){
-			CustomMessages message=new CustomMessages(customtaskId,saleid,content);
+		List<String> salesids = (List<String>) messages.get("salesmanId");
+		List<CustomMessages> mlist = new ArrayList<CustomMessages>();
+		for (String saleid : salesids) {
+			CustomMessages message = new CustomMessages(customtaskId, saleid, content);
 			mlist.add(message);
 		}
 		messageRep.save(mlist);
 		Map<String, Object> talMap = new HashMap<String, Object>();
-		List<SalesMan> salesList=salesmanRep.findAll(salesids);
-		String phone="";
-		for(SalesMan man:salesList){
-			phone+=man.getMobile()+",";
+		List<SalesMan> salesList = salesmanRep.findAll(salesids);
+		String phone = "";
+		for (SalesMan man : salesList) {
+			phone += man.getMobile() + ",";
 		}
-		talMap.put("mobiles", phone.substring(0,phone.length()-1));
+		talMap.put("mobiles", phone.substring(0, phone.length() - 1));
 		talMap.put("msg", "您有新的自定义回复消息");
 		talMap.put("Id", customtaskId);
-		
+
 		HttpUtil.sendPostJson(AppServer.URL + "customTask", talMap);
 	}
 
 	@Override
 	public Object findlastId(Long taskId) {
-		
+
 		return messageRep.CountbyCustomtaskId(taskId);
 	}
 

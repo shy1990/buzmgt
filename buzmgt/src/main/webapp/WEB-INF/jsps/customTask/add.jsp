@@ -159,7 +159,7 @@
 									<div class="input-group are-line">
 										<span class="input-group-addon"><i
 											class="icon icon-ren"></i></span> <select id="salesName"
-											multiple="multiple" class="form-control input-h">
+											multiple="multiple" size="5" class="form-control input-h">
 											<option vlue="">请选择接收人</option>
 											<c:forEach items="${salesList}" var="saleman">
 												<option value="${saleman.id}">${saleman.truename}</option>

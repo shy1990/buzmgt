@@ -29,8 +29,7 @@ public class DataEventHandler {
 	@HandleBeforeCreate
 	public void handlePersonCreate(MonthTask monthTask) throws Exception {
 		try {
-			MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId(monthTask.getAgentid(), null,
-					monthTask.getMonth());
+			MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId(monthTask.getAgentid(), monthTask.getMonth());
 			if (null != orda) {
 				orda.setUsed(1);
 				monthRep.save(orda);
@@ -55,7 +54,7 @@ public class DataEventHandler {
 			Map<String, Object> talMap = new HashMap<String, Object>();
 			talMap.put("mobiles", phone);
 			talMap.put("msg", "下月的月任务已生成");
-			String result = HttpUtil.sendPostJson(AppServer.URL+"/push/mainMonthTask", talMap);
+			String result = HttpUtil.sendPostJson(AppServer.URL + "/push/mainMonthTask", talMap);
 			if (!result.contains("true")) {
 				log.debug("手机推送月任务出错!!" + monthTask);
 			}
@@ -64,12 +63,11 @@ public class DataEventHandler {
 
 	@HandleBeforeSave
 	public void handleProfileSave(MonthTask monthTask) {
-//		MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId( monthTask.getAgentid(),null,
-//				monthTask.getMonth());
-//		try {
-//			// handlePush(monthTask, orda);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId(monthTask.getAgentid(), monthTask.getMonth());
+		try {
+			handlePush(monthTask, orda);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
