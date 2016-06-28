@@ -13,7 +13,7 @@ import com.wangge.buzmgt.customTask.entity.CustomTask;
 
 public interface CustomTaskServer {
 	/**
-	 * 获取分页数据
+	 * 查询自定义分页数据
 	 * 
 	 * @param salesmanId
 	 * @param page

@@ -38,6 +38,7 @@ public class DataEventHandler {
 			handlePush(monthTask, orda);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 	}
 
@@ -68,6 +69,7 @@ public class DataEventHandler {
 			handlePush(monthTask, orda);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 	}
 }
