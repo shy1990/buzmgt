@@ -26,8 +26,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**
- * 本模块为自定义任务; 功能:任务保存时向手机端提供推送,并生成任务详情页面链接;手机端用web组件打开 推送可以全体广播或多人推送
- * 推送情况:1.全体推送可选个别区域不推送, 2.区域推送,个别用户不推送;
+ * 本模块为自定义事件; 功能:任务保存时向手机端提供推送,并生成任务详情页面链接;手机端用web组件打开 推送可以全体广播或多人推送
+ * 推送情况:按手机好推送
  * 
  * @author yangqc
  *

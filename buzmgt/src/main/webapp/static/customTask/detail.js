@@ -109,6 +109,10 @@ function fastresp() {
 	} else if (type == 2) {
 		saleIds = reset;
 	}
+	if(saleIds.length<1){
+		alert("该选项无业务员,请选择其他选项");
+		return;
+	}
 	postMessage(content, saleIds);
 }
 // 具体执行,发送到后台

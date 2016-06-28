@@ -36,7 +36,7 @@ public interface CustomTaskServer {
 	 */
 	public Map<String, Object> findAll(Pageable page, Map<String, Object> searchParams);
 
-	/**通过自定义任务有回执和无回执的业务员id
+	/**通过自定义任务查询有回执和无回执的业务员id
 	 * @param customTask
 	 * @param model 
 	 * @return

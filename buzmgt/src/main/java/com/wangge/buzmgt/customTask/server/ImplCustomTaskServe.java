@@ -51,6 +51,13 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		return null;
 	}
 
+	/*
+	 * 保存自定义事件的同时将该事件推送到每个相关业务员手机上
+	 * 
+	 * @see
+	 * com.wangge.buzmgt.customTask.server.CustomTaskServer#save(com.wangge.
+	 * buzmgt.customTask.entity.CustomTask)
+	 */
 	@Override
 	public void save(CustomTask customTask) throws Exception {
 		try {
@@ -63,6 +70,8 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 			List<SalesMan> newlist = salesmanRep.findAll(idList);
 			customTask.setSalesmanSet(new HashSet<SalesMan>(newlist));
 			customRep.save(customTask);
+
+			// 开始推送操作
 			String phone = "";
 			for (SalesMan salesman : newlist) {
 				phone += salesman.getMobile() + ",";
@@ -81,6 +90,14 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		}
 	}
 
+	/*
+	 * SetJoin<CustomTask, SalesMan> setJion = root
+	 * .join(root.getModel().getDeclaredSet("salesmanSet", SalesMan.class),
+	 * JoinType.LEFT); 聚合属性查询,JoinType(inner,left,right);可以看成单个属性的操作
+	 * 
+	 * @see com.wangge.buzmgt.customTask.server.CustomTaskServer#findAll(org.
+	 * springframework.data.domain.Pageable, java.util.Map)
+	 */
 	@Override
 	public Map<String, Object> findAll(Pageable page, Map<String, Object> searchParams) {
 		String salesName = searchParams.get("salesName") == null ? "" : searchParams.get("salesName").toString();
@@ -103,6 +120,8 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		List<CustomTask> cList = cpage.getContent();
 		Map<String, Object> allMap = new HashMap<String, Object>();
 		List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+
+		// 查完组装数据
 		for (CustomTask task : cList) {
 			Map<String, Object> datamap = new HashMap<String, Object>();
 			datamap.put("id", task.getId());
@@ -143,13 +162,15 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		if (status == 0) {
 			datamap.put("recieve", "业务员未读");
 		} else {
-			datamap.put("recieve", "有回执");
+			datamap.put("recieve", "业务员已读");
 		}
 		if (saleList.size() > 0 && status == 1) {
 			Object[] sum = (Object[]) messageRep.countByRoleType(task.getId());
 			int allsum = Integer.parseInt(sum[1].toString());
 			int unsum = Integer.parseInt(sum[0].toString());
-			if (allsum == 1 && saleList.size() == 1 && unsum == 0) {
+			if (allsum == 1 && saleList.size() == 1 && unsum == 1) {
+				datamap.put("recieve", "有回执");
+			} else if (allsum == 1 && saleList.size() == 1 && unsum == 0) {
 				datamap.put("recieve", "回执已读");
 			} else if (allsum > 1) {
 				datamap.put("recieve", unsum + "/" + allsum);
@@ -158,6 +179,9 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		return datamap.get("recieve");
 	}
 
+	/*
+	 * 1.先查出有回执的业务员reset 2.查出所有业务员的allset 3.allset去掉rest里的元素得到无回执的业务员ids
+	 */
 	@Override
 	public void getSaleSet(CustomTask customTask, Model model) {
 		Set<String> reSet = messageRep.findByCustomtaskId(customTask.getId());
@@ -188,12 +212,17 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		}
 	}
 
+	/*
+	 * 功能:实现分页查询自定义事件中的业务员消息对话列表 1.查找分页中的业务员信息 2.根据业务员信息查相关消息 3.消息根据业务员分组
+	 * 4.组装处理分组的消息
+	 */
 	@Override
 	public Map<String, Object> getMessage(CustomTask customTask, Pageable pageReq) {
 
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		getCustomRecieve(customTask, returnMap, customTask.getSalesmanSet());
 
+		// 1.得到所有有消息记录的业务员id(动态获取),2.自动根据size和page来获取分页的业务员
 		Long customId = customTask.getId();
 		Set<String> reSet = messageRep.findbyRoleType(customId);
 		int size = pageReq.getPageSize();
@@ -205,10 +234,12 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		for (int i = 0; i < ArrSize; i++) {
 			idArr[i] = subSet[startNum + i];
 		}
+
+		// 通过业务员来查找信息
 		List<CustomMessages> msList = messageRep.findByCustomtaskIdAndSalesmanIdInOrderByTimeAsc(customId, idArr);
 		List<Map<String, Object>> contList = new ArrayList<Map<String, Object>>();
 		Map<String, List<CustomMessages>> remap = new HashMap<String, List<CustomMessages>>();
-		// 聚合分组消息列表
+		// 用salesmanId(业务员Id)来聚合分组消息到remap
 		for (CustomMessages message : msList) {
 			message.setCtime();
 			String saleid = message.getSalesmanId();
@@ -219,7 +250,8 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 			mList.add(message);
 			remap.put(saleid, mList);
 		}
-		// 处理分组
+
+		// 处理分组,
 		for (Map.Entry<String, List<CustomMessages>> entry : remap.entrySet()) {
 			Map<String, Object> singleSaleMap = new HashMap<String, Object>();
 			SalesMan man = salesmanRep.findById(entry.getKey());
@@ -231,8 +263,10 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 			singleSaleMap.put("mesList", mesageList);
 			contList.add(singleSaleMap);
 		}
+		// 拼接返回数据
 		returnMap.put("content", contList);
 		returnMap.put("totalElements", reSet.size());
+		// 轮询用
 		returnMap.put("newId", findlastId(customId));
 		returnMap.put("size", size);
 		returnMap.put("appUrl", AppServer.URL);
@@ -260,12 +294,12 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		return i;
 	}
 
+	/*
+	 * 功能:1.支持多条聊天消息保存.2.支持消息推送到手机
+	 * 
+	 */
 	@Override
 	public void saveMessage(Map<String, Object> messages) {
-		/*
-		 * "customtaskId" : taskId, "salesmanId" : salesmanIds, "content" :
-		 * content
-		 */
 		Long customtaskId = Long.parseLong(messages.get("customtaskId").toString());
 		String content = messages.get("content").toString();
 		@SuppressWarnings("unchecked")
@@ -276,6 +310,8 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 			mlist.add(message);
 		}
 		messageRep.save(mlist);
+
+		// 推送到手机中
 		Map<String, Object> talMap = new HashMap<String, Object>();
 		List<SalesMan> salesList = salesmanRep.findAll(salesids);
 		String phone = "";
@@ -289,10 +325,14 @@ public class ImplCustomTaskServe implements CustomTaskServer {
 		HttpUtil.sendPostJson(AppServer.URL + "customTask", talMap);
 	}
 
+	/*
+	 * 通过前端不断轮询,得打最新的id,与前端js的对比,如果值大的话就重新加载前端的消息列表
+	 * 
+	 */
 	@Override
 	public Object findlastId(Long taskId) {
-
-		return messageRep.CountbyCustomtaskId(taskId);
+		Object id = messageRep.CountbyCustomtaskId(taskId);
+		return null == id ? 0 : id;
 	}
 
 }

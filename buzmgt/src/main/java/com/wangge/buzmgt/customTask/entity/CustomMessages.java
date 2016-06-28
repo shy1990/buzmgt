@@ -15,6 +15,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.wangge.buzmgt.util.DateUtil;
 
+/**自定义事件下的消息
+ * @author yangqc
+ *
+ */
 @Entity
 @Table(name = "sys_custom_message")
 public class CustomMessages {

@@ -37,7 +37,7 @@
 								<span> {{salesMan}}</span>
 							</p>
 						</td>									
-						<td  onclick="openDetail({{id}},{{recieve}});">{{content}}</td>
+						<td  onclick="openDetail({{id}});">{{content}}</td>
 						<td>{{time}}</td>  
 						<td>{{recieve}}</td>  
 					</tr>
@@ -183,8 +183,8 @@ p {
 		}
 		
 		findTaskList(0);
-		function openDetail(id,recieve){
-			window.location.href="<%=basePath%>customTask/details/"+id+"?recieve="+recieve;
+		function openDetail(id){
+			window.location.href="<%=basePath%>customTask/details/"+id;
 		}
 	</script>
 </body>

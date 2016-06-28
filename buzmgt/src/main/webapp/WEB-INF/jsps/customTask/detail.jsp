@@ -71,7 +71,7 @@
 		{{/each}}
 	{{else}}
 		<tr>
-			<td colspan="100">没有相关数据</td>
+			<td colspan="100">没有消息记录</td>
 		</tr>
 	{{/if}}
 </script>
@@ -122,7 +122,7 @@
 
 					<div class="text-hor" id="punish">
 						<label class="col-sm-2">扣罚：</label>
-						<p class="col-sm-10" style="line-height: 30px">${task.punishCount}元</p>
+						<p class="col-sm-10" style="line-height: 25px;"><span style="color:red;font-size:30;">${task.punishCount}</span>元</p>
 					</div>
 					<div class="hr" id="punish1"></div>
 
