@@ -1,8 +1,9 @@
 ﻿<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
-  String path = request.getContextPath();
-			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-					+ path + "/";
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+            + path + "/";
+    System.out.print(basePath);
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -21,10 +22,13 @@
     <link rel="stylesheet" type="text/css" href="../static/kaohe/kaohe-det.css"/>
     <link rel="stylesheet" type="text/css" href="../static/yw-team-member/team-member.css"/>
     <link rel="stylesheet" type="text/css" href="../static/yw-team-member/ywmember.css"/>
-    <link rel="stylesheet" type="text/css" href="css/mouth.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/month-target/css/mouth.css"/>
     <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/task/task.css">
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+    <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
+
 </head>
 
 <body>
@@ -68,22 +72,23 @@
                 </div>
                 <!--日期、筛选、导出-->
                 <div class="input-m">
-                    <div class="search-date" style="width: 187px ">
+                    <div class="search-date">
                         <div class="input-group input-group-sm">
-                            <span class="input-group-addon " id="basic-addon1"><i
-                                    class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-                            <input type="text" class="form-control form_datetime input-sm" placeholder="选择日期"
+	                <span class="input-group-addon " id="basic-addon1"><i
+                            class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+                            <input id="searchTime" type="text" class="form-control form_datetime input-sm" placeholder="选择日期"
                                    readonly="readonly" style="background-color: #FFFFFF">
                         </div>
                     </div>
-                    <button class="btn btn-sx " style="padding:  3px 12px 3px 10px">筛选</button>
+
+                    <button id="listByDate" class="btn btn-sx " style="padding:  3px 12px 3px 10px">筛选</button>
                 </div>
 
 
                 <div class="link-posit-t pull-right export" style="margin-top: -55px">
-                    <input class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
-                    <button class="btn btn-sx " style="padding:  3px 12px 3px 10px"onclick="goSearch('${salesman.id}','${assess.id}');">
-                        检索
+                    <input id="searchName" class="cs-select  text-gery-hs" placeholder="请输入商家名称">
+                    <button class="btn btn-sx " style="padding:  3px 12px 3px 10px" id="listByName">
+                        <检索></检索>
                     </button>
                     <a class="table-export" href="javascript:void(0);">导出excel</a>
                 </div>
@@ -103,144 +108,25 @@
                             <th>日期</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
+                        <tbody id="tbody">
+                        <%--<tr>--%>
+                            <%--<td><a href="">历下区冠之霖卖场泉城店</a></td>--%>
+                            <%--<td>200</td>--%>
+                            <%--<td>2</td>--%>
+                            <%--<td>--%>
+                                <%--18855514445--%>
+                            <%--</td>--%>
+                            <%--<td>历下区泉城路</td>--%>
+                            <%--<td>2016.06.01-2016.07.05</td>--%>
+                        <%--</tr>--%>
 
 
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="">历下区冠之霖卖场泉城店</a></td>
-                            <td>200</td>
-                            <td>2</td>
-                            <td>
-                                18855514445
-                            </td>
-                            <td>历下区泉城路</td>
-                            <td>2016.06.01-2016.07.05</td>
-                        </tr>
 
 
                         </tbody>
                     </table>
                 </div>
+                <div id="callBackPager"></div>
                 <!--title-->
                 <!--box-body-->
                 <div class="box-body-new">
@@ -263,7 +149,7 @@
                 <div class="box-body">
                     <!--ywmamber-body-->
                     <div class="ywmamber-body">
-                        <img width="80" src="../static/img/background/user-head.png" alt="..." class="img-circle">
+                        <img width="80" src="../static/img/user-head.png" alt="..." class="img-circle">
                         <div class="msg-text">
                             <h4>易小星</h4>
                             <p>ID: A236743252</p>
@@ -325,11 +211,11 @@
 <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 <script src="../static/bootstrap/js/bootstrap.min.js"></script>
-<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript">
-    $('body input').val('');
     $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
+        format: "yyyy-mm",
         language: 'zh-CN',
         weekStart: 1,
         todayBtn: 1,
@@ -340,6 +226,7 @@
         pickerPosition: "bottom-right",
         forceParse: 0
     });
+
     var $_haohe_plan = $('.J_kaohebar').width();
     var $_haohe_planw = $('.J_kaohebar_parents').width();
     $(".J_btn").attr("disabled", 'disabled');
@@ -347,6 +234,157 @@
         $(".J_btn").removeAttr("disabled");
     }
 
+</script>
+<script id="tbody-template" type="text/x-handlebars-template">
+    {{#each this}}
+    <tr>
+        <td>{{shopName}}</td>
+        <td>{{numsOne}}</td>
+        <td>{{count}}</td>
+        <td>{{phoneNmu}}</td>
+        <td>{{regionName}}</td>
+        <td>{{time}}</td>
+        <td></td>
+    </tr>
+    {{/each}}
+</script>
+<script type="text/javascript">
+    //日期格式化
+    Date.prototype.format =function(format)
+    {
+        var o = {
+            "M+" : this.getMonth()+1, //month
+            "d+" : this.getDate(), //day
+            "h+" : this.getHours(), //hour
+            "m+" : this.getMinutes(), //minute
+            "s+" : this.getSeconds(), //second
+            "q+" : Math.floor((this.getMonth()+3)/3), //quarter
+            "S" : this.getMilliseconds() //millisecond
+        }
+        if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+                (this.getFullYear()+"").substr(4- RegExp.$1.length));
+        for(var k in o)if(new RegExp("("+ k +")").test(format))
+            format = format.replace(RegExp.$1,
+                    RegExp.$1.length==1? o[k] :
+                            ("00"+ o[k]).substr((""+ o[k]).length));
+        return format;
+    }
+    var myDate = new Date().format('yyyy-MM');
+
+    $(function () {
+        monthTargetData.searchData.time = myDate;
+        //页面初始化
+        monthTargetData.detail.init(monthTargetData.searchData);
+
+        //商家名称检索
+        $("#listByName").click(function(){
+            var name = $("#searchName").val();
+            console.log(name+"========");
+            monthTargetData.searchData.name = name;
+            monthTargetData.searchData.page = 0;
+            monthTargetData.findByName(monthTargetData.searchData);
+
+        });
+
+
+        //根据时间检索
+        $("#listByDate").click(function(){
+            var searchTime = $("#searchTime").val();
+
+            monthTargetData.searchData.time = searchTime;
+            monthTargetData.searchData.page = 0;
+            console.log(monthTargetData.searchData);
+            monthTargetData.findByDate(monthTargetData.searchData);
+
+        });
+
+
+
+
+
+    });
+
+    var monthTargetData = {
+        //初始化参数
+        searchData: {
+            page: 0,
+            size: 3,
+            time: '',
+            name: ''
+        },
+        //分页参数
+        _count: {
+            totalCount: 0,
+            limit: 0,
+            total: -1
+        },
+
+        //调用的url
+        url: {
+            listAll: function () {
+                return 'mothTargetData/mothTargetDatas';
+            }
+        },
+        //查询全部的方法
+        findAll: function (searchData) {
+            $.ajax({
+                url: monthTargetData.url.listAll(),
+                data: searchData,
+                success: function (data) {
+                    console.log(data);
+                    monthTargetData.handelerbars_register(data.content);
+                    monthTargetData._count.totalCount = data.totalElements;//总页数
+                    monthTargetData._count.limit = data.size;
+                    if (monthTargetData._count.totalCount != monthTargetData._count.total || monthTargetData._count.totalCount == 0) {
+                        monthTargetData._count.total = monthTargetData._count.totalCount;
+                        monthTargetData.initPaging();
+                    }
+
+                }
+            });
+        },
+        //根据商家名检索
+        findByName:function(searchData){
+            monthTargetData._count.total = -1;
+            monthTargetData.findAll(searchData);
+
+        },
+        findByDate:function(searchData){
+            monthTargetData._count.total = -1;
+            monthTargetData.findAll(searchData);
+        },
+
+        //handelerbars填充数据
+        handelerbars_register:function(content){
+            var driver_template = Handlebars.compile($("#tbody-template").html());//注册
+            $("#tbody").html(driver_template(content));//填充数据
+
+        },
+        //分页工具
+        initPaging: function () {
+            $('#callBackPager').extendPagination({
+                totalCount: monthTargetData._count.totalCount,//总条数
+                showCount: 5,//下面小图标显示的个数
+                limit: monthTargetData._count.limit,//每页显示的条数
+                callback: function (curr, limit, totalCount) {
+                    monthTargetData.searchData.page = curr - 1;
+                    monthTargetData.searchData.size = limit;
+                    monthTargetData.findAll(monthTargetData.searchData);
+                }
+            });
+        },
+
+
+        //页面初始化
+        detail: {
+            init: function (args) {
+                console.log(args);
+                monthTargetData.findAll(args);
+            }
+
+        }
+
+    }
 </script>
 </body>
 
