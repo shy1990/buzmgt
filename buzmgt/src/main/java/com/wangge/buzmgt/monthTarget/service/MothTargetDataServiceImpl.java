@@ -37,46 +37,75 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
      * pageNum:当前页
      * limit：显示几条
      * */
-    public Page<MothTargetData> getMothTargetDatas(String time,Integer page,Integer size) {
+    public Page<MothTargetData> getMothTargetDatas(String name, String time, Integer page, Integer size) {
+
+        String sql = "select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t where to_char(createtime,'yyyy-mm-dd') LIKE ? group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId ";
+        Query query = null;
+        SQLQuery sqlQuery = null;
+        if (name != null && !"".equals(name)) {
+            sql = "select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t " +
+                    " where to_char(createtime,'yyyy-mm-dd') LIKE ? " +
+                    " and t.shopName like ? " +
+                    " group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId";
+            query = entityManager.createNativeQuery(sql);
+            sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
+            int l = 0;
+            sqlQuery.setParameter(l, "%" + time + "%");//日期参数
+            int a = 1;
+            sqlQuery.setParameter(a, "%" + name + "%");//商家名字参数
+
+        } else {
+            query = entityManager.createNativeQuery(sql);
+            sqlQuery = query.unwrap(SQLQuery.class);
+            int l = 0;
+            sqlQuery.setParameter(l, "%"+time+"%");//日期参数
+        }
         //根据日期查询
-        Query query = entityManager.createNativeQuery("select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t where to_char(createtime,'yyyy-mm-dd') LIKE ? group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId  ");
-        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
+//        query = entityManager.createNativeQuery("select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t where to_char(createtime,'yyyy-mm-dd') LIKE ? group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId  ");
+//        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
         Page<MothTargetData> pageResult = null;
-        int l = 0;
-        try{
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-DD");
-            Date d = simpleDateFormat.parse("2016-06-16");
-            sqlQuery.setParameter(l, "%2016-06%");//日期参数
-            sqlQuery.setFirstResult(page * size);
-            sqlQuery.setMaxResults(size);
-            List<MothTargetData> mtdList = new ArrayList<>();
-            List<Object[]> ret = sqlQuery.list();
-            int count = sqlQuery.list().size();//分页查询出总条数
-            System.out.println(count+"-------");
-            if (CollectionUtils.isNotEmpty(ret)) {
-                ret.forEach(o -> {
-                    MothTargetData mtd = new MothTargetData();
-                    mtd.setOrderId((String)o[0]);
-                    mtd.setMemberId((String)o[1]);
-                    mtd.setRegionId((String)o[4]);
-                    mtd.setPhoneNmu((String)o[2]);
-                    mtd.setShopName((String) o[3]);
-                    Region region = regionService.findListRegionbyid((String)o[4]);
-                    mtd.setRegion(region);
-                    mtd.setNumsOne((BigDecimal) o[5]);
-                    mtd.setCount((BigDecimal)o[6]);
-                    mtdList.add(mtd);
-                });
-            }
-            pageResult = new PageImpl<MothTargetData>(mtdList,new PageRequest(page,size),count);
-            System.out.println(pageResult+"******");
+//        int l = 0;
+//            sqlQuery.setParameter(l, "%2016-06%");//日期参数
+
+        int count = sqlQuery.list().size();//分页查询出总条数(不是分页之后的)
+        sqlQuery.setFirstResult(page * size);//设置开始位置
+        sqlQuery.setMaxResults(size);//每页显示条数
+        List<MothTargetData> mtdList = new ArrayList<>();
+        List<Object[]> ret = sqlQuery.list();
+        System.out.println(count + "-------");
+        if (CollectionUtils.isNotEmpty(ret)) {
+            ret.forEach(o -> {
+                MothTargetData mtd = new MothTargetData();
+                mtd.setOrderId((String) o[0]);
+                mtd.setMemberId((String) o[1]);
+                mtd.setRegionId((String) o[4]);
+                mtd.setPhoneNmu((String) o[2]);
+                mtd.setShopName((String) o[3]);
+                Region region = regionService.findListRegionbyid((String) o[4]);
+                mtd.setRegionName(region.getName());
+                System.out.println(region.getType());
+//                mtd.setRegionName("ppppppp");
+                mtd.setNumsOne((BigDecimal) o[5]);
+                mtd.setCount((BigDecimal) o[6]);
+                mtd.setTime(time);
+                mtdList.add(mtd);
+            });
+        }
+        pageResult = new PageImpl<MothTargetData>(mtdList, new PageRequest(page, size), count);
+        System.out.println(pageResult + "******");
 //            mtdList.forEach(mtd -> {
 //                System.out.println(mtd);
 //            });
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
 
         return pageResult;
     }
+
+
+//    public static String regionName(Region region){
+//        switch (region.getType())
+//
+//
+//        return null;
+//
+//    }
 }
