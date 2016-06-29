@@ -51,7 +51,7 @@ public class SceduleOfMonthOrders {
 
 	// 每月15号点时分 0 30 1 15 * ?
 	@SuppressWarnings("unchecked")
-  @Scheduled(cron = " 0 30 1 15 * ? ")
+  @Scheduled(cron = " 0 10 18 * * ? ")
 	public void handleMontholdData() {
 		List<Object[]> townList = em.createNativeQuery(townSql).getResultList();
 		for (Object[] towns : townList) {
@@ -70,7 +70,7 @@ public class SceduleOfMonthOrders {
 	 * @throws NumberFormatException
 	 */
 	private void handleOneTownOrders(String town, String salemanid, String salemanName) throws NumberFormatException {
-		String sql = MonthTaskServiceImpl.lsdatasql.replace("$town", salemanid);
+		String sql = MonthTaskServiceImpl.lsdatasql.replace("$town", town);
 		// 得出三个月的数据sql
 		sql += "union " + sql.replace("'1' month", "'2' month") + " union " + sql.replace("'1' month", "'3' month");
 		Query q = em.createNativeQuery(sql);
@@ -115,7 +115,7 @@ public class SceduleOfMonthOrders {
 			int sum = sum1[i] + sum2[i] + sum3[i];
 			sum4[i] = sum % 3 == 0 ? sum / 3 : (sum / 3 + 1);
 		}
-		String vsSql = MonthTaskServiceImpl.lsVisitSql.replace("$town", salemanid);
+		String vsSql = MonthTaskServiceImpl.lsVisitSql.replace("$town", town);
 		@SuppressWarnings("unchecked")
     List<Object[]> visList = em.createNativeQuery(vsSql).getResultList();
 		for (Object[] vist : visList) {

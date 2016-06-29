@@ -37,19 +37,19 @@ import com.wangge.buzmgt.util.HttpUtil;
 @Service
 public class ImplCustomTaskServe implements CustomTaskServer {
   @Autowired
-  CustomTaskRepository         customRep;
+  CustomTaskRepository customRep;
   @Autowired
-  CustomMessagesRepository     messageRep;
+  CustomMessagesRepository messageRep;
   @Autowired
-  SalesManRepository           salesmanRep;
-  private Log                  log         = LogFactory.getLog(this.getClass());
+  SalesManRepository salesmanRep;
+  private Log log = LogFactory.getLog(this.getClass());
   public static final String[] TASKTYPEARR = new String[] { "注册", "售后", "扣罚" };
-
+  
   @Override
   public Map<String, Object> getList(String salesmanId, Pageable page) {
     return null;
   }
-
+  
   /*
    * 保存自定义事件的同时将该事件推送到每个相关业务员手机上
    * 
@@ -59,7 +59,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
   @Override
   public void save(CustomTask customTask) throws Exception {
     try {
-
+      
       Collection<SalesMan> oldSet = customTask.getSalesmanSet();
       List<String> idList = new ArrayList<String>();
       for (SalesMan old : oldSet) {
@@ -68,7 +68,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
       List<SalesMan> newlist = salesmanRep.findAll(idList);
       customTask.setSalesmanSet(new HashSet<SalesMan>(newlist));
       customRep.save(customTask);
-
+      
       // 开始推送操作
       String phone = "";
       for (SalesMan salesman : newlist) {
@@ -87,7 +87,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
       throw e;
     }
   }
-
+  
   /*
    * SetJoin<CustomTask, SalesMan> setJion = root
    * .join(root.getModel().getDeclaredSet("salesmanSet", SalesMan.class),
@@ -101,7 +101,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     String salesName = searchParams.get("salesName") == null ? "" : searchParams.get("salesName").toString();
     searchParams.remove("salesName");
     Page<CustomTask> cpage = customRep.findAll(new Specification<CustomTask>() {
-
+      
       @Override
       public Predicate toPredicate(Root<CustomTask> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<Predicate>();
@@ -111,14 +111,14 @@ public class ImplCustomTaskServe implements CustomTaskServer {
           predicates.add(cb.like(setJion.get("truename"), "%" + salesName + "%"));
         }
         PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
-
+        
         return cb.and(predicates.toArray(new Predicate[] {}));
       }
     }, page);
     List<CustomTask> cList = cpage.getContent();
     Map<String, Object> allMap = new HashMap<String, Object>();
     List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
-
+    
     // 查完组装数据
     for (CustomTask task : cList) {
       Map<String, Object> datamap = new HashMap<String, Object>();
@@ -144,7 +144,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     allMap.put("totalElements", cpage.getTotalElements());
     return allMap;
   }
-
+  
   /**
    * 获取单个customtask的recieve数据
    * 
@@ -176,7 +176,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     }
     return datamap.get("recieve");
   }
-
+  
   /*
    * 1.先查出有回执的业务员reset 2.查出所有业务员的allset 3.allset去掉rest里的元素得到无回执的业务员ids
    */
@@ -187,7 +187,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     List<SalesMan> reList = salesmanRep.findAll(reSet);
     salesmanSet.removeAll(reList);
     Set<SalesMan> unreSet = salesmanSet;
-
+    
     model.addAttribute("reSet", reList);
     model.addAttribute("unreSet", unreSet);
     if (reSet.size() > 0) {
@@ -209,17 +209,17 @@ public class ImplCustomTaskServe implements CustomTaskServer {
       model.addAttribute("unresalSet", "null");
     }
   }
-
+  
   /*
    * 功能:实现分页查询自定义事件中的业务员消息对话列表 1.查找分页中的业务员信息 2.根据业务员信息查相关消息 3.消息根据业务员分组
    * 4.组装处理分组的消息
    */
   @Override
   public Map<String, Object> getMessage(CustomTask customTask, Pageable pageReq) {
-
+    
     Map<String, Object> returnMap = new HashMap<String, Object>();
     getCustomRecieve(customTask, returnMap, customTask.getSalesmanSet());
-
+    
     // 1.得到所有有消息记录的业务员id(动态获取),2.自动根据size和page来获取分页的业务员
     Long customId = customTask.getId();
     Set<String> reSet = messageRep.findbyRoleType(customId);
@@ -232,7 +232,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     for (int i = 0; i < ArrSize; i++) {
       idArr[i] = subSet[startNum + i];
     }
-
+    
     // 通过业务员来查找信息
     List<CustomMessages> msList = messageRep.findByCustomtaskIdAndSalesmanIdInOrderByTimeAsc(customId, idArr);
     List<Map<String, Object>> contList = new ArrayList<Map<String, Object>>();
@@ -248,7 +248,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
       mList.add(message);
       remap.put(saleid, mList);
     }
-
+    
     // 处理分组,
     for (Map.Entry<String, List<CustomMessages>> entry : remap.entrySet()) {
       Map<String, Object> singleSaleMap = new HashMap<String, Object>();
@@ -273,7 +273,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     returnMap.put("appUrl", AppServer.URL);
     return returnMap;
   }
-
+  
   /**
    * 统计每个list中有多少条没有阅读的信息
    * 
@@ -294,7 +294,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     }
     return i;
   }
-
+  
   /*
    * 功能:1.支持多条聊天消息保存.2.支持消息推送到手机
    * 
@@ -311,7 +311,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
       mlist.add(message);
     }
     messageRep.save(mlist);
-
+    
     // 推送到手机中
     Map<String, Object> talMap = new HashMap<String, Object>();
     List<SalesMan> salesList = salesmanRep.findAll(salesids);
@@ -322,10 +322,10 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     talMap.put("mobiles", phone.substring(0, phone.length() - 1));
     talMap.put("msg", "您有新的自定义回复消息");
     talMap.put("Id", customtaskId);
-
+    
     HttpUtil.sendPostJson(AppServer.URL + "customTask", talMap);
   }
-
+  
   /*
    * 通过前端不断轮询,得打最新的id,与前端js的对比,如果值大的话就重新加载前端的消息列表
    * 
@@ -335,5 +335,5 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     Object id = messageRep.CountbyCustomtaskId(taskId);
     return null == id ? 0 : id;
   }
-
+  
 }

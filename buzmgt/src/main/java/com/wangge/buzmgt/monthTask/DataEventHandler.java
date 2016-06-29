@@ -20,9 +20,9 @@ import com.wangge.buzmgt.util.HttpUtil;
 public class DataEventHandler {
   @Autowired
   private MonthOrdersDataRepository monthRep;
-
-  private Log                       log = LogFactory.getLog(DataEventHandler.class);
-
+  
+  private Log log = LogFactory.getLog(this.getClass());
+  
   /*
    * TODO 目前将信息推动事项关闭,以后需要会开启
    */
@@ -38,10 +38,11 @@ public class DataEventHandler {
       // handlePush(monthTask, orda);
     } catch (Exception e) {
       e.printStackTrace();
+      log.debug(e);
       throw e;
     }
   }
-
+  
   /**
    * 实现月任务发布推送
    * 
@@ -61,7 +62,7 @@ public class DataEventHandler {
       }
     }
   }
-
+  
   @HandleBeforeSave
   public void handleProfileSave(MonthTask monthTask) {
     try {
@@ -69,6 +70,7 @@ public class DataEventHandler {
       // handlePush(monthTask, orda);
     } catch (Exception e) {
       e.printStackTrace();
+      log.debug(e);
       throw e;
     }
   }
