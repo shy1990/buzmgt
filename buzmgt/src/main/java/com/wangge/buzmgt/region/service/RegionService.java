@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
@@ -39,4 +40,5 @@ public interface RegionService {
    */
   public void disposeSearchParams(String Column, Map<String, Object> searchParams);
 
+  public List<Region> findByTypeOrderById(RegionType type);
 }

@@ -15,8 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
@@ -37,7 +35,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @SecondaryTable(name = "SYS_COORDINATES")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@NamedEntityGraph(name="region.graph",attributeNodes={@NamedAttributeNode(value="parent"),@NamedAttributeNode(value="children")})
 public class Region implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -68,7 +65,7 @@ public class Region implements Serializable {
 	private RegionType type;
 
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PARENT_ID")
 	private Region parent;
 
@@ -156,10 +153,8 @@ public class Region implements Serializable {
     this.centerPoint = centerPoint;
   }
 
-  @Override
-  public String toString() {
-    return "Region [id=" + id + ", name=" + name + ", coordinates="
-        + coordinates + ", type=" + type + ", centerPoint=" + centerPoint + "]";
-  }
-
+  
+	
+	
+	
 }

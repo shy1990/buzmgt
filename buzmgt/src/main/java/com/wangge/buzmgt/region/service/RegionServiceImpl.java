@@ -176,6 +176,9 @@ public class RegionServiceImpl implements RegionService {
     return regionArr;
   }
 
-
+  @Override
+  public List<Region> findByTypeOrderById(RegionType type) {
+    return regionRepository.findByTypeOrderById(type);
+  }
  
 }

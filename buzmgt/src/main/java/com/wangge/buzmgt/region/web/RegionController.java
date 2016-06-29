@@ -4,6 +4,8 @@ package com.wangge.buzmgt.region.web;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -159,13 +161,15 @@ public class RegionController {
 	public ResponseEntity<Region>   editRegion(String id,String pid,String name) {
 		logger.debug(pid+name);
 		
-		Region region=regionService.findListRegionbyid(pid);
+		Region region=regionService.findListRegionbyid(id);
 		Long maxid=Long.parseLong(id);
 		Region newRegion=new Region(String.valueOf(maxid),name,RegionUtil.getTYpe(region));
 		newRegion.setParent(region);
-		regionService.saveRegion(newRegion);
+		region.setName(name);
+		region.setParent(regionService.findListRegionbyid(pid));
+		regionService.saveRegion(region);
 		logger.debug(region);
-		return new ResponseEntity<Region>(newRegion,HttpStatus.OK);
+		return new ResponseEntity<Region>(region,HttpStatus.OK);
 	}
 	
 	
@@ -183,10 +187,8 @@ public class RegionController {
 	@RequestMapping(value = "/dragRegion", method = RequestMethod.POST)
 	public void dragRegion(String id, String pid) {
 		Region region = regionService.findListRegionbyid(id);
-		Region newRegion=new Region(region.getId(),region.getName(),RegionUtil.getTYpe(regionService.findListRegionbyid(pid)));
-		newRegion.setParent(region);
-		newRegion.setParent(regionService.findListRegionbyid(pid));
-		regionService.saveRegion(newRegion);
+		region.setParent(regionService.findListRegionbyid(pid));
+		regionService.saveRegion(region);
 	}
 	
 	
@@ -228,6 +230,10 @@ public class RegionController {
 		Region region = regionService.findListRegionbyid(parentid);
 		List<Region> listRegion =new ArrayList<Region>();
 		for(Region reg:region.getChildren()){
+			Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+            Matcher m = p.matcher(reg.getName());
+            String name = m.replaceAll("");
+            reg.setName(name);
 			listRegion.add(reg);
 		}
 		String name=regionName;
@@ -239,8 +245,8 @@ public class RegionController {
 		model.addAttribute("parentName",region.getParent().getName());
  		model.addAttribute("jsonData", listRegion);
  		model.addAttribute("regionName", name);
-    model.addAttribute("parentid", parentid);
-    model.addAttribute("pcoordinates",pcoordinates);
+ 		model.addAttribute("parentid", parentid);
+ 		model.addAttribute("pcoordinates",pcoordinates);
 		return "region/region_map";
 	}
 	
