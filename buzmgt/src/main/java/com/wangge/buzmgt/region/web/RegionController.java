@@ -4,6 +4,8 @@ package com.wangge.buzmgt.region.web;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -228,6 +230,10 @@ public class RegionController {
 		Region region = regionService.findListRegionbyid(parentid);
 		List<Region> listRegion =new ArrayList<Region>();
 		for(Region reg:region.getChildren()){
+			Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+            Matcher m = p.matcher(reg.getName());
+            String name = m.replaceAll("");
+            reg.setName(name);
 			listRegion.add(reg);
 		}
 		String name=regionName;
@@ -239,8 +245,8 @@ public class RegionController {
 		model.addAttribute("parentName",region.getParent().getName());
  		model.addAttribute("jsonData", listRegion);
  		model.addAttribute("regionName", name);
-    model.addAttribute("parentid", parentid);
-    model.addAttribute("pcoordinates",pcoordinates);
+ 		model.addAttribute("parentid", parentid);
+ 		model.addAttribute("pcoordinates",pcoordinates);
 		return "region/region_map";
 	}
 	

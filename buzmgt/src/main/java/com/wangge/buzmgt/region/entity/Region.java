@@ -58,7 +58,7 @@ public class Region implements Serializable {
 	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
-	@Column(table = "SYS_COORDINATES", columnDefinition = "CLOB", name = "content",updatable=false)
+	@Column(table = "SYS_COORDINATES", columnDefinition = "CLOB", name = "content",updatable=true)
 	private String coordinates;
 
 	@Enumerated(EnumType.ORDINAL)

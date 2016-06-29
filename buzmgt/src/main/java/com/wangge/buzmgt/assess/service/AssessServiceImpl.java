@@ -273,7 +273,12 @@ public class AssessServiceImpl implements AssessService {
   public RegistData findRegistData(Long registId) {
     return rdr.findRegistDataById(registId);
   }
-
+  
+  @Override
+  public void saveRegistData(RegistData registData) {
+     rdr.save(registData);
+  }
+  
   @Override
   public Assess findByStageAndSalesman(String stage,String userId) {
     return assessRepository.findByStageAndSalesman(stage,userId);

@@ -135,7 +135,14 @@
 						 		  		%>
 						 <%
 									}%>
+									
+									<%	if(null!=request.getAttribute("jsonData")){%>
 									], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
+								<%}else{%>
+								], {strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
+								<%}%>
+									
+									
 					 				map.addOverlay(polygon);
 									<%
 										String jlng=listCoordinates[0].split("-")[0];
@@ -152,7 +159,11 @@
 			 		var count = rs.boundaries.length; //行政区域的点有多少个
 		
 			 		for(var i = 0; i < count; i++){
-			 		var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+			 		<%	if(null!=request.getAttribute("jsonData")){%>
+			 			var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+					<%}else{%>
+						var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+					<%}%>
 			 		map.addOverlay(ply); //添加覆盖物
 			 		map.setViewport(ply.getPath()); //调整视野 
 			 		} 
