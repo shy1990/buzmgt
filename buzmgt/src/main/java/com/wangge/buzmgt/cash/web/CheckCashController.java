@@ -95,6 +95,11 @@ public class CheckCashController {
     json.put("content", bankTrades);
     return json;
   }
+  /**
+   * 么有流失单号的扣罚审核
+   * @param createDate
+   * @return
+   */
   @RequestMapping(value="/debtCheck",method=RequestMethod.GET)
   @ResponseBody
   public JSONObject getDebtCheck(String createDate){
@@ -152,7 +157,7 @@ public class CheckCashController {
     JSONObject json=new JSONObject();
     try {
       Map<String, Object> spec=new HashMap<>();
-      spec.put("EQ_payDate", archivingDate);
+      spec.put("LTE_payDate", archivingDate);
       spec.put("EQ_isArchive", 0);
       List<BankTrade> bankTrades=bankTradeService.findAll(spec);
       if(bankTrades.size()>0){
