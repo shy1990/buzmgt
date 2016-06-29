@@ -24,6 +24,7 @@
     <link rel="stylesheet" type="text/css" href="<%=basePath%>static/month-target/css/mouth.css"/>
     <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/task/task.css">
+    <link rel="stylesheet" type="text/css" href="../static/bootStrapPager/css/page.css" />
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
     <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
