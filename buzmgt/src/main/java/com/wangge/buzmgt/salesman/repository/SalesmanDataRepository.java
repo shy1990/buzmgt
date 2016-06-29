@@ -21,8 +21,8 @@ public interface SalesmanDataRepository extends  PagingAndSortingRepository<Sale
 	public Page<SalesmanData> findAll(Pageable pageable);//分页查询
 	public Page<SalesmanData> findAll(Specification specification,Pageable pageable);//分页查询
 	public SalesmanData save(SalesmanData salesmanData);//添加
+	int deleteById(Long id);
 	public SalesmanData findById(Long id);
 	public List<SalesmanData> findByName(String name);
   public SalesmanData findByNameAndCard_cardNumber(String name,String cardNu);
-  void delete(Long id);
 }
