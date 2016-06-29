@@ -78,7 +78,7 @@ public class SalesmanDataServiceImpl implements SalesmanDataService{
 	}
 	@Override
 	public void deleteById(Long id) {
-		salesmanDataRepository.deleteById(id);
+		salesmanDataRepository.delete(id);
 		
 	}
   @Override
