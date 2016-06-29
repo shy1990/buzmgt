@@ -14,21 +14,24 @@ function addSales() {
 		return;
 	}
 	salesArr.push(salesId);
-	$("#tjjsr").css("display", "none");
-	$('#salesList').append(
-			'<input type="text" id="saleInput' + salesArr.length
-					+ '" class="form-control" value="' + saleName + '">');
-	$('#salesList').append(
-			'<span class="input-group-addon" id="saleSpan' + salesArr.length
-					+ '"><i class="icon icon-close" onclick="deletediv('
-					+ salesArr.length + ');"></i></span>');
+	var html = '<div class="col-sm-2"  id="saleDiv'
+			+ salesArr.length
+			+ '">'
+			+ '<div class="input-group col-sm-2 input-peo">'
+			+ '  <input class="form-control" name="" placeholder="'
+			+ saleName
+			+ '">'
+			+ '  <span class="input-group-addon" id="basic-addon2" onclick="deletediv('
+			+ salesArr.length + ');" >删除</span>' + '</div>' + '</div>';
+	$("#acont").append(html);
+
 	$('#tjjsr').modal('hide');
 }
 // 删除选中的业务员
 function deletediv(index) {
 	salesArr[index - 1] = "";
-	$("#saleInput" + index).remove();
-	$("#saleSpan" + index).remove();
+	$("#saleDiv" + index).empty();
+	$("#saleDiv" + index).remove();
 }
 // 发布消息
 function issue() {
@@ -45,7 +48,8 @@ function issue() {
 			request.setRequestHeader("Content-Type", "application/json");
 		},
 		success : function(data) {
-			alert("新建已完成");
+			alert("事件已发布!!");
+			location.href="/customTask/list";
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");

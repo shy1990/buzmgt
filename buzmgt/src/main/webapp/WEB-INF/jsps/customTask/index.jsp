@@ -80,7 +80,7 @@ p {
 			<div class="area-choose"></div>
 			<!--/区域选择按钮-->
 			<a href="<%=basePath%>customTask/add" class="btn btn-blue" > <i
-				class="ico icon-add"></i>新建模块
+				class="ico icon-add"></i>新建自定义事件
 			</a>
 		</h4>
 

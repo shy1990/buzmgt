@@ -29,7 +29,8 @@ function getSearchParam(page1) {
 	var searchParam = {
 		"page" : page,
 		"size" : size,
-		"SC_salesName" : salesName
+		"SC_salesName" : salesName,
+		"sort" : "id,desc"
 	};
 	var startTime = $("#start-time").val();
 	var endTime = $("#end-time").val();

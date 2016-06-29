@@ -2,7 +2,6 @@ package com.wangge.buzmgt.customTask.web;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,10 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.WebUtils;
 
-import com.wangge.buzmgt.customTask.entity.CustomMessages;
 import com.wangge.buzmgt.customTask.entity.CustomTask;
 import com.wangge.buzmgt.customTask.server.CustomTaskServer;
 import com.wangge.buzmgt.customTask.server.ImplCustomTaskServe;

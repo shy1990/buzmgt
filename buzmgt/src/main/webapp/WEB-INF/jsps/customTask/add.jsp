@@ -26,7 +26,9 @@
 	type="text/javascript" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css"
 		href="static/customTask/type.css">
-	<link href="/static/customTask/searchSelect/css/jquery.multiselect.css"
+<link rel="stylesheet" type="text/css"
+		href="static/customTask/add.css">		
+<link href="/static/customTask/searchSelect/css/jquery.multiselect.css"
 		type="text/css" rel="stylesheet" />
 </head>
 <body>
@@ -101,25 +103,26 @@
 						</div>
 						<div class="hr"></div>
 
-						<div class="form-group">
-							<label class="col-sm-2 control-label">接收人：</label>
-							<div class="col-sm-2 input-group left">
-								<div id="salesList" class="input-group">
-									<!-- 	<input type="text" id="saleInput0" class="form-control" placeholder="胡老大"
-										> <span
-										class="input-group-addon" id="saleSpan0"><i class="icon icon-close" onclick="deletediv(0);"></i></span>
-								<input type="text" id="saleInput1" class="form-control" placeholder="胡老大"
-										> <span
-										class="input-group-addon" id="saleSpan1"><i class="icon icon-close" onclick="deletediv(1);"></i></span>
-								 -->
-								</div>
-							</div>
-							<button class="btn  btn-tj" data-toggle="modal"
-								data-target="#tjjsr">
-								<i class="icon icon-btn-c"></i>添加
-							</button>
-						</div>
+					<div class="form-group">
+                        <label class="col-sm-2 control-label">接收人：</label>
 
+                        <div class="table-responsive">
+                            <div class="average-tr " >
+                                <div class=" butn-tj">
+                                    <a class="J_addDire btn btn-default btn-kaohe-add col-sm-6"  data-toggle="modal" data-target="#tjjsr"  ><i class="icon-saojie-add"></i>添加</a>
+                                </div>
+
+                            </div><br><br><br>
+
+                            <div class=" table table-bordered"  id="acont">
+
+                            </div>
+                            <!--/table-->
+                        </div>
+
+
+                    </div>
+                          
 						<div class="form-group">
 							<label class="col-sm-2 control-label"></label>
 							<div class="col-sm-2 input-group left">

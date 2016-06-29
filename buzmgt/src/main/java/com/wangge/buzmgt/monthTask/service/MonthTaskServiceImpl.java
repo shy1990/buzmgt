@@ -4,18 +4,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.annotation.Resource;
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,17 +19,12 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.entity.RegistData;
-import com.wangge.buzmgt.assess.repository.AssessRepository;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
 import com.wangge.buzmgt.monthTask.entity.MonthTask;
@@ -462,7 +452,7 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 	@Override
 	public void ExportSetExcel(MonthTask task, String salesName, HttpServletRequest request,
 			HttpServletResponse response) {
-		List<Object> dataList = taskSubrep.findByMonthTask(task.getId());
+		List<Object> dataList = taskSubrep.findByMonthTask_Id(task.getId());
 		List<Map<String, Object>> alList = new ArrayList<Map<String, Object>>();
 		Map<String, Integer> sumMap = new HashMap<String, Integer>();
 		Map<String, Object> rateMap = new HashMap<String, Object>();

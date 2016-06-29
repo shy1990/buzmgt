@@ -1,10 +1,8 @@
 package com.wangge.buzmgt.monthTask.service;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Map;
 
-import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 
 import com.wangge.buzmgt.monthTask.entity.MonthTask;
-import com.wangge.buzmgt.monthTask.entity.MonthTaskPunish;
 import com.wangge.buzmgt.region.entity.Region;
 
 public interface MonthTaskService {
