@@ -265,7 +265,7 @@ public class OrderSignforServiceImpl implements OrderSignforService {
         notRemarklist.setSalesMan(salesManService.findByUserId(notRemarklist.getUserId()));
         if(notRemarklist.getSalesMan()!=null){
           notRemarklist.getSalesMan().setUser(null);
-          notRemarklist.getSalesMan().setRegion(null);
+//          notRemarklist.getSalesMan().setRegion(null);
         }else{
           notRemarklist.setSalesMan(new SalesMan());
         }

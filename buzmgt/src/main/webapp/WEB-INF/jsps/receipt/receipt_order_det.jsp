@@ -58,7 +58,7 @@
 								</dl>
 								<dl class="dl-horizontal">
 									<dt>所属区域:</dt>
-									<dd>暂无所属区域</dd>
+									<dd>${order.salesMan.region.parent.name }${order.salesMan.region.name }</dd>
 								</dl>
 								<dl class="dl-horizontal">
 									<dt>负责人:</dt>
