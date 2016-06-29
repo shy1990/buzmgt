@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface MothTargetDataService {
     public Page<MothTargetData> getMothTargetDatas(String name,String time, Integer page, Integer size);
+
+    public List<MothTargetData> findAll(String time);
 }

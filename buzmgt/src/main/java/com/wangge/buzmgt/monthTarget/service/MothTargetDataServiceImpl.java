@@ -84,8 +84,7 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
                 Region region = regionService.findListRegionbyid((String) o[4]);
                 mtd.setRegionName(regionName(region));
                 System.out.println(region.getType());
-                mtd.setRegion(region);
-//                regionName(region);
+//                mtd.setRegion(region);
                 mtd.setNumsOne((BigDecimal) o[5]);
                 mtd.setCount((BigDecimal) o[6]);
                 mtd.setTime(time);
@@ -99,6 +98,39 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
 //            });
 
         return pageResult;
+    }
+
+    @Override
+    public List<MothTargetData> findAll(String time) {
+       String sql = "select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t " +
+                " where to_char(createtime,'yyyy-mm-dd') LIKE ? " +
+                " group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId";
+        List<MothTargetData> mtdList = new ArrayList<>();
+        Query query = entityManager.createNativeQuery(sql);
+        int a = 1;
+        query.setParameter(a,"%"+time+"%");
+        List<Object[]> list = query.getResultList();
+        if(CollectionUtils.isNotEmpty(list)){
+            list.forEach(o -> {
+                MothTargetData mtd = new MothTargetData();
+                mtd.setOrderId((String) o[0]);
+                mtd.setMemberId((String) o[1]);
+                mtd.setRegionId((String) o[4]);
+                mtd.setPhoneNmu((String) o[2]);
+                mtd.setShopName((String) o[3]);
+                Region region = regionService.findListRegionbyid((String) o[4]);
+                mtd.setRegionName(regionName(region));
+                System.out.println(region.getType());
+//                mtd.setRegion(region);
+                mtd.setNumsOne((BigDecimal) o[5]);
+                mtd.setCount((BigDecimal) o[6]);
+                mtd.setTime(time);
+                mtdList.add(mtd);
+
+            });
+        }
+
+            return mtdList;
     }
 
 
