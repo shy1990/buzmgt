@@ -3,7 +3,6 @@
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
             + path + "/";
-    System.out.print(basePath);
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -243,6 +242,7 @@
         <td>{{count}}</td>
         <td>{{phoneNmu}}</td>
         <td>{{regionName}}</td>
+        <%--<td>{{region.parent.parent.parent.parent.name}}{{region.parent.parent.parent.name}}{{region.parent.parent.name}}{{region.name}}</td>--%>
         <td>{{time}}</td>
         <td></td>
     </tr>
@@ -322,7 +322,7 @@
         //调用的url
         url: {
             listAll: function () {
-                return 'mothTargetData/mothTargetDatas';
+                return '/mothTargetData/mothTargetDatas';
             }
         },
         //查询全部的方法
