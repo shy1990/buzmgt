@@ -55,14 +55,17 @@ function initFileUpload() {
             });
         },
         done: function (e, data) {
-            if (data.result.result == "failure") {
-                $('#message').text(data.result.message);
+        	console.info(data.result.result==="failure");
+            if (data.result.result === "failure") {
+                alert(data.result.message);
+            }else{
+            	alert("上传完成");
             }
-            $('#file-input').fileinput('clear');
-            $('#daoru').modal('hide');
-            $('#searchDate').val(firstImportDate);
-            goSearch();
-            alert("上传完成");
+            window.location.reload();
+//            $('#file-input').fileinput('clear');
+//            $('#daoru').modal('hide');
+//            $('#searchDate').val(firstImportDate);
+//            goSearch();
         }
     });
 }
