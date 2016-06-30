@@ -17,8 +17,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * 
- * @author thor
- *
+* @ClassName: BankTrade
+* @Description: TODO(银行交易记录请求层)
+* @author ChenGuop
+* @date 2016年6月30日 下午3:06:01
+*
  */
 @Entity
 @Table(name="SYS_BANK_TRADE")

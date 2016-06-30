@@ -35,15 +35,15 @@ public class CheckCash implements Serializable  {
   private Integer rnid;
   private String userId;
   private Date createDate;
-  private Float cashMoney=new Float(0);//收现金额
+  private Float cashMoney=0.0f;//收现金额
   @Transient
   private String cardName;
   @Transient
-  private Float incomeMoney=new Float(0);//打款金额
+  private Float incomeMoney=0.0f;//打款金额
   @Transient
-  private Float shouldPayMoney=new Float(0);//应付金额
+  private Float shouldPayMoney=0.0f;//应付金额
   @Transient
-  private Float debtMoney=new Float(0);//欠款金额（欠款+扣罚）
+  private Float debtMoney=0.0f;//欠款金额（欠款+扣罚）
   @Transient
   private Float stayMoney;//待收金额
   @Transient
