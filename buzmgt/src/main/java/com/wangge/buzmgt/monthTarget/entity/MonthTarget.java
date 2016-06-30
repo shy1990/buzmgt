@@ -53,13 +53,13 @@ public class MonthTarget implements Serializable{
   @JoinColumn(name = "REGION_ID")
   private Region region;
   
-  private int orderNum;
+  private int orderNum;//提货量
   
-  private int merchantNum;
+  private int merchantNum;//提货商家数量
   
-  private int activeNum;
+  private int activeNum;//活跃商家
   
-  private int matureNum;
+  private int matureNum;//成熟商家
   
   @Column(name = "PUBLISH_STATUS")
   private int publishStatus;//0未发布 1已发布

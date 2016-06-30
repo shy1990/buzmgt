@@ -30,7 +30,7 @@ public class MothTargetDataServiceImplTest {
     private MothTargetDataService mothTargetDataService;
     @Test
     public void getMothTargetDatas() throws Exception {
-        mothTargetDataService.getMothTargetDatas("测试","2016-06",0,9);
+        mothTargetDataService.getMothTargetDatas("","测试","2016-06",0,9);
     }
 
 }

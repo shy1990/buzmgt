@@ -39,26 +39,6 @@ public class MothTargetData implements Serializable {
 
     private Region region;//区域
 
-    private String ywId;//业务员id
-
-    private String ywphone;//业务员电话
-
-    public String getYwId() {
-        return ywId;
-    }
-
-    public void setYwId(String ywId) {
-        this.ywId = ywId;
-    }
-
-    public String getYwphone() {
-        return ywphone;
-    }
-
-    public void setYwphone(String ywphone) {
-        this.ywphone = ywphone;
-    }
-
     public Region getRegion() {
         return region;
     }

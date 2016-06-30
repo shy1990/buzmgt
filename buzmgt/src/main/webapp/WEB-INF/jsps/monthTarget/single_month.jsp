@@ -15,17 +15,17 @@
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>个人月指标进度详情</title>
     <!-- Bootstrap -->
-    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../static/css/common.css"/>
-    <link rel="stylesheet" type="text/css" href="../static/kaohe/kaohe-det.css"/>
-    <link rel="stylesheet" type="text/css" href="../static/yw-team-member/team-member.css"/>
-    <link rel="stylesheet" type="text/css" href="../static/yw-team-member/ywmember.css"/>
+    <link href="<%=basePath%>static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="<%=basePath%>static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/kaohe/kaohe-det.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/yw-team-member/team-member.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/yw-team-member/ywmember.css"/>
     <link rel="stylesheet" type="text/css" href="<%=basePath%>static/month-target/css/mouth.css"/>
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/task/task.css">
-    <link rel="stylesheet" type="text/css" href="../static/bootStrapPager/css/page.css" />
-    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%=basePath%>static/task/task.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/bootStrapPager/css/page.css" />
+    <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
     <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 
@@ -149,7 +149,7 @@
                 <div class="box-body">
                     <!--ywmamber-body-->
                     <div class="ywmamber-body">
-                        <img width="80" src="../static/img/user-head.png" alt="..." class="img-circle">
+                        <img width="80" src="<%=basePath%>static/img/user-head.png" alt="..." class="img-circle">
                         <div class="msg-text">
                             <h4>易小星</h4>
                             <p>ID: A236743252</p>
@@ -210,9 +210,9 @@
 <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-<script src="../static/bootstrap/js/bootstrap.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript">
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm",
@@ -273,7 +273,8 @@
     var myDate = new Date().format('yyyy-MM');
 
     $(function () {
-        monthTargetData.searchData.time = myDate;
+        monthTargetData.searchData.time = '${time}';
+        monthTargetData.searchData.regionId = '${regionId}';
         //页面初始化
         monthTargetData.detail.init(monthTargetData.searchData);
 
@@ -311,7 +312,8 @@
             page: 0,
             size: 3,
             time: '',
-            name: ''
+            name: '',
+            regionId:''
         },
         //分页参数
         _count: {
