@@ -50,6 +50,9 @@
             color: #555555;
         }
     </style>
+    <script type="text/javascript">
+    var base = "<%=basePath%>";
+    </script>
 </head>
 <body>
 <div class="content main">
@@ -61,15 +64,12 @@
 
     <div class="text-blue text-strong" style="margin-top: 25px; margin-bottom: 25px ">
 
-        <select class="selectpicker demo3" data-live-search="true" >
-            <option data-tokens="ketchup mustard">选择业务员</option>
-            <option data-tokens="mustard">z张花花</option>
-            <option data-tokens="frosting">eee</option>
-            <option data-tokens="frosting">rr</option>
-            <option data-tokens="frosting">ww王ww老豆</option>
-            <option data-tokens="frosting">z张花花</option>
-            <option data-tokens="frosting">z张花花</option>
-            <option data-tokens="frosting">z张花花</option>
+        <select class="selectpicker demo3" data-live-search="true" id="regionId" onchange="getRegionName();">
+            <c:if test="${not empty salesList}">
+				<c:forEach var="sales" items="${salesList}">
+					<option value="${sales.id}">${sales.truename}</option>
+				</c:forEach>
+			</c:if>
         </select>
 
 
@@ -92,7 +92,7 @@
         <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
             检索
         </button>
-     <span style="color: #a6a6a6">  山东省  滨州市  邹平县</span> </div>
+     <span style="color: #a6a6a6" id="regionName">  </span> </div>
     <!--地区-->
 
     <div class="row" >
@@ -110,15 +110,15 @@
                          <tr>
                              <td>
                                  近三个月月均提货量
-                                 <div class="  text-right" style="margin-top: -15px;color: #00b7ee">720 台</div>
+                                 <div class="  text-right" style="margin-top: -15px;color: #00b7ee" id="orderAvg">720 台</div>
                              </td>
                          </tr>
                          <tr>
-                             <td>上月提货量 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee">800 台</div></td>
+                             <td>上月提货量 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee" id="orderLast">800 台</div></td>
 
                          </tr>
                          <tr>
-                             <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">750 台</div></td>
+                             <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="adviseOrder">750 台</div></td>
 
                          </tr>
                          <tr>
@@ -248,6 +248,7 @@
     </div>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 <script src="<%=basePath%>static/multiselect/js/jquery.multiselect.js"></script>
+<script src="<%=basePath%>static/month-target/js/update.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
     $('.menu a,.menu li.active a').click(function () {
