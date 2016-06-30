@@ -37,6 +37,16 @@ public class MothTargetData implements Serializable {
 
     private BigDecimal numsOne;//单品数量
 
+    private Region region;//区域
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
     public BigDecimal getCount() {
         return count;
     }
