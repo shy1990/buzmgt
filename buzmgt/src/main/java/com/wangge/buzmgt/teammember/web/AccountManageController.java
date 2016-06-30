@@ -165,6 +165,7 @@ public class AccountManageController  extends BaseController{
     if(null != req.getSession().getAttribute("orgName")){
       model.addAttribute("org",req.getSession().getAttribute("orgName"));
     }
+    model.addAttribute("searchParam",searchParam);
     model.addAttribute("accounts",accList);
     model.addAttribute("page", pd);
     model.addAttribute("totalCount", totalNum);
