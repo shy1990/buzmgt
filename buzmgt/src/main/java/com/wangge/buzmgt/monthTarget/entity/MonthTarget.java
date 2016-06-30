@@ -2,6 +2,7 @@ package com.wangge.buzmgt.monthTarget.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,10 +13,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**
@@ -48,6 +52,8 @@ public class MonthTarget implements Serializable{
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USER_ID")
   private SalesMan salesman;
+  
+  private String managerId;
   
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "REGION_ID")
@@ -139,6 +145,14 @@ public class MonthTarget implements Serializable{
 
   public void setTargetCycle(Date targetCycle) {
     this.targetCycle = targetCycle;
+  }
+
+  public String getManagerId() {
+    return managerId;
+  }
+
+  public void setManagerId(String managerId) {
+    this.managerId = managerId;
   }
   
 }
