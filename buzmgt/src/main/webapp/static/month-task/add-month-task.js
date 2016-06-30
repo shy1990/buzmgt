@@ -139,7 +139,6 @@ function submit(flag) {
 	var taskObj = {
 		"regionid" : lsdata.regionId,
 		"month" : lsdata.month,
-		"agentid" : $("#basic").val()[0],
 		"tal7goal" : $("#7goal").val(),
 		"tal15goal" : $("#15goal").val(),
 		"tal10goal" : $("#10goal").val(),
@@ -158,6 +157,7 @@ function submit(flag) {
 			message = "修改并保存";
 		}
 	} else {
+		taskObj.agentid = salemanid;
 		if (newed == 0) {
 			// 本次查询数据已被使用
 			alert("数据未刷新,请重新检索!!");
