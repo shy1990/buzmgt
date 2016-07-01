@@ -41,7 +41,8 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
 			+ "                 start with r.region_id = ?1 \n"
 			+ "                connect by prior r.region_id = r.parent_id) tmp\n"
 			+ "         where tmp.region_id = s.region_id) and  exists (select  1 \n"
-			+ " from sys_month_Task_basicdata d where d.salesman_id=s.user_id and d.used=0 )", nativeQuery = true)
+			+ " from sys_month_Task_basicdata d where d.salesman_id=s.user_id and d.used=0 "
+			+ " and d.month=to_char(sysdate + interval '1' month,'yyyy-mm'))", nativeQuery = true)
 	Set<SalesMan> readAllByRegionIdandMonth_Userd(String regionId);
 	
 	 /** 
