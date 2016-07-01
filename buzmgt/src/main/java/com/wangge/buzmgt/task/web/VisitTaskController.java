@@ -244,7 +244,7 @@ public class VisitTaskController {
       visit.setSalesman(sm);
       visit.setBeginTime(new Date());
       if(StringUtils.isBlank(expiredTime)){
-        visit.setExpiredTime(DateUtil.moveDate(DateUtil.string2Date(expiredTime), 2));
+        visit.setExpiredTime(DateUtil.moveDate(new Date(), 2));
       }else{
         visit.setExpiredTime(DateUtil.string2Date(expiredTime));
       }
