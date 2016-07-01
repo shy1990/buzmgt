@@ -45,6 +45,60 @@ $('.J_addDire').click(function() {
 function toSubmit(){
 	form.submit();
 }
+function checkForm(){
+	var activeNum = $("#assessActivenum").val()
+	var orderNum = $("#assessOrdernum").val()
+	var assessCycle = $("#assessCycle").val()
+	var assessTime = $("#assessTime").val()
+	var town = $("#town").val()
+	
+	if (activeNum == null || activeNum.trim() == "") {
+		errorMsgShow($("#assessActivenum"));
+		return false;
+	}
+	
+	if (orderNum == null || orderNum.trim() == "") {
+		errorMsgShow($("#assessOrdernum"));
+		return false;
+	}
+	
+	if (assessCycle == null || assessCycle.trim() == "") {
+		errorMsgShow($("#assessCycle"));
+		return false;
+	}
+
+	if (assessTime == null || assessTime.trim() == "") {
+		errorMsgShow($("#assessTime"));
+		return false;
+	}
+
+	if(typeof(town) == "undefined"){
+		alert("请先选择考核区域!");
+		return false;
+	}
+	
+	if (town == null || town.trim() == "") {
+		errorMsgShow($("#town"));
+		return false;
+	}
+	
+	return true;
+	
+}
+
+function errorMsgShow($option,msg){
+	if($option==null||$option==""){
+		$option=$(this);
+	}
+	$option.parents('.form-group').addClass('has-error');
+	$option.parents('.col-sm-4').addClass('has-error');
+	console.info(msg);
+	if(msg!=null&&msg!=""){
+		$option.parents('.form-group').find('.msg-error').html(msg);
+		$option.parents('.average-tr').find('.msg-error').html(msg);
+	}
+	
+}
 
 function passed(salesmanId){
 	$.ajax({

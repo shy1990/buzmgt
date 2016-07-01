@@ -139,7 +139,7 @@
 							</div>
 							<form class="member-from-box form-horizontal"
 								action="/assess/saveAssess/${salesman.id}?stage=+${stage+1 }+"
-								name="form" method="post">
+								name="form" method="post" onsubmit="javascript:return checkForm()">
 								<div class="form-group">
 									<div
 										class="saojie-upd-list col-sm-9  col-sm-offset-2 col-xs-12">
@@ -164,23 +164,26 @@
 																	href="javascript:;" id="btn"><i
 																	class="icon-saojie-add"></i></a>
 															</div> 
+															<label class="pull-right col-md-6 control-label msg-error">请选择考核区域</label>
 														</td>
 														<td class="average-tr target form-inline">
 															<div class="col-sm-5">
 																<div class="form-group">
 																	<label class="">活跃数</label> <input
 																		class="form-control input-sm" type=""
-																		name="assessActivenum" id="" value="" /> <label
+																		name="assessActivenum" id="assessActivenum" value="" /> <label
 																		class="">家</label>
 																</div>
+																<label class="pull-right col-md-8 control-label msg-error">请填写活跃数</label>
 															</div>
 															<div class="col-sm-5">
 																<div class="form-group">
 																	<label class="">提货量</label> <input
 																		class="form-control input-sm" type=""
-																		name="assessOrdernum" id="" value="" /> <label
+																		name="assessOrdernum" id="assessOrdernum" value="" /> <label
 																		class="">部</label>
 																</div>
+																<label class="pull-right col-md-8 control-label msg-error">请填写提货量</label>
 															</div>
 														</td>
 													</tr>
@@ -203,10 +206,11 @@
 									<div class="input-group col-sm-2">
 										<span class="input-group-addon" id="basic-addon1"><i
 											class="ico icon-kaohe-week"></i></span> <input type="text"
-											class="form-control" aria-describedby="basic-addon1"
+											class="form-control"id="assessCycle" aria-describedby="basic-addon1"
 											name="assessCycle" value=""> <span
 											class="input-group-addon">天</span>
 									</div>
+									<label class="pull-right col-md-6 control-label msg-error">请填写考核周期</label>
 								</div>
 								<!--考核周期-->
 								<div class="hr"></div>
@@ -216,7 +220,7 @@
 									<div class="input-group col-sm-2">
 										<span class="input-group-addon" id="basic-addon1"><i
 											class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-											type="text" class="form-control form_datetime"
+											type="text" id="assessTime"  class="form-control form_datetime"
 											readonly="readonly" name="assessTime" value="">
 									</div>
 								</div>
@@ -224,7 +228,7 @@
 								<div class="hr"></div>
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-2 input-group">
-										<button class="btn btn-audit col-sm-2" onclick="toSubmit();">确定</button>
+										<button class="btn btn-audit col-sm-2" type="submit">确定</button>
 									</c:if>
 										<c:if test="${salesman.status ne 'weihu' }">
 											<c:if test="${stage eq assessStageSum}">
