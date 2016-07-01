@@ -116,6 +116,7 @@ public class SalaryServiceImpl implements SalaryService {
                     salary.setTel(content[2]);
                     salary.setCreateTime(DateUtil.string2Date(content[3]));
                     salary.setMessage(content[4]);
+                    salary.setMonths(content[5]);
                     salaryRespository.save(salary);
                 }
             });

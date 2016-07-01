@@ -523,19 +523,27 @@ public class RegionController {
 	    * @since JDK 1.8
 	   */
 	  @RequestMapping(value = "/dragSaojieData", method = RequestMethod.POST)
-	  public void dragSaojieData(String id, String pid) {
+	  @ResponseBody
+	  public String dragSaojieData(String id, String pid) {
 	    SaojieData saojiedata=saojieDateService.findById(Long.parseLong(id));
 	    Region region=regionService.findListRegionbyid(pid);
+	    
+	    SalesMan salesman= salesmanservice.findSaleamanByRegionId(region.getParent().getId());
+	    if(null==salesman){
+	    	return "false";
+	    }
+	    
 	    saojiedata.setRegion(region);
 	    saojieDateService.saveSaojieData(saojiedata);
-	    if(null!=saojiedata.getRegistId()&&"".equals(saojiedata.getRegistId())){
-	      RegistData registdata=assessService.findRegistData(saojiedata.getRegistId());
+	    if(null!=saojiedata.getRegistData()){
+	      RegistData registdata=assessService.findRegistData(saojiedata.getRegistData().getId());
 	      if(null!=registdata){
 	        registdata.setRegion(region);
+	        registdata.setSalesman(salesman);
 	        assessService.saveRegistData(registdata);
 	      }
 	    }
-	   
+	   return "true";
 	  }
 	  
 	  /**

@@ -28,7 +28,8 @@ public class Salary {
     private String tel;
     @Column(name = "SALARY_MESSAGE")
     private String message;
-
+    @Column(name = "MONTHS")
+    private String months;
     public Long getId() {
         return id;
     }
@@ -76,8 +77,16 @@ public class Salary {
     public void setMessage(String message) {
         this.message = message;
     }
+    
+    public String getMonths() {
+		return months;
+	}
 
-    @Override
+	public void setMonths(String months) {
+		this.months = months;
+	}
+
+	@Override
     public String toString() {
         return "Salary{" +
                 "id=" + id +

@@ -127,7 +127,6 @@
  		}
  		
  		function selectAllNode(obj){
- 			
  			if($(obj).attr("checked")){
  				$("#menuTree").jstree("checkbox").check_all();
  			}else{

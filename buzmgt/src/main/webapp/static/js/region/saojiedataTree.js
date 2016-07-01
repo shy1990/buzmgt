@@ -467,7 +467,15 @@ function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
 			pid : treeNodes[0].pId,
 		},
 		dataType : "text", // 数据传输格式
-		url : "dragSaojieData" // 请求链接
+		url : "dragSaojieData" ,// 请求链接
+		success : function(data){
+			if(data==="false"){
+				BootstrapDialog.alert("此区域的父区域没有业务员");
+			}
+		},
+		error : function(data){
+			alert("你拖拽到的位置可能不对");
+		}
 	});
 }
 

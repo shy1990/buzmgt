@@ -26,6 +26,7 @@ import com.wangge.buzmgt.sys.repository.RoleRepository;
 import com.wangge.buzmgt.sys.util.SortUtil;
 import com.wangge.buzmgt.sys.vo.NodeData;
 import com.wangge.buzmgt.sys.vo.TreeData;
+import com.wangge.json.JSONFormat;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
@@ -44,6 +45,7 @@ public class ResourceServiceImpl implements ResourceService {
 	}
 
 	@Override
+	@JSONFormat(filterField={"Menu.children"})
 	public List<Menu> getMenusByUsername(String username) {
 		Sort s=new Sort(Direction.ASC, "createTime");
 		List<Resource> resources = resourceRepository.findByRolesUsersUsernameAndType(username, ResourceType.MENU,s);
@@ -63,7 +65,7 @@ public class ResourceServiceImpl implements ResourceService {
 			menu.setIcon(r.getIcon());
 			if (!r.getChildren().isEmpty()) {
 				menu.setChildren(resource2Menu(r.getChildren()));
-			}  
+			} 
 			if(r.getParent()!=null){
 				menu.setParentId(r.getParent().getId());
 			}
@@ -222,6 +224,10 @@ public class ResourceServiceImpl implements ResourceService {
 			for (Resource child : childMenus) {
 				menus.add(child);
 			}
+//			if(res.getParent().getId()!=1){
+//				menus.add(res);
+//				menus.add(res.getParent());
+//			}
 		}
 		roleEntity.setResource(menus);
 		
