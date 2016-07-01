@@ -3,16 +3,7 @@ package com.wangge.buzmgt.monthTarget.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -53,7 +44,7 @@ public class MonthTarget implements Serializable{
   @JoinColumn(name = "USER_ID")
   private SalesMan salesman;
   
-  private String managerId;
+  private String managerId;//区域经理id
   
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "REGION_ID")
@@ -70,10 +61,29 @@ public class MonthTarget implements Serializable{
   @Column(name = "PUBLISH_STATUS")
   private int publishStatus;//0未发布 1已发布
   
-  @Column(name = "TARGET_CYCLE")
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  @Temporal(TemporalType.DATE)
-  private Date targetCycle;
+  private String targetCycle;//日期指标
+
+  @Transient
+  private int order;//实际提货量
+
+  @Transient
+  private int active;//实际活跃商家
+
+  public int getOrder() {
+    return order;
+  }
+
+  public void setOrder(int order) {
+    this.order = order;
+  }
+
+  public int getActive() {
+    return active;
+  }
+
+  public void setActive(int active) {
+    this.active = active;
+  }
 
   public Long getId() {
     return id;
@@ -139,11 +149,11 @@ public class MonthTarget implements Serializable{
     this.publishStatus = publishStatus;
   }
 
-  public Date getTargetCycle() {
+  public String getTargetCycle() {
     return targetCycle;
   }
 
-  public void setTargetCycle(Date targetCycle) {
+  public void setTargetCycle(String targetCycle) {
     this.targetCycle = targetCycle;
   }
 
@@ -154,5 +164,4 @@ public class MonthTarget implements Serializable{
   public void setManagerId(String managerId) {
     this.managerId = managerId;
   }
-  
 }
