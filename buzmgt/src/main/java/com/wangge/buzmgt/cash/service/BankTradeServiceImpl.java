@@ -100,7 +100,7 @@ public class BankTradeServiceImpl implements BankTradeService {
       if (!"空".equals(content[0])) {
 
         bt.setPayDate(DateUtil.string2Date(content[0]));
-        Float money = content[1] == "" ? new Float(0) : new Float(content[1]);
+        Float money = content[1] == "" ? 0.0f : new Float(content[1]);
         bt.setMoney(money);
         bt.setCardName(content[2]);
         bt.setCardNo(content[3]);

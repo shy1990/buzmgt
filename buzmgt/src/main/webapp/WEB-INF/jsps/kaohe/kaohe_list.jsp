@@ -126,10 +126,10 @@
 																	考核失败: bustkaohe-bar
 																 -->
 														<tr>
-															<td class="project-people"><a href=""><img
+															<td class="project-people"><img
 																	alt="image" class="img-circle"
-																	src="<%=basePath%>/static/img/team-member/a.jpg"></a></td>
-															<td class="project-title"><a href=""><strong>${assess.salesman.truename}</strong>(${assess.salesman.user.organization.name})</a>
+																	src="<%=basePath%>/static/img/team-member/a.jpg"></td>
+															<td class="project-title"><strong>${assess.salesman.truename}</strong>(${assess.salesman.user.organization.name})
 																<br /> <span>${assess.salesman.region.name}</span></td>
 															<td class="project-title"><span class="l-h">提货量：<strong
 																	class="shop-num">${assess.assessOrdernum }部</strong></span> <br /> <span>活跃客户：<strong
@@ -181,7 +181,7 @@
 																</div></td>
 
 																</c:if> --%>
-															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=${assess.salesman.id }&asssessid=${assess.id }&baifen=${fn:substringBefore(assess.percent, "%") }&active=${assess.activeNum}&orderNum=${assess.orderNum}" class="btn btn-white btn-sm "> <span class="folder"></span>
+															<td class="project-actions"><a href="/assess/toAccessDet?salesmanId=${assess.salesman.id }&asssessid=${assess.id }&baifen=${fn:substringBefore(assess.percent, '%') }&active=${assess.activeNum}&orderNum=${assess.orderNum}" class="btn btn-white btn-sm "> <span class="folder"></span>
 
 																	查看
 															</a> <!-- Single button --></td>

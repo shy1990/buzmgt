@@ -278,7 +278,7 @@ public class AssessController {
       Assess firstStage = assessService.findByStageAndSalesman("1", salesmanId.trim());
       model.addAttribute("passType",firstStage.getPassType());
     }
-    model.addAttribute("percent",Integer.parseInt(baifen));
+    model.addAttribute("percent",Integer.parseInt("".equals(baifen) ? "0" :baifen));
     model.addAttribute("active",active);
     model.addAttribute("orderNum",orderNum);
     return "kaohe/kaohe_det";

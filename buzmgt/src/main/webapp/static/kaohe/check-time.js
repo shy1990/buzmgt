@@ -1,3 +1,4 @@
+var total;
 $(function() {
 	
 	ajaxSearch(searchData);
@@ -39,8 +40,6 @@ function ajaxSearch(searchData) {
 			totalElements = data.result.totalElements;
 			totalPages = data.result.totalPages;
 			searchData["size"] = data.result.size;
-			alert(searchData["size"]);
-			alert(totalElements);
 			seachSuccessTable(data.result);
 			var searchTotal = totalElements;
 

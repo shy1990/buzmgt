@@ -95,7 +95,7 @@
 			<ul class="nav nav-task" >
 			   <div class="input-group ">
 					<input type="text" class="form-control" placeholder="请输入名称或用户名"
-						id="param" onkeyup="javascript:if(event.keyCode==13){getAccountList()}"> <span class="input-group-addon"
+						id="param" value="${searchParam}" onkeyup="javascript:if(event.keyCode==13){getAccountList()}"> <span class="input-group-addon"
 						id="goSearch"
 						onclick="getAccountList();"><i
 						class="icon icon-finds"></i></span>
@@ -236,7 +236,7 @@
 		<c:if test="${totalPage > 1}">
 						<div style="text-align: center; padding-bottom: 20px">
 							<ul class="pagination box-page-ul">
-								<li><a href="?page=${currentPage > 1 ?currentPage-1 : 1}">&laquo;</a></li>
+								<li><a href="?page=${currentPage > 1 ?currentPage-1 : 1}&searchParam=${searchParam}">&laquo;</a></li>
 								<!-- 1.total<=7 -->
 								<c:forEach var="s" begin="1" end="${totalPage}" step="1">
 									<c:choose>
@@ -244,12 +244,12 @@
 											<li class="active"><a href="?page=${s}">${s}</a></li>
 										</c:when>
 										<c:otherwise>
-											<li><a href="?page=${s}">${s}</a></li>
+											<li><a href="?page=${s}&searchParam=${searchParam}">${s}</a></li>
 										</c:otherwise>
 									</c:choose>
 								</c:forEach>
 								<li><a
-									href="?page=${currentPage == totalPage ? totalPage : currentPage+1 }">&raquo;</a></li>
+									href="?page=${currentPage == totalPage ? totalPage : currentPage+1 }&searchParam=${searchParam}">&raquo;</a></li>
 							</ul>
 						</div>
 					</c:if>

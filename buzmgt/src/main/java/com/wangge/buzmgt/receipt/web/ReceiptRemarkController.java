@@ -37,6 +37,7 @@ import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 import com.wangge.json.JSONFormat;
 
@@ -52,8 +53,14 @@ public class ReceiptRemarkController {
   
   @Autowired
   private OrderSignforService orderSignforService;
+  
   @Autowired
   private ManagerService managerService;
+  
+  @Autowired
+  private SalesManService salesManService;
+  
+  
   
   @RequestMapping(value="/show",method=RequestMethod.GET)
   public String showReceiptRemark(Model model){
@@ -255,6 +262,7 @@ public class ReceiptRemarkController {
     int size=pageRequest.getPageSize();
     for(OrderSignfor action:receiptRemarkList){
       if(number*size <= total && total < (number+1)*size){
+        action.getSalesMan().setRegion(null);
         notRemarkList.add(action);
       }
       total++;
@@ -273,9 +281,12 @@ public class ReceiptRemarkController {
       HttpServletRequest request){
     Map<String, Object> searchParams = new HashMap<String, Object>();
     searchParams.put("EQ_orderNo", orderNo);
-    List<OrderSignfor> notRemarkList = orderReceiptService.getReceiptNotRemark(searchParams);
     try {
+      List<OrderSignfor> notRemarkList = orderReceiptService.getReceiptNotRemark(searchParams);
       OrderSignfor notRemark=notRemarkList.get(0);
+      String userId=notRemark.getUserId();
+      SalesMan s=salesManService.findByUserId(userId);
+      notRemark.setSalesMan(s);
       model.addAttribute("order", notRemark);
     }
     catch(Exception e){

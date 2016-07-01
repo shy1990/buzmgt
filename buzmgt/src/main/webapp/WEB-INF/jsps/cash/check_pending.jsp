@@ -229,7 +229,7 @@ var	base='<%=basePath%>';
 					<div class="container-fluid">
 						<form id="addd" class="form-horizontal">
 							<div class="form-group">
-								<label class="col-sm-4 control-label">归档日期：</label>
+								<label class="col-sm-4 control-label">归档日期止：</label>
 								<div class="col-sm-7 dialog-calender">
 									<div class="search-date">
 										<div class="input-group input-group-sm">

@@ -158,10 +158,8 @@
 
 <!---alert---->
 
-<![endif]-->
 <script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
-<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="<%=basePath%>static/js/common.js" type="text/javascript"></script>
 <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
 <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 <script src="<%=basePath%>static/kaohe/check-time.js" type="text/javascript" charset="utf-8"></script>

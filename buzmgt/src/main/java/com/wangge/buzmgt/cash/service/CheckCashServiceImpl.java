@@ -141,7 +141,7 @@ public class CheckCashServiceImpl implements CheckCashService {
 
   // 计算扣罚金额
   private void disposeMonthPunish(List<MonthPunish> monthPunishs, CheckCash cc) {
-    Float debtMoney = new Float(0);
+    Float debtMoney = 0.0f;
     for (MonthPunish wp : monthPunishs) {
       debtMoney += wp.getDebt() + wp.getAmerce();
     }
@@ -150,7 +150,7 @@ public class CheckCashServiceImpl implements CheckCashService {
 
   // 计算打款总金额
   public void disposeBankTrade(List<BankTrade> bankTrades, CheckCash cc) {
-    Float incomeMoney = new Float(0);
+    Float incomeMoney = 0.0f;
     String cardName = "";
     if(bankTrades==null||bankTrades.size()==0){
       String userId=cc.getUserId();
@@ -254,7 +254,7 @@ public class CheckCashServiceImpl implements CheckCashService {
           PunishSet punishSet = punishSetService.findByUserId(userId);
           mp.setAmerce(stayMoney * punishSet.getPunishNumber());// 扣罚
         } else {
-          mp.setAmerce(new Float(0));// 扣罚
+          mp.setAmerce(0.0f);// 扣罚
         }
         mp.setStatus(0);//
         mp.setCreateDate(order.getCreateDate());
@@ -648,7 +648,7 @@ public class CheckCashServiceImpl implements CheckCashService {
         cash.setUserId(userId);
         cash.setDebtMoney(monthPunish.getDebt() + monthPunish.getAmerce());
         cash.setMonthPunishs(monthPunishs);
-        cash.setCashMoney(new Float(0));
+        cash.setCashMoney(0.0f);
         cash.setCreateDate(DateUtil.string2Date(createDate));
         if(monthPunish.getStatus()==0){
           cash.setIsCheck("未审核");
@@ -658,7 +658,7 @@ public class CheckCashServiceImpl implements CheckCashService {
         spec.put("EQ_createDate", createDate);
         List<BankTrade> bankTrades = bankTradeService.findAll(spec);
         if (bankTrades.size() > 0) {
-          Float incomeMoney = new Float(0);
+          Float incomeMoney = 0.0f;
           for (BankTrade bankTrade : bankTrades) {
             incomeMoney += bankTrade.getMoney();
           }
@@ -731,7 +731,7 @@ public class CheckCashServiceImpl implements CheckCashService {
         PunishSet punishSet = punishSetService.findByUserId(userId);
         mp.setAmerce(stayMoney * punishSet.getPunishNumber());// 扣罚
       } else {
-        mp.setAmerce(new Float(0));// 扣罚
+        mp.setAmerce(0.0f);// 扣罚
       }
       mp.setStatus(0);//
       mp.setCreateDate(cash.getCreateDate());

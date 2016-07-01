@@ -28,3 +28,4 @@ spring:
     poolPreparedStatements: true
   aop:
     auto: true
+
