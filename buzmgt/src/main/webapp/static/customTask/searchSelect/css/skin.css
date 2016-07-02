@@ -1,0 +1,51 @@
+ ul, ol, li,  input{
+	margin: 0;
+	padding: 0;
+}
+body{font-family:Verdana, Geneva, sans-serif;}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+fieldset, img, button {
+	border: 0;
+}
+address, caption, cite, code, dfn, em, strong, th, var {
+	font-style: normal;
+	font-weight: normal;
+}
+ol, ul {
+	list-style: none;
+}
+caption, th {
+	text-align: left;
+}
+
+q:before, q:after {
+	content: '';
+}
+abbr, acronym {
+	border: 0;
+}
+.content{width:160px;margin:50px auto;}
+
+.text-red{
+	color: red;
+}
+
+  /*多选框*/
+.sj-ms-btn-ok{
+	margin-top: 0px;
+	margin-bottom: 0px;
+	text-align: center;
+	background-color: #eee;
+	padding-top: 5px;
+	border-bottom-width: 0px;
+	padding-bottom: 5px;
+}
+ .sj-ms-btn-ok>button{
+	 padding-right: 15px;
+	 padding-left: 15px;
+	 background-color: #fff;
+	 border: 1px solid #aaaaaa;
+ }
