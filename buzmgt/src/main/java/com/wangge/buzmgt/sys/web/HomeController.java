@@ -43,7 +43,6 @@ public class HomeController {
 			}
 			 MenuComparator comparator=new MenuComparator();
       Collections.sort(menusL,comparator);
-			
 			req.getSession().setAttribute("menus", menusL);
 		}else{
 			List<Menu> menus = resourceService.getMenusByUsername(((User) SecurityUtils.getSubject().getPrincipal()).getUsername());

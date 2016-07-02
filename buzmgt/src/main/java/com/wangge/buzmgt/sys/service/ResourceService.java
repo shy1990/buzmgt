@@ -40,7 +40,15 @@ public interface ResourceService {
 			this.name = name;
 			this.url = url;
 		}
-		public void addChild(Menu child){
+		
+		public Menu(Long id,String name, String url, String icon) {
+      super();
+      this.id = id;
+      this.name = name;
+      this.url = url;
+      this.icon = icon;
+    }
+    public void addChild(Menu child){
 			this.children.add(child);
 		}
 		public String getName() {
