@@ -2,8 +2,10 @@ package com.wangge.buzmgt.sys.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,6 @@ import com.wangge.buzmgt.sys.repository.RoleRepository;
 import com.wangge.buzmgt.sys.util.SortUtil;
 import com.wangge.buzmgt.sys.vo.NodeData;
 import com.wangge.buzmgt.sys.vo.TreeData;
-import com.wangge.json.JSONFormat;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
@@ -45,11 +46,10 @@ public class ResourceServiceImpl implements ResourceService {
 	}
 
 	@Override
-	@JSONFormat(filterField={"Menu.children"})
 	public List<Menu> getMenusByUsername(String username) {
 		Sort s=new Sort(Direction.ASC, "createTime");
 		List<Resource> resources = resourceRepository.findByRolesUsersUsernameAndType(username, ResourceType.MENU,s);
-		return resource2Menu(resources).stream().collect(Collectors.toList());
+		return resource2MenuByParent(resources).stream().collect(Collectors.toList());
 	}
 
 	public List<Menu> getMenusByRoleId(Long id) {
@@ -61,30 +61,75 @@ public class ResourceServiceImpl implements ResourceService {
 	private Set<Menu> resource2Menu(Collection<Resource> resources) {
 		Set<Menu> menus=new HashSet<Menu>();
 		resources.forEach(r->{
-			Menu menu=new Menu(r.getId(),r.getName(), r.getUrl());
-			menu.setIcon(r.getIcon());
-			if (!r.getChildren().isEmpty()) {
-				menu.setChildren(resource2Menu(r.getChildren()));
-			} 
-			if(r.getParent()!=null){
-				menu.setParentId(r.getParent().getId());
-			}
-				menus.add(menu);
+			addMenuToSet(menus, r);
 		});
 		return menus;
 	}
-	//单个转
-//	private Menu resource2MenuByOne(Resource r) {
-//		Menu menu=new Menu(r.getId(),r.getName(), r.getUrl());
-//		if (!r.getChildren().isEmpty()) {
-//			menu.setChildren(resource2Menu(r.getChildren()));
-//		}  
-//		if(r.getParent()!=null){
-//			menu.setParentId(r.getParent().getId());
-//		}
-//		
-//		return menu;
-//	}
+
+  /** 
+    * addMenuToSet:(这里用一句话描述这个方法的作用). <br/> 
+    * TODO(这里描述这个方法适用条件 – 可选).<br/> 
+    * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
+    * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
+    * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
+    * 
+    * @author yangqc 
+    * @param menus
+    * @param r 
+    * @since JDK 1.8 
+    */  
+  private void addMenuToSet(Set<Menu> menus, Resource r) {
+    Menu menu=new Menu(r.getId(),r.getName(), r.getUrl());
+    menu.setIcon(r.getIcon());
+    if (!r.getChildren().isEmpty()) {
+    	menu.setChildren(resource2Menu(r.getChildren()));
+    }  
+    if(r.getParent()!=null){
+    	menu.setParentId(r.getParent().getId());
+    }
+    	menus.add(menu);
+  }
+  /**
+   * resource2MenuByParent:新的构造菜单的方法. <br/>
+   * 先构造父级菜单,再构造子菜单
+   * 只支持两级菜单,如果是三级菜单,推测:方案1:则可以使用Map<Resource,Map<Resource,Set<Resource>>>类型的容器进行嵌套;
+   * 方案二:通过不断层级精确Resource的child的值,可以构造一个可以精确反映受控资源树;
+   * 
+   * @author yangqc
+   * @param resources
+   * @return
+   * @since JDK 1.8
+   */
+  private Set<Menu> resource2MenuByParent(Collection<Resource> resources) {
+    Set<Menu> menus = new HashSet<Menu>();
+    Map<Resource,Set<Resource>> treeMap=new HashMap<Resource,Set<Resource>>();
+    resources.forEach(r -> {
+      Resource fatherR = r.getParent();
+      if (fatherR != null && fatherR.getId() != 1) {
+        Set<Resource> childSet= treeMap.get(fatherR);
+        if(null==childSet){
+          childSet = new HashSet<Resource>();
+        }
+        childSet.add(r);
+        treeMap.put(fatherR, childSet);
+      }
+    });
+    for(Map.Entry<Resource, Set<Resource>> tree :treeMap.entrySet()){
+      Resource fatherR=tree.getKey();
+      Set<Resource> childSet= tree.getValue();
+      Menu menu=new Menu(fatherR.getId(),fatherR.getName(), fatherR.getUrl(),fatherR.getIcon());
+      Set<Menu> childMenus = new HashSet<Menu>();
+      childSet.forEach(r ->{
+        Menu childMenu=new Menu(r.getId(),r.getName(), r.getUrl(),r.getIcon());
+        childMenu.setParentId(fatherR.getId());
+        childMenus.add(childMenu);
+      });
+      menu.setParentId(fatherR.getParent().getId());
+      menu.setChildren(childMenus);
+      menus.add(menu);
+    }
+    return menus;
+  }
 	@Override
 	public Set<Menu> getAllMenus() {
 		Sort s=new Sort(Direction.ASC, "createTime");
@@ -224,10 +269,6 @@ public class ResourceServiceImpl implements ResourceService {
 			for (Resource child : childMenus) {
 				menus.add(child);
 			}
-//			if(res.getParent().getId()!=1){
-//				menus.add(res);
-//				menus.add(res.getParent());
-//			}
 		}
 		roleEntity.setResource(menus);
 		
