@@ -21,7 +21,7 @@
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="static/customTask/type.css">
+<link rel="stylesheet" type="text/css" href="/static/customTask/type.css">
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
@@ -30,14 +30,17 @@
 
 	{{#if content}}
 		{{#each content}}
-					<tr>
+					<tr  ondblclick="openDetail({{id}});">
 						<td><span class="icon-{{qfType type}}">{{typeName}}</span> {{title}}</td>
 						<td class="ssh" title="">
                              <p>
 								<span> {{salesMan}}</span>
 							</p>
 						</td>									
-						<td  onclick="openDetail({{id}});">{{content}}</td>
+						<td class="ssh" >
+							<p>
+								<span> {{content}}</span>
+							</p></td>
 						<td>{{time}}</td>  
 						<td>{{recieve}}</td>  
 					</tr>

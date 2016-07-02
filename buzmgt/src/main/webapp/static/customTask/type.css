@@ -37,21 +37,21 @@ body{
     padding: 2px 10px;
     background: url(../customTask/image/baifang.png) no-repeat;
     color: #ffffff;
-    font-size: 6px;
+    font-size: 12px;
 }
 
 .icon-zc{
     padding: 2px 10px;
     background: url(../customTask/image/zhuc.png) no-repeat;
     color: #ffffff;
-    font-size: 6px;
+    font-size: 12px;
 }
 
 .icon-kf{
     padding: 2px 10px;
     background: url(../customTask/image/kf.png) no-repeat;
     color: #ffffff;
-    font-size: 6px;
+    font-size: 12px;
 }
 
 
