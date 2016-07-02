@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.monthTarget.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -43,13 +44,13 @@ public class MonthTarget implements Serializable{
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USER_ID")
   private SalesMan salesman;
-  
+
   private String managerId;//区域经理id
   
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "REGION_ID")
   private Region region;
-  
+
   private int orderNum;//提货量
   
   private int merchantNum;//提货商家数量
@@ -57,33 +58,25 @@ public class MonthTarget implements Serializable{
   private int activeNum;//活跃商家
   
   private int matureNum;//成熟商家
-  
+
   @Column(name = "PUBLISH_STATUS")
   private int publishStatus;//0未发布 1已发布
   
-  private String targetCycle;//日期指标
+  private String targetCycle;
 
   @Transient
-  private int order;//实际提货量
+  private Integer order;//实际提货量
+  @Transient
+  private Integer active;//实际活跃商家
 
   @Transient
-  private int active;//实际活跃商家
+  private Integer mature;//实际成熟商家
+  @Transient
+  private Integer merchant;//实际提货商家
 
-  public int getOrder() {
-    return order;
-  }
+  @Transient
+  private Integer matureAll;//实际提货商家
 
-  public void setOrder(int order) {
-    this.order = order;
-  }
-
-  public int getActive() {
-    return active;
-  }
-
-  public void setActive(int active) {
-    this.active = active;
-  }
 
   public Long getId() {
     return id;
@@ -95,6 +88,46 @@ public class MonthTarget implements Serializable{
 
   public SalesMan getSalesman() {
     return salesman;
+  }
+
+  public Integer getOrder() {
+    return order;
+  }
+
+  public void setOrder(Integer order) {
+    this.order = order;
+  }
+
+  public Integer getActive() {
+    return active;
+  }
+
+  public void setActive(Integer active) {
+    this.active = active;
+  }
+
+  public Integer getMature() {
+    return mature;
+  }
+
+  public void setMature(Integer mature) {
+    this.mature = mature;
+  }
+
+  public Integer getMerchant() {
+    return merchant;
+  }
+
+  public void setMerchant(Integer merchant) {
+    this.merchant = merchant;
+  }
+
+  public Integer getMatureAll() {
+    return matureAll;
+  }
+
+  public void setMatureAll(Integer matureAll) {
+    this.matureAll = matureAll;
   }
 
   public void setSalesman(SalesMan salesman) {
@@ -164,4 +197,5 @@ public class MonthTarget implements Serializable{
   public void setManagerId(String managerId) {
     this.managerId = managerId;
   }
+
 }

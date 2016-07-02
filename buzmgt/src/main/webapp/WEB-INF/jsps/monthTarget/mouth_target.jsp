@@ -13,12 +13,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>月指标</title>
-
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/bootStrapPager/css/page.css" />
     <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="static/css/common.css">
     <link rel="stylesheet" type="text/css" href="static/month-target/css/mouth.css">
     <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+    <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 </head>
 <body>
 <div class="content main">
@@ -89,189 +91,24 @@
                         <th>操作</th>
                     </tr>
                     </thead>
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>500 / 700</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>25 / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                        </td>
-                    </tr>
-
-
+                    <tbody id="tbody">
+                    <%--<tr>--%>
+                        <%--<td>山东省滨州市哈哈县</td>--%>
+                        <%--<td>胡老大</td>--%>
+                        <%--<td>400</td>--%>
+                        <%--<td>500 / 700</td>--%>
+                        <%--<td>25 / 50</td>--%>
+                        <%--<td>25 / 50</td>--%>
+                        <%--<td>25 / 50</td>--%>
+                        <%--<td>2016.05</td>--%>
+                        <%--<td>--%>
+                            <%--<button class="btn btn-blue btn-bn-style">查看</button>--%>
+                        <%--</td>--%>
+                    <%--</tr>--%>
+                  </tbody>
                 </table>
+                <div id="callBackPager"></div>
             </div>
-            <!--table-box-->
         </div>
         <!--油补记录-->
     </div>
@@ -400,6 +237,100 @@
 
     select();
 </script>
+<script id="tbody-template" type="text/x-handlebars-template">
+    {{#each this}}
+    <tr>
+        <td>{{region.parent.parent.parent.parent.name}}{{region.parent.parent.parent.name}}{{region.parent.parent.name}}{{region.name}}</td>
+        <td>{{salesman.truename}}</td>
+        <td>400</td>
+        <td>500 / 700</td>
+        <td>25 / 50</td>
+        <td>25 / 50</td>
+        <td>25 / 50</td>
+        <td>2016.05</td>
+        <td>
+            <button class="btn btn-blue btn-bn-style">查看</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>
+<script>
+    $(function(){
+        //页面初始化
+        monthTarget.detail.init(monthTarget.searchData);
 
+    });
+    var monthTarget = {
+        //查询条件
+        searchData: {
+            page: 0,
+            size: 3,
+            time: '2016-07',
+            name: ''
+        },
+        //分页参数
+        _count: {
+            totalCount: 0,
+            limit: 0,
+            total: -1
+        },
+
+        url:function(time){
+            return 'monthTarget/monthTargets/'+time;
+        },
+        findAll:function (searchData) {
+            console.log(searchData);
+            $.ajax({
+                url:monthTarget.url('2016-07'),
+                data:searchData,
+                success:function (data) {
+                    console.log(data);
+                    monthTarget.handelerbars_register(data.content);
+//                    monthTarget._count.totalCount = data.totalElements;//总页数
+//                    monthTarget._count.limit = data.size;
+//                    if (monthTarget._count.totalCount != monthTarget._count.total || monthTarget._count.totalCount == 0) {
+//                        monthTarget._count.total = monthTarget._count.totalCount;
+//                        console.log("-------");
+//                        monthTarget.initPaging();
+//                    }
+
+                }
+
+            });
+
+        },
+        //handelerbars填充数据
+        handelerbars_register:function(content){
+            var driver_template = Handlebars.compile($("#tbody-template").html());//注册
+            $("#tbody").html(driver_template(content));//填充数据
+
+        },
+        //分页工具
+//        initPaging: function () {
+//            $('#callBackPager').extendPagination({
+//                totalCount: monthTarget._count.totalCount,//总条数
+//                showCount: 5,//下面小图标显示的个数
+//                limit: monthTarget._count.limit,//每页显示的条数
+//                callback: function (curr, limit, totalCount) {
+//                    monthTarget.searchData.page = curr - 1;
+//                    monthTarget.searchData.size = limit;
+//                    monthTarget.findAll(monthTarget.searchData);
+//                }
+//            });
+//        },
+
+        detail: {
+            init:function(searchData){
+                monthTarget.findAll(searchData);
+            }
+        }
+
+
+
+
+    }
+
+
+</script>
 </body>
 </html>
