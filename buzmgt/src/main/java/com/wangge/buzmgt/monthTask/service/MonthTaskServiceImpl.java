@@ -4,18 +4,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.annotation.Resource;
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,17 +19,12 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.entity.RegistData;
-import com.wangge.buzmgt.assess.repository.AssessRepository;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
 import com.wangge.buzmgt.monthTask.entity.MonthTask;
@@ -86,57 +76,84 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 	// 订单支付状态为1,计算上个月的订单情况
 	public static final String lsdatasql =
 
-			"select r.registdata_id, r.region_id, o3.days, r.shop_name, '1' month\n" + "  from sys_registdata r\n"
-					+ "  left join SJZAIXIAN.SJ_TB_members m on r.member_id = m.id\n"
-					+ "  left join (select count(1) days, o2.member_id\n"
-					+ "               from (select o1.member_id, o1.day\n"
-					+ "                       from (select t.member_id,\n"
-					+ "                                    t.CREATETIME,\n"
-					+ "                                    to_char(t.CREATETIME, 'yyyy-mm-dd') day,\n"
-					+ "                                    t.ship_Name\n"
-					+ "                               from SJZAIXIAN.SJ_TB_ORDER t\n"
-					+ "                              where to_char(t.createTime, 'yyyy-mm') =\n"
-					+ "                                    to_char(sysdate - interval '1' month,\n"
-					+ "                                            'yyyy-mm')\n"
-					+ "                                and t.pay_status = '1') o1\n"
-					+ "                      group by o1.member_id, o1.day) o2\n"
-					+ "              group by o2.member_id\n"
-					+ "              order by days desc) o3 on o3.member_id = m.id\n"
-					+ " where r.user_id like '$town%'";
+
+"select r.registdata_id, r.region_id, o3.days, r.shop_name, '1' month\n" +
+"  from sys_registdata r\n" + 
+"  left join SJZAIXIAN.SJ_TB_members m on r.member_id = m.id\n" + 
+"  left join (select count(1) days, o2.member_id\n" + 
+"               from (select o1.member_id, o1.day\n" + 
+"                       from (select t.member_id,\n" + 
+"                                    t.CREATETIME,\n" + 
+"                                    to_char(t.CREATETIME, 'yyyy-mm-dd') day,\n" + 
+"                                    t.ship_Name\n" + 
+"                               from SJZAIXIAN.SJ_TB_ORDER t\n" + 
+"                              where to_char(t.createTime, 'yyyy-mm') =\n" + 
+"                                    to_char(sysdate - interval '1' month,\n" + 
+"                                            'yyyy-mm')\n" + 
+"                                and t.pay_status = '1') o1\n" + 
+"                      group by o1.member_id, o1.day) o2\n" + 
+"              group by o2.member_id\n" + 
+"              order by days desc) o3 on o3.member_id = m.id\n" + 
+" where exists (select 1\n" + 
+"          from (select *\n" + 
+"                  from sys_region r\n" + 
+"                 start with r.region_id = $town \n" + 
+"                connect by prior r.region_id = r.parent_id) tmp\n" + 
+"         where tmp.region_id = r.region_id)";
 	// 上月拜访访情况
 
 	/*
 	 * 正式上线一月后使用,一月之前以sys_visit表的数据进行统计
 	 * 
-	 * "select count(1), tmp.month, tmp.registdata_id, tmp.region_id\n" +
-	 * "  from (select substr(g.finish_time, 0, 7) month,\n" +
-	 * "               g.registdata_id,\n" + "               g.region_id\n" +
-	 * "          from (select to_char(v.time, 'yyyy-mm-dd') finish_time,\n" +
-	 * "                       r.registdata_id,\n" +
-	 * "                       r.region_id\n" +
-	 * "                  from sys_monthtask_execution v\n" +
-	 * "                  left join sys_registdata r on v.memberid = r.registdata_id\n"
-	 * + "                 where (to_char(v.time, 'yyyy-mm') =\n" +
-	 * "                       to_char(sysdate - interval '1' month, 'yyyy-mm'))\n"
-	 * + "                   and r.user_id like '$town%') g\n" +
-	 * "         group by g.finish_time, g.registdata_id, g.region_id) tmp\n" +
-	 * " group by tmp.month, tmp.registdata_id, tmp.region_id";
+	
+	
+"select count(1), tmp.month, tmp.registdata_id, tmp.region_id\n" +
+"  from (select substr(g.finish_time, 0, 7) month,\n" + 
+"               g.registdata_id,\n" + 
+"               g.region_id\n" + 
+"          from (select to_char(v.time, 'yyyy-mm-dd') finish_time,\n" + 
+"                       r.registdata_id,\n" + 
+"                       r.region_id\n" + 
+"                  from sys_monthtask_execution v\n" + 
+"                  left join sys_registdata r on v.memberid = r.registdata_id\n" + 
+"                 where (to_char(v.time, 'yyyy-mm') =\n" + 
+"                       to_char(sysdate - interval '1' month, 'yyyy-mm'))\n" + 
+"                   and exists\n" + 
+"                 (select 1\n" + 
+"                          from (select *\n" + 
+"                                  from sys_region r\n" + 
+"                                 start with r.region_id = $town \n" + 
+"                                connect by prior r.region_id = r.parent_id) tmp\n" + 
+"                         where tmp.region_id = r.region_id)) g\n" + 
+"         group by g.finish_time, g.registdata_id, g.region_id) tmp\n" + 
+" group by tmp.month, tmp.registdata_id, tmp.region_id";
+
 	 * 
 	 * 
 	 */
-	public static final String lsVisitSql = "select count(1), tmp.month, tmp.registdata_id, tmp.region_id \n"
-			+ "  from (select substr(g.finish_time, 0, 7) month,\n" + "               g.registdata_id,\n"
-			+ "               g.region_id\n"
-			+ "          from (select to_char(v.finish_time, 'yyyy-mm-dd') finish_time,\n"
-			+ "                       r.registdata_id,\n" + "                       r.region_id\n"
-			+ "                  from sys_visit v\n"
-			+ "                  left join sys_registdata r on v.registdata_id =\n"
-			+ "                                                r.registdata_id\n"
-			+ "                 where v.finish_time is not null\n" + "                   and r.user_id  like '$town%'\n"
-			+ "                   and (to_char(v.finish_time, 'yyyy-mm') =\n"
-			+ "                       to_char(sysdate - interval '1' month, 'yyyy-mm'))) g\n"
-			+ "         group by g.finish_time, g.registdata_id, g.region_id) tmp\n"
-			+ " group by tmp.month, tmp.registdata_id, tmp.region_id";
+	public static final String lsVisitSql = 
+	    "select count(1), tmp.month, tmp.registdata_id, tmp.region_id\n" +
+	        "  from (select substr(g.finish_time, 0, 7) month,\n" + 
+	        "               g.registdata_id,\n" + 
+	        "               g.region_id\n" + 
+	        "          from (select to_char(v.finish_time, 'yyyy-mm-dd') finish_time,\n" + 
+	        "                       r.registdata_id,\n" + 
+	        "                       r.region_id\n" + 
+	        "                  from sys_visit v\n" + 
+	        "                  left join sys_registdata r on v.registdata_id =\n" + 
+	        "                                                r.registdata_id\n" + 
+	        "                 where v.finish_time is not null\n" + 
+	        "                   and exists\n" + 
+	        "                 (select 1\n" + 
+	        "                          from (select *\n" + 
+	        "                                  from sys_region r\n" + 
+	        "                                 start with r.region_id = $town\n" + 
+	        "                                connect by prior r.region_id = r.parent_id) tmp\n" + 
+	        "                         where tmp.region_id = r.region_id)\n" + 
+	        "                   and (to_char(v.finish_time, 'yyyy-mm') =\n" + 
+	        "                       to_char(sysdate - interval '1' month, 'yyyy-mm'))) g\n" + 
+	        "         group by g.finish_time, g.registdata_id, g.region_id) tmp\n" + 
+	        " group by tmp.month, tmp.registdata_id, tmp.region_id";
 
 	@Override
 	public Map<String, Object> getMainTaskList(Pageable page, String month, MultiValueMap<String, String> parameters)
@@ -462,7 +479,7 @@ public class MonthTaskServiceImpl implements MonthTaskService {
 	@Override
 	public void ExportSetExcel(MonthTask task, String salesName, HttpServletRequest request,
 			HttpServletResponse response) {
-		List<Object> dataList = taskSubrep.findByMonthTask(task.getId());
+		List<Object> dataList = taskSubrep.findByMonthTask_Id(task.getId());
 		List<Map<String, Object>> alList = new ArrayList<Map<String, Object>>();
 		Map<String, Integer> sumMap = new HashMap<String, Integer>();
 		Map<String, Object> rateMap = new HashMap<String, Object>();

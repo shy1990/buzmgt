@@ -18,56 +18,60 @@ import com.wangge.buzmgt.util.HttpUtil;
 
 @RepositoryEventHandler
 public class DataEventHandler {
-	@Autowired
-	private MonthOrdersDataRepository monthRep;
-
-	private Log log = LogFactory.getLog(DataEventHandler.class);
-
-	/*
-	 * TODO 目前将信息推动事项关闭,以后需要会开启
-	 */
-	@HandleBeforeCreate
-	public void handlePersonCreate(MonthTask monthTask) throws Exception {
-		MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId(null,monthTask.getRegionid(), monthTask.getMonth());
-		if (null != orda) {
-			orda.setUsed(1);
-			monthRep.save(orda);
-			monthTask.setMonthData(orda);
-		}
-		try {
-			// handlePush(monthTask, orda);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 实现月任务发布推送
-	 * 
-	 * @param monthTask
-	 * @param orda
-	 * @throws Exception
-	 */
-	private void handlePush(MonthTask monthTask, MonthOdersData orda) {
-		if (monthTask.getStatus() == 1) {
-			String phone = orda.getSalesman().getMobile();
-			Map<String, String> talMap = new HashMap<String, String>();
-			talMap.put("mobiles", phone);
-			talMap.put("msg", "下月的月任务已生成");
-			String result = HttpUtil.sendPostJson(AppServer.URL, talMap);
-			if (!result.contains("true")) {
-				log.debug("手机推送月任务出错!!" + monthTask);
-			}
-		}
-	}
-
-	@HandleBeforeSave
-	public void handleProfileSave(MonthTask monthTask) {
-		MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId(null,monthTask.getAgentid(), monthTask.getMonth());
-		try {
-			// handlePush(monthTask, orda);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+  @Autowired
+  private MonthOrdersDataRepository monthRep;
+  
+  private Log log = LogFactory.getLog(this.getClass());
+  
+  /*
+   * TODO 目前将信息推动事项关闭,以后需要会开启
+   */
+  @HandleBeforeCreate
+  public void handlePersonCreate(MonthTask monthTask) throws Exception {
+    try {
+      MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId(monthTask.getAgentid(), monthTask.getMonth());
+      if (null != orda) {
+        orda.setUsed(1);
+        monthRep.save(orda);
+        monthTask.setMonthData(orda);
+      }
+      // handlePush(monthTask, orda);
+    } catch (Exception e) {
+      e.printStackTrace();
+      log.debug(e);
+      throw e;
+    }
+  }
+  
+  /**
+   * 实现月任务发布推送
+   * 
+   * @param monthTask
+   * @param orda
+   * @throws Exception
+   */
+  private void handlePush(MonthTask monthTask, MonthOdersData orda) {
+    if (monthTask.getStatus() == 1) {
+      String phone = orda.getSalesman().getMobile();
+      Map<String, Object> talMap = new HashMap<String, Object>();
+      talMap.put("mobiles", phone);
+      talMap.put("msg", "下月的月任务已生成");
+      String result = HttpUtil.sendPostJson(AppServer.URL + "/push/mainMonthTask", talMap);
+      if (!result.contains("true")) {
+        log.debug("手机推送月任务出错!!" + monthTask);
+      }
+    }
+  }
+  
+  @HandleBeforeSave
+  public void handleProfileSave(MonthTask monthTask) {
+    try {
+      MonthOdersData orda = monthRep.findFirst1bySalesmanOrRegionId(monthTask.getAgentid(), monthTask.getMonth());
+      // handlePush(monthTask, orda);
+    } catch (Exception e) {
+      e.printStackTrace();
+      log.debug(e);
+      throw e;
+    }
+  }
 }

@@ -31,7 +31,7 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
 
 	//
 	/**
-	 * 查找某地区下所有业务员
+	 * 查找某地区下所有的未设置本月月任务的业务员
 	 * 
 	 * @param regionId
 	 * @return
@@ -41,9 +41,23 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
 			+ "                 start with r.region_id = ?1 \n"
 			+ "                connect by prior r.region_id = r.parent_id) tmp\n"
 			+ "         where tmp.region_id = s.region_id) and  exists (select  1 \n"
-			+ " from sys_month_Task_basicdata d where d.salesman_id=s.user_id and d.used=0 )", nativeQuery = true)
-	Set<SalesMan> readAllByRegionId(String regionId);
-
+			+ " from sys_month_Task_basicdata d where d.salesman_id=s.user_id and d.used=0 "
+			+ " and d.month=to_char(sysdate + interval '1' month,'yyyy-mm'))", nativeQuery = true)
+	Set<SalesMan> readAllByRegionIdandMonth_Userd(String regionId);
+	
+	 /** 
+	  * readAllByRegionId:查找一个区域下所有的业务员列表<br/> 
+	  * @author yangqc 
+	  * @param regionId
+	  * @return 
+	  * @since JDK 1.8 
+	  */  
+	@Query(value = "select * \n" + "  from sys_salesman s\n" + " where  exists (select 1\n"
+	      + "       from (select * \n" + "                  from sys_region r\n"
+	      + "                 start with r.region_id = ?1 \n"
+	      + "                connect by prior r.region_id = r.parent_id) tmp\n"
+	      + "         where tmp.region_id = s.region_id) ", nativeQuery = true)
+  Set<SalesMan> readAllByRegionId(String regionId);
 	/**
 	 * 通过地区查找主业务员
 	 * 

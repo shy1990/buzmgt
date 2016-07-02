@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.monthTask.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,7 +50,8 @@ public class SceduleOfMonthOrders {
 	private static final String townSql = " select s.region_id, s.user_id, s.truename   from sys_salesman s ";
 
 	// 每月15号点时分 0 30 1 15 * ?
-	@Scheduled(cron = " 0 30 1 15 * ? ")
+	@SuppressWarnings("unchecked")
+  @Scheduled(cron = " 0 30 1 15 * ? ")
 	public void handleMontholdData() {
 		List<Object[]> townList = em.createNativeQuery(townSql).getResultList();
 		for (Object[] towns : townList) {
@@ -70,11 +70,12 @@ public class SceduleOfMonthOrders {
 	 * @throws NumberFormatException
 	 */
 	private void handleOneTownOrders(String town, String salemanid, String salemanName) throws NumberFormatException {
-		String sql = MonthTaskServiceImpl.lsdatasql.replace("$town", salemanid);
+		String sql = MonthTaskServiceImpl.lsdatasql.replace("$town", town);
 		// 得出三个月的数据sql
 		sql += "union " + sql.replace("'1' month", "'2' month") + " union " + sql.replace("'1' month", "'3' month");
 		Query q = em.createNativeQuery(sql);
-		List<Object[]> datalist = q.getResultList();
+		@SuppressWarnings("unchecked")
+    List<Object[]> datalist = q.getResultList();
 		Map<String, Object> lastMonth = new HashMap<String, Object>();
 		lastMonth.put("town", town);
 		// 上月的数据
@@ -114,8 +115,9 @@ public class SceduleOfMonthOrders {
 			int sum = sum1[i] + sum2[i] + sum3[i];
 			sum4[i] = sum % 3 == 0 ? sum / 3 : (sum / 3 + 1);
 		}
-		String vsSql = MonthTaskServiceImpl.lsVisitSql.replace("$town", salemanid);
-		List<Object[]> visList = em.createNativeQuery(vsSql).getResultList();
+		String vsSql = MonthTaskServiceImpl.lsVisitSql.replace("$town", town);
+		@SuppressWarnings("unchecked")
+    List<Object[]> visList = em.createNativeQuery(vsSql).getResultList();
 		for (Object[] vist : visList) {
 			int tal = Integer.parseInt(vist[0] + "");
 			Map<String, Object> shopMap = new HashMap<String, Object>();

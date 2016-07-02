@@ -1,16 +1,12 @@
 package com.wangge.buzmgt.monthTask.web;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +14,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -194,13 +189,13 @@ public class TaskController {
 		}
 		Set<SalesMan> salesSet = new HashSet<SalesMan>();
 		Region region = monthTaskService.getRegion(regionId);
-		salesSet.addAll(salesRep.readAllByRegionId(region.getId()));
+		salesSet.addAll(salesRep.readAllByRegionIdandMonth_Userd(region.getId()));
 		model.addAttribute("salesList", salesSet);
 		model.addAttribute("region", region);
 		model.addAttribute("taskId", taskId);
 		return "month/month_task_add";
 	}
-
+	
 	/**
 	 * 子任务数据查询页面
 	 * 
