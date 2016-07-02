@@ -68,11 +68,6 @@ public class ResourceServiceImpl implements ResourceService {
 
   /** 
     * addMenuToSet:(这里用一句话描述这个方法的作用). <br/> 
-    * TODO(这里描述这个方法适用条件 – 可选).<br/> 
-    * TODO(这里描述这个方法的执行流程 – 可选).<br/> 
-    * TODO(这里描述这个方法的使用方法 – 可选).<br/> 
-    * TODO(这里描述这个方法的注意事项 – 可选).<br/> 
-    * 
     * @author yangqc 
     * @param menus
     * @param r 
@@ -91,7 +86,8 @@ public class ResourceServiceImpl implements ResourceService {
   }
   /**
    * resource2MenuByParent:新的构造菜单的方法. <br/>
-   * 先构造父级菜单,再构造子菜单
+   *  本方法思路:按上下级树来整理受控资源;
+   *   将一个资源树分支整理成一个menu;包括其本身和下级区域;
    * 只支持两级菜单,如果是三级菜单,推测:方案1:则可以使用Map<Resource,Map<Resource,Set<Resource>>>类型的容器进行嵌套;
    * 方案二:通过不断层级精确Resource的child的值,可以构造一个可以精确反映受控资源树;
    * 
@@ -101,6 +97,7 @@ public class ResourceServiceImpl implements ResourceService {
    * @since JDK 1.8
    */
   private Set<Menu> resource2MenuByParent(Collection<Resource> resources) {
+    //整理资源为资源树
     Set<Menu> menus = new HashSet<Menu>();
     Map<Resource,Set<Resource>> treeMap=new HashMap<Resource,Set<Resource>>();
     resources.forEach(r -> {
@@ -114,6 +111,8 @@ public class ResourceServiceImpl implements ResourceService {
         treeMap.put(fatherR, childSet);
       }
     });
+ 
+    //处理资源树到Set<Menu>
     for(Map.Entry<Resource, Set<Resource>> tree :treeMap.entrySet()){
       Resource fatherR=tree.getKey();
       Set<Resource> childSet= tree.getValue();

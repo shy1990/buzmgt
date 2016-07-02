@@ -174,7 +174,7 @@
 		charset="utf-8"></script>
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
-	<script src="static/month-task/month.js"></script>
+	<script src="/static/month-task/month.js"></script>
 
 	<script type="text/javascript">
 		function addTask() {
