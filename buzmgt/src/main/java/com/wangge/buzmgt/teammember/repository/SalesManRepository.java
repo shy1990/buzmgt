@@ -39,6 +39,6 @@ public interface SalesManRepository extends JpaRepository<SalesMan,String>{
       + "       from (select * \n" + "                  from sys_region r\n"
       + "                 start with r.region_id = ?1 \n"
       + "                connect by prior r.region_id = r.parent_id) tmp\n"
-      + "         where tmp.region_id = s.region_id)", nativeQuery = true)
+      + "         where tmp.region_id = s.region_id and s.status=2)", nativeQuery = true)
   Set<SalesMan> findForTargetByReginId(String regionId);
 }

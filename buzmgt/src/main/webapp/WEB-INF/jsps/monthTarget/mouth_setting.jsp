@@ -282,7 +282,7 @@
 <script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 <script src="<%=basePath%>static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
-<script src="<%=basePath%>static/month-target/js/update.js" type="text/javascript" charset="utf-8"></script>
+<script src="<%=basePath%>static/month-target/js/monthSetting.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     $('body input').val('');
     $(".form_datetime").datetimepicker({

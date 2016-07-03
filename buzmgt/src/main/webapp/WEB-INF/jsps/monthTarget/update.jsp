@@ -89,13 +89,16 @@
             </form>
         </div> -->
 
-        <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
+        <button class="btn btn-blue btn-sm" onclick="goSearch();">
             检索
         </button>
      <span style="color: #a6a6a6" id="regionName">  </span> </div>
     <!--地区-->
 
     <div class="row" >
+    <div class="member-from-box form-horizontal">
+    <!-- 
+    <form id="dataForm" class="member-from-box form-horizontal" name="form" method="POST"> -->
         <!--提货量-->
         <div class="col-sm-3" style="margin: 0; padding: 0">
              <div class="tab-pane fade in active" >
@@ -110,19 +113,19 @@
                          <tr>
                              <td>
                                  近三个月月均提货量
-                                 <div class="  text-right" style="margin-top: -15px;color: #00b7ee" id="orderAvg">720 台</div>
+                                 <div class="  text-right" style="margin-top: -15px;color: #00b7ee" id="orderAvg">0 台</div>
                              </td>
                          </tr>
                          <tr>
-                             <td>上月提货量 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee" id="orderLast">800 台</div></td>
+                             <td>上月提货量 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee" id="orderLast">0 台</div></td>
 
                          </tr>
                          <tr>
-                             <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="adviseOrder">750 台</div></td>
+                             <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="adviseOrder">0 台</div></td>
 
                          </tr>
                          <tr>
-                             <td>请录入 <input class="input-th" type="text" placeholder="提货量"> &nbsp;台</td>
+                             <td>请录入 <input class="input-th" type="text" placeholder="提货量" name="orderNum"> &nbsp;台</td>
                          </tr>
 
                          </table>
@@ -147,19 +150,19 @@
                         <tr>
                             <td>
                                 近三个月月均提货商家
-                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee">720 台</div>
+                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee" id="merAvg">0 台</div>
                             </td>
                         </tr>
                         <tr>
-                            <td>上月提货商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee">800 台</div></td>
+                            <td>上月提货商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee" id="merLast">0 台</div></td>
 
                         </tr>
                         <tr>
-                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">750 台</div></td>
+                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="merAd">0 台</div></td>
 
                         </tr>
                         <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="提货商家"> &nbsp;家</td>
+                            <td>请录入 <input class="input-th" type="text" placeholder="提货商家" name="merchantNum"> &nbsp;家</td>
                         </tr>
 
                     </table>
@@ -183,19 +186,19 @@
                         <tr>
                             <td>
                                 近三个月月均活跃商家
-                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee">20 家</div>
+                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee" id="acAvg">0 家</div>
                             </td>
                         </tr>
                         <tr>
-                            <td>上月活跃商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee">15 家</div></td>
+                            <td>上月活跃商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee" id="acLast">0 家</div></td>
 
                         </tr>
                         <tr>
-                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">18 家</div></td>
+                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="acAd">0 家</div></td>
 
                         </tr>
                         <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="活跃商家"> &nbsp;家</td>
+                            <td>请录入 <input class="input-th" type="text" placeholder="活跃商家" name="activeNum"> &nbsp;家</td>
                         </tr>
 
                     </table>
@@ -219,21 +222,21 @@
                         <tr>
                             <td>
                                 近三个月月均成熟商家
-                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee">20 家</div>
+                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee" id="maAvg">0 家</div>
                             </td>
                         </tr>
                         <tr>
-                            <td>上月成熟商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee">15 家</div></td>
+                            <td>上月成熟商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee" id="maLast">0 家</div></td>
 
                         </tr>
                         <tr>
-                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">18 家</div></td>
+                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="maAd">0 家</div></td>
 
                         </tr>
                         <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="成熟商家"> &nbsp;家</td>
+                            <td>请录入 <input class="input-th" type="text" placeholder="成熟商家" name="matureNum"> &nbsp;家</td>
                         </tr>
-
+						<input class="input-th" type="hidden" name="salesman.id" value="" id="userId">
                     </table>
                 </div>
             </div>
@@ -244,8 +247,9 @@
 
 
     <div style="text-align: center;background-color: #fafafa">
-        <button class="btn btn-primary btn-blue btn-ok" >保存</button>
+        <button class="btn btn-primary btn-blue btn-ok" onclick="toSubmit();" id="btn">保存</button>
     </div>
+   </div>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 <script src="<%=basePath%>static/multiselect/js/jquery.multiselect.js"></script>
 <script src="<%=basePath%>static/month-target/js/update.js" type="text/javascript" charset="utf-8"></script>
