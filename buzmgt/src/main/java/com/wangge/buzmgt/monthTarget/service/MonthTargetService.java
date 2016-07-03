@@ -11,7 +11,7 @@ public interface MonthTargetService {
 	
   Region getRegion();
 
-  public Page<MonthTarget> findByTargetCycleAndManagerId(String time, String managerId,Pageable pageable);
+  public Page<MonthTarget> findByTargetCycleAndManagerId(String truename,String time, String managerId,Pageable pageable);
 
 
   public Page<MonthTarget> findCount(String time,Page page);

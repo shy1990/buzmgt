@@ -7,6 +7,7 @@ import java.util.Set;
 import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.json.JSONFormat;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.wangge.buzmgt.util.JsonResponse;
 @RequestMapping("/monthTarget")
 @Controller
 public class MonthTargetController {
+  private static final Logger logger = Logger.getLogger(MonthTargetController.class);
   @Autowired
   private SalesManService smService;
   @Autowired
@@ -70,19 +72,22 @@ public class MonthTargetController {
    * 根据时间与区域经理id查询 全部的业务员信息
    * @return
      */
-  @RequestMapping(value = "/monthTargets/{time}",method = RequestMethod.GET)
+  @RequestMapping(value = "/monthTargets",method = RequestMethod.GET)
 //  @ResponseBody
   @JSONFormat(filterField = {"SalesMan.user","region.children"})
-  public  Page<MonthTarget> findByTargetCycleAndManagerId(@PathVariable String time,
+  public  Page<MonthTarget> findByTargetCycleAndManagerId(@RequestParam String time,
                                                           @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                           @RequestParam(value = "size", defaultValue = "20") Integer size,
-                                                          @RequestParam (value = "name", defaultValue = "")String name
+                                                          @RequestParam (value = "name", defaultValue = "")String truename
                                                           ){
     User user = (User)SecurityUtils.getSubject().getPrincipal();
-//    String managerId = user.getId();B37000006290
+//    String managerId = user.getId();
     String managerId = "B37000006290";
+    logger.info("time: "+time);
+//    time = "2016-06";
+//    truename = "拓展经理";
     Pageable pageable = new PageRequest(page, size);
-    Page<MonthTarget> requestPage = mtService.findByTargetCycleAndManagerId(time,managerId,pageable);
+    Page<MonthTarget> requestPage = mtService.findByTargetCycleAndManagerId(truename,time,managerId,pageable);
 
     return requestPage;
   }

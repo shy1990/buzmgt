@@ -75,7 +75,7 @@ public class MonthTarget implements Serializable{
   private Integer merchant;//实际提货商家
 
   @Transient
-  private Integer matureAll;//实际提货商家
+  private Integer matureAll;//注册商家
 
 
   public Long getId() {

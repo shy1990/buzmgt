@@ -1,25 +1,26 @@
-﻿<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" import="java.util.*" pageEncoding="UTF-8" %>
 <%
-  String path = request.getContextPath();
-			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-					+ path + "/";
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+            + path + "/";
 %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-	<base href="<%=basePath%>" />
+    <base href="<%=basePath%>"/>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>月指标</title>
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/bootStrapPager/css/page.css" />
     <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=basePath%>static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="static/css/common.css">
     <link rel="stylesheet" type="text/css" href="static/month-target/css/mouth.css">
     <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/bootStrapPager/css/page.css"/>
     <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 </head>
 <body>
@@ -38,39 +39,34 @@
             <div class="input-group input-group-sm">
                 <span class="input-group-addon " id="basic-addon1"><i
                         class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-                <input type="text" class="form-control form_datetime input-sm" placeholder="选择日期" readonly="readonly">
+                <input id="iuputtime" type="text" class="form-control form_datetime input-sm" placeholder="选择日期"
+                       readonly="readonly">
             </div>
         </div>
     </div>
-    <!---选择地区-->
 
-    <!---设置次数-->
     <div class="box-szcs">
-        <span class="text-gray">选择区域：</span>
-        <select class="box-sty-s" style="width: 187px">
-            <option>省-市-县</option>
-            <option>上海市</option>
-            <option>北京市</option>
-        </select>
-
-        <button class="btn btn-blue btn-sm" style="height: 30px;margin-left: 10px"
-                onclick="goSearch('${salesman.id}','${assess.id}');">
+        <input id="inputname" class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
+        <button class="btn btn-blue btn-sm" id="searchName">
             检索
         </button>
+        <%--<span class="text-gray">选择区域：</span>--%>
+        <%--<select class="box-sty-s" style="width: 187px">--%>
+        <%--<option>省-市-县</option>--%>
+        <%--<option>上海市</option>--%>
+        <%--<option>北京市</option>--%>
+        <%--</select>--%>
+
+        <%--<button  class="btn btn-blue btn-sm" style="height: 30px;margin-left: 10px">--%>
+        <%--检索--%>
+        <%--</button>--%>
 
         <div class="link-posit-t pull-right export">
-            <input class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
-            <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
-                检索
-            </button>
+
             <a class="table-export" href="javascript:void(0);">导出excel</a>
         </div>
 
     </div>
-
-
-    <!---设置次数-->
-
     <div class="clearfix"></div>
     <div class="tab-content">
         <!--油补记录-->
@@ -83,32 +79,32 @@
                         <th>区域</th>
                         <th>负责人</th>
                         <th>注册商家</th>
-                        <th>提货量  <span class="th-td">（实际/指标）</span></th>
-                        <th>提货商家  <span class="th-td">（实际/指标）</span></th>
-                        <th>活跃商家  <span class="th-td">（实际/指标）</span></th>
-                        <th>成熟商家  <span class="th-td">（实际/指标）</span></th>
+                        <th>提货量 <span class="th-td">（实际/指标）</span></th>
+                        <th>提货商家 <span class="th-td">（实际/指标）</span></th>
+                        <th>活跃商家 <span class="th-td">（实际/指标）</span></th>
+                        <th>成熟商家 <span class="th-td">（实际/指标）</span></th>
                         <th>指标周期</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody id="tbody">
                     <%--<tr>--%>
-                        <%--<td>山东省滨州市哈哈县</td>--%>
-                        <%--<td>胡老大</td>--%>
-                        <%--<td>400</td>--%>
-                        <%--<td>500 / 700</td>--%>
-                        <%--<td>25 / 50</td>--%>
-                        <%--<td>25 / 50</td>--%>
-                        <%--<td>25 / 50</td>--%>
-                        <%--<td>2016.05</td>--%>
-                        <%--<td>--%>
-                            <%--<button class="btn btn-blue btn-bn-style">查看</button>--%>
-                        <%--</td>--%>
+                    <%--<td>山东省滨州市哈哈县</td>--%>
+                    <%--<td>胡老大</td>--%>
+                    <%--<td>400</td>--%>
+                    <%--<td>500 / 700</td>--%>
+                    <%--<td>25 / 50</td>--%>
+                    <%--<td>25 / 50</td>--%>
+                    <%--<td>25 / 50</td>--%>
+                    <%--<td>2016.05</td>--%>
+                    <%--<td>--%>
+                    <%--<button class="btn btn-blue btn-bn-style">查看</button>--%>
+                    <%--</td>--%>
                     <%--</tr>--%>
-                  </tbody>
+                    </tbody>
                 </table>
-                <div id="callBackPager"></div>
             </div>
+            <div id="callBackPager"></div>
         </div>
         <!--油补记录-->
     </div>
@@ -183,14 +179,14 @@
 <script type="text/javascript">
     $('body input').val('');
     $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
+        format: "yyyy-mm",
         language: 'zh-CN',
         weekStart: 1,
         todayBtn: 1,
         autoclose: 1,
         todayHighlight: 1,
-        startView: 2,
-        minView: 2,
+        startView: 3,
+        minView: 3,
         pickerPosition: "bottom-right",
         forceParse: 0
     });
@@ -240,32 +236,100 @@
 <script id="tbody-template" type="text/x-handlebars-template">
     {{#each this}}
     <tr>
-        <td>{{region.parent.parent.parent.parent.name}}{{region.parent.parent.parent.name}}{{region.parent.parent.name}}{{region.name}}</td>
-        <td>{{salesman.truename}}</td>
-        <td>400</td>
-        <td>500 / 700</td>
-        <td>25 / 50</td>
-        <td>25 / 50</td>
-        <td>25 / 50</td>
-        <td>2016.05</td>
         <td>
-            <button class="btn btn-blue btn-bn-style">查看</button>
+            {{region.parent.parent.parent.parent.name}}{{region.parent.parent.parent.name}}{{region.parent.parent.name}}{{region.name}}
+        </td>
+        <td>{{salesman.truename}}</td>
+        <td>{{matureAll}}</td>
+        <td>{{order}} / {{orderNum}}</td>
+        <td>{{merchant}} / {{merchantNum}}</td>
+        <td>{{active}} / {{activeNum}}</td>
+        <td>{{mature}} / {{matureNum}}</td>
+        <td>{{targetCycle}}</td>
+        <td>
+            <button onclick="seeSalseman('{{region.id}}','{{targetCycle}}','{{order}}','{{orderNum}}','{{merchant}}','{{merchantNum}}','{{active}}','{{activeNum}}','{{mature}}','{{matureNum}}');"
+                    class="btn btn-blue btn-bn-style">查看
+            </button>
+
         </td>
     </tr>
     {{/each}}
 </script>
 <script>
-    $(function(){
+    //日期格式化
+    Date.prototype.format = function (format) {
+        var o = {
+            "M+": this.getMonth() + 1, //month
+            "d+": this.getDate(), //day
+            "h+": this.getHours(), //hour
+            "m+": this.getMinutes(), //minute
+            "s+": this.getSeconds(), //second
+            "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+            "S": this.getMilliseconds() //millisecond
+        }
+        if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
+                (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)if (new RegExp("(" + k + ")").test(format))
+            format = format.replace(RegExp.$1,
+                    RegExp.$1.length == 1 ? o[k] :
+                            ("00" + o[k]).substr(("" + o[k]).length));
+        return format;
+    }
+    var myDate = new Date().format('yyyy-MM');//今天日期
+    //查看业务员的信息
+    function seeSalseman(regionId, time, order, orderNum,merchant,merchantNum, active, activeNum,mature,matureNum) {
+        console.log(regionId + '  ' + time + '  ' + order + '  ' + orderNum + '  ' + active + '  ' + activeNum);
+//        $.post("/mothTargetData", {regionId: regionId, time: time,order:order,orderNum:orderNum,merchant:merchant,merchantNum:merchantNum,active:active,activeNum:activeNum,mature:mature,matureNum:matureNum});
+        window.location.href = '/mothTargetData?regionId='+regionId+'&time='+time+'&order='+order+'&orderNum='+orderNum+'&merchant='+merchant+'&merchantNum='+merchantNum+'&active='+active+'&activeNum='+activeNum+'&mature='+mature+'&matureNum='+matureNum;
+
+//        $.ajax(function(){
+//            type:"POST",
+//            dataType:"json",
+//            url:"default.aspx",//请求页面
+//            data:"{id=1}",
+//            complete:function(){location.href ="default.aspx"}//跳转页面
+//        })
+
+
+//        $.ajax({
+//            type:"GET",
+//            url:"/mothTargetData",
+//            data:{regionId: regionId, time: time,order:order,orderNum:orderNum,merchant:merchant,merchantNum:merchantNum,active:active,activeNum:activeNum,mature:mature,matureNum:matureNum},
+////            complete:function(){location.href ="/mothTargetData"}//跳转页面
+//        });
+
+
+    }
+    $(function () {
         //页面初始化
+        console.log(myDate);
+        monthTarget.searchData.time = myDate;
         monthTarget.detail.init(monthTarget.searchData);
+
+        //根据姓名和日期检索
+        $("#searchName").click(function () {
+            var name = $("#inputname").val();
+            var time = $("#iuputtime").val();
+            console.log(time+'  time');
+            if (time == null || time == undefined || time == '') {
+                time = myDate;
+            }
+            monthTarget.searchData.page = 0;
+            monthTarget.searchData.name = name;
+            monthTarget.searchData.time = time;
+            monthTarget.findByName(monthTarget.searchData);
+
+
+        });
+
 
     });
     var monthTarget = {
         //查询条件
         searchData: {
             page: 0,
-            size: 3,
-            time: '2016-07',
+            size: 2,
+            time: '',
             name: ''
         },
         //分页参数
@@ -275,57 +339,62 @@
             total: -1
         },
 
-        url:function(time){
-            return 'monthTarget/monthTargets/'+time;
+        url: function () {
+            return 'monthTarget/monthTargets';
         },
-        findAll:function (searchData) {
+        //查询全部
+        findAll: function (searchData) {
             console.log(searchData);
             $.ajax({
-                url:monthTarget.url('2016-07'),
-                data:searchData,
-                success:function (data) {
+                url: monthTarget.url(),
+                data: searchData,
+                success: function (data) {
                     console.log(data);
                     monthTarget.handelerbars_register(data.content);
-//                    monthTarget._count.totalCount = data.totalElements;//总页数
-//                    monthTarget._count.limit = data.size;
-//                    if (monthTarget._count.totalCount != monthTarget._count.total || monthTarget._count.totalCount == 0) {
-//                        monthTarget._count.total = monthTarget._count.totalCount;
-//                        console.log("-------");
-//                        monthTarget.initPaging();
-//                    }
+                    monthTarget._count.totalCount = data.totalElements;//总页数
+                    monthTarget._count.limit = data.size;
+                    console.log(monthTarget._count)
+                    if (monthTarget._count.totalCount != monthTarget._count.total || monthTarget._count.totalCount == 0) {
+                        monthTarget._count.total = monthTarget._count.totalCount;
+                        console.log("-------");
+                        monthTarget.initPaging();
+                    }
 
                 }
 
             });
+        },
+        //根据姓名见检索
+        findByName: function (searchData) {
+            monthTarget._count.total = -1;
+            monthTarget.findAll(searchData);
 
         },
         //handelerbars填充数据
-        handelerbars_register:function(content){
+        handelerbars_register: function (content) {
             var driver_template = Handlebars.compile($("#tbody-template").html());//注册
             $("#tbody").html(driver_template(content));//填充数据
 
         },
         //分页工具
-//        initPaging: function () {
-//            $('#callBackPager').extendPagination({
-//                totalCount: monthTarget._count.totalCount,//总条数
-//                showCount: 5,//下面小图标显示的个数
-//                limit: monthTarget._count.limit,//每页显示的条数
-//                callback: function (curr, limit, totalCount) {
-//                    monthTarget.searchData.page = curr - 1;
-//                    monthTarget.searchData.size = limit;
-//                    monthTarget.findAll(monthTarget.searchData);
-//                }
-//            });
-//        },
+        initPaging: function () {
+            $('#callBackPager').extendPagination({
+                totalCount: monthTarget._count.totalCount,//总条数
+                showCount: 5,//下面小图标显示的个数
+                limit: monthTarget._count.limit,//每页显示的条数
+                callback: function (curr, limit, totalCount) {
+                    monthTarget.searchData.page = curr - 1;
+                    monthTarget.searchData.size = limit;
+                    monthTarget.findAll(monthTarget.searchData);
+                }
+            });
+        },
 
         detail: {
-            init:function(searchData){
+            init: function (searchData) {
                 monthTarget.findAll(searchData);
             }
         }
-
-
 
 
     }
