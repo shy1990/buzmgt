@@ -26,10 +26,10 @@ function initDate() {
 		todayBtn : 1,
 		autoclose : 1,
 		todayHighlight : 1,
-		startView : 2,
-		minView : 2,
+		startView : 3,
+		minView : 3,
 		pickerPosition : "bottom-left",
-		forceParse : 0
+		forceParse : 0,
 	});
 	var $_haohe_plan = $('.J_kaohebar').width();
 	var $_haohe_planw = $('.J_kaohebar_parents').width();
