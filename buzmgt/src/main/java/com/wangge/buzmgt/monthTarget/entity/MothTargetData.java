@@ -29,6 +29,8 @@ public class MothTargetData implements Serializable {
 
     private String regionId;//所属区域
 
+    private String parentId;//业务员regionid
+
     private String phoneNmu;//商家电话
 
     private String shopName;//商家名称
@@ -37,7 +39,11 @@ public class MothTargetData implements Serializable {
 
     private BigDecimal numsOne;//单品数量
 
-    private Region region;//区域
+    private Region region;//商家区域
+
+    private String regionName;//商家区域
+
+    private String time;//用于在页面显示月份
 
     public Region getRegion() {
         return region;
@@ -63,9 +69,7 @@ public class MothTargetData implements Serializable {
         this.numsOne = numsOne;
     }
 
-    private String regionName;//区域
 
-    private String time;//用于在页面显示月份
 
 
     public MothTargetData(){};
@@ -142,6 +146,14 @@ public class MothTargetData implements Serializable {
         this.regionName = regionName;
     }
 
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
     @Override
     public String toString() {
         return "MothTargetData{" +
@@ -150,11 +162,14 @@ public class MothTargetData implements Serializable {
                 ", nums=" + nums +
                 ", createTime=" + createTime +
                 ", regionId='" + regionId + '\'' +
+                ", parentId='" + parentId + '\'' +
                 ", phoneNmu='" + phoneNmu + '\'' +
                 ", shopName='" + shopName + '\'' +
                 ", count=" + count +
                 ", numsOne=" + numsOne +
+                ", region=" + region +
                 ", regionName='" + regionName + '\'' +
+                ", time='" + time + '\'' +
                 '}';
     }
 }

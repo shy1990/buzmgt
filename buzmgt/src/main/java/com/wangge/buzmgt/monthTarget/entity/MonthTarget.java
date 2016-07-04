@@ -59,37 +59,28 @@ public class MonthTarget implements Serializable{
   private int matureNum;//成熟商家
   
   @Column(name = "PUBLISH_STATUS")
+
   private int publishStatus;//0未发布 1已发布
-  
+
   private String targetCycle;//日期指标
 
   @Transient
-  private int order;//实际提货量
+  private Integer order;//实际提货量
 
   @Transient
-  private int active;//实际活跃商家
+  private Integer active;//实际活跃商家
 
   @Transient
-  private Integer matureAll;//注册商家
+  private Integer mature;//实际成熟商家
+  @Transient
+  private Integer merchant;//实际提货商家
 
   @Transient
   private boolean view;//视图判断
 
-  public int getOrder() {
-    return order;
-  }
+  @Transient
+  private Integer matureAll;//注册商家
 
-  public void setOrder(int order) {
-    this.order = order;
-  }
-
-  public int getActive() {
-    return active;
-  }
-
-  public void setActive(int active) {
-    this.active = active;
-  }
 
   public Long getId() {
     return id;
@@ -105,6 +96,14 @@ public class MonthTarget implements Serializable{
 
   public void setSalesman(SalesMan salesman) {
     this.salesman = salesman;
+  }
+
+  public String getManagerId() {
+    return managerId;
+  }
+
+  public void setManagerId(String managerId) {
+    this.managerId = managerId;
   }
 
   public Region getRegion() {
@@ -163,12 +162,44 @@ public class MonthTarget implements Serializable{
     this.targetCycle = targetCycle;
   }
 
-  public String getManagerId() {
-    return managerId;
+  public Integer getOrder() {
+    return order;
   }
 
-  public void setManagerId(String managerId) {
-    this.managerId = managerId;
+  public void setOrder(Integer order) {
+    this.order = order;
+  }
+
+  public Integer getActive() {
+    return active;
+  }
+
+  public void setActive(Integer active) {
+    this.active = active;
+  }
+
+  public Integer getMature() {
+    return mature;
+  }
+
+  public void setMature(Integer mature) {
+    this.mature = mature;
+  }
+
+  public Integer getMerchant() {
+    return merchant;
+  }
+
+  public void setMerchant(Integer merchant) {
+    this.merchant = merchant;
+  }
+
+  public boolean isView() {
+    return view;
+  }
+
+  public void setView(boolean view) {
+    this.view = view;
   }
 
   public Integer getMatureAll() {
@@ -177,13 +208,5 @@ public class MonthTarget implements Serializable{
 
   public void setMatureAll(Integer matureAll) {
     this.matureAll = matureAll;
-  }
-
-  public boolean getView() {
-    return view;
-  }
-
-  public void setView(boolean view) {
-    this.view = view;
   }
 }
