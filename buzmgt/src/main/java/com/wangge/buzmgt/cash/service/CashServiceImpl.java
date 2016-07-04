@@ -19,6 +19,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +50,9 @@ public class CashServiceImpl implements CashService {
     regionService.disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<Cash> spec = CashSearchFilter(filters.values(), Cash.class);
-    List<Cash> cashList = cashRepository.findAll(spec);
+    Order order=new Order(Direction.DESC,"createDate");
+    Sort sort=new Sort(order);
+    List<Cash> cashList = cashRepository.findAll(spec,sort);
     disposeCashList(cashList);
     return cashList;
     
@@ -91,6 +96,14 @@ public class CashServiceImpl implements CashService {
   @Override
   public List<Cash> findAllByParams(Map<String, Object> searchParams) {
     String orderNo = (String) searchParams.get("EQ_orderNo");
+    String startTime=(String) searchParams.get("GTE_createTime");
+    String endTime=(String) searchParams.get("LTE_createTime");
+    searchParams.remove("GTE_createTime");
+    searchParams.remove("LTE_createTime");
+    if(!"".equals(startTime) || !"".equals(endTime)){
+      searchParams.put("GTE_createDate", startTime);
+      searchParams.put("LTE_createDate", endTime);
+    }
     List<Cash> listAll=new ArrayList<>();
     if(StringUtils.isNotEmpty(orderNo)){
       OrderSignfor order = orderSignforService.findByOrderNo(orderNo);
@@ -100,6 +113,13 @@ public class CashServiceImpl implements CashService {
       searchParams.remove("EQ_orderNo");
       searchParams.put("EQ_cashId", order.getId());
     }
+    //未支付
+    String unStatus=(String) searchParams.get("EQ_status");
+    if("UnPay".equals(unStatus)){
+      searchParams.remove("EQ_status");
+      searchParams.put("LT_status","OverPay");
+    }
+    
     //超时UnPayLate(为付款超时)
     String status = (String) searchParams.get("GTE_status");
     searchParams.remove("GTE_status");
@@ -203,6 +223,15 @@ public class CashServiceImpl implements CashService {
                 } catch (ParseException e) {
                   throw new RuntimeException("日期格式化失败!");
                 }
+              } else if (javaTypeName.equals(TYPE_ORDERSIGNFOR_TYPE)) {
+                String status = filter.value.toString();
+                if (CashStatusEnum.UnPay.toString().equals(status)) {
+                  filter.value = CashStatusEnum.UnPay;
+                }
+                if (CashStatusEnum.OverPay.toString().equals(status)) {
+                  filter.value = CashStatusEnum.OverPay;
+                }
+                predicates.add(cb.lessThan(expression, (Comparable)filter.value));
               } else {
                 predicates.add(cb.lessThan(expression, (Comparable) filter.value));
               }
