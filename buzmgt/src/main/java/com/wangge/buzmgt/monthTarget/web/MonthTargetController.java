@@ -84,8 +84,8 @@ public class MonthTargetController {
     User user = (User)SecurityUtils.getSubject().getPrincipal();
     String managerId = user.getId();
 //    String managerId = "B37000006290";
-    logger.info("time: "+time);
-    time = "2016-08";
+//    logger.info("time: "+time);
+//    time = "2016-08";
 //    truename = "拓展经理";
     Sort sort = new Sort(Sort.Direction.DESC,"id");
     Pageable pageable = new PageRequest(page, size,sort);

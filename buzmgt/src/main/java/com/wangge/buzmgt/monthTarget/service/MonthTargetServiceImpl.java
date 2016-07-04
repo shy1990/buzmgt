@@ -75,7 +75,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         //根据姓名检索
         if (truename != null && !"".equals(truename)){
           Join<MonthTarget,SalesMan> salesManJoin = root.join(root.getModel().getSingularAttribute("salesman",SalesMan.class),JoinType.LEFT);
-          Predicate predicate2 = cb.like(salesManJoin.get("truename").as(String.class),"%拓展经理%");
+          Predicate predicate2 = cb.like(salesManJoin.get("truename").as(String.class),"%"+truename+"%");
           p = cb.and(predicate,predicate1,predicate2);
         }
         return p;
