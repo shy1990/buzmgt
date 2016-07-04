@@ -91,16 +91,19 @@ public class CashServiceImpl implements CashService {
   @Override
   public List<Cash> findAllByParams(Map<String, Object> searchParams) {
     String orderNo = (String) searchParams.get("EQ_orderNo");
-    
+    List<Cash> listAll=new ArrayList<>();
     if(StringUtils.isNotEmpty(orderNo)){
       OrderSignfor order = orderSignforService.findByOrderNo(orderNo);
+      if(order==null){
+        return listAll;
+      }
       searchParams.remove("EQ_orderNo");
       searchParams.put("EQ_cashId", order.getId());
     }
     //超时UnPayLate(为付款超时)
     String status = (String) searchParams.get("GTE_status");
     searchParams.remove("GTE_status");
-    List<Cash> listAll= findAll(searchParams);
+    listAll = findAll(searchParams);
     if(StringUtils.isNotEmpty(status)){
       
       List<Cash> cashList=new ArrayList<>();
