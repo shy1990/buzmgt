@@ -69,7 +69,7 @@ public class MothTargetDataController {
                                      @RequestParam(value = "regionId", defaultValue = "") String regionId//限定为当前业务员
     ) {
         logger.info("regionId======= " + regionId + "  name==== " + name);
-        regionId = "37";
+//        regionId = "37";
         Page pageResult = mothTargetDataService.getMothTargetDatas(regionId, name, time, page, size);
         return pageResult;
     }

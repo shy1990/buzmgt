@@ -288,7 +288,6 @@
         //根据时间检索
         $("#listByDate").click(function(){
             var searchTime = $("#searchTime").val();
-
             monthTargetData.searchData.time = searchTime;
             monthTargetData.searchData.page = 0;
             console.log(monthTargetData.searchData);

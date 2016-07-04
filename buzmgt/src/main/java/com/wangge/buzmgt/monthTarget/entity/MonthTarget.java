@@ -194,7 +194,7 @@ public class MonthTarget implements Serializable{
     this.merchant = merchant;
   }
 
-  public boolean isView() {
+  public boolean getView() {
     return view;
   }
 

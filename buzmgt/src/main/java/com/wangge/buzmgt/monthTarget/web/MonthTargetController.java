@@ -78,6 +78,7 @@ public class MonthTargetController {
   ){
     User user = (User)SecurityUtils.getSubject().getPrincipal();
     String managerId = user.getId();
+    logger.info(user.getManager().getId()+"======");
 //    String managerId = "B37000006290";
 //    logger.info("time: "+time);
 //    time = "2016-08";
