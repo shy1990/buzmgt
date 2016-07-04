@@ -17,4 +17,8 @@ public interface SaojieDataService {
   List<SaojieData> findByregionId(String regionId);
   
   List<SaojieData> findBySalesman(SalesMan salesMan);
+
+  int getCountByUserId(String userId);
+
+
 }

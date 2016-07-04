@@ -69,6 +69,12 @@ public class MonthTarget implements Serializable{
   @Transient
   private int active;//实际活跃商家
 
+  @Transient
+  private Integer matureAll;//注册商家
+
+  @Transient
+  private boolean view;//视图判断
+
   public int getOrder() {
     return order;
   }
@@ -163,5 +169,21 @@ public class MonthTarget implements Serializable{
 
   public void setManagerId(String managerId) {
     this.managerId = managerId;
+  }
+
+  public Integer getMatureAll() {
+    return matureAll;
+  }
+
+  public void setMatureAll(Integer matureAll) {
+    this.matureAll = matureAll;
+  }
+
+  public boolean getView() {
+    return view;
+  }
+
+  public void setView(boolean view) {
+    this.view = view;
   }
 }

@@ -5,6 +5,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +24,8 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.JsonResponse;
 import com.wangge.json.JSONFormat;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/monthTarget")
 @Controller
@@ -43,12 +49,16 @@ public class MonthTargetController {
   }
   
   @RequestMapping(value = "/toUpdate")
-  public String toUpdate(Model model){
-    Set<SalesMan> salesSet = new HashSet<SalesMan>();
+  public String toUpdate(String flag,Long id,Model model){
     Region region = mtService.getRegion();
-    salesSet.addAll(smService.findForTargetByReginId(region.getId()));
-    model.addAttribute("salesList", salesSet);
+    if(!"update".equals(flag)){
+      Set<SalesMan> salesSet = new HashSet<SalesMan>();
+      salesSet.addAll(smService.findForTargetByReginId(region.getId()));
+      model.addAttribute("salesList", salesSet);
+    }
     model.addAttribute("region", region);
+    model.addAttribute("flag",flag);
+    model.addAttribute("id",id);
     return "monthTarget/update";
   }
   
@@ -79,6 +89,37 @@ public class MonthTargetController {
     String msg = mtService.save(mt,salesman);
     return msg;
   }
-  
-  
+
+  @RequestMapping(value = "/update/{id}",method = {RequestMethod.POST})
+  @ResponseBody
+  public String update(@RequestBody MonthTarget mt,@PathVariable("id") MonthTarget monthTarget){
+    monthTarget.setActiveNum(mt.getActiveNum());
+    monthTarget.setOrderNum(mt.getOrderNum());
+    monthTarget.setMerchantNum(mt.getMerchantNum());
+    monthTarget.setMatureNum(mt.getMatureNum());
+    String msg = mtService.save(monthTarget);
+    return msg;
+  }
+
+  @RequestMapping(value = "/publish/{id}",method = {RequestMethod.GET})
+  @ResponseBody
+  public String publish(@PathVariable("id") MonthTarget monthTarget){
+    String msg = mtService.publish(monthTarget);
+    return msg;
+  }
+
+  @RequestMapping(value = "/publishAll",method = RequestMethod.POST)
+  @ResponseBody
+  public String publishAll(){
+    String msg = mtService.publishAll();
+    return msg;
+  }
+
+  @RequestMapping(value = "/findMonthTarget",method = RequestMethod.GET)
+  @JSONFormat(filterField = {"SalesMan.user","region.children"})
+  public Page<MonthTarget> findMonthTarget(String targetCycle,String userName,
+                                  @PageableDefault(page = 0,size=20,sort={"orderNum"},direction= Sort.Direction.DESC) Pageable pageRequest){
+    Page<MonthTarget> page = mtService.findAll(targetCycle,userName,pageRequest);
+    return page;
+  }
 }

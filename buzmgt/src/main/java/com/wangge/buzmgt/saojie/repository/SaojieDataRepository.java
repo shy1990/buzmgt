@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import org.springframework.data.jpa.repository.Query;
 
 public interface SaojieDataRepository extends JpaRepository<SaojieData, Long>{
 
@@ -24,4 +25,7 @@ public interface SaojieDataRepository extends JpaRepository<SaojieData, Long>{
   List<SaojieData> findByregionId(String regionId);
   
   List<SaojieData> findBySalesman(SalesMan salesMan);
+
+  @Query("select count(*) from SaojieData as s where s.salesman.id = ?1")
+  int getCountByUserId(String userId);
 }

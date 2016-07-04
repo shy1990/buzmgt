@@ -63,35 +63,36 @@
     <!--地区-->
 
     <div class="text-blue text-strong" style="margin-top: 25px; margin-bottom: 25px ">
+        <c:if test="${flag ne 'update'}">
+            <select class="selectpicker demo3" data-live-search="true" id="regionId" onchange="getRegionName();">
+                <c:if test="${not empty salesList}">
+                    <c:forEach var="sales" items="${salesList}">
+                        <option value="${sales.id}">${sales.truename}</option>
+                    </c:forEach>
+                </c:if>
+            </select>
 
-        <select class="selectpicker demo3" data-live-search="true" id="regionId" onchange="getRegionName();">
-            <c:if test="${not empty salesList}">
-				<c:forEach var="sales" items="${salesList}">
-					<option value="${sales.id}">${sales.truename}</option>
-				</c:forEach>
-			</c:if>
-        </select>
 
 
-
-        <!-- <div style="width: 180px ; float: left;margin-right: 20px">
+            <!-- <div style="width: 180px ; float: left;margin-right: 20px">
             <form>
-                <select name="basic[]" multiple="multiple" class="demo3" >
+            <select name="basic[]" multiple="multiple" class="demo3" >
 
-                    <option value="UT" >胡老大</option>
-                    <option value="VT">横额啊</option>
-                    <option value="VA">张二啦</option>
-                    <option value="VA">王晓晓</option>
-                    <option value="WV">杭大大</option>
-                    <option value="WV">曹大大</option>
-                    <option value="WI">槽大小</option>
-                </select>
+            <option value="UT" >胡老大</option>
+            <option value="VT">横额啊</option>
+            <option value="VA">张二啦</option>
+            <option value="VA">王晓晓</option>
+            <option value="WV">杭大大</option>
+            <option value="WV">曹大大</option>
+            <option value="WI">槽大小</option>
+            </select>
             </form>
-        </div> -->
+            </div> -->
 
-        <button class="btn btn-blue btn-sm" onclick="goSearch();">
-            检索
-        </button>
+            <button class="btn btn-blue btn-sm" onclick="goSearch();">
+                检索
+            </button>
+        </c:if>
      <span style="color: #a6a6a6" id="regionName">  </span> </div>
     <!--地区-->
 
@@ -125,9 +126,10 @@
 
                          </tr>
                          <tr>
-                             <td>请录入 <input class="input-th" type="text" placeholder="提货量" name="orderNum"> &nbsp;台</td>
+                             <td>请录入 <input class="input-th" type="text" placeholder="提货量" name="orderNum"> &nbsp;台
+                                 <label class="pull-right col-md-8 control-label msg-error"></label>
+                             </td>
                          </tr>
-
                          </table>
                      </div>
 
@@ -162,9 +164,10 @@
 
                         </tr>
                         <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="提货商家" name="merchantNum"> &nbsp;家</td>
+                            <td>请录入 <input class="input-th" type="text" placeholder="提货商家" name="merchantNum"> &nbsp;家
+                                <label class="pull-right col-md-8 control-label msg-error"></label>
+                            </td>
                         </tr>
-
                     </table>
                 </div>
 
@@ -198,9 +201,10 @@
 
                         </tr>
                         <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="活跃商家" name="activeNum"> &nbsp;家</td>
+                            <td>请录入 <input class="input-th" type="text" placeholder="活跃商家" name="activeNum"> &nbsp;家
+                                <label class="pull-right col-md-8 control-label msg-error"></label>
+                            </td>
                         </tr>
-
                     </table>
                 </div>
 
@@ -234,7 +238,9 @@
 
                         </tr>
                         <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="成熟商家" name="matureNum"> &nbsp;家</td>
+                            <td>请录入 <input class="input-th" type="text" placeholder="成熟商家" name="matureNum"> &nbsp;家
+                                <label class="pull-right col-md-8 control-label msg-error"></label>
+                            </td>
                         </tr>
 						<input class="input-th" type="hidden" name="salesman.id" value="" id="userId">
                     </table>
@@ -245,10 +251,16 @@
     </div>
 </div>
 
-
-    <div style="text-align: center;background-color: #fafafa">
-        <button class="btn btn-primary btn-blue btn-ok" onclick="toSubmit();" id="btn">保存</button>
-    </div>
+    <c:if test="${flag ne 'update'}">
+        <div style="text-align: center;background-color: #fafafa">
+            <button class="btn btn-primary btn-blue btn-ok" onclick="toSubmit('','add');" id="btn">保存</button>
+        </div>
+    </c:if>
+    <c:if test="${flag eq 'update'}">
+        <div style="text-align: center;background-color: #fafafa">
+            <button class="btn btn-primary btn-blue btn-ok" onclick="toSubmit('${id}','update');">修改</button>
+        </div>
+    </c:if>
    </div>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 <script src="<%=basePath%>static/multiselect/js/jquery.multiselect.js"></script>

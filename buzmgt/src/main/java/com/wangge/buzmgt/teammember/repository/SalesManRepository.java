@@ -35,10 +35,10 @@ public interface SalesManRepository extends JpaRepository<SalesMan,String>{
   /*
    * 查找某地区下的所有业务
    */
-  @Query(value = "select * \n" + "  from sys_salesman s\n" + " where  exists (select 1\n"
-      + "       from (select * \n" + "                  from sys_region r\n"
-      + "                 start with r.region_id = ?1 \n"
-      + "                connect by prior r.region_id = r.parent_id) tmp\n"
-      + "         where tmp.region_id = s.region_id and s.status=2)", nativeQuery = true)
+  @Query(value = "select * \n" +
+                  "from sys_salesman s where not exists (select * from sys_month_target mt where mt.user_id=s.user_id)\n" +
+                  "and exists (select 1 from (select * from sys_region r start with r.region_id = ?1\n" +
+                  "connect by prior r.region_id = r.parent_id) tmp\n" +
+                  "where tmp.region_id = s.region_id and s.status=2)", nativeQuery = true)
   Set<SalesMan> findForTargetByReginId(String regionId);
 }

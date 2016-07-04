@@ -2,20 +2,24 @@ package com.wangge.buzmgt.monthTarget.service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.criteria.*;
 
+import com.wangge.buzmgt.saojie.entity.Saojie;
+import com.wangge.buzmgt.saojie.service.SaojieDataService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.SQLQuery;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -32,6 +36,8 @@ import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.JsonResponse;
 
+import static com.wangge.buzmgt.teammember.entity.SalesmanStatus.saojie;
+
 @Service
 public class MonthTargetServiceImpl implements MonthTargetService {
   @Resource
@@ -42,6 +48,8 @@ public class MonthTargetServiceImpl implements MonthTargetService {
   private RegionService regionService;
   @Resource
   private SalesManService smService;
+  @Resource
+  private SaojieDataService saojieDataService;
   @PersistenceContext
   private EntityManager em;
   
@@ -71,7 +79,8 @@ public class MonthTargetServiceImpl implements MonthTargetService {
       SQLQuery sqlQuery = null;
       query = em.createNativeQuery(sql);
       sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
-      sqlQuery.setParameter(0, userId);//业务参数
+      int a = 0;
+      sqlQuery.setParameter(a, userId);//业务参数
       sqlQuery.setParameter(1, userId);
       List<Object[]> ret = sqlQuery.list();
       Map<String,Object> map = new HashMap<String,Object>();
@@ -110,7 +119,8 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         SQLQuery sqlQuery = null;
         query = em.createNativeQuery(sql);
         sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
-        sqlQuery.setParameter(0, userId);//业务参数
+        int a = 0;
+        sqlQuery.setParameter(a, userId);//业务参数
         sqlQuery.setParameter(2, userId);
         sqlQuery.setParameter(1, 1);
         sqlQuery.setParameter(3, 1);
@@ -178,5 +188,73 @@ public class MonthTargetServiceImpl implements MonthTargetService {
     Manager manager = managerService.getById(user.getId());
     return manager;
   }
-  
+
+    @Override
+    public Page<MonthTarget> findAll(String targetCycle, String userName, Pageable pageRequest) {
+        Page<MonthTarget> page = mtr.findAll(new Specification<MonthTarget>() {
+
+            public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder cb) {
+//                List<Predicate> predicates = new ArrayList<Predicate>();
+                Predicate predicate = cb.equal(root.get("targetCycle").as(String.class), targetCycle);
+//                predicates.add(cb.equal(root.get("targetCycle").as(String.class), targetCycle));
+                if (StringUtils.isNotBlank(userName)) {
+                    Join<MonthTarget, SalesMan> salesmanJoin = root.join(root.getModel()
+                            .getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
+                    Predicate predicate1= (cb.like(salesmanJoin.get("truename").as(String.class),
+                            "%" + userName + "%"));
+                    predicate = cb.and(predicate,predicate1);
+                }
+
+                return predicate;
+            }
+
+        }, pageRequest);
+        List<MonthTarget> list = page.getContent();
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.forEach(m -> {
+                int count = saojieDataService.getCountByUserId(m.getSalesman().getId());
+                m.setMatureAll(count);
+                if (m.getPublishStatus() == 0){
+                    m.setView(true);
+                }else{
+                    m.setView(false);
+                }
+            });
+        }
+        return page;
+    }
+
+    @Override
+    public String save(MonthTarget monthTarget) {
+        if(!ObjectUtils.isEmpty(monthTarget)){
+            mtr.save(monthTarget);
+            return "ok";
+        }else{
+            return "error";
+        }
+    }
+
+    @Override
+    public String publish(MonthTarget monthTarget) {
+        monthTarget.setPublishStatus(1);//设置为已发布
+        mtr.save(monthTarget);
+        return "ok";
+    }
+
+    @Override
+    public String publishAll() {
+        Manager manager = getManager();
+        //根据管理员id查找未发布的指标
+        List<MonthTarget> list = mtr.findByManagerIdAndPublishStatus(manager.getId(),0);
+        if (!ObjectUtils.isEmpty(list)){
+            list.forEach(mt -> {
+                mt.setPublishStatus(1);
+                mtr.save(mt);
+            });
+            return "ok";
+        }else {
+            return "non";
+        }
+    }
 }
