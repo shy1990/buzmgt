@@ -44,7 +44,7 @@ public class MothTargetDataController {
                          String matureNum,//指标成熟商家
                         Model model){
         logger.info(regionId+" ======= "+time+"====="+order+"===="+orderNum+"==="+merchant+"==="+merchantNum+"==="+active+"==="+activeNum+"==="+mature+"==="+matureNum);
-            model.addAttribute("regionId",regionId);
+        model.addAttribute("regionId",regionId);
         model.addAttribute("time",time);
         model.addAttribute("order",order);
         model.addAttribute("orderNum",orderNum);

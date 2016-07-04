@@ -53,20 +53,15 @@
                             <div class="box-text">
                                 <p>提货量指标： &nbsp; <span>${orderNum}台&nbsp;&nbsp;</span> &nbsp; &nbsp;已达成： ${order}台</p>
                                 <p>商家指标： &nbsp; <span>${merchantNum}家&nbsp;&nbsp;</span> &nbsp; &nbsp;已达成： ${merchant}家</p>
+
+                            </div>
+                            <div class="box-text" style="margin-left: 400px;margin-top:-80px">
                                 <p>活跃商家指标： <span class="text-blue">${activeNum} 家&nbsp;</span> &nbsp;&nbsp;&nbsp; 已达成：<span
                                         class="text-blue"> ${active}家</span></p>
                                 <p>成熟商家指标： &nbsp; <span>${matureNum}家&nbsp;&nbsp;</span> &nbsp; &nbsp;已达成： ${mature}家</p>
                             </div>
-                            <%--<div class="box-plan">--%>
-                                <%--<p class="p-height ">完成进度：85% <span class="text-blue text-right-s">85%</span> /100%</p>--%>
-                                <%--<p>--%>
-                                <%--<div class="progress" style="width: 100%">--%>
-                                    <%--<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"--%>
-                                         <%--aria-valuemax="100" style="width: 85%; background-color: #00b7ee">--%>
-                                    <%--</div>--%>
-                                <%--</div>--%>
-                                <%--</p>--%>
-                            <%--</div>--%>
+
+
                         </div>
                     </div>
                 </div>
@@ -221,8 +216,8 @@
         todayBtn: 1,
         autoclose: 1,
         todayHighlight: 1,
-        startView: 2,
-        minView: 2,
+        startView: 3,
+        minView: 3  ,
         pickerPosition: "bottom-right",
         forceParse: 0
     });

@@ -24,21 +24,21 @@ import static org.junit.Assert.*;
 @SpringApplicationConfiguration(classes = BuzmgtApplication.class)
 @WebAppConfiguration
 public class MonthTargetServiceImplTest {
-    @Autowired
-    private MonthTargetService monthTargetService;
-    @Test
-    public void findByTargetCycleAndManagerId() throws Exception {
-//        Sort sort = new Sort(Sort.Direction.DESC, "id");
-        Pageable pageable = new PageRequest(0, 3);
-
-        monthTargetService.findByTargetCycleAndManagerId("2016-07","",pageable);
-    }
-
-    @Test
-    public void findCount(){
+//    @Autowired
+//    private MonthTargetService monthTargetService;
+//    @Test
+//    public void findByTargetCycleAndManagerId() throws Exception {
+////        Sort sort = new Sort(Sort.Direction.DESC, "id");
 //        Pageable pageable = new PageRequest(0, 3);
-//        monthTargetService.findCount("2016-06","",pageable);
-    }
-
+//
+//        monthTargetService.findByTargetCycleAndManagerId("2016-07","",pageable);
+//    }
+//
+//    @Test
+//    public void findCount(){
+////        Pageable pageable = new PageRequest(0, 3);
+////        monthTargetService.findCount("2016-06","",pageable);
+//    }
+//
 
 }
