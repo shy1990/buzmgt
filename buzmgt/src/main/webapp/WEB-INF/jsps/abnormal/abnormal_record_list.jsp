@@ -82,7 +82,7 @@
 <script type="text/javascript">
 var	base='<%=basePath%>';
 var SearchData = {
-		"size" : "1",
+		"size" : "20",
 		"page" : "0",
 	};
 </script>
