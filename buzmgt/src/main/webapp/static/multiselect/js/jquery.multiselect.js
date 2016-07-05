@@ -115,7 +115,7 @@
                 maxHeight = ($(window).height() - optionsWrap.offset().top - 20);
                 maxHeight = maxHeight > options.maxHeight ? options.maxHeight : maxHeight;
             }else
-            	maxHeight = maxHeight < options.minHeight ? options.minHeight : maxHeight;
+              maxHeight = maxHeight < options.minHeight ? options.minHeight : maxHeight;
 
             optionsWrap.css({
                 maxWidth: maxWidth,
@@ -166,7 +166,7 @@
                         maxHeight = ($(window).height() - optionsWrap.offset().top - 20);
                         maxHeight = maxHeight > options.maxHeight ? options.maxHeight : maxHeight;
                     }else
-                    	maxHeight = maxHeight < options.minHeight ? options.minHeight : maxHeight;
+                      maxHeight = maxHeight < options.minHeight ? options.minHeight : maxHeight;
 
                     optionsWrap.css('maxHeight', maxHeight);
                 }

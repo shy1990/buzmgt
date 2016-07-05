@@ -2,6 +2,7 @@ package com.wangge.buzmgt.teammember.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -175,4 +176,14 @@ public  class SalesManServiceImpl implements SalesManService {
 	}
   
   
+  @Override
+  public Set<SalesMan> findForTargetByReginId(String regionId) {
+    return salesManRepository.findForTargetByReginId(regionId);
+  }
+
+  /*@Override
+  public int deleteRegionById(String id) {
+    return salesManRepository.deleteRegionById(id);
+  }*/
+
 }

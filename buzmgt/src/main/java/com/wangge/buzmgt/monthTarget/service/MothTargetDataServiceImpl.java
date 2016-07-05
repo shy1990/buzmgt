@@ -4,6 +4,7 @@ import com.wangge.buzmgt.monthTarget.entity.MothTargetData;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import java.util.*;
 @Service
 public class MothTargetDataServiceImpl implements MothTargetDataService {
 
+    private static final Logger logger = Logger.getLogger(MothTargetDataServiceImpl.class);
     @PersistenceContext
     private EntityManager entityManager;
     @Autowired
@@ -37,46 +39,173 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
      * pageNum:当前页
      * limit：显示几条
      * */
-    public Page<MothTargetData> getMothTargetDatas(String time,Integer page,Integer size) {
-        //根据日期查询
-        Query query = entityManager.createNativeQuery("select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t where to_char(createtime,'yyyy-mm-dd') LIKE ? group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId  ");
-        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
-        Page<MothTargetData> pageResult = null;
+    public Page<MothTargetData> getMothTargetDatas(String regionId,String name, String time, Integer page, Integer size) {
+
+        String sql =
+                "select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(*),0) count " + "from mothtargetdata t " +
+                "where " +
+                    " to_char(createtime,'yyyy-mm-dd') LIKE ? " +
+                 " and t.parentid like ? " +
+                "group by " +
+                "t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId ";
+        Query query = null;
+        SQLQuery sqlQuery = null;
         int l = 0;
-        try{
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-DD");
-            Date d = simpleDateFormat.parse("2016-06-16");
-            sqlQuery.setParameter(l, "%2016-06%");//日期参数
-            sqlQuery.setFirstResult(page * size);
-            sqlQuery.setMaxResults(size);
-            List<MothTargetData> mtdList = new ArrayList<>();
-            List<Object[]> ret = sqlQuery.list();
-            int count = sqlQuery.list().size();//分页查询出总条数
-            System.out.println(count+"-------");
-            if (CollectionUtils.isNotEmpty(ret)) {
-                ret.forEach(o -> {
-                    MothTargetData mtd = new MothTargetData();
-                    mtd.setOrderId((String)o[0]);
-                    mtd.setMemberId((String)o[1]);
-                    mtd.setRegionId((String)o[4]);
-                    mtd.setPhoneNmu((String)o[2]);
-                    mtd.setShopName((String) o[3]);
-                    Region region = regionService.findListRegionbyid((String)o[4]);
-                    mtd.setRegion(region);
-                    mtd.setNumsOne((BigDecimal) o[5]);
-                    mtd.setCount((BigDecimal)o[6]);
-                    mtdList.add(mtd);
-                });
-            }
-            pageResult = new PageImpl<MothTargetData>(mtdList,new PageRequest(page,size),count);
-            System.out.println(pageResult+"******");
+        int a = 1;
+        int b = 2;
+        if (name != null && !"".equals(name)) {
+            sql = "select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(*),0) count from mothtargetdata t " +
+                    " where to_char(createtime,'yyyy-mm-dd') LIKE ? " +
+                    " and t.shopName like ? " +
+                    " and t.parentid like ? " +
+                    " group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId";
+            query = entityManager.createNativeQuery(sql);
+            sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
+            sqlQuery.setParameter(l, "%" + time + "%");//日期参数,必须存在
+            sqlQuery.setParameter(a, "%" + name + "%");//商家名字参数
+            sqlQuery.setParameter(b,"%"+regionId+"%");//业务员id
+        } else {
+            query = entityManager.createNativeQuery(sql);
+            sqlQuery = query.unwrap(SQLQuery.class);
+            sqlQuery.setParameter(l, "%"+time+"%");//日期参数,必须存在
+            sqlQuery.setParameter(a,"%"+regionId+"%");
+        }
+        //根据日期查询
+//        query = entityManager.createNativeQuery("select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t where to_char(createtime,'yyyy-mm-dd') LIKE ? group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId  ");
+//        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
+        Page<MothTargetData> pageResult = null;
+//        int l = 0;
+//            sqlQuery.setParameter(l, "%2016-06%");//日期参数
+
+        int count = sqlQuery.list().size();//分页查询出总条数(不是分页之后的)
+        sqlQuery.setFirstResult(page * size);//设置开始位置
+        sqlQuery.setMaxResults(size);//每页显示条数
+        List<MothTargetData> mtdList = new ArrayList<>();
+        List<Object[]> ret = sqlQuery.list();
+       logger.info(count + "-------");
+        if (CollectionUtils.isNotEmpty(ret)) {
+            ret.forEach(o -> {
+                MothTargetData mtd = new MothTargetData();
+                mtd.setOrderId((String) o[0]);
+                mtd.setMemberId((String) o[1]);
+                mtd.setRegionId((String) o[4]);
+                mtd.setPhoneNmu((String) o[2]);
+                mtd.setShopName((String) o[3]);
+                Region region = regionService.findListRegionbyid((String) o[4]);
+                mtd.setRegionName(regionName(region));
+                mtd.setNumsOne((BigDecimal) o[5]);
+                mtd.setCount((BigDecimal) o[6]);
+                mtd.setTime(time);
+                mtdList.add(mtd);
+            });
+        }
+        pageResult = new PageImpl<MothTargetData>(mtdList, new PageRequest(page, size), count);
 //            mtdList.forEach(mtd -> {
 //                System.out.println(mtd);
 //            });
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
 
         return pageResult;
+    }
+
+    @Override
+    public List<MothTargetData> findAll(String time) {
+       String sql = "select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t " +
+                " where to_char(createtime,'yyyy-mm-dd') LIKE ? " +
+                " group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId";
+        List<MothTargetData> mtdList = new ArrayList<>();
+        Query query = entityManager.createNativeQuery(sql);
+        int a = 1;
+        query.setParameter(a,"%"+time+"%");
+        List<Object[]> list = query.getResultList();
+        if(CollectionUtils.isNotEmpty(list)){
+            list.forEach(o -> {
+                MothTargetData mtd = new MothTargetData();
+                mtd.setOrderId((String) o[0]);
+                mtd.setMemberId((String) o[1]);
+                mtd.setRegionId((String) o[4]);
+                mtd.setPhoneNmu((String) o[2]);
+                mtd.setShopName((String) o[3]);
+                Region region = regionService.findListRegionbyid((String) o[4]);
+                mtd.setRegionName(regionName(region));
+                logger.info(region.getType());
+//                mtd.setRegion(region);
+                mtd.setNumsOne((BigDecimal) o[5]);
+                mtd.setCount((BigDecimal) o[6]);
+                mtd.setTime(time);
+                mtdList.add(mtd);
+
+            });
+        }
+            return mtdList;
+    }
+
+
+
+
+
+
+    public static String regionName(Region region){
+//        COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他")
+        String name = "";
+
+        switch (region.getType()){
+            case COUNTRY:
+                 name = region.getName();
+                 break;
+
+            case PARGANA:
+                name = region.getParent().getName();
+                name +=region.getName();
+                break;
+            case PROVINCE:
+                name = region.getParent().getParent().getName();
+                name += region.getParent().getName();
+                name +=region.getName();
+                break;
+            case AREA:
+                name = region.getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getName();
+                name += region.getParent().getName();
+                name +=region.getName();
+                break;
+            case CITY:
+                name = region.getParent().getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getName();
+                name += region.getParent().getName();
+                name +=region.getName();
+                break;
+            case COUNTY:
+                name = region.getParent().getParent().getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getName();
+                name += region.getParent().getName();
+                name +=region.getName();
+                break;
+            case TOWN:
+                name = region.getParent().getParent().getParent().getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getName();
+                name += region.getParent().getName();
+                name +=region.getName();
+                break;
+            case OTHER:
+                name = region.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getParent().getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getParent().getName();
+                name += region.getParent().getParent().getName();
+                name += region.getParent().getName();
+                name +=region.getName();
+                break;
+        }
+
+
+        return name;
+
     }
 }
