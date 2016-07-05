@@ -2,7 +2,7 @@ var remarkedTotal = 0;// 报备总条数
 var cashTotal = 0;// 总条数
 var notRemarkedTotal = 0;// 未报备总条数
 $(function() {
-//	nowTime();//初始化日期
+	nowTime();//初始化日期
 	DispositRegionId();//区域选择数据处理
 	findRemarked();//报备
 	findNOTRemarked();//未报备

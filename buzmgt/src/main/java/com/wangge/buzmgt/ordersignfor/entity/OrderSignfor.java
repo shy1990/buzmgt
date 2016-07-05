@@ -1,7 +1,9 @@
 package com.wangge.buzmgt.ordersignfor.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -31,7 +34,7 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 @NamedEntityGraph(
     name = "graph.OrderSignfor.salesMan",
     attributeNodes={
-        @NamedAttributeNode(value="salesMan",subgraph = "graph.OrderSignfor.salesMan.user"),
+        @NamedAttributeNode(value="salesMan",subgraph = "graph.OrderSignfor.salesMan.user")
     },
     subgraphs = {
         @NamedSubgraph(
@@ -100,7 +103,9 @@ public class OrderSignfor implements Serializable {
   @Transient
   private Date payDate;//支付时间
   
-
+  @Transient
+  private List<OrderItem> items;
+  
   //业务签收异常标记
   @Transient
   private String ywSignforTag;
@@ -137,6 +142,16 @@ public class OrderSignfor implements Serializable {
   private Date fastmailTime;
   private String customUnSignRemark;
   
+  
+  
+  public List<OrderItem> getItems() {
+    return items;
+  }
+
+  public void setItems(List<OrderItem> items) {
+    this.items = items;
+  }
+
   public Date getPayDate() {
     return payDate;
   }
