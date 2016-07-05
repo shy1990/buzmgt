@@ -99,7 +99,7 @@
 
 					<div class="text-hor">
 						<label class="col-sm-2">送达时间：</label>
-						<p class="col-sm-10" style="line-height: 30px">${task.createTime}</p>
+						<p class="col-sm-10" style="line-height: 30px">${taskTime}</p>
 					</div>
 					<div class="hr"></div>
 
