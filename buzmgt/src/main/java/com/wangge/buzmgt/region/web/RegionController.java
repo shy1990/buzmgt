@@ -29,6 +29,7 @@ import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.service.SaojieDataService;
+import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.sys.vo.OrganizationVo;
@@ -62,7 +63,8 @@ public class RegionController {
 	private SaojieDataService sds;
 	@Resource
 	private SalesManService salesmanservice;
-	
+	@Resource
+	private SaojieService saojieService;
 	private static final String ONELEAVE="0";
 	
 	/**
@@ -206,7 +208,7 @@ public class RegionController {
 	@ResponseBody
 	public boolean deleteRegionbyId(String id, String pid) {
 		Region region = regionService.findListRegionbyid(id);
-		if(region.getChildren().size()>0 || saojieDateService.findByReion(region).size()>0){
+		if(region.getChildren().size()>0 || saojieDateService.findByReion(region).size()>0|| null!=saojieService.findByregion(region) || assessService.findByRegion(region).size()>0){
 			return false;
 		}
 		regionService.delete(region);

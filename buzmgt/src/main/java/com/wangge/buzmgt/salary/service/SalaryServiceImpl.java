@@ -105,12 +105,16 @@ public class SalaryServiceImpl implements SalaryService {
                 String[] content = s.split("-->");
                 logger.info("=====================");
                 if(!"姓名".equals(content[0])){
-                    Salary salary= new Salary();
+                    Salary salary= null;
                     logger.info(content[0]);
                     logger.info(content[1]);
                     logger.info(content[2]);
                     logger.info(DateUtil.string2Date(content[3]));
                     logger.info(content[4]);
+                    salary=salaryRespository.findByTelAndMonths(content[2].trim(), content[5]);
+                    if(null==salary){
+                    	salary=new Salary();
+                    }
                     salary.setName(content[0]);
                     salary.setSalary(Float.parseFloat(content[1]));
                     salary.setTel(content[2]);

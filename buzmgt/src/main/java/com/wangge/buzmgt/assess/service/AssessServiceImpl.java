@@ -298,5 +298,11 @@ public class AssessServiceImpl implements AssessService {
   public Page<AssessTime> findAll(Pageable pageable) {
     return aTRepository.findAll(pageable);
   }
+
+@Override
+public List<RegistData> findByRegion(Region region) {
+	// TODO Auto-generated method stub
+	return rdr.findByRegion(region);
+}
 	
 }
