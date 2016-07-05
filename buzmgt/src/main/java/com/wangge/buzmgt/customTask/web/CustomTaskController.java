@@ -29,6 +29,7 @@ import com.wangge.buzmgt.monthTask.service.MonthTaskService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
+import com.wangge.buzmgt.util.DateUtil;
 
 ///customTask/list
 @Controller
@@ -110,6 +111,7 @@ public class CustomTaskController {
 	public String detail(@PathVariable("id") CustomTask customTask,
 			HttpServletRequest request, Model model) {
 		model.addAttribute("task", customTask);
+		model.addAttribute("taskTime",DateUtil.date2String(customTask.getCreateTime(), "MM-dd HH:mm"));
 		customServ.getSaleSet(customTask, model);
 		model.addAttribute("taskType", ImplCustomTaskServe.TASKTYPEARR[customTask.getType()]);
 		return "customTask/detail";

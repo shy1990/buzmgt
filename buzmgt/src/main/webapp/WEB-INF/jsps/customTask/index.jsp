@@ -111,9 +111,10 @@ p {
 
 				<select class="box-sty-s" id="customType">
 					<option value="">---请选择类型---</option>
-					<option value="0">店铺注册</option>
-					<option value="1">售后拜访</option>
-					<option value="2">扣罚通知</option>
+									<option value="0">店铺注册</option>
+									<option value="1">售后处理</option>
+									<option value="2">扣罚通知</option>
+									<option value="3">客户拜访</option>
 				</select>
 
 				<button class="btn btn-blue btn-sm"

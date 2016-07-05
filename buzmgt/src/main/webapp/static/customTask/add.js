@@ -67,6 +67,14 @@ function getCustomTask() {
 		return false;
 	}
 	var salesSet = [];
+	if(title==""||content==""){
+		alert("事件的标题或消息内容不能为空");
+		return false;
+	}
+	if(salesArr.length<1){
+		alert("业务员数量不能为空!!");
+		return false;
+	}
 	for (var i = 0; i < salesArr.length; i++) {
 		if (salesArr[i] != '') {
 			salesSet.push({
@@ -82,4 +90,20 @@ function getCustomTask() {
 		"salesmanSet" : salesSet
 	};
 	return customTask;
+}
+//类型变更事件
+function changePunish(type){
+	if(type==2){
+		$("#punishDiv").css("display","");
+		$("#punishhr").css("display","");
+	}else{
+		$("#punishDiv").css("display","none");
+		$("#punishhr").css("display","none");
+	}
+}
+function testPunish(punish){
+	if(punish.value<0){
+		alert("扣罚金额要大于0!!");
+		punish.value=0;
+	}
 }

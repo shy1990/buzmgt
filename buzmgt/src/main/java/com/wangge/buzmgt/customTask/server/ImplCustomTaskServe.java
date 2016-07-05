@@ -22,6 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.wangge.buzmgt.customTask.entity.CustomMessages;
@@ -35,6 +37,7 @@ import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.HttpUtil;
 
 @Service
+@Transactional
 public class ImplCustomTaskServe implements CustomTaskServer {
   @Autowired
   CustomTaskRepository customRep;
@@ -43,7 +46,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
   @Autowired
   SalesManRepository salesmanRep;
   private Log log = LogFactory.getLog(this.getClass());
-  public static final String[] TASKTYPEARR = new String[] { "注册", "售后", "扣罚" };
+  public static final String[] TASKTYPEARR = new String[] { "注册", "售后", "扣罚", "拜访" };
   
   @Override
   public Map<String, Object> getList(String salesmanId, Pageable page) {
@@ -323,7 +326,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     talMap.put("msg", "您有新的自定义回复消息");
     talMap.put("Id", customtaskId);
     
-    HttpUtil.sendPostJson(AppServer.URL + "customTask", talMap);
+    HttpUtil.sendPostJson(AppServer.URL + "push/customTask", talMap);
   }
   
   /*
