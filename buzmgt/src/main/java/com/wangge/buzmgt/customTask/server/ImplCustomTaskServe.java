@@ -22,7 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
@@ -34,10 +33,10 @@ import com.wangge.buzmgt.customTask.util.PredicateUtil;
 import com.wangge.buzmgt.monthTask.entity.AppServer;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
+import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.HttpUtil;
 
 @Service
-@Transactional
 public class ImplCustomTaskServe implements CustomTaskServer {
   @Autowired
   CustomTaskRepository customRep;
@@ -60,6 +59,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
    * buzmgt.customTask.entity.CustomTask)
    */
   @Override
+  @Transactional(rollbackForClassName="Exception")
   public void save(CustomTask customTask) throws Exception {
     try {
       
@@ -130,7 +130,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
       datamap.put("type", task.getType());
       datamap.put("typeName", TASKTYPEARR[task.getType()]);
       datamap.put("content", task.getContent());
-      datamap.put("time", task.getCreateTime());
+      datamap.put("time", DateUtil.date2String(task.getCreateTime(), "YYYY-MM-dd HH:mm"));
       Set<SalesMan> saleList = task.getSalesmanSet();
       String saleNames = "";
       for (SalesMan man : saleList) {
@@ -186,7 +186,11 @@ public class ImplCustomTaskServe implements CustomTaskServer {
   @Override
   public void getSaleSet(CustomTask customTask, Model model) {
     Set<String> reSet = messageRep.findByCustomtaskId(customTask.getId());
-    Set<SalesMan> salesmanSet = customTask.getSalesmanSet();
+    /*
+     * 此处原为Set<SalesMan> salesmanSet = customTask.getSalesmanSet();
+     * 结果操作salesmanSet结果自动保持久化了. 此bug;
+     */
+    Set<SalesMan> salesmanSet = new HashSet<SalesMan>(customTask.getSalesmanSet());
     List<SalesMan> reList = salesmanRep.findAll(reSet);
     salesmanSet.removeAll(reList);
     Set<SalesMan> unreSet = salesmanSet;
@@ -303,7 +307,8 @@ public class ImplCustomTaskServe implements CustomTaskServer {
    * 
    */
   @Override
-  public void saveMessage(Map<String, Object> messages) {
+  @Transactional(rollbackForClassName="Exception")
+  public void saveMessage(Map<String, Object> messages) throws Exception {
     Long customtaskId = Long.parseLong(messages.get("customtaskId").toString());
     String content = messages.get("content").toString();
     @SuppressWarnings("unchecked")
@@ -326,7 +331,13 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     talMap.put("msg", "您有新的自定义回复消息");
     talMap.put("Id", customtaskId);
     
-    HttpUtil.sendPostJson(AppServer.URL + "push/customTask", talMap);
+    try {
+      HttpUtil.sendPostJson(AppServer.URL + "push/customTask", talMap);
+    } catch (Exception e) {
+      e.printStackTrace();
+      log.debug(e);
+      throw e;
+    }
   }
   
   /*

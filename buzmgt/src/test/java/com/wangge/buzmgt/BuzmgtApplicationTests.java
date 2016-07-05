@@ -330,7 +330,7 @@ public class BuzmgtApplicationTests {
 	}
 
 	@Test
-	public void testMonth() {
+	public void testMonth() throws Exception {
 		Map<String, Object> talMap = new HashMap<String, Object>();
 		talMap.put("mobiles", "18769727652");
 		talMap.put("msg", "下月的月任务已生成");

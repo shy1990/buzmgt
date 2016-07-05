@@ -50,7 +50,7 @@ public class DataEventHandler {
    * @param orda
    * @throws Exception
    */
-  private void handlePush(MonthTask monthTask, MonthOdersData orda) {
+  private void handlePush(MonthTask monthTask, MonthOdersData orda) throws Exception {
     if (monthTask.getStatus() == 1) {
       String phone = orda.getSalesman().getMobile();
       Map<String, Object> talMap = new HashMap<String, Object>();
