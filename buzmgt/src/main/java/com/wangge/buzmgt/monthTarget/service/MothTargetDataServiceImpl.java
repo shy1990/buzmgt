@@ -108,9 +108,11 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
     }
 
     @Override
-    public List<MothTargetData> findAll(String time) {
-       String sql = "select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t " +
+    public List<MothTargetData> findAll(String regionid,String time) {
+        String sql = "select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(*),0) count from mothtargetdata t " +
                 " where to_char(createtime,'yyyy-mm-dd') LIKE ? " +
+                " and t.shopName like ? " +
+                " and t.parentid like ? " +
                 " group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId";
         List<MothTargetData> mtdList = new ArrayList<>();
         Query query = entityManager.createNativeQuery(sql);

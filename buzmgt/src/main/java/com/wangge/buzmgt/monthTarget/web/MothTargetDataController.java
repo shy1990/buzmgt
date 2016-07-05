@@ -77,12 +77,12 @@ public class MothTargetDataController {
 
     /**
      * 导出表
-     *
+     * regionId:当前业务员的regionId
      * @return
      */
-    @RequestMapping(value = "export/{time}")
-    public void exportExcel(HttpServletRequest request, HttpServletResponse response, @PathVariable String time) {
-        List<MothTargetData> list = mothTargetDataService.findAll(time);
+    @RequestMapping(value = "export/{regionId}/{time}")
+    public void exportExcel(HttpServletRequest request, HttpServletResponse response, @PathVariable String time,@PathVariable String regionId) {
+        List<MothTargetData> list = mothTargetDataService.findAll(regionId,time);
 
         System.out.println(list.size());
 //        list.forEach(MonthPunishUp ->{
