@@ -130,7 +130,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
       datamap.put("type", task.getType());
       datamap.put("typeName", TASKTYPEARR[task.getType()]);
       datamap.put("content", task.getContent());
-      datamap.put("time", DateUtil.date2String(task.getCreateTime(), "YYYY-MM-dd HH:mm"));
+      datamap.put("time", DateUtil.date2String(task.getCreateTime(), "yyyy-MM-dd HH:mm"));
       Set<SalesMan> saleList = task.getSalesmanSet();
       String saleNames = "";
       for (SalesMan man : saleList) {
