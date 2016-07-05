@@ -73,25 +73,26 @@
 							<div class="col-sm-3 input-group left">
 								<span class="input-group-addon" style=""><i
 									class="icon ico-xinjian"></i></span> <select id="Customtype"
-									class="form-control">
+									class="form-control" onchange="changePunish(this.value)">
 									<option value="">---请选择类型---</option>
 									<option value="0">店铺注册</option>
-									<option value="1">售后拜访</option>
+									<option value="1">售后处理</option>
 									<option value="2">扣罚通知</option>
+									<option value="3">客户拜访</option>
 								</select>
 							</div>
 						</div>
 						<div class="hr"></div>
 
-						<div class="form-group">
+						<div id='punishDiv' class="form-group">
 							<label class="col-sm-2 control-label">扣罚金额：</label>
 							<div class="col-sm-3 input-group left">
 								<span class="input-group-addon"><i class="icon icon-jine"></i></span>
-								<input type="number" id="punish" class="form-control"
+								<input type="number" id="punish" onchange="testPunish(this);" class="form-control"
 									placeholder="请输入金额" aria-describedby="basic-addon1">
 							</div>
 						</div>
-						<div class="hr"></div>
+						<div id='punishhr' class="hr"></div>
 
 
 						<div class="form-group">
