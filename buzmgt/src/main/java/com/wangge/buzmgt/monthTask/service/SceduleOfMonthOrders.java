@@ -51,7 +51,7 @@ public class SceduleOfMonthOrders {
 
 	// 每月15号点时分 0 30 1 15 * ?
 	@SuppressWarnings("unchecked")
-  @Scheduled(cron = " 0 30 1 15 * ? ")
+  @Scheduled(cron = " 0 37 10 * * ? ")
 	public void handleMontholdData() {
 		List<Object[]> townList = em.createNativeQuery(townSql).getResultList();
 		for (Object[] towns : townList) {

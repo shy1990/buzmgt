@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
@@ -325,7 +326,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     talMap.put("msg", "您有新的自定义回复消息");
     talMap.put("Id", customtaskId);
     
-    HttpUtil.sendPostJson(AppServer.URL + "customTask", talMap);
+    HttpUtil.sendPostJson(AppServer.URL + "push/customTask", talMap);
   }
   
   /*
