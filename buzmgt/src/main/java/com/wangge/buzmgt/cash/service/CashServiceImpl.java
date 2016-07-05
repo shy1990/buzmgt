@@ -54,6 +54,7 @@ public class CashServiceImpl implements CashService {
     Sort sort=new Sort(order);
     List<Cash> cashList = cashRepository.findAll(spec,sort);
     disposeCashList(cashList);
+    
     return cashList;
     
   }

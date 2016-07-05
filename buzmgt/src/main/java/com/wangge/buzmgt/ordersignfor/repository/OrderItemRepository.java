@@ -9,6 +9,5 @@ import com.wangge.buzmgt.ordersignfor.entity.OrderItem;
 
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, String> {
-
-  public List<OrderItem> findByOrderNum(String orderNum);
+  List<OrderItem> findByOrderNum(String orderNum);
 }
