@@ -145,6 +145,7 @@ public class OrderSignforController {
       if (list.size() > 0) {
         list.forEach(l->{
           l.setFastmailNo(fastMailNo);
+          l.setFastmailTime(new Date());
         });
         os.save(list);
         json.put("fastMailNo", fastMailNo);

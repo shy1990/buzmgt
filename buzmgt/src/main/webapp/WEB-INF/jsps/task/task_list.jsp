@@ -91,7 +91,6 @@
 					<!--modal-body-->
 					<div class="modal-body">
 						<a href="/task/addVisitMap" class="btn btn-blue">拜访任务</a>
-							<a href="/monthTask/initMonthTask" class="btn btn-blue">批量任务</a>
 					</div>
 					<div class="modal-footer">
 		 			</div>

@@ -44,7 +44,8 @@ public class Cash implements Serializable  {
   
   
   public enum CashStatusEnum{
-    UnPay("未支付"), OverPay("已支付");
+    //结算
+    UnPay("未支付"),OverCash("已结算"), OverPay("已支付");
     private String name;
     CashStatusEnum(String name){
       this.name=name;
