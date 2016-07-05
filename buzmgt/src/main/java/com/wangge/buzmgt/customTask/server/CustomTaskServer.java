@@ -48,8 +48,9 @@ public interface CustomTaskServer {
 
 	/**保存message消息列表
 	 * @param messages
+	 * @throws Exception 
 	 */
-	public void saveMessage(Map<String, Object> messages);
+	public void saveMessage(Map<String, Object> messages) throws Exception;
 
 	/**查找最新的消息id
 	 * @param taskId

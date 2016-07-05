@@ -44,7 +44,6 @@ public class CustomTask {
 	// 扣罚
 	private int punishCount;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Temporal(TemporalType.DATE)
 	private Date createTime = new Date();
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<SalesMan> salesmanSet;
