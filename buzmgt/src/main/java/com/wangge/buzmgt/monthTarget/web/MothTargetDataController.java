@@ -68,8 +68,10 @@ public class MothTargetDataController {
                                      @RequestParam(value = "name", defaultValue = "") String name,
                                      @RequestParam(value = "regionId", defaultValue = "") String regionId//限定为当前业务员
     ) {
-        logger.info("regionId======= " + regionId + "  name==== " + name);
-//        regionId = "37";
+        logger.info("regionId======= " + regionId + "  name==== " + name+"      `time===="+time);
+//        TODO 暂时 String regionId =  37170, 时间是 2016-06
+//        regionId = "370287";
+//        time = "2016-06";
         Page pageResult = mothTargetDataService.getMothTargetDatas(regionId, name, time, page, size);
         return pageResult;
     }
@@ -77,19 +79,19 @@ public class MothTargetDataController {
 
     /**
      * 导出表
-     *
+     * regionId:当前业务员的regionId
      * @return
      */
-    @RequestMapping(value = "export/{time}")
-    public void exportExcel(HttpServletRequest request, HttpServletResponse response, @PathVariable String time) {
-        List<MothTargetData> list = mothTargetDataService.findAll(time);
-
-        System.out.println(list.size());
-//        list.forEach(MonthPunishUp ->{
-//            MonthPunishUp.setRegionName(MonthPunishUp.getSalesMan().getRegion().getName());
-//        });
-        String[] title_ = new String[]{"商铺名", "电话", "区域", "提货量", "提货次数", "时间"};
-        String[] coloumsKey_ = new String[]{"shopName", "phoneNmu", "regionName", "numsOne", "count", "time"};
-        ExcelExport.doExcelExport("月指标.xls", list, title_, coloumsKey_, request, response);
-    }
+//    @RequestMapping(value = "export/{regionId}/{time}")
+//    public void exportExcel(HttpServletRequest request, HttpServletResponse response, @PathVariable String time,@PathVariable String regionId) {
+//        List<MothTargetData> list = mothTargetDataService.findAll(regionId,time);
+//
+//        System.out.println(list.size());
+////        list.forEach(MonthPunishUp ->{
+////            MonthPunishUp.setRegionName(MonthPunishUp.getSalesMan().getRegion().getName());
+////        });
+//        String[] title_ = new String[]{"商铺名", "电话", "区域", "提货量", "提货次数", "时间"};
+//        String[] coloumsKey_ = new String[]{"shopName", "phoneNmu", "regionName", "numsOne", "count", "time"};
+//        ExcelExport.doExcelExport("月指标.xls", list, title_, coloumsKey_, request, response);
+//    }
 }

@@ -159,7 +159,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
             mt.setSalesman(sm);
             mt.setRegion(sm.getRegion());
             Manager manager = getManager();
-            mt.setManagerId(manager.getId());
+            mt.setManagerRegion(manager.getRegion().getId());
             Calendar cal = Calendar.getInstance();
             //下面的就是把当前日期加一个月
             cal.add(Calendar.MONTH, 1);
@@ -239,8 +239,8 @@ public class MonthTargetServiceImpl implements MonthTargetService {
     @Override
     public String publishAll() {
         Manager manager = getManager();
-        //根据管理员id查找未发布的指标
-        List<MonthTarget> list = mtr.findByManagerIdAndPublishStatus(manager.getId(),0);
+        //根据管理员区域id查找未发布的指标
+        List<MonthTarget> list = mtr.findByManagerRegionAndPublishStatus(manager.getRegion().getId(),0);
         if (!ObjectUtils.isEmpty(list)){
             list.forEach(mt -> {
                 mt.setPublishStatus(1);
@@ -254,29 +254,47 @@ public class MonthTargetServiceImpl implements MonthTargetService {
     /**
      *
      * @param time：月份
-     * @param managerId:区域经理id
      * @param pageable
      * @return
      */
     @Override
-    public Page<MonthTarget> findByTargetCycleAndManagerId(String truename,String time, String managerId, Pageable pageable) {
-        logger.info("time:  "+time);
-        logger.info("managerId:  "+managerId);
-        Specification<MonthTarget> specification1 = new Specification<MonthTarget>() {
-            @Override
-            public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Predicate predicate = cb.like(root.get("targetCycle").as(String.class),"%"+time+"%");//插入查询时间
-                Predicate predicate1 = cb.like(root.get("managerId").as(String.class),"%"+managerId+"%");//插入当前的区域经理的id
-                Predicate p = cb.and(predicate,predicate1);
-                //根据姓名检索
-                if (truename != null && !"".equals(truename)){
-                    Join<MonthTarget,SalesMan> salesManJoin = root.join(root.getModel().getSingularAttribute("salesman",SalesMan.class),JoinType.LEFT);
-                    Predicate predicate2 = cb.like(salesManJoin.get("truename").as(String.class),"%"+truename+"%");
-                    p = cb.and(predicate,predicate1,predicate2);
+    public Page<MonthTarget> findByTargetCycleAndManagerId(String truename,String time, Pageable pageable) {
+        Manager m = getManager();
+        String managerRegion = m.getRegion().getId();
+        Specification<MonthTarget> specification1 = null;
+        //判断是不是root用户
+        if("0".equals(m.getId().trim())){
+            specification1 = new Specification<MonthTarget>() {
+                @Override
+                public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    Predicate predicate = cb.like(root.get("targetCycle").as(String.class),"%"+time+"%");//插入查询时间
+                    //根据姓名检索
+                    if (truename != null && !"".equals(truename)){
+                        Join<MonthTarget,SalesMan> salesManJoin = root.join(root.getModel().getSingularAttribute("salesman",SalesMan.class),JoinType.LEFT);
+                        Predicate predicate2 = cb.like(salesManJoin.get("truename").as(String.class),"%"+truename+"%");
+                        predicate = cb.and(predicate,predicate2);
+                    }
+                    return predicate;
                 }
-                return p;
-            }
-        };
+            };
+        }else{
+            specification1 = new Specification<MonthTarget>() {
+                @Override
+                public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    Predicate predicate = cb.like(root.get("targetCycle").as(String.class),"%"+time+"%");//插入查询时间
+                    Predicate predicate1 = cb.like(root.get("managerRegion").as(String.class),"%"+managerRegion+"%");//插入当前的区域经理的id
+                    Predicate p = cb.and(predicate,predicate1);
+                    //根据姓名检索
+                    if (truename != null && !"".equals(truename)){
+                        Join<MonthTarget,SalesMan> salesManJoin = root.join(root.getModel().getSingularAttribute("salesman",SalesMan.class),JoinType.LEFT);
+                        Predicate predicate2 = cb.like(salesManJoin.get("truename").as(String.class),"%"+truename+"%");
+                        p = cb.and(predicate,predicate1,predicate2);
+                    }
+                    return p;
+                }
+            };
+        }
+
         Page page = mtr.findAll(specification1,pageable);//查询出所有的目标设置信息（对应的是一条业务员的信息）
         logger.info(page);
         return findCount(time, page);
@@ -294,7 +312,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         list.forEach(m->{
             //获取业务员的id
             String parentId = m.getRegion().getId();
-            parentId = "370000";
+//            parentId = "370000";
             //根据业务员获取获取所有商家的提货量
             String sql = "select nvl(sum(m.NUMS),0) nums from " +
                     "MOTHTARGETDATA m " +
@@ -361,15 +379,19 @@ public class MonthTargetServiceImpl implements MonthTargetService {
             }
 
             if(CollectionUtils.isNotEmpty(list4)){
-                m.setMerchant(((BigDecimal)list4.get(0)).intValue());;//插入提货商家数量
+                m.setMerchant(((BigDecimal)list4.get(0)).intValue());//插入提货商家数量
             }
             if(CollectionUtils.isNotEmpty(list5)){
-                m.setMatureAll(((BigDecimal)list1.get(0)).intValue());;//插入所有注册商家
+                m.setMatureAll(((BigDecimal)list1.get(0)).intValue());//插入所有注册商家
             }
 
         });
         return page;
     }
+
+
+
+
 
     @Override
     public Page<MonthTarget> findActive(String time, Page page) {

@@ -83,9 +83,9 @@
                 <div class="link-posit-t pull-right export" style="margin-top: -55px">
                     <input id="searchName" class="cs-select  text-gery-hs" placeholder="请输入商家名称">
                     <button class="btn btn-sx " style="padding:  3px 12px 3px 10px" id="listByName">
-                        <检索></检索>
+                        检索
                     </button>
-                    <a class="table-export" href="javascript:void(0);">导出excel</a>
+                    <button class="table-export" onclick="exportExcel()">导出excel</button>
                 </div>
 
 
@@ -266,7 +266,10 @@
         return format;
     }
     var myDate = new Date().format('yyyy-MM');
+    function exportExcel(){
+        window.location.href = 'mothTargetData/export/'+'${regionId}'+'/'+'${time}';
 
+    }
 
     $(function () {
         monthTargetData.searchData.time = '${time}';
@@ -284,7 +287,6 @@
 
         });
 
-
         //根据时间检索
         $("#listByDate").click(function(){
             var searchTime = $("#searchTime").val();
@@ -294,10 +296,6 @@
             monthTargetData.findByDate(monthTargetData.searchData);
 
         });
-
-
-
-
 
     });
 
