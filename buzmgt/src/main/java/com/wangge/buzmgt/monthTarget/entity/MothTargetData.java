@@ -175,6 +175,7 @@ public class MothTargetData implements Comparable<MothTargetData> {
 
     @Override
     public int compareTo(MothTargetData o) {
-        return this.getNumsOne() - o.getNumsOne();
+//        return this.getNumsOne() - o.getNumsOne();
+        return o.getNumsOne()-this.getNumsOne();
     }
 }

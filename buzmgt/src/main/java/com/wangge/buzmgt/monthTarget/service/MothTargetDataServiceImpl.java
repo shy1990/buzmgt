@@ -43,23 +43,25 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
     public Page<MothTargetData> getMothTargetDatas(String regionId, String name, String time, Integer page, Integer size) {
 
         String sql =
-                "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(*),0) count " + "from mothtargetdata t " +
+                "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(1),0) count " + "from mothtargetdata t " +
                         "where " +
                         " to_char(createtime,'yyyy-mm') LIKE ? " +
                         " and t.parentid like ? " +
                         "group by " +
-                        "t.phoneNum,t.shopName,t.regionId ";
+                        "t.phoneNum,t.shopName,t.regionId " +
+                        "  order by nvl(sum(NUMS),0) desc,nvl(count(1),0) desc ";
         Query query = null;
         SQLQuery sqlQuery = null;
         int l = 0;
         int a = 1;
         int b = 2;
         if (name != null && !"".equals(name)) {
-            sql = "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(*),0) count from mothtargetdata t " +
+            sql = "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(1),0) count from mothtargetdata t " +
                     " where to_char(createtime,'yyyy-mm') LIKE ? " +
                     " and t.shopName like ? " +
                     " and t.parentid like ? " +
-                    " group by t.phoneNum,t.shopName,t.regionId";
+                    " group by t.phoneNum,t.shopName,t.regionId " +
+                    " order by nvl(sum(NUMS),0) desc,nvl(count(1),0) desc ";
             query = entityManager.createNativeQuery(sql);
             sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
             sqlQuery.setParameter(l, "%" + time + "%");//日期参数,必须存在
@@ -103,24 +105,6 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
             });
         }
         pageResult = new PageImpl<MothTargetData>(mtdList, new PageRequest(page, size), count);
-        if (pageResult.getContent().size() >= 2) {
-            logger.info("size:    " + pageResult.getContent().size());
-            List<MothTargetData> lll = new ArrayList<>();
-
-            pageResult.getContent().forEach(ll -> {
-                MothTargetData mtd = new MothTargetData();
-                mtd.setNumsOne(ll.getNumsOne());
-                mtd.setShopName(ll.getShopName());
-                lll.add(mtd);
-            });
-
-//            Collections.sort(pageResult.getContent());
-            Collections.sort(lll);
-
-            lll.forEach(ll -> {
-                System.out.println(ll.getShopName());
-            });
-        }
         return pageResult;
     }
 
