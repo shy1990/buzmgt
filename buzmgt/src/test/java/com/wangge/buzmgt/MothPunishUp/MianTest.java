@@ -162,6 +162,6 @@ public class MianTest {
         talMap.put("amount", "333");
         talMap.put("orderNum", "123456985");
         talMap.put("memberMobile", "18700000001");
-        HttpUtil.sendPostJson("http://192.168.2.151:8082/v1/"+ "push/pushNewOrder", talMap);
+//        HttpUtil.sendPostJson("http://192.168.2.151:8082/v1/"+ "push/pushNewOrder", talMap);
     }
 }

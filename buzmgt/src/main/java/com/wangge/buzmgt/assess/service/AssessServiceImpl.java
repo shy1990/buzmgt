@@ -61,7 +61,7 @@ public class AssessServiceImpl implements AssessService {
   }
 
   @Override
-  public Page<Assess> getAssessList(Assess assess, int pageNum, String regionName) {
+  public Page<Assess> getAssessList(Assess assess, int pageNum,int size, String regionName) {
     String hql = "select t.* from SYS_ASSESS t,(select user_id,max(to_number(assess_stage)) stage from SYS_Assess group by user_id) b left join sys_salesman s on b.user_id = s.user_id where t.user_id=b.user_id and to_number(t.assess_stage)=b.stage ";
     if(assess.getSalesman() != null){
       if((null!=assess.getSalesman().getJobNum()&&!"".equals(assess.getSalesman().getJobNum()))||(null!=assess.getSalesman().getTruename()&&!"".equals(assess.getSalesman().getTruename()))){
@@ -81,8 +81,8 @@ public class AssessServiceImpl implements AssessService {
     }
     Query q = em.createNativeQuery(hql,Assess.class);  
     int count=q.getResultList().size();
-    q.setFirstResult(pageNum* 7);
-    q.setMaxResults(7);
+    q.setFirstResult(pageNum* size);
+    q.setMaxResults(size);
     List<Assess> list = new ArrayList<Assess>();
     for(Object obj: q.getResultList()){
       Assess ass = (Assess)obj;
@@ -157,7 +157,7 @@ public class AssessServiceImpl implements AssessService {
       list.add(ass);
     }
     
-    Page<Assess> page = new PageImpl<Assess>(list,new PageRequest(pageNum,7),count);   
+    Page<Assess> page = new PageImpl<Assess>(list,new PageRequest(pageNum,size),count);   
     return page;  
 }
 

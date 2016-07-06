@@ -82,7 +82,7 @@ public class AccountManageController  extends BaseController{
   @RequestMapping(value = "/accountManage")
   public String accountList(Integer page, Model model,HttpServletRequest req,String regionId,String searchParam){
     page = page== null ? 1 : page<1 ? 1 : page;
-    int pageSize = 10;
+    int pageSize = 20;
     PageRequest pageRequest = SortUtil.buildPageRequest(page, pageSize,null);
     //过滤查询
     List<AccountBean> accList = new ArrayList<AccountBean>();
