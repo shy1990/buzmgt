@@ -70,8 +70,8 @@ public class MothTargetDataController {
     ) {
         logger.info("regionId======= " + regionId + "  name==== " + name+"      `time===="+time);
 //        TODO 暂时 String regionId =  37170, 时间是 2016-06
-        regionId = "370287";
-        time = "2016-06";
+//        regionId = "370287";
+//        time = "2016-06";
         Page pageResult = mothTargetDataService.getMothTargetDatas(regionId, name, time, page, size);
         return pageResult;
     }

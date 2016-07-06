@@ -26,7 +26,7 @@ public interface MonthTargetService {
 
   String publishAll();
 
-  public Page<MonthTarget> findByTargetCycleAndManagerId(String truename,String time, String managerId,Pageable pageable);
+  public Page<MonthTarget> findByTargetCycleAndManagerId(String truename,String time,Pageable pageable);
 
 
   public Page<MonthTarget> findCount(String time,Page page);
