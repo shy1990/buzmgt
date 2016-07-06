@@ -259,7 +259,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
      * @return
      */
     @Override
-    public Page<MonthTarget> findByTargetCycleAndManagerId(String truename,String time, String managerId, Pageable pageable) {
+    public Page<MonthTarget> findByTargetCycleAndManagerId(String managerId,String truename,String time, String managerRegion, Pageable pageable) {
         logger.info("time:  "+time);
         logger.info("managerId:  "+managerId);
         Specification<MonthTarget> specification1 = null;
@@ -283,7 +283,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
                 @Override
                 public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                     Predicate predicate = cb.like(root.get("targetCycle").as(String.class),"%"+time+"%");//插入查询时间
-                    Predicate predicate1 = cb.like(root.get("managerId").as(String.class),"%"+managerId+"%");//插入当前的区域经理的id
+                    Predicate predicate1 = cb.like(root.get("managerRegion").as(String.class),"%"+managerRegion+"%");//插入当前的区域经理的id
                     Predicate p = cb.and(predicate,predicate1);
                     //根据姓名检索
                     if (truename != null && !"".equals(truename)){
