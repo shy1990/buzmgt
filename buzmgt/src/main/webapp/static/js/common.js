@@ -1,17 +1,25 @@
-$(function(){
-	$('.form-group input,.form-group .form-control').focus(function(){
+$(function() {
+	$('.form-group input,.form-group .form-control').focus(function() {
 		$(this).parents('.form-group').removeClass('has-error');
 	});
+	$(document).ajaxStart(function() {
+		$(document).html("<img id='loading' src='/static/img/background/loading.gif' />");
+	});
+	$(document).ajaxStop(function(){
+//		$("#loading").hide();
+//		alert("All AJAX requests completed");
+	});
+
 });
-//子页面刷新f5
+// 子页面刷新f5
 window.document.onkeydown = childRefresh;
-function childRefresh(evt){
-var iframeSrc = parent.document.getElementById('iframepage').src;
-evt = (evt) ? evt : window.event;
-if (evt.keyCode) {
-   if(evt.keyCode == 116){
-	 evt.preventDefault();//阻止系统刷新。
-	 parent.document.getElementById('iframepage').src = iframeSrc;
-   }
-}
+function childRefresh(evt) {
+	var iframeSrc = parent.document.getElementById('iframepage').src;
+	evt = (evt) ? evt : window.event;
+	if (evt.keyCode) {
+		if (evt.keyCode == 116) {
+			evt.preventDefault();// 阻止系统刷新。
+			parent.document.getElementById('iframepage').src = iframeSrc;
+		}
+	}
 }

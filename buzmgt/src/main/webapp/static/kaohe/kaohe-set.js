@@ -90,7 +90,6 @@ function errorMsgShow($option,msg){
 	}
 	$option.parents('.form-group').addClass('has-error');
 	$option.parents('.col-sm-4').addClass('has-error');
-	console.info(msg);
 	if(msg!=null&&msg!=""){
 		$option.parents('.form-group').find('.msg-error').html(msg);
 		$option.parents('.average-tr').find('.msg-error').html(msg);

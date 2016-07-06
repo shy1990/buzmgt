@@ -5,7 +5,6 @@ $(function(){
 		var cityOffset = $("#region").offset();//设置文档偏移
 		//获取权限，区域列表从哪一级开始
 		var id = $("#n").val();
-		console.log("***********"+id);
 		$.ajax({
 			async : true, // 是否异步
 			cache : false, // 是否使用缓存
@@ -21,7 +20,6 @@ $(function(){
 			},
 			success : function(data) {
 				ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
-				console.log(ztreeNodes);
 				// zNodes = zNodes.concat(ztreeNodes);
 				$.fn.zTree.init($("#regionTree"), regionSetting, ztreeNodes);
 				$("#regionMenuContent").slideDown("fast");

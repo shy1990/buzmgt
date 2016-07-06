@@ -274,7 +274,6 @@ function errorMsgShow($option,msg){
 		$option=$(this);
 	}
 	$option.parents('.form-group').addClass('has-error');
-	console.info(msg);
 	if(msg!=null&&msg!=""){
 		$option.parents('.form-group').find('.msg-error').html(msg);
 	}
