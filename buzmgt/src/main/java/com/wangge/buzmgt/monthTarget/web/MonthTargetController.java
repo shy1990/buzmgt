@@ -35,17 +35,34 @@ public class MonthTargetController {
   private SalesManService smService;
   @Autowired
   private MonthTargetService mtService;
+
+  /**
+   * 跳转到月指标
+   * @return
+     */
   @RequestMapping("/monthTarget")
   public String toMonthTarget(){
 
     return "monthTarget/mouth_target";
   }
 
+  /**
+   * 跳转到月指标设置
+   * @return
+     */
   @RequestMapping("/monthSetting")
   public String toMonthSetting(){
 
     return "monthTarget/mouth_setting";
   }
+
+  /**
+   * 跳转到月指标添加和修改
+   * @param flag
+   * @param id
+   * @param model
+     * @return
+     */
   @RequestMapping(value = "/toUpdate")
   public String toUpdate(String flag,Long id,Model model){
     Region region = mtService.getRegion();
@@ -60,6 +77,11 @@ public class MonthTargetController {
     return "monthTarget/update";
   }
 
+  /**
+   * 根据userId查询业务
+   * @param userId
+   * @return
+     */
   @RequestMapping("/regionName")
   @JSONFormat(filterField = {"SalesMan.user","region.children"})
   public SalesMan getRegionName(String userId){
@@ -67,6 +89,11 @@ public class MonthTargetController {
     return sm;
   }
 
+  /**
+   * 根据userId查询订单量数据
+   * @param userId
+   * @return
+     */
   @RequestMapping(value = "/orderNum",method = RequestMethod.GET)
   @ResponseBody
   public Map<String,Object> orderNum(String userId){
@@ -74,6 +101,11 @@ public class MonthTargetController {
     return map;
   }
 
+  /**
+   * 根据userId查询提货、活跃、成熟商家
+   * @param userId
+   * @return
+     */
   @RequestMapping(value = "/seller",method = RequestMethod.GET)
   @ResponseBody
   public Map<String,Object> seller(String userId){
@@ -81,6 +113,12 @@ public class MonthTargetController {
     return map;
   }
 
+  /**
+   * 根据userId保存月指标
+   * @param mt
+   * @param salesman
+   * @return
+     */
   @RequestMapping(value = "/save/{userId}",method = {RequestMethod.POST})
   @ResponseBody
   public String save(@RequestBody MonthTarget mt,@PathVariable("userId") SalesMan salesman){
@@ -88,6 +126,12 @@ public class MonthTargetController {
     return msg;
   }
 
+  /**
+   * 根据id修改月指标
+   * @param mt
+   * @param monthTarget
+   * @return
+     */
   @RequestMapping(value = "/update/{id}",method = {RequestMethod.POST})
   @ResponseBody
   public String update(@RequestBody MonthTarget mt,@PathVariable("id") MonthTarget monthTarget){
@@ -99,6 +143,11 @@ public class MonthTargetController {
     return msg;
   }
 
+  /**
+   * 根据月指标id发布一条月指标
+   * @param monthTarget
+   * @return
+     */
   @RequestMapping(value = "/publish/{id}",method = {RequestMethod.GET})
   @ResponseBody
   public String publish(@PathVariable("id") MonthTarget monthTarget){
@@ -106,6 +155,10 @@ public class MonthTargetController {
     return msg;
   }
 
+  /**
+   * 发布当前管理员保存的全部业务员指标
+   * @return
+     */
   @RequestMapping(value = "/publishAll",method = RequestMethod.POST)
   @ResponseBody
   public String publishAll(){
@@ -113,6 +166,13 @@ public class MonthTargetController {
     return msg;
   }
 
+  /**
+   * 按条件(业务姓名、指标周期)查询全部的月指标并分页
+   * @param targetCycle
+   * @param userName
+   * @param pageRequest
+     * @return
+     */
   @RequestMapping(value = "/findMonthTarget",method = RequestMethod.GET)
   @JSONFormat(filterField = {"SalesMan.user","region.children"})
   public Page<MonthTarget> findMonthTarget(String targetCycle,String userName,

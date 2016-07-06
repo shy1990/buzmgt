@@ -47,6 +47,10 @@ public class MonthTargetServiceImpl implements MonthTargetService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     *  根据当前登录管理员获取区域
+     * @return
+     */
     @Override
     public Region getRegion() {
         // 获取user
@@ -189,15 +193,14 @@ public class MonthTargetServiceImpl implements MonthTargetService {
 
             public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query,
                                          CriteriaBuilder cb) {
-//                List<Predicate> predicates = new ArrayList<Predicate>();
                 Predicate predicate = cb.equal(root.get("targetCycle").as(String.class), targetCycle);
-//                predicates.add(cb.equal(root.get("targetCycle").as(String.class), targetCycle));
+                Predicate predicate2 = cb.equal(root.get("managerRegion").as(String.class),getManager().getRegion().getId());
                 if (StringUtils.isNotBlank(userName)) {
                     Join<MonthTarget, SalesMan> salesmanJoin = root.join(root.getModel()
                             .getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
                     Predicate predicate1= (cb.like(salesmanJoin.get("truename").as(String.class),
                             "%" + userName + "%"));
-                    predicate = cb.and(predicate,predicate1);
+                    predicate = cb.and(predicate,predicate1,predicate2);
                 }
 
                 return predicate;
