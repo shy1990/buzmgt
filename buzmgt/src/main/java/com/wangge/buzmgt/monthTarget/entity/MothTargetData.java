@@ -11,13 +11,10 @@ import java.util.Date;
 
 /**
  * Created by joe on 16-6-27.
- *
+ * <p>
  * 视图实体类（MothTargetData）
  */
-//@Entity
-//@Immutable
-//@Subselect("select * from mothtargetdata")
-public class MothTargetData implements Serializable {
+public class MothTargetData implements Comparable<MothTargetData> {
 
     private String orderId;//订单id
 
@@ -35,9 +32,9 @@ public class MothTargetData implements Serializable {
 
     private String shopName;//商家名称
 
-    private BigDecimal count;//提货次数
+    private int count;//提货次数
 
-    private BigDecimal numsOne;//单品数量
+    private int numsOne;//单品数量
 
     private Region region;//商家区域
 
@@ -53,26 +50,21 @@ public class MothTargetData implements Serializable {
         this.region = region;
     }
 
-    public BigDecimal getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(BigDecimal count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
-    public BigDecimal getNumsOne() {
+    public Integer getNumsOne() {
         return numsOne;
     }
 
-    public void setNumsOne(BigDecimal numsOne) {
+    public void setNumsOne(Integer numsOne) {
         this.numsOne = numsOne;
     }
-
-
-
-
-    public MothTargetData(){};
 
     public String getTime() {
         return time;
@@ -150,6 +142,14 @@ public class MothTargetData implements Serializable {
         return parentId;
     }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setNumsOne(int numsOne) {
+        this.numsOne = numsOne;
+    }
+
     public void setParentId(String parentId) {
         this.parentId = parentId;
     }
@@ -171,5 +171,10 @@ public class MothTargetData implements Serializable {
                 ", regionName='" + regionName + '\'' +
                 ", time='" + time + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(MothTargetData o) {
+        return this.getNumsOne() - o.getNumsOne();
     }
 }
