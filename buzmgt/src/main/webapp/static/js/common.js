@@ -3,10 +3,15 @@ $(function() {
 		$(this).parents('.form-group').removeClass('has-error');
 	});
 	$(document).ajaxStart(function() {
-		$(document).html("<img id='loading' src='/static/img/background/loading.gif' />");
+		var loadObj=$(".loading-box")
+		if(loadObj.length > 0){
+			$(".loading-box").show();
+			return ;
+		}
+		$("body").prepend("<div class='loading-box'><img id='loading' class='common-loading' src='/static/img/background/loading.gif' /></div>");
 	});
-	$(document).ajaxStop(function(){
-//		$("#loading").hide();
+	$(document).ajaxSuccess(function(){
+		$(".loading-box").hide();
 //		alert("All AJAX requests completed");
 	});
 

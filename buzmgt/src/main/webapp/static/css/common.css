@@ -710,3 +710,22 @@ a.table-export:hover, a.table-export:focus {
 	border: 1px solid #ebebeb;
 	background: #FFF;
 }
+.loading-box{
+	position: fixed;
+	width:100%;
+  height: 100%;
+	top: 0;
+	bottom: 0;
+	background-color:#000; 
+	background:rgba(0,0,0,0.3);  
+  background:#000 9;/*CSS Hack,只能对ie9以下浏览器ie6,ie7,ie8有效，否侧ie10,FF,Cherome会失去透明效果*/  
+  filter:Alpha(opacity=30);/*只对ie7,ie8有效*/  
+/* 	opacity:0.3; */
+  z-index: 1000;
+}
+.loading-box img {
+	position:absolute;
+	top:15%;
+	left:35%;
+	z-index: 1001;
+}
