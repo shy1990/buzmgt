@@ -349,7 +349,6 @@ Handlebars.registerHelper('whatPartsCount', function(value) {
 Handlebars.registerHelper('isTimeOutPlant', function(isTimeOut,payDate) {
 	var html = "";
 	payDate=isEmpty(payDate)?'':payDate;
-	console.info(isEmpty(payDate));
 	isTimeOut=isEmpty(isTimeOut)?'': isTimeOut;
 	html+='<span class="text-red">'+isTimeOut+'</span> <br /> '
 	var formDate=changeTimeToString(new Date(payDate));

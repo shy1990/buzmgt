@@ -42,7 +42,6 @@ function createTaskTable(data) {
  */
 function oilCostPaging(data) {
 	var totalCount = data.totalElements, limit = data.size;
-	console.info(data);
 	$('#Pager').extendPagination({
 		totalCount : totalCount,
 		showCount : 5,

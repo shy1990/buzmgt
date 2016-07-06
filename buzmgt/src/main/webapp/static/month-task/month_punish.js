@@ -81,7 +81,6 @@ $('#zdyqy').on('hidden.bs.modal', function(e) {
 
 // 添加
 function addd(toil) {
-	console.log($("#addd").serializeArray());
 	addCustom($("#addd").serializeArray());
 }
 

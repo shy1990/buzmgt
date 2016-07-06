@@ -4,7 +4,6 @@ $("#button_bocun").click(function() {
 	var ratio = $("#default_km").val();
 	var regionId = '0';
 	var kmOilSubsidy =$("#default_money").val() ;
-	console.log(ratio+"   "+kmOilSubsidy);
 	$.ajax({
 		url:'/oil/saveDefault',
 		type:'post',
@@ -30,7 +29,6 @@ $('#zdyqy').on('hidden.bs.modal', function(e) {
 
 // 添加
 function addd(toil) {
-	console.log($("#addd").serializeArray());
 	addCustom($("#addd").serializeArray());
 }
 var i = 1;
@@ -38,12 +36,10 @@ function addCustom(o) {
 	var qy = o[0]["value"];// regionId
 	var glxs = o[1]["value"];//
 	var km_ratio = o[2]["value"];
-	console.log(qy.length);
 	if (qy.length > 7) {
 		alert("请您只选择到：要选择区域的最后一级");
 		return location.href = '/oil/toOilSetList';
 	}
-	console.log(qy + '******' + km_ratio);
 	oilForm(km_ratio, qy);// 执行添加
 
 }
@@ -73,7 +69,6 @@ function modify(id, kmOilSubsidy, regionId) {
 	$('#changed').modal('show').on('shown.bs.modal', function() {
 		$("#set_a").click(function() {
 			var ratio = $("#select_modify").val();
-			console.log(id + "  " + kmOilSubsidy + "  " + regionId);
 			$.ajax({
 				url : 'oil/modifyOilParameter',
 				type : 'post',
@@ -173,7 +168,6 @@ function changeTo() {
 			);
 	// 执行添加
 	$("#a").on("click", function() {
-		console.log("999999999999999");
 		addoil();
 	});
 }
@@ -183,7 +177,6 @@ function changeTo() {
  */
 function addoil() {
 
-	console.log($("#addd").serializeArray());
 	oilCustom($("#addd").serializeArray());
 }
 var j = 1;
@@ -233,7 +226,6 @@ function modify_money(id, kmRatio, regionId) {
 	$('#changed1').modal('show').on('shown.bs.modal', function() {
 		$("#set_b").on("click", function() {
 			var kmOilSubsidy = $("#select_kmOilSubsidy").val();
-			console.log(id + "  " + kmOilSubsidy + "  " + regionId);
 			$.ajax({
 				url : 'oil/modifyOilParameter',
 				type : 'post',
