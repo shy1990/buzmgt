@@ -239,8 +239,8 @@ public class MonthTargetServiceImpl implements MonthTargetService {
     @Override
     public String publishAll() {
         Manager manager = getManager();
-        //根据管理员id查找未发布的指标
-        List<MonthTarget> list = mtr.findByManagerIdAndPublishStatus(manager.getId(),0);
+        //根据管理员区域id查找未发布的指标
+        List<MonthTarget> list = mtr.findByManagerRegionAndPublishStatus(manager.getRegion().getId(),0);
         if (!ObjectUtils.isEmpty(list)){
             list.forEach(mt -> {
                 mt.setPublishStatus(1);

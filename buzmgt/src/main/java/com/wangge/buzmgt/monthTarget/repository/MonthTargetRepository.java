@@ -19,7 +19,7 @@ public interface MonthTargetRepository extends JpaRepository<MonthTarget, Long>{
 
   Page<MonthTarget> findAll(Specification<MonthTarget> specification, Pageable pageRequest);
 
-  List<MonthTarget> findByManagerIdAndPublishStatus(String managerId,int status);
+  List<MonthTarget> findByManagerRegionAndPublishStatus(String regionId,int status);
 
 //    public Page<MonthTarget> findAll(Specification specification, Pageable pageable);//分页查询
 }
