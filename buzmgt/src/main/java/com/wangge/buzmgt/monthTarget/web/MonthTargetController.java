@@ -136,17 +136,9 @@ public class MonthTargetController {
                                                           @RequestParam(value = "size", defaultValue = "20") Integer size,
                                                           @RequestParam (value = "name", defaultValue = "")String truename
   ){
-    User user = (User)SecurityUtils.getSubject().getPrincipal();
-    String managerId = user.getId();
-    String managerRegion = user.getManager().getRegion().getId();
-    logger.info(user.getManager().getId()+"======");
-//     managerId = "0";
-//    logger.info("time: "+time);
-//    time = "2016-08";
-//    truename = "拓展经理";
     Sort sort = new Sort(Sort.Direction.DESC,"id");
     Pageable pageable = new PageRequest(page, size,sort);
-    Page<MonthTarget> requestPage = mtService.findByTargetCycleAndManagerId(managerId,truename,time,managerRegion,pageable);
+    Page<MonthTarget> requestPage = mtService.findByTargetCycleAndManagerId(truename,time,pageable);
 
     return requestPage;
   }

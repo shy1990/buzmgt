@@ -254,17 +254,16 @@ public class MonthTargetServiceImpl implements MonthTargetService {
     /**
      *
      * @param time：月份
-     * @param managerId:区域经理id
      * @param pageable
      * @return
      */
     @Override
-    public Page<MonthTarget> findByTargetCycleAndManagerId(String managerId,String truename,String time, String managerRegion, Pageable pageable) {
-        logger.info("time:  "+time);
-        logger.info("managerId:  "+managerId);
+    public Page<MonthTarget> findByTargetCycleAndManagerId(String truename,String time, Pageable pageable) {
+        Manager m = getManager();
+        String managerRegion = m.getRegion().getId();
         Specification<MonthTarget> specification1 = null;
         //判断是不是root用户
-        if("0".equals(managerId.trim())){
+        if("0".equals(m.getId().trim())){
             specification1 = new Specification<MonthTarget>() {
                 @Override
                 public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
