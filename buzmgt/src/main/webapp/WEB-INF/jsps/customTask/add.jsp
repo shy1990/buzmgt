@@ -190,9 +190,10 @@
 	<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script type="text/javascript"
-		src="/static/customTask/searchSelect/searchSelect.js"></script>
+		src="/static/multiselect/js/jquery.multiselect.js"></script>
 	
 	<script type="text/javascript" src="/static/customTask/add.js"></script>
+	<script src="/static/bootstrap/js/bootstrap-select.min.js"></script>
 	<script type="text/javascript">
 		$('select#salesName').multiselect({
 			columns : 1,

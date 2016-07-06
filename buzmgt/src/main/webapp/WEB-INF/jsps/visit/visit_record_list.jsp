@@ -33,7 +33,7 @@
 	var number = '';//当前页数（从零开始）
 	var totalPages = '';//总页数(个数)
 	var searchData = {
-		"size" : "8",
+		"size" : "20",
 		"page" : "0",
 	}
 	var totalElements;//总条数

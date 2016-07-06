@@ -122,7 +122,7 @@ public class HttpUtil {
 		return result;
 	}
 
-	public static String sendPostJson(String url, Map<String, Object> talMap) {
+	public static String sendPostJson(String url, Map<String, Object> talMap) throws Exception {
 		JSONObject obj = new JSONObject();
 		for (Map.Entry<String, Object> entry : talMap.entrySet()) {
 			obj.put(entry.getKey(), entry.getValue());
@@ -160,6 +160,7 @@ public class HttpUtil {
 		} catch (Exception e) {
 			System.out.println("发送 POST 请求出现异常！" + e);
 			e.printStackTrace();
+			throw e;
 		}
 		// 使用finally块来关闭输出流、输入流
 		finally {

@@ -29,6 +29,7 @@ import org.springframework.web.util.WebUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ordersignfor.service.OrderItemService;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.receipt.service.OrderReceiptService;
@@ -60,6 +61,8 @@ public class ReceiptRemarkController {
   @Autowired
   private SalesManService salesManService;
   
+  @Autowired
+  private OrderItemService itemService;
   
   
   @RequestMapping(value="/show",method=RequestMethod.GET)
@@ -160,6 +163,8 @@ public class ReceiptRemarkController {
   @RequestMapping(value="/cash/{orderId}")
   public String getCashById(Model model ,@PathVariable("orderId") OrderSignfor orderSignfor , 
       HttpServletRequest request){
+    //绑定数据订单详情
+    itemService.disposeOrderSignfor(orderSignfor);
     model.addAttribute("order", orderSignfor);
     return "receipt/receipt_order_det";
   }
@@ -176,6 +181,8 @@ public class ReceiptRemarkController {
     }
     String orderNo=receiptRemark.getOrderno();
     OrderSignfor order= orderSignforService.findByOrderNo(orderNo);
+    //绑定数据订单详情
+    itemService.disposeOrderSignfor(order);
     receiptRemark.setOrder(order);
     model.addAttribute("receiptRemark", receiptRemark);
     return "receipt/receipt_remark_det";
@@ -284,6 +291,8 @@ public class ReceiptRemarkController {
     try {
       List<OrderSignfor> notRemarkList = orderReceiptService.getReceiptNotRemark(searchParams);
       OrderSignfor notRemark=notRemarkList.get(0);
+      //绑定数据订单详情
+      itemService.disposeOrderSignfor(notRemark);
       String userId=notRemark.getUserId();
       SalesMan s=salesManService.findByUserId(userId);
       notRemark.setSalesMan(s);
