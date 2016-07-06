@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.teammember.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
@@ -31,5 +32,7 @@ public interface SalesManService {
 
   SalesMan findSaleamanByRegionId(String regionId);
   
+  
+  Set<SalesMan> findForTargetByReginId(String regionId);
   
 }

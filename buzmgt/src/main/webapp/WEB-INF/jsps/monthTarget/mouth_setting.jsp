@@ -15,10 +15,48 @@
     <title>月指标</title>
 
     <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap-datetimepicker.min.css" />
     <link href="static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="static/css/common.css">
     <link rel="stylesheet" type="text/css" href="static/month-target/css/mouth.css">
+    <link href="static/bootStrapPager/css/page.css" rel="stylesheet">
     <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var base = "<%=basePath%>";
+        var number = '';//当前页数（从零开始）
+        var totalPages = '';//总页数(个数)
+        var searchData = {
+            "size" : "2",
+            "page" : "0",
+        }
+        var totalElements;//总条数
+    </script>
+    <script id="table-template" type="text/x-handlebars-template">
+        {{#each content}}
+        <tr>
+            <td>{{region.parent.parent.parent.parent.name}} {{region.parent.parent.parent.name}} {{region.parent.parent.name}} {{region.name}}</td>
+            <td>{{salesman.truename}}</td>
+            <td>{{matureAll}}</td>
+            <td>-- / {{orderNum}}</td>
+            <td>-- / {{merchantNum}}</td>
+            <td>-- / {{activeNum}}</td>
+            <td>-- / {{matureNum}}</td>
+            <td>{{targetCycle}}</td>
+            <td>
+                <button class="btn btn-blue btn-bn-style" onclick="update('{{id}}','update');">查看</button>
+                {{#if view}}
+                <button class="btn btn-green btn-bn-style" onclick="publish('{{id}}');" id="{{id}}">发布</button>
+                {{else}}
+                <button class="btn btn-green btn-bn-style" disabled="disabled">已发布</button>
+                {{/if}}
+            </td>
+        </tr>
+        {{else}}
+        <div style="text-align: center;">
+            <tr style="text-align: center;">没有相关数据!</tr>
+        </div>
+        {{/each}}
+    </script>
 </head>
 <body>
 <div class="content main">
@@ -28,7 +66,7 @@
 
         </div>
         <!--/区域选择按钮-->
-        <a href="/monthTarget/toUpdate" onclick="toUpdate();" class="btn btn-blue"
+        <a href="javascript:;" onclick="toUpdate();" class="btn btn-blue"
            data-toggle="modal" data-target="#xzyw" data-whatever="@mdo">
             <i class="ico icon-add"></i>添加
         </a>
@@ -50,11 +88,11 @@
     <!---设置次数-->
     <div style="margin-top: -29px">
         <div class="pull-right export">
-            <input class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
-            <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
+            <input class="cs-select  text-gery-hs" placeholder="请输入业务员名称">
+            <button class="btn btn-blue btn-sm" onclick="goSearch();">
                 检索
             </button>
-            <span class="text-blue-s" style="margin-left: 30px">一键全部发布</span>
+            <a href="javascript:;" onclick="publishAll();"><span class="text-blue-s" style="margin-left: 30px">一键全部发布</span></a>
         </div>
 
     </div>
@@ -82,133 +120,11 @@
                         <th>操作</th>
                     </tr>
                     </thead>
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>-- / 700</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                            <button class="btn btn-green btn-bn-style">发布</button>
-                        </td>
-                    </tr>
+                    <tbody id="tableList">
 
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>-- / 700</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                            <button class="btn btn-green btn-bn-style">发布</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>-- / 700</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                            <button class="btn btn-green btn-bn-style">发布</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>-- / 700</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                          <span class="text-gery">已发布</span>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>-- / 700</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <span class="text-gery">已发布</span>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>-- / 700</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                            <button class="btn btn-green btn-bn-style">发布</button>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>-- / 700</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <button class="btn btn-blue btn-bn-style">查看</button>
-                            <button class="btn btn-green btn-bn-style">发布</button>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>山东省滨州市哈哈县</td>
-                        <td>胡老大</td>
-                        <td>400</td>
-                        <td>-- / 700</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>-- / 50</td>
-                        <td>2016.05</td>
-                        <td>
-                            <span class="text-gery">已发布</span>
-                        </td>
-                    </tr>
-
-
-
-
-
+                    </tbody>
                 </table>
+                <div id="callBackPager"></div>
             </div>
             <!--table-box-->
         </div>
@@ -216,134 +132,30 @@
     </div>
 
 </div>
-<!---alert---->
-<div id="daoru" class="modal fade" role="dialog">
-    <div class="modal-dialog fang" role="document">
-        <div class="modal-content modal-blue yuan ">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title">导入表格</h3>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <form id="addd" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">选择日期：</label>
-                            <div class="col-sm-7">
-                                <div class="input-group are-line">
-                                    <span class="input-group-addon"><i class="icon icon-rq"></i></span>
-                                    <input name="a" type="text" class="form-control input-hh  form_datetime"
-                                           aria-describedby="basic-addon1" type="text" placeholder="请选择年-月-日"
-                                           readonly="readonly">
-                                    </input>
-                                    <!-- /btn-group -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">选择文件：</label>
-                            <div class="col-sm-7">
-                                <div class="input-group are-line">
-                                    <span class="input-group-addon"><i class="icon icon-wj"></i></span>
-                                    <select name="b" type="" class="form-control input-h"
-                                            aria-describedby="basic-addon1">
-                                        <option></option>
-                                        <option>20</option>
-                                        <option>30</option>
-                                        <option>40</option>
-                                        <option>50</option>
-                                    </select>
-                                    <!-- /btn-group -->
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-offset-4 col-sm-4 ">
-                                <a herf="javascript:return 0;" onclick="addd(this)"
-                                   class="Zdy_add  col-sm-12 btn btn-primary">确定
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!---alert---->
 
 <![endif]-->
-<script src="../static/bootstrap/js/bootstrap.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
+<script src="<%=basePath%>static/month-target/js/monthSetting.js" type="text/javascript" charset="utf-8"></script>
+<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 <script type="text/javascript">
     $('body input').val('');
+
     $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
+        format: "yyyy-mm",
         language: 'zh-CN',
         weekStart: 1,
         todayBtn: 1,
         autoclose: 1,
         todayHighlight: 1,
-        startView: 2,
-        minView: 2,
+        startView: 3,
+        minView: 3,
         pickerPosition: "bottom-right",
         forceParse: 0
     });
-    var $_haohe_plan = $('.J_kaohebar').width();
-    var $_haohe_planw = $('.J_kaohebar_parents').width();
-    $(".J_btn").attr("disabled", 'disabled');
-    if ($_haohe_planw === $_haohe_plan) {
-        $(".J_btn").removeAttr("disabled");
-    }
 
-    function select() {
-        var $listcon = $('.abnormal-table tbody tr'),
-                $unpay = $('.icon-tag-wfk'),
-                $payed = $('.payed'),
-                $timeout = $('.time-out'),
-                $paystatus = $('.J-pay-staus');
-        $paystatus.delegate('li', 'click', function () {
-            var $target = $(this);
-            $paystatus.children('li').removeClass('pay-status-active');
-            $target.addClass('pay-status-active');
-            $listcon.hide();
-            switch ($target.data('item')) {
-                case 'all':
-                    $listcon.show();
-                    break;
-                case 'unpay':
-                    for (var i = 0; i < $unpay.length; i++) {
-                        $($unpay[i]).parents('tr').show();
-                    }
-                    ;
-                    break;
-                case 'timeout':
-                    for (var i = 0; i < $timeout.length; i++) {
-                        $($timeout[i]).parents('tr').show();
-                    }
-                    ;
-                    break;
-                case 'payed':
-                    for (var i = 0; i < $payed.length; i++) {
-                        $($payed[i]).parents('tr').show();
-                    }
-                    ;
-                    break;
-                default:
-                    break;
-            }
-        });
-
-    }
-
-    select();
 </script>
 
 </body>

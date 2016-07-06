@@ -41,4 +41,6 @@ public interface AssessService {
   Page<AssessTime> findAll(Pageable pageable);
   
   void saveRegistData(RegistData registdata);
+  
+  List<RegistData> findByRegion(Region region);
 }

@@ -11,13 +11,10 @@ import java.util.Date;
 
 /**
  * Created by joe on 16-6-27.
- *
+ * <p>
  * 视图实体类（MothTargetData）
  */
-//@Entity
-//@Immutable
-//@Subselect("select * from mothtargetdata")
-public class MothTargetData implements Serializable {
+public class MothTargetData implements Comparable<MothTargetData> {
 
     private String orderId;//订单id
 
@@ -29,31 +26,21 @@ public class MothTargetData implements Serializable {
 
     private String regionId;//所属区域
 
+    private String parentId;//业务员regionid
+
     private String phoneNmu;//商家电话
 
     private String shopName;//商家名称
 
-    private BigDecimal count;//提货次数
+    private int count;//提货次数
 
-    private BigDecimal numsOne;//单品数量
+    private int numsOne;//单品数量
 
-    public BigDecimal getCount() {
-        return count;
-    }
+    private Region region;//商家区域
 
-    public void setCount(BigDecimal count) {
-        this.count = count;
-    }
+    private String regionName;//商家区域
 
-    public BigDecimal getNumsOne() {
-        return numsOne;
-    }
-
-    public void setNumsOne(BigDecimal numsOne) {
-        this.numsOne = numsOne;
-    }
-
-    private Region region;//区域
+    private String time;//用于在页面显示月份
 
     public Region getRegion() {
         return region;
@@ -63,8 +50,29 @@ public class MothTargetData implements Serializable {
         this.region = region;
     }
 
-    public MothTargetData(){};
+    public Integer getCount() {
+        return count;
+    }
 
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public Integer getNumsOne() {
+        return numsOne;
+    }
+
+    public void setNumsOne(Integer numsOne) {
+        this.numsOne = numsOne;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public String getOrderId() {
         return orderId;
@@ -122,6 +130,30 @@ public class MothTargetData implements Serializable {
         this.shopName = shopName;
     }
 
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setNumsOne(int numsOne) {
+        this.numsOne = numsOne;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
     @Override
     public String toString() {
         return "MothTargetData{" +
@@ -130,11 +162,19 @@ public class MothTargetData implements Serializable {
                 ", nums=" + nums +
                 ", createTime=" + createTime +
                 ", regionId='" + regionId + '\'' +
+                ", parentId='" + parentId + '\'' +
                 ", phoneNmu='" + phoneNmu + '\'' +
                 ", shopName='" + shopName + '\'' +
                 ", count=" + count +
                 ", numsOne=" + numsOne +
                 ", region=" + region +
+                ", regionName='" + regionName + '\'' +
+                ", time='" + time + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(MothTargetData o) {
+        return this.getNumsOne() - o.getNumsOne();
     }
 }

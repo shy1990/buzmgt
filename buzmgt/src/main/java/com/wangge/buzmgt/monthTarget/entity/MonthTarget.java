@@ -2,20 +2,15 @@ package com.wangge.buzmgt.monthTarget.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import javax.persistence.*;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**
@@ -49,25 +44,43 @@ public class MonthTarget implements Serializable{
   @JoinColumn(name = "USER_ID")
   private SalesMan salesman;
   
+  private String managerRegion;//区域经理id
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "REGION_ID")
   private Region region;
   
-  private int orderNum;
+  private int orderNum;//提货量
   
-  private int merchantNum;
+  private int merchantNum;//提货商家数量
   
-  private int activeNum;
+  private int activeNum;//活跃商家
   
-  private int matureNum;
+  private int matureNum;//成熟商家
   
   @Column(name = "PUBLISH_STATUS")
+
   private int publishStatus;//0未发布 1已发布
-  
-  @Column(name = "TARGET_CYCLE")
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  @Temporal(TemporalType.DATE)
-  private Date targetCycle;
+
+  private String targetCycle;//日期指标
+
+  @Transient
+  private Integer order;//实际提货量
+
+  @Transient
+  private Integer active;//实际活跃商家
+
+  @Transient
+  private Integer mature;//实际成熟商家
+  @Transient
+  private Integer merchant;//实际提货商家
+
+  @Transient
+  private boolean view;//视图判断
+
+  @Transient
+  private Integer matureAll;//注册商家
+
 
   public Long getId() {
     return id;
@@ -83,6 +96,14 @@ public class MonthTarget implements Serializable{
 
   public void setSalesman(SalesMan salesman) {
     this.salesman = salesman;
+  }
+
+  public String getManagerRegion() {
+    return managerRegion;
+  }
+
+  public void setManagerRegion(String managerRegion) {
+    this.managerRegion = managerRegion;
   }
 
   public Region getRegion() {
@@ -133,12 +154,59 @@ public class MonthTarget implements Serializable{
     this.publishStatus = publishStatus;
   }
 
-  public Date getTargetCycle() {
+  public String getTargetCycle() {
     return targetCycle;
   }
 
-  public void setTargetCycle(Date targetCycle) {
+  public void setTargetCycle(String targetCycle) {
     this.targetCycle = targetCycle;
   }
-  
+
+  public Integer getOrder() {
+    return order;
+  }
+
+  public void setOrder(Integer order) {
+    this.order = order;
+  }
+
+  public Integer getActive() {
+    return active;
+  }
+
+  public void setActive(Integer active) {
+    this.active = active;
+  }
+
+  public Integer getMature() {
+    return mature;
+  }
+
+  public void setMature(Integer mature) {
+    this.mature = mature;
+  }
+
+  public Integer getMerchant() {
+    return merchant;
+  }
+
+  public void setMerchant(Integer merchant) {
+    this.merchant = merchant;
+  }
+
+  public boolean getView() {
+    return view;
+  }
+
+  public void setView(boolean view) {
+    this.view = view;
+  }
+
+  public Integer getMatureAll() {
+    return matureAll;
+  }
+
+  public void setMatureAll(Integer matureAll) {
+    this.matureAll = matureAll;
+  }
 }
