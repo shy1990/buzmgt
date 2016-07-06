@@ -159,7 +159,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
             mt.setSalesman(sm);
             mt.setRegion(sm.getRegion());
             Manager manager = getManager();
-            mt.setManagerId(manager.getId());
+            mt.setManagerRegion(manager.getRegion().getId());
             Calendar cal = Calendar.getInstance();
             //下面的就是把当前日期加一个月
             cal.add(Calendar.MONTH, 1);
@@ -361,10 +361,10 @@ public class MonthTargetServiceImpl implements MonthTargetService {
             }
 
             if(CollectionUtils.isNotEmpty(list4)){
-                m.setMerchant(((BigDecimal)list4.get(0)).intValue());;//插入提货商家数量
+                m.setMerchant(((BigDecimal)list4.get(0)).intValue());//插入提货商家数量
             }
             if(CollectionUtils.isNotEmpty(list5)){
-                m.setMatureAll(((BigDecimal)list1.get(0)).intValue());;//插入所有注册商家
+                m.setMatureAll(((BigDecimal)list1.get(0)).intValue());//插入所有注册商家
             }
 
         });
