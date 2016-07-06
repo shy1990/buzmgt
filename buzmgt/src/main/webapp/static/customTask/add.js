@@ -1,28 +1,32 @@
 var salesArr = [];
 // 添加一名业务员
 function addSales() {
-	var salesIds = $("#salesName").val();
-	if (salesIds == null) {
+	var salesIds = [];	
+	var options = $("#salesName").find('option:selected');
+	if (options == null||options.length<1) {
 		alert("请选择业务员");
 		return;
 	}
-	var salesId = salesIds[0];
-	var saleName = $("#salesName").find('option:selected').text();
-	var indx = jQuery.inArray(salesId, salesArr);
-	if (jQuery.inArray(salesId, salesArr) > -1) {
-		alert("请勿重复添加业务员");
-		return;
-	}
-	salesArr.push(salesId);
-	var html = '<div class="col-sm-2"  id="saleDiv'
+	var salesName=[];
+	var html ='';
+	for(var i=0;i<options.length;i++){
+		var salesId=options[i].value;
+		if (jQuery.inArray(salesId, salesArr) > -1) {
+//			alert("请勿重复添加业务员");
+			continue;
+		}
+		salesArr.push(options[i].value);
+		html+= '<div class="col-sm-2"  id="saleDiv'
 			+ salesArr.length
 			+ '">'
 			+ '<div class="input-group col-sm-2 input-peo">'
 			+ '  <input class="form-control" name="" placeholder="'
-			+ saleName
+			+ options[i].text
 			+ '">'
 			+ '  <span class="input-group-addon" id="basic-addon2" onclick="deletediv('
 			+ salesArr.length + ');" >删除</span>' + '</div>' + '</div>';
+	}
+		
 	$("#acont").append(html);
 
 	$('#tjjsr').modal('hide');
