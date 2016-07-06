@@ -238,7 +238,8 @@
         <td>{{count}}</td>
         <td>{{phoneNmu}}</td>
         <%--<td>{{regionName}}</td>--%>
-        <td>{{region.parent.parent.parent.parent.name}}{{region.parent.parent.parent.name}}{{region.parent.parent.name}}{{region.name}}</td>
+        <%--<td>{{region.parent.parent.parent.parent.name}}{{region.parent.parent.parent.name}}{{region.parent.parent.name}}{{region.name}}</td>--%>
+        <td>{{region.name}}</td>
         <td>{{time}}</td>
         <td></td>
     </tr>
@@ -327,7 +328,8 @@
                 url: monthTargetData.url.listAll(),
                 data: searchData,
                 success: function (data) {
-                    console.log(data);
+//                    console.log(123);
+//                    console.log(data);
                     monthTargetData.handelerbars_register(data.content);
                     monthTargetData._count.totalCount = data.totalElements;//总页数
                     monthTargetData._count.limit = data.size;
@@ -374,7 +376,7 @@
         //页面初始化
         detail: {
             init: function (args) {
-                console.log(args);
+//                console.log(args);
                 monthTargetData.findAll(args);
             }
 

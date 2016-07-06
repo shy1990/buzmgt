@@ -310,7 +310,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         //获取所有的指标信息
         List<MonthTarget> list = page.getContent();
         list.forEach(m->{
-            //获取业务员的id
+            //获取业务员的区域id
             String parentId = m.getRegion().getId();
 //            parentId = "370000";
             //根据业务员获取获取所有商家的提货量

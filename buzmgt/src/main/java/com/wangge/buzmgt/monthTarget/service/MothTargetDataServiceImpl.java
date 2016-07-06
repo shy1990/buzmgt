@@ -92,9 +92,10 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
                 mtd.setRegionId((String) o[2]);
                 mtd.setPhoneNmu((String) o[0]);
                 mtd.setShopName((String) o[1]);
-//                Region region = regionService.getRegionById((String) o[2]);
+                Region region = regionService.getRegionById((String) o[2]);
 //                logger.info(region);
 //                mtd.setRegionName(regionName(region));
+                mtd.setRegion(region);
                 mtd.setNumsOne(((BigDecimal) o[3]).intValue());
                 mtd.setCount(((BigDecimal) o[4]).intValue());
                 mtd.setTime(time);
