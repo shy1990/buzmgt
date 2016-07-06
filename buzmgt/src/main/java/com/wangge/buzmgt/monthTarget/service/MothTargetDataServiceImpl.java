@@ -92,8 +92,9 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
                 mtd.setRegionId((String) o[2]);
                 mtd.setPhoneNmu((String) o[0]);
                 mtd.setShopName((String) o[1]);
-                Region region = regionService.findListRegionbyid((String) o[2]);
-                mtd.setRegionName(regionName(region));
+//                Region region = regionService.getRegionById((String) o[2]);
+//                logger.info(region);
+//                mtd.setRegionName(regionName(region));
                 mtd.setNumsOne(((BigDecimal) o[3]).intValue());
                 mtd.setCount(((BigDecimal) o[4]).intValue());
                 mtd.setTime(time);
@@ -190,7 +191,9 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
                 name += region.getName();
                 break;
             case COUNTY:
+                logger.info(region.getType());
                 name = region.getParent().getParent().getParent().getParent().getParent().getName();
+                logger.info(region.getId());
                 name += region.getParent().getParent().getParent().getParent().getName();
                 name += region.getParent().getParent().getParent().getName();
                 name += region.getParent().getParent().getName();

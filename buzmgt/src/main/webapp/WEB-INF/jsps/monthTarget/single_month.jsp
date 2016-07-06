@@ -237,8 +237,8 @@
         <td>{{numsOne}}</td>
         <td>{{count}}</td>
         <td>{{phoneNmu}}</td>
-        <td>{{regionName}}</td>
-        <%--<td>{{region.parent.parent.parent.parent.name}}{{region.parent.parent.parent.name}}{{region.parent.parent.name}}{{region.name}}</td>--%>
+        <%--<td>{{regionName}}</td>--%>
+        <td>{{region.parent.parent.parent.parent.name}}{{region.parent.parent.parent.name}}{{region.parent.parent.name}}{{region.name}}</td>
         <td>{{time}}</td>
         <td></td>
     </tr>

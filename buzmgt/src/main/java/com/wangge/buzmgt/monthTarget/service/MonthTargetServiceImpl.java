@@ -316,12 +316,12 @@ public class MonthTargetServiceImpl implements MonthTargetService {
             //根据业务员获取获取所有商家的提货量
             String sql = "select nvl(sum(m.NUMS),0) nums from " +
                     "MOTHTARGETDATA m " +
-                    "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID like ?  ";
+                    "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID = ?  ";
             //根据业务员获取获取活跃商家
             String sql1 = "select nvl(count(1),0) from (select count(t.shopname) from (" +
                     "select m.shopname,m.createTime,count(to_char(CREATETIME,'YYYY-MM-DD')) " +
                     "FROM mothtargetdata m " +
-                    "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID like ? " +
+                    "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID = ? " +
                     "group by to_char(CREATETIME,'YYYY-MM-DD'),m.shopname,m.createTime ) t " +
                     "group by t.shopname " +
                     "having count(t.shopname)>=2)";
@@ -329,7 +329,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
             String sql2 = "select nvl(count(1),0) from (select count(t.shopname) from (" +
                     "select m.shopname,m.createTime,count(to_char(CREATETIME,'YYYY-MM-DD')) " +
                     "FROM mothtargetdata m " +
-                    "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID like ? " +
+                    "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID = ? " +
                     "group by to_char(CREATETIME,'YYYY-MM-DD'),m.shopname,m.createTime ) t " +
                     "group by t.shopname " +
                     "having count(t.shopname)>=5)";
@@ -338,30 +338,30 @@ public class MonthTargetServiceImpl implements MonthTargetService {
             String sql3 = "select nvl(count(1),0) from (select count(t.shopname) from (" +
                     "select m.shopname,m.createTime,count(to_char(CREATETIME,'YYYY-MM-DD')) " +
                     "FROM mothtargetdata m " +
-                    "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID like ? " +
+                    "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID = ? " +
                     "group by to_char(CREATETIME,'YYYY-MM-DD'),m.shopname,m.createTime ) t " +
                     "group by t.shopname " +
                     ")";
 
             //根据业务员获取所有注册商家
-            String sql4 = "select nvl(count(1),0) from sys_registdata where user_id like ? ";
+            String sql4 = "select nvl(count(1),0) from sys_registdata where user_id = ? ";
 
             Query query = entityManager.createNativeQuery(sql);
             int a = 1;
             query.setParameter(a,"%" + time + "%");
             int b = 2;
-            query.setParameter(b,"%" + parentId + "%");
+            query.setParameter(b, parentId.trim());
             Query query1 = entityManager.createNativeQuery(sql1);
             query1.setParameter(a,"%" + time + "%");
-            query1.setParameter(b,"%" + parentId + "%");
+            query1.setParameter(b,parentId.trim());
             Query query2 = entityManager.createNativeQuery(sql2);
             query2.setParameter(a,"%" + time + "%");
-            query2.setParameter(b,"%" + parentId + "%");
+            query2.setParameter(b,parentId.trim());
             Query query3 = entityManager.createNativeQuery(sql3);
             query3.setParameter(a,"%" + time + "%");
-            query3.setParameter(b,"%" + parentId + "%");
+            query3.setParameter(b,parentId.trim());
             Query query4 = entityManager.createNativeQuery(sql4);
-            query4.setParameter(a,"%" + parentId + "%");
+            query4.setParameter(a,parentId.trim());
             List<Object> list1 = query.getResultList();
             List<Object> list2 = query1.getResultList();
             List<Object> list3 = query2.getResultList();
