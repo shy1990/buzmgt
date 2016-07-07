@@ -170,4 +170,8 @@ public  class SalesManServiceImpl implements SalesManService {
     return salesManRepository.deleteRegionById(id);
   }*/
 
+  @Override
+  public SalesMan findByRegion(Region region) {
+    return salesManRepository.findByRegion(region);
+  }
 }

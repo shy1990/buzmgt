@@ -67,7 +67,7 @@
             <select class="selectpicker demo3" data-live-search="true" id="regionId" onchange="getRegionName();">
                 <c:if test="${not empty salesList}">
                     <c:forEach var="sales" items="${salesList}">
-                        <option value="${sales.id}">${sales.truename}</option>
+                        <option value="${sales.region.id}">${sales.truename}</option>
                     </c:forEach>
                 </c:if>
             </select>
@@ -242,7 +242,7 @@
                                 <label class="pull-right col-md-8 control-label msg-error"></label>
                             </td>
                         </tr>
-						<input class="input-th" type="hidden" name="salesman.id" value="" id="userId">
+						<input class="input-th" type="hidden" name="salesman.id" value="" id="region">
                     </table>
                 </div>
             </div>

@@ -61,25 +61,25 @@ public class MonthTargetServiceImpl implements MonthTargetService {
 
 
     @Override
-    public Map<String,Object> getOrderNum(String userId) {
+    public Map<String,Object> getOrderNum(String regionId) {
 
-        String sql ="select 'one',count(oi.id) ms from sys_registdata r left join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
+        String sql ="select 'one' ms,sum(oi.nums) from sys_registdata r inner join sys_region reg on r.region_id=reg.region_id left join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
                 "left join sjzaixian.sj_tb_order_items oi on o.id=oi.order_id where o.pay_status='1' and oi.target_type='sku'\n" +
                 "and o.createtime between (select last_day(add_months(sysdate,-2))+1  from dual)\n" +
-                "and (select last_day(add_months(sysdate,-1))  from dual) and r.user_id=?\n" +
+                "and (select last_day(add_months(sysdate,-1))  from dual) and reg.parent_id=?\n" +
                 "union all\n" +
-                "select 'three',count(oi.id) ms from sys_registdata r left join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
-                "left join sjzaixian.sj_tb_order_items oi on o.id=oi.order_id where o.pay_status='1' and oi.target_type='sku'\n" +
+                "select 'three' ms,sum(oi.nums) from sys_registdata r inner join sys_region reg on r.region_id=reg.region_id inner join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
+                "inner join sjzaixian.sj_tb_order_items oi on o.id=oi.order_id where o.pay_status='1' and oi.target_type='sku'\n" +
                 "and o.createtime between (select last_day(add_months(sysdate,-4))+1  from dual)\n" +
-                "and (select last_day(add_months(sysdate,-1))  from dual) and r.user_id=?";
+                "and (select last_day(add_months(sysdate,-1))  from dual) and reg.parent_id=?";
 
         Query query = null;
         SQLQuery sqlQuery = null;
         query = entityManager.createNativeQuery(sql);
         sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
         int a = 0;
-        sqlQuery.setParameter(a, userId);//业务参数
-        sqlQuery.setParameter(1, userId);
+        sqlQuery.setParameter(a, regionId);//业务参数
+        sqlQuery.setParameter(1, regionId);
         List<Object[]> ret = sqlQuery.list();
         Map<String,Object> map = new HashMap<String,Object>();
         if (CollectionUtils.isNotEmpty(ret)) {
@@ -92,14 +92,14 @@ public class MonthTargetServiceImpl implements MonthTargetService {
 
 
     @Override
-    public Map<String, Object> getSeller(String userId) {
+    public Map<String, Object> getSeller(String regionId) {
         String sql = "select 'one',count(*)\n" +
                 "  from (select MT.MEMBERID, count(MT.ORDERID) total\n" +
                 "          from MOTHTARGETDATA MT\n" +
                 "         where MT.createtime between\n" +
                 "               (select last_day(add_months(sysdate, -2)) + 1 from dual) and\n" +
                 "               (select last_day(add_months(sysdate, -1)) from dual)\n" +
-                "           and MT.userid = ?\n" +
+                "           and MT.parentId = ?\n" +
                 "         Group by MT.MEMBERID)\n" +
                 " where total >= ?\n" +
                 "union all\n" +
@@ -109,7 +109,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
                 "         where MT.createtime between\n" +
                 "               (select last_day(add_months(sysdate, -4)) + 1 from dual) and\n" +
                 "               (select last_day(add_months(sysdate, -1)) from dual)\n" +
-                "           and MT.userid = ?\n" +
+                "           and MT.parentId = ?\n" +
                 "         Group by MT.MEMBERID)\n" +
                 " where total >= ?";
 
@@ -118,8 +118,8 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         query = entityManager.createNativeQuery(sql);
         sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
         int a = 0;
-        sqlQuery.setParameter(a, userId);//业务参数
-        sqlQuery.setParameter(2, userId);
+        sqlQuery.setParameter(a, regionId);//业务参数
+        sqlQuery.setParameter(2, regionId);
         sqlQuery.setParameter(1, 1);
         sqlQuery.setParameter(3, 1);
         Map<String,Object> map = new HashMap<String,Object>();
@@ -157,8 +157,9 @@ public class MonthTargetServiceImpl implements MonthTargetService {
 
 
     @Override
-    public String save(MonthTarget mt,SalesMan sm){
-        MonthTarget m = mtr.findBySalesman(sm);
+    public String save(MonthTarget mt,Region region){
+        MonthTarget m = mtr.findByRegion(region);
+        SalesMan sm = smService.findByRegion(region);
         if(ObjectUtils.isEmpty(m)){
             mt.setSalesman(sm);
             mt.setRegion(sm.getRegion());

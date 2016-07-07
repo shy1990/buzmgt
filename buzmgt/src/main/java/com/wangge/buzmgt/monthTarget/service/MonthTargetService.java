@@ -16,7 +16,7 @@ public interface MonthTargetService {
   
   Map<String,Object> getSeller(String userId);
   
-  String save(MonthTarget mt,SalesMan sm);
+  String save(MonthTarget mt,Region region);
 
   String save(MonthTarget monthTarget);
 

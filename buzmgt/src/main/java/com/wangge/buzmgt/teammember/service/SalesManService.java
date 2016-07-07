@@ -3,6 +3,7 @@ package com.wangge.buzmgt.teammember.service;
 import java.util.List;
 import java.util.Set;
 
+import com.wangge.buzmgt.region.entity.Region;
 import org.springframework.data.domain.Page;
 
 import com.wangge.buzmgt.sys.entity.User;
@@ -31,5 +32,6 @@ public interface SalesManService {
 //  int deleteRegionById(String id);
   
   Set<SalesMan> findForTargetByReginId(String regionId);
-  
+
+    SalesMan findByRegion(Region region);
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
+import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.json.JSONFormat;
 import org.apache.log4j.Logger;
@@ -35,6 +36,8 @@ public class MonthTargetController {
   private SalesManService smService;
   @Autowired
   private MonthTargetService mtService;
+  @Autowired
+  private RegionService regionService;
 
   /**
    * 跳转到月指标
@@ -78,38 +81,38 @@ public class MonthTargetController {
   }
 
   /**
-   * 根据userId查询业务
-   * @param userId
+   * 根据regionId查询业务
+   * @param regionId
    * @return
      */
   @RequestMapping("/regionName")
   @JSONFormat(filterField = {"SalesMan.user","region.children"})
-  public SalesMan getRegionName(String userId){
-    SalesMan sm = smService.findById(userId);
+  public SalesMan getRegionName(String regionId){
+    SalesMan sm = smService.findByRegion(regionService.getRegionById(regionId));
     return sm;
   }
 
   /**
    * 根据userId查询订单量数据
-   * @param userId
+   * @param regionId
    * @return
      */
   @RequestMapping(value = "/orderNum",method = RequestMethod.GET)
   @ResponseBody
-  public Map<String,Object> orderNum(String userId){
-    Map<String,Object> map = mtService.getOrderNum(userId);
+  public Map<String,Object> orderNum(String regionId){
+    Map<String,Object> map = mtService.getOrderNum(regionId);
     return map;
   }
 
   /**
    * 根据userId查询提货、活跃、成熟商家
-   * @param userId
+   * @param regionId
    * @return
      */
   @RequestMapping(value = "/seller",method = RequestMethod.GET)
   @ResponseBody
-  public Map<String,Object> seller(String userId){
-    Map<String,Object> map = mtService.getSeller(userId);
+  public Map<String,Object> seller(String regionId){
+    Map<String,Object> map = mtService.getSeller(regionId);
     return map;
   }
 
@@ -119,10 +122,10 @@ public class MonthTargetController {
    * @param salesman
    * @return
      */
-  @RequestMapping(value = "/save/{userId}",method = {RequestMethod.POST})
+  @RequestMapping(value = "/save/{regionId}",method = {RequestMethod.POST})
   @ResponseBody
-  public String save(@RequestBody MonthTarget mt,@PathVariable("userId") SalesMan salesman){
-    String msg = mtService.save(mt,salesman);
+  public String save(@RequestBody MonthTarget mt,@PathVariable("regionId") Region region){
+    String msg = mtService.save(mt,region);
     return msg;
   }
 

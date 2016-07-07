@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.monthTarget.repository;
 
+import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,4 +23,6 @@ public interface MonthTargetRepository extends JpaRepository<MonthTarget, Long>{
   List<MonthTarget> findByManagerRegionAndPublishStatus(String regionId,int status);
 
 //    public Page<MonthTarget> findAll(Specification specification, Pageable pageable);//分页查询
+
+  MonthTarget findByRegion(Region region);
 }
