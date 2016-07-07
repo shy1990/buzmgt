@@ -51,12 +51,12 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
 	  * @return 
 	  * @since JDK 1.8 
 	  */  
-	@Query(value = "select * \n" + "  from sys_salesman s\n" + " where  exists (select 1\n"
+	@Query(value = "select s.USER_ID,s.truename \n" + "  from sys_salesman s\n" + " where  exists (select 1\n"
 	      + "       from (select * \n" + "                  from sys_region r\n"
 	      + "                 start with r.region_id = ?1 \n"
 	      + "                connect by prior r.region_id = r.parent_id) tmp\n"
 	      + "         where tmp.region_id = s.region_id) ", nativeQuery = true)
-  Set<SalesMan> readAllByRegionId(String regionId);
+  Set<Object> readAllByRegionId(String regionId);
 	/**
 	 * 通过地区查找主业务员
 	 * 
