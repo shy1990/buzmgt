@@ -26,7 +26,6 @@ function list(searchData) {
                     initPaging();
                 }
             } else {
-                console.log("系统异常");
                 alert('系统异常');
             }
         }
@@ -201,7 +200,6 @@ function add_card(id) {
 //点击确定按钮
 function sure_add_card() {
     var s = $("#addCard").serializeArray();
-    console.log(s);
     var id = s[0]['value'];
     var bankName = s[1]['value'];
     var cardNumber = s[2]['value'];

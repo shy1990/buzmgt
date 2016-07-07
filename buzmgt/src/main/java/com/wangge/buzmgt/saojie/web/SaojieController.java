@@ -70,13 +70,14 @@ public class SaojieController {
 	@RequestMapping("/saojieList")
 	public String saojieList(String saojieList, Model model,Saojie saojie){
 	  int pageNum = 0;
+	  int size = 20;
 	  Subject subject = SecurityUtils.getSubject();
     User user=(User) subject.getPrincipal();
     Manager manager = managerService.getById(user.getId());
     if(null!=manager.getRegion().getCoordinates()){
       model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
     }
-    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,manager.getRegion().getName());
+    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,size,manager.getRegion().getName());
     int count = saojieService.getRegionCount();
     model.addAttribute("count",count);
     model.addAttribute("list", list);
@@ -101,8 +102,9 @@ public class SaojieController {
 	  * @since JDK 1.8
 	 */
 	@RequestMapping(value = "/getSaojieList")
-  public  String  getSaojieList(Model model,Saojie saojie,String regionid,String regionName, String saojieStatus,String page, HttpServletRequest requet){
+  public  String  getSaojieList(Model model,Saojie saojie,String regionid,String regionName, String saojieStatus,String page, String size, HttpServletRequest requet){
         int pageNum = Integer.parseInt(page != null ? page : "0");
+        int sizeNum = Integer.parseInt(size !=null ? size : "20");
         if(SaojieStatus.PENDING.getName().equals(saojieStatus) ){
           saojie.setStatus(SaojieStatus.PENDING);
         }else if(SaojieStatus.AGREE.getName().equals(saojieStatus)){
@@ -132,7 +134,7 @@ public class SaojieController {
          model.addAttribute("jobNum",saojie.getSalesman().getJobNum());
        }
         
-    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,region.getName());
+    Page<Saojie> list = saojieService.getSaojieList(saojie,pageNum,sizeNum,region.getName());
     model.addAttribute("list", list);
     model.addAttribute("saojieStatus",saojieStatus);
     int count = saojieService.getRegionCount();

@@ -30,7 +30,7 @@
             selectGroup: false, // select entire optgroup
             minHeight: 200,   // minimum height of option overlay
             maxHeight: false,  // maximum height of option overlay
-            showCheckbox: true,  // display the checkbox to the user
+            showCheckbox: false,  // display the checkbox to the user
             jqActualOpts: {},    // options for jquery.actual
 
             // @NOTE: these are for future development
@@ -115,7 +115,7 @@
                 maxHeight = ($(window).height() - optionsWrap.offset().top - 20);
                 maxHeight = maxHeight > options.maxHeight ? options.maxHeight : maxHeight;
             }else
-              maxHeight = maxHeight < options.minHeight ? options.minHeight : maxHeight;
+                maxHeight = maxHeight < options.minHeight ? options.minHeight : maxHeight;
 
             optionsWrap.css({
                 maxWidth: maxWidth,
@@ -166,7 +166,7 @@
                         maxHeight = ($(window).height() - optionsWrap.offset().top - 20);
                         maxHeight = maxHeight > options.maxHeight ? options.maxHeight : maxHeight;
                     }else
-                      maxHeight = maxHeight < options.minHeight ? options.minHeight : maxHeight;
+                        maxHeight = maxHeight < options.minHeight ? options.minHeight : maxHeight;
 
                     optionsWrap.css('maxHeight', maxHeight);
                 }

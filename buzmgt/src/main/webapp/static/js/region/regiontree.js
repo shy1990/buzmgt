@@ -186,7 +186,7 @@ function beforeRemove(treeId, treeNode) {
 					BootstrapDialog.alert("删除成功");
 					flag = true;
 				} else {
-					BootstrapDialog.alert("有子节点不能删除");
+					BootstrapDialog.alert("有区域、扫街任务、扫街数据、注册数据子节点不能删除");
 					flag = false;
 				}
 			}

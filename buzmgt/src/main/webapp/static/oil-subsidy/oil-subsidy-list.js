@@ -153,8 +153,6 @@ function findOilCostList(page) {
 		success : function(orderData) {
 			createOilCostTable(orderData);
 			var searchTotal = orderData.totalPages;
-			console.info(oilCostTotal);
-			console.info(searchTotal);
 			if (searchTotal != oilCostTotal || searchTotal == 0) {
 				oilCostTotal = searchTotal;
 

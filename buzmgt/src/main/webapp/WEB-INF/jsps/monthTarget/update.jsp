@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="static/month-target/css/mouth.css">
     <link rel="stylesheet" href="static/multiselect/css/jquery.multiselect.css">
     <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
-    <style>
+ <style>
         ul li{
             list-style-type:none;
         }
@@ -50,6 +50,9 @@
             color: #555555;
         }
     </style>
+    <script type="text/javascript">
+    var base = "<%=basePath%>";
+    </script>
 </head>
 <body>
 <div class="content main">
@@ -60,28 +63,43 @@
     <!--地区-->
 
     <div class="text-blue text-strong" style="margin-top: 25px; margin-bottom: 25px ">
-        <div style="width: 180px ; float: left;margin-right: 20px">
+        <c:if test="${flag ne 'update'}">
+            <select class="selectpicker demo3" data-live-search="true" id="regionId" onchange="getRegionName();">
+                <c:if test="${not empty salesList}">
+                    <c:forEach var="sales" items="${salesList}">
+                        <option value="${sales.id}">${sales.truename}</option>
+                    </c:forEach>
+                </c:if>
+            </select>
+
+
+
+            <!-- <div style="width: 180px ; float: left;margin-right: 20px">
             <form>
-                <select name="basic[]" multiple="multiple" class="demo3" >
+            <select name="basic[]" multiple="multiple" class="demo3" >
 
-                    <option value="UT" >胡老大</option>
-                    <option value="VT">横额啊</option>
-                    <option value="VA">张二啦</option>
-                    <option value="VA">王晓晓</option>
-                    <option value="WV">杭大大</option>
-                    <option value="WV">曹大大</option>
-                    <option value="WI">槽大小</option>
-                </select>
+            <option value="UT" >胡老大</option>
+            <option value="VT">横额啊</option>
+            <option value="VA">张二啦</option>
+            <option value="VA">王晓晓</option>
+            <option value="WV">杭大大</option>
+            <option value="WV">曹大大</option>
+            <option value="WI">槽大小</option>
+            </select>
             </form>
-        </div>
+            </div> -->
 
-        <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
-            检索
-        </button>
-     <span style="color: #a6a6a6">  山东省  滨州市  邹平县</span> </div>
+            <button class="btn btn-blue btn-sm" onclick="goSearch();">
+                检索
+            </button>
+        </c:if>
+     <span style="color: #a6a6a6" id="regionName">  </span> </div>
     <!--地区-->
 
     <div class="row" >
+    <div class="member-from-box form-horizontal">
+    <!-- 
+    <form id="dataForm" class="member-from-box form-horizontal" name="form" method="POST"> -->
         <!--提货量-->
         <div class="col-sm-3" style="margin: 0; padding: 0">
              <div class="tab-pane fade in active" >
@@ -96,21 +114,22 @@
                          <tr>
                              <td>
                                  近三个月月均提货量
-                                 <div class="  text-right" style="margin-top: -15px;color: #00b7ee">720 台</div>
+                                 <div class="  text-right" style="margin-top: -15px;color: #00b7ee" id="orderAvg">0 台</div>
                              </td>
                          </tr>
                          <tr>
-                             <td>上月提货量 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee">800 台</div></td>
+                             <td>上月提货量 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee" id="orderLast">0 台</div></td>
 
                          </tr>
                          <tr>
-                             <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">750 台</div></td>
+                             <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="adviseOrder">0 台</div></td>
 
                          </tr>
                          <tr>
-                             <td>请录入 <input class="input-th" type="text" placeholder="提货量"> &nbsp;台</td>
+                             <td>请录入 <input class="input-th" type="text" placeholder="提货量" name="orderNum"> &nbsp;台
+                                 <label class="pull-right col-md-8 control-label msg-error"></label>
+                             </td>
                          </tr>
-
                          </table>
                      </div>
 
@@ -133,21 +152,22 @@
                         <tr>
                             <td>
                                 近三个月月均提货商家
-                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee">720 台</div>
+                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee" id="merAvg">0 台</div>
                             </td>
                         </tr>
                         <tr>
-                            <td>上月提货商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee">800 台</div></td>
+                            <td>上月提货商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee" id="merLast">0 台</div></td>
 
                         </tr>
                         <tr>
-                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">750 台</div></td>
+                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="merAd">0 台</div></td>
 
                         </tr>
                         <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="提货商家"> &nbsp;家</td>
+                            <td>请录入 <input class="input-th" type="text" placeholder="提货商家" name="merchantNum"> &nbsp;家
+                                <label class="pull-right col-md-8 control-label msg-error"></label>
+                            </td>
                         </tr>
-
                     </table>
                 </div>
 
@@ -169,21 +189,22 @@
                         <tr>
                             <td>
                                 近三个月月均活跃商家
-                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee">20 家</div>
+                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee" id="acAvg">0 家</div>
                             </td>
                         </tr>
                         <tr>
-                            <td>上月活跃商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee">15 家</div></td>
+                            <td>上月活跃商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee" id="acLast">0 家</div></td>
 
                         </tr>
                         <tr>
-                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">18 家</div></td>
+                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="acAd">0 家</div></td>
 
                         </tr>
                         <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="活跃商家"> &nbsp;家</td>
+                            <td>请录入 <input class="input-th" type="text" placeholder="活跃商家" name="activeNum"> &nbsp;家
+                                <label class="pull-right col-md-8 control-label msg-error"></label>
+                            </td>
                         </tr>
-
                     </table>
                 </div>
 
@@ -205,38 +226,45 @@
                         <tr>
                             <td>
                                 近三个月月均成熟商家
-                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee">20 家</div>
+                                <div class="  text-right" style="margin-top: -15px;color: #00b7ee" id="maAvg">0 家</div>
                             </td>
                         </tr>
                         <tr>
-                            <td>上月成熟商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee">15 家</div></td>
+                            <td>上月成熟商家 <div class=" text-right"  style="margin-top: -15px;color: #00b7ee" id="maLast">0 家</div></td>
 
                         </tr>
                         <tr>
-                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">18 家</div></td>
+                            <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="maAd">0 家</div></td>
 
                         </tr>
                         <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="成熟商家"> &nbsp;家</td>
+                            <td>请录入 <input class="input-th" type="text" placeholder="成熟商家" name="matureNum"> &nbsp;家
+                                <label class="pull-right col-md-8 control-label msg-error"></label>
+                            </td>
                         </tr>
-
+						<input class="input-th" type="hidden" name="salesman.id" value="" id="userId">
                     </table>
                 </div>
-
-
             </div>
         </div>
         <!--成熟商家-->
     </div>
 </div>
 
-
-    <div style="text-align: center;background-color: #fafafa">
-        <button class="btn btn-primary btn-blue btn-ok" >保存</button>
-    </div>
-<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
-<script src="../static/bootstrap/js/bootstrap.min.js"></script>
-<script src="../static/multiselect/js/jquery.multiselect.js"></script>
+    <c:if test="${flag ne 'update'}">
+        <div style="text-align: center;background-color: #fafafa">
+            <button class="btn btn-primary btn-blue btn-ok" onclick="toSubmit('','add');" id="btn">保存</button>
+        </div>
+    </c:if>
+    <c:if test="${flag eq 'update'}">
+        <div style="text-align: center;background-color: #fafafa">
+            <button class="btn btn-primary btn-blue btn-ok" onclick="toSubmit('${id}','update');">修改</button>
+        </div>
+    </c:if>
+   </div>
+<script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
+<script src="<%=basePath%>static/multiselect/js/jquery.multiselect.js"></script>
+<script src="<%=basePath%>static/month-target/js/update.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
     $('.menu a,.menu li.active a').click(function () {

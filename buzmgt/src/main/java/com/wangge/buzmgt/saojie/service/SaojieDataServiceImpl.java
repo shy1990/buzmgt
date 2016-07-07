@@ -116,4 +116,9 @@ public class SaojieDataServiceImpl implements SaojieDataService {
   public List<SaojieData> findBySalesman(SalesMan salesMan) {
     return sdr.findBySalesman(salesMan);
   }
+
+  @Override
+  public int getCountByUserId(String userId) {
+    return sdr.getCountByUserId(userId);
+  }
 }

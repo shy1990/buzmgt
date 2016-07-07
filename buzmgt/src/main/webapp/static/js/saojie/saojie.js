@@ -274,7 +274,6 @@ function errorMsgShow($option,msg){
 		$option=$(this);
 	}
 	$option.parents('.form-group').addClass('has-error');
-	console.info(msg);
 	if(msg!=null&&msg!=""){
 		$option.parents('.form-group').find('.msg-error').html(msg);
 	}
@@ -307,6 +306,6 @@ function getSaojieList(param,name,regionId){
 
 function getPageList(num,regionId,name,job,statu){
 	
-	window.location.href="/saojie/getSaojieList?page="+num+"&regionid="+regionId+"&salesman.jobNum="+job+"&salesman.truename="+name+"&saojieStatus="+statu;
+	window.location.href="/saojie/getSaojieList?page="+num+"&size=20&regionid="+regionId+"&salesman.jobNum="+job+"&salesman.truename="+name+"&saojieStatus="+statu;
 }
 

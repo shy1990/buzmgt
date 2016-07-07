@@ -1,6 +1,6 @@
 var itemTotal = 0;// 补统计总条数
 var page = 0;
-var size = 24;
+var size = 20;
 // 已自定义区域数组
 var regionArr = new Array();
 function findTaskList(page) {
@@ -81,7 +81,6 @@ $('#zdyqy').on('hidden.bs.modal', function(e) {
 
 // 添加
 function addd(toil) {
-	console.log($("#addd").serializeArray());
 	addCustom($("#addd").serializeArray());
 }
 

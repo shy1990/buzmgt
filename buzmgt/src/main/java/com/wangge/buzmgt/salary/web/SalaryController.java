@@ -46,7 +46,7 @@ public class SalaryController {
     @RequestMapping(value = "/salarys",method = RequestMethod.GET)
     @ResponseBody
     public Page<Salary> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                @RequestParam(value = "size", defaultValue = "3") Integer size,
+                                @RequestParam(value = "size", defaultValue = "20") Integer size,
                                 @RequestParam(value = "startTime", defaultValue = "2000-01-26")String startTime,
                                 @RequestParam(value = "endTime", defaultValue = "2200-07-26") String endTime,
                                 @RequestParam String name

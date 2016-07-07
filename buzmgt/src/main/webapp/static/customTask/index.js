@@ -1,6 +1,6 @@
 var itemTotal = 0;// 补统计总条数
 var page = 0;
-var size = 10;
+var size = 20;
 function findTaskList(page1) {
 
 	var searchParam = getSearchParam(page1);

@@ -174,13 +174,14 @@ public class AssessController {
   @RequestMapping("/assessList")
   public String assessList(String assessList, Model model,Assess assess){
     int pageNum = 0;
+    int size = 7;
     Subject subject = SecurityUtils.getSubject();
     User user=(User) subject.getPrincipal();
     Manager manager = managerService.getById(user.getId());
     if(null!=manager.getRegion().getCoordinates()){
       model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
     }
-    Page<Assess> list = assessService.getAssessList(assess,pageNum,manager.getRegion().getName());
+    Page<Assess> list = assessService.getAssessList(assess,pageNum,size,manager.getRegion().getName());
     model.addAttribute("list", list);
     model.addAttribute("total",list.getTotalElements());
     model.addAttribute("assessList", assessList);
@@ -204,8 +205,9 @@ public class AssessController {
     * @since JDK 1.8
    */
   @RequestMapping(value = "/getAssessList")
-  public  String  getAssessList(Model model,Assess assess,String regionid,String regionName, String assessStatus,String page, HttpServletRequest requet){
+  public  String  getAssessList(Model model,Assess assess,String regionid,String regionName, String assessStatus,String page, String size, HttpServletRequest requet){
         int pageNum = Integer.parseInt(page != null ? page : "0");
+        int sizeNum = Integer.parseInt(size !=null ? size : "7");
         if(AssessStatus.PENDING.getName().equals(assessStatus) ){
           assess.setStatus(AssessStatus.PENDING);
         }else if(AssessStatus.FAIL.getName().equals(assessStatus)){
@@ -233,7 +235,7 @@ public class AssessController {
          model.addAttribute("jobNum",assess.getSalesman().getJobNum());
        }
         
-    Page<Assess> list = assessService.getAssessList(assess,pageNum,region.getName());
+    Page<Assess> list = assessService.getAssessList(assess,pageNum,sizeNum,region.getName());
     model.addAttribute("list", list);
     model.addAttribute("assessStatus",assessStatus);
     return   "kaohe/kaohe_list";
@@ -445,7 +447,7 @@ public class AssessController {
       @JSONFormat(filterField={"Region.children","Region.parent"})
       public JsonResponse getAssessTimes(
               @RequestParam(value = "page", defaultValue = "0") Integer page,
-              @RequestParam(value = "size", defaultValue = "3") Integer size) {
+              @RequestParam(value = "size", defaultValue = "20") Integer size) {
           Sort sort = new Sort(Direction.DESC, "createTime");
           Pageable pageable = new PageRequest(page, size, sort);
           Page<AssessTime> result = assessService.findAll(pageable);

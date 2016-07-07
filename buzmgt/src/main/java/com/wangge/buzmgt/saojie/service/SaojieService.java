@@ -15,7 +15,7 @@ public interface SaojieService {
 
   Saojie saveSaojie(Saojie saojie);
 
-  Page<Saojie> getSaojieList(Saojie saojie,int pageNum,String regionName);
+  Page<Saojie> getSaojieList(Saojie saojie,int pageNum,int size, String regionName);
   
   List<Saojie> findBysalesman(SalesMan salesman);
   

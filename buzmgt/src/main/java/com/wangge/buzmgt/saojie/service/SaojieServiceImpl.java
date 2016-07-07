@@ -84,7 +84,7 @@ public class SaojieServiceImpl implements SaojieService {
 //
 //  }
   @Override
-  public Page<Saojie> getSaojieList(Saojie saojie, int pageNum,String regionName) {
+  public Page<Saojie> getSaojieList(Saojie saojie, int pageNum, int size ,String regionName) {
     String hql = " select sj.* from sys_saojie sj  left join sys_salesman s on s.user_id = sj.user_id  where ";
     if(saojie.getStatus() != null){
       int status = saojie.getStatus().ordinal();
@@ -112,8 +112,8 @@ public class SaojieServiceImpl implements SaojieService {
     }
     Query q = em.createNativeQuery(hql,Saojie.class);  
     int count=q.getResultList().size();
-    q.setFirstResult(pageNum* 7);
-    q.setMaxResults(7);
+    q.setFirstResult(pageNum* size);
+    q.setMaxResults(size);
     System.out.println(q.getResultList());
     List<Saojie> list = new ArrayList<Saojie>();
     for(Object obj: q.getResultList()){
@@ -132,7 +132,7 @@ public class SaojieServiceImpl implements SaojieService {
       
     }
     
-    Page<Saojie> page = new PageImpl<Saojie>(list,new PageRequest(pageNum,7),count);
+    Page<Saojie> page = new PageImpl<Saojie>(list,new PageRequest(pageNum,size),count);
     return page;  
 }
   

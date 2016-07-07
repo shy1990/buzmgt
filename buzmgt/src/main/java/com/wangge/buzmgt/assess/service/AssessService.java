@@ -16,7 +16,7 @@ public interface AssessService {
 	
   void saveAssess(Assess assess);
   
-  Page<Assess> getAssessList(Assess assess,int pageNum,String regionName);
+  Page<Assess> getAssessList(Assess assess,int pageNum,int size, String regionName);
   
   
   Assess findAssess(long id);
@@ -41,4 +41,6 @@ public interface AssessService {
   Page<AssessTime> findAll(Pageable pageable);
   
   void saveRegistData(RegistData registdata);
+  
+  List<RegistData> findByRegion(Region region);
 }

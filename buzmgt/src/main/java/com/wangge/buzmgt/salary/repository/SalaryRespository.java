@@ -12,4 +12,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface SalaryRespository extends PagingAndSortingRepository<Salary,Long> {
     public Page<Salary> findAll(Specification specification, Pageable pageable);//分页查询
+    
+    Salary  findByTelAndMonths(String  tel,String months);
 }

@@ -1,9 +1,12 @@
 package com.wangge.buzmgt.MothPunishUp;
 
 import com.wangge.buzmgt.BuzmgtApplication;
+import com.wangge.buzmgt.monthTask.entity.AppServer;
 import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
 import com.wangge.buzmgt.salesman.repository.MothPunishUpRepository;
 import com.wangge.buzmgt.salesman.service.MonthPunishUpService;
+import com.wangge.buzmgt.util.HttpUtil;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -20,7 +23,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 神盾局 on 2016/5/21.
@@ -145,5 +150,18 @@ public class MianTest {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss SSS");
         String a = sf.format(new Date());
         return a;
+    }
+    
+    @Test
+    public   void pushTest(){
+  	  Map<String, Object> talMap = new HashMap<String, Object>();
+        talMap.put("orderNum", "15105314911");
+        talMap.put("accNum", "11");
+        talMap.put("username", "zhang1");
+        talMap.put("skuNum", "222");
+        talMap.put("amount", "333");
+        talMap.put("orderNum", "123456985");
+        talMap.put("memberMobile", "18700000001");
+//        HttpUtil.sendPostJson("http://192.168.2.151:8082/v1/"+ "push/pushNewOrder", talMap);
     }
 }
