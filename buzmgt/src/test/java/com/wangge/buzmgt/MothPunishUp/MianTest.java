@@ -152,16 +152,16 @@ public class MianTest {
         return a;
     }
     
-    @Test
-    public   void pushTest(){
-  	  Map<String, Object> talMap = new HashMap<String, Object>();
-        talMap.put("orderNum", "15105314911");
-        talMap.put("accNum", "11");
-        talMap.put("username", "zhang1");
-        talMap.put("skuNum", "222");
-        talMap.put("amount", "333");
-        talMap.put("orderNum", "123456985");
-        talMap.put("memberMobile", "18700000001");
-        HttpUtil.sendPostJson("http://192.168.2.151:8082/v1/"+ "push/pushNewOrder", talMap);
-    }
+//    @Test
+//    public   void pushTest(){
+//  	  Map<String, Object> talMap = new HashMap<String, Object>();
+//        talMap.put("orderNum", "15105314911");
+//        talMap.put("accNum", "11");
+//        talMap.put("username", "zhang1");
+//        talMap.put("skuNum", "222");
+//        talMap.put("amount", "333");
+//        talMap.put("orderNum", "123456985");
+//        talMap.put("memberMobile", "18700000001");
+//        HttpUtil.sendPostJson("http://192.168.2.151:8082/v1/"+ "push/pushNewOrder", talMap);
+//    }
 }
