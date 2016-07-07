@@ -123,12 +123,6 @@ function findCheckDebtList() {
 		dataType : "json",
 		success : function(orderData) {
 			createCheckDebtTable(orderData);
-			var searchTotal = orderData.totalElements;
-			if (searchTotal != checkPendingTotal || searchTotal == 0) {
-				checkPendingTotal = searchTotal;
-				
-				checkDebtPaging(orderData);
-			}
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");
