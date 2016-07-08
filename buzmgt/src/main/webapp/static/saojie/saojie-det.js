@@ -211,7 +211,7 @@ var intervalid;
 function audit(id,regName) {
 	$('#auditModal').modal({
 		keyboard: false,
-		backdrop: false
+		backdrop: 'static'
 		})
 	$("#salesmanId").val(id);
 	var a=document.getElementById ("regName");

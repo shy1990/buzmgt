@@ -1,15 +1,15 @@
 package com.wangge.buzmgt.monthTarget.service;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.criteria.*;
+import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
+import com.wangge.buzmgt.monthTarget.repository.MonthTargetRepository;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.service.SaojieDataService;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -21,15 +21,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
-import com.wangge.buzmgt.monthTarget.repository.MonthTargetRepository;
-import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.sys.entity.User;
-import com.wangge.buzmgt.teammember.entity.Manager;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
-import com.wangge.buzmgt.teammember.service.ManagerService;
-import com.wangge.buzmgt.teammember.service.SalesManService;
+
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.*;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class MonthTargetServiceImpl implements MonthTargetService {
@@ -63,12 +66,12 @@ public class MonthTargetServiceImpl implements MonthTargetService {
     @Override
     public Map<String,Object> getOrderNum(String regionId) {
 
-        String sql ="select 'one' ms,sum(oi.nums) from sys_registdata r inner join sys_region reg on r.region_id=reg.region_id left join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
+        String sql ="select 'one' ms,nvl(sum(oi.nums),0) from sys_registdata r inner join sys_region reg on r.region_id=reg.region_id left join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
                 "left join sjzaixian.sj_tb_order_items oi on o.id=oi.order_id where o.pay_status='1' and oi.target_type='sku'\n" +
                 "and o.createtime between (select last_day(add_months(sysdate,-2))+1  from dual)\n" +
                 "and (select last_day(add_months(sysdate,-1))  from dual) and reg.parent_id=?\n" +
                 "union all\n" +
-                "select 'three' ms,sum(oi.nums) from sys_registdata r inner join sys_region reg on r.region_id=reg.region_id inner join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
+                "select 'three' ms,nvl(sum(oi.nums),0) from sys_registdata r inner join sys_region reg on r.region_id=reg.region_id inner join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
                 "inner join sjzaixian.sj_tb_order_items oi on o.id=oi.order_id where o.pay_status='1' and oi.target_type='sku'\n" +
                 "and o.createtime between (select last_day(add_months(sysdate,-4))+1  from dual)\n" +
                 "and (select last_day(add_months(sysdate,-1))  from dual) and reg.parent_id=?";
@@ -170,7 +173,6 @@ public class MonthTargetServiceImpl implements MonthTargetService {
             cal.add(Calendar.MONTH, 1);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
             mt.setTargetCycle(sdf.format(cal.getTime()));
-            System.out.println(mt.getTargetCycle());
             mt = mtr.save(mt);
             return "ok";
         }else{
@@ -195,13 +197,13 @@ public class MonthTargetServiceImpl implements MonthTargetService {
             public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query,
                                          CriteriaBuilder cb) {
                 Predicate predicate = cb.equal(root.get("targetCycle").as(String.class), targetCycle);
-                Predicate predicate2 = cb.equal(root.get("managerRegion").as(String.class),getManager().getRegion().getId());
+//                Predicate predicate2 = cb.equal(root.get("managerRegion").as(String.class),getManager().getRegion().getId());
                 if (StringUtils.isNotBlank(userName)) {
                     Join<MonthTarget, SalesMan> salesmanJoin = root.join(root.getModel()
                             .getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
                     Predicate predicate1= (cb.like(salesmanJoin.get("truename").as(String.class),
                             "%" + userName + "%"));
-                    predicate = cb.and(predicate,predicate1,predicate2);
+                    predicate = cb.and(predicate,predicate1);
                 }
 
                 return predicate;

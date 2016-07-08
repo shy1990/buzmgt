@@ -44,19 +44,29 @@ function toSubmit(){
 }
 
 function checkForm(){
-	var activeNum = $("#activeNum").val()
-	var orderNum = $("#orderNum").val()
-	var assessCycle = $("#assessCycle").val()
-	var assessTime = $("#assessTime").val()
-	var town = $("#town").val()
-	
+	var activeNum = $("#activeNum").val();
+	var orderNum = $("#orderNum").val();
+	var assessCycle = $("#assessCycle").val();
+	var assessTime = $("#assessTime").val();
+	var town = $("#town").val();
+	var reg = /^(\d{10})$/;
 	if (activeNum == null || activeNum.trim() == "") {
 		errorMsgShow($("#activeNum"));
+		return false;
+	}
+
+	if(!reg.test(activeNum) || activeNum < 0){
+		alert("数量必须为大于0的数字!");
 		return false;
 	}
 	
 	if (orderNum == null || orderNum.trim() == "") {
 		errorMsgShow($("#orderNum"));
+		return false;
+	}
+
+	if(!reg.test(orderNum) || orderNum < 0){
+		alert("数量必须为大于0的数字!");
 		return false;
 	}
 	

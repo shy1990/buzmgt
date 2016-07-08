@@ -80,8 +80,8 @@
 							<!--bar 布局-->
 							<div class="col-sm-10 clear-p-l">
 								<div class="quiet-days marg-b-30">
-									<c:if test="${salesman.status ne 'zhuanzheng'}">
-										<span class="kaohe-stage onekaohe-stage">第${assess.assessStage}阶段考核</span> 
+									<c:if test="${salesman.status ne 'kaifa'}">
+										<span class="kaohe-stage onekaohe-stage" style="margin-bottom:6px">第${assess.assessStage}阶段考核</span>
 									</c:if>
 									<%-- <c:if test="${assess.assessStage == '2' }">
 										<span class="kaohe-stage twokaohe-stage ">第二阶段考核</span> 
@@ -89,7 +89,7 @@
 									<c:if test="${assess.assessStage == '3'}">
 										<span class="kaohe-stage threekaohe-stage">第三阶段考核</span> 
 									</c:if> --%>
-									<c:if test="${salesman.status eq 'zhuanzheng'}">
+									<c:if test="${salesman.status eq 'kaifa'}">
 										<span class="kaohe-stage overkaohe-stage">已转正</span> 
 									</c:if>
 									<c:if test="${assess.status == 'FAIL'}">
@@ -116,7 +116,7 @@
 							</div>
 							<!--bar 布局-->
 							<div class="col-xs-2 clear-p-r">
-							<c:if test="${salesman.status ne 'zhuanzheng'}">
+							<c:if test="${salesman.status eq 'kaifa'}">
 								<c:choose>
 									<c:when test="${assess.assessStage eq '1'}">
 										<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
@@ -132,19 +132,24 @@
 										onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');" disabled="disabled">考核通过</button>
 										</c:if>
 									</c:when>
-									<c:when test="${assess.assessStage eq '1'}">
+									<c:when test="${assess.assessStage ne '1' || assess.assessStage ne '2'}">
+										<c:if test="${percent ge 100}">
 										<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
 									onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');">考核通过</button>
+										</c:if>
+										<c:if test="${percent lt 100}">
+											<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
+													disabled="disabled">考核通过</button>
+										</c:if>
 									</c:when>
-									<c:otherwise>
+									<%--<c:otherwise>
 										<button class="J_btn col-xs-12 btn btn-blue marg-t-30"
 									onclick="toAssessStage('${salesman.id}','${assess.id}','${percent }');">考核通过</button>
-									</c:otherwise>
+									</c:otherwise>--%>
 								</c:choose>
 							</c:if>
 							<c:if test="${salesman.status eq 'weihu'}">
-								<button class="T_btn col-xs-12 btn btn-blue marg-t-30"
-										onclick="toAssessDet('${salesman.id}','${assess.id}','${percent }');">已转正</button>
+								<button class="T_btn col-xs-12 btn btn-blue marg-t-30">已转正</button>
 							</c:if>
 							</div>
 						</div>

@@ -47,8 +47,7 @@
 	<tr>
 		<td class="text-strong">{{taskName}}</td>
 		<td>{{Convert expiredTime}}</td>
-		<td><span class="icon-tag-zc">正常</span> <span
-		class="icon-tag-yc">异常</span> {{address}}</td>
+		<td>  {{address}}</td>
 		<td>{{period}}天</td>
 		<td><a class="btn btn-blue btn-sm" href="javascript:;" onclick="seeDetails('{{id}}')">查看</a>
 		</td>
