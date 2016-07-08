@@ -8,6 +8,7 @@ import java.util.Set;
 import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.util.ExcelExport;
 import com.wangge.json.JSONFormat;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -27,6 +28,9 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.JsonResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RequestMapping("/monthTarget")
 @Controller
@@ -119,7 +123,6 @@ public class MonthTargetController {
   /**
    * 根据userId保存月指标
    * @param mt
-   * @param salesman
    * @return
      */
   @RequestMapping(value = "/save/{regionId}",method = {RequestMethod.POST})
@@ -204,6 +207,15 @@ public class MonthTargetController {
     Page<MonthTarget> requestPage = mtService.findByTargetCycleAndManagerId(truename,time,pageable);
 
     return requestPage;
+  }
+
+  @RequestMapping(value = "/export")
+  public void exportExcel(HttpServletRequest request,HttpServletResponse response,String time){
+//    time = "2016-08";
+    List<MonthTarget> list = mtService.exportExcel(time);
+    String[] title_ = new String[]{"区域","负责人","注册商家","提货量(实际)","提货量(指标)","提货商家(实际)","提货商家(指标)","活跃商家(实际)","活跃商家(指标)","成熟商家(实际)","成熟商家(指标)","指标周期"};
+    String[] coloumsKey_ = new String[]{"region.name","salesman.truename","matureAll","order","orderNum","merchant","merchantNum","merchant","activeNum","mature","matureNum","targetCycle"};
+    ExcelExport.doExcelExport("月指标.xls",list,title_,coloumsKey_,request,response);
   }
 
 

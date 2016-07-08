@@ -3,7 +3,6 @@ package com.wangge.buzmgt.teammember.repository;
 import java.util.List;
 import java.util.Set;
 
-import com.sun.xml.internal.bind.v2.model.core.RegistryInfo;
 import com.wangge.buzmgt.region.entity.Region;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
