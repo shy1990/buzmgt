@@ -46,7 +46,7 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
                 "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(1),0) count " + "from mothtargetdata t " +
                         "where " +
                         " to_char(createtime,'yyyy-mm') LIKE ? " +
-                        " and t.parentid like ? " +
+                        " and t.parentid = ? " +
                         "group by " +
                         "t.phoneNum,t.shopName,t.regionId " +
                         "  order by nvl(sum(NUMS),0) desc,nvl(count(1),0) desc ";
@@ -59,19 +59,19 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
             sql = "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(1),0) count from mothtargetdata t " +
                     " where to_char(createtime,'yyyy-mm') LIKE ? " +
                     " and t.shopName like ? " +
-                    " and t.parentid like ? " +
+                    " and t.parentid = ? " +
                     " group by t.phoneNum,t.shopName,t.regionId " +
                     " order by nvl(sum(NUMS),0) desc,nvl(count(1),0) desc ";
             query = entityManager.createNativeQuery(sql);
             sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
             sqlQuery.setParameter(l, "%" + time + "%");//日期参数,必须存在
             sqlQuery.setParameter(a, "%" + name + "%");//商家名字参数
-            sqlQuery.setParameter(b, "%" + regionId + "%");//业务员id
+            sqlQuery.setParameter(b,regionId);//业务员id
         } else {
             query = entityManager.createNativeQuery(sql);
             sqlQuery = query.unwrap(SQLQuery.class);
             sqlQuery.setParameter(l, "%" + time + "%");//日期参数,必须存在
-            sqlQuery.setParameter(a, "%" + regionId + "%");
+            sqlQuery.setParameter(a, regionId);
         }
         //根据日期查询
 //        query = entityManager.createNativeQuery("select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t where to_char(createtime,'yyyy-mm-dd') LIKE ? group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId  ");
