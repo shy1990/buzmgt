@@ -195,7 +195,7 @@
     var totalCount = 0;
     var limit = 0;
     var searchData = {
-        "size": "3",
+        "size": "20",
         "page": "0",
         "startTime":"2016-01-26",
         "endTime":"2200-01-26",

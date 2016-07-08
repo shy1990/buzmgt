@@ -46,7 +46,11 @@
         <td>{{formDate createTime}}</td>
         <td>
           <div class="pay-time-box">
-			{{{whatremarkStatus status}}}	
+					{{#if order.customSignforTime}}	
+						<span class="pay-time icon-tag-yfk">已付款</span>
+					{{else}}
+						<span class="pay-time icon-tag-wfk">未付款</span>
+					{{/if}}
             <br /> <span class="text-bule">{{#with order}}{{formDate customSignforTime}}{{/with}}</span> 
           </div>
         </td>
@@ -242,7 +246,7 @@ var SearchData = {
 												<th>金额</th>
 												<th>理由</th>
 												<th>报备时间</th>
-												<th>付款时间</th>
+												<th>客户签收时间</th>
 												<th>操作</th>
 											</tr>
 										</thead>
