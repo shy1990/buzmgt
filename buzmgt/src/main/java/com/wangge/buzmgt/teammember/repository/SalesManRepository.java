@@ -3,6 +3,7 @@ package com.wangge.buzmgt.teammember.repository;
 import java.util.List;
 import java.util.Set;
 
+import com.wangge.buzmgt.region.entity.Region;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -84,4 +85,6 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
                   "connect by prior r.region_id = r.parent_id) tmp\n" +
                   "where tmp.region_id = s.region_id and s.status=2)", nativeQuery = true)
   Set<SalesMan> findForTargetByReginId(String regionId);
+
+  SalesMan findByRegion(Region region);
 }

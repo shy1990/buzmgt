@@ -1,17 +1,17 @@
 /*月指标保存和修改*/
-var userId;
+var regionId;
 $(function() {
 	getRegionName();
 });
 
 function getRegionName() {
-	userId = $("#regionId  option:selected").val();
-	$("#userId").val(userId);
+	regionId = $("#regionId  option:selected").val();
+	$("#region").val(regionId);
 	$.ajax({
 		url : base + "monthTarget/regionName",
 		type : "GET",
 		data : {
-			"userId" : userId
+			"regionId" : regionId
 		},
 		dataType : "json",
 		success : function(salesman) {
@@ -31,7 +31,7 @@ function goSearch(){
 	$.ajax({
 		url : base + "monthTarget/orderNum",
 		data : {
-			"userId" : userId
+			"regionId" : regionId
 		},
 		type : "GET",
 		dataType : "json",
@@ -50,7 +50,7 @@ function goSearch(){
 	$.ajax({
 		url : base + "monthTarget/seller",
 		data : {
-			"userId" : userId
+			"regionId" : regionId
 		},
 		type : "GET",
 		dataType : "json",
@@ -91,7 +91,7 @@ function toSubmit(id,flag) {
 		};
 		if (flag != 'update'){
 			$.ajax({
-				url : base + "monthTarget/save/"+$("#userId").val(),
+				url : base + "monthTarget/save/"+$("#region").val(),
 				type : "post",
 				data : JSON.stringify(param),
 				dataType : "text",
