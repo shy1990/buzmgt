@@ -147,11 +147,12 @@
 					</div>
 					<!--/列表内容-->
 					<!-- 分页组 -->
-					<div id="abnormalCoordPager"></div>
+					
 				</div>
 				<!--/box-body-->
 			</div>
 			<!--/box-->
+			<div id="abnormalCoordPager"></div>
 		</div>
 		<!--team-map-->
 	</div>
