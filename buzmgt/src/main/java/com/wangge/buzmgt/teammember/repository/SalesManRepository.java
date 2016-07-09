@@ -2,7 +2,6 @@ package com.wangge.buzmgt.teammember.repository;
 
 import java.util.List;
 import java.util.Set;
-
 import com.wangge.buzmgt.region.entity.Region;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
