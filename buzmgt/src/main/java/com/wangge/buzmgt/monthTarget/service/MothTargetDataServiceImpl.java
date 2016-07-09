@@ -43,33 +43,35 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
     public Page<MothTargetData> getMothTargetDatas(String regionId, String name, String time, Integer page, Integer size) {
 
         String sql =
-                "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(*),0) count " + "from mothtargetdata t " +
+                "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(1),0) count " + "from mothtargetdata t " +
                         "where " +
                         " to_char(createtime,'yyyy-mm') LIKE ? " +
-                        " and t.parentid like ? " +
+                        " and t.parentid = ? " +
                         "group by " +
-                        "t.phoneNum,t.shopName,t.regionId ";
+                        "t.phoneNum,t.shopName,t.regionId " +
+                        "  order by nvl(sum(NUMS),0) desc,nvl(count(1),0) desc ";
         Query query = null;
         SQLQuery sqlQuery = null;
         int l = 0;
         int a = 1;
         int b = 2;
         if (name != null && !"".equals(name)) {
-            sql = "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(*),0) count from mothtargetdata t " +
+            sql = "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(1),0) count from mothtargetdata t " +
                     " where to_char(createtime,'yyyy-mm') LIKE ? " +
                     " and t.shopName like ? " +
-                    " and t.parentid like ? " +
-                    " group by t.phoneNum,t.shopName,t.regionId";
+                    " and t.parentid = ? " +
+                    " group by t.phoneNum,t.shopName,t.regionId " +
+                    " order by nvl(sum(NUMS),0) desc,nvl(count(1),0) desc ";
             query = entityManager.createNativeQuery(sql);
             sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
             sqlQuery.setParameter(l, "%" + time + "%");//日期参数,必须存在
             sqlQuery.setParameter(a, "%" + name + "%");//商家名字参数
-            sqlQuery.setParameter(b, "%" + regionId + "%");//业务员id
+            sqlQuery.setParameter(b,regionId);//业务员id
         } else {
             query = entityManager.createNativeQuery(sql);
             sqlQuery = query.unwrap(SQLQuery.class);
             sqlQuery.setParameter(l, "%" + time + "%");//日期参数,必须存在
-            sqlQuery.setParameter(a, "%" + regionId + "%");
+            sqlQuery.setParameter(a, regionId);
         }
         //根据日期查询
 //        query = entityManager.createNativeQuery("select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,sum(NUMS),count(*) count from mothtargetdata t where to_char(createtime,'yyyy-mm-dd') LIKE ? group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId  ");
@@ -92,8 +94,10 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
                 mtd.setRegionId((String) o[2]);
                 mtd.setPhoneNmu((String) o[0]);
                 mtd.setShopName((String) o[1]);
-                Region region = regionService.findListRegionbyid((String) o[2]);
-                mtd.setRegionName(regionName(region));
+                Region region = regionService.getRegionById((String) o[2]);
+//                logger.info(region);
+//                mtd.setRegionName(regionName(region));
+                mtd.setRegion(region);
                 mtd.setNumsOne(((BigDecimal) o[3]).intValue());
                 mtd.setCount(((BigDecimal) o[4]).intValue());
                 mtd.setTime(time);
@@ -101,24 +105,6 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
             });
         }
         pageResult = new PageImpl<MothTargetData>(mtdList, new PageRequest(page, size), count);
-        if (pageResult.getContent().size() >= 2) {
-            logger.info("size:    " + pageResult.getContent().size());
-            List<MothTargetData> lll = new ArrayList<>();
-
-            pageResult.getContent().forEach(ll -> {
-                MothTargetData mtd = new MothTargetData();
-                mtd.setNumsOne(ll.getNumsOne());
-                mtd.setShopName(ll.getShopName());
-                lll.add(mtd);
-            });
-
-//            Collections.sort(pageResult.getContent());
-            Collections.sort(lll);
-
-            lll.forEach(ll -> {
-                System.out.println(ll.getShopName());
-            });
-        }
         return pageResult;
     }
 
@@ -190,7 +176,9 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
                 name += region.getName();
                 break;
             case COUNTY:
+                logger.info(region.getType());
                 name = region.getParent().getParent().getParent().getParent().getParent().getName();
+                logger.info(region.getId());
                 name += region.getParent().getParent().getParent().getParent().getName();
                 name += region.getParent().getParent().getParent().getName();
                 name += region.getParent().getParent().getName();

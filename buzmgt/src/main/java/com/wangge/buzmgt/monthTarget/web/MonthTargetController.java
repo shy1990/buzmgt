@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
+import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 import com.wangge.json.JSONFormat;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -27,6 +29,9 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.JsonResponse;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @RequestMapping("/monthTarget")
 @Controller
 public class MonthTargetController {
@@ -35,17 +40,36 @@ public class MonthTargetController {
   private SalesManService smService;
   @Autowired
   private MonthTargetService mtService;
+  @Autowired
+  private RegionService regionService;
+
+  /**
+   * 跳转到月指标
+   * @return
+     */
   @RequestMapping("/monthTarget")
   public String toMonthTarget(){
 
     return "monthTarget/mouth_target";
   }
 
+  /**
+   * 跳转到月指标设置
+   * @return
+     */
   @RequestMapping("/monthSetting")
   public String toMonthSetting(){
 
     return "monthTarget/mouth_setting";
   }
+
+  /**
+   * 跳转到月指标添加和修改
+   * @param flag
+   * @param id
+   * @param model
+     * @return
+     */
   @RequestMapping(value = "/toUpdate")
   public String toUpdate(String flag,Long id,Model model){
     Region region = mtService.getRegion();
@@ -60,34 +84,60 @@ public class MonthTargetController {
     return "monthTarget/update";
   }
 
+  /**
+   * 根据regionId查询业务
+   * @param regionId
+   * @return
+     */
   @RequestMapping("/regionName")
   @JSONFormat(filterField = {"SalesMan.user","region.children"})
-  public SalesMan getRegionName(String userId){
-    SalesMan sm = smService.findById(userId);
+  public SalesMan getRegionName(String regionId){
+    SalesMan sm = smService.findByRegion(regionService.getRegionById(regionId));
     return sm;
   }
 
+  /**
+   * 根据userId查询订单量数据
+   * @param regionId
+   * @return
+     */
   @RequestMapping(value = "/orderNum",method = RequestMethod.GET)
   @ResponseBody
-  public Map<String,Object> orderNum(String userId){
-    Map<String,Object> map = mtService.getOrderNum(userId);
+  public Map<String,Object> orderNum(String regionId){
+    Map<String,Object> map = mtService.getOrderNum(regionId);
     return map;
   }
 
+  /**
+   * 根据userId查询提货、活跃、成熟商家
+   * @param regionId
+   * @return
+     */
   @RequestMapping(value = "/seller",method = RequestMethod.GET)
   @ResponseBody
-  public Map<String,Object> seller(String userId){
-    Map<String,Object> map = mtService.getSeller(userId);
+  public Map<String,Object> seller(String regionId){
+    Map<String,Object> map = mtService.getSeller(regionId);
     return map;
   }
 
-  @RequestMapping(value = "/save/{userId}",method = {RequestMethod.POST})
+  /**
+   * 根据userId保存月指标
+   * @param mt
+   * @return
+     */
+  @RequestMapping(value = "/save/{regionId}",method = {RequestMethod.POST})
   @ResponseBody
-  public String save(@RequestBody MonthTarget mt,@PathVariable("userId") SalesMan salesman){
-    String msg = mtService.save(mt,salesman);
+  public String save(@RequestBody MonthTarget mt,@PathVariable("regionId") Region region){
+    String msg = mtService.save(mt,region);
     return msg;
   }
 
+  /**
+   * 根据id修改月指标
+   * @param mt
+   * @param monthTarget
+   * @return
+     */
   @RequestMapping(value = "/update/{id}",method = {RequestMethod.POST})
   @ResponseBody
   public String update(@RequestBody MonthTarget mt,@PathVariable("id") MonthTarget monthTarget){
@@ -99,6 +149,11 @@ public class MonthTargetController {
     return msg;
   }
 
+  /**
+   * 根据月指标id发布一条月指标
+   * @param monthTarget
+   * @return
+     */
   @RequestMapping(value = "/publish/{id}",method = {RequestMethod.GET})
   @ResponseBody
   public String publish(@PathVariable("id") MonthTarget monthTarget){
@@ -106,6 +161,10 @@ public class MonthTargetController {
     return msg;
   }
 
+  /**
+   * 发布当前管理员保存的全部业务员指标
+   * @return
+     */
   @RequestMapping(value = "/publishAll",method = RequestMethod.POST)
   @ResponseBody
   public String publishAll(){
@@ -113,6 +172,13 @@ public class MonthTargetController {
     return msg;
   }
 
+  /**
+   * 按条件(业务姓名、指标周期)查询全部的月指标并分页
+   * @param targetCycle
+   * @param userName
+   * @param pageRequest
+     * @return
+     */
   @RequestMapping(value = "/findMonthTarget",method = RequestMethod.GET)
   @JSONFormat(filterField = {"SalesMan.user","region.children"})
   public Page<MonthTarget> findMonthTarget(String targetCycle,String userName,
@@ -141,6 +207,15 @@ public class MonthTargetController {
     Page<MonthTarget> requestPage = mtService.findByTargetCycleAndManagerId(truename,time,pageable);
 
     return requestPage;
+  }
+
+  @RequestMapping(value = "/export")
+  public void exportExcel(HttpServletRequest request,HttpServletResponse response,String time){
+//    time = "2016-08";
+    List<MonthTarget> list = mtService.exportExcel(time);
+    String[] title_ = new String[]{"区域","负责人","注册商家","提货量(实际)","提货量(指标)","提货商家(实际)","提货商家(指标)","活跃商家(实际)","活跃商家(指标)","成熟商家(实际)","成熟商家(指标)","指标周期"};
+    String[] coloumsKey_ = new String[]{"region.name","salesman.truename","matureAll","order","orderNum","merchant","merchantNum","merchant","activeNum","mature","matureNum","targetCycle"};
+    ExcelExport.doExcelExport("月指标.xls",list,title_,coloumsKey_,request,response);
   }
 
 

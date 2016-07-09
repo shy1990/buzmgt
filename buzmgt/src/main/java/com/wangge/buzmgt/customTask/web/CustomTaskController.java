@@ -111,7 +111,6 @@ public class CustomTaskController {
 	public String detail(@PathVariable("id") CustomTask customTask,
 			HttpServletRequest request, Model model) {
 		model.addAttribute("task", customTask);
-		customTask.setTitle("被某攻城狮改了");
 		model.addAttribute("taskTime",DateUtil.date2String(customTask.getCreateTime(), "MM-dd HH:mm"));
 		customServ.getSaleSet(customTask, model);
 		model.addAttribute("taskType", ImplCustomTaskServe.TASKTYPEARR[customTask.getType()]);
@@ -127,7 +126,7 @@ public class CustomTaskController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String add(HttpServletRequest request, Model model) {
-		Set<SalesMan> salesSet = new HashSet<SalesMan>();
+		Set<Object> salesSet = new HashSet<Object>();
 		Region region = monthTaskService.getRegion(null);
 		salesSet.addAll(salesRep.readAllByRegionId(region.getId()));
 		model.addAttribute("salesList", salesSet);

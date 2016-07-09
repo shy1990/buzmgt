@@ -166,7 +166,7 @@
 											multiple="multiple" size="5" class="form-control input-h">
 											<option vlue="">请选择接收人</option>
 											<c:forEach items="${salesList}" var="saleman">
-												<option value="${saleman.id}">${saleman.truename}</option>
+												<option value="${saleman[0]}">${saleman[1]}</option>
 											</c:forEach>
 										</select>
 									</div>

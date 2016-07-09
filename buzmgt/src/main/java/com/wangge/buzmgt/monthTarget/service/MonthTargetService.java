@@ -6,6 +6,7 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Map;
 
 public interface MonthTargetService {
@@ -16,7 +17,7 @@ public interface MonthTargetService {
   
   Map<String,Object> getSeller(String userId);
   
-  String save(MonthTarget mt,SalesMan sm);
+  String save(MonthTarget mt,Region region);
 
   String save(MonthTarget monthTarget);
 
@@ -32,5 +33,7 @@ public interface MonthTargetService {
   public Page<MonthTarget> findCount(String time,Page page);
 
   public Page<MonthTarget> findActive(String time, Page page);
+
+  public List<MonthTarget> exportExcel(String targetCycle);
 
 }

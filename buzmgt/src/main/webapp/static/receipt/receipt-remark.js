@@ -319,15 +319,11 @@ Handlebars.registerHelper('formDate', function(value) {
 Handlebars.registerHelper('whatremarkStatus', function(value) {
 	var html = "";
 	var color= "bule";
-	if (value.indexOf("未付款") >= 0) {
-		html += '<span class="pay-time icon-tag-wfk">未付款</span>';
-	}
-	if (value.indexOf("已付款") >= 0) {
+	console.info(value);
+	if (!isEmpty(value)) {
 		html += '<span class="pay-time icon-tag-yfk">已付款</span>';
-	}
-	if (value.indexOf("超时") >= 0) {
-		html += '<span class="text-red">超时</span>';
-		color="red";
+	}else{
+		html += '<span class="pay-time icon-tag-wfk">未付款</span>';
 	}
 	html+='<br /> <span class="'+color+'">';
 	return html;

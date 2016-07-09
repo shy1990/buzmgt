@@ -63,7 +63,7 @@
 
         <div class="link-posit-t pull-right export">
 
-            <a class="table-export" href="javascript:void(0);">导出excel</a>
+            <button class="table-export" id="export"  >导出excel</button>
         </div>
 
     </div>
@@ -322,6 +322,14 @@
 
         });
 
+        //导出
+        $("#export").click(function(){
+            console.log(222222);
+            window.location.href = "monthTarget/export?time="+monthTarget.searchData.time;
+//            monthTarget.exportExcel(monthTarget.searchData.time)
+//            $.get("monthTarget/export?time="+monthTarget.searchData.time);
+        });
+
 
     });
     var monthTarget = {
@@ -376,6 +384,10 @@
             $("#tbody").html(driver_template(content));//填充数据
 
         },
+        exportExcel:function(time){
+            $.get("monthTarget/export?time="+time);
+        },
+
         //分页工具
         initPaging: function () {
             $('#callBackPager').extendPagination({

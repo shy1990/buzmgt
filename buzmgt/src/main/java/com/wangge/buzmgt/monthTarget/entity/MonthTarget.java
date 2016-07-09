@@ -44,11 +44,11 @@ public class MonthTarget implements Serializable{
   @JoinColumn(name = "USER_ID")
   private SalesMan salesman;
   
-  private String managerRegion;//区域经理id
+  private String managerRegion;//区域经理regionid
   
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "REGION_ID")
-  private Region region;
+  private Region region;//业务员的id
   
   private int orderNum;//提货量
   
