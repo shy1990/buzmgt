@@ -6,7 +6,7 @@ $(function() {
 var itemTotal = 0;// 补统计总条数
 var month = '';
 var page = 0;
-var size = 7;
+var size = 20;
 
 function initDate() {
 	$('body input').val('');

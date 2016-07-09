@@ -1,7 +1,7 @@
 var itemTotal = 0;// 补统计总条数
 var month = getNextMonth();
 var page = 0;
-var size = 10;
+var size = 20;
 
 // 得到下一个的月份
 function getNextMonth() {

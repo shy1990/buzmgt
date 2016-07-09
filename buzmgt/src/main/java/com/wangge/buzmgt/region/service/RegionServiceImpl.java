@@ -80,6 +80,7 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Region region) {
 		regionRepository.delete(region);
 		logService.log(region, null,EventType.DELETE);

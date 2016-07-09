@@ -16,7 +16,7 @@ public interface AssessService {
 	
   void saveAssess(Assess assess);
   
-  Page<Assess> getAssessList(Assess assess,int pageNum,String regionName);
+  Page<Assess> getAssessList(Assess assess,int pageNum,int size, String regionName);
   
   
   Assess findAssess(long id);

@@ -54,7 +54,7 @@ var SearchData = {
 		'sc_GTE_dateTime':'${startTime}',
 		'sc_LTE_dateTime':'${endTime}',
 		'page':'0',
-		'size':'10'
+		'size':'20'
 	}
 </script>
 </head>
