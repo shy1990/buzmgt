@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,6 +46,7 @@ import com.wangge.buzmgt.teammember.service.AccountService;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.teammember.vo.AccountBean;
+import com.wangge.json.JSONFormat;
 
 @Controller
 public class AccountManageController  extends BaseController{
@@ -173,6 +176,112 @@ public class AccountManageController  extends BaseController{
     model.addAttribute("currentPage", page);
     model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), pageSize,totalNum, 10));
     return "account/account_list";
+  }
+  /**
+   * 
+  * @Title: accountListAjax 
+  * @Description: 替换原有列表查询
+  * @param @param page
+  * @param @param model
+  * @param @param req
+  * @param @param regionId
+  * @param @param searchParam
+  * @param @return    设定文件 
+  * @return String    返回类型 
+  * @throws
+   */
+  @RequestMapping(value = "/accountManage1")
+  @JSONFormat(filterField={"Region."})
+  public Page<AccountBean> accountListAjax(Integer page, Model model,HttpServletRequest req,String regionId,String searchParam){
+    page = page== null ? 1 : page<1 ? 1 : page;
+    int pageSize = 20;
+    PageRequest pageRequest = SortUtil.buildPageRequest(page, pageSize,null);
+    //过滤查询
+    List<AccountBean> accList = new ArrayList<AccountBean>();
+    String rName = "";
+    String rId = "";
+    
+    if(null!=req.getParameter("orgName")){
+      String orgName = req.getParameter("orgName");
+      req.getSession().setAttribute("orgName", orgName);
+    }
+    
+    if(null!=regionId && !"".equals(regionId)){
+      Region r =rs.getRegionById(regionId);
+      rName  = r.getName();
+      rId =  r.getId();
+      
+      req.getSession().setAttribute("rName", rName);
+      req.getSession().setAttribute("rId", rId);
+      
+      model.addAttribute("regionName",rName);
+      model.addAttribute("regionId", rId);
+      if(null==req.getParameter("orgName")){
+        if(null != req.getSession().getAttribute("orgName")){
+          accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", "used",rName, pageRequest, searchParam);
+        }else{
+          accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest, searchParam);
+        }
+        
+        
+      }else {
+        String orgName = req.getParameter("orgName"); 
+//       req.getSession().setAttribute("orgName", orgName);
+        
+        String status = req.getParameter("status");
+        if(null != req.getSession().getAttribute("orgName")){
+          accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", status,rName, pageRequest, searchParam);
+        }else{
+          accList = as.selectAccountByPositionAndStatus("all", status,rName, pageRequest, searchParam);
+        }
+//       accList = as.selectAccountByPositionAndStatus(orgName, status,rName, pageRequest);
+      }
+    }else{
+      Subject subject = SecurityUtils.getSubject();
+      User user=(User) subject.getPrincipal();
+      Manager manager = ms.getById(user.getId());
+      if(null!=req.getSession().getAttribute("rName")){
+        rName = req.getSession().getAttribute("rName")+"";
+        rId = req.getSession().getAttribute("rId")+"";
+      }else{
+        rName  = manager.getRegion().getName();
+        rId =  manager.getRegion().getId();
+      }
+      model.addAttribute("regionName", rName);
+      model.addAttribute("regionId", rId);
+      if(null==req.getParameter("orgName")){
+        if(null != req.getSession().getAttribute("orgName")){
+          accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"", "used",rName, pageRequest, searchParam);
+        }else{
+          accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest, searchParam);
+        }
+//        accList = as.selectAccountByPositionAndStatus("all", "used",rName, pageRequest);
+      }else {
+        String orgName = req.getParameter("orgName");
+        String status = req.getParameter("status");
+        if(null != req.getSession().getAttribute("orgName")){
+          accList = as.selectAccountByPositionAndStatus( req.getSession().getAttribute("orgName")+"",status,rName, pageRequest, searchParam);
+        }else{
+          accList = as.selectAccountByPositionAndStatus("all", status,rName, pageRequest, searchParam);
+        }
+        //     accList = as.selectAccountByPositionAndStatus(orgName, status,rName, pageRequest);
+      }
+    }
+    
+    
+    
+    int totalNum  = accList.size() > 0 ? accList.get(0).getTotalNum() :0;
+    Page<AccountBean> accPage=new PageImpl<>(accList, pageRequest, totalNum);
+    
+    if(null != req.getSession().getAttribute("orgName")){
+      model.addAttribute("org",req.getSession().getAttribute("orgName"));
+    }
+    model.addAttribute("searchParam",searchParam);
+    model.addAttribute("accounts",accList);
+    model.addAttribute("totalCount", totalNum);
+    model.addAttribute("totalPage", (int) Math.ceil(totalNum/Double.parseDouble(String.valueOf(pageSize))));
+    model.addAttribute("currentPage", page);
+    return accPage;
   }
   /**
    * 
