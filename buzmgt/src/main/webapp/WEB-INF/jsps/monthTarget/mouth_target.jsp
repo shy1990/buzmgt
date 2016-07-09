@@ -336,7 +336,7 @@
         //查询条件
         searchData: {
             page: 0,
-            size: 2,
+            size: 20,
             time: '',
             name: ''
         },
