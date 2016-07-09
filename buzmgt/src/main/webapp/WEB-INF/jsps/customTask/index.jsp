@@ -30,7 +30,7 @@
 
 	{{#if content}}
 		{{#each content}}
-					<tr  ondblclick="openDetail({{id}});">
+					<tr  onclick="openDetail({{id}});">
 						<td><span class="icon-{{qfType type}}">{{typeName}}</span> {{title}}</td>
 						<td class="ssh" title="">
                              <p>
