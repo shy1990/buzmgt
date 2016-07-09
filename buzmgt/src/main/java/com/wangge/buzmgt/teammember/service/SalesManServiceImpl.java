@@ -133,9 +133,9 @@ public  class SalesManServiceImpl implements SalesManService {
       q.setParameter(2, "%"+salesMan.getJobNum()+"%");
     }
     int count=q.getResultList().size();
-    q.setFirstResult(pageNum* 7);
-    q.setMaxResults(7);
-    Page<SalesMan> page = new PageImpl<SalesMan>(q.getResultList(),new PageRequest(pageNum,7),count);   
+    q.setFirstResult(pageNum* 20);
+    q.setMaxResults(20);
+    Page<SalesMan> page = new PageImpl<SalesMan>(q.getResultList(),new PageRequest(pageNum,20),count);   
     return page;  
   }
   

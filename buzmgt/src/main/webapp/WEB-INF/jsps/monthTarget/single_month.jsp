@@ -304,7 +304,7 @@
         //初始化参数
         searchData: {
             page: 0,
-            size: 3,
+            size: 20,
             time: '',
             name: '',
             regionId:''

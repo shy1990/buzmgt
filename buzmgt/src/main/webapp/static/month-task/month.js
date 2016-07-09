@@ -1,12 +1,11 @@
 var itemTotal = 0;// 补统计总条数
-var month = getNextMonth();
 var page = 0;
 var size = 20;
 
-// 得到下一个的月份
-function getNextMonth() {
+// 得到月份 reduceNum:0是下个月份,1是本月份
+function getNextMonth(reduceNum) {
 	var date = new Date();
-	var month = date.getMonth();
+	var month = date.getMonth()-reduceNum;
 	var year = date.getFullYear();
 	if (month < 9) {
 		month = "0" + (month + 2);

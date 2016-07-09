@@ -149,7 +149,7 @@ button:active {
 }
 
 .box-body {
-	min-height: 635px;
+	min-height: 770px;
 	padding: 10px 20px;
 	background: #FFF;
 	border-bottom-left-radius: 4px;
@@ -720,9 +720,10 @@ a.table-export:hover, a.table-export:focus {
 	background:rgba(0,0,0,0.3);  
   background:#000 9;/*CSS Hack,只能对ie9以下浏览器ie6,ie7,ie8有效，否侧ie10,FF,Cherome会失去透明效果*/  
   filter:Alpha(opacity=30);/*只对ie7,ie8有效*/  
-/* 	opacity:0.3; */
+ /* 	opacity:0.3; */
   z-index: 1000;
 }
+
 .loading-box img {
 	position:absolute;
 	top:15%;

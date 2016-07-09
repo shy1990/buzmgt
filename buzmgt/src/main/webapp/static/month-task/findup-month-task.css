@@ -66,4 +66,7 @@
 	position: relative;
 	bottom:1px;
 }
-
+.box-body-a{
+    width: 100%;
+    min-height: 850px;
+}
