@@ -23,7 +23,7 @@
 <link rel="stylesheet" type="text/css" href="static/kaohe/kaohe-det.css" />
 <link rel="stylesheet" type="text/css"
 	href="static/yw-team-member/ywmember.css" />
-<link rel="stylesheet" type="text/css" href="static/task/detail.css">
+<link rel="stylesheet" type="text/css" href="/static/task/detail.css">
 <link rel="stylesheet" type="text/css" href="static/oil/css/oil.css">
 
 
@@ -147,7 +147,12 @@
 					<!--列表头部-->
 					<div class="bs-example">
 						<table class="table table-hover text-body table-my--">
-							<tbody id="taskList"></tbody>
+							<tbody id="taskList">			
+							<tr style="border:1px solid #CCC;">
+								
+							</tr>
+							
+							</tbody>
 						</table>
 					</div>
 					<!--/列表内容-->
@@ -180,6 +185,7 @@
 		function addTask() {
 			window.location.href = "/monthTask/addTask";
 		}
+		var month = getNextMonth(0);
 		$(function() {
 			initDate();// 初始化日期
 			findTaskList(0);// 初始查询

@@ -21,7 +21,7 @@
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link rel="stylesheet" type="text/css" href="static/kaohe/kaohe-det.css" />
 <link rel="stylesheet" type="text/css"
 	href="static/yw-team-member/ywmember.css" />
@@ -137,10 +137,12 @@
 				</div>
 				<!--title-->
 				<!--box-body-->
-				<div class="box-body-a">
+				<div class="box-body-month">
 					<div class="bs-example">
 						<table class="table table-hover text-body table-my--">
-							<tbody id="taskList"></tbody>
+							<tbody id="taskList">
+				
+							</tbody>
 						</table>
 					</div>
 					<!--/列表内容-->
@@ -175,6 +177,7 @@
 	function getRegion(id){
 		window.location.href='/region/getPersonalRegion?id='+id+"&flag=mainTask";
 	}
+	var month = getNextMonth(1);
 	$(function() {
 		initDate();// 初始化日期
 		findTaskList(0,1);// 初始查询
