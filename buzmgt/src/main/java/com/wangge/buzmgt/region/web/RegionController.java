@@ -423,17 +423,18 @@ public class RegionController {
 	     }
 	     
 	     List<Region> listRegion=regionService.findByRegion(parentReigon.getId());
+	     List<Region> listNewRegion=new ArrayList<Region>();
 	 	for(Region reg:listRegion){
 			Pattern p = Pattern.compile("\\s*|\t|\r|\n");
             Matcher m = p.matcher(reg.getName());
             String regionName = m.replaceAll("");
             reg.setName(regionName);
-			listRegion.add(reg);
+            listNewRegion.add(reg);
 		}
 	    
 	    
 	    model.addAttribute("areaname",parentReigon.getParent().getName()+parentReigon.getName());
-	    model.addAttribute("regionData",listRegion);
+	    model.addAttribute("regionData",listNewRegion);
 	    model.addAttribute("pcoordinates",parentReigon.getCoordinates());
 	    model.addAttribute("parentid",parentid);
 	
