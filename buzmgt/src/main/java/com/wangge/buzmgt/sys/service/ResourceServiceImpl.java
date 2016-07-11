@@ -282,6 +282,10 @@ public class ResourceServiceImpl implements ResourceService {
     for (String menuId : menuIds) {
       Resource res = this.getResourceById(Long.parseLong(menuId));
       menus.add(res);
+      Resource parent = res.getParent();
+      if (parent.getId() != 1) {
+        menus.add(parent);
+      }
       // 取菜单下所有子菜单
       List<Resource> childMenus = resourceRepository.findByParentId(res.getId());
       for (Resource child : childMenus) {
