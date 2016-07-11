@@ -437,7 +437,7 @@ public class AssessController {
        * @return
        */
       @RequestMapping(value = "/assessTimes", method = RequestMethod.GET)
-      @JSONFormat(filterField={"Region.children","Region.parent"})
+      @JSONFormat(filterField={"Region.children","Region.parent","AssessTime.region"})
       public JsonResponse getAssessTimes(
               @RequestParam(value = "page", defaultValue = "0") Integer page,
               @RequestParam(value = "size", defaultValue = "20") Integer size) {
