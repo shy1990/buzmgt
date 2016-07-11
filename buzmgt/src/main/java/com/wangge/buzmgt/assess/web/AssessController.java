@@ -167,7 +167,7 @@ public class AssessController {
   @RequestMapping("/assessList")
   public String assessList(String assessList, Model model,Assess assess){
     int pageNum = 0;
-    int size = 7;
+    int size = 10;
     Subject subject = SecurityUtils.getSubject();
     User user=(User) subject.getPrincipal();
     Manager manager = managerService.getById(user.getId());
@@ -200,7 +200,7 @@ public class AssessController {
   @RequestMapping(value = "/getAssessList")
   public  String  getAssessList(Model model,Assess assess,String regionid,String regionName, String assessStatus,String page, String size, HttpServletRequest requet){
         int pageNum = Integer.parseInt(page != null ? page : "0");
-        int sizeNum = Integer.parseInt(size !=null ? size : "7");
+        int sizeNum = Integer.parseInt(size !=null ? size : "10");
         if(AssessStatus.PENDING.getName().equals(assessStatus) ){
           assess.setStatus(AssessStatus.PENDING);
         }else if(AssessStatus.FAIL.getName().equals(assessStatus)){
