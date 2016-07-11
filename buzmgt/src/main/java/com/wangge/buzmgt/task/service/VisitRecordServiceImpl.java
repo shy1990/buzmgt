@@ -1,27 +1,23 @@
 package com.wangge.buzmgt.task.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.transaction.Transactional;
-
+import com.wangge.buzmgt.sys.vo.VisitVo;
+import com.wangge.buzmgt.task.entity.Visit;
+import com.wangge.buzmgt.task.repository.VisitTaskRepository;
+import com.wangge.buzmgt.util.DateUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.wangge.buzmgt.sys.vo.VisitVo;
-import com.wangge.buzmgt.task.entity.Visit;
-import com.wangge.buzmgt.task.repository.VisitTaskRepository;
-import com.wangge.buzmgt.util.DateUtil;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class VisitRecordServiceImpl implements VisitRecordService {
@@ -36,16 +32,16 @@ public class VisitRecordServiceImpl implements VisitRecordService {
     if(begin != null && !"".equals(begin) && end != null && !"".equals(end)){
       hql = "select s.user_id,a.name area,s.truename,sr.name,max(v.finish_time),t.total,tt.overtime from sys_salesman s left join sys_visit v on s.user_id=v.user_id "+
           "left join (select v.user_id,count(v.visit_id) total from sys_visit v where v.visit_status='1' and v.finish_time between "+
-          "to_date('"+begin+"','yyyy/mm/dd') and to_date('"+end+"','yyyy/mm/dd') group by v.user_id) t on v.user_id=t.user_id left join "+
-          "(select v.user_id,count(v.user_id) overtime from sys_visit v where v.finish_time-v.expired_time > 0 and v.finish_time between to_date('"+begin+"','yyyy/mm/dd') "+
-          "and to_date('"+end+"','yyyy/mm/dd') group by v.user_id) tt on v.user_id=tt.user_id left join sys_users_roles sur on v.user_id=sur.user_id left join sys_role sr "+ 
-          "on sur.role_id=sr.role_id left join sys_region a on s.region_id=a.region_id where v.finish_time between to_date('"+begin+"','yyyy/mm/dd') and to_date('"+end+"','yyyy/mm/dd') "+ 
+          "to_date('"+begin+"','yyyy/mm/dd hh24:mi:ss') and to_date('"+end+"','yyyy/mm/dd hh24:mi:ss') group by v.user_id) t on v.user_id=t.user_id left join "+
+          "(select v.user_id,count(v.user_id) overtime from sys_visit v where nvl(v.finish_time,sysdate) - (v.expired_time+1) > 0 and v.finish_time between to_date('"+begin+"','yyyy/mm/dd hh24:mi:ss') "+
+          "and to_date('"+end+"','yyyy/mm/dd hh24:mi:ss') group by v.user_id) tt on v.user_id=tt.user_id left join sys_users_roles sur on v.user_id=sur.user_id left join sys_role sr "+
+          "on sur.role_id=sr.role_id left join sys_region a on s.region_id=a.region_id where v.finish_time between to_date('"+begin+"','yyyy/mm/dd hh24:mi:ss') and to_date('"+end+"','yyyy/mm/dd hh24:mi:ss') "+
           "and s.region_id in (SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID) "+
           "group by s.user_id,a.name,s.truename,t.total,tt.overtime,sr.name";
     }else{
       hql = "select s.user_id,a.name area,s.truename,sr.name,max(v.finish_time),t.total,tt.overtime from sys_salesman s left join sys_visit v on s.user_id=v.user_id "+
           "left join (select v.user_id,count(v.visit_id) total from sys_visit v where v.visit_status='1' group by v.user_id) t on v.user_id=t.user_id left join "+ 
-          "(select v.user_id,count(v.user_id) overtime from sys_visit v where v.finish_time-v.expired_time > 0 group by v.user_id) tt on v.user_id=tt.user_id left join sys_users_roles sur on s.user_id=sur.user_id left join sys_role sr "+ 
+          "(select v.user_id,count(v.user_id) overtime from sys_visit v where nvl(v.finish_time,sysdate) - (v.expired_time+1) > 0 group by v.user_id) tt on v.user_id=tt.user_id left join sys_users_roles sur on s.user_id=sur.user_id left join sys_role sr "+
           "on sur.role_id=sr.role_id left join sys_region a on s.region_id=a.region_id where "+
           "s.region_id in (SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID) "+
           "group by s.user_id,a.name,s.truename,t.total,tt.overtime,sr.name";
@@ -90,7 +86,7 @@ public class VisitRecordServiceImpl implements VisitRecordService {
         String sql = "select sum(total) from (select v.user_id,count(v.visit_id) total from sys_visit v left join sys_salesman s on v.user_id=s.user_id where v.visit_status='1' and "+
             "s.region_id in (SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID) ";
         if(begin != null && !"".equals(begin) && end != null && !"".equals(end)){
-            sql += "and v.finish_time between to_date('"+begin+"','yyyy/mm/dd') and to_date('"+end+"','yyyy/mm/dd') ";
+            sql += "and v.finish_time between to_date('"+begin+"','yyyy/mm/dd hh24:mi:ss') and to_date('"+end+"','yyyy/mm/dd hh24:mi:ss') ";
         }
         sql += "group by v.user_id)";
         Query query =  em.createNativeQuery(sql);
@@ -108,7 +104,7 @@ public class VisitRecordServiceImpl implements VisitRecordService {
         "left join sys_registdata r on v.registdata_id = r.registdata_id where v.finish_time in (select max(v.finish_time) "+ 
         "from sys_visit v where v.user_id='"+userId+"' ";
     if(begin != null && !"".equals(begin) && end != null && !"".equals(end)){
-        hql += "and v.finish_time between to_date('"+begin+"','yyyy/mm/dd') and to_date('"+end+"','yyyy/mm/dd') ";
+        hql += "and v.finish_time between to_date('"+begin+"','yyyy/mm/dd hh24:mi:ss') and to_date('"+end+"','yyyy/mm/dd hh24:mi:ss') ";
     }
     hql += ")and v.visit_status='1' group by v.user_id,v.visit_id,r.shop_name,v.finish_time,v.address";
     Query q = em.createNativeQuery(hql);

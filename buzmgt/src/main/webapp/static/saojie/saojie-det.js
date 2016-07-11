@@ -180,7 +180,7 @@ function openInfo(content,e){
 function initPaging(){
 	var totalCount = totalElements; //总条数
 	showCount = totalPages, //显示分页个数
-	limit =  6;//每页条数
+	limit =  searchData['size'];//每页条数
 	$('#callBackPager').extendPagination({
 	totalCount : totalCount, 
 	showCount : showCount,
