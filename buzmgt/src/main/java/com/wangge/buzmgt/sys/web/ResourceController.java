@@ -56,7 +56,7 @@ public class ResourceController extends BaseController {
 		int pageSize = 10;
 		PageRequest pageRequest = SortUtil.buildPageRequest(page, pageSize,"res");
 		Page<Resource> mlist = res.getMenusByPage(pageRequest) ;
-		Set<Menu> menuList =     res.getAllMenus();
+		Set<Menu> menuList =     res.getAllMenus(null);
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		//下拉列表
@@ -96,7 +96,7 @@ public class ResourceController extends BaseController {
 	@RequestMapping(value="/getAllMenus",method = RequestMethod.POST)
 	@ResponseBody
 	public String getAllMenus(){
-		Set<Menu> mlist = res.getAllMenus(); 
+		Set<Menu> mlist = res.getAllMenus(null); 
 		String jsonText =  com.alibaba.fastjson.JSONArray.toJSONString(mlist, true); 
 //		JSONArray list1 = JSONArray.fromObject(mlist);
 		return jsonText;

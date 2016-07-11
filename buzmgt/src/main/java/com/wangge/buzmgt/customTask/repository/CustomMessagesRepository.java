@@ -21,10 +21,10 @@ public interface CustomMessagesRepository extends JpaRepository<CustomMessages, 
 			+ "  left join (select count(1) sum1\n" + "               from sys_custom_message t \n"
 			+ "              where t.customtask_id = ?1\n" + "                and t.status = 0\n"
 			+ "                and t.roletype = 1) t1 on 1 = 1", nativeQuery = true)
-	Object countByRoleType(Long customtaskId);
+	Object countByRoleType(long customtaskId);
 
 	@Query("select distinct m.salesmanId from CustomMessages m where m.customtaskId=?1 and m.roletype=1")
-	Set<String> findByCustomtaskId(Long customtaskId);
+	Set<String> findByCustomtaskId(long customtaskId);
 
 	/**查询有某个事件下有消息记录的业务员并按状态排序
 	 * @param customtaskId

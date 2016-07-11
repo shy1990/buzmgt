@@ -37,7 +37,7 @@ public class HomeController {
     LOG.info("loginer=====" + username);
     List<Menu> menusL = new ArrayList<Menu>();
     if ("root".equals(username)) {
-      menusL = new ArrayList<Menu>(resourceService.getAllMenus());
+      menusL = new ArrayList<Menu>(resourceService.getAllMenus("1"));
       req.getSession().setAttribute("menus", menusL);
     } else {
       List<Menu> menus = resourceService

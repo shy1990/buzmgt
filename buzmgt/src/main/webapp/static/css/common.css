@@ -149,7 +149,7 @@ button:active {
 }
 
 .box-body {
-	min-height: 770px;
+	min-height: 600px;
 	padding: 10px 20px;
 	background: #FFF;
 	border-bottom-left-radius: 4px;
