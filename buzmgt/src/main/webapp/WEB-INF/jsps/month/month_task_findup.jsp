@@ -19,7 +19,7 @@
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link rel="stylesheet" type="text/css" href="static/kaohe/kaohe-det.css" />
 <link rel="stylesheet" type="text/css"
 	href="static/yw-team-member/team-member.css" />
@@ -31,7 +31,7 @@
 <link rel="stylesheet" type="text/css"
 	href="static/month-task/bootstrap-select.min.css">
 <link rel="stylesheet" type="text/css"
-	href="static/month-task/findup-month-task.css">
+	href="/static/month-task/findup-month-task.css">
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 
@@ -124,11 +124,12 @@
 						</div>
 						<!--列表内容-->
 						<!--分页-->
-						<div class="page-index" id="abnormalCoordPager"></div>
+						<div class="page-index" id="abnormalCoordPager"  style="margin-bottom: -100px"></div>
 						<!--分页-->
 					</div>
 				</div>
 				<!--box-->
+				
 			</div>
 			<!--col-md-9-->
 			<div class="col-md-3">

@@ -61,8 +61,8 @@ function ajaxSearch(searchData) {
 
 function initPaging(){
 	var totalCount = totalElements; //总条数 
-	showCount = 6, //显示分页个数
-	limit =  20;//每页条数
+	showCount = totalPages, //显示分页个数
+	limit =  searchData['size'];//每页条数
 	//createTable(1, limit, totalCount);
 	$('#callBackPager').extendPagination({
 	totalCount : totalCount, 

@@ -137,7 +137,7 @@
 				</div>
 				<!--title-->
 				<!--box-body-->
-				<div class="box-body-month">
+				<div class="box-body-a">
 					<div class="bs-example">
 						<table class="table table-hover text-body table-my--">
 							<tbody id="taskList">

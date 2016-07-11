@@ -24,7 +24,7 @@ public class RoleServiceImpl implements RoleService {
 	@Resource
 	private RoleRepository roleRepository;
 
-	@Transactional
+//	@Transactional 非CUD别用事务
 	public List<RoleVo> findAll() {
 		List<RoleVo> voList = new ArrayList<RoleVo>();
 		List<Role> list = roleRepository.findAll();
@@ -42,7 +42,7 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public Role getRoleById(String roleId) {
 		
-		
+	
 		return roleRepository.findOne(Long.parseLong(roleId));
 	}
 
