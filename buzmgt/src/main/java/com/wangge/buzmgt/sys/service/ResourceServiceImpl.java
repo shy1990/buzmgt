@@ -72,6 +72,7 @@ public class ResourceServiceImpl implements ResourceService {
   /**
    * addMenuToSet:(这里用一句话描述这个方法的作用). <br/>
    * 以前的处理单个菜单项的方法
+   * 
    * @author yangqc
    * @param menus
    * @param r
@@ -106,8 +107,9 @@ public class ResourceServiceImpl implements ResourceService {
     Map<Resource, Set<Resource>> treeMap = new HashMap<Resource, Set<Resource>>();
     resources.forEach(r -> {
       Resource fatherR = r.getParent();
-      /*为二级节点时,为三级节点时
-       * */
+      /*
+       * 为二级节点时,为三级节点时
+       */
       if (fatherR != null && fatherR.getId() == 1) {
         if (null == treeMap.get(r)) {
           treeMap.put(r, new HashSet<Resource>());
@@ -142,10 +144,14 @@ public class ResourceServiceImpl implements ResourceService {
   }
   
   @Override
-  public Set<Menu> getAllMenus() {
+  public Set<Menu> getAllMenus(String flag) {
     Sort s = new Sort(Direction.ASC, "createTime");
     List<Resource> list = resourceRepository.findAll(s);
-    return resource2MenuByParent(list);
+    if (null == flag) {
+      return resource2Menu(list);
+    } else {
+      return resource2MenuByParent(list);
+    }
   }
   
   @Override
@@ -217,7 +223,7 @@ public class ResourceServiceImpl implements ResourceService {
     List<TreeData> treeDatas = new ArrayList<TreeData>();
     
     // 取得所有菜单
-    Set<Menu> allMenus = this.getAllMenus();
+    Set<Menu> allMenus = this.getAllMenus(null);
     List<Menu> menus = this.loadMenuInfos(allMenus);
     for (Menu menu : menus) {
       // System.out.println(menu.getName()+"***222");

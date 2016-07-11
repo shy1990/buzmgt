@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.wangge.buzmgt.sys.entity.Resource;
+import com.wangge.buzmgt.sys.service.ResourceService.Menu;
 import com.wangge.buzmgt.sys.vo.TreeData;
 
 public interface ResourceService {
@@ -112,7 +113,7 @@ public interface ResourceService {
    * @author changjun
    * @date 2015年12月22日
    */
-  Set<Menu> getAllMenus();
+  Set<Menu> getAllMenus(String flag);
   /**
    * 
    * @Description: 菜单列表分页
