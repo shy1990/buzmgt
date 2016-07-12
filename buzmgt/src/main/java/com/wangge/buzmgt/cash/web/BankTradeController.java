@@ -89,7 +89,7 @@ public class BankTradeController {
 
     // ============查询是否归档+是否已经审核账单。
     Map<String, Object> searchParams = new HashMap<>();
-    searchParams.put("EQ_payDate", importDate);
+    searchParams.put("EQ_importDate", importDate);
     searchParams.put("EQ_isArchive", 1);
     List<BankTrade> bankTrades = bankTradeService.findAll(searchParams);
     searchParams.remove("EQ_isArchive");

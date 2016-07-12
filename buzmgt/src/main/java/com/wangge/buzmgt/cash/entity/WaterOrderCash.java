@@ -84,7 +84,7 @@ public class WaterOrderCash implements Serializable  {
   private List<WaterOrderDetail> orderDetails;//订单详情
   
   @Enumerated(EnumType.ORDINAL)
-  private WaterPayStatusEnum payStatus=WaterPayStatusEnum.UnPay;//支付状态
+  private WaterPayStatusEnum payStatus=WaterPayStatusEnum.UnPay;//审核状态
   
   @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone = "GMT+8")  
   private Date createDate ;//创建日期
