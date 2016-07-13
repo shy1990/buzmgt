@@ -28,6 +28,8 @@
 	href="/static/abnormal/abnormal.css" />
 <link rel="stylesheet" href="/static/customTask/type.css"
 	type="text/css" />
+<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
+
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>

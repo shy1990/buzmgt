@@ -56,7 +56,9 @@ function getMonthData(regionId) {
 					var tagid = tagids[j];
 					var val = getObjectVal(tagid, jb);
 					if (tagid == 'goal') {
-						$("#" + jb + tagid).attr("value", val);
+						//$("#" + jb + tagid).attr("value", val);
+						//值无变化,很坑
+						$("#" + jb + tagid).val(val);
 					} else {
 						$("#" + jb + tagid).html(val);
 					}

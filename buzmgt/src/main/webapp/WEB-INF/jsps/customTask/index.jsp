@@ -22,6 +22,7 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
 <link rel="stylesheet" type="text/css" href="/static/customTask/type.css">
+	<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>

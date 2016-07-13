@@ -51,24 +51,27 @@ function getTask(flag) {
 
 }
 
-function findTaskList(page, flag) {
-	page = page == null || page == '' ? 0 : page;
+function findTaskList(cpage, flag) {
+	cpage = cpage == null || cpage == '' ? 0 : cpage;
+	page=cpage;
 	// SearchData['page'] = page;
 	var searchData = null;
 	var salesManName = $('[name="truename"]').val();
 	if (flag == 1) {
 		searchData = {
-			"page" : page,
+			"page" : cpage,
 			"size" : size,
 			"salesManName" : salesManName,
 			"flag" : 1
 		};
 	} else {
 		searchData = {
-			"page" : page,
+			"page" : cpage,
 			"size" : size,
+			"sffb":$('#sffb').val(),
 			"salesManName" : salesManName
 		};
+		
 	}
 	$.ajax({
 		url : "/monthTask/search?month=" + month,
