@@ -1,18 +1,21 @@
 package com.wangge.buzmgt.salesman.service;
 
-import com.wangge.buzmgt.salesman.entity.SalesmanData;
-import com.wangge.buzmgt.salesman.repository.SalesmanDataRepository;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.List;
+import com.wangge.buzmgt.salesman.entity.SalesmanData;
+import com.wangge.buzmgt.salesman.repository.SalesmanDataRepository;
 
 
 @Service
@@ -29,6 +32,7 @@ public class SalesmanDataServiceImpl implements SalesmanDataService{
 	 */
 	@Override
 	public SalesmanData save(SalesmanData salesmanData) {
+	  salesmanData.setAddTime(new Date());
 		return salesmanDataRepository.save(salesmanData);
 	}
 	/**

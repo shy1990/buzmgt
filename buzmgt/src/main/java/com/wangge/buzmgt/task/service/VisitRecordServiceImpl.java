@@ -30,8 +30,8 @@ public class VisitRecordServiceImpl implements VisitRecordService {
   public Page<VisitVo> getVisitData(int pageNum, int limit, String regionName,String begin,String end) {
     String hql = "";
     if(begin != null && !"".equals(begin) && end != null && !"".equals(end)){
-      hql = "select s.user_id,a.name area,s.truename,sr.name,max(v.finish_time),t.total,tt.overtime from sys_salesman s left join sys_visit v on s.user_id=v.user_id "+
-          "left join (select v.user_id,count(v.visit_id) total from sys_visit v where v.visit_status='1' and v.finish_time between "+
+      hql = "select s.user_id,a.name area,s.truename,sr.name,max(v.finish_time),t.total,tt.overtime from sys_salesman s inner join sys_visit v on s.user_id=v.user_id "+
+          "inner join (select v.user_id,count(v.visit_id) total from sys_visit v where v.visit_status='1' and v.finish_time between "+
           "to_date('"+begin+"','yyyy/mm/dd hh24:mi:ss') and to_date('"+end+"','yyyy/mm/dd hh24:mi:ss') group by v.user_id) t on v.user_id=t.user_id left join "+
           "(select v.user_id,count(v.user_id) overtime from sys_visit v where nvl(v.finish_time,sysdate) - (v.expired_time+1) > 0 and v.finish_time between to_date('"+begin+"','yyyy/mm/dd hh24:mi:ss') "+
           "and to_date('"+end+"','yyyy/mm/dd hh24:mi:ss') group by v.user_id) tt on v.user_id=tt.user_id left join sys_users_roles sur on v.user_id=sur.user_id left join sys_role sr "+
@@ -39,13 +39,14 @@ public class VisitRecordServiceImpl implements VisitRecordService {
           "and s.region_id in (SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID) "+
           "group by s.user_id,a.name,s.truename,t.total,tt.overtime,sr.name";
     }else{
-      hql = "select s.user_id,a.name area,s.truename,sr.name,max(v.finish_time),t.total,tt.overtime from sys_salesman s left join sys_visit v on s.user_id=v.user_id "+
-          "left join (select v.user_id,count(v.visit_id) total from sys_visit v where v.visit_status='1' group by v.user_id) t on v.user_id=t.user_id left join "+ 
+      hql = "select s.user_id,a.name area,s.truename,sr.name,max(v.finish_time),t.total,tt.overtime from sys_salesman s inner join sys_visit v on s.user_id=v.user_id "+
+          "inner join (select v.user_id,count(v.visit_id) total from sys_visit v where v.visit_status='1' group by v.user_id) t on v.user_id=t.user_id left join "+
           "(select v.user_id,count(v.user_id) overtime from sys_visit v where nvl(v.finish_time,sysdate) - (v.expired_time+1) > 0 group by v.user_id) tt on v.user_id=tt.user_id left join sys_users_roles sur on s.user_id=sur.user_id left join sys_role sr "+
           "on sur.role_id=sr.role_id left join sys_region a on s.region_id=a.region_id where "+
           "s.region_id in (SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID) "+
           "group by s.user_id,a.name,s.truename,t.total,tt.overtime,sr.name";
     }
+    hql += " order by max(v.finish_time) desc";
     Query q = em.createNativeQuery(hql);
     int count=q.getResultList().size();
     q.setFirstResult(pageNum* limit);

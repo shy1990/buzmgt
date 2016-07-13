@@ -75,7 +75,7 @@ function initFileUpload() {
 function nowTime() {
 	var newDate = (new Date()).DateAdd('d', -1);
 	var nowDate = changeDateToString(newDate);
-	SearchData['sc_EQ_payDate'] = nowDate;
+	SearchData['sc_EQ_importDate'] = nowDate;
 	$('#searchDate').val(nowDate)
 	return nowDate;
 }
@@ -86,7 +86,7 @@ function nowTime() {
 function goSearch() {
 	var Time = $('#searchDate').val();
 	if (!isEmpty(Time)) {
-		SearchData['sc_EQ_payDate'] = Time;
+		SearchData['sc_EQ_importDate'] = Time;
 		findBankTradeList();
 	}
 }
@@ -97,7 +97,7 @@ $('#table-export').on('click', function() {
 	var startTime = $('#startTime').val();
 	if (!isEmpty(startTime)) {
 
-		SearchData['sc_EQ_payDate'] = startTime;
+		SearchData['sc_EQ_importDate'] = startTime;
 
 		window.location.href = base + "" + conditionProcess();
 	}
