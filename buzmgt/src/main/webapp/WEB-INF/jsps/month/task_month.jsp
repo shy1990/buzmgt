@@ -23,8 +23,10 @@
 <link rel="stylesheet" type="text/css" href="static/kaohe/kaohe-det.css" />
 <link rel="stylesheet" type="text/css"
 	href="static/yw-team-member/ywmember.css" />
+	<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
+	
 <link rel="stylesheet" type="text/css" href="/static/task/detail.css">
-<link rel="stylesheet" type="text/css" href="static/oil/css/oil.css">
+<link rel="stylesheet" type="text/css" href="/static/oil/css/oil.css">
 
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
@@ -112,11 +114,21 @@
 									</div>
 								</div>
 							</div>
+							<div class="select-jjl">
+								<span class="text-bai">&nbsp; 是否发布 &nbsp;
+								<select id='sffb'  class="select-sffb">
+								 <option value=''>所有类型</option>
+								 <option value='0'>未发布</option>
+								 <option value='1'>已发布</option>
+								</select>
+								</span>
+							</div>
+							
 							<div class="date-jll">
 								<a class="btn btn-default btn-sm" onclick="getTask();"
 									><span class="text-bule">筛选</span></a>
 							</div>
-
+							
 							<div class="date-jlll">
 								<span class="text-bai"> 已派发 &nbsp;<span
 									class="text-bai-d">${doneCount}</span> &nbsp; 个区域

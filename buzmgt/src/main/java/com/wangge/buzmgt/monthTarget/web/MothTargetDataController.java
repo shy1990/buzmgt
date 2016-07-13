@@ -60,8 +60,8 @@ public class MothTargetDataController {
     }
 
     @RequestMapping(value = "/mothTargetDatas", method = RequestMethod.GET)
-    @ResponseBody
-//    @JSONFormat(filterField = {"SalesMan.user","region.children"})
+//    @ResponseBody
+    @JSONFormat(filterField = {"SalesMan.user","region.children"})
     public Page<MothTargetData> list(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                      @RequestParam(value = "size", defaultValue = "20") Integer size,
                                      @RequestParam(value = "time", defaultValue = "") String time,

@@ -110,9 +110,9 @@ public class CheckCashServiceImpl implements CheckCashService {
           Map<String, Object> secp = new HashMap<>();
 
           secp.put("EQ_userId", userId);
-          secp.put("EQ_payDate", payDate);
+          secp.put("EQ_importDate", payDate);
           List<BankTrade> bankTrades = bankTradeService.findAll(secp);
-          secp.remove("EQ_payDate");
+          secp.remove("EQ_importDate");
           checkCash.setBankTrades(bankTrades);
           disposeBankTrade(bankTrades, checkCash);
 
