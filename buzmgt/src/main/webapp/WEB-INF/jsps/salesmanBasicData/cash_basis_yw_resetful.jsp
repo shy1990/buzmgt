@@ -212,6 +212,11 @@
                                         <option>中国银行</option>
                                         <option>农业银行</option>
                                         <option>工商银行</option>
+                                        <option>民生银行</option>
+                                        <option>建设银行</option>
+                                        <option>邮政银行</option>
+                                        <option>中信银行</option>
+                                        <option>莱商银行</option>
                                         <option>亚细亚银行</option>
                                     </select>
                                         <!-- /btn-group -->
