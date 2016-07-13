@@ -326,20 +326,21 @@ public class MonthTargetServiceImpl implements MonthTargetService {
             String sql = "select nvl(sum(m.NUMS),0) nums from " +
                     "MOTHTARGETDATA m " +
                     "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID = ?  ";
+
             //根据业务员获取获取活跃商家
             String sql1 = "select nvl(count(1),0) from (select count(t.shopname) from (" +
-                    "select m.shopname,m.createTime,count(to_char(CREATETIME,'YYYY-MM-DD')) " +
+                    "select m.shopname,count(to_char(CREATETIME,'YYYY-MM-DD')) " +
                     "FROM mothtargetdata m " +
                     "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID = ? " +
-                    "group by to_char(CREATETIME,'YYYY-MM-DD'),m.shopname,m.createTime ) t " +
+                    "group by to_char(CREATETIME,'YYYY-MM-DD'),m.shopname ) t " +
                     "group by t.shopname " +
                     "having count(t.shopname)>=2)";
             //根据业务员获取成熟商家
             String sql2 = "select nvl(count(1),0) from (select count(t.shopname) from (" +
-                    "select m.shopname,m.createTime,count(to_char(CREATETIME,'YYYY-MM-DD')) " +
+                    "select m.shopname,count(to_char(CREATETIME,'YYYY-MM-DD')) " +
                     "FROM mothtargetdata m " +
                     "where to_char(CREATETIME,'YYYY-MM') like ? and PARENTID = ? " +
-                    "group by to_char(CREATETIME,'YYYY-MM-DD'),m.shopname,m.createTime ) t " +
+                    "group by to_char(CREATETIME,'YYYY-MM-DD'),m.shopname ) t " +
                     "group by t.shopname " +
                     "having count(t.shopname)>=5)";
 
@@ -351,6 +352,9 @@ public class MonthTargetServiceImpl implements MonthTargetService {
                     "group by to_char(CREATETIME,'YYYY-MM-DD'),m.shopname,m.createTime ) t " +
                     "group by t.shopname " +
                     ")";
+
+
+
 
             //根据业务员获取所有注册商家
             String sql4 = "select nvl(count(1),0) from(\n" +
@@ -454,7 +458,12 @@ public class MonthTargetServiceImpl implements MonthTargetService {
                     ")";
 
             //根据业务员获取所有注册商家
-            String sql4 = "select nvl(count(1),0) from sys_registdata where user_id = ? ";
+            String sql4 = "select nvl(count(1),0) from(\n" +
+                    "select r.parent_id pr_id\n" +
+                    "from sys_registdata s left join sys_region r \n" +
+                    "on s.region_id = r.region_id )\n" +
+                    "\n" +
+                    "where pr_id = ? ";
 
             Query query = entityManager.createNativeQuery(sql);
             int a = 1;
