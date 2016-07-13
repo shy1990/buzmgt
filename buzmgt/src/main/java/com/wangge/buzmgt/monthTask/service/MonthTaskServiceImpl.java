@@ -146,16 +146,21 @@ public class MonthTaskServiceImpl implements MonthTaskService {
     Map<String, Object> pageMap = new HashMap<String, Object>();
     Object flag = parameters.getFirst("flag");
     String saleManName = parameters.getFirst("salesManName") == null ? null : parameters.getFirst("salesManName") + "";
+    String sffb = parameters.getFirst("sffb") == null ? null : parameters.getFirst("sffb") + "";
     String regionId = getDefaultRegionId();
     if (null == month || "".equals(month))
       month = DateUtil.getPreMonth(new Date(), 1);
     Page<MonthTask> result = null;
     
     if (null == flag) {
-      if (null == saleManName || "".equals(saleManName)) {
-        result = mtaskRep.findByMonthAndRegionidLike(month, regionId, page);
+      if (null != sffb && !"".equals(sffb)) {
+        result = mtaskRep.findByMonthAndStatusAndRegionidLike(month, Integer.valueOf(sffb), regionId, page);
       } else {
-        result = mtaskRep.findByMonthAndMonthData_Salesman_TruenameLike(month, "%" + saleManName + "%", page);
+        if (null == saleManName || "".equals(saleManName)) {
+          result = mtaskRep.findByMonthAndRegionidLike(month, regionId, page);
+        } else {
+          result = mtaskRep.findByMonthAndMonthData_Salesman_TruenameLike(month, "%" + saleManName + "%", page);
+        }
       }
     } else {
       if (null == saleManName || "".equals(saleManName)) {
@@ -181,7 +186,7 @@ public class MonthTaskServiceImpl implements MonthTaskService {
       } catch (Exception e) {
         
       }
-      if(null==r){
+      if (null == r) {
         continue;
       }
       Map<String, Object> taskMap = new HashMap<String, Object>();

@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css"
 	href="static/abnormal/abnormal.css" />
 
+
 <link rel="stylesheet" type="text/css"
 	href="static/month-task/bootstrap-select.min.css">
 <link rel="stylesheet" type="text/css"

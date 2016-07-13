@@ -25,8 +25,10 @@
 <link rel="stylesheet" type="text/css" href="static/kaohe/kaohe-det.css" />
 <link rel="stylesheet" type="text/css"
 	href="static/yw-team-member/ywmember.css" />
-<link rel="stylesheet" type="text/css" href="static/task/detail.css">
-<link rel="stylesheet" type="text/css" href="static/oil/css/oil.css">
+	<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
+	
+<link rel="stylesheet" type="text/css" href="/static/task/detail.css">
+<link rel="stylesheet" type="text/css" href="/static/oil/css/oil.css">
 
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
