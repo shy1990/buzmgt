@@ -33,7 +33,7 @@
 {{#if content}}
 {{#each content}}
 <tr class="am-active">
-	<td width="5%" class="center">{{index}}</td>
+	<td width="5%" class="center">{{addOne @index}}</td>
 	<td width="10%">{{position}}</td>
 	<td width="10%">{{accountNum}}</td>
 	<td width="10%">{{name}}</td>
@@ -48,7 +48,7 @@
 		<a href="javascript:resetPwd('{{accountNum}}');">重置密码</a> 
 		<a href="javascript:modifyAccount('{{accountNum}}','{{position}}');">修改资料</a> 
 		<a class="text-danger" href="javascript:mofidyAccount('{{accountNum}}','2');">辞退</a>
-		<a href="javascript:mofidyAccount('${ac.accountNum}','4');"> 清空sim</a>
+		<a href="javascript:mofidyAccount('{{accountNum}}','4');"> 清空sim</a>
 	</td>
 	<td>
 		<a class="" href="" data-toggle="modal"onclick="addAccount('{{accountNum}}');" >
@@ -69,7 +69,7 @@
 {{#if content}}
 {{#each content}}
 <tr class="am-active">
-	<td width="5%" class="center">{{index}}</td>
+	<td width="5%" class="center">{{@index}}</td>
 	<td width="10%">{{position}}</td>
 	<td width="10%">{{accountNum}}</td>
 	<td width="10%">{{name}}</td>
@@ -81,8 +81,9 @@
 		</div>
 	</td>
 	<td width="20%" class="operation">
-		<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','1');">恢复账号</a>
-		<a class="text-danger" href="javascript:mofidyAccount('${ac.accountNum}','3');">删除</a>
+		<a class="text-danger" href="javascript:mofidyAccount('{{accountNum}}','1');">恢复账号</a>
+		<a class="text-danger" href="javascript:mofidyAccount('{{accountNum}}','3');">删除</a>
+		<a href="javascript:mofidyAccount('{{accountNum}}','4');"> 清空sim</a>
 	</td>
 </tr>
 {{/each}}
@@ -97,7 +98,7 @@
 var	base='<%=basePath%>';
 var SearchData={
 		"page":"0",
-		"size":"20"
+		"size":"4"
 }
 </script>
 </head>
@@ -121,12 +122,12 @@ var SearchData={
 				<li><a href="#box_tab1" data-toggle="tab"
 					onclick="selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
 				<li><a href="#box_tab1" data-toggle="tab"
-					onclick="selectByOrg('大区总监','0');"> 大区总监(在职)</a></li>
+					onclick="selectByOrg('大区经理','0');"> 大区经理(在职)</a></li>
 				<li><a href="#box_tab2" data-toggle="tab"
 					onclick="selectByOrg('allDis','2');">已辞退</a></li>
 				<!-- Nav tabs -->
 			</ul>
-			<ul class="nav nav-task">
+			<ul class="nav nav-task" style="width: 30%;float: right;">
 				<div class="input-group ">
 					<input type="text" class="form-control" placeholder="请输入名称或用户名"
 						id="param" value="${searchParam}"
@@ -163,6 +164,7 @@ var SearchData={
 								</tbody>
 							</table>
 						</div>
+						<div id="initPager"></div>
 					</div>
 
 					<div class="tab-pane fade " id="box_tab2">
@@ -183,9 +185,9 @@ var SearchData={
 								</tbody>
 							</table>
 						</div>
+						<div id="initDismissPager"></div>
 					</div>
 				</div>
-				<div id="initPager"></div>
 			<!-- tab-content -->
 		</div>
 	</div>
