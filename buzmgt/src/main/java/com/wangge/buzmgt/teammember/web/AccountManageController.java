@@ -184,7 +184,7 @@ public class AccountManageController extends BaseController {
     model.addAttribute("totalPage", (int) Math.ceil(totalNum / Double.parseDouble(String.valueOf(pageSize))));
     model.addAttribute("currentPage", page);
     model.addAttribute("pageNav", PageNavUtil.getPageNavHtml(page.intValue(), pageSize, totalNum, 10));
-    return "account/account_list";
+    return "account/account_list2";
   }
 
   /**
@@ -205,7 +205,7 @@ public class AccountManageController extends BaseController {
     String rName = "";
     String rId = "";
     // 职务查询
-    if (null != orgName && "".equals(orgName)) {
+    if (null != orgName && !"".equals(orgName)) {
       req.getSession().setAttribute("orgName", orgName);
     }
     String sessionOrgName = (String) req.getSession().getAttribute("orgName");
