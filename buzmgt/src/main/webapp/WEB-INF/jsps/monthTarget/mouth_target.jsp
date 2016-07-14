@@ -175,7 +175,7 @@
 <script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="<%=basePath%>static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+<%--<script src="<%=basePath%>static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>--%>
 <script type="text/javascript">
     $('body input').val('');
     $(".form_datetime").datetimepicker({
@@ -278,7 +278,7 @@
     var myDate = new Date().format('yyyy-MM');//今天日期
     //查看业务员的信息
     function seeSalseman(regionId, time, order, orderNum,merchant,merchantNum, active, activeNum,mature,matureNum) {
-        console.log(regionId + '  ' + time + '  ' + order + '  ' + orderNum + '  ' + active + '  ' + activeNum);
+//        console.log(regionId + '  ' + time + '  ' + order + '  ' + orderNum + '  ' + active + '  ' + activeNum);
 //        $.post("/mothTargetData", {regionId: regionId, time: time,order:order,orderNum:orderNum,merchant:merchant,merchantNum:merchantNum,active:active,activeNum:activeNum,mature:mature,matureNum:matureNum});
         window.location.href = '/mothTargetData?regionId='+regionId+'&time='+time+'&order='+order+'&orderNum='+orderNum+'&merchant='+merchant+'&merchantNum='+merchantNum+'&active='+active+'&activeNum='+activeNum+'&mature='+mature+'&matureNum='+matureNum;
 
@@ -302,7 +302,7 @@
     }
     $(function () {
         //页面初始化
-        console.log(myDate);
+//        console.log(myDate);
         monthTarget.searchData.time = myDate;
         monthTarget.detail.init(monthTarget.searchData);
 
@@ -310,7 +310,7 @@
         $("#searchName").click(function () {
             var name = $("#inputname").val();
             var time = $("#iuputtime").val();
-            console.log(time+'  time');
+//            console.log(time+'  time');
             if (time == null || time == undefined || time == '') {
                 time = myDate;
             }
@@ -324,7 +324,7 @@
 
         //导出
         $("#export").click(function(){
-            console.log(222222);
+//            console.log(222222);
             window.location.href = "monthTarget/export?time="+monthTarget.searchData.time;
 //            monthTarget.exportExcel(monthTarget.searchData.time)
 //            $.get("monthTarget/export?time="+monthTarget.searchData.time);
@@ -352,19 +352,19 @@
         },
         //查询全部
         findAll: function (searchData) {
-            console.log(searchData);
+//            console.log(searchData);
             $.ajax({
                 url: monthTarget.url(),
                 data: searchData,
                 success: function (data) {
-                    console.log(data);
+//                    console.log(data);
                     monthTarget.handelerbars_register(data.content);
                     monthTarget._count.totalCount = data.totalElements;//总页数
                     monthTarget._count.limit = data.size;
-                    console.log(monthTarget._count)
+//                    console.log(monthTarget._count)
                     if (monthTarget._count.totalCount != monthTarget._count.total || monthTarget._count.totalCount == 0) {
                         monthTarget._count.total = monthTarget._count.totalCount;
-                        console.log("-------");
+//                        console.log("-------");
                         monthTarget.initPaging();
                     }
 
