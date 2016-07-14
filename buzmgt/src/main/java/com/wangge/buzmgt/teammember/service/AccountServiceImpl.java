@@ -49,9 +49,9 @@ public class AccountServiceImpl implements AccountService {
      sb.append(" JOIN SYS_ORGANIZATION o ON u.ORGANIZATION_ID = o.ORGANIZATION_ID  JOIN SYS_REGION re   ON m.REGION_ID = re.REGION_ID ) v where 1=1 and v.rid in  (SELECT region_id FROM SYS_REGION START WITH name='"+regionName+"' CONNECT BY PRIOR region_id=PARENT_ID)");
     if(orgName!=null && !"".equals(orgName)){
       if(!orgName.startsWith("al")){
-        if("大区总监".equals(orgName.trim())){
+        if("大区经理".equals(orgName.trim())){
          // sb.append( " and v.oname != '服务站经理' and v.truename!='root' and  v.status in ('0','1')");
-          sb.append( " and v.oname = '大区总监' and v.truename!='root' and  v.status in ('0','1')");
+          sb.append( " and v.oname = '大区经理' and v.truename!='root' and  v.status in ('0','1')");
         }else{
           sb.append( " and v.oname = '服务站经理' and  v.status in ('0','1')");
         }

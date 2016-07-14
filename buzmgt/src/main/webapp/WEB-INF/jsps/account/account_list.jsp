@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+  String path = request.getContextPath();
+			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+					+ path + "/";
+%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -13,6 +18,7 @@
 <title>账号管理</title>
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-switch.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
@@ -24,6 +30,78 @@
 <link rel="stylesheet" type="text/css" href="static/task/task.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script id="table-template" type="text/x-handlebars-template">
+{{#if content}}
+{{#each content}}
+<tr class="am-active">
+	<td width="5%" class="center">{{addOne @index}}</td>
+	<td width="10%">{{position}}</td>
+	<td width="10%">{{accountNum}}</td>
+	<td width="10%">{{name}}</td>
+	<td width="10%">{{areaName}}</td>
+	<td width="10%">{{roleName}}</td>
+	<td width="10%">
+		<div class="switch switch-small" data-on="info" data-off="success">
+		{{{switch status accountNum}}}
+		</div>
+	</td>
+	<td width="20%" class="operation">
+		<a href="javascript:resetPwd('{{accountNum}}');">重置密码</a> 
+		<a href="javascript:modifyAccount('{{accountNum}}','{{position}}');">修改资料</a> 
+		<a class="text-danger" href="javascript:mofidyAccount('{{accountNum}}','2');">辞退</a>
+		<a href="javascript:mofidyAccount('{{accountNum}}','4');"> 清空sim</a>
+	</td>
+	<td>
+		<a class="" href="" data-toggle="modal"onclick="addAccount('{{accountNum}}');" >
+			<img src="static/img/addcode/tj.png">添加</a> 
+		<a href="javascript:findChildAccount('{{accountNum}}');"
+			aria-controls="pofile" role="tab" data-target="tab">
+			{{childCount}}个子账号<img src="static/img/addcode/jl.png"></a>
+	</td>
+</tr>
+{{/each}}
+{{else}}
+<tr>
+	<td colspan="100">没有相关数据</td>
+</tr>
+{{/if}}
+</script>
+<script id="dismiss-table-template" type="text/x-handlebars-template">
+{{#if content}}
+{{#each content}}
+<tr class="am-active">
+	<td width="5%" class="center">{{addOne @index}}</td>
+	<td width="10%">{{position}}</td>
+	<td width="10%">{{accountNum}}</td>
+	<td width="10%">{{name}}</td>
+	<td width="10%">{{areaName}}</td>
+	<td width="10%">{{roleName}}</td>
+	<td width="10%">
+		<div class="switch switch-small" data-on="info" data-off="success">
+		{{{switch status}}}
+		</div>
+	</td>
+	<td width="20%" class="operation">
+		<a class="text-danger" href="javascript:mofidyAccount('{{accountNum}}','1');">恢复账号</a>
+		<a class="text-danger" href="javascript:mofidyAccount('{{accountNum}}','3');">删除</a>
+		<a href="javascript:mofidyAccount('{{accountNum}}','4');"> 清空sim</a>
+	</td>
+</tr>
+{{/each}}
+{{else}}
+<tr>
+	<td colspan="100">没有相关数据</td>
+</tr>
+{{/if}}
+</script>
+
+<script type="text/javascript">
+var	base='<%=basePath%>';
+var SearchData={
+		"page":"0",
+		"size":"20"
+}
+</script>
 </head>
 
 <body>
@@ -40,221 +118,79 @@
 
 		<div class="table-before marg-b-10">
 			<ul class="nav nav-task" role="tablist">
-				<c:choose>
-					<c:when test="${not empty org}">
-						<c:if test="${org=='allUsed'}">
-							<li class="active"><a
-								href="javascript:selectByOrg('allUsed','used');"> 全部(在职)</a></li>
-							<li><a href="javascript:selectByOrg('服务站经理','0');">
-									服务站经理(在职)</a></li>
-							<li><a href="javascript:selectByOrg('大区总监','0');">
-									大区总监(在职)</a></li>
-							<li><a href="javascript:selectByOrg('allDis','2');">已辞退</a></li>
-						</c:if>
-						<c:if test="${org=='服务站经理'}">
-							<li><a href="javascript:selectByOrg('allUsed','used');">
-									全部(在职)</a></li>
-							<li class="active"><a
-								href="javascript:selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
-							<li><a href="javascript:selectByOrg('大区总监','0');">
-									大区总监(在职)</a></li>
-							<li><a href="javascript:selectByOrg('allDis','2');">已辞退</a></li>
-						</c:if>
-						<c:if test="${org=='大区总监'}">
-							<li><a href="javascript:selectByOrg('allUsed','used');">
-									全部(在职)</a></li>
-							<li><a href="javascript:selectByOrg('服务站经理','0');">
-									服务站经理(在职)</a></li>
-							<li class="active"><a
-								href="javascript:selectByOrg('大区总监','0');"> 大区总监(在职)</a></li>
-							<li><a href="javascript:selectByOrg('allDis','2');">已辞退</a></li>
-						</c:if>
-						<c:if test="${org=='allDis'}">
-							<li><a href="javascript:selectByOrg('allUsed','used');">
-									全部(在职)</a></li>
-							<li><a href="javascript:selectByOrg('服务站经理','0');">
-									服务站经理(在职)</a></li>
-							<li><a href="javascript:selectByOrg('大区总监','0');">
-									大区总监(在职)</a></li>
-							<li class="active"><a
-								href="javascript:selectByOrg('allDis','2');">已辞退</a></li>
-						</c:if>
-					</c:when>
-					<c:otherwise>
-						<li class="active"><a
-							href="javascript:selectByOrg('allDis','used');"> 全部(在职)</a></li>
-						<li><a href="javascript:selectByOrg('服务站经理','0');">
-								服务站经理(在职)</a></li>
-						<li><a href="javascript:selectByOrg('大区总监','0');">
-								大区总监(在职)</a></li>
-						<li><a href="javascript:selectByOrg('allDis','2');">已辞退</a></li>
-					</c:otherwise>
-				</c:choose>
+				<li class="active"><a href="#box_tab1" data-toggle="tab"
+					onclick="selectByOrg('allUsed','used');"> 全部(在职)</a></li>
+				<li><a href="#box_tab1" data-toggle="tab"
+					onclick="selectByOrg('服务站经理','0');"> 服务站经理(在职)</a></li>
+				<li><a href="#box_tab1" data-toggle="tab"
+					onclick="selectByOrg('大区经理','0');"> 大区经理(在职)</a></li>
+				<li><a href="#box_tab2" data-toggle="tab"
+					onclick="selectByOrg('allDis','2');">已辞退</a></li>
 				<!-- Nav tabs -->
 			</ul>
-			<ul class="nav nav-task" >
-			   <div class="input-group ">
+			<ul class="nav nav-task" style="width: 30%;float: right;">
+				<div class="input-group ">
 					<input type="text" class="form-control" placeholder="请输入名称或用户名"
-						id="param" value="${searchParam}" onkeyup="javascript:if(event.keyCode==13){getAccountList()}"> <span class="input-group-addon"
-						id="goSearch"
-						onclick="getAccountList();"><i
-						class="icon icon-finds"></i></span>
+						id="param" value="${searchParam}"
+						onkeyup="javascript:if(event.keyCode==13){getAccountList()}">
+					<span class="input-group-addon" id="goSearch"
+						onclick="getAccountList();"><i class="icon icon-finds"></i></span>
 				</div>
 			</ul>
-			
+
 		</div>
-        
+
 
 		<div class="tab-box-border">
-		<!--tab-content-->
-		<div class="tab-content">
-			<div class="table-responsive table-overflow">
-				<table id="table_report" class="table table-hover new-table abnormal-order-table">
-					<thead>
-						<th width="5%" class="center">序号</th>
-						<th width="10%" class="center">职务</th>
-						<th width="10%" class="center">账号</th>
-						<th width="10%" class="center">姓名</th>
-						<th width="10%" class="center">负责区域</th>
-						<th width="10%" class="center">角色权限</th>
-						<th width="5%" class="center">账号状态</th>
-						<th width="20%" class="center">操作</th>
-						<c:if test="${org != 'allDis'}">
-						<th width="20%" class="center">子账号</th>
-						</c:if>
-					</thead>
-					<tbody>
-						<c:choose>
-							<c:when test="${not empty accounts}">
-								<c:forEach var="ac" items="${accounts}" varStatus="s">
-									<tr class="am-active">
-										<td width="5%" class="center">${s.index+1}</td>
-										<td width="10%">${ac.position}</td>
-										<td width="10%">${ac.accountNum}</td>
-										<td width="10%">${ac.name}</td>
-										<td width="10%">${ac.areaName}</td>
-										<td width="10%">${ac.roleName}</td>
-										<td width="10%">
-											<div class="switch switch-small" data-on="info"
-												data-off="success">
-												<c:choose>
-													<c:when test="${ac.status==2}">
-														<input type="checkbox" checked="checked"
-															autocomplete="off" name="my-checkbox" id="accountStatus"
-															value="${ac.accountNum}" data-on-color="info"
-															data-off-color="success" data-size="mini"
-															data-on-text="冻结" data-off-text="正常" readonly />
-													</c:when>
-													<c:otherwise>
-														<c:choose>
-															<c:when test="${ac.status==0}">
-																<input type="checkbox" checked="checked"
-																	autocomplete="off" name="my-checkbox"
-																	id="accountStatus" value="${ac.accountNum}"
-																	data-on-color="info" data-off-color="success"
-																	data-size="mini" data-off-text="冻结" data-on-text="正常"
-																	onchange="mofidyAccount('${ac.accountNum}','0')" />
-															</c:when>
-															<c:otherwise>
-																<input type="checkbox" autocomplete="off"
-																	name="my-checkbox" id="accountStatus"
-																	value="${ac.status}" data-on-color="info"
-																	data-off-color="success" data-size="mini"
-																	data-off-text="冻结" data-on-text="正常"
-																	onchange="mofidyAccount('${ac.accountNum}','1')" />
-															</c:otherwise>
-														</c:choose>
-													</c:otherwise>
-												</c:choose>
-											</div>
-										</td>
-										<c:choose>
-											<c:when test="${ac.status==2}">
-												<td width="20%" class="operation"><a
-													class="text-danger"
-													href="javascript:mofidyAccount('${ac.accountNum}','1');">恢复账号</a>
-													<c:choose>
-														<c:when test="${ac.status==2}">
-															<a class="text-danger"
-																href="javascript:mofidyAccount('${ac.accountNum}','3');">删除</a>
-														</c:when>
-														<c:otherwise>
-															<a class="text-danger"
-																href="javascript:mofidyAccount('${ac.accountNum}','2');">辞退</a>
-														</c:otherwise>
-													</c:choose>
-													<a
-													href="javascript:mofidyAccount('${ac.accountNum}','4');">
-														清空sim</a>
-													</td>
-											</c:when>
-											<c:otherwise>
-												<td width="20%" class="operation"><a
-													href="javascript:resetPwd('${ac.accountNum}');">重置密码</a> <a
-													href="javascript:modifyAccount('${ac.accountNum}','${ac.position}');">
-														修改资料</a> <c:choose>
-														<c:when test="${ac.status==2}">
-															<a class="text-danger"
-																href="javascript:mofidyAccount('${ac.accountNum}','3');">删除</a>
-														</c:when>
-														<c:otherwise>
-															<a class="text-danger"
-																href="javascript:mofidyAccount('${ac.accountNum}','2');">辞退</a>
-														</c:otherwise>
-													</c:choose>
-													<a
-													href="javascript:mofidyAccount('${ac.accountNum}','4');">
-														清空sim</a>
-													</td>
-											</c:otherwise>
-										</c:choose>
-										<c:if test="${org != 'allDis'}">
-										<td><a class="" href="" data-toggle="modal"
-													onclick="addAccount('${ac.accountNum}');" s><img
-														src="static/img/addcode/tj.png">添加</a> <a
-													href="javascript:findChildAccount('${ac.accountNum}');"
-													aria-controls="pofile" role="tab" data-target="tab">${ac.childCount}个子账号<img
-														src="static/img/addcode/jl.png"></a></td>
-										</c:if>
-									</tr>
-								</c:forEach>
-							</c:when>
-							<c:otherwise>
-								<tr>
-									<td colspan="100">没有相关数据</td>
-								</tr>
-							</c:otherwise>
-						</c:choose>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<%-- <div id="pageNav" class="scott" align="center">
-			<font color="#88af3f">共${totalCount} 条数据， 共${totalPage} 页</font>
-			<div class="page-link">${pageNav}</div>
-		</div> --%>
-		<c:if test="${totalPage > 1}">
-						<div style="text-align: center; padding-bottom: 20px">
-							<ul class="pagination box-page-ul">
-								<li><a href="?page=${currentPage > 1 ?currentPage-1 : 1}&searchParam=${searchParam}">&laquo;</a></li>
-								<!-- 1.total<=7 -->
-								<c:forEach var="s" begin="1" end="${totalPage}" step="1">
-									<c:choose>
-										<c:when test="${currentPage == s }">
-											<li class="active"><a href="?page=${s}">${s}</a></li>
-										</c:when>
-										<c:otherwise>
-											<li><a href="?page=${s}&searchParam=${searchParam}">${s}</a></li>
-										</c:otherwise>
-									</c:choose>
-								</c:forEach>
-								<li><a
-									href="?page=${currentPage == totalPage ? totalPage : currentPage+1 }&searchParam=${searchParam}">&raquo;</a></li>
-							</ul>
+			<!--tab-content-->
+				<!--业务揽收异常-->
+				<!--列表内容-->
+				<div class="tab-content">
+					<div class="tab-pane fade in active" id="box_tab1">
+						<div class="table-responsive table-overflow">
+							<table id="table_report"
+								class="table table-hover new-table abnormal-order-table">
+								<thead>
+									<th width="5%" class="center">序号</th>
+									<th width="10%" class="center">职务</th>
+									<th width="10%" class="center">账号</th>
+									<th width="10%" class="center">姓名</th>
+									<th width="10%" class="center">负责区域</th>
+									<th width="10%" class="center">角色权限</th>
+									<th width="5%" class="center">账号状态</th>
+									<th width="20%" class="center">操作</th>
+									<th width="20%" class="center">子账号</th>
+								</thead>
+								<tbody id="tableList">
+								</tbody>
+							</table>
 						</div>
-					</c:if>
-	<!-- tab-content -->
-	</div>
+						<div id="initPager"></div>
+					</div>
+
+					<div class="tab-pane fade " id="box_tab2">
+						<div class="table-responsive table-overflow">
+							<table id="table_report"
+								class="table table-hover new-table abnormal-order-table">
+								<thead>
+									<th width="5%" class="center">序号</th>
+									<th width="10%" class="center">职务</th>
+									<th width="10%" class="center">账号</th>
+									<th width="10%" class="center">姓名</th>
+									<th width="10%" class="center">负责区域</th>
+									<th width="10%" class="center">角色权限</th>
+									<th width="5%" class="center">账号状态</th>
+									<th width="20%" class="center">操作</th>
+								</thead>
+								<tbody id="dismissTableList">
+								</tbody>
+							</table>
+						</div>
+						<div id="initDismissPager"></div>
+					</div>
+				</div>
+			<!-- tab-content -->
+		</div>
 	</div>
 	<!--box-->
 	<!-- alert resetPwd html -->
@@ -438,174 +374,10 @@
 <script src='/static/bootstrap/js/bootstrap.js'></script>
 <script src='/static/js/common.js'></script>
 <script src="/static/bootstrap/js/bootstrap-switch.min.js"></script>
-<script type="text/javascript">
-		$("[name='my-checkbox']").bootstrapSwitch();
-		//checkbox点击事件回调函数
-		$('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-			console.log(this); // DOM element
-			console.log(event); // jQuery event
-			console.log(state); // true | false
-		//	alert(event.target);
-			if(state){
-		//		alert(state+"==="+event.target.value);
-			}else{
-			//	alert(state+"---"+event.target.value);
-			}
-		});
-		//修改资料
-		function modifyAccount(accountNum,position){
-			var url = "modifyAccount?accountNum=" + accountNum+"&position="+position;
-			window.location = encodeURI(url);
-		}
-		//根据职务查询
-		function selectByOrg(orgName,status){
-			var url = "accountManage?orgName=" + orgName+"&status="+status;
-			window.location = encodeURI(url);
-		//	 document.getElementById("all").className="active";
-		}
-		// 重置密码
-		function resetPwd(accountNum){
-			if (confirm("确定要重置密码？	初始密码123456")) {
-				var url = "resetPwd?id=" + accountNum;
-				$.post(url, function(data) {
-					if (data === 'suc') {
-						alert("重置成功!");
-						setTimeout(function(){
-			        		location.reload()
-			        		},3000);
-					} else {
-						alert("系统异常,请重试");
-					}
-				});
-			}
-		}
-		// 修改账号状态,0正常,1冻结,2辞退,3删除,4清空sim卡
-		function mofidyAccount(accountNum,status){
-			if(status=='2'){
-				if (confirm("确定要辞退该员工")) {
-					var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
-					$.post(url, function(data) {
-						if (data === 'suc') {
-							alert("已辞退!");
-				        	location.reload();
-						} else {
-							alert("系统异常,请重试");
-						}
-					});
-				}   
-			}else if(status=='3'){
-				if (confirm("确定要删除该员工?删除后无法恢复")) {
-					var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
-					$.post(url, function(data) {
-						if (data === 'suc') {
-							alert("已删除!");
-				        	location.reload();
-						} else {
-							alert("系统异常,请重试");
-						}
-					});
-				}
-			}else if(status=='4'){
-				if (confirm("确定要清空该员工sim卡?清空后无法恢复")) {
-					 var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
-					$.post(url, function(data) {
-						if (data === 'suc') {
-							alert("已清空!");
-				        	location.reload();
-						} else {
-							alert("系统异常,请重试");
-						}
-					}); 
-				}
-			}else if(status=='0'){
-				if (confirm("确定要冻结改账号?")) {
-					var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
-					$.post(url, function(data) {
-						if (data === 'suc') {
-							alert("已冻结!");
-				        	location.reload();	
-						} else {
-							alert("系统异常,请重试");
-						}
-					});
-				}
-			}else if(status=='1'){
-				if (confirm("确定要解封/恢复该账号?")) {
-					var url = "mofidyAccountStatus?id=" + accountNum+"&status="+status;
-					$.post(url, function(data) {
-						if (data === 'suc') {
-							alert("已解封/恢复!");
-				        	location.reload();
-						} else {
-							alert("系统异常,请重试");
-						}
-					});
-				}
-			}
-		}
-		
-		
-		/*区域 */
-		function getRegion(id){
-			window.location.href='/region/getPersonalRegion?flag='+"account";
-		}
-		
-	     $("[name='my-checkbox']").bootstrapSwitch();
-         //checkbox点击事件回调函数
-         $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
-             console.log(this); // DOM element
-             console.log(event); // jQuery event
-             console.log(state); // true | false
-             if (state) {
-                 alert('冻结');
-             } else {
-                 alert('正常');
-             }
-         });
-		
-		
-         
-         
-         //弹出子账号model 
-         function addAccount(id){
-        	 $("#userId").val(id);
-        	 $('#addAccount').modal({
-					keyboard: false
-				})
-			
-         }
-         
-         
-         
-         
-         //添加子账号
-        function addChildAccount(){
-        	 var truename=$("#truename").val();
-        	 var userId=$("#userId").val();
-        	 var url="/addChildAccount?truename="+truename+"&userId="+userId;
-        	 $.post(url, function(data) {
-					if (data === 'suc') {
-			        	location.reload();
-					} else if(data === 'err') {
-						alert("超过最大个数");
-					}else {
-						alert("系统异常,请重试");
-					}
-				});
-        	 
-         }
-         
-         
-         //子账号列表展示
-         function findChildAccount(userId){
-        	 window.location.href="/findChildAccount?userId="+userId;
-         }
-         
-         function getAccountList(){
-        	/*  var value = $("#param").val();
-        	 alert(value); */
-        	 window.location.href="/accountManage?searchParam="+ $("#param").val();
-        	 
-         }
-	</script>
+<script type="text/javascript" src="/static/js/handlebars-v4.0.2.js"
+	charset="utf-8"></script>
+<script type="text/javascript"
+	src="/static/bootStrapPager/js/extendPagination.js"></script>
+<script type="text/javascript"
+	src="/static/account-manage/account-list.js"></script>
 </html>

@@ -192,6 +192,8 @@ public class MonthTargetController {
 
   /**
    * 根据时间与区域经理id查询 全部的业务员信息
+   *
+   * 不用这个
    * @return
    */
   @RequestMapping(value = "/ceshi",method = RequestMethod.GET)
@@ -209,7 +211,9 @@ public class MonthTargetController {
     return requestPage;
   }
 
-
+/**
+ * 根据时间与区域经理id查询 全部的业务员信息
+ * **/
   @RequestMapping(value = "/monthTargets",method = RequestMethod.GET)
 //  @ResponseBody
   @JSONFormat(filterField = {"SalesMan.user","region.children"})
@@ -229,26 +233,12 @@ public class MonthTargetController {
     return requestPage;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   @RequestMapping(value = "/export")
   public void exportExcel(HttpServletRequest request,HttpServletResponse response,String time){
 //    time = "2016-08";
     List<MonthTarget> list = mtService.exportExcel(time);
     String[] title_ = new String[]{"区域","负责人","注册商家","提货量(实际)","提货量(指标)","提货商家(实际)","提货商家(指标)","活跃商家(实际)","活跃商家(指标)","成熟商家(实际)","成熟商家(指标)","指标周期"};
-    String[] coloumsKey_ = new String[]{"region.name","salesman.truename","matureAll","order","orderNum","merchant","merchantNum","merchant","activeNum","mature","matureNum","targetCycle"};
+    String[] coloumsKey_ = new String[]{"region.name","trueName","matureAll","order","orderNum","merchant","merchantNum","active","activeNum","mature","matureNum","targetCycle"};
     ExcelExport.doExcelExport("月指标.xls",list,title_,coloumsKey_,request,response);
   }
 
