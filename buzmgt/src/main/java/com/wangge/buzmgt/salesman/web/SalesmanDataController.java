@@ -3,6 +3,8 @@ package com.wangge.buzmgt.salesman.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,9 @@ import com.wangge.buzmgt.salesman.entity.SalesmanData;
 import com.wangge.buzmgt.salesman.service.BankCardService;
 import com.wangge.buzmgt.salesman.service.SalesmanDataService;
 import com.wangge.buzmgt.util.JsonResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * controller
@@ -75,6 +80,28 @@ public class SalesmanDataController {
         Pageable pageable = new PageRequest(page, size, sort);
         return new ResponseEntity<JsonResponse>(new JsonResponse(service.findAll(name, pageable)), HttpStatus.OK);
     }
+
+
+    /**
+     * 导出表
+     * @return
+     */
+    @RequestMapping(value = "export")
+    public void exportExcel(HttpServletRequest request, HttpServletResponse response){
+        List<SalesmanData> list = service.findAll();
+
+        String[] title_ = new String[]{ "业务ID","姓名","银行卡"};
+        String[] coloumsKey_ = new String[]{"userId","name","card"};
+        ExcelExport.doExcelExport("业务员基础数据.xls",list,title_,coloumsKey_,request,response);
+    }
+
+
+
+
+
+
+
+
 
     /**
      * 根据id查询基础数据
