@@ -55,7 +55,7 @@
         </div>
 
         <div class="link-posit-t pull-right export">
-            <a class="table-export" href="javascript:void(0);">导出excel</a>
+            <a class="table-export" href="salesmanData/export">导出excel</a>
         </div>
 
     </div>

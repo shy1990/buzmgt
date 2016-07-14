@@ -82,6 +82,7 @@ public class SalesmanDataController {
     }
 
 
+
     /**
      * 导出表
      * @return
@@ -89,9 +90,11 @@ public class SalesmanDataController {
     @RequestMapping(value = "export")
     public void exportExcel(HttpServletRequest request, HttpServletResponse response){
         List<SalesmanData> list = service.findAll();
-
+//        list.forEach(salesmanData -> {
+//            System.out.println(salesmanData);
+//        });
         String[] title_ = new String[]{ "业务ID","姓名","银行卡"};
-        String[] coloumsKey_ = new String[]{"userId","name","card"};
+        String[] coloumsKey_ = new String[]{"userId","name","card.bankCard.bankName"};
         ExcelExport.doExcelExport("业务员基础数据.xls",list,title_,coloumsKey_,request,response);
     }
 
