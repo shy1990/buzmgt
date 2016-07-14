@@ -90,4 +90,6 @@ public class SalesmanDataServiceImpl implements SalesmanDataService{
     return salesmanDataRepository.findByNameAndCard_cardNumber(name, cardNu);
   }
 
+
+
 }

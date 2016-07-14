@@ -16,5 +16,4 @@ public interface SalesmanDataService {
 	public SalesmanData findById(Long id);
 	public SalesmanData findByNameAndCard_cardNumber(String name,String cardNu);
 	public void deleteById(Long id);
-
 }
