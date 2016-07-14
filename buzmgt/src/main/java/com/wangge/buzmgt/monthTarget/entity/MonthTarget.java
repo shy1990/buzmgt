@@ -80,7 +80,16 @@ public class MonthTarget implements Serializable{
 
   @Transient
   private Integer matureAll;//注册商家
+  @Transient
+  private String trueName;
 
+  public String getTrueName() {
+    return trueName;
+  }
+
+  public void setTrueName(String trueName) {
+    this.trueName = trueName;
+  }
 
   public Long getId() {
     return id;
