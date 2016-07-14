@@ -42,7 +42,7 @@ public class BankTradeController {
 
   @Value("${buzmgt.file.fileUploadPath}")
   private String fileUploadPath;
-  
+
   private static final String SEARCH_OPERTOR = "sc_";
 
   private static final Logger logger = Logger.getLogger(BankTradeController.class);
@@ -52,23 +52,25 @@ public class BankTradeController {
   @Autowired
   private WaterOrderCashService waterOrderCashService;
 
-  @RequestMapping(value="/toBankTrades")
-  public String toBankTrades(){
+  @RequestMapping(value = "/toBankTrades")
+  public String toBankTrades() {
     return "cash/bank_import";
   }
+
   @RequestMapping(value = "", method = RequestMethod.GET)
   @ResponseBody
-  public String getCashList(HttpServletRequest request,
-      @PageableDefault(page = 0, size = 10, sort = { "createDate","id" }, direction = Direction.DESC) Pageable pageable) {
+  public Page<BankTrade> getCashList(HttpServletRequest request, @PageableDefault(page = 0, size = 10, sort = {
+      "createDate", "id" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<BankTrade> bankTrades = bankTradeService.findAll(searchParams, pageable);
-    String json = "";
-    try {
-      json = JSON.toJSONString(bankTrades, SerializerFeature.DisableCircularReferenceDetect);
-    } catch (Exception e) {
-      logger.error(e.getMessage());
-    }
-    return json;
+    // String json = "";
+    // try {
+    // json = JSON.toJSONString(bankTrades,
+    // SerializerFeature.DisableCircularReferenceDetect);
+    // } catch (Exception e) {
+    // logger.error(e.getMessage());
+    // }
+    return bankTrades;
   }
 
   /**
@@ -79,43 +81,45 @@ public class BankTradeController {
    */
   @RequestMapping(value = "/upload", method = RequestMethod.POST)
   @ResponseBody
-  public JSONObject upload(HttpServletRequest request,@RequestParam String importDate) {
+  public JSONObject upload(HttpServletRequest request, @RequestParam String importDate) {
 
     JSONObject jsonObject = new JSONObject();
-
     MultipartHttpServletRequest mReq;
     MultipartFile file;
     InputStream is;
 
-    // ============查询是否归档+是否已经审核账单。
-    Map<String, Object> searchParams = new HashMap<>();
-    searchParams.put("EQ_importDate", importDate);
-    searchParams.put("EQ_isArchive", 1);
-    List<BankTrade> bankTrades = bankTradeService.findAll(searchParams);
-    searchParams.remove("EQ_isArchive");
-
-    // 已归档
-    if (bankTrades.size() > 0) {
-      jsonObject.put("result", "failure");
-      jsonObject.put("message", "已归档不能导入");
-      return jsonObject;
-    }
-
-    // 已审核
-    searchParams.put("EQ_payStatus", WaterPayStatusEnum.OverPay);
-    List<WaterOrderCash> orderCashs = waterOrderCashService.findAll(searchParams);
-    searchParams.remove("EQ_payStatus");
-    if (orderCashs.size() > 0) {
-      jsonObject.put("result", "failure");
-      jsonObject.put("message", "已审核不能导入");
-      return jsonObject;
-    }
-
     // 原始文件名称
     String fileName;
-
+    
     String fileRealPath = "";
     try {
+
+      // ============查询是否归档+是否已经审核账单。
+      Map<String, Object> searchParams = new HashMap<>();
+      searchParams.put("EQ_importDate", importDate);
+      searchParams.put("EQ_isArchive", 1);
+      List<BankTrade> bankTrades = bankTradeService.findAll(searchParams);
+      searchParams.remove("EQ_isArchive");
+      searchParams.remove("EQ_importDate");
+
+      // 已归档
+      if (bankTrades.size() > 0) {
+        jsonObject.put("result", "failure");
+        jsonObject.put("message", "已归档不能导入");
+        return jsonObject;
+      }
+
+      // 已审核
+      searchParams.put("EQ_createDate", importDate);
+      searchParams.put("EQ_payStatus", WaterPayStatusEnum.OverPay);
+      List<WaterOrderCash> orderCashs = waterOrderCashService.findAll(searchParams);
+      searchParams.remove("EQ_payStatus");
+      if (orderCashs.size() > 0) {
+        jsonObject.put("result", "failure");
+        jsonObject.put("message", "已审核不能导入");
+        return jsonObject;
+      }
+
 
       mReq = (MultipartHttpServletRequest) request;
 
@@ -172,12 +176,13 @@ public class BankTradeController {
     } catch (Exception e) {
       FileUtils.deleteFile(fileRealPath);
       jsonObject.put("result", "failure");
+      jsonObject.put("message", "系统异常，稍后重试！");
       logger.info(e.getMessage());
       return jsonObject;
 
     }
     return jsonObject;
-    
+
   }
 
 }

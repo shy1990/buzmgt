@@ -182,7 +182,7 @@ Handlebars.registerHelper('formDate', function(value) {
 function findBySalesManName() {
 	var salesmanName = $('#salesmanName').val();
 	$.ajax({
-		// url : base+"/bankTrade?sc_EQ_salesManName=" + salesmanName,
+		url : base+"/bankTrade?sc_EQ_cardName=" + salesmanName,
 		type : "GET",
 		dataType : "json",
 		success : function(orderData) {
