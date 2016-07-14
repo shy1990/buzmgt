@@ -36,4 +36,9 @@ public interface MonthTargetService {
 
   public List<MonthTarget> exportExcel(String targetCycle);
 
+
+
+
+  public Page<MonthTarget> findAllBySql(Integer page,Integer size,String truename,String time);
+
 }
