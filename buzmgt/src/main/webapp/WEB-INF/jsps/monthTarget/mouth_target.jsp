@@ -239,7 +239,7 @@
         <td>
             {{region.parent.parent.parent.parent.name}}{{region.parent.parent.parent.name}}{{region.parent.parent.name}}{{region.name}}
         </td>
-        <td>{{salesman.truename}}</td>
+        <td>{{trueName}}</td>
         <td>{{matureAll}}</td>
         <td>{{order}} / {{orderNum}}</td>
         <td>{{merchant}} / {{merchantNum}}</td>
@@ -336,7 +336,7 @@
         //查询条件
         searchData: {
             page: 0,
-            size: 20,
+            size: 3,
             time: '',
             name: ''
         },

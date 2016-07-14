@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.monthTarget.service;
 
 import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
+import com.wangge.buzmgt.monthTarget.entity.MothTargetData;
 import com.wangge.buzmgt.monthTarget.repository.MonthTargetRepository;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
@@ -17,6 +18,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.SQLQuery;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -29,10 +32,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class MonthTargetServiceImpl implements MonthTargetService {
@@ -508,6 +508,172 @@ public class MonthTargetServiceImpl implements MonthTargetService {
 
 
         return list;
+    }
+
+    @Override
+    public Page<MonthTarget> findAllBySql(Integer page,Integer size,String truename, String time) {
+        Manager m = getManager();
+        String managerRegion = m.getRegion().getId();
+       String sql = "\n" +
+               "SELECT tg.region_id,\n" +
+               "  tg.manager_region,\n" +
+               " s.truename ,\n" +
+               "  tg.order_num,\n" +
+               "  tg.merchant_num,\n" +
+               "  tg.active_num,\n" +
+               "  tg.mature_num,\n" +
+               "  NVL(ab.order_num1,'0') order_num_a ,\n" +
+               "  NVL(q.merchant_num1,'0') merchant_num_a,\n" +
+               "  NVL(ac.active_num1,'0') active_num_a,\n" +
+               "  NVL(cs.mature_num1,'0') mature_num_a,\n" +
+               "  NVL(g.zhuce,'0') zhuce_a, \n" +
+               "  tg.target_cycle\n" +
+               "FROM sys_month_target tg\n" +
+               "LEFT JOIN sys_salesman s\n" +
+               "ON tg.user_id = s.user_id\n" +
+               "LEFT JOIN \n" +
+               "  (SELECT m.parentid kk,\n" +
+               "    SUM(m.NUMS) order_num1\n" +
+               "  FROM MOTHTARGETDATA m\n" +
+               "  WHERE TO_CHAR(CREATETIME,'YYYY-MM') LIKE ?\n" +
+               "  GROUP BY m.parentid\n" +
+               "  ) ab\n" +
+               "ON ab.kk = tg.region_id\n" +
+               "LEFT JOIN \n" +
+               "  (SELECT active.parentid,\n" +
+               "    COUNT(1) active_num1\n" +
+               "  FROM\n" +
+               "    (SELECT COUNT(t.shopname),\n" +
+               "      t.parentid\n" +
+               "    FROM\n" +
+               "      (SELECT m.shopname,\n" +
+               "        m.parentid,\n" +
+               "    \n" +
+               "        COUNT(TO_CHAR(CREATETIME,'YYYY-MM-DD'))\n" +
+               "      FROM mothtargetdata m\n" +
+               "      WHERE TO_CHAR(CREATETIME,'YYYY-MM') LIKE ?\n" +
+               " \n" +
+               "      GROUP BY TO_CHAR(CREATETIME,'YYYY-MM-DD'),\n" +
+               "        m.shopname,\n" +
+               "        m.parentid\n" +
+               "\n" +
+               "      ) t\n" +
+               "    GROUP BY t.shopname,\n" +
+               "      t.parentid\n" +
+               "    HAVING COUNT(t.shopname)>=2\n" +
+               "    ) active\n" +
+               "  GROUP BY active.parentid\n" +
+               "  ) ac\n" +
+               "ON ac.parentid= tg.region_id\n" +
+               "LEFT JOIN \n" +
+               "  (SELECT active.parentid,\n" +
+               "    COUNT(1) mature_num1\n" +
+               "  FROM\n" +
+               "    (SELECT COUNT(t.shopname),\n" +
+               "      t.parentid\n" +
+               "    FROM\n" +
+               "      (SELECT m.shopname,\n" +
+               "        m.parentid,\n" +
+               "        COUNT(TO_CHAR(CREATETIME,'YYYY-MM-DD'))\n" +
+               "      FROM mothtargetdata m\n" +
+               "      WHERE TO_CHAR(CREATETIME,'YYYY-MM') LIKE ?\n" +
+               "      GROUP BY TO_CHAR(CREATETIME,'YYYY-MM-DD'),\n" +
+               "        m.shopname,\n" +
+               "        m.parentid\n" +
+               "      ) t\n" +
+               "    GROUP BY t.shopname,\n" +
+               "      t.parentid\n" +
+               "    HAVING COUNT(t.shopname)>=5\n" +
+               "    ) active\n" +
+               "\n" +
+               "  GROUP BY active.parentid\n" +
+               "  ) cs\n" +
+               "ON cs.parentid= tg.region_id\n" +
+               "LEFT JOIN \n" +
+               "  (SELECT p.parentid,\n" +
+               "    COUNT(1) merchant_num1\n" +
+               "  FROM\n" +
+               "    (SELECT m.parentid,\n" +
+               "      m.shopname,\n" +
+               "      m.phonenum\n" +
+               "    FROM mothtargetdata m\n" +
+               "    WHERE TO_CHAR(createtime,'yyyy-mm') LIKE ? \n" +
+               "   \n" +
+               "    GROUP BY m.parentid,\n" +
+               "      m.shopname,\n" +
+               "      m.phonenum\n" +
+               "    ) p\n" +
+               "   \n" +
+               "  GROUP BY p.parentid\n" +
+               "  ) q\n" +
+               "ON q.parentid= tg.region_id\n" +
+               "LEFT JOIN\n" +
+               "  (SELECT pr_id,\n" +
+               "    COUNT(1) zhuce\n" +
+               "  FROM\n" +
+               "    (SELECT r.parent_id pr_id\n" +
+               "    FROM sys_registdata s\n" +
+               "    LEFT JOIN sys_region r\n" +
+               "    ON s.region_id = r.region_id\n" +
+               "    )\n" +
+               "  GROUP BY pr_id\n" +
+               "  ) g ON g.pr_id = tg.region_id\n" +
+               "WHERE tg.target_cycle LIKE ? \n" +
+               " and s.truename like ? ";
+        logger.info("managerRegion:  "+managerRegion);
+
+//        if(truename != null && !"".equals(truename) ){
+//            sql += " and tg.truename like ?  ";
+//
+//        }
+        Page<MonthTarget> pageResult = null;
+
+        Query query = entityManager.createNativeQuery(sql);
+        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
+        for(int i=0;i<=4;i++){
+                sqlQuery.setParameter(i,"%"+time+"%");
+        }
+        int a = 5;
+        if(truename != null && !"".equals(truename)) {
+            sqlQuery.setParameter(a,"%"+truename+"%");
+        }
+        if(truename == null || "".equals(truename)) {
+            sqlQuery.setParameter(a,"%%");
+        }
+
+        if(!"0".equals(managerRegion)){
+            sql +=  " and tg.manager_region = ? ";
+            sqlQuery.setParameter(a+1,"%"+managerRegion+"%");
+        }
+
+        int count = sqlQuery.list().size();//分页查询出总条数(不是分页之后的)
+        sqlQuery.setFirstResult(page * size);//设置开始位置
+        sqlQuery.setMaxResults(size);//每页显示条数
+        List<MonthTarget> list = new ArrayList<>();
+        List<Object[]> ret = sqlQuery.list();
+        logger.info(ret);
+        if(CollectionUtils.isNotEmpty(ret)){
+            ret.forEach(o -> {
+                MonthTarget monthTarget = new MonthTarget();
+                Region region = regionService.getRegionById((String) o[0]);
+                monthTarget.setRegion(region);//业务员区域
+                monthTarget.setTrueName((String) o[2]);//姓名
+                monthTarget.setOrderNum(((BigDecimal) o[3]).intValue());//指标提货量
+                monthTarget.setMerchantNum(((BigDecimal)o[4]).intValue());//指标提货商家
+                monthTarget.setActiveNum(((BigDecimal) o[5]).intValue());//指标活跃商家
+                monthTarget.setMatureNum(((BigDecimal) o[6]).intValue());//指标成熟商家
+                monthTarget.setOrder(((BigDecimal) o[7]).intValue());//实际提货量
+                monthTarget.setMerchant(((BigDecimal)o[8]).intValue());//实际提货商家
+                monthTarget.setActive(((BigDecimal) o[9]).intValue());//实际活跃商家
+                monthTarget.setMature(((BigDecimal) o[10]).intValue());//实际成熟商家
+                monthTarget.setMatureAll(((BigDecimal) o[11]).intValue()); //总注册商家
+                monthTarget.setTargetCycle((String) o[12]);//指标时间
+                list.add(monthTarget);
+            });
+        }
+        pageResult = new PageImpl<MonthTarget>(list, new PageRequest(page, size), count);
+
+        return pageResult;
     }
 
 

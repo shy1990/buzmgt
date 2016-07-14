@@ -194,7 +194,7 @@ public class MonthTargetController {
    * 根据时间与区域经理id查询 全部的业务员信息
    * @return
    */
-  @RequestMapping(value = "/monthTargets",method = RequestMethod.GET)
+  @RequestMapping(value = "/ceshi",method = RequestMethod.GET)
 //  @ResponseBody
   @JSONFormat(filterField = {"SalesMan.user","region.children"})
   public  Page<MonthTarget> findByTargetCycleAndManagerId(@RequestParam String time,
@@ -208,6 +208,40 @@ public class MonthTargetController {
 
     return requestPage;
   }
+
+
+  @RequestMapping(value = "/monthTargets",method = RequestMethod.GET)
+//  @ResponseBody
+  @JSONFormat(filterField = {"SalesMan.user","region.children"})
+  public Page<MonthTarget> listAll(@RequestParam String time,
+                                   @RequestParam (value = "name", defaultValue = "")String name,
+                                   @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                   @RequestParam(value = "size", defaultValue = "20") Integer size
+                                   ){
+    logger.info("*******************************************");
+//    time = "2016-07";
+//    page = 0;
+//    size = 20;
+
+    Page<MonthTarget> requestPage = mtService.findAllBySql(page,size,name,time);
+
+
+    return requestPage;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @RequestMapping(value = "/export")
   public void exportExcel(HttpServletRequest request,HttpServletResponse response,String time){
