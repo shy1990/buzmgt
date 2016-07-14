@@ -113,6 +113,7 @@ public class BankTradeController {
       searchParams.put("EQ_createDate", importDate);
       searchParams.put("EQ_payStatus", WaterPayStatusEnum.OverPay);
       List<WaterOrderCash> orderCashs = waterOrderCashService.findAll(searchParams);
+      searchParams.remove("EQ_importDate");
       searchParams.remove("EQ_payStatus");
       if (orderCashs.size() > 0) {
         jsonObject.put("result", "failure");
@@ -159,7 +160,9 @@ public class BankTradeController {
         Map<Integer, String> excelContent = ExcelImport.readExcelContent(fileRealPath);
 
         // ============读取文件完成后，导入到数据库=============
+        searchParams.put("EQ_importDate", importDate);
         bankTrades = bankTradeService.findAll(searchParams);
+        searchParams.remove("EQ_importDate");
         if (bankTrades.size() > 0) {
           bankTradeService.delete(bankTrades);
         }
