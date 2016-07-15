@@ -52,7 +52,7 @@ function getSearchParam(page1) {
  * @Param data
  *            得到带分页信息的obj对象
  */
-var Customtype = [ "zc", "sh", "kf","bf"];
+var Customtype = [ "zc", "sh", "kf","bf","xm"];
 function createTaskTable(data) {
 	Handlebars.registerHelper("qfType", function(type) {
 		return Customtype[type];

@@ -42,12 +42,8 @@ public class HomeController {
     } else {
       List<Menu> menus = resourceService
           .getMenusByUsername(((User) SecurityUtils.getSubject().getPrincipal()).getUsername());
-      MenuComparator comparator = new MenuComparator();
-      Collections.sort(menus, comparator);
       req.getSession().setAttribute("menus", menus);
     }
-    // model.addAttribute("menus", menus);
-    // return "left_menu";
     return "home";
   }
   
@@ -57,15 +53,4 @@ public class HomeController {
     this.resourceService = resourceService;
   }
   
-  public class MenuComparator implements Comparator<Menu> {
-    
-    @Override
-    public int compare(Menu arg0, Menu arg1) {
-      if (arg0.getId() != arg1.getId()) {
-        return (int) (arg0.getId() - arg1.getId());
-      }
-      return 0;
-    }
-    
-  }
 }
