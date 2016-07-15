@@ -4,16 +4,14 @@ package com.wangge.buzmgt.teammember.web;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.hibernate.annotations.Parameter;
-import org.jboss.logging.annotations.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -405,18 +403,37 @@ public class TeamMembersController {
         }
       }
     }else{
-      if(umList.size() > 0){
-          for(int j=0;j<umList.size();j++){
-            userId += num[umList.size()]+id+time+"0";
-            break;
-          }
-      }else{
-        for(int j=0;j<num.length;j++){
-          userId += num[0]+id+time+"0";
-          break;
-        }
-      }
+//      if(umList.size() > 0){
+//          for(int j=0;j<umList.size();j++){
+//            userId += num[umList.size()]+id+time+"0";
+//            break;
+//          }
+//      }else{
+//        for(int j=0;j<num.length;j++){
+//          userId += num[0]+id+time+"0";
+//          break;
+//        }
+    	
+//      }
+    	String  str=getRandomString(4);
+    	userId+="M"+id+str+"0";
     }
     return userId;
   }
+  
+  /**
+   * 随机字符串
+   * @param length
+   * @return
+   */
+  public static String getRandomString(int length) {   
+      StringBuffer buffer = new StringBuffer("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");   
+      StringBuffer sb = new StringBuffer();   
+      Random random = new Random();   
+      int range = buffer.length();   
+      for (int i = 0; i < length; i ++) {   
+          sb.append(buffer.charAt(random.nextInt(range)));   
+      }   
+      return sb.toString();   
+  }  
 }
