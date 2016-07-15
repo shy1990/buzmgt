@@ -21,6 +21,7 @@ public class ManagerServiceImpl implements ManagerService {
 	private LogService logService;
 	
 	@Override
+	@Transactional
 	public void addManager(Manager m) {
 		m = managerRepository.save(m);
 		logService.log(null, m, EventType.SAVE);
