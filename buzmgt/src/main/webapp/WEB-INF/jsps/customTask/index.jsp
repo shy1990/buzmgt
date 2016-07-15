@@ -20,7 +20,7 @@
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link rel="stylesheet" type="text/css" href="/static/customTask/type.css">
 	<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
 
@@ -57,14 +57,14 @@
 
 /* 省略号*/
 .ssh {
-	width: 200px; /*容器的基本定义*/
+	
 	height: auto;
 }
 
 /* IE下的样式 */
 p span {
 	display: block;
-	width: 400px; /*对宽度的定义,根据情况修改*/
+	width: 300px; /*对宽度的定义,根据情况修改*/
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
