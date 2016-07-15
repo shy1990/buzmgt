@@ -79,6 +79,7 @@
 									<option value="1">售后处理</option>
 									<option value="2">扣罚通知</option>
 									<option value="3">客户拜访</option>
+									<option value="4">小米分销</option>
 								</select>
 							</div>
 						</div>
