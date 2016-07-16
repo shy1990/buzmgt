@@ -43,7 +43,6 @@ public class CustomTask {
 	private String content;
 	// 扣罚
 	private int punishCount;
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime = new Date();
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<SalesMan> salesmanSet;
