@@ -195,9 +195,12 @@ public class ReceiptRemarkController {
    */
   @RequestMapping("/export")
   public void excelExport(HttpServletRequest request, HttpServletResponse response) {
-    String[] gridTitles = { "业务名称","店铺名称","订单号", "金额","理由","报备时间","付款时间"};
-    String[] coloumsKey = { "salesMan.truename","shopName", "orderno", "order.orderPrice",
-          "remark","createTime", "order.yewuSignforTime"};
+    String[] gridTitles = { "业务名称","店铺名称","订单号","理由","报备时间"};
+    String[] coloumsKey = { "salesMan.truename","shopName", "orderno",
+          "remark","createTime"};
+//    String[] gridTitles = { "业务名称","店铺名称","订单号", "金额","理由","报备时间","付款时间"};
+//    String[] coloumsKey = { "salesMan.truename","shopName", "orderno", "order.orderPrice",
+//        "remark","createTime", "order.yewuSignforTime"};
 
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     String type=(String) request.getParameter("type");
