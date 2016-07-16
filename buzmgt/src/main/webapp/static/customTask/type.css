@@ -37,29 +37,34 @@ body{
     padding: 2px 10px;
     background: url(../customTask/image/baifang.png) no-repeat;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .icon-zc{
     padding: 2px 10px;
     background: url(../customTask/image/zhuc.png) no-repeat;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .icon-sh{
     padding: 2px 10px;
     background: url(../customTask/image/sh.png) no-repeat;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 14px;
 }
 .icon-kf{
     padding: 2px 10px;
     background: url(../customTask/image/kf.png) no-repeat;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 14px;
 }
-
+.icon-xm{
+    padding: 2px 10px;
+    background: url(../customTask/image/xm.png) no-repeat;
+    color: #ffffff;
+    font-size: 14px;
+}
 
 .text-orage{
     color: #edab6a;

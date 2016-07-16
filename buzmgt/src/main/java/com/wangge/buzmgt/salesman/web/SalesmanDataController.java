@@ -3,6 +3,7 @@ package com.wangge.buzmgt.salesman.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wangge.buzmgt.salesman.entity.ExcelData;
 import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,12 +90,12 @@ public class SalesmanDataController {
      */
     @RequestMapping(value = "export")
     public void exportExcel(HttpServletRequest request, HttpServletResponse response){
-        List<SalesmanData> list = service.findAll();
+        List<ExcelData> list = service.findAll();
 //        list.forEach(salesmanData -> {
 //            System.out.println(salesmanData);
 //        });
-        String[] title_ = new String[]{ "业务ID","姓名","银行卡"};
-        String[] coloumsKey_ = new String[]{"userId","name","card.bankCard.bankName"};
+        String[] title_ = new String[]{ "业务ID","姓名","银行卡号","开户行"};
+        String[] coloumsKey_ = new String[]{"userId","name","cardNumber","bankName"};
         ExcelExport.doExcelExport("业务员基础数据.xls",list,title_,coloumsKey_,request,response);
     }
 

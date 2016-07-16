@@ -113,7 +113,7 @@ public class CustomTaskController {
 		model.addAttribute("task", customTask);
 		model.addAttribute("taskTime",DateUtil.date2String(customTask.getCreateTime(), "MM-dd HH:mm"));
 		customServ.getSaleSet(customTask, model);
-		model.addAttribute("taskType", ImplCustomTaskServe.TASKTYPEARR[customTask.getType()]);
+		model.addAttribute("taskType", ImplCustomTaskServe.TASKTYPEDETAILARR[customTask.getType()]);
 		return "customTask/detail";
 	}
 

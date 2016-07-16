@@ -17,7 +17,7 @@
     <title>业务员基础表</title>
 
     <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/static/bootStrapPager/css/page.css" />
+    <link rel="stylesheet" type="text/css" href="/static/bootStrapPager/css/page.css"/>
     <link href="static/bootstrap/css/bootstrap-switch.min.css"
           rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="static/css/common.css">
@@ -76,8 +76,6 @@
                 <tbody id="tbody">
 
 
-
-
                 </tbody>
             </table>
 
@@ -108,7 +106,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label text-dk">姓 &nbsp; &nbsp; 名：</label>
                                 <div class="col-sm-8">
-                                    <p class="form-control-static text-bg" id="name1"> </p>
+                                    <p class="form-control-static text-bg" id="name1"></p>
                                 </div>
                             </div>
 
@@ -127,10 +125,12 @@
                             </div>
 
                             <%--<div class="btn-qx">--%>
-                                <%--<a id="sure_delete" href="javascript:void(0);" class="btn btn-danger btn-d">删除</a>--%>
+                            <%--<a id="sure_delete" href="javascript:void(0);" class="btn btn-danger btn-d">删除</a>--%>
                             <%--</div>--%>
                             <div class="btn-qx">
-                                <button type="submit" id="sure_delete" data-dismiss="modal" class="btn btn-danger btn-d">删除</button>
+                                <button type="submit" id="sure_delete" data-dismiss="modal"
+                                        class="btn btn-danger btn-d">删除
+                                </button>
                             </div>
 
                             <div class="btn-dd">
@@ -219,6 +219,8 @@
                                         <option>莱商银行</option>
                                         <option>亚细亚银行</option>
                                         <option>农村信用社</option>
+                                        <option>交通银行</option>
+                                        <option>其他</option>
                                     </select>
                                         <!-- /btn-group -->
                                     </div>
@@ -227,12 +229,14 @@
 
                             <div class="form-group">
                                 <%--<div class="col-sm-offset-4 col-sm-4 ">--%>
-                                    <%--<a herf="javascript:return 0;"--%>
-                                       <%--onclick="addSalesmanData(this)"--%>
-                                       <%--class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>--%>
+                                <%--<a herf="javascript:return 0;"--%>
+                                <%--onclick="addSalesmanData(this)"--%>
+                                <%--class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>--%>
                                 <%--</div>--%>
                                 <div class="col-sm-offset-4 col-sm-4">
-                                    <button type="submit"  onclick="addSalesmanData(this)" data-dismiss="modal" class="Zdy_add  col-sm-12 btn btn-primary">确定</button>
+                                    <button type="submit" onclick="addSalesmanData(this)" data-dismiss="modal"
+                                            class="Zdy_add  col-sm-12 btn btn-primary">确定
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -265,15 +269,17 @@
                                                 aria-describedby="basic-addon1">
                                             <option></option>
                                             <option>中国银行</option>
-                                        		<option>农业银行</option>
-                                        		<option>工商银行</option>
-                                        		<option>建设银行</option>
-                                        		<option>邮政银行</option>
-                                       		 	<option>中信银行</option>
-                                        		<option>民生银行</option>
-                                        		<option>莱商银行</option>
-                                       	 		<option>亚细亚银行</option>
-                                        		<option>农村信用社</option>
+                                            <option>农业银行</option>
+                                            <option>工商银行</option>
+                                            <option>建设银行</option>
+                                            <option>邮政银行</option>
+                                            <option>中信银行</option>
+                                            <option>民生银行</option>
+                                            <option>莱商银行</option>
+                                            <option>亚细亚银行</option>
+                                            <option>农村信用社</option>
+                                            <option>交通银行</option>
+                                            <option>其他</option>
                                         </select>
                                         <!-- /btn-group -->
                                     </div>
@@ -294,13 +300,15 @@
 
                             <div class="form-group">
                                 <%--<div class="col-sm-offset-4 col-sm-4 ">--%>
-                                    <%--<a herf="javascript:return 0;" onclick="sure_add_card(this)"--%>
-                                       <%--class="Zdy_add  col-sm-12 btn btn-primary">确定--%>
-                                    <%--</a>--%>
+                                <%--<a herf="javascript:return 0;" onclick="sure_add_card(this)"--%>
+                                <%--class="Zdy_add  col-sm-12 btn btn-primary">确定--%>
+                                <%--</a>--%>
                                 <%--</div>--%>
-                                    <div class="col-sm-offset-4 col-sm-4 ">
-                                        <button type="submit" onclick="sure_add_card(this)" data-dismiss="modal" class="Zdy_add  col-sm-12 btn btn-primary">确定</button>
-                                    </div>
+                                <div class="col-sm-offset-4 col-sm-4 ">
+                                    <button type="submit" onclick="sure_add_card(this)" data-dismiss="modal"
+                                            class="Zdy_add  col-sm-12 btn btn-primary">确定
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -323,7 +331,7 @@
                     <div class="container-fluid">
                         <form id="modify_form" class="form-horizontal">
                             <input name="id" id="modify_id" hidden/>
-                            <input name="bankId"id="modify_bankId" hidden/>
+                            <input name="bankId" id="modify_bankId" hidden/>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">姓 &nbsp;名：</label>
                                 <div class="col-sm-7">
@@ -359,7 +367,15 @@
                                             <option>中国银行</option>
                                             <option>农业银行</option>
                                             <option>工商银行</option>
+                                            <option>建设银行</option>
+                                            <option>邮政银行</option>
+                                            <option>中信银行</option>
+                                            <option>民生银行</option>
+                                            <option>莱商银行</option>
                                             <option>亚细亚银行</option>
+                                            <option>农村信用社</option>
+                                            <option>交通银行</option>
+                                            <option>其他</option>
                                         </select>
                                         <!-- /btn-group -->
                                     </div>
@@ -368,13 +384,15 @@
 
                             <div class="form-group">
                                 <%--<div class="col-sm-offset-4 col-sm-4 ">--%>
-                                    <%--<a herf="javascript:return 0;" onclick="modify_sure()"--%>
-                                       <%--class="Zdy_add  col-sm-12 btn btn-primary">确定--%>
-                                    <%--</a>--%>
+                                <%--<a herf="javascript:return 0;" onclick="modify_sure()"--%>
+                                <%--class="Zdy_add  col-sm-12 btn btn-primary">确定--%>
+                                <%--</a>--%>
                                 <%--</div>--%>
-                                    <div class="col-sm-offset-4 col-sm-4 ">
-                                        <button type="submit" onclick="modify_sure()" data-dismiss="modal" class="Zdy_add  col-sm-12 btn btn-primary">确定</button>
-                                    </div>
+                                <div class="col-sm-offset-4 col-sm-4 ">
+                                    <button type="submit" onclick="modify_sure()" data-dismiss="modal"
+                                            class="Zdy_add  col-sm-12 btn btn-primary">确定
+                                    </button>
+                                </div>
 
                             </div>
                         </form>
@@ -419,10 +437,13 @@
                 <span hidden>{{../id}}</span>
                 <span hidden>{{bankId}}</span>
                 <button class="btn btn-green btn-sm btn-w" data-toggle="modal"
-                        data-target="" onclick="modify('{{../id}}','{{bankId}}','{{../name}}','{{cardNumber}}','{{bankName}}')">修改
+                        data-target=""
+                        onclick="modify('{{../id}}','{{bankId}}','{{../name}}','{{cardNumber}}','{{bankName}}')">修改
                 </button>
                 <button class="btn btn-warning btn-sm" data-toggle="modal"
-                        data-target="" onclick="deleteSalesmanData('{{../id}}','{{bankId}}','{{../name}}','{{cardNumber}}','{{bankName}}')">删除
+                        data-target=""
+                        onclick="deleteSalesmanData('{{../id}}','{{bankId}}','{{../name}}','{{cardNumber}}','{{bankName}}')">
+                    删除
                 </button>
             </p>
             {{/each}}
