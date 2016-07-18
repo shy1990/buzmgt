@@ -215,7 +215,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
     @Override
     public String save(MonthTarget mt, Region region) {
         MonthTarget m = mtr.findByRegion(region);
-        SalesMan sm = smService.findSaleamanByRegionId(region.getId());
+        SalesMan sm = smService.findByRegionAndisPrimaryAccount(region);
         if(ObjectUtils.isEmpty(m)){
             mt.setSalesman(sm);
             mt.setRegion(sm.getRegion());
