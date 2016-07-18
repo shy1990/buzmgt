@@ -37,9 +37,9 @@ function goSearch(){
 		dataType : "json",
 		success : function(map) {
 			var name = " 台";
-			$("#orderAvg").text(map.one + name);
-			$("#orderLast").text(map.three + name);
-			var ad = (map.one);
+			$("#orderAvg").text(map.three + name);
+			$("#orderLast").text(map.one + name);
+			var ad = map.three;
 			$("#adviseOrder").text(ad + name);
 		},
 		error : function() {
@@ -56,19 +56,34 @@ function goSearch(){
 		dataType : "json",
 		success : function(map) {
 			var name = " 家";
-			$("#merAvg").text(map.merone + name);
-			$("#merLast").text(map.merthree + name);
-			var ad = (map.merone + map.merthree) / 2;
+			$("#merAvg").text(map.merthree + name);
+			$("#merLast").text(map.merone + name);
+			var ad = map.merthree ;
 			$("#merAd").text(ad + name);
+		},
+		error : function() {
+			alert("系统异常，请稍后重试！");
+		}
+	});
 
-			$("#acAvg").text(map.activeone + name);
-			$("#acLast").text(map.activethree + name);
-			ad = (map.activeone + map.activethree) / 2;
+	$.ajax({
+		url : base + "monthTarget/merchant",
+		data : {
+			"regionId" : regionId
+		},
+		type : "GET",
+		dataType : "json",
+		success : function(map) {
+			var name = " 家";
+
+			$("#acAvg").text(map.activethree + name);
+			$("#acLast").text(map.activeone + name);
+			var ad = map.activethree ;
 			$("#acAd").text(ad + name);
 
-			$("#maAvg").text(map.matureone + name);
-			$("#maLast").text(map.maturethree + name);
-			ad = (map.matureone + map.maturethree) / 2;
+			$("#maAvg").text(map.maturethree + name);
+			$("#maLast").text(map.matureone + name);
+			ad = map.maturethree ;
 			$("#maAd").text(ad + name);
 		},
 		error : function() {

@@ -1,11 +1,10 @@
 package com.wangge.buzmgt.monthTarget.service;
 
+import com.wangge.buzmgt.assess.service.RegistDataService;
 import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
-import com.wangge.buzmgt.monthTarget.entity.MothTargetData;
 import com.wangge.buzmgt.monthTarget.repository.MonthTargetRepository;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.saojie.service.SaojieDataService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
@@ -24,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -46,7 +44,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
     @Resource
     private SalesManService smService;
     @Resource
-    private SaojieDataService saojieDataService;
+    private RegistDataService registDataService;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -72,7 +70,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
                 "and o.createtime between (select last_day(add_months(sysdate,-2))+1  from dual)\n" +
                 "and (select last_day(add_months(sysdate,-1))  from dual) and reg.parent_id=?\n" +
                 "union all\n" +
-                "select 'three' ms,nvl(sum(oi.nums),0) from sys_registdata r inner join sys_region reg on r.region_id=reg.region_id inner join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
+                "select 'three' ms,nvl(sum(oi.nums)/3,0) from sys_registdata r inner join sys_region reg on r.region_id=reg.region_id inner join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
                 "inner join sjzaixian.sj_tb_order_items oi on o.id=oi.order_id where o.pay_status='1' and oi.target_type='sku'\n" +
                 "and o.createtime between (select last_day(add_months(sysdate,-4))+1  from dual)\n" +
                 "and (select last_day(add_months(sysdate,-1))  from dual) and reg.parent_id=?";
@@ -88,7 +86,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         Map<String, Object> map = new HashMap<String, Object>();
         if (CollectionUtils.isNotEmpty(ret)) {
             ret.forEach(o -> {
-                map.put((String) o[0], (BigDecimal) o[1]);
+                map.put((String)o[0], ((BigDecimal)o[1]).intValue());
             });
         }
         return map;
@@ -97,7 +95,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
 
     @Override
     public Map<String, Object> getSeller(String regionId) {
-        String sql = "select 'one',count(*)\n" +
+        String sql = "select 'one',count(1)\n" +
                 "  from (select MT.MEMBERID, count(MT.ORDERID) total\n" +
                 "          from MOTHTARGETDATA MT\n" +
                 "         where MT.createtime between\n" +
@@ -107,7 +105,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
                 "         Group by MT.MEMBERID)\n" +
                 " where total >= ?\n" +
                 "union all\n" +
-                "select 'three',count(*)\n" +
+                "select 'three',count(1)/3\n" +
                 "  from (select MT.MEMBERID, count(MT.ORDERID) total\n" +
                 "          from MOTHTARGETDATA MT\n" +
                 "         where MT.createtime between\n" +
@@ -126,14 +124,8 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         sqlQuery.setParameter(2, regionId);
         sqlQuery.setParameter(1, 1);
         sqlQuery.setParameter(3, 1);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map = getMap(sqlQuery, map, 1);
-        sqlQuery.setParameter(1, 2);
-        sqlQuery.setParameter(3, 2);
-        map = getMap(sqlQuery, map, 2);
-        sqlQuery.setParameter(1, 5);
-        sqlQuery.setParameter(3, 5);
-        map = getMap(sqlQuery, map, 5);
+        Map<String,Object> map = new HashMap<String,Object>();
+        map = getMap(sqlQuery,map,1);
         return map;
     }
 
@@ -142,29 +134,89 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         if (CollectionUtils.isNotEmpty(ret)) {
             if (term == 1) {
                 ret.forEach(o -> {
-                    map.put("mer" + (String) o[0], (BigDecimal) o[1]);
+                    map.put("mer" + (String)o[0], ((BigDecimal)o[1]).intValue());
                 });
             }
             if (term == 2) {
                 ret.forEach(o -> {
-                    map.put("active" + (String) o[0], (BigDecimal) o[1]);
+                    map.put("active" + (String)o[0], ((BigDecimal)o[1]).intValue());
                 });
             }
             if (term == 5) {
                 ret.forEach(o -> {
-                    map.put("mature" + (String) o[0], (BigDecimal) o[1]);
+                    map.put("mature" + (String)o[0], ((BigDecimal)o[1]).intValue());
                 });
             }
         }
         return map;
     }
 
+    @Override
+    public Map<String, Object> getMerchant(String regionId) {
+        String sql = "SELECT 'one', COUNT(1) active_num1\n" +
+                "  FROM (SELECT COUNT(t.MEMBERID), t.parentid\n" +
+                "          FROM (SELECT m.MEMBERID,\n" +
+                "                       m.parentid,\n" +
+                "                       COUNT(TO_CHAR(m.CREATETIME, 'YYYY-MM-DD'))\n" +
+                "                  FROM mothtargetdata m\n" +
+                "                 WHERE TO_CHAR(m.CREATETIME, 'YYYY/MM/DD') between\n" +
+                "                       (select to_char(add_months(last_day(sysdate), -2) + 1,\n" +
+                "                                       'yyyy/mm/dd')\n" +
+                "                          from dual) and\n" +
+                "                       (select to_char(add_months(last_day(sysdate), -1),\n" +
+                "                                       'yyyy/mm/dd')\n" +
+                "                          from dual)\n" +
+                "                 GROUP BY TO_CHAR(m.CREATETIME, 'YYYY-MM-DD'),\n" +
+                "                          m.MEMBERID,\n" +
+                "                          m.parentid\n" +
+                "                ) t\n" +
+                "         GROUP BY t.MEMBERID, t.parentid\n" +
+                "        HAVING COUNT(t.MEMBERID) >= ?) active\n" +
+                " where active.parentid = ?\n" +
+                " union all\n" +
+                "SELECT 'three', COUNT(1)/3 active_num1\n" +
+                "  FROM (SELECT COUNT(t.MEMBERID), t.parentid\n" +
+                "          FROM (SELECT m.MEMBERID,\n" +
+                "                       m.parentid,\n" +
+                "                       COUNT(TO_CHAR(m.CREATETIME, 'YYYY-MM-DD'))\n" +
+                "                  FROM mothtargetdata m\n" +
+                "                 WHERE TO_CHAR(m.CREATETIME, 'YYYY/MM/DD') between\n" +
+                "                       (select to_char(add_months(last_day(sysdate), -4) + 1,\n" +
+                "                                       'yyyy/mm/dd')\n" +
+                "                          from dual) and\n" +
+                "                       (select to_char(add_months(last_day(sysdate), -1),\n" +
+                "                                       'yyyy/mm/dd')\n" +
+                "                          from dual)\n" +
+                "                 GROUP BY TO_CHAR(m.CREATETIME, 'YYYY-MM-DD'),\n" +
+                "                          m.MEMBERID,\n" +
+                "                          m.parentid\n" +
+                "                ) t\n" +
+                "         GROUP BY t.MEMBERID, t.parentid\n" +
+                "        HAVING COUNT(t.MEMBERID) >= ?) active\n" +
+                " where active.parentid = ?";
+
+        Query query = null;
+        SQLQuery sqlQuery = null;
+        query = entityManager.createNativeQuery(sql);
+        sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
+        int a = 0;
+        sqlQuery.setParameter(1, regionId);//业务参数
+        sqlQuery.setParameter(3, regionId);
+        Map<String,Object> map = new HashMap<String,Object>();
+        sqlQuery.setParameter(a, 2);
+        sqlQuery.setParameter(2, 2);
+        map = getMap(sqlQuery,map,2);
+        sqlQuery.setParameter(a, 5);
+        sqlQuery.setParameter(2, 5);
+        map = getMap(sqlQuery,map,5);
+        return map;
+    }
 
     @Override
     public String save(MonthTarget mt, Region region) {
         MonthTarget m = mtr.findByRegion(region);
-        SalesMan sm = smService.findByRegion(region);
-        if (ObjectUtils.isEmpty(m)) {
+        SalesMan sm = smService.findSaleamanByRegionId(region.getId());
+        if(ObjectUtils.isEmpty(m)){
             mt.setSalesman(sm);
             mt.setRegion(sm.getRegion());
             Manager manager = getManager();
@@ -214,7 +266,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         List<MonthTarget> list = page.getContent();
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(m -> {
-                int count = saojieDataService.getCountByUserId(m.getSalesman().getId());
+                int count = registDataService.findCountByRegionIdlike(m.getRegion().getId());
                 m.setMatureAll(count);
                 if (m.getPublishStatus() == 0) {
                     m.setView(true);

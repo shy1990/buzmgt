@@ -1,18 +1,14 @@
 package com.wangge.buzmgt.monthTarget.web;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
+import com.wangge.buzmgt.monthTarget.service.MonthTargetService;
+import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 import com.wangge.json.JSONFormat;
 import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,14 +19,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.wangge.buzmgt.monthTarget.service.MonthTargetService;
-import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
-import com.wangge.buzmgt.teammember.service.SalesManService;
-import com.wangge.buzmgt.util.JsonResponse;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RequestMapping("/monthTarget")
 @Controller
@@ -46,7 +40,7 @@ public class MonthTargetController {
   /**
    * 跳转到月指标
    * @return
-     */
+   */
   @RequestMapping("/monthTarget")
   public String toMonthTarget(){
 
@@ -56,7 +50,7 @@ public class MonthTargetController {
   /**
    * 跳转到月指标设置
    * @return
-     */
+   */
   @RequestMapping("/monthSetting")
   public String toMonthSetting(){
 
@@ -68,8 +62,8 @@ public class MonthTargetController {
    * @param flag
    * @param id
    * @param model
-     * @return
-     */
+   * @return
+   */
   @RequestMapping(value = "/toUpdate")
   public String toUpdate(String flag,Long id,Model model){
     Region region = mtService.getRegion();
@@ -88,19 +82,19 @@ public class MonthTargetController {
    * 根据regionId查询业务
    * @param regionId
    * @return
-     */
+   */
   @RequestMapping("/regionName")
-  @JSONFormat(filterField = {"SalesMan.user","region.children"})
+  @JSONFormat(filterField = {"SalesMan.user","region.children","region.coordinates"})
   public SalesMan getRegionName(String regionId){
-    SalesMan sm = smService.findByRegion(regionService.getRegionById(regionId));
+    SalesMan sm = smService.findByRegionAndisPrimaryAccount(regionService.getRegionById(regionId));
     return sm;
   }
 
   /**
-   * 根据userId查询订单量数据
+   * 根据regionId查询订单量数据
    * @param regionId
    * @return
-     */
+   */
   @RequestMapping(value = "/orderNum",method = RequestMethod.GET)
   @ResponseBody
   public Map<String,Object> orderNum(String regionId){
@@ -109,10 +103,10 @@ public class MonthTargetController {
   }
 
   /**
-   * 根据userId查询提货、活跃、成熟商家
+   * 根据regionId查询提货商家
    * @param regionId
    * @return
-     */
+   */
   @RequestMapping(value = "/seller",method = RequestMethod.GET)
   @ResponseBody
   public Map<String,Object> seller(String regionId){
@@ -121,10 +115,22 @@ public class MonthTargetController {
   }
 
   /**
-   * 根据userId保存月指标
+   * 根据regionId查询活跃商家和成熟商家
+   * @param regionId
+   * @return
+   */
+  @RequestMapping(value = "/merchant",method = RequestMethod.GET)
+  @ResponseBody
+  public Map<String,Object> merchant(String regionId){
+    Map<String,Object> map = mtService.getMerchant(regionId);
+    return map;
+  }
+
+  /**
+   * 根据regionId保存月指标
    * @param mt
    * @return
-     */
+   */
   @RequestMapping(value = "/save/{regionId}",method = {RequestMethod.POST})
   @ResponseBody
   public String save(@RequestBody MonthTarget mt,@PathVariable("regionId") Region region){
@@ -137,7 +143,7 @@ public class MonthTargetController {
    * @param mt
    * @param monthTarget
    * @return
-     */
+   */
   @RequestMapping(value = "/update/{id}",method = {RequestMethod.POST})
   @ResponseBody
   public String update(@RequestBody MonthTarget mt,@PathVariable("id") MonthTarget monthTarget){
@@ -153,7 +159,7 @@ public class MonthTargetController {
    * 根据月指标id发布一条月指标
    * @param monthTarget
    * @return
-     */
+   */
   @RequestMapping(value = "/publish/{id}",method = {RequestMethod.GET})
   @ResponseBody
   public String publish(@PathVariable("id") MonthTarget monthTarget){
@@ -164,7 +170,7 @@ public class MonthTargetController {
   /**
    * 发布当前管理员保存的全部业务员指标
    * @return
-     */
+   */
   @RequestMapping(value = "/publishAll",method = RequestMethod.POST)
   @ResponseBody
   public String publishAll(){
@@ -177,8 +183,8 @@ public class MonthTargetController {
    * @param targetCycle
    * @param userName
    * @param pageRequest
-     * @return
-     */
+   * @return
+   */
   @RequestMapping(value = "/findMonthTarget",method = RequestMethod.GET)
   @JSONFormat(filterField = {"SalesMan.user","region.children"})
   public Page<MonthTarget> findMonthTarget(String targetCycle,String userName,
@@ -211,9 +217,9 @@ public class MonthTargetController {
     return requestPage;
   }
 
-/**
- * 根据时间与区域经理id查询 全部的业务员信息
- * **/
+  /**
+   * 根据时间与区域经理id查询 全部的业务员信息
+   * **/
   @RequestMapping(value = "/monthTargets",method = RequestMethod.GET)
 //  @ResponseBody
   @JSONFormat(filterField = {"SalesMan.user","region.children"})
@@ -221,7 +227,7 @@ public class MonthTargetController {
                                    @RequestParam (value = "name", defaultValue = "")String name,
                                    @RequestParam(value = "page", defaultValue = "0") Integer page,
                                    @RequestParam(value = "size", defaultValue = "20") Integer size
-                                   ){
+  ){
     logger.info("*******************************************");
 //    time = "2016-07";
 //    page = 0;

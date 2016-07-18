@@ -64,31 +64,24 @@
 
     <div class="text-blue text-strong" style="margin-top: 25px; margin-bottom: 25px ">
         <c:if test="${flag ne 'update'}">
-            <select class="selectpicker demo3" data-live-search="true" id="regionId" onchange="getRegionName();">
+            <div style="width: 180px ; float: left;margin-right: 20px">
+                <form>
+                    <select name="basic[]" multiple="multiple" class="demo3" id="regionId" onchange="getRegionName();">
+                        <c:if test="${not empty salesList}">
+                            <c:forEach var="sales" items="${salesList}">
+                                <option value="${sales.region.id}">${sales.truename}</option>
+                            </c:forEach>
+                        </c:if>
+                    </select>
+                </form>
+            </div>
+            <%--<select class="selectpicker demo3" data-live-search="true" id="regionId" onchange="getRegionName();">
                 <c:if test="${not empty salesList}">
                     <c:forEach var="sales" items="${salesList}">
                         <option value="${sales.region.id}">${sales.truename}</option>
                     </c:forEach>
                 </c:if>
-            </select>
-
-
-
-            <!-- <div style="width: 180px ; float: left;margin-right: 20px">
-            <form>
-            <select name="basic[]" multiple="multiple" class="demo3" >
-
-            <option value="UT" >胡老大</option>
-            <option value="VT">横额啊</option>
-            <option value="VA">张二啦</option>
-            <option value="VA">王晓晓</option>
-            <option value="WV">杭大大</option>
-            <option value="WV">曹大大</option>
-            <option value="WI">槽大小</option>
-            </select>
-            </form>
-            </div> -->
-
+            </select>--%>
             <button class="btn btn-blue btn-sm" onclick="goSearch();">
                 检索
             </button>
