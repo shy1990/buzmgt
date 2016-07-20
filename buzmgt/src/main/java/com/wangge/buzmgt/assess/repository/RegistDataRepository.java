@@ -1,17 +1,20 @@
 package com.wangge.buzmgt.assess.repository;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.region.entity.Region;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface RegistDataRepository extends JpaRepository<RegistData, Long>{
-  public RegistData findRegistDataById(Long registId);
-  
-  
-  public List<RegistData> findByRegion(Region region);
+  RegistData findRegistDataById(Long registId);
+
+
+  List<RegistData> findByRegion(Region region);
+
+  @Query("select count(1) from RegistData r where r.region.id like %?1%")
+  int findCountByRegionIdlike(String regionId);
 }

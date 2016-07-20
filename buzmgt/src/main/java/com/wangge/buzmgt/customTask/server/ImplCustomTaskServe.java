@@ -2,6 +2,7 @@ package com.wangge.buzmgt.customTask.server;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -46,9 +47,9 @@ public class ImplCustomTaskServe implements CustomTaskServer {
   SalesManRepository salesmanRep;
   private Log log = LogFactory.getLog(this.getClass());
   
-  public static final String[] TASKTYPEARR = new String[] { "注册", "售后", "扣罚", "拜访","小米" };
-  public static final String[] TASKTYPEDETAILARR = new String[] { "店铺注册", "售后处理", "扣罚通知","客户拜访","小米分销"};
-
+  public static final String[] TASKTYPEARR = new String[] { "注册", "售后", "扣罚", "拜访", "小米" };
+  public static final String[] TASKTYPEDETAILARR = new String[] { "店铺注册", "售后处理", "扣罚通知", "客户拜访", "小米分销" };
+  
   @Override
   public Map<String, Object> getList(String salesmanId, Pageable page) {
     return null;
@@ -61,7 +62,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
    * buzmgt.customTask.entity.CustomTask)
    */
   @Override
-  @Transactional(rollbackForClassName="Exception")
+  @Transactional(rollbackForClassName = "Exception")
   public void save(CustomTask customTask) throws Exception {
     try {
       
@@ -175,7 +176,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
         datamap.put("recieve", "有回执");
       } else if (allsum == 1 && saleList.size() == 1 && unsum == 0) {
         datamap.put("recieve", "回执已读");
-      } else if (allsum > 1) {
+      } else if (saleList.size() > 1 || allsum > 1) {
         datamap.put("recieve", unsum + "/" + allsum);
       }
     }
@@ -231,17 +232,26 @@ public class ImplCustomTaskServe implements CustomTaskServer {
     
     // 1.得到所有有消息记录的业务员id(动态获取),2.自动根据size和page来获取分页的业务员
     Long customId = customTask.getId();
-    Set<String> reSet = messageRep.findbyRoleType(customId);
+    Set<Object> saleArrSet1 = messageRep.findbyRoleType(customId);
+    List<Object> reSet = new ArrayList<>(saleArrSet1);
+    Collections.sort(reSet, (c1, c2) -> {
+      Object[] man1 = (Object[]) c1;
+      Object[] man2 = (Object[]) c2;
+      return Integer.valueOf(man1[1].toString()) - Integer.valueOf(man2[1].toString());
+    });
+    // List<String> reSet = new ArrayList<>();
+    // saleArrSet.forEach((c) -> {
+    // reSet.add(((Object[]) c)[0].toString());
+    // });
     int size = pageReq.getPageSize();
     int page = pageReq.getPageNumber();
     int startNum = size * page;
     int ArrSize = reSet.size() > size * (page + 1) ? size : reSet.size() - startNum;
-    String[] subSet = reSet.toArray(new String[] {});
+    Object[] subSet = reSet.toArray(new Object[] {});
     String[] idArr = new String[ArrSize];
     for (int i = 0; i < ArrSize; i++) {
-      idArr[i] = subSet[startNum + i];
+      idArr[i] = ((Object[]) subSet[startNum + i])[0].toString();
     }
-    
     // 通过业务员来查找信息
     List<CustomMessages> msList = messageRep.findByCustomtaskIdAndSalesmanIdInOrderByTimeAsc(customId, idArr);
     List<Map<String, Object>> contList = new ArrayList<Map<String, Object>>();
@@ -309,7 +319,7 @@ public class ImplCustomTaskServe implements CustomTaskServer {
    * 
    */
   @Override
-  @Transactional(rollbackForClassName="Exception")
+  @Transactional(rollbackForClassName = "Exception")
   public void saveMessage(Map<String, Object> messages) throws Exception {
     Long customtaskId = Long.parseLong(messages.get("customtaskId").toString());
     String content = messages.get("content").toString();

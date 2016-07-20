@@ -2,7 +2,6 @@ package com.wangge.buzmgt.monthTarget.service;
 
 import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,13 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 public interface MonthTargetService {
-	
+
   Region getRegion();
 
-  Map<String,Object> getOrderNum(String userId);
-  
-  Map<String,Object> getSeller(String userId);
-  
+  Map<String,Object> getOrderNum(String regionId);
+
+  Map<String,Object> getSeller(String regionId);
+
+  Map<String,Object> getMerchant(String regionId);
+
   String save(MonthTarget mt,Region region);
 
   String save(MonthTarget monthTarget);

@@ -49,7 +49,7 @@ public class SceduleOfMonthOrders {
 	private MonthshopBasDataRepository shopRep;
 	private static final String townSql = " select s.region_id, s.user_id, s.truename   from sys_salesman s ";
 
-	// 每月15号点时分 0 30 1 15 * ?
+	// 每月15号1点时分 0 30 1 * * ?
 	@SuppressWarnings("unchecked")
   @Scheduled(cron = " 0 30 1 15 * ? ")
 	public void handleMontholdData() {
