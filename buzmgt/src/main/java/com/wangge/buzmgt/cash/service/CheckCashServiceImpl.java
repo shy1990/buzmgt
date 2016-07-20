@@ -353,6 +353,10 @@ public class CheckCashServiceImpl implements CheckCashService {
               }
 
               break;
+            case IN:
+              predicates.add(cb.in(expression).value(filter.value));
+              
+              break;
             case LIKE:
               predicates.add(cb.like(expression, "%" + filter.value + "%"));
 
