@@ -28,9 +28,7 @@ import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
 import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 import com.wangge.buzmgt.cash.repository.WaterOrderCashRepository;
-import com.wangge.buzmgt.cash.repository.WaterOrderDetailRepository;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
-import com.wangge.buzmgt.receipt.entity.RemarkStatusEnum;
 import com.wangge.buzmgt.util.SearchFilter;
 import com.wangge.buzmgt.util.excel.MapedExcelExport;
 
@@ -39,8 +37,6 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
   @Autowired
   private WaterOrderCashRepository waterOrderCashRepository;
-  @Autowired
-  private WaterOrderDetailRepository waterOrderDetailRepository;
 
 
   @Override
@@ -66,11 +62,6 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
   }
 
   @Override
-  public WaterOrderDetail findByOrderNo(String cashId) {
-    return waterOrderDetailRepository.findByCashId(cashId);
-  }
-
-  @Override
   public WaterOrderCash findBySerialNo(String serialNo) {
     return waterOrderCashRepository.findBySerialNo(serialNo);
   }
@@ -80,6 +71,23 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
     waterOrderCashRepository.save(waterOrders);
   }
+  
+  @Override
+  public void save(WaterOrderCash waterOrder) {
+    
+    waterOrderCashRepository.save(waterOrder);
+  }
+  
+  @Override
+  public List<WaterOrderCash> findByUserIdAndCreateDateForPunish(String createDate,Integer isPunish,String userId){
+  //查询是否已经处理扣罚
+    Map<String, Object> spec=new HashMap<>();
+    spec.put("EQ_createDate", createDate);
+    spec.put("EQ_isPunish", isPunish);
+    spec.put("EQ_userId", userId);
+    return this.findAll(spec);
+  }
+  
 
   private static Specification<WaterOrderCash> WaterOrderCashSearchFilter(final Collection<SearchFilter> filters,
       final Class<WaterOrderCash> entityClazz) {

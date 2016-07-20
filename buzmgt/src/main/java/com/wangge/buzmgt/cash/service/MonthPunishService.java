@@ -35,5 +35,17 @@ public interface MonthPunishService {
 
   public List<MonthPunish> findAllISNotCash(Map<String, Object> spec);
 
+  /**
+   * 
+  * @Title: findByUserIdAndCreateDate 
+  * @Description: 查询某一用户某一天的扣罚列表
+  * @param @param userId
+  * @param @param date2String
+  * @param @return    设定文件 
+  * @return List<MonthPunish>    返回类型 
+  * @throws
+   */
+  public List<MonthPunish> findByUserIdAndCreateDate(String userId, String date2String);
+
   
 }

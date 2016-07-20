@@ -17,35 +17,23 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.alibaba.fastjson.JSONObject;
-import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
 import com.wangge.buzmgt.cash.entity.MonthPunish;
-import com.wangge.buzmgt.cash.repository.BankTradeRepository;
 import com.wangge.buzmgt.cash.repository.MonthPunishRepository;
 import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.salesman.entity.BankCard;
-import com.wangge.buzmgt.salesman.entity.SalesmanData;
 import com.wangge.buzmgt.salesman.service.SalesmanDataService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
-import com.wangge.buzmgt.util.excel.ExcelImport;
-import com.wangge.buzmgt.util.file.FileUtils;
 
 @Service
 public class MonthPunishServiceImpl implements MonthPunishService {
@@ -77,6 +65,28 @@ public class MonthPunishServiceImpl implements MonthPunishService {
     return page;
   }
 
+  /**
+   * 
+   * @param searchParams
+   * @param pageable
+   * @return
+   */
+  @Override
+  public List<MonthPunish> findByUserIdAndCreateDate(String userId,String createDate) {
+    Map<String, Object> spec= new HashMap<>();
+    spec.put("EQ_userId", userId);
+    spec.put("GTE_createDate", createDate);
+    spec.put("LTE_createDate", createDate);
+    
+    List<MonthPunish> monthPunishList=new ArrayList<>();
+    try {
+      
+      monthPunishList = this.findAll(spec);
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+    }
+    return monthPunishList;
+  }
 
   @Override
   public void save(MonthPunish mp) {

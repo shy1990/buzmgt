@@ -60,7 +60,7 @@ public class Cash implements Serializable  {
   @Column(name="id")
   private Long cashId ; //订单id
 //  @Transient
-  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+  @OneToOne(cascade = CascadeType.REFRESH,fetch=FetchType.LAZY)
   @JoinColumn(name="id",insertable=false,updatable=false)
   private OrderSignfor order;//订单
   private String userId ; //用户id
@@ -90,8 +90,6 @@ public class Cash implements Serializable  {
     this.cashId = id;
   }
   public OrderSignfor getOrder() {
-    order.getSalesMan().setUser(null);
-    order.getSalesMan().setRegion(null);
     return order;
   }
   public void setOrder(OrderSignfor order) {

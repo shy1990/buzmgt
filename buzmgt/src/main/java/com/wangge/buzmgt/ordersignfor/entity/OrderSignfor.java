@@ -117,7 +117,7 @@ public class OrderSignfor implements Serializable {
 //  private String truename;
 //  private String ywName;//业务名称;
  
-  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+  @OneToOne(cascade = CascadeType.REFRESH,fetch=FetchType.EAGER)
   @JoinColumn(name = "user_id",insertable=false,updatable=false)
   private SalesMan salesMan;
   

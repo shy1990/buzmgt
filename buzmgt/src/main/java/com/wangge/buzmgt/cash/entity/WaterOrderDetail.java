@@ -40,11 +40,11 @@ public class WaterOrderDetail implements Serializable  {
   @Column(name="SERIAL_NO")
   private String serialNo ; //流水单号
   
-  @Column(name = "cash_id",insertable=false,updatable=false)
-  private Integer cashId; //订单id
+  @Column(name = "cash_id")
+  private Long cashId; //订单id
   
   @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
-  @JoinColumn(name = "cash_id")
+  @JoinColumn(name = "cash_id",insertable=false,updatable=false)
   private Cash cash; //订单号
   
   public Integer getId() {
@@ -59,10 +59,10 @@ public class WaterOrderDetail implements Serializable  {
   public void setSerialNo(String serialNo) {
     this.serialNo = serialNo;
   }
-  public Integer getCashId() {
+  public Long getCashId() {
     return cashId;
   }
-  public void setCashId(Integer cashId) {
+  public void setCashId(Long cashId) {
     this.cashId = cashId;
   }
   public Cash getCash() {

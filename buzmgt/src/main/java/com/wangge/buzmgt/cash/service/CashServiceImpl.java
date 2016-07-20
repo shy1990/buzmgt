@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,9 +26,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wangge.buzmgt.cash.entity.Cash;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
+import com.wangge.buzmgt.cash.entity.MonthPunish;
+import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
+import com.wangge.buzmgt.cash.entity.WaterOrderCash;
+import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 import com.wangge.buzmgt.cash.repository.CashRepository;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
@@ -43,6 +50,14 @@ public class CashServiceImpl implements CashService {
   private RegionService regionService;
   @Resource
   private OrderSignforService orderSignforService;
+  @Resource
+  private WaterOrderCashService orderCashService;
+  @Resource
+  private WaterOrderDetialService detialService;
+  @Resource
+  private MonthPunishService monthPunishService;
+  
+  private Logger logger=Logger.getLogger(CashServiceImpl.class);
   
   
   @Override
@@ -137,6 +152,119 @@ public class CashServiceImpl implements CashService {
       return cashList;
     }
     return listAll;
+  }
+  
+  @Override
+  public List<String> findByStatusGroupByUserId(){
+    return cashRepository.findByStatusGroupByUserId();
+  }
+
+  /**
+   * 购物车结算
+   * 将所有未结算订单全部结算
+   * 
+   * 流程：1.根据userID和cashIds查询所要处理的现金订单cash
+   * 2.生成流水单号-->使用：流水订单+流水订单详情
+   * 3.组装流水单详情数据
+   * 4.组装流水单数据
+   * 5.保存流水单
+   * 6.保存流水单详情列表
+   * 7.修改现金订单列表中状态status改为1（已结算）
+   * 8.返回状态
+   * @param userId
+   * @param cashIds
+   * @return
+   */
+  @Override
+  @Transactional(readOnly=false)
+  public boolean createWaterOrderByCash(String userId){
+    boolean msg=false;
+    logger.info("cashToWaterOrder----->userId:"+userId);
+    try {
+      
+      //查询代数现金列表现金列表
+      List<Cash> cashlist=cashRepository.findByUserIdAndStatus(userId, CashStatusEnum.UnPay);
+      //流水单号详情
+      List<WaterOrderDetail> detailList=new ArrayList<>();
+      
+      //生成流水单号 
+      String serialNo=createSerialNo();
+      
+      Float totalPrice = 0.0f;
+      if(CollectionUtils.isNotEmpty(cashlist)){
+        for(Cash cash:cashlist){
+          //计算流水单号收现金金额
+          OrderSignfor order=cash.getOrder();
+          totalPrice+=order.getOrderPrice();
+          
+          //组装流水单号详情数据
+          WaterOrderDetail detail=new WaterOrderDetail();
+          detail.setCashId(cash.getCashId());
+          detail.setSerialNo(serialNo);
+          detailList.add(detail);
+          
+          //修改状态
+          cash.setStatus(CashStatusEnum.OverCash);
+        };
+        
+        //组装流水单数据
+        WaterOrderCash woc=new WaterOrderCash();
+        woc.setSerialNo(serialNo);
+        woc.setUserId(userId);
+        woc.setCreateDate(new Date());
+        woc.setCashMoney(totalPrice);
+        woc.setIsPunish(0);
+        woc.setPayStatus(WaterPayStatusEnum.UnPay);
+
+        //查询是否已经处理扣罚
+        List<WaterOrderCash> orderCashs=orderCashService.findByUserIdAndCreateDateForPunish(DateUtil.date2String(woc.getCreateDate()),1,userId);
+        if(CollectionUtils.isEmpty(orderCashs)){
+          //检查是否有扣罚
+          List<MonthPunish> mpl=monthPunishService.findByUserIdAndCreateDate(userId, DateUtil.date2String(DateUtil.moveDate(woc.getCreateDate(),-1)));
+          if(CollectionUtils.isNotEmpty(mpl)){
+            woc.setIsPunish(1);
+            //修改扣罚状态确认有对应流水单号。
+            mpl.forEach(mp -> {
+              mp.setStatus(1);
+            });
+            monthPunishService.save(mpl);
+          }
+          
+        }
+        
+        //保存流水单
+        orderCashService.save(woc);
+        //保存流水单详情列表
+        detialService.save(detailList);
+        //修改现金列表状态
+        cashRepository.save(cashlist);
+        msg=true;
+      }
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+      return msg;
+    }
+    
+    return msg;
+  }
+  /**
+   * 流水单号生成策略：时间戳+4位随机码
+   * @return serialNo
+   */
+  public String createSerialNo(){
+    String serialNo="";
+    Date now=new Date();
+    serialNo+=now.getTime();
+    int randow=(int)Math.random()*10000+1;
+    serialNo+=randow;
+    logger.info("流水单号:serialNo-->"+serialNo);
+    return serialNo;
+  }
+  
+  @Override
+  @Transactional
+  public Cash save(Cash cash){
+    return cashRepository.save(cash);
   }
 
   private static Specification<Cash> CashSearchFilter(final Collection<SearchFilter> filters,

@@ -25,6 +25,18 @@ public interface WaterOrderCashService {
   public List<WaterOrderCash> findAll(Map<String, Object> searchParams);
 
   /**
+   * 
+  * @Title: findByUserIdAndCreateDateForPunish 
+  * @Description: 查询某人某天流水单号是否有扣罚 
+  * @param @param createDate
+  * @param @param isPunish
+  * @param @param userId
+  * @param @return    设定文件 
+  * @return List<WaterOrderCash>    返回类型 
+  * @throws
+   */
+  public List<WaterOrderCash> findByUserIdAndCreateDateForPunish(String createDate,Integer isPunish,String userId);
+  /**
    * 查询分页流水单号记录
    * @param searchParams
    * @param pageRequest
@@ -32,13 +44,12 @@ public interface WaterOrderCashService {
    */
   public Page<WaterOrderCash> findAll(Map<String, Object> searchParams, Pageable pageRequest);
   
-  
-  public WaterOrderDetail findByOrderNo(String orderNo);
-  
   public WaterOrderCash findBySerialNo(String serialNo);
 
   public void save(List<WaterOrderCash> waterOrders);
 
+  public void save(WaterOrderCash waterOrders);
+  
   public void ExportSetExcel(List<WaterOrderCash> waterOrders, HttpServletRequest request,
       HttpServletResponse response);
   

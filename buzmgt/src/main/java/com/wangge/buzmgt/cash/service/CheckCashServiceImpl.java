@@ -691,7 +691,7 @@ public class CheckCashServiceImpl implements CheckCashService {
     try {
       // 修改原有扣罚状态
       List<CheckCash> list = this.findCheckCashByDebt(spec);
-      if (list.size() > 0) {
+      if (CollectionUtils.isNotEmpty(list)) {
         checkDebtOrder(list.get(0));
         
         json.put("status", "success");

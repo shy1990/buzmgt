@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 import com.wangge.buzmgt.cash.service.WaterOrderCashService;
+import com.wangge.buzmgt.cash.service.WaterOrderDetialService;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
@@ -58,6 +59,10 @@ public class OrderSignforServiceImpl implements OrderSignforService {
   
   @Autowired
   private WaterOrderCashService waterOrderCashService;
+  
+  @Autowired
+  private WaterOrderDetialService detialService;
+  
   @Autowired
   private RegionService regionService;
   
@@ -281,7 +286,7 @@ public class OrderSignforServiceImpl implements OrderSignforService {
     List<OrderSignfor> cashList=findAll(searchParams);
     //TODO 查询收现金打款时间
     cashList.forEach(cash->{
-     WaterOrderDetail detail= waterOrderCashService.findByOrderNo(cash.getId().toString());
+     WaterOrderDetail detail= detialService.findByOrderNo(cash.getId().toString());
      if(detail!=null){
        WaterOrderCash waterOrder=waterOrderCashService.findBySerialNo(detail.getSerialNo());
        cash.setPayDate(waterOrder.getPayDate());

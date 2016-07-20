@@ -64,6 +64,18 @@ public class CashController {
     return json;
   }
 
+  @RequestMapping("/send")
+  public void send(){
+    logger.info("-----------------开启定时结算");
+    List<String> userIds=cashService.findByStatusGroupByUserId();
+    userIds.forEach(userId->{
+      logger.info("userId:"+userId);
+      boolean msg=cashService.createWaterOrderByCash(userId);
+      logger.info("返回结果:"+msg);
+    });
+    logger.info("-----------------结束定时结算");
+    
+  }
   
   
   
