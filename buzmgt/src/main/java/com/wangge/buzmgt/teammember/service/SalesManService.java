@@ -26,7 +26,7 @@ public interface SalesManService {
     List<Object> gainSaojieMan(SalesmanStatus status);
     SalesMan findByUserId(String userId);
 
-    String findByTruename(String truename);
+    List<String> findByTruename(String truename);
 
     String getRegionIdByUserId(String userId);
 
