@@ -24,7 +24,7 @@ import org.springframework.web.util.WebUtils;
 
 import com.wangge.buzmgt.customTask.entity.CustomTask;
 import com.wangge.buzmgt.customTask.server.CustomTaskServer;
-import com.wangge.buzmgt.customTask.server.ImplCustomTaskServe;
+import com.wangge.buzmgt.customTask.server.CustomTaskServeImpl;
 import com.wangge.buzmgt.monthTask.service.MonthTaskService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
@@ -113,7 +113,7 @@ public class CustomTaskController {
 		model.addAttribute("task", customTask);
 		model.addAttribute("taskTime",DateUtil.date2String(customTask.getCreateTime(), "MM-dd HH:mm"));
 		customServ.getSaleSet(customTask, model);
-		model.addAttribute("taskType", ImplCustomTaskServe.TASKTYPEDETAILARR[customTask.getType()]);
+		model.addAttribute("taskType", CustomTaskServeImpl.TASKTYPEDETAILARR[customTask.getType()]);
 		return "customTask/detail";
 	}
 
