@@ -38,7 +38,7 @@ import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.HttpUtil;
 
 @Service
-public class ImplCustomTaskServe implements CustomTaskServer {
+public class CustomTaskServeImpl implements CustomTaskServer {
   @Autowired
   CustomTaskRepository customRep;
   @Autowired
