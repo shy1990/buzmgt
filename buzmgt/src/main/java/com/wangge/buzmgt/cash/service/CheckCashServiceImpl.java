@@ -640,6 +640,7 @@ public class CheckCashServiceImpl implements CheckCashService {
     
     spec.remove("EQ_status");
     spec.remove("NOTEQ_status");
+    spec.remove("EQ_createDate");
     if (monthPunishs.size() > 0) {
       for (MonthPunish monthPunish : monthPunishs) {
         CheckCash cash = new CheckCash();
@@ -652,10 +653,11 @@ public class CheckCashServiceImpl implements CheckCashService {
         cash.setCreateDate(DateUtil.string2Date(createDate));
         if(monthPunish.getStatus()==0){
           cash.setIsCheck("未审核");
-        }else
+        }else{
           cash.setIsCheck("已审核");
+        }
         spec.put("EQ_userId", userId);
-        spec.put("EQ_createDate", createDate);
+        spec.put("EQ_importDate", createDate);
         List<BankTrade> bankTrades = bankTradeService.findAll(spec);
         if (bankTrades.size() > 0) {
           Float incomeMoney = 0.0f;
