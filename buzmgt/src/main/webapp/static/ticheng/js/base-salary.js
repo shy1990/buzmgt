@@ -114,11 +114,11 @@ function deleteSalary(){
 function goSearch() {
 	var truename=$('#truename').val();
 	$.ajax({
-		url:base+'baseSalary/'+truename(),
+		url:base+'baseSalary/'+truename,
 		type:'GET',
 		dataType:'json',
 		success:function(data){
-			
+			createTable(data);
 		}
 	})
 }
@@ -190,27 +190,6 @@ Handlebars.registerHelper('formDate', function(value) {
 	}
 	return changeTimeToString(new Date(value));
 });
-/**
- * 根据流水号查询
- */
-function findBySalesManName() {
-	var salesmanName = $('#salesmanName').val();
-	$.ajax({
-		// url : base+"/bankTrade?sc_EQ_salesManName=" + salesmanName,
-		type : "GET",
-		dataType : "json",
-		success : function(orderData) {
-			if (orderData.totalElements < 1) {
-				alert("未查到相关信息！");
-				return false;
-			}
-			createBankTradeTable(orderData);
-		},
-		error : function() {
-			alert("系统异常，请稍后重试！");
-		}
-	})
-}
 /**
  * 判读是否为空
  * 
