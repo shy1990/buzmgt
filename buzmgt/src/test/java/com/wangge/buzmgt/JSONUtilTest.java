@@ -53,5 +53,7 @@ public class JSONUtilTest {
 //     System.out.println(o);
 //   }
    System.out.println(number+","+fastMailNo);;
+   String key="ab.asd";
+   System.out.println(key.matches("^[a-zA-Z]*.[a-zA-Z]*.[a-zA-Z]*$"));
   }
 }
