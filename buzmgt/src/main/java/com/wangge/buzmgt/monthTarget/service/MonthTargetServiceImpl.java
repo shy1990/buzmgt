@@ -65,15 +65,15 @@ public class MonthTargetServiceImpl implements MonthTargetService {
     @Override
     public Map<String, Object> getOrderNum(String regionId) {
 
-        String sql = "select 'one' ms,nvl(sum(oi.nums),0) from sys_registdata r inner join sys_region reg on r.region_id=reg.region_id left join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
-                "left join sjzaixian.sj_tb_order_items oi on o.id=oi.order_id where o.pay_status='1' and oi.target_type='sku'\n" +
-                "and o.createtime between (select last_day(add_months(sysdate,-2))+1  from dual)\n" +
-                "and (select last_day(add_months(sysdate,-1))  from dual) and reg.parent_id=?\n" +
-                "union all\n" +
-                "select 'three' ms,nvl(sum(oi.nums)/3,0) from sys_registdata r inner join sys_region reg on r.region_id=reg.region_id inner join sjzaixian.sj_tb_order o on r.member_id=o.member_id\n" +
-                "inner join sjzaixian.sj_tb_order_items oi on o.id=oi.order_id where o.pay_status='1' and oi.target_type='sku'\n" +
-                "and o.createtime between (select last_day(add_months(sysdate,-4))+1  from dual)\n" +
-                "and (select last_day(add_months(sysdate,-1))  from dual) and reg.parent_id=?";
+        String sql = "select 'one' ms,nvl(sum(m.NUMS),0) nums from\n" +
+        "                    MOTHTARGETDATA m\n" +
+        "                    where to_char(CREATETIME,'YYYY-MM') = (select to_char(last_day(add_months(sysdate,-2))+1,'YYYY-MM')  from dual)\n" +
+        "                    and PARENTID = ?\n" +
+        "                    union all\n" +
+        "                    select 'three' ms,nvl(sum(m.NUMS)/3,0) nums from\n" +
+        "                    MOTHTARGETDATA m\n" +
+        "                    where to_char(CREATETIME,'YYYY-MM') between (select to_char(last_day(add_months(sysdate,-4))+1,'YYYY-MM')  from dual)\n" +
+        "                    and (select to_char(last_day(add_months(sysdate,-2))+1,'YYYY-MM')  from dual) and PARENTID = ?";
 
         Query query = null;
         SQLQuery sqlQuery = null;

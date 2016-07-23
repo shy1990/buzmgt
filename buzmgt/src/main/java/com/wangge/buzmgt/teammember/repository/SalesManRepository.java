@@ -81,7 +81,8 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
    * 查找某地区下的所有业务
    */
   @Query(value = "select * \n" +
-          "from sys_salesman s left join sys_user u on s.user_id=u.user_id where not exists (select * from sys_month_target mt where mt.user_id=s.user_id)\n" +
+          "from sys_salesman s left join sys_user u on s.user_id=u.user_id where not exists (select * from sys_month_target mt where mt.user_id=s.user_id\n" +
+          "and mt.target_cycle = to_char((select add_months(sysdate,1) from dual),'YYYY-MM'))\n" +
           "and exists (select 1 from (select * from sys_region r start with r.region_id = ?1\n" +
           "connect by prior r.region_id = r.parent_id) tmp\n" +
           "where tmp.region_id = s.region_id and s.status=2 and s.is_primary_account = 1 and u.status=0)", nativeQuery = true)
