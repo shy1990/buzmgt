@@ -1,8 +1,10 @@
 package com.wangge.buzmgt.customTask.server;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -65,7 +67,7 @@ public class CustomTaskServeImpl implements CustomTaskServer {
   @Transactional(rollbackForClassName = "Exception")
   public void save(CustomTask customTask) throws Exception {
     try {
-      
+      customTask.setCreateTime(Date.from(Instant.now()));
       Collection<SalesMan> oldSet = customTask.getSalesmanSet();
       List<String> idList = new ArrayList<String>();
       for (SalesMan old : oldSet) {
