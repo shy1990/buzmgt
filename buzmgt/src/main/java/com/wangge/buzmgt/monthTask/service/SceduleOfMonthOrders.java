@@ -29,7 +29,7 @@ import com.wangge.buzmgt.util.DateUtil;
 
 /**
  * 执行统计每个县级区域的历史订单数量
- * 
+ *
  * @author yangqc
  *
  */
@@ -62,7 +62,7 @@ public class SceduleOfMonthOrders {
 
 	/**
 	 * 计算出每个区域的历史订单值;三月内平均,上月的;
-	 * 
+	 *
 	 * @param town
 	 * @param salemanid
 	 *            目前通过业务员作为查询条件
@@ -223,7 +223,7 @@ public class SceduleOfMonthOrders {
 
 	/**
 	 * 给每月的访问情况计数
-	 * 
+	 *
 	 * @param tal
 	 * @param arr
 	 */
