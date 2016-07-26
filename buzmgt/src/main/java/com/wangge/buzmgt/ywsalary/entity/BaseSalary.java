@@ -93,7 +93,7 @@ public class BaseSalary implements Serializable  {
 
   @Override
   public String toString() {
-    return "BaseSalary [id=" + id + ", userId=" + userId + ", user=" + user + ", salary=" + salary + ", updateDate="
+    return "BaseSalary [id=" + id + ", userId=" + userId + ", salary=" + salary + ", updateDate="
         + updateDate + "]";
   }
  

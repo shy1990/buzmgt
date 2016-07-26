@@ -81,14 +81,12 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   @Transactional
   public BaseSalary save(BaseSalary baseSalary) {
     baseSalary.setUpdateDate(new Date());
-    logService.log(null, ""+baseSalary, EventType.SAVE);
     return baseSalaryRepository.save(baseSalary);
   }
 
   @Override
   @Transactional
   public void delete(BaseSalary baseSalary) {
-    logService.log(baseSalary, null, EventType.SAVE);
     baseSalaryRepository.delete(baseSalary);
   }
   
