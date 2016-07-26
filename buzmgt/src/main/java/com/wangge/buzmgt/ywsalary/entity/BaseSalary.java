@@ -90,6 +90,12 @@ public class BaseSalary implements Serializable  {
   public void setUpdateDate(Date updateDate) {
     this.updateDate = updateDate;
   }
+
+  @Override
+  public String toString() {
+    return "BaseSalary [id=" + id + ", userId=" + userId + ", salary=" + salary + ", updateDate="
+        + updateDate + "]";
+  }
  
   
   
