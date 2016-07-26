@@ -21,10 +21,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.util.SearchFilter;
 import com.wangge.buzmgt.ywsalary.entity.BaseSalary;
@@ -47,6 +48,8 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   
   @Resource
   private RegionService regionService;
+  @Resource
+  private LogService logService;
   
   @Override
   public List<BaseSalary> findAll(Map<String, Object> searchParams) {
@@ -78,12 +81,14 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   @Transactional
   public BaseSalary save(BaseSalary baseSalary) {
     baseSalary.setUpdateDate(new Date());
+    logService.log(null, ""+baseSalary, EventType.SAVE);
     return baseSalaryRepository.save(baseSalary);
   }
 
   @Override
   @Transactional
   public void delete(BaseSalary baseSalary) {
+    logService.log(baseSalary, null, EventType.SAVE);
     baseSalaryRepository.delete(baseSalary);
   }
   

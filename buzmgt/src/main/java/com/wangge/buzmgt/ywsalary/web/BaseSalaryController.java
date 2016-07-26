@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
@@ -46,6 +48,8 @@ public class BaseSalaryController {
   private ManagerService managerService;
   @Resource
   private SalesManService salesManService;
+  @Resource
+  private LogService logService;
 
   private static final String SEARCH_OPERTOR = "sc_";
 
@@ -136,6 +140,7 @@ public class BaseSalaryController {
     JSONObject json = new JSONObject();
     try {
       baseSalaryService.save(baseSalary);
+      logService.log(null, "添加基础薪资"+baseSalary.toString(), EventType.SAVE);
       json.put("status", "success");
       json.put("successMsg", "操作成功！");
     } catch (Exception e) {
@@ -164,6 +169,7 @@ public class BaseSalaryController {
       return json;
     }
     try {
+      logService.log(baseSalary.getUserId()+"修改基础薪资"+baseSalary.getSalary(), "修改为"+salary, EventType.UPDATE);
       if (salary != null) {
         baseSalary.setSalary(salary);
       }
@@ -191,6 +197,7 @@ public class BaseSalaryController {
     JSONObject json = new JSONObject();
     try {
       baseSalaryService.delete(baseSalary);
+      logService.log("删除基础薪资"+baseSalary.toString(), null, EventType.DELETE);
       json.put("status", "success");
       json.put("successMsg", "操作成功！");
     } catch (Exception e) {
