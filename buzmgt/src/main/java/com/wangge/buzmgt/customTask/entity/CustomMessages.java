@@ -40,8 +40,7 @@ public class CustomMessages {
   private int roletype;
  
  @ReadOnlyProperty
-  private Date time ;
-// = Date.from(Instant.now());
+  private Date time = Date.from(Instant.now());
   // 信息读取状态,0未读,1已读
   private int status;
   @Transient

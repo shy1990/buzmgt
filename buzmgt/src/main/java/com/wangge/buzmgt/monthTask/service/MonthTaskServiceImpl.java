@@ -464,6 +464,8 @@ public class MonthTaskServiceImpl implements MonthTaskService {
       double seted = getReflectInt(mclass.getDeclaredMethod("getTal" + level + "set").invoke(mt));
       if (sum == seted) {
         rate = "100%";
+      } else if (sum == 0) {
+        rate = "100%";
       } else {
         rate = String.format("%10.2f%%", seted / sum).trim().substring(2);
       }
