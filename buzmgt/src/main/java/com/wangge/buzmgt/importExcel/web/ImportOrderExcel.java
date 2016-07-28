@@ -39,8 +39,6 @@ public class ImportOrderExcel {
   @Value("${buzmgt.file.fileUploadPath}")
   private String fileUploadDir;
   
-  private String FestmailNoString;
-  
   //private static String url = "http://image.3j1688.com/uploadfile/"; // 外网正式环境
   
   @Resource
