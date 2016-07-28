@@ -82,16 +82,12 @@ public class MothTargetDataController {
      * regionId:当前业务员的regionId
      * @return
      */
-//    @RequestMapping(value = "export/{regionId}/{time}")
-//    public void exportExcel(HttpServletRequest request, HttpServletResponse response, @PathVariable String time,@PathVariable String regionId) {
-//        List<MothTargetData> list = mothTargetDataService.findAll(regionId,time);
-//
-//        System.out.println(list.size());
-////        list.forEach(MonthPunishUp ->{
-////            MonthPunishUp.setRegionName(MonthPunishUp.getSalesMan().getRegion().getName());
-////        });
-//        String[] title_ = new String[]{"商铺名", "电话", "区域", "提货量", "提货次数", "时间"};
-//        String[] coloumsKey_ = new String[]{"shopName", "phoneNmu", "regionName", "numsOne", "count", "time"};
-//        ExcelExport.doExcelExport("月指标.xls", list, title_, coloumsKey_, request, response);
-//    }
+    @RequestMapping(value = "export/{regionId}/{time}")
+    public void exportExcel(HttpServletRequest request, HttpServletResponse response, @PathVariable String time,@PathVariable String regionId) {
+        List<MothTargetData> list = mothTargetDataService.findAll(regionId,time);
+
+        String[] title_ = new String[]{"商铺名", "电话", "区域", "提货量", "提货次数", "时间"};
+        String[] coloumsKey_ = new String[]{"shopName", "phoneNmu", "region.name", "numsOne", "count", "time"};
+        ExcelExport.doExcelExport("月指标.xls", list, title_, coloumsKey_, request, response);
+    }
 }

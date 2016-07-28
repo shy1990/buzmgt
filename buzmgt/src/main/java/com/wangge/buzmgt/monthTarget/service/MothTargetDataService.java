@@ -12,12 +12,11 @@ import java.util.Map;
 public interface MothTargetDataService {
     public Page<MothTargetData> getMothTargetDatas(String regionId,String name,String time, Integer page, Integer size);
 
-//    public List<MothTargetData> findAll(String regionid,String time);
+    public List<MothTargetData> findAll(String regionid,String time);
 
 
 //    public Map<String,Integer> maps();
 
 //    public Integer findCount();//查询当前业务员活跃商家
 
-//    public Integer count_
 }
