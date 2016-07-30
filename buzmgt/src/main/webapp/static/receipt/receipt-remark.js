@@ -1,6 +1,7 @@
 var remarkedTotal = 0;// 报备总条数
 var cashTotal = 0;// 总条数
 var notRemarkedTotal = 0;// 未报备总条数
+var rejectedTotal = 0;//拒收总条数
 $(function() {
 	nowTime();//初始化日期
 	DispositRegionId();//区域选择数据处理
@@ -231,6 +232,27 @@ function findNOTRemarked(page) {
 			if (searchTotal != notRemarkedTotal || searchTotal == 0) {
 				notRemarkedTotal = searchTotal;
 				notRemarkedPaging(orderData);
+			}
+		},
+		error : function() {
+			alert("系统异常，请稍后重试！");
+		}
+	})
+}
+function findRejected(page) {
+	page = page == null || page == '' ? 0 : page;
+	SearchData['page'] = page;
+	$.ajax({
+		url : base+"rejection/rejectedList",
+		type : "GET",
+		data : SearchData,
+		dataType : "json",
+		success : function(rejectData) {
+			createNotRemarkedTable(rejectData);
+			var searchTotal = rejectData.totalElements;
+			if (searchTotal != rejectedTotal || searchTotal == 0) {
+				rejectedTotal = searchTotal;
+				notRemarkedPaging(rejectData);
 			}
 		},
 		error : function() {

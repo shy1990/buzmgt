@@ -24,7 +24,7 @@ public interface MonthTargetRepository extends JpaRepository<MonthTarget, Long>{
 
 //    public Page<MonthTarget> findAll(Specification specification, Pageable pageable);//分页查询
 
-  MonthTarget findByRegion(Region region);
+  MonthTarget findByRegionAndTargetCycle(Region region,String nextMonth);
   //根据大区经理的区域id和时间查询数据,用来导出数据
   public List<MonthTarget> findByManagerRegionAndTargetCycle(String managerRegion,String targetCycle);
 }

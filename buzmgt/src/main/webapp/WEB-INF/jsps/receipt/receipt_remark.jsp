@@ -29,6 +29,23 @@
 <link rel="stylesheet" type="text/css" href="static/task/task.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+	<style>
+		.mark-red{
+			position: absolute;
+			top: 2px;
+			right:8px;
+			display: block;
+			border-radius: 2px;
+			-moz-border-radius: 2px;
+			-webkit-border-radius: 2px;
+			font-size: 6px;
+			line-height: 15px;
+			padding: 0px 2px;
+			background: #FF4647;
+			color: #ffffff;
+		}
+
+	</style>
 <script id="remarked-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
@@ -103,29 +120,52 @@
 <script id="notremarked-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
-    <tr>
-      <td class="">{{#with salesMan}}{{truename}}{{/with}}</td>
-      <td class="">{{shopName}}</td>
-      <td>{{orderNo}}</td>
-      <td>{{orderPrice}}</td>
-      <td>{{formDate createTime}}</td>
-      <td>{{formDate fastmailTime}}</td>
-      <td>{{formDate yewuSignforTime}}</td>
-      <td>
-        <div class="pay-time-box">
-		  {{#if customSignforTime}}
-		  <span class="pay-time icon-tag-yfk">已付款</span>
-		  <span class="text-red">超时</span> <br />
-		  <span class="text-red">{{formDate customSignforTime}}</span>
-		  {{else}}
-          <span class="pay-time icon-tag-wfk">未付款</span>
-		  <span class="text-red">超时</span>
-		  {{/if}}
-        </div>
-      </td>
-      <td><a class="btn btn-blue btn-sm" href="/receiptRemark/notRemarkList/{{orderNo}}">查看</a>
-        <a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
-    </tr>
+	<tr>
+		<td class="">{{#with salesMan}}{{truename}}{{/with}}</td>
+		<td class="">{{shopName}}</td>
+		<td>{{orderNo}}</td>
+		<td>{{orderPrice}}</td>
+		<td>{{formDate createTime}}</td>
+		<td>{{formDate fastmailTime}}</td>
+		<td>{{formDate yewuSignforTime}}</td>
+		<td>
+			<div class="pay-time-box">
+				{{#if customSignforTime}}
+				<span class="pay-time icon-tag-yfk">已付款</span>
+				<span class="text-red">超时</span> <br />
+				<span class="text-red">{{formDate customSignforTime}}</span>
+				{{else}}
+				<span class="pay-time icon-tag-wfk">未付款</span>
+				<span class="text-red">超时</span>
+				{{/if}}
+			</div>
+		</td>
+		<td><a class="btn btn-blue btn-sm" href="/receiptRemark/notRemarkList/{{orderNo}}">查看</a>
+			<a class="btn btn-yellow btn-sm" href="javascrip:;">扣罚</a></td>
+	</tr>
+	{{/each}}
+	{{else}}
+	<tr>
+		<td colspan="100">没有相关数据</td>
+	</tr>
+	{{/if}}
+</script>
+<script id="rejected-table-template" type="text/x-handlebars-template">
+	{{#if content}}
+	{{#each content}}
+	<tr>
+		<td class="">
+			<img width="108" height="72" src="static/img/background/saojie-img.png" class="img-goods" />
+		</td>
+		<td class="">
+			小米手机专卖店
+		</td>
+		<td>201603041256</td>
+		<td>6565985956565</td>
+		<td>2016.03.12 18:20</td>
+		<td>老板不在家，下暴雨了</td>
+		<td>2016.03.12 18:20</td>
+	</tr>
 	{{/each}}
 	{{else}}
 	<tr>
@@ -170,7 +210,8 @@ var SearchData = {
 									<li data-tital="cash"><a href="#box_tab2" data-toggle="tab"><span
 											class="">收现金</span></a></li>
 									<li data-tital="notreported"><a href="#box_tab3" data-toggle="tab"><span
-											class="">未报备</span></a></li>
+											class="">未报备<span class="mark-red">4</span></span></a></li>
+									<li data-tital="rejected"><a href="#box_tab4" data-toggle="tab"><span class="">拒收</span></a></li>
 								</ul>
 								<!--/菜单栏-->
 							</div>
@@ -202,6 +243,12 @@ var SearchData = {
 								<li data-item="timeout"><a href="javascript:;">已超时</a></li>
 								<li data-item="payed"><a href="javascript:;">已支付</a></li>
 							</ul>
+							<script type="text/javascript">
+								$('.nav-task li').click(function() {
+									$(this).addClass('active');
+									$(this).siblings('li').removeClass('active');
+								});
+							</script>
 							<div class="search-date-box">
 								<span class="text-strong chang-time">请选择时间：</span>
 								<div class="search-date">
@@ -313,6 +360,28 @@ var SearchData = {
 								<!-- 分页 -->
 							</div>
 							<!--未报备-->
+							<!--拒收-->
+							<div class="tab-pane fade" id="box_tab4">
+								<!--table-box-->
+								<div class="table-abnormal-list table-overflow"  style="overflow-x: hidden">
+									<table class="table table-hover new-table abnormal-order-table">
+										<thead>
+										<tr>
+											<th>货物照片</th>
+											<th>商家名称</th>
+											<th>订单号</th>
+											<th>预计到达时间</th>
+											<th>寄回物流单号</th>
+											<th>拒收原因</th>
+											<th>拒收时间</th>
+										</tr>
+										</thead>
+										<tbody id="rejectedList"></tbody>
+									</table>
+								</div>
+								<!--table-box-->
+							</div>
+							<!--拒收-->
 						</div>
 						<!--列表内容-->
 					</div>
