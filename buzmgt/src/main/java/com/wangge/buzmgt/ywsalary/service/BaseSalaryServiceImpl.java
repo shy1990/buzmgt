@@ -25,10 +25,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.util.SearchFilter;
 import com.wangge.buzmgt.ywsalary.entity.BaseSalary;
 import com.wangge.buzmgt.ywsalary.entity.BaseSalaryUser;
+import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 import com.wangge.buzmgt.ywsalary.repository.BaseSalaryRepository;
 import com.wangge.buzmgt.ywsalary.repository.BaseSalaryUserRepository;
 
@@ -107,6 +109,8 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
 
       private final static String TYPE_DATE = "java.util.Date";
 
+      private final static String TYPE_BASE_SALARY_FLAG_TYPE = "com.wangge.buzmgt.ywsalary.entity.FlagEnum";
+      
       @SuppressWarnings({ "rawtypes", "unchecked" })
       @Override
       public Predicate toPredicate(Root<BaseSalary> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -136,6 +140,15 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
                 } catch (ParseException e) {
                   throw new RuntimeException("日期格式化失败!");
                 }
+              }else if(javaTypeName.equals(TYPE_BASE_SALARY_FLAG_TYPE)){
+                String type = filter.value.toString();
+                if(FlagEnum.NORMAL.toString().equals(type)){
+                  filter.value = FlagEnum.NORMAL;
+                }else{
+                  filter.value = FlagEnum.DELETE;
+                }
+                predicates.add(cb.equal(expression, filter.value));
+                
               } else {
                 predicates.add(cb.equal(expression, filter.value));
               }
