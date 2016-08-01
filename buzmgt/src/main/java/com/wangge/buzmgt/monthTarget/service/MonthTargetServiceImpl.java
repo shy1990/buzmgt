@@ -577,19 +577,21 @@ public class MonthTargetServiceImpl implements MonthTargetService {
                 "  ) g ON g.pr_id = tg.region_id\n" +
                 "WHERE tg.target_cycle LIKE  ? ";
         logger.info("managerRegion:  " + managerRegion);
+        int a = 5;
+        SQLQuery sqlQuery = null;
+        if (!"0".equals(managerRegion)) {
+            sql += " and tg.manager_region = ? ";
+            Query query = entityManager.createNativeQuery(sql);
+            sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
+            sqlQuery.setParameter(a, managerRegion);
+        }else {
+            Query query = entityManager.createNativeQuery(sql);
+            sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
+        }
 
-
-        Query query = entityManager.createNativeQuery(sql);
-        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
         for (int i = 0; i <= 4; i++) {
             sqlQuery.setParameter(i, "%" + time + "%");
         }
-        int a = 5;
-        if (!"0".equals(managerRegion)) {
-            sql += " and tg.manager_region = ? ";
-            sqlQuery.setParameter(a, managerRegion);
-        }
-
         List<MonthTarget> list = new ArrayList<>();
         List<Object[]> ret = sqlQuery.list();
         logger.info(ret);
