@@ -8,6 +8,7 @@ $(function() {
 	findRemarked();//报备
 	findNOTRemarked();//未报备
 	findCash();//收现金
+	findRejected();//拒收
 })
 $('.nav-task li').on("click", function() {
 	$(this).addClass('active');
@@ -135,6 +136,9 @@ function goSearch() {
 		case 'cash':
 			findCash();
 			break;
+		case 'rejected':
+			findRejected();
+			break;
 		default:
 			break;
 		}
@@ -158,6 +162,12 @@ $('.table-export').on(
 function findTab(){
 	var tab = $('#receiptOrderStatus li.active').attr('data-tital');
 	return tab;
+}
+function hide() {
+	$("#term").hide();
+}
+function show() {
+	$("#term").show();
 }
 /**
  * 处理检索条件
@@ -247,12 +257,15 @@ function findRejected(page) {
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
+		beforeSend:function(req){
+			req.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+		},
 		success : function(rejectData) {
-			createNotRemarkedTable(rejectData);
+			createRejectedTable(rejectData);
 			var searchTotal = rejectData.totalElements;
 			if (searchTotal != rejectedTotal || searchTotal == 0) {
 				rejectedTotal = searchTotal;
-				notRemarkedPaging(rejectData);
+				rejectedPaging(rejectData);
 			}
 		},
 		error : function() {
@@ -286,6 +299,14 @@ function createNotRemarkedTable(data) {
 	var myTemplate = Handlebars
 			.compile($("#notremarked-table-template").html());
 	$('#notRemarkedList').html(myTemplate(data));
+}
+/**
+ * 生成拒收列表
+ * @param data
+ */
+function createRejectedTable(data) {
+	var myTemplate = Handlebars.compile($("#rejected-table-template").html());
+	$('#rejectedList').html(myTemplate(data));
 }
 /**
  * 报备的分页
@@ -329,6 +350,21 @@ function notRemarkedPaging(data) {
 		limit : limit,
 		callback : function(curr, limit, totalCount) {
 			findNOTRemarked(curr - 1);
+		}
+	});
+}
+/**
+ * 拒收的分页
+ * @param data
+ */
+function rejectedPaging(data) {
+	var totalCount = data.totalElements, limit = data.size;
+	$('#rejectedPager').extendPagination({
+		totalCount : totalCount,
+		showCount : 20,
+		limit : limit,
+		callback : function(curr, limit, totalCount) {
+			findRejected(curr - 1);
 		}
 	});
 }
@@ -453,7 +489,23 @@ function findByOrderNo(){
 			}
 		})
 		break;
-		
+	case 'rejected':
+		$.ajax({
+			url : base+"rejection/rejectedList?sc_EQ_orderno="+orderNo,
+			type : "GET",
+			dataType : "json",
+			success : function(rejectData) {
+				if(rejectData.totalElements < 1){
+					alert("拒收订单中，未查到此订单！");
+					return false;
+				}
+				createRejectedTable(rejectData);
+			},
+			error : function() {
+				alert("系统异常，请稍后重试！");
+			}
+		})
+		break;
 	default:
 		break;
 	}
@@ -466,4 +518,30 @@ function findByOrderNo(){
  */
 function isEmpty(value){
 	return value ==""||value==null || value== undefined ;
-} 
+}
+
+/**
+ * 拒收的确认收货
+ * @param id
+ */
+function confirm(id) {
+	$.ajax({
+		url : base + "/rejection/update/"+id,
+		type : "POST",
+		beforeSend : function(request) {
+			request.setRequestHeader("Content-Type",
+				"application/json; charset=UTF-8");
+		},
+		dataType : "text",
+		success : function(data) {
+			if(data == "ok"){
+				alert("收货成功!");
+				$("#"+id).text("已收货");
+				$("#"+id).removeAttr('onclick');
+			}
+		},
+		error : function() {
+			alert("系统错误，请稍后再试");
+		}
+	});
+}

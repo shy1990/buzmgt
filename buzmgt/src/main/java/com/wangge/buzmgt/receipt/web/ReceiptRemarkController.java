@@ -9,6 +9,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wangge.buzmgt.rejection.entity.Rejection;
+import com.wangge.buzmgt.rejection.service.RejectionServive;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -63,6 +65,9 @@ public class ReceiptRemarkController {
   
   @Autowired
   private OrderItemService itemService;
+
+  @Autowired
+  private RejectionServive rejectionServive;
   
   
   @RequestMapping(value="/show",method=RequestMethod.GET)
@@ -251,7 +256,13 @@ public class ReceiptRemarkController {
     case "cash":
       //TODO 收现金导出
       break;
-
+    //拒收导出
+    case "rejected":
+        List<Rejection> rejectionList = rejectionServive.findAll(searchParams);
+      String[] rejectTitles_ = { "业务名称","商家名称","订单号","预计到达时间", "寄回物流单号","拒收原因","拒收时间"};
+      String[] rejectKey_ = { "salesMan.truename","shopName", "orderno", "arriveTime","trackingno","remark","createTime"};
+      ExcelExport.doExcelExport("拒收导出.xls", rejectionList, rejectTitles_, rejectKey_, request, response);
+      break;
     default:
       break;
     }

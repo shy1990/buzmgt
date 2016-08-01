@@ -155,16 +155,23 @@
 	{{#each content}}
 	<tr>
 		<td class="">
-			<img width="108" height="72" src="static/img/background/saojie-img.png" class="img-goods" />
+			<img width="108" height="72" src="{{frontImgUrl}}" class="img-goods" />
 		</td>
 		<td class="">
-			小米手机专卖店
+			{{shopName}}
 		</td>
-		<td>201603041256</td>
-		<td>6565985956565</td>
-		<td>2016.03.12 18:20</td>
-		<td>老板不在家，下暴雨了</td>
-		<td>2016.03.12 18:20</td>
+		<td>{{orderno}}</td>
+		<td>{{formDate arriveTime}}</td>
+		<td>{{trackingno}}</td>
+		<td>{{remark}}</td>
+		<td>{{formDate createTime}}</td>
+		<td><a class="btn btn-blue btn-sm" href="/rejection/{{id}}">查看</a>
+			{{#if view}}
+			<a class="btn btn-green btn-sm" href="javascript:;">已收货</a>
+			{{else}}
+			<a class="btn btn-green btn-sm" href="javascript:;" onclick="confirm('{{id}}')" id="{{id}}">确认收货</a>
+			{{/if}}
+		</td>
 	</tr>
 	{{/each}}
 	{{else}}
@@ -205,13 +212,13 @@ var SearchData = {
 							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<ul id="receiptOrderStatus" class="nav nav-tabs">
-									<li class="active" data-tital="reported"><a href="#box_tab1" data-toggle="tab"><span
+									<li class="active" data-tital="reported"><a href="#box_tab1" data-toggle="tab" onclick="show();"><span
 											class="">报备</span></a></li>
-									<li data-tital="cash"><a href="#box_tab2" data-toggle="tab"><span
+									<li data-tital="cash"><a href="#box_tab2" data-toggle="tab" onclick="show();"><span
 											class="">收现金</span></a></li>
-									<li data-tital="notreported"><a href="#box_tab3" data-toggle="tab"><span
+									<li data-tital="notreported"><a href="#box_tab3" data-toggle="tab" onclick="show();"><span
 											class="">未报备<span class="mark-red">4</span></span></a></li>
-									<li data-tital="rejected"><a href="#box_tab4" data-toggle="tab"><span class="">拒收</span></a></li>
+									<li data-tital="rejected"><a href="#box_tab4" data-toggle="tab" onclick="hide();"><span class="">拒收</span></a></li>
 								</ul>
 								<!--/菜单栏-->
 							</div>
@@ -237,12 +244,12 @@ var SearchData = {
 					<!--box-body-->
 					<div class="box-body">
 						<div class="table-before">
-							<ul class="nav nav-task">
-								<li class="active" data-item="all"><a href="javascript:;">全部</a></li>
-								<li data-item="unpay"><a href="javascript:;">未支付</a></li>
-								<li data-item="timeout"><a href="javascript:;">已超时</a></li>
-								<li data-item="payed"><a href="javascript:;">已支付</a></li>
-							</ul>
+								<ul class="nav nav-task" id="term">
+									<li class="active" data-item="all"><a href="javascript:;">全部</a></li>
+									<li data-item="unpay"><a href="javascript:;">未支付</a></li>
+									<li data-item="timeout"><a href="javascript:;">已超时</a></li>
+									<li data-item="payed"><a href="javascript:;">已支付</a></li>
+								</ul>
 							<script type="text/javascript">
 								$('.nav-task li').click(function() {
 									$(this).addClass('active');
@@ -374,12 +381,16 @@ var SearchData = {
 											<th>寄回物流单号</th>
 											<th>拒收原因</th>
 											<th>拒收时间</th>
+											<th>操作</th>
 										</tr>
 										</thead>
 										<tbody id="rejectedList"></tbody>
 									</table>
 								</div>
 								<!--table-box-->
+								<!-- 分页 -->
+								<div id="rejectedPager"></div>
+								<!-- 分页 -->
 							</div>
 							<!--拒收-->
 						</div>
@@ -410,7 +421,7 @@ var SearchData = {
 		<script type="text/javascript" src="static/receipt/receipt-remark.js" 
 			charset="utf-8"></script>
 		<script type="text/javascript">
-			
+
 		</script>
 </body>
 
