@@ -66,7 +66,7 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
             sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
             sqlQuery.setParameter(l, "%" + time + "%");//日期参数,必须存在
             sqlQuery.setParameter(a, "%" + name + "%");//商家名字参数
-            sqlQuery.setParameter(b,regionId);//业务员id
+            sqlQuery.setParameter(b, regionId);//业务员id
         } else {
             query = entityManager.createNativeQuery(sql);
             sqlQuery = query.unwrap(SQLQuery.class);
@@ -108,40 +108,42 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
         return pageResult;
     }
 
-//    @Override
-//    public List<MothTargetData> findAll(String regionid, String time) {
-//        String sql = "select t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(*),0) count from mothtargetdata t " +
-//                " where to_char(createtime,'yyyy-mm') LIKE ? " +
-//                " and t.parentid like ? " +
-//                " group by t.memberid,t.orderId,t.memberId,t.phoneNum,t.shopName,t.regionId";
-//        List<MothTargetData> mtdList = new ArrayList<>();
-//        Query query = entityManager.createNativeQuery(sql);
-//        int a = 1;
-//        int b = 2;
-//        query.setParameter(a, "%" + time + "%");
-//        query.setParameter(b, "%" + regionid + "%");
-//        List<Object[]> list = query.getResultList();
-//        if (CollectionUtils.isNotEmpty(list)) {
-//            list.forEach(o -> {
-//                MothTargetData mtd = new MothTargetData();
-//                mtd.setOrderId((String) o[0]);
-//                mtd.setMemberId((String) o[1]);
-//                mtd.setRegionId((String) o[4]);
-//                mtd.setPhoneNmu((String) o[2]);
-//                mtd.setShopName((String) o[3]);
-//                Region region = regionService.findListRegionbyid((String) o[4]);
-//                mtd.setRegionName(regionName(region));
-//                logger.info(region.getType());
-////                mtd.setRegion(region);
-//                mtd.setNumsOne(((BigDecimal) o[5]).intValue());
-//                mtd.setCount(((BigDecimal) o[6]).intValue());
-//                mtd.setTime(time);
-//                mtdList.add(mtd);
-//
-//            });
-//        }
-//        return mtdList;
-//    }
+    @Override
+    public List<MothTargetData> findAll(String regionid, String time) {
+        String sql =
+                "select t.phoneNum,t.shopName,t.regionId,nvl(sum(NUMS),0),nvl(count(1),0) count " + "from mothtargetdata t " +
+                        "where " +
+                        " to_char(createtime,'yyyy-mm') LIKE ? " +
+                        " and t.parentid = ? " +
+                        "group by " +
+                        "t.phoneNum,t.shopName,t.regionId " +
+                        "  order by nvl(sum(NUMS),0) desc,nvl(count(1),0) desc ";
+        Query query = null;
+        SQLQuery sqlQuery = null;
+        int l = 0;
+        int a = 1;
+        query = entityManager.createNativeQuery(sql);
+        sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
+        sqlQuery.setParameter(l, "%" + time + "%");//日期参数,必须存在
+        sqlQuery.setParameter(a, regionid);//业务员id
+        List<MothTargetData> mtdList = new ArrayList<>();
+        List<Object[]> ret = sqlQuery.list();
+        if (CollectionUtils.isNotEmpty(ret)) {
+            ret.forEach(o -> {
+                MothTargetData mtd = new MothTargetData();
+                mtd.setRegionId((String) o[2]);
+                mtd.setPhoneNmu((String) o[0]);
+                mtd.setShopName((String) o[1]);
+                Region region = regionService.getRegionById((String) o[2]);
+                mtd.setRegion(region);
+                mtd.setNumsOne(((BigDecimal) o[3]).intValue());
+                mtd.setCount(((BigDecimal) o[4]).intValue());
+                mtd.setTime(time);
+                mtdList.add(mtd);
+            });
+        }
+        return mtdList;
+    }
 
 
     public static String regionName(Region region) {

@@ -57,7 +57,7 @@ public class BankTrade implements Serializable  {
   @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")  
   private Date importDate;
   
-  private Integer isArchive;//是否归档
+  private Integer isArchive;//是否归档0-未归档，1-已归档
 
   
   public Integer getIsArchive() {

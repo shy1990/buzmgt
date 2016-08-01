@@ -51,7 +51,20 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
     List<WaterOrderCash> waterOrderList = waterOrderCashRepository.findAll(spec);
     return waterOrderList;
   }
+  
+  public long count(Map<String, Object> searchParams){
+    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+    Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
+    return waterOrderCashRepository.count(spec);
+  }
 
+  @Override
+  public long countByPayStatusAndCreateDate(WaterPayStatusEnum overpay, String createDate) {
+    Map<String,Object> searchParams = new HashMap<>();
+    searchParams.put("EQ_createDate", createDate);
+    searchParams.put("EQ_payStatus", WaterPayStatusEnum.OverPay);
+    return this.count(searchParams);
+  }
   @Override
   public Page<WaterOrderCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);

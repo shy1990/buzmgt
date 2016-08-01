@@ -214,18 +214,19 @@ public class MonthTargetServiceImpl implements MonthTargetService {
 
     @Override
     public String save(MonthTarget mt, Region region) {
-        MonthTarget m = mtr.findByRegion(region);
+        Calendar cal = Calendar.getInstance();
+        //下面的就是把当前日期加一个月
+        cal.add(Calendar.MONTH, 1);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String nextMonth = sdf.format(cal.getTime());
+        MonthTarget m = mtr.findByRegionAndTargetCycle(region,nextMonth);
         SalesMan sm = smService.findByRegionAndisPrimaryAccount(region);
         if(ObjectUtils.isEmpty(m)){
             mt.setSalesman(sm);
             mt.setRegion(sm.getRegion());
             Manager manager = getManager();
             mt.setManagerRegion(manager.getRegion().getId());
-            Calendar cal = Calendar.getInstance();
-            //下面的就是把当前日期加一个月
-            cal.add(Calendar.MONTH, 1);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-            mt.setTargetCycle(sdf.format(cal.getTime()));
+            mt.setTargetCycle(nextMonth);
             mt = mtr.save(mt);
             return "ok";
         } else {
