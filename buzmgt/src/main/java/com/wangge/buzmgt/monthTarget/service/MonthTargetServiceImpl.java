@@ -733,22 +733,24 @@ public class MonthTargetServiceImpl implements MonthTargetService {
 //        }
         Page<MonthTarget> pageResult = null;
 
-        Query query = entityManager.createNativeQuery(sql);
-        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
+        SQLQuery sqlQuery = null;
+        int a =5;
+        if (!"0".equals(managerRegion)) {
+            sql += " and tg.manager_region = ? ";
+            Query query = entityManager.createNativeQuery(sql);
+            sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
+            sqlQuery.setParameter(a+1,managerRegion);
+        }else{
+            Query query = entityManager.createNativeQuery(sql);
+            sqlQuery = query.unwrap(SQLQuery.class);//转换成sqlQuery
+        }
         for (int i = 0; i <= 4; i++) {
             sqlQuery.setParameter(i, "%" + time + "%");
         }
-        int a = 5;
-        if (truename != null && !"".equals(truename)) {
+        if (StringUtils.isNotEmpty(truename)) {
             sqlQuery.setParameter(a, "%" + truename + "%");
-        }
-        if (truename == null || "".equals(truename)) {
+        } else{
             sqlQuery.setParameter(a, "%%");
-        }
-
-        if (!"0".equals(managerRegion)) {
-            sql += " and tg.manager_region = ? ";
-            sqlQuery.setParameter(a + 1,managerRegion);
         }
 
         int count = sqlQuery.list().size();//分页查询出总条数(不是分页之后的)
