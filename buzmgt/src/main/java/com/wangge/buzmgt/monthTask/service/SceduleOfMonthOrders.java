@@ -47,12 +47,50 @@ public class SceduleOfMonthOrders {
   
   @Autowired
   private MonthshopBasDataRepository shopRep;
+  
+  // 订单支付状态为1,计算上个月的订单情况
+  public static final String lsdatasql =
+      
+      "select r.registdata_id, r.region_id, o3.days, r.shop_name, '1' month\n" + "  from sys_registdata r\n"
+          + "  left join SJZAIXIAN.SJ_TB_members m on r.member_id = m.id\n"
+          + "  left join (select count(1) days, o2.member_id\n" + "               from (select o1.member_id, o1.day\n"
+          + "                       from (select t.member_id,\n" + "                                    t.CREATETIME,\n"
+          + "                                    to_char(t.CREATETIME, 'yyyy-mm-dd') day,\n"
+          + "                                    t.ship_Name\n"
+          + "                               from SJZAIXIAN.SJ_TB_ORDER t\n"
+          + "                              where to_char(t.createTime, 'yyyy-mm') =\n"
+          + "                                    to_char(sysdate - interval '1' month,\n"
+          + "                                            'yyyy-mm')\n"
+          + "                                and t.pay_status = '1') o1\n"
+          + "                      group by o1.member_id, o1.day) o2\n" + "              group by o2.member_id\n"
+          + "              order by days desc) o3 on o3.member_id = m.id\n" + " where exists (select 1\n"
+          + "          from (select *\n" + "                  from sys_region r\n"
+          + "                 start with r.region_id = $town \n"
+          + "                connect by prior r.region_id = r.parent_id) tmp\n"
+          + "         where tmp.region_id = r.region_id)";
+  // 上月拜访访情况
+  public static final String lsVisitSql = "select count(1), tmp.month, tmp.registdata_id, tmp.region_id\n"
+      + "  from (select substr(g.finish_time, 0, 7) month,\n" + "               g.registdata_id,\n"
+      + "               g.region_id\n" + "          from (select to_char(v.time, 'yyyy-mm-dd') finish_time,\n"
+      + "                       r.registdata_id,\n" + "                       r.region_id\n"
+      + "                  from sys_monthtask_execution v\n"
+      + "                  left join sys_registdata r on v.memberid = r.registdata_id\n"
+      + "                 where (to_char(v.time, 'yyyy-mm') =\n"
+      + "                       to_char(sysdate - interval '1' month, 'yyyy-mm'))\n" + "                   and exists\n"
+      + "                 (select 1\n" + "                          from (select \n"
+      + "                                  from sys_region r\n"
+      + "                                 start with r.region_id = $town \n"
+      + "                                connect by prior r.region_id = r.parent_id) tmp\n"
+      + "                         where tmp.region_id = r.region_id)) g\n"
+      + "         group by g.finish_time, g.registdata_id, g.region_id) tmp\n"
+      + " group by tmp.month, tmp.registdata_id, tmp.region_id";
+  // 查询所有业务和区域
   private static final String townSql = "select s.region_id, s.user_id, s.truename  from sys_salesman s \n"
       + "  left join sys_user u on s.user_id = u.user_id  where u.status in (0, 1)";
   
   // 每月15号1点时分 0 30 1 15 * ?
   @SuppressWarnings("unchecked")
-  @Scheduled(cron = " 0 30 1 15 * ? ")
+  @Scheduled(cron = " 0 20 18 29 * ? ")
   public void handleMontholdData() {
     List<Object[]> townList = em.createNativeQuery(townSql).getResultList();
     for (Object[] towns : townList) {
@@ -71,7 +109,7 @@ public class SceduleOfMonthOrders {
    * @throws NumberFormatException
    */
   private void handleOneTownOrders(String town, String salemanid, String salemanName) throws NumberFormatException {
-    String sql = MonthTaskServiceImpl.lsdatasql.replace("$town", town);
+    String sql = lsdatasql.replace("$town", town);
     // 得出三个月的数据sql
     sql += "union " + sql.replace("'1' month", "'2' month") + " union " + sql.replace("'1' month", "'3' month");
     Query q = em.createNativeQuery(sql);
@@ -116,7 +154,7 @@ public class SceduleOfMonthOrders {
       int sum = sum1[i] + sum2[i] + sum3[i];
       sum4[i] = sum % 3 == 0 ? sum / 3 : (sum / 3 + 1);
     }
-    String vsSql = MonthTaskServiceImpl.lsVisitSql.replace("$town", town);
+    String vsSql = lsVisitSql.replace("$town", town);
     @SuppressWarnings("unchecked")
     List<Object[]> visList = em.createNativeQuery(vsSql).getResultList();
     for (Object[] vist : visList) {

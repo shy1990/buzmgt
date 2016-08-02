@@ -40,7 +40,7 @@ function initDate() {
 // 查询数据
 function getTask(flag) {
 	var time = $('body input').val();
-	if (month != null && month != '') {
+	if (time != '') {
 		if (time != month) {
 			page = 0;
 		}
@@ -51,17 +51,20 @@ function getTask(flag) {
 
 }
 
+var gflag=0;
 function findTaskList(cpage, flag) {
 	cpage = cpage == null || cpage == '' ? 0 : cpage;
 	page=cpage;
 	// SearchData['page'] = page;
 	var searchData = null;
 	var salesManName = $('[name="truename"]').val();
+	gflag=flag;
 	if (flag == 1) {
 		searchData = {
 			"page" : cpage,
 			"size" : size,
 			"salesManName" : salesManName,
+			"sffb":$('#sffb').val(),
 			"flag" : 1
 		};
 	} else {
@@ -115,7 +118,7 @@ function oilCostPaging(data) {
 		showCount : 5,
 		limit : limit,
 		callback : function(curr, limit, totalCount) {
-			findTaskList(curr - 1);
+			findTaskList(curr - 1,gflag);
 		}
 	});
 }

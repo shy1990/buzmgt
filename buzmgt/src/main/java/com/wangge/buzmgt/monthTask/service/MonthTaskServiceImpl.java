@@ -73,71 +73,25 @@ public class MonthTaskServiceImpl implements MonthTaskService {
   MonthTaskPunishRepository monthPunishRep;
   private static Integer[] levels = new Integer[] { 20, 15, 10, 7, 4 };
   
-  // 订单支付状态为1,计算上个月的订单情况
-  public static final String lsdatasql =
-      
-      "select r.registdata_id, r.region_id, o3.days, r.shop_name, '1' month\n" + "  from sys_registdata r\n"
-          + "  left join SJZAIXIAN.SJ_TB_members m on r.member_id = m.id\n"
-          + "  left join (select count(1) days, o2.member_id\n" + "               from (select o1.member_id, o1.day\n"
-          + "                       from (select t.member_id,\n" + "                                    t.CREATETIME,\n"
-          + "                                    to_char(t.CREATETIME, 'yyyy-mm-dd') day,\n"
-          + "                                    t.ship_Name\n"
-          + "                               from SJZAIXIAN.SJ_TB_ORDER t\n"
-          + "                              where to_char(t.createTime, 'yyyy-mm') =\n"
-          + "                                    to_char(sysdate - interval '1' month,\n"
-          + "                                            'yyyy-mm')\n"
-          + "                                and t.pay_status = '1') o1\n"
-          + "                      group by o1.member_id, o1.day) o2\n" + "              group by o2.member_id\n"
-          + "              order by days desc) o3 on o3.member_id = m.id\n" + " where exists (select 1\n"
-          + "          from (select *\n" + "                  from sys_region r\n"
-          + "                 start with r.region_id = $town \n"
-          + "                connect by prior r.region_id = r.parent_id) tmp\n"
-          + "         where tmp.region_id = r.region_id)";
-  // 上月拜访访情况
-  
-  /*
-   * 正式上线一月后使用,一月之前以sys_visit表的数据进行统计
-   * 
-   * 
-   * 
-   * "select count(1), tmp.month, tmp.registdata_id, tmp.region_id\n" +
-   * "  from (select substr(g.finish_time, 0, 7) month,\n" +
-   * "               g.registdata_id,\n" + "               g.region_id\n" +
-   * "          from (select to_char(v.time, 'yyyy-mm-dd') finish_time,\n" +
-   * "                       r.registdata_id,\n" +
-   * "                       r.region_id\n" +
-   * "                  from sys_monthtask_execution v\n" +
-   * "                  left join sys_registdata r on v.memberid = r.registdata_id\n"
-   * + "                 where (to_char(v.time, 'yyyy-mm') =\n" +
-   * "                       to_char(sysdate - interval '1' month, 'yyyy-mm'))\n"
-   * + "                   and exists\n" + "                 (select 1\n" +
-   * "                          from (select *\n" +
-   * "                                  from sys_region r\n" +
-   * "                                 start with r.region_id = $town \n" +
-   * "                                connect by prior r.region_id = r.parent_id) tmp\n"
-   * + "                         where tmp.region_id = r.region_id)) g\n" +
-   * "         group by g.finish_time, g.registdata_id, g.region_id) tmp\n" +
-   * " group by tmp.month, tmp.registdata_id, tmp.region_id";
-   * 
-   * 
-   * 
-   */
-  public static final String lsVisitSql = "select count(1), tmp.month, tmp.registdata_id, tmp.region_id\n"
-      + "  from (select substr(g.finish_time, 0, 7) month,\n" + "               g.registdata_id,\n"
-      + "               g.region_id\n" + "          from (select to_char(v.finish_time, 'yyyy-mm-dd') finish_time,\n"
-      + "                       r.registdata_id,\n" + "                       r.region_id\n"
-      + "                  from sys_visit v\n" + "                  left join sys_registdata r on v.registdata_id =\n"
-      + "                                                r.registdata_id\n"
-      + "                 where v.finish_time is not null\n" + "                   and exists\n"
-      + "                 (select 1\n" + "                          from (select *\n"
-      + "                                  from sys_region r\n"
-      + "                                 start with r.region_id = $town\n"
-      + "                                connect by prior r.region_id = r.parent_id) tmp\n"
-      + "                         where tmp.region_id = r.region_id)\n"
-      + "                   and (to_char(v.finish_time, 'yyyy-mm') =\n"
-      + "                       to_char(sysdate - interval '1' month, 'yyyy-mm'))) g\n"
-      + "         group by g.finish_time, g.registdata_id, g.region_id) tmp\n"
-      + " group by tmp.month, tmp.registdata_id, tmp.region_id";
+
+// 
+// public static final String lsVisitSql = "select count(1), tmp.month, tmp.registdata_id, tmp.region_id\n"
+//     + "  from (select substr(g.finish_time, 0, 7) month,\n" + "               g.registdata_id,\n"
+//     + "               g.region_id\n" + "          from (select to_char(v.finish_time, 'yyyy-mm-dd') finish_time,\n"
+//     + "                       r.registdata_id,\n" + "                       r.region_id\n"
+//     + "                  from sys_visit v\n" + "                  left join sys_registdata r on v.registdata_id =\n"
+//     + "                                                r.registdata_id\n"
+//     + "                 where v.finish_time is not null\n" + "                   and exists\n"
+//     + "                 (select 1\n" + "                          from (select *\n"
+//     + "                                  from sys_region r\n"
+//     + "                                 start with r.region_id = $town\n"
+//     + "                                connect by prior r.region_id = r.parent_id) tmp\n"
+//     + "                         where tmp.region_id = r.region_id)\n"
+//     + "                   and (to_char(v.finish_time, 'yyyy-mm') =\n"
+//     + "                       to_char(sysdate - interval '1' month, 'yyyy-mm'))) g\n"
+//     + "         group by g.finish_time, g.registdata_id, g.region_id) tmp\n"
+//     + " group by tmp.month, tmp.registdata_id, tmp.region_id";
+// 
   
   @Override
   public Map<String, Object> getMainTaskList(Pageable page, String month, MultiValueMap<String, String> parameters)
@@ -154,7 +108,22 @@ public class MonthTaskServiceImpl implements MonthTaskService {
     
     if (null == flag) {
       if (null != sffb && !"".equals(sffb)) {
-        result = mtaskRep.findByMonthAndStatusAndRegionidLike(month, Integer.valueOf(sffb), regionId, page);
+        int searchType = Integer.valueOf(sffb);
+        switch (searchType) {
+          case 0:
+          case 1:
+            result = mtaskRep.findByMonthAndStatusAndRegionidLike(month, searchType, regionId, page);
+            break;
+          case 2:
+            result = mtaskRep.findBySetUnFinished(month, regionId, page);
+            break;
+          case 3:
+            result = mtaskRep.findBySetFinished(month, regionId, page);
+            break;
+          default:
+            break;
+        }
+        
       } else {
         if (null == saleManName || "".equals(saleManName)) {
           result = mtaskRep.findByMonthAndRegionidLike(month, regionId, page);
@@ -163,7 +132,19 @@ public class MonthTaskServiceImpl implements MonthTaskService {
         }
       }
     } else {
-      if (null == saleManName || "".equals(saleManName)) {
+      if (null != sffb && !"".equals(sffb)) {
+        int searchType = Integer.valueOf(sffb);
+        switch (searchType) {
+          case 0:
+            result = mtaskRep.findByDoneUnFinished(month, regionId, page);
+            break;
+          case 1:
+            result = mtaskRep.findByDoneFinished(month, regionId, page);
+            break;
+          default:
+            break;
+        }
+      } else if (null == saleManName || "".equals(saleManName)) {
         result = mtaskRep.findByMonthAndStatusAndRegionidLike(month, 1, regionId, page);
       } else {
         result = mtaskRep.findByMonthAndStatusAndMonthData_Salesman_TruenameLike(month, 1, "%" + saleManName + "%",
