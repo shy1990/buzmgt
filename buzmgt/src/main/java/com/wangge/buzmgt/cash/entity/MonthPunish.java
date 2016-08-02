@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,6 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 
 
@@ -62,8 +65,8 @@ public class MonthPunish implements Serializable  {
   
   private Integer status;
   
-  
-  
+  @Enumerated(EnumType.STRING)
+  private FlagEnum flag = FlagEnum.NORMAL;
   
   public Integer getStatus() {
     return status;
@@ -107,9 +110,11 @@ public class MonthPunish implements Serializable  {
   public void setCreateDate(Date createDate) {
     this.createDate = createDate;
   }
-
-  
-  
-  
+  public FlagEnum getFlag() {
+    return flag;
+  }
+  public void setFlag(FlagEnum flag) {
+    this.flag = flag;
+  }
 
 }

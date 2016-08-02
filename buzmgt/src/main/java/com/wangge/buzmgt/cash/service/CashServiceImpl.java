@@ -40,6 +40,7 @@ import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
+import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 @Service
 public class CashServiceImpl implements CashService {
@@ -56,54 +57,56 @@ public class CashServiceImpl implements CashService {
   private WaterOrderDetialService detialService;
   @Resource
   private MonthPunishService monthPunishService;
-  
-  private Logger logger=Logger.getLogger(CashServiceImpl.class);
-  
-  
+
+  private Logger logger = Logger.getLogger(CashServiceImpl.class);
+
   @Override
   public List<Cash> findAll(Map<String, Object> searchParams) {
-    regionService.disposeSearchParams("userId",searchParams);
+    searchParams.put("EQ_flag", "NORMAL");
+    regionService.disposeSearchParams("userId", searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<Cash> spec = CashSearchFilter(filters.values(), Cash.class);
-    Order order=new Order(Direction.DESC,"createDate");
-    Sort sort=new Sort(order);
-    List<Cash> cashList = cashRepository.findAll(spec,sort);
+    Order order = new Order(Direction.DESC, "createDate");
+    Sort sort = new Sort(order);
+    List<Cash> cashList = cashRepository.findAll(spec, sort);
     disposeCashList(cashList);
-    
+
     return cashList;
-    
+
   }
 
   @Override
   public Page<Cash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
-    regionService.disposeSearchParams("userId",searchParams);
+    searchParams.put("EQ_flag", "NORMAL");
+    regionService.disposeSearchParams("userId", searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<Cash> spec = CashSearchFilter(filters.values(), Cash.class);
-    Page<Cash> cashPage = cashRepository.findAll(spec,pageRequest);
+    Page<Cash> cashPage = cashRepository.findAll(spec, pageRequest);
     disposeCashList(cashPage.getContent());
     return cashPage;
   }
 
   @SuppressWarnings("deprecation")
-  public void disposeCashList(List<Cash> cashList){
-  //TODO  某一个时间点（如12:00）拓展后期后台设置 超时时间点;
+  public void disposeCashList(List<Cash> cashList) {
+    // TODO 某一个时间点（如12:00）拓展后期后台设置 超时时间点;
     String timesGap = "12:00";
-    String[] times=timesGap.split(":");
-    cashList.forEach(cash->{
-      //去除无用数据
+    String[] times = timesGap.split(":");
+    cashList.forEach(cash -> {
+      // 去除无用数据
       cash.getOrder().getSalesMan().setUser(null);
       cash.getOrder().getSalesMan().setRegion(null);
-      //判断是否超时
+      // 判断是否超时
       Date createTime = cash.getCreateDate();
-      Date checkDate=DateUtil.moveDate(createTime, 1);
+      Date checkDate = DateUtil.moveDate(createTime, 1);
       checkDate.setHours(Integer.parseInt(times[0]));
       checkDate.setMinutes(Integer.parseInt(times[1]));
       Date payTime = cash.getPayDate();
-      if((payTime==null?new Date():payTime).getTime()>checkDate.getTime()){
+      if ((payTime == null ? new Date() : payTime).getTime() > checkDate.getTime()) {
         cash.setIsTimeOut("超时");
       }
     });
   }
+
   @Override
   public Cash findById(Long id) {
     return cashRepository.findOne(id);
@@ -112,40 +115,40 @@ public class CashServiceImpl implements CashService {
   @Override
   public List<Cash> findAllByParams(Map<String, Object> searchParams) {
     String orderNo = (String) searchParams.get("EQ_orderNo");
-    String startTime=(String) searchParams.get("GTE_createTime");
-    String endTime=(String) searchParams.get("LTE_createTime");
+    String startTime = (String) searchParams.get("GTE_createTime");
+    String endTime = (String) searchParams.get("LTE_createTime");
     searchParams.remove("GTE_createTime");
     searchParams.remove("LTE_createTime");
-    if(!"".equals(startTime) || !"".equals(endTime)){
+    if (!"".equals(startTime) || !"".equals(endTime)) {
       searchParams.put("GTE_createDate", startTime);
       searchParams.put("LTE_createDate", endTime);
     }
-    List<Cash> listAll=new ArrayList<>();
-    if(StringUtils.isNotEmpty(orderNo)){
+    List<Cash> listAll = new ArrayList<>();
+    if (StringUtils.isNotEmpty(orderNo)) {
       OrderSignfor order = orderSignforService.findByOrderNo(orderNo);
-      if(order==null){
+      if (order == null) {
         return listAll;
       }
       searchParams.remove("EQ_orderNo");
       searchParams.put("EQ_cashId", order.getId());
     }
-    //未支付
-    String unStatus=(String) searchParams.get("EQ_status");
-    if("UnPay".equals(unStatus)){
+    // 未支付
+    String unStatus = (String) searchParams.get("EQ_status");
+    if ("UnPay".equals(unStatus)) {
       searchParams.remove("EQ_status");
-      searchParams.put("LT_status","OverPay");
+      searchParams.put("LT_status", "OverPay");
     }
-    
-    //超时UnPayLate(为付款超时)
+
+    // 超时UnPayLate(为付款超时)
     String status = (String) searchParams.get("GTE_status");
     searchParams.remove("GTE_status");
     listAll = findAll(searchParams);
-    if(StringUtils.isNotEmpty(status)){
-      
-      List<Cash> cashList=new ArrayList<>();
-      listAll.forEach(cash->{
-        String msg=cash.getIsTimeOut();
-        if("超时".equals(msg)){
+    if (StringUtils.isNotEmpty(status)) {
+
+      List<Cash> cashList = new ArrayList<>();
+      listAll.forEach(cash -> {
+        String msg = cash.getIsTimeOut();
+        if ("超时".equals(msg)) {
           cashList.add(cash);
         }
       });
@@ -153,62 +156,57 @@ public class CashServiceImpl implements CashService {
     }
     return listAll;
   }
-  
+
   @Override
-  public List<String> findByStatusGroupByUserId(){
+  public List<String> findByStatusGroupByUserId() {
     return cashRepository.findByStatusGroupByUserId();
   }
 
   /**
-   * 购物车结算
-   * 将所有未结算订单全部结算
+   * 购物车结算 将所有未结算订单全部结算
    * 
-   * 流程：1.根据userID和cashIds查询所要处理的现金订单cash
-   * 2.生成流水单号-->使用：流水订单+流水订单详情
-   * 3.组装流水单详情数据
-   * 4.组装流水单数据
-   * 5.保存流水单
-   * 6.保存流水单详情列表
-   * 7.修改现金订单列表中状态status改为1（已结算）
-   * 8.返回状态
+   * 流程：1.根据userID和cashIds查询所要处理的现金订单cash 2.生成流水单号-->使用：流水订单+流水订单详情 3.组装流水单详情数据
+   * 4.组装流水单数据 5.保存流水单 6.保存流水单详情列表 7.修改现金订单列表中状态status改为1（已结算） 8.返回状态
+   * 
    * @param userId
    * @param cashIds
    * @return
    */
   @Override
-  @Transactional(readOnly=false)
-  public boolean createWaterOrderByCash(String userId){
-    boolean msg=false;
-    logger.info("cashToWaterOrder----->userId:"+userId);
+  @Transactional(readOnly = false)
+  public boolean createWaterOrderByCash(String userId) {
+    boolean msg = false;
+    logger.info("cashToWaterOrder----->userId:" + userId);
     try {
-      
-      //查询代数现金列表现金列表
-      List<Cash> cashlist=cashRepository.findByUserIdAndStatus(userId, CashStatusEnum.UnPay);
-      //流水单号详情
-      List<WaterOrderDetail> detailList=new ArrayList<>();
-      
-      //生成流水单号 
-      String serialNo=createSerialNo();
-      
+
+      // 查询代数现金列表现金列表
+      List<Cash> cashlist = cashRepository.findByUserIdAndStatusAndFlag(userId, CashStatusEnum.UnPay, FlagEnum.NORMAL);
+      // 流水单号详情
+      List<WaterOrderDetail> detailList = new ArrayList<>();
+
+      // 生成流水单号
+      String serialNo = createSerialNo();
+
       Float totalPrice = 0.0f;
-      if(CollectionUtils.isNotEmpty(cashlist)){
-        for(Cash cash:cashlist){
-          //计算流水单号收现金金额
-          OrderSignfor order=cash.getOrder();
-          totalPrice+=order.getOrderPrice();
-          
-          //组装流水单号详情数据
-          WaterOrderDetail detail=new WaterOrderDetail();
+      if (CollectionUtils.isNotEmpty(cashlist)) {
+        for (Cash cash : cashlist) {
+          // 计算流水单号收现金金额
+          OrderSignfor order = cash.getOrder();
+          totalPrice += order.getOrderPrice();
+
+          // 组装流水单号详情数据
+          WaterOrderDetail detail = new WaterOrderDetail();
           detail.setCashId(cash.getCashId());
           detail.setSerialNo(serialNo);
           detailList.add(detail);
-          
-          //修改状态
+
+          // 修改状态
           cash.setStatus(CashStatusEnum.OverCash);
-        };
-        
-        //组装流水单数据
-        WaterOrderCash woc=new WaterOrderCash();
+        }
+        ;
+
+        // 组装流水单数据
+        WaterOrderCash woc = new WaterOrderCash();
         woc.setSerialNo(serialNo);
         woc.setUserId(userId);
         woc.setCreateDate(new Date());
@@ -216,59 +214,64 @@ public class CashServiceImpl implements CashService {
         woc.setIsPunish(0);
         woc.setPayStatus(WaterPayStatusEnum.UnPay);
 
-        //查询是否已经处理扣罚
-        List<WaterOrderCash> orderCashs=orderCashService.findByUserIdAndCreateDateForPunish(DateUtil.date2String(woc.getCreateDate()),1,userId);
-        if(CollectionUtils.isEmpty(orderCashs)){
-          //检查是否有扣罚
-          List<MonthPunish> mpl=monthPunishService.findByUserIdAndCreateDate(userId, DateUtil.date2String(DateUtil.moveDate(woc.getCreateDate(),-1)));
-          if(CollectionUtils.isNotEmpty(mpl)){
+        // 查询是否已经处理扣罚
+        List<WaterOrderCash> orderCashs = orderCashService
+            .findByUserIdAndCreateDateForPunish(DateUtil.date2String(woc.getCreateDate()), 1, userId);
+        if (CollectionUtils.isEmpty(orderCashs)) {
+          // 检查是否有扣罚
+          List<MonthPunish> mpl = monthPunishService.findByUserIdAndCreateDate(userId,
+              DateUtil.date2String(DateUtil.moveDate(woc.getCreateDate(), -1)));
+          if (CollectionUtils.isNotEmpty(mpl)) {
             woc.setIsPunish(1);
-            //修改扣罚状态确认有对应流水单号。
+            // 修改扣罚状态确认有对应流水单号。
             mpl.forEach(mp -> {
               mp.setStatus(1);
             });
             monthPunishService.save(mpl);
           }
-          
+
         }
-        
-        //保存流水单
+
+        // 保存流水单
         orderCashService.save(woc);
-        //保存流水单详情列表
+        // 保存流水单详情列表
         detialService.save(detailList);
-        //修改现金列表状态
+        // 修改现金列表状态
         cashRepository.save(cashlist);
-        msg=true;
+        msg = true;
       }
     } catch (Exception e) {
       logger.info(e.getMessage());
       return msg;
     }
-    
+
     return msg;
   }
+
   /**
    * 流水单号生成策略：时间戳+4位随机码
+   * 
    * @return serialNo
    */
-  public String createSerialNo(){
-    String serialNo="";
-    Date now=new Date();
-    serialNo+=now.getTime();
-    int randow=(int)Math.random()*10000+1;
-    serialNo+=randow;
-    logger.info("流水单号:serialNo-->"+serialNo);
+  public String createSerialNo() {
+    String serialNo = "";
+    Date now = new Date();
+    serialNo += now.getTime();
+    int randow = (int) Math.random() * 10000 + 1;
+    serialNo += randow;
+    logger.info("流水单号:serialNo-->" + serialNo);
     return serialNo;
   }
-  
+
   @Override
   @Transactional
-  public Cash save(Cash cash){
+  public Cash save(Cash cash) {
     return cashRepository.save(cash);
   }
 
   private static Specification<Cash> CashSearchFilter(final Collection<SearchFilter> filters,
-      final Class<Cash> entityClazz) {
+
+  final Class<Cash> entityClazz) {
 
     return new Specification<Cash>() {
 
@@ -279,6 +282,8 @@ public class CashServiceImpl implements CashService {
       private final static String TIME_MAX = " 23:59:59 999";
 
       private final static String TYPE_ORDERSIGNFOR_TYPE = "com.wangge.buzmgt.cash.entity.Cash$CashStatusEnum";
+
+      private final static String TYPE_CASH_FLAG_TYPE = "com.wangge.buzmgt.ywsalary.entity.FlagEnum";
 
       private final static String TYPE_DATE = "java.util.Date";
 
@@ -318,6 +323,14 @@ public class CashServiceImpl implements CashService {
                 }
                 if (CashStatusEnum.OverPay.toString().equals(status)) {
                   filter.value = CashStatusEnum.OverPay;
+                }
+                predicates.add(cb.equal(expression, filter.value));
+              } else if (javaTypeName.equals(TYPE_CASH_FLAG_TYPE)) {
+                String status = filter.value.toString();
+                if (FlagEnum.NORMAL.toString().equals(status)) {
+                  filter.value = FlagEnum.NORMAL;
+                } else {
+                  filter.value = FlagEnum.DEL;
                 }
                 predicates.add(cb.equal(expression, filter.value));
               } else {
@@ -360,7 +373,7 @@ public class CashServiceImpl implements CashService {
                 if (CashStatusEnum.OverPay.toString().equals(status)) {
                   filter.value = CashStatusEnum.OverPay;
                 }
-                predicates.add(cb.lessThan(expression, (Comparable)filter.value));
+                predicates.add(cb.lessThan(expression, (Comparable) filter.value));
               } else {
                 predicates.add(cb.lessThan(expression, (Comparable) filter.value));
               }
@@ -405,34 +418,33 @@ public class CashServiceImpl implements CashService {
 
               break;
             case NOTEQ:
-              
-                predicates.add(cb.notEqual(expression, filter.value));
+
+              predicates.add(cb.notEqual(expression, filter.value));
 
               break;
             case ISNULL:
-              
-                predicates.add(cb.isNull(expression));
+
+              predicates.add(cb.isNull(expression));
               break;
             case NOTNULL:
-                predicates.add(cb.isNull(expression));
+              predicates.add(cb.isNull(expression));
 
               break;
             case ORMLK:
               /**
-               * sc_ORMLK_userId = 370105,3701050,3701051
-               * 用于区域选择
+               * sc_ORMLK_userId = 370105,3701050,3701051 用于区域选择
                */
               String[] parameterValue = ((String) filter.value).split(",");
-              Predicate[] pl=new Predicate[parameterValue.length];
-              
-              for(int n=0;n<parameterValue.length;n++){
-                pl[n]=(cb.like(expression, "%"+parameterValue[n]+"%"));
+              Predicate[] pl = new Predicate[parameterValue.length];
+
+              for (int n = 0; n < parameterValue.length; n++) {
+                pl[n] = (cb.like(expression, "%" + parameterValue[n] + "%"));
               }
-              
+
               Predicate p_ = cb.or(pl);
               predicates.add(p_);
               break;
-              
+
             default:
               break;
 
@@ -450,6 +462,4 @@ public class CashServiceImpl implements CashService {
     };
   }
 
- 
-  
 }

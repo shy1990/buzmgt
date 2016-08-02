@@ -2,7 +2,6 @@ package com.wangge.buzmgt.cash.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,21 +9,14 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 
 
@@ -70,6 +62,8 @@ public class Cash implements Serializable  {
   
   private Date createDate ;//创建日期
   private Date payDate  ;//支付时间
+  @Enumerated(EnumType.STRING)
+  private FlagEnum flag = FlagEnum.NORMAL;
   
   
   @Transient
@@ -119,8 +113,16 @@ public class Cash implements Serializable  {
   public void setPayDate(Date payDate) {
     this.payDate = payDate;
   }
-  
-  
-  
+  public FlagEnum getFlag() {
+    return flag;
+  }
+  public void setFlag(FlagEnum flag) {
+    this.flag = flag;
+  }
+  @Override
+  public String toString() {
+    return "Cash [cashId=" + cashId + ", order=" + order + ", userId=" + userId + ", status=" + status + ", createDate="
+        + createDate + ", payDate=" + payDate + ", isTimeOut=" + isTimeOut + "]";
+  }
 
 }

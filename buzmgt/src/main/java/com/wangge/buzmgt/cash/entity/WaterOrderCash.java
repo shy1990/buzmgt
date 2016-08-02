@@ -26,6 +26,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 
 
@@ -91,6 +92,8 @@ public class WaterOrderCash implements Serializable  {
   @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone = "GMT+8")  
   private Date payDate  ;//支付时间
   
+  @Enumerated(EnumType.STRING)
+  private FlagEnum flag = FlagEnum.NORMAL;
   
   public List<WaterOrderDetail> getOrderDetails() {
     return orderDetails;
@@ -146,7 +149,11 @@ public class WaterOrderCash implements Serializable  {
   public void setPayDate(Date payDate) {
     this.payDate = payDate;
   }
-
-  
+  public FlagEnum getFlag() {
+    return flag;
+  }
+  public void setFlag(FlagEnum flag) {
+    this.flag = flag;
+  }
 
 }

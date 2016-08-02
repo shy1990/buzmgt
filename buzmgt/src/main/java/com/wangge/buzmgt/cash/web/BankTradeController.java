@@ -63,13 +63,6 @@ public class BankTradeController {
       "createDate", "id" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<BankTrade> bankTrades = bankTradeService.findAll(searchParams, pageable);
-    // String json = "";
-    // try {
-    // json = JSON.toJSONString(bankTrades,
-    // SerializerFeature.DisableCircularReferenceDetect);
-    // } catch (Exception e) {
-    // logger.error(e.getMessage());
-    // }
     return bankTrades;
   }
 

@@ -54,8 +54,8 @@ public class BaseSalary implements Serializable  {
   @Temporal(TemporalType.TIMESTAMP)
   private Date updateDate;//修改日期
   
-  @Enumerated(EnumType.ORDINAL)
-  private FlagEnum flag;//是否删除
+  @Enumerated(EnumType.STRING)
+  private FlagEnum flag = FlagEnum.NORMAL;//是否删除 normal-正常,del-删除
   
   public SalesMan getUser() {
     return user;

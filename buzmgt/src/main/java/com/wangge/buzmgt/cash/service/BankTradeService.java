@@ -21,12 +21,6 @@ public interface BankTradeService {
   public  List<BankTrade> findAll(Map<String, Object> searchParams);
   
   /**
-   * 根据创建日期查询银行交易记录
-   * @param createDate
-   * @return
-   */
-  public List<BankTrade> findByCreateDate(String createDate);
-  /**
    * 查询分页银行交易记录列表
    * @param searchParams
    * @param pageRequest

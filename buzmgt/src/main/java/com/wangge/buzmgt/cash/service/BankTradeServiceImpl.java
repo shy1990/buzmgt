@@ -46,6 +46,7 @@ import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import com.wangge.buzmgt.util.excel.ExcelImport;
 import com.wangge.buzmgt.util.file.FileUtils;
+import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 @Service
 public class BankTradeServiceImpl implements BankTradeService {
@@ -64,6 +65,7 @@ public class BankTradeServiceImpl implements BankTradeService {
 
   @Override
   public List<BankTrade> findAll(Map<String, Object> searchParams) {
+    searchParams.put("EQ_flag", "NORMAL");
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<BankTrade> spec = bankTradeSearchFilter(filters.values(), BankTrade.class);
     List<BankTrade> bankTrades = bankTradeRepository.findAll(spec);
@@ -73,20 +75,18 @@ public class BankTradeServiceImpl implements BankTradeService {
 
   @Override
   public Page<BankTrade> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
+    searchParams.put("EQ_flag", "NORMAL");
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<BankTrade> spec = bankTradeSearchFilter(filters.values(), BankTrade.class);
     Page<BankTrade> bankTradePage = bankTradeRepository.findAll(spec, pageRequest);
     return bankTradePage;
   }
 
-  @Override
-  public List<BankTrade> findByCreateDate(String createDate) {
-    return null;
-  }
 
   @Override
   public void delete(BankTrade bankTrade) {
-    bankTradeRepository.delete(bankTrade);
+    bankTrade.setFlag(FlagEnum.DEL);
+    bankTradeRepository.save(bankTrade);
   }
 
 
@@ -107,6 +107,7 @@ public class BankTradeServiceImpl implements BankTradeService {
         bt.setBankName(content[4]);
         bt.setImportDate(date);
         bt.setIsArchive(0);
+        bt.setFlag(FlagEnum.NORMAL);
 
         // 核对业务员打款基表进行核对，添加userId
         setUserIdForBankTrade(bt);
@@ -143,7 +144,10 @@ public class BankTradeServiceImpl implements BankTradeService {
 
   @Override
   public void delete(List<BankTrade> bankTrades) {
-    bankTradeRepository.delete(bankTrades);
+    bankTrades.forEach(bank->{
+      bank.setFlag(FlagEnum.DEL);
+    });
+    bankTradeRepository.save(bankTrades);
   }
 
   private static Specification<BankTrade> bankTradeSearchFilter(final Collection<SearchFilter> filters,
@@ -159,6 +163,8 @@ public class BankTradeServiceImpl implements BankTradeService {
 
       private final static String TYPE_ORDERSIGNFOR_TYPE = "com.wangge.buzmgt.cash.entity.Cash$CashStatusEnum";
 
+      private final static String TYPE_FlAG_TYPE = "com.wangge.buzmgt.ywsalary.entity.FlagEnum";
+      
       private final static String TYPE_DATE = "java.util.Date";
 
       @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -197,6 +203,16 @@ public class BankTradeServiceImpl implements BankTradeService {
                 }
                 if (CashStatusEnum.OverPay.toString().equals(status)) {
                   filter.value = CashStatusEnum.OverPay;
+                }
+                predicates.add(cb.equal(expression, filter.value));
+              } else if(javaTypeName.equals(TYPE_FlAG_TYPE)){
+                
+                String status = filter.value.toString();
+                if (FlagEnum.NORMAL.toString().equals(status)) {
+                  filter.value = FlagEnum.NORMAL;
+                }
+                if (FlagEnum.DEL.toString().equals(status)) {
+                  filter.value = FlagEnum.DEL;
                 }
                 predicates.add(cb.equal(expression, filter.value));
               } else {

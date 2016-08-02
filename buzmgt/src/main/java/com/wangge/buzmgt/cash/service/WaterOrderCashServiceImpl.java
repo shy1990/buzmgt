@@ -31,6 +31,7 @@ import com.wangge.buzmgt.cash.repository.WaterOrderCashRepository;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.util.SearchFilter;
 import com.wangge.buzmgt.util.excel.MapedExcelExport;
+import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 @Service
 public class WaterOrderCashServiceImpl implements WaterOrderCashService {
@@ -46,6 +47,7 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
   @Override
   public List<WaterOrderCash> findAll(Map<String, Object> searchParams) {
+    searchParams.put("EQ_flag", "NORMAL");
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
     List<WaterOrderCash> waterOrderList = waterOrderCashRepository.findAll(spec);
@@ -54,6 +56,7 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
   @Override
   public Page<WaterOrderCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
+    searchParams.put("EQ_flag", "NORMAL");
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
     Page<WaterOrderCash> waterOrderPage = waterOrderCashRepository.findAll(spec, pageRequest);
@@ -101,6 +104,8 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
       private final static String TIME_MAX = " 23:59:59 999";
 
       private final static String TYPE_WATERPAYSTATUS_TYPE = "com.wangge.buzmgt.cash.entity.WaterOrderCash$WaterPayStatusEnum";
+      
+      private final static String TYPE_FLAG_TYPE = "com.wangge.buzmgt.ywsalary.entity.FlagEnum";
 
       private final static String TYPE_DATE = "java.util.Date";
 
@@ -142,6 +147,18 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
                   filter.value = WaterPayStatusEnum.OverPay;
                 }
                 predicates.add(cb.equal(expression, filter.value));
+                
+              } else if (javaTypeName.equals(TYPE_FLAG_TYPE)) {
+                
+                String status = filter.value.toString();
+                if (FlagEnum.NORMAL.toString().equals(status)) {
+                  filter.value = FlagEnum.NORMAL;
+                }
+                if (FlagEnum.DEL.toString().equals(status)) {
+                  filter.value = FlagEnum.DEL;
+                }
+                predicates.add(cb.equal(expression, filter.value));
+                
               } else {
                 predicates.add(cb.equal(expression, filter.value));
               }

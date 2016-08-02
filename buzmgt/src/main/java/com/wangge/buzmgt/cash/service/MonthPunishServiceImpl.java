@@ -34,6 +34,7 @@ import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.service.SalesmanDataService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
+import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 @Service
 public class MonthPunishServiceImpl implements MonthPunishService {
@@ -111,6 +112,8 @@ public class MonthPunishServiceImpl implements MonthPunishService {
       private final static String TIME_MAX = " 23:59:59 999";
 
       private final static String TYPE_ORDERSIGNFOR_TYPE = "com.wangge.buzmgt.cash.entity.Cash$CashStatusEnum";
+      
+      private final static String TYPE_FLAG_TYPE = "com.wangge.buzmgt.ywsalary.entity.FlagEnum";
 
       private final static String TYPE_DATE = "java.util.Date";
 
@@ -143,6 +146,17 @@ public class MonthPunishServiceImpl implements MonthPunishService {
                 } catch (ParseException e) {
                   throw new RuntimeException("日期格式化失败!");
                 }
+              } else if (javaTypeName.equals(TYPE_FLAG_TYPE)) {
+                
+                String status = filter.value.toString();
+                if (FlagEnum.NORMAL.toString().equals(status)) {
+                  filter.value = FlagEnum.NORMAL;
+                }
+                if (FlagEnum.DEL.toString().equals(status)) {
+                  filter.value = FlagEnum.DEL;
+                }
+                predicates.add(cb.equal(expression, filter.value));
+                
               } else if (javaTypeName.equals(TYPE_ORDERSIGNFOR_TYPE)) {
                 String status = filter.value.toString();
                 if (CashStatusEnum.UnPay.toString().equals(status)) {

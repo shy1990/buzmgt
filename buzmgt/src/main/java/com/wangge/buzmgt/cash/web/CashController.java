@@ -65,16 +65,24 @@ public class CashController {
   }
 
   @RequestMapping("/send")
-  public void send(){
-    logger.info("-----------------开启定时结算");
-    List<String> userIds=cashService.findByStatusGroupByUserId();
-    userIds.forEach(userId->{
-      logger.info("userId:"+userId);
-      boolean msg=cashService.createWaterOrderByCash(userId);
-      logger.info("返回结果:"+msg);
-    });
-    logger.info("-----------------结束定时结算");
-    
+  @ResponseBody
+  public String send(){
+    String msg="定时操作失败";
+    try{
+      logger.info("-----------------开启定时结算");
+      List<String> userIds=cashService.findByStatusGroupByUserId();
+      userIds.forEach(userId->{
+        logger.info("userId:"+userId);
+        boolean flag=cashService.createWaterOrderByCash(userId);
+        logger.info("返回结果:"+flag);
+      });
+      msg = "操作成功";
+      logger.info("-----------------结束定时结算");
+      return msg;
+    }catch(Exception e){
+      logger.info(e.getMessage());
+      return msg;
+    }
   }
   
   

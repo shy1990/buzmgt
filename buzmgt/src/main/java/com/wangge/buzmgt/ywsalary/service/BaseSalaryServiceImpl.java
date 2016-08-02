@@ -53,6 +53,7 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   @Override
   public List<BaseSalary> findAll(Map<String, Object> searchParams) {
     regionService.disposeSearchParams("userId", searchParams);
+    searchParams.put("EQ_flag", "NORMAL");
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<BaseSalary> spec = baseSalarySearchFilter(filters.values(), BaseSalary.class);
     List<BaseSalary> baseSalarys = baseSalaryRepository.findAll(spec);
@@ -145,7 +146,7 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
                 if(FlagEnum.NORMAL.toString().equals(type)){
                   filter.value = FlagEnum.NORMAL;
                 }else{
-                  filter.value = FlagEnum.DELETE;
+                  filter.value = FlagEnum.DEL;
                 }
                 predicates.add(cb.equal(expression, filter.value));
                 
