@@ -21,6 +21,7 @@
     <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
     <link rel="stylesheet" type="text/css" href="<%=basePath%>static/bootStrapPager/css/page.css"/>
+    <link rel="stylesheet" href="<%=basePath%>static/month-target/progressbar/styles/progressbar.css">
     <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 </head>
 <body>
@@ -171,10 +172,32 @@
 
 <!---alert---->
 
+
+<%--进度条--%>
+<div id="xgywxx" class="modal fade" role="dialog">
+    <div class="modal-dialog " role="document">
+        <section class="container">
+            <div class="progress">
+                <span class="blue" style="width:0%;"><span>0%</span></span>
+            </div>
+        </section>
+    </div>
+</div>
+<%--end--%>
+
+
 <![endif]-->
 <script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<%--进度条--%>
+<script>
+    function loading(percent) {
+        $('.progress span').animate({width: percent}, 2000, function () {
+            $(this).children().html(percent);
+        })
+    }
+</script>
 <%--<script src="<%=basePath%>static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>--%>
 <script type="text/javascript">
     $('body input').val('');
@@ -303,6 +326,12 @@
     $(function () {
         //页面初始化
 //        console.log(myDate);
+        loading('5%');
+        loading('20%');
+        loading('40%');
+        loading('70%');
+        loading('100%');
+
         monthTarget.searchData.time = myDate;
         monthTarget.detail.init(monthTarget.searchData);
 
@@ -353,6 +382,8 @@
         //查询全部
         findAll: function (searchData) {
 //            console.log(searchData);
+            $("#xgywxx").modal('show').on('shown.bs.model', function () {
+            });
             $.ajax({
                 url: monthTarget.url(),
                 data: searchData,
@@ -368,6 +399,13 @@
                         monthTarget.initPaging();
                     }
 
+                },
+                complete: function () {
+                    setTimeout(function () {
+                        $('.container').fadeOut();
+                        $('.container').hide();
+                        $('#xgywxx').modal('hide');
+                    }, 1000);
                 }
 
             });
@@ -375,6 +413,12 @@
         //根据姓名见检索
         findByName: function (searchData) {
             monthTarget._count.total = -1;
+            $('.container').show();
+            loading('5%');
+            loading('20%');
+            loading('40%');
+            loading('70%');
+            loading('100%');
             monthTarget.findAll(searchData);
 
         },
