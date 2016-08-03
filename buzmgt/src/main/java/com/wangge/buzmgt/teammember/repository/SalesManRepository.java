@@ -90,7 +90,7 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
       + "and mt.target_cycle = to_char((select add_months(sysdate,1) from dual),'YYYY-MM'))\n"
       + "and exists (select 1 from (select * from sys_region r start with r.region_id = ?1\n"
       + "connect by prior r.region_id = r.parent_id) tmp\n"
-      + "where tmp.region_id = s.region_id and s.status=2 and s.is_primary_account = 1 and u.status=0)", nativeQuery = true)
+      + "where tmp.region_id = s.region_id and s.status=2 and u.status=0)", nativeQuery = true)
   Set<SalesMan> findForTargetByReginId(String regionId);
   
   SalesMan findByRegionAndIsPrimaryAccount(Region region, int isPrimaryAccount);
