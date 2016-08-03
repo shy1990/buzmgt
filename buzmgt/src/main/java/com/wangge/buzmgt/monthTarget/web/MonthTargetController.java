@@ -86,7 +86,7 @@ public class MonthTargetController {
   @RequestMapping("/regionName")
   @JSONFormat(filterField = {"SalesMan.user","region.children","region.coordinates"})
   public SalesMan getRegionName(String regionId){
-    SalesMan sm = smService.findByRegionAndisPrimaryAccount(regionService.getRegionById(regionId));
+    SalesMan sm = smService.findByRegionAndStatus(regionService.getRegionById(regionId));
     return sm;
   }
 

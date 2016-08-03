@@ -92,6 +92,7 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
       + "connect by prior r.region_id = r.parent_id) tmp\n"
       + "where tmp.region_id = s.region_id and s.status=2 and u.status=0)", nativeQuery = true)
   Set<SalesMan> findForTargetByReginId(String regionId);
-  
-  SalesMan findByRegionAndIsPrimaryAccount(Region region, int isPrimaryAccount);
+
+  @Query("select s from SalesMan s where s.region.id = ?1 and s.user.status = ?2")
+  SalesMan findByRegion(String regionId, User.UserStatus status);
 }

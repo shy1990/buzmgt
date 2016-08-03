@@ -181,9 +181,9 @@ public  class SalesManServiceImpl implements SalesManService {
   }*/
 
     @Override
-    public SalesMan findByRegionAndisPrimaryAccount(Region region) {
+    public SalesMan findByRegionAndStatus(Region region) {
         if (!ObjectUtils.isEmpty(region)){
-            return salesManRepository.findByRegionAndIsPrimaryAccount(region,1);
+            return salesManRepository.findByRegion(region.getId(), User.UserStatus.NORMAL);
         }else{
             return null;
         }

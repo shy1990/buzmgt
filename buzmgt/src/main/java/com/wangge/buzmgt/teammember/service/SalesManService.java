@@ -35,5 +35,5 @@ public interface SalesManService {
 
     Set<SalesMan> findForTargetByReginId(String regionId);
 
-    SalesMan findByRegionAndisPrimaryAccount(Region region);
+    SalesMan findByRegionAndStatus(Region region);
 }

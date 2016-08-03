@@ -220,7 +220,7 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String nextMonth = sdf.format(cal.getTime());
         MonthTarget m = mtr.findByRegionAndTargetCycle(region,nextMonth);
-        SalesMan sm = smService.findByRegionAndisPrimaryAccount(region);
+        SalesMan sm = smService.findByRegionAndStatus(region);
         if(ObjectUtils.isEmpty(m)){
             mt.setSalesman(sm);
             mt.setRegion(sm.getRegion());
