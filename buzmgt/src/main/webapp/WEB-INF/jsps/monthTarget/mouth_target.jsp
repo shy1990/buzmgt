@@ -175,15 +175,9 @@
 
 
 <%--进度条--%>
-<div id="xgywxx" class="modal fade" role="dialog">
+<div id="xgywxx" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog " role="document" style="margin-top: 300px">
-        <div class="progress progress-striped active">
-            <div class="progress-bar progress-bar-success" role="progressbar"
-                 aria-valuenow="60" aria-valuemin="10" aria-valuemax="100"
-                 style="width: 99%;">
-                <span class="sr-only">40% 完成</span>
-            </div>
-        </div>
+            <div id="loading" class="loading">加载数据中...</div>
     </div>
 </div>
 <%--end--%>
@@ -392,6 +386,7 @@
                     }
 
                 },
+                //加载完毕之后隐藏进度条
                 complete: function () {
                         $('#xgywxx').modal('hide');
                 }
