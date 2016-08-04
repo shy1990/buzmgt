@@ -25,6 +25,7 @@
     <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 </head>
 <body>
+
 <div class="content main">
     <h4 class="page-header">
         <i class="ico icon-yue"></i>月指标
@@ -175,12 +176,14 @@
 
 <%--进度条--%>
 <div id="xgywxx" class="modal fade" role="dialog">
-    <div class="modal-dialog " role="document">
-        <section class="container">
-            <div class="progress">
-                <span class="blue" style="width:0%;"><span>0%</span></span>
+    <div class="modal-dialog " role="document" style="margin-top: 300px">
+        <div class="progress progress-striped active">
+            <div class="progress-bar progress-bar-success" role="progressbar"
+                 aria-valuenow="60" aria-valuemin="10" aria-valuemax="100"
+                 style="width: 99%;">
+                <span class="sr-only">40% 完成</span>
             </div>
-        </section>
+        </div>
     </div>
 </div>
 <%--end--%>
@@ -325,13 +328,6 @@
     }
     $(function () {
         //页面初始化
-//        console.log(myDate);
-        loading('5%');
-        loading('20%');
-        loading('40%');
-        loading('70%');
-        loading('100%');
-
         monthTarget.searchData.time = myDate;
         monthTarget.detail.init(monthTarget.searchData);
 
@@ -381,31 +377,23 @@
         },
         //查询全部
         findAll: function (searchData) {
-//            console.log(searchData);
             $("#xgywxx").modal('show').on('shown.bs.model', function () {
             });
             $.ajax({
                 url: monthTarget.url(),
                 data: searchData,
                 success: function (data) {
-//                    console.log(data);
                     monthTarget.handelerbars_register(data.content);
                     monthTarget._count.totalCount = data.totalElements;//总页数
                     monthTarget._count.limit = data.size;
-//                    console.log(monthTarget._count)
                     if (monthTarget._count.totalCount != monthTarget._count.total || monthTarget._count.totalCount == 0) {
                         monthTarget._count.total = monthTarget._count.totalCount;
-//                        console.log("-------");
                         monthTarget.initPaging();
                     }
 
                 },
                 complete: function () {
-                    setTimeout(function () {
-                        $('.container').fadeOut();
-                        $('.container').hide();
                         $('#xgywxx').modal('hide');
-                    }, 1000);
                 }
 
             });
@@ -413,12 +401,6 @@
         //根据姓名见检索
         findByName: function (searchData) {
             monthTarget._count.total = -1;
-            $('.container').show();
-            loading('5%');
-            loading('20%');
-            loading('40%');
-            loading('70%');
-            loading('100%');
             monthTarget.findAll(searchData);
 
         },
