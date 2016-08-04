@@ -217,7 +217,7 @@ var SearchData = {
 									<li data-tital="cash"><a href="#box_tab2" data-toggle="tab" onclick="show();"><span
 											class="">收现金</span></a></li>
 									<li data-tital="notreported"><a href="#box_tab3" data-toggle="tab" onclick="show();"><span
-											class="">未报备<span class="mark-red">4</span></span></a></li>
+											class="">未报备<!-- <span class="mark-red">4</span> --></span></a></li>
 									<li data-tital="rejected"><a href="#box_tab4" data-toggle="tab" onclick="hide();"><span class="">拒收</span></a></li>
 								</ul>
 								<!--/菜单栏-->
@@ -370,7 +370,7 @@ var SearchData = {
 							<!--拒收-->
 							<div class="tab-pane fade" id="box_tab4">
 								<!--table-box-->
-								<div class="table-abnormal-list table-overflow"  style="overflow-x: hidden">
+								<div class="table-abnormal-list table-overflow">
 									<table class="table table-hover new-table abnormal-order-table">
 										<thead>
 										<tr>
