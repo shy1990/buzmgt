@@ -175,7 +175,7 @@
 
 
 <%--进度条--%>
-<div id="xgywxx" class="modal fade" role="dialog">
+<div id="xgywxx" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog " role="document" style="margin-top: 300px">
             <div id="loading" class="loading">加载数据中...</div>
     </div>
