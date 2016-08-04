@@ -7,6 +7,7 @@ import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface SalesManService {
@@ -36,4 +37,15 @@ public interface SalesManService {
     Set<SalesMan> findForTargetByReginId(String regionId);
 
     SalesMan findByRegionAndStatus(Region region);
+
+    /**
+     * 
+    * @Title: disposeSearchParams 
+    * @Description: 处理根据用户名查询userId
+    * @param @param filedAttribute
+    * @param @param searchParams    设定文件 
+    * @return void    返回类型 
+    * @throws
+     */
+    void disposeSearchParams(String filedAttribute, Map<String, Object> searchParams);
 }

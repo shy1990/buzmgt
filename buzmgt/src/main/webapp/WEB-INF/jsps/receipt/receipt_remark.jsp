@@ -29,23 +29,22 @@
 <link rel="stylesheet" type="text/css" href="static/task/task.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-	<style>
-		.mark-red{
-			position: absolute;
-			top: 2px;
-			right:8px;
-			display: block;
-			border-radius: 2px;
-			-moz-border-radius: 2px;
-			-webkit-border-radius: 2px;
-			font-size: 6px;
-			line-height: 15px;
-			padding: 0px 2px;
-			background: #FF4647;
-			color: #ffffff;
-		}
-
-	</style>
+<style>
+.mark-red {
+	position: absolute;
+	top: 2px;
+	right: 8px;
+	display: block;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	font-size: 6px;
+	line-height: 15px;
+	padding: 0px 2px;
+	background: #FF4647;
+	color: #ffffff;
+}
+</style>
 <script id="remarked-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
@@ -117,7 +116,8 @@
 	</tr>
 	{{/if}}
 </script>
-<script id="notremarked-table-template" type="text/x-handlebars-template">
+<script id="notremarked-table-template"
+	type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
 	<tr>
@@ -193,15 +193,15 @@ var SearchData = {
 	<div class="content main">
 		<h4 class="page-header">
 			<i class="ico icon-abnormal_order"></i>收款异常订单
-				<!--区域选择按钮-->
-        <div class="area-choose">
-            选择区域：<span>${regionName }</span>
-            <a class="are-line" onclick="getRegion(${regionId});" href="javascript:;">切换</a>
-           	<input type="hidden" id="regionId" value="${regionId }">
-           	<input type="hidden" id="regionType" value="${regionType }">
-        </div>
-        <!--/区域选择按钮-->
- 		</h4>
+			<!--区域选择按钮-->
+			<div class="area-choose">
+				选择区域：<span>${regionName }</span> <a class="are-line"
+					onclick="getRegion(${regionId});" href="javascript:;">切换</a> <input
+					type="hidden" id="regionId" value="${regionId }"> <input
+					type="hidden" id="regionType" value="${regionType }">
+			</div>
+			<!--/区域选择按钮-->
+		</h4>
 		<div class="row">
 			<div class="col-md-12">
 				<!--box-->
@@ -212,13 +212,15 @@ var SearchData = {
 							<div class="col-sm-8 col-md-6">
 								<!--菜单栏-->
 								<ul id="receiptOrderStatus" class="nav nav-tabs">
-									<li class="active" data-tital="reported"><a href="#box_tab1" data-toggle="tab" onclick="show();"><span
+									<li class="active" data-tital="reported"><a
+										href="#box_tab1" data-toggle="tab" onclick="show('reported');"><span
 											class="">报备</span></a></li>
-									<li data-tital="cash"><a href="#box_tab2" data-toggle="tab" onclick="show();"><span
-											class="">收现金</span></a></li>
-									<li data-tital="notreported"><a href="#box_tab3" data-toggle="tab" onclick="show();"><span
-											class="">未报备<!-- <span class="mark-red">4</span> --></span></a></li>
-									<li data-tital="rejected"><a href="#box_tab4" data-toggle="tab" onclick="hide();"><span class="">拒收</span></a></li>
+									<li data-tital="cash"><a href="#box_tab2"
+										data-toggle="tab" onclick="show('cash');"><span class="">收现金</span></a></li>
+									<!-- 									<li data-tital="notreported"><a href="#box_tab3" data-toggle="tab" onclick="show();"><span -->
+									<!-- 											class="">未报备<span class="mark-red">4</span></span></a></li> -->
+									<li data-tital="rejected"><a href="#box_tab4"
+										data-toggle="tab" onclick="hide();"><span class="">拒收</span></a></li>
 								</ul>
 								<!--/菜单栏-->
 							</div>
@@ -228,10 +230,9 @@ var SearchData = {
 								<a class="remark-title-link" href="/receiptRemark/allOrderList">所有订单列表</a>
 								<div class="form-group title-form remark-title">
 									<div class="input-group ">
-										<input type="text" class="form-control"
-											id="orderNo" placeholder="请输入订单号">
-										<a class="input-group-addon"onclick="findByOrderNo();"> <i
-											class="icon icon-finds"></i>
+										<input type="text" class="form-control" id="orderNo"
+											placeholder="请输入订单号"> <a class="input-group-addon"
+											onclick="findByOrderNo();"> <i class="icon icon-finds"></i>
 										</a>
 									</div>
 								</div>
@@ -244,25 +245,20 @@ var SearchData = {
 					<!--box-body-->
 					<div class="box-body">
 						<div class="table-before">
-								<ul class="nav nav-task" id="term">
-									<li class="active" data-item="all"><a href="javascript:;">全部</a></li>
-									<li data-item="unpay"><a href="javascript:;">未支付</a></li>
-									<li data-item="timeout"><a href="javascript:;">已超时</a></li>
-									<li data-item="payed"><a href="javascript:;">已支付</a></li>
-								</ul>
-							<script type="text/javascript">
-								$('.nav-task li').click(function() {
-									$(this).addClass('active');
-									$(this).siblings('li').removeClass('active');
-								});
-							</script>
+							<ul class="nav nav-task" id="term">
+								<li class="active" data-item="all"><a href="javascript:;">全部</a></li>
+								<li data-item="unpay"><a href="javascript:;">未支付</a></li>
+								<li data-item="timeout"><a href="javascript:;">已超时</a></li>
+								<li data-item="payed"><a href="javascript:;">已支付</a></li>
+							</ul>
 							<div class="search-date-box">
 								<span class="text-strong chang-time">请选择时间：</span>
 								<div class="search-date">
 									<div class="input-group input-group-sm">
 										<span class="input-group-addon " id="basic-addon1"><i
 											class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-											type="text" id="startTime" class="form-control form_datetime input-sm"
+											type="text" id="startTime"
+											class="form-control form_datetime input-sm"
 											placeholder="开始日期" readonly="readonly">
 									</div>
 								</div>
@@ -271,16 +267,23 @@ var SearchData = {
 									<div class="input-group input-group-sm">
 										<span class="input-group-addon " id="basic-addon1"><i
 											class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-											type="text" id="endTime" class="form-control form_datetime input-sm"
+											type="text" id="endTime"
+											class="form-control form_datetime input-sm"
 											placeholder="结束日期" readonly="readonly">
 									</div>
 								</div>
 								<!--考核开始时间-->
 								<button class="btn btn-blue btn-sm"
-									onclick="goSearch('${salesman.id}','${assess.id}');">
+									onclick="goSearch();">
 									检索</button>
 							</div>
 							<div class="link-posit pull-right">
+								<span class="salesman-input-box" id="searchNamebox">
+									<input class="salesman-input" id="salesManName"
+										placeholder="请输入业务员名称">
+									<button class="btn btn-blue btn-sm check-btn"
+										onclick="findBySalesManName();">检索</button>
+								</span>
 								<a class="table-export" href="javascript:void(0);">导出excel</a>
 							</div>
 						</div>
@@ -373,16 +376,16 @@ var SearchData = {
 								<div class="table-abnormal-list table-overflow">
 									<table class="table table-hover new-table abnormal-order-table">
 										<thead>
-										<tr>
-											<th>货物照片</th>
-											<th>商家名称</th>
-											<th>订单号</th>
-											<th>预计到达时间</th>
-											<th>寄回物流单号</th>
-											<th>拒收原因</th>
-											<th>拒收时间</th>
-											<th>操作</th>
-										</tr>
+											<tr>
+												<th>货物照片</th>
+												<th>商家名称</th>
+												<th>订单号</th>
+												<th>预计到达时间</th>
+												<th>寄回物流单号</th>
+												<th>拒收原因</th>
+												<th>拒收时间</th>
+												<th>操作</th>
+											</tr>
 										</thead>
 										<tbody id="rejectedList"></tbody>
 									</table>
@@ -410,15 +413,21 @@ var SearchData = {
       <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-		<script type="text/javascript" src="static/bootstrap/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-		<script type="text/javascript" src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+		<script type="text/javascript"
+			src="static/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript"
+			src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+		<script type="text/javascript"
+			src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 		<script src="/static/js/dateutil.js" type="text/javascript"
 			charset="utf-8"></script>
-		<script type="text/javascript" src="static/js/common.js" charset="utf-8"></script>
-		<script type="text/javascript" src="static/js/handlebars-v4.0.2.js" charset="utf-8"></script>
-		<script type="text/javascript" src="static/bootStrapPager/js/extendPagination.js"></script>
-		<script type="text/javascript" src="static/receipt/receipt-remark.js" 
+		<script type="text/javascript" src="static/js/common.js"
+			charset="utf-8"></script>
+		<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
+			charset="utf-8"></script>
+		<script type="text/javascript"
+			src="static/bootStrapPager/js/extendPagination.js"></script>
+		<script type="text/javascript" src="static/receipt/receipt-remark.js"
 			charset="utf-8"></script>
 		<script type="text/javascript">
 

@@ -6,10 +6,17 @@ $(function() {
 	nowTime();//初始化日期
 	DispositRegionId();//区域选择数据处理
 	findRemarked();//报备
-	findNOTRemarked();//未报备
+//	findNOTRemarked();//未报备
 	findCash();//收现金
 	findRejected();//拒收
 })
+function findBySalesManName(){
+	var $truename= $("#salesManName").val();
+	SearchData['sc_EQ_truename'] = $truename;
+	goSearch();
+	delete SearchData['sc_EQ_truename'];
+}
+
 $('.nav-task li').on("click", function() {
 	$(this).addClass('active');
 	$(this).siblings('li').removeClass('active');
@@ -165,8 +172,14 @@ function findTab(){
 }
 function hide() {
 	$("#term").hide();
+	$("#searchNamebox").hide();
 }
-function show() {
+function show(tab) {
+	if(tab ==='cash'){
+		$("#searchNamebox").hide();
+	}else{
+		$("#searchNamebox").show();
+	}
 	$("#term").show();
 }
 /**

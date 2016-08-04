@@ -109,17 +109,6 @@ public class ReceiptRemarkController {
       @PageableDefault(page = 0,size=10,sort={"createTime"},direction=Direction.DESC) Pageable pageRequest ){
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<ReceiptRemark> receiptRemarkList=orderReceiptService.getReceiptRemarkList(searchParams, pageRequest);
-//    receiptRemarkList.getContent().forEach(list->{
-//      list.getSalesMan().setUser(null);
-//      list.getSalesMan().setRegion(null);
-//    });
-//    String json="";
-//    try { 
-//      json=JSON.toJSONString(receiptRemarkList, SerializerFeature.DisableCircularReferenceDetect);
-//    }
-//     catch(Exception e){
-//       logger.error(e.getMessage());
-//     }
     return receiptRemarkList;
   }
   /**
