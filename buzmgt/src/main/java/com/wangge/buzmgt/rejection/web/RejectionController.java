@@ -7,6 +7,7 @@ import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.rejection.entity.RejectStatusEnum;
 import com.wangge.buzmgt.rejection.entity.Rejection;
 import com.wangge.buzmgt.rejection.service.RejectionServive;
+import com.wangge.json.JSONFormat;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -37,7 +38,7 @@ public class RejectionController {
 	private OrderItemService orderItemService;
 
 	@RequestMapping(value = "/rejectedList", method = RequestMethod.GET)
-	@ResponseBody
+	@JSONFormat(filterField = {"SalesMan.user","region.children","region.parent"})
 	public Page<Rejection> rejectedList(HttpServletRequest request,
 														 @PageableDefault(page = 0,size=10,sort={"createTime"},direction= Sort.Direction.DESC) Pageable pageRequest) {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);

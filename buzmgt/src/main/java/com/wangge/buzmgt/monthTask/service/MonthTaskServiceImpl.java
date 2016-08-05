@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -73,25 +74,28 @@ public class MonthTaskServiceImpl implements MonthTaskService {
   MonthTaskPunishRepository monthPunishRep;
   private static Integer[] levels = new Integer[] { 20, 15, 10, 7, 4 };
   
-
-// 
-// public static final String lsVisitSql = "select count(1), tmp.month, tmp.registdata_id, tmp.region_id\n"
-//     + "  from (select substr(g.finish_time, 0, 7) month,\n" + "               g.registdata_id,\n"
-//     + "               g.region_id\n" + "          from (select to_char(v.finish_time, 'yyyy-mm-dd') finish_time,\n"
-//     + "                       r.registdata_id,\n" + "                       r.region_id\n"
-//     + "                  from sys_visit v\n" + "                  left join sys_registdata r on v.registdata_id =\n"
-//     + "                                                r.registdata_id\n"
-//     + "                 where v.finish_time is not null\n" + "                   and exists\n"
-//     + "                 (select 1\n" + "                          from (select *\n"
-//     + "                                  from sys_region r\n"
-//     + "                                 start with r.region_id = $town\n"
-//     + "                                connect by prior r.region_id = r.parent_id) tmp\n"
-//     + "                         where tmp.region_id = r.region_id)\n"
-//     + "                   and (to_char(v.finish_time, 'yyyy-mm') =\n"
-//     + "                       to_char(sysdate - interval '1' month, 'yyyy-mm'))) g\n"
-//     + "         group by g.finish_time, g.registdata_id, g.region_id) tmp\n"
-//     + " group by tmp.month, tmp.registdata_id, tmp.region_id";
-// 
+  //
+  // public static final String lsVisitSql = "select count(1), tmp.month,
+  // tmp.registdata_id, tmp.region_id\n"
+  // + " from (select substr(g.finish_time, 0, 7) month,\n" + "
+  // g.registdata_id,\n"
+  // + " g.region_id\n" + " from (select to_char(v.finish_time, 'yyyy-mm-dd')
+  // finish_time,\n"
+  // + " r.registdata_id,\n" + " r.region_id\n"
+  // + " from sys_visit v\n" + " left join sys_registdata r on v.registdata_id
+  // =\n"
+  // + " r.registdata_id\n"
+  // + " where v.finish_time is not null\n" + " and exists\n"
+  // + " (select 1\n" + " from (select *\n"
+  // + " from sys_region r\n"
+  // + " start with r.region_id = $town\n"
+  // + " connect by prior r.region_id = r.parent_id) tmp\n"
+  // + " where tmp.region_id = r.region_id)\n"
+  // + " and (to_char(v.finish_time, 'yyyy-mm') =\n"
+  // + " to_char(sysdate - interval '1' month, 'yyyy-mm'))) g\n"
+  // + " group by g.finish_time, g.registdata_id, g.region_id) tmp\n"
+  // + " group by tmp.month, tmp.registdata_id, tmp.region_id";
+  //
   
   @Override
   public Map<String, Object> getMainTaskList(Pageable page, String month, MultiValueMap<String, String> parameters)
@@ -458,6 +462,12 @@ public class MonthTaskServiceImpl implements MonthTaskService {
     return rate;
   }
   
+  /** 
+    * 8月5日 修复 导出excle时单元格合并出错的问题,原因合并的单元格与内容不对称.
+    * 1. 输出内容list未排序
+    * 2.合并单元格数据元数据与list数据布局不对称的问题 
+    *  
+    */ 
   @Override
   public void ExportSetExcel(MonthTask task, String salesName, HttpServletRequest request,
       HttpServletResponse response) {
@@ -465,7 +475,7 @@ public class MonthTaskServiceImpl implements MonthTaskService {
     List<Map<String, Object>> alList = new ArrayList<Map<String, Object>>();
     Map<String, Integer> sumMap = new HashMap<String, Integer>();
     Map<String, Object> rateMap = new HashMap<String, Object>();
-    for (int level : new Integer[] { 20, 15, 10, 7, 4 }) {
+    for (int level : levels) {
       rateMap.put(level + "", getRate(level, task));
     }
     for (Object o1 : dataList) {
@@ -483,6 +493,7 @@ public class MonthTaskServiceImpl implements MonthTaskService {
         sumMap.put(level, sum + 1);
       }
     }
+    alList.sort((map1, map2) -> Integer.valueOf(map2.get("level") + "") - Integer.valueOf(map1.get("level") + ""));
     List<Map<String, Object>> marginList = getMarginList(sumMap);
     String title = salesName + task.getMonth() + "批量任务设置.xls";
     String[] gridTitles = new String[] { "拜访次数", "已设置商家", "已设置占比" };
@@ -500,15 +511,19 @@ public class MonthTaskServiceImpl implements MonthTaskService {
     List<Map<String, Object>> marginList = new ArrayList<Map<String, Object>>();
     int start = 0;
     int end = 0;
-    for (Map.Entry<String, Integer> entry : sumMap.entrySet()) {
-      int sum = entry.getValue();
-      if (sum > 1) {
+    //按任务目标降序排序
+    for (int level : levels) {
+      if (null == sumMap.get(level + "")) {
+        continue;
+      }
+      int sum = sumMap.get(level + "");
+      if (sum >1) {
         Map<String, Object> obMap = new HashMap<String, Object>();
         /*
          * int firstRow, int lastRow, int firstCol, int lastCol)
          */
         obMap.put("firstRow", start + 1);
-        end = start + entry.getValue();
+        end = start + sum;
         obMap.put("lastRow", end);
         obMap.put("firstCol", 0);
         obMap.put("lastCol", 0);

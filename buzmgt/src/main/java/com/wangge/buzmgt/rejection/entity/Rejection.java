@@ -149,7 +149,7 @@ public class Rejection implements Serializable{
     this.trackingno = trackingno;
   }
 
-  public boolean isView() {
+  public boolean getView() {
     return view;
   }
 
