@@ -68,6 +68,7 @@ public class WaterOrderCashController {
     Page<WaterOrderCash> waterOrderPage=waterOrderCashService.findAll(searchParams,pageRequest);
     
     List<Map<String, Object>> alList = new ArrayList<Map<String, Object>>();
+    //有序插入
     Map<String, Integer> sumMap = new LinkedHashMap<>();
     waterOrderPage.forEach(waterOrder -> {
       String serialNo = waterOrder.getSerialNo();

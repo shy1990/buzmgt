@@ -5,12 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.wangge.buzmgt.rejection.entity.Rejection;
-import com.wangge.buzmgt.rejection.service.RejectionServive;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -30,12 +27,16 @@ import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.wangge.buzmgt.cash.entity.Cash;
+import com.wangge.buzmgt.cash.service.CashService;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderItemService;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.receipt.service.OrderReceiptService;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.rejection.entity.Rejection;
+import com.wangge.buzmgt.rejection.service.RejectionServive;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
@@ -53,21 +54,18 @@ public class ReceiptRemarkController {
   private static final Logger logger = Logger.getLogger(ReceiptRemarkController.class);
   @Autowired
   private OrderReceiptService orderReceiptService; 
-  
   @Autowired
   private OrderSignforService orderSignforService;
-  
   @Autowired
   private ManagerService managerService;
-  
   @Autowired
   private SalesManService salesManService;
-  
   @Autowired
   private OrderItemService itemService;
-
   @Autowired
   private RejectionServive rejectionServive;
+  @Autowired
+  private CashService cashService;
   
   
   @RequestMapping(value="/show",method=RequestMethod.GET)
@@ -243,7 +241,21 @@ public class ReceiptRemarkController {
       
       break;
     case "cash":
-      //TODO 收现金导出
+      String[] gridTitles_2 = { "业务名称","店铺名称","订单号", "金额","收现金时间","发货时间","业务签收时间","打款时间"};
+      String[] coloumsKey_2 = { "order.salesMan.truename","order.shopName", "order.orderNo", "order.orderPrice","createDate",
+          "order.fastmailTime","order.yewuSignforTime","payDate"};
+      String startTime=(String) searchParams.get("GTE_createTime");
+      String endTime=(String) searchParams.get("LTE_createTime");
+      searchParams.remove("GTE_createTime");
+      searchParams.remove("LTE_createTime");
+      if(!"".equals(startTime) || !"".equals(endTime)){
+        searchParams.put("GTE_createDate", startTime);
+        searchParams.put("LTE_createDate", endTime);
+      }
+      List<Cash> cashListAll=cashService.findAll(searchParams);
+      
+      ExcelExport.doExcelExport("收现金导出"+(startTime+"~"+endTime)+".xls", 
+          cashListAll, gridTitles_2, coloumsKey_2, request, response);
       break;
     //拒收导出
     case "rejected":
