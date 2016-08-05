@@ -30,7 +30,7 @@ public class RejectionServiceImpl implements RejectionServive {
 
     @Override
     public Page<Rejection> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
-        regionService.disposeSearchParams("userId",searchParams);
+        regionService.disposeSearchParams("salesmanId",searchParams);
         Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
         Specification<Rejection> spec = RejectSearchFilter(filters.values(), Rejection.class);
         Page<Rejection> rejectionPage = rejectionRepository.findAll(spec,pageRequest);
@@ -47,7 +47,7 @@ public class RejectionServiceImpl implements RejectionServive {
 
     @Override
     public List<Rejection> findAll(Map<String, Object> searchParams) {
-        regionService.disposeSearchParams("userId",searchParams);
+        regionService.disposeSearchParams("salesmanId",searchParams);
         Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
         Specification<Rejection> spec = RejectSearchFilter(filters.values(), Rejection.class);
         List<Rejection> rejectionList = rejectionRepository.findAll(spec);
@@ -148,7 +148,7 @@ public class RejectionServiceImpl implements RejectionServive {
                                 break;
                             case ORMLK:
                                 /**
-                                 * sc_ORMLK_userId = 370105,3701050,3701051
+                                 * sc_ORMLK_salesmanId = 370105,3701050,3701051
                                  * 用于区域选择
                                  */
                                 String[] parameterValue = ((String) filter.value).split(",");
