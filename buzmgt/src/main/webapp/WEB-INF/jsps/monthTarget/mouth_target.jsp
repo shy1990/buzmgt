@@ -32,7 +32,7 @@
         <div class="area-choose">
 
         </div>
-        <a class="btn btn-setting" href="/monthTarget/monthSetting"><i class="icon-ratio"></i>月指标</a>
+        <a class="btn btn-setting" href="/monthtarget/monthSetting"><i class="icon-ratio"></i>月指标</a>
     </h4>
     <!---选择地区-->
     <div>
@@ -344,9 +344,9 @@
         //导出
         $("#export").click(function(){
 //            console.log(222222);
-            window.location.href = "monthTarget/export?time="+monthTarget.searchData.time;
-//            monthTarget.exportExcel(monthTarget.searchData.time)
-//            $.get("monthTarget/export?time="+monthTarget.searchData.time);
+            window.location.href = "monthtarget/export?time="+monthTarget.searchData.time;
+//            monthtarget.exportExcel(monthtarget.searchData.time)
+//            $.get("monthtarget/export?time="+monthtarget.searchData.time);
         });
 
 
@@ -367,7 +367,7 @@
         },
 
         url: function () {
-            return 'monthTarget/monthTargets';
+            return 'monthtarget/monthTargets';
         },
         //查询全部
         findAll: function (searchData) {
@@ -406,7 +406,7 @@
 
         },
         exportExcel:function(time){
-            $.get("monthTarget/export?time="+time);
+            $.get("monthtarget/export?time="+time);
         },
 
         //分页工具

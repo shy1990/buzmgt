@@ -1,16 +1,13 @@
 package com.wangge.buzmgt.monthTarget.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**

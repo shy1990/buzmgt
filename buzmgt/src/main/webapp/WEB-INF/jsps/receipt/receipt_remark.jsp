@@ -44,6 +44,23 @@
 	background: #FF4647;
 	color: #ffffff;
 }
+
+p span {
+	display: block;
+	width: 200px; /*对宽度的定义,根据情况修改*/
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+/* FF 下的样式 */
+p {
+	clear: both;
+}
+
+p:after {
+	content: "...";
+}
 </style>
 <script id="remarked-table-template" type="text/x-handlebars-template">
 	{{#if content}}

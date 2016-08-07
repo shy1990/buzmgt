@@ -1,12 +1,7 @@
 package com.wangge.buzmgt.monthTarget.entity;
 
 import com.wangge.buzmgt.region.entity.Region;
-import org.hibernate.annotations.Immutable;
-import org.hibernate.annotations.Subselect;
 
-import javax.persistence.Entity;
-import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**

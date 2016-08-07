@@ -1,14 +1,10 @@
 package com.wangge.buzmgt.monthTarget.web;
 
-import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
 import com.wangge.buzmgt.monthTarget.entity.MothTargetData;
 import com.wangge.buzmgt.monthTarget.service.MothTargetDataService;
-import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 import com.wangge.json.JSONFormat;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -56,7 +52,7 @@ public class MothTargetDataController {
         model.addAttribute("mature", mature);
         model.addAttribute("matureNum", matureNum);
 
-        return "monthTarget/single_month";
+        return "monthtarget/single_month";
     }
 
     @RequestMapping(value = "/mothTargetDatas", method = RequestMethod.GET)

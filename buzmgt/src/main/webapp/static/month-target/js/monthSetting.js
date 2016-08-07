@@ -6,7 +6,7 @@ $(function() {
 });
 
 function toUpdate(){
-	window.location.href = "/monthTarget/toUpdate";
+	window.location.href = "/monthtarget/toUpdate";
 }
 
 /**
@@ -34,7 +34,7 @@ function goSearch() {
 
 function ajaxSearch(searchData) {
 	$.ajax({
-		url : base + "monthTarget/findMonthTarget",
+		url : base + "monthtarget/findMonthTarget",
 		type : "GET",
 		data : searchData,
 		beforeSend : function(request) {
@@ -89,13 +89,13 @@ function seachSuccessTable(data) {
 
 function update(id,flag){
 	if(flag == "update"){
-		window.location.href = "/monthTarget/toUpdate?flag="+flag+"&id="+id;
+		window.location.href = "/monthtarget/toUpdate?flag="+flag+"&id="+id;
 	}
 }
 
 function publish(id) {
 	$.ajax({
-		url : base + "monthTarget/publish/"+id,
+		url : base + "monthtarget/publish/"+id,
 		type : "GET",
 		beforeSend : function(request) {
 			request.setRequestHeader("Content-Type",
@@ -116,7 +116,7 @@ function publish(id) {
 
 function publishAll() {
 	$.ajax({
-		url : base + "monthTarget/publishAll",
+		url : base + "monthtarget/publishAll",
 		type : "POST",
 		beforeSend : function(request) {
 			request.setRequestHeader("Content-Type",
