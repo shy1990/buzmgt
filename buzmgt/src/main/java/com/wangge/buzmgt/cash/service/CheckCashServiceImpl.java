@@ -17,7 +17,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.cash.entity.BankTrade;
@@ -173,7 +173,7 @@ public class CheckCashServiceImpl implements CheckCashService {
    * 审核过程梳理 1.查询数据userId+createDate 2.
    */
   @Override
-  @Transactional
+  @Transactional(rollbackForClassName = "Exception")
   public JSONObject checkPendingByUserIdAndCreateDate(String userId, String createDate) {
     Map<String, Object> secp = new HashMap<>();
     JSONObject json = new JSONObject();
@@ -200,7 +200,6 @@ public class CheckCashServiceImpl implements CheckCashService {
     return json;
   }
 
-  @Transactional
   public void checkWaterOrderCash(CheckCash cc) {
     try {
       List<WaterOrderCash> waterOrders = cc.getCashs();
@@ -265,8 +264,8 @@ public class CheckCashServiceImpl implements CheckCashService {
       cashService.save(waterOrders);
 
     } catch (Exception e) {
-      e.printStackTrace();
       logger.info(e.getMessage());
+      throw e;
     }
 
   }
@@ -279,7 +278,7 @@ public class CheckCashServiceImpl implements CheckCashService {
   }
 
   @Override
-  @Transactional
+  @Transactional(rollbackForClassName = "Exception")
   public JSONObject deleteUnCheckBankTrade(BankTrade bankTrade) {
     JSONObject json = new JSONObject();
     try {
@@ -685,7 +684,7 @@ public class CheckCashServiceImpl implements CheckCashService {
     return null;
   }
   @Override
-  @Transactional
+  @Transactional(rollbackForClassName = "Exception")
   public JSONObject auditDebtCheck(String userId, String createDate) {
     Map<String, Object> spec = new HashMap<>();
     JSONObject json = new JSONObject();

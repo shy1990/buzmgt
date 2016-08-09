@@ -15,6 +15,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -80,12 +81,14 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
   }
 
   @Override
+  @Transactional
   public void save(List<WaterOrderCash> waterOrders) {
 
     waterOrderCashRepository.save(waterOrders);
   }
   
   @Override
+  @Transactional
   public void save(WaterOrderCash waterOrder) {
     
     waterOrderCashRepository.save(waterOrder);
