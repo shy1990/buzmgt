@@ -179,8 +179,8 @@ p:after {
 		</td>
 		<td>{{orderno}}</td>
 		<td>{{formDate arriveTime}}</td>
-		<td>{{trackingno}}</td>
-		<td>{{remark}}</td>
+		<td><p><span>{{trackingno}}</span></p></td>
+		<td><p><span>{{remark}}</span></p></td>
 		<td>{{formDate createTime}}</td>
 		<td><a class="btn btn-blue btn-sm" href="/rejection/{{id}}">查看</a>
 			{{#if view}}
