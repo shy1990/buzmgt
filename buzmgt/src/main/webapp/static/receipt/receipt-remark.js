@@ -332,9 +332,13 @@ function remarkedPaging(data) {
 		showCount : 5,
 		limit : limit,
 		callback : function(curr, limit, totalCount) {
+			var $truename= $("#salesManName").val();
+			SearchData['sc_EQ_truename'] = $truename;
 			findRemarked(curr - 1);
+			delete SearchData['sc_EQ_truename'];
 		}
 	});
+	
 }
 /**
  * 现金的分页

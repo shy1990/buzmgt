@@ -69,6 +69,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
   @Override
   public List<ReceiptRemark> findAll(Map<String, Object> searchParams) {
     regionService.disposeSearchParams("salesmanId",searchParams);
+    salesManService.disposeSearchParams("salesmanId", searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<ReceiptRemark> spec = orderReceiptSearchFilter(filters.values(), ReceiptRemark.class);
     List<ReceiptRemark> remarkedList = orderReceiptRepository.findAll(spec);
