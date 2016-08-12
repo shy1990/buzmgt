@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.monthTarget.entity;
+package com.wangge.buzmgt.monthtarget.entity;
 
 import com.wangge.buzmgt.region.entity.Region;
 

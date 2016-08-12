@@ -1,7 +1,7 @@
-package com.wangge.buzmgt.monthTarget.web;
+package com.wangge.buzmgt.monthtarget.web;
 
-import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
-import com.wangge.buzmgt.monthTarget.service.MonthTargetService;
+import com.wangge.buzmgt.monthtarget.entity.MonthTarget;
+import com.wangge.buzmgt.monthtarget.service.MonthTargetService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
