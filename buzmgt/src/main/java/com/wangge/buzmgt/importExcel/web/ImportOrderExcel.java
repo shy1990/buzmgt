@@ -108,7 +108,9 @@ public class ImportOrderExcel {
        for (OrderSignfor os : list) {
          String[] orderno =  os.getOrderNo().split(",");
            for(int i=0;i<orderno.length;i++){
-             OrderSignfor orderSf = orderSignforService.findByOrderNo(orderno[i]);
+           //  List<OrderSignfor> orderSf = orderSignforService.findByOrderNo(orderno[i]);
+             OrderSignfor orderSf = findOrder(orderSignforService.findListByOrderNo(orderno[i]));
+             
              if(orderSf != null && (os.getFastmailNo() != null && !"".equals(os.getFastmailNo()))){
                  orderSf.setFastmailTime(os.getFastmailTime());
                  orderSf.setFastmailNo(os.getFastmailNo());
@@ -120,7 +122,22 @@ public class ImportOrderExcel {
      }
      
   }
-    
+    /**
+     * 
+      * findOrder:(订单去重). <br/> 
+      * @author Administrator 
+      * @param orderlist
+      * @return 
+      * @since JDK 1.8
+     */
+   private OrderSignfor findOrder(List<OrderSignfor> orderlist){
+      if(orderlist.size() > 1){
+        for(int i=1;i<orderlist.size();i++){
+          orderSignforService.deleteById(orderlist.get(i).getId());
+        }
+      }
+      return orderlist.get(0);
+   }
    
       /**
        * 读取xls文件内容
