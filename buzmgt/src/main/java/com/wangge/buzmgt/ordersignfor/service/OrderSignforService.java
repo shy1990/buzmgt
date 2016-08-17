@@ -12,7 +12,9 @@ public interface OrderSignforService {
 
   void updateOrderSignfor(OrderSignfor xlsOrder);
 
-  OrderSignfor findByOrderNo(String orderNo);
+  List<OrderSignfor> findListByOrderNo(String orderNo);
+  
+  public OrderSignfor findByOrderNo(String orderNo);
 
   public List<OrderSignfor> findAll();
   
@@ -41,6 +43,8 @@ public interface OrderSignforService {
   List<OrderSignfor> getReceiptCashList(Map<String, Object> searchParams);
 
   void save(List<OrderSignfor> list);
+
+  void deleteById(Long id);
   
   
   

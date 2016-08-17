@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
-import com.wangge.buzmgt.monthTask.entity.AppServer;
+import com.wangge.buzmgt.monthtask.entity.AppServer;
 import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.sys.entity.Resource;
 import com.wangge.buzmgt.sys.entity.Resource.ResourceType;
