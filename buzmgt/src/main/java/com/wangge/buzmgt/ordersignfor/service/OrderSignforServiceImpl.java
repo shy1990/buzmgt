@@ -298,6 +298,16 @@ public class OrderSignforServiceImpl implements OrderSignforService {
   public void save(List<OrderSignfor> list) {
     orderSignforRepository.save(list);
   }
+  @Override
+  public List<OrderSignfor> findListByOrderNo(String orderNo) {
+    // TODO Auto-generated method stub
+    return orderSignforRepository.findAllByOrderNo(orderNo);
+  }
+  @Override
+  public void deleteById(Long id) {
+    orderSignforRepository.delete(id);
+    
+  }
   
 
  }
