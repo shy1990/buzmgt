@@ -131,12 +131,14 @@ public class ImportOrderExcel {
       * @since JDK 1.8
      */
    private OrderSignfor findOrder(List<OrderSignfor> orderlist){
+      
       if(orderlist.size() > 1){
         for(int i=1;i<orderlist.size();i++){
           orderSignforService.deleteById(orderlist.get(i).getId());
         }
+        return orderlist.get(0);
       }
-      return orderlist.get(0);
+     return null;
    }
    
       /**
