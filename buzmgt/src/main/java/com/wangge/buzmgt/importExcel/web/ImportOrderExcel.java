@@ -132,7 +132,7 @@ public class ImportOrderExcel {
      */
    private OrderSignfor findOrder(List<OrderSignfor> orderlist){
       
-      if(orderlist.size() > 1){
+      if(orderlist.size() >= 1){
         for(int i=1;i<orderlist.size();i++){
           orderSignforService.deleteById(orderlist.get(i).getId());
         }
