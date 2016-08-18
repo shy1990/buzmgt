@@ -112,8 +112,8 @@ public class MonthTargetServiceImpl implements MonthTargetService {
                 "               (select last_day(add_months(sysdate, -4)) + 1 from dual) and\n" +
                 "               (select last_day(add_months(sysdate, -1)) from dual)\n" +
                 "           and MT.parentId = ?\n" +
-                "         Group by MT.MEMBERID)\n" +
-                " where total >= ?";
+                "         Group by MT.MEMBERID,to_char(MT.createtime,'yyyy-mm')) t\n" +
+                " where t.total >= ?";
 
         Query query = null;
         SQLQuery sqlQuery = null;

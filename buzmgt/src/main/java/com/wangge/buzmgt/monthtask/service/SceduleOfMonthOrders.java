@@ -64,7 +64,7 @@ public class SceduleOfMonthOrders {
           + "                                and t.pay_status = '1') o1\n"
           + "                      group by o1.member_id, o1.day) o2\n" + "              group by o2.member_id\n"
           + "              order by days desc) o3 on o3.member_id = m.id\n" + " where exists (select 1\n"
-          + "          from (select *\n" + "                  from sys_region r\n"
+          + "          from (select *               from sys_region r\n"
           + "                 start with r.region_id = $town \n"
           + "                connect by prior r.region_id = r.parent_id) tmp\n"
           + "         where tmp.region_id = r.region_id)";
@@ -77,7 +77,7 @@ public class SceduleOfMonthOrders {
       + "                  left join sys_registdata r on v.memberid = r.registdata_id\n"
       + "                 where (to_char(v.time, 'yyyy-mm') =\n"
       + "                       to_char(sysdate - interval '1' month, 'yyyy-mm'))\n" + "                   and exists\n"
-      + "                 (select 1\n" + "                          from (select \n"
+      + "                 (select 1\n" + "                          from (select r.* \n"
       + "                                  from sys_region r\n"
       + "                                 start with r.region_id = $town \n"
       + "                                connect by prior r.region_id = r.parent_id) tmp\n"
