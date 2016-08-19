@@ -216,14 +216,15 @@ function findBySalesManName() {
 	var salesmanName = $('#salesManName').val();
 	var createDate = $('#searchDate').val();
 	$.ajax({
-		url : base+"/checkCash/salesmanName?salesmanName=" + salesmanName+"&createDate="+createDate,
+		url : base+"checkCash/salesmanName?salesmanName=" + salesmanName+"&createDate="+createDate,
 		type : "GET",
 		dataType : "json",
 		success : function(data) {
-			if (data.status=='success') {
+			if (data.content !='' ) {
 				createCheckPendingTable(data);
 				return false;
 			}
+			alert("无此用户信息");
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");
