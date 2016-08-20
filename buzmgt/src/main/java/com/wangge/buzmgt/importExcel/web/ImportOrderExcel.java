@@ -131,17 +131,18 @@ public class ImportOrderExcel {
       * @since JDK 1.8
      */
    private OrderSignfor findOrder(List<OrderSignfor> orderlist){
-      if(orderlist.size() > 1){
+      
+      if(orderlist.size() >= 1){
         for(int i=1;i<orderlist.size();i++){
           orderSignforService.deleteById(orderlist.get(i).getId());
         }
+        return orderlist.get(0);
       }
-      return orderlist.get(0);
+     return null;
    }
    
       /**
        * 读取xls文件内容
-       * 
        * @return List<XlsDto>对象
        * @throws IOException
        *             输入/输出(i/o)异常

@@ -102,11 +102,11 @@ public class CheckCashServiceImpl implements CheckCashService {
     try {
 
       checkCashs.forEach(checkCash -> {
-        String userId = checkCash.getUserId();
+        String userId = checkCash.getUserId().trim();
         if (StringUtils.isNotEmpty(userId)) {
 
           String payDate = DateUtil.date2String(checkCash.getCreateDate());
-          // TODO 查询银行导入数据
+          //查询银行导入数据
           Map<String, Object> secp = new HashMap<>();
 
           secp.put("EQ_userId", userId);
@@ -116,7 +116,7 @@ public class CheckCashServiceImpl implements CheckCashService {
           checkCash.setBankTrades(bankTrades);
           disposeBankTrade(bankTrades, checkCash);
 
-          // TODO 查询流水单号
+          // 查询流水单号
           secp.put("EQ_createDate", payDate);// 划分时间
           List<WaterOrderCash> wocs = cashService.findAll(secp);
           secp.remove("EQ_createDate");
