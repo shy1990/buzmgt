@@ -75,7 +75,16 @@ public class Region implements Serializable {
 	@JoinColumn(name = "CENTER_POINT")
   private String centerPoint;
 	
-	public String getId() {
+	private String namepath;
+	public String getNamepath() {
+    return namepath;
+  }
+
+  public void setNamepath(String namepath) {
+    this.namepath = namepath;
+  }
+
+  public String getId() {
 		return id;
 	}
 
