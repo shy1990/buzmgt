@@ -38,6 +38,7 @@ import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.repository.BankTradeRepository;
 import com.wangge.buzmgt.cash.repository.WaterOrderCashRepository;
+import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.entity.BankCard;
 import com.wangge.buzmgt.salesman.entity.SalesmanData;
@@ -46,7 +47,6 @@ import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import com.wangge.buzmgt.util.excel.ExcelImport;
 import com.wangge.buzmgt.util.file.FileUtils;
-import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 @Service
 public class BankTradeServiceImpl implements BankTradeService {

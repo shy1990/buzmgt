@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.ywsalary.web;
+package com.wangge.buzmgt.income.ywsalary.web;
 
 import java.util.List;
 import java.util.Map;
@@ -25,15 +25,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wangge.buzmgt.income.ywsalary.entity.BaseSalary;
+import com.wangge.buzmgt.income.ywsalary.entity.BaseSalaryUser;
+import com.wangge.buzmgt.income.ywsalary.service.BaseSalaryService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.excel.ExcelExport;
-import com.wangge.buzmgt.ywsalary.entity.BaseSalary;
-import com.wangge.buzmgt.ywsalary.entity.BaseSalaryUser;
-import com.wangge.buzmgt.ywsalary.service.BaseSalaryService;
 import com.wangge.json.JSONFormat;
 
 @Controller

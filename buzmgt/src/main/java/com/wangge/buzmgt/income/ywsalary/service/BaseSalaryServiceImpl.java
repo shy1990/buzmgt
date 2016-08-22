@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.ywsalary.service;
+package com.wangge.buzmgt.income.ywsalary.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,14 +25,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.common.FlagEnum;
+import com.wangge.buzmgt.income.ywsalary.entity.BaseSalary;
+import com.wangge.buzmgt.income.ywsalary.entity.BaseSalaryUser;
+import com.wangge.buzmgt.income.ywsalary.repository.BaseSalaryRepository;
+import com.wangge.buzmgt.income.ywsalary.repository.BaseSalaryUserRepository;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.util.SearchFilter;
-import com.wangge.buzmgt.ywsalary.entity.BaseSalary;
-import com.wangge.buzmgt.ywsalary.entity.BaseSalaryUser;
-import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
-import com.wangge.buzmgt.ywsalary.repository.BaseSalaryRepository;
-import com.wangge.buzmgt.ywsalary.repository.BaseSalaryUserRepository;
 
 @Service
 public class BaseSalaryServiceImpl implements BaseSalaryService {

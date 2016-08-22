@@ -35,12 +35,12 @@ import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 import com.wangge.buzmgt.cash.repository.CashRepository;
+import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
-import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 @Service
 public class CashServiceImpl implements CashService {

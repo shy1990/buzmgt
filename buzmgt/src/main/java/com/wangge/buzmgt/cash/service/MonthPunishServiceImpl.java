@@ -30,11 +30,11 @@ import org.springframework.stereotype.Service;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
 import com.wangge.buzmgt.cash.entity.MonthPunish;
 import com.wangge.buzmgt.cash.repository.MonthPunishRepository;
+import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.service.SalesmanDataService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
-import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 @Service
 public class MonthPunishServiceImpl implements MonthPunishService {

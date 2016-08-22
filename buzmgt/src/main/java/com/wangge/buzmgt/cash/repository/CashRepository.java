@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.wangge.buzmgt.cash.entity.Cash;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
-import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
+import com.wangge.buzmgt.common.FlagEnum;
 
 public interface CashRepository extends JpaRepository<Cash, Long>, JpaSpecificationExecutor<Cash> {
 

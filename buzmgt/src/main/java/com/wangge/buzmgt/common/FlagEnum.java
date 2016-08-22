@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.ywsalary.entity;
+package com.wangge.buzmgt.common;
 
 public enum FlagEnum {
   // 正常

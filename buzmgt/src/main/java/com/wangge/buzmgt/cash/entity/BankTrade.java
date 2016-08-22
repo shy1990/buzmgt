@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
+import com.wangge.buzmgt.common.FlagEnum;
 
 
 

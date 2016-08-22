@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.ywsalary.service;
+package com.wangge.buzmgt.income.ywsalary.service;
 
 import java.util.List;
 import java.util.Map;
@@ -6,8 +6,8 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.wangge.buzmgt.ywsalary.entity.BaseSalary;
-import com.wangge.buzmgt.ywsalary.entity.BaseSalaryUser;
+import com.wangge.buzmgt.income.ywsalary.entity.BaseSalary;
+import com.wangge.buzmgt.income.ywsalary.entity.BaseSalaryUser;
 
 public interface BaseSalaryService {
   /**
