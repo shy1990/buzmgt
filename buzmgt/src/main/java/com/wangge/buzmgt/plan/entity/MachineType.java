@@ -2,6 +2,7 @@ package com.wangge.buzmgt.plan.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -13,21 +14,15 @@ public class MachineType implements Serializable{
   private static final long serialVersionUID = 1L;
 
   @Id
-  private Long id;
-  private String code;
+  @Column(name="code")
+  private String id;
   private String name;
   
-  public Long getId() {
+  public String getId() {
     return id;
   }
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
-  }
-  public String getCode() {
-    return code;
-  }
-  public void setCode(String code) {
-    this.code = code;
   }
   public String getName() {
     return name;
@@ -37,7 +32,7 @@ public class MachineType implements Serializable{
   }
   @Override
   public String toString() {
-    return "MachineType [id=" + id + ", code=" + code + ", name=" + name + "]";
+    return "MachineType [id=" + id + ", name=" + name + "]";
   }
   
 }

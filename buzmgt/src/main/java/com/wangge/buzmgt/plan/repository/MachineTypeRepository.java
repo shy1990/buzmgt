@@ -12,7 +12,6 @@ import com.wangge.buzmgt.plan.entity.MachineType;
 * @date 2016年8月17日 下午3:59:15
 *
  */
-public interface MachineTypeRepository extends JpaRepository<MachineType, Long>{
+public interface MachineTypeRepository extends JpaRepository<MachineType, String>{
 
-  MachineType findByCode(String code);
 }

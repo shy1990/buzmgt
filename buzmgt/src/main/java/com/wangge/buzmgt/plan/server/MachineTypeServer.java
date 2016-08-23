@@ -24,16 +24,4 @@ public interface MachineTypeServer {
    */
   List<MachineType> findAll();
   
-  /**
-   * 根据code查询机型
-  * @Title: findByCode 
-  * @Description: TODO(这里用一句话描述这个方法的作用) 
-  * @param @param code
-  * @param @return    设定文件 
-  * @return MachineType    返回类型 
-  * @throws
-   */
-  MachineType findByCode(String code);
-  
-  
 }

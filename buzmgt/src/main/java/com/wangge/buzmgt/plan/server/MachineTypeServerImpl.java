@@ -16,10 +16,4 @@ public class MachineTypeServerImpl implements MachineTypeServer {
   public List<MachineType> findAll() {
     return machineTypeRepository.findAll();
   }
-
-  @Override
-  public MachineType findByCode(String code) {
-    return machineTypeRepository.findByCode(code);
-  }
-
 }
