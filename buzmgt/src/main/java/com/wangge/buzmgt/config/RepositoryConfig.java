@@ -7,9 +7,9 @@ import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 
-import com.wangge.buzmgt.monthTask.DataEventHandler;
-import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
-import com.wangge.buzmgt.monthTask.entity.MonthTask;
+import com.wangge.buzmgt.monthtask.DataEventHandler;
+import com.wangge.buzmgt.monthtask.entity.MonthOdersData;
+import com.wangge.buzmgt.monthtask.entity.MonthTask;
 
 @Configuration
 public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
