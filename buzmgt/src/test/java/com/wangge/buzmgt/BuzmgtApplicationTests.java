@@ -1,44 +1,19 @@
 package com.wangge.buzmgt;
 
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.transaction.Transactional;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.domain.Page;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-
-import com.wangge.buzmgt.customTask.repository.CustomMessagesRepository;
-import com.wangge.buzmgt.monthTask.entity.AppServer;
-import com.wangge.buzmgt.monthTask.entity.MonthOdersData;
-import com.wangge.buzmgt.monthTask.repository.MonthOrdersDataRepository;
-import com.wangge.buzmgt.monthTask.repository.MonthTaskRepository;
-import com.wangge.buzmgt.monthTask.service.MonthTaskService;
+import com.wangge.buzmgt.customtask.repository.CustomMessagesRepository;
+import com.wangge.buzmgt.monthtask.entity.AppServer;
+import com.wangge.buzmgt.monthtask.repository.MonthOrdersDataRepository;
+import com.wangge.buzmgt.monthtask.repository.MonthTaskRepository;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
-import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.repository.OrganizationRepository;
 import com.wangge.buzmgt.sys.repository.UserRepository;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.UserService;
-import com.wangge.buzmgt.sys.vo.SaojieDataVo;
 import com.wangge.buzmgt.task.service.VisitRecordService;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
@@ -47,6 +22,18 @@ import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.HttpUtil;
 import com.wangge.buzmgt.util.RegionUtil;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.domain.Page;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BuzmgtApplication.class)
