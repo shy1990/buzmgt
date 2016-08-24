@@ -1,30 +1,5 @@
 package com.wangge.buzmgt.teammember.web;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.wangge.buzmgt.log.entity.Log.EventType;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.region.entity.Region;
@@ -39,9 +14,6 @@ import com.wangge.buzmgt.sys.service.ChildAccountService;
 import com.wangge.buzmgt.sys.service.OrganizationService;
 import com.wangge.buzmgt.sys.service.RoleService;
 import com.wangge.buzmgt.sys.service.UserService;
-import com.wangge.buzmgt.sys.util.PageData;
-import com.wangge.buzmgt.sys.util.PageNavUtil;
-import com.wangge.buzmgt.sys.util.SortUtil;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.AccountService;
@@ -49,6 +21,24 @@ import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.teammember.vo.AccountBean;
 import com.wangge.json.JSONFormat;
+import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @Controller
 public class AccountManageController extends BaseController {
@@ -350,6 +340,7 @@ public class AccountManageController extends BaseController {
       } else if ("4".equals(status)) {
         u.getSalseMan().setSimId("");
       }
+      u.getSalseMan().setFireddate(new Date());
       User user = us.addUser(u);
       logService.log(u, user, EventType.UPDATE);
       return "suc";
