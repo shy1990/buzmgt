@@ -72,6 +72,19 @@ public class BankTradeServiceImpl implements BankTradeService {
     return bankTrades;
 
   }
+  
+  public long count(Map<String, Object> searchParams) {
+    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+    Specification<BankTrade> spec = bankTradeSearchFilter(filters.values(), BankTrade.class);
+    return bankTradeRepository.count(spec);
+  }
+  @Override
+  public long countByIsArchiveAndImportDate(Integer tag,String importDate){
+    Map<String, Object> searchParams = new HashMap<>();
+    searchParams.put("EQ_importDate", importDate);
+    searchParams.put("EQ_isArchive", tag);
+    return this.count(searchParams);
+  }
 
   @Override
   public Page<BankTrade> findAll(Map<String, Object> searchParams, Pageable pageRequest) {

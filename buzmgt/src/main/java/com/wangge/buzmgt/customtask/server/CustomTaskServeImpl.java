@@ -1,8 +1,10 @@
 package com.wangge.buzmgt.customtask.server;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,9 +33,6 @@ import com.wangge.buzmgt.customtask.entity.CustomTask;
 import com.wangge.buzmgt.customtask.repository.CustomMessagesRepository;
 import com.wangge.buzmgt.customtask.repository.CustomTaskRepository;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
-import com.wangge.buzmgt.income.main.entity.MainIncome;
-import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
-import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.monthtask.entity.AppServer;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
@@ -48,11 +47,6 @@ public class CustomTaskServeImpl implements CustomTaskServer {
   CustomMessagesRepository messageRep;
   @Autowired
   SalesManRepository salesmanRep;
-  @Autowired
-  MainIncomeService mainIncomeService;
-  @Autowired
-  MainIncomeRepository incomeRep;
-  
   private Log log = LogFactory.getLog(this.getClass());
   
   public static final String[] TASKTYPEARR = new String[] { "注册", "售后", "扣罚", "拜访", "小米" };
@@ -73,7 +67,7 @@ public class CustomTaskServeImpl implements CustomTaskServer {
   @Transactional(rollbackForClassName = "Exception")
   public void save(CustomTask customTask) throws Exception {
     try {
-      
+      customTask.setCreateTime(Date.from(Instant.now()));
       Collection<SalesMan> oldSet = customTask.getSalesmanSet();
       List<String> idList = new ArrayList<String>();
       for (SalesMan old : oldSet) {
@@ -82,16 +76,6 @@ public class CustomTaskServeImpl implements CustomTaskServer {
       List<SalesMan> newlist = salesmanRep.findAll(idList);
       customTask.setSalesmanSet(new HashSet<SalesMan>(newlist));
       customRep.save(customTask);
-      
-      // 计算扣罚金额,每次有就叠加
-      if (customTask.getType() == 2) {
-        for (String salesManId : idList) {
-          MainIncome main = mainIncomeService.findIncomeMain(salesManId);
-          main.setPunish(main.getPunish() + customTask.getPunishCount());
-          incomeRep.save(main);
-        }
-        
-      }
       
       // 开始推送操作
       String phone = "";

@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -14,7 +12,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.wangge.buzmgt.common.FlagEnum;
 
 
 
@@ -61,9 +58,7 @@ public class BankTrade implements Serializable  {
   private Date importDate;
   
   private Integer isArchive;//是否归档
-  
-  @Enumerated(EnumType.STRING)
-  private FlagEnum flag = FlagEnum.NORMAL;
+
   
   public Integer getIsArchive() {
     return isArchive;
@@ -145,20 +140,8 @@ public class BankTrade implements Serializable  {
   public void setImportDate(Date importDate) {
     this.importDate = importDate;
   }
-
-  public FlagEnum getFlag() {
-    return flag;
-  }
-
-  public void setFlag(FlagEnum flag) {
-    this.flag = flag;
-  }
-
-  @Override
-  public String toString() {
-    return "BankTrade [id=" + id + ", userId=" + userId + ", cardName=" + cardName + ", cardNo=" + cardNo
-        + ", bankName=" + bankName + ", money=" + money + ", createDate=" + createDate + ", payDate=" + payDate
-        + ", importDate=" + importDate + ", isArchive=" + isArchive + "]";
-  }
+  
+  
+  
 
 }

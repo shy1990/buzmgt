@@ -220,6 +220,11 @@
                                         <option>亚细亚银行</option>
                                         <option>农村信用社</option>
                                         <option>交通银行</option>
+                                        <option>济宁银行</option>
+                                        <option>招商银行</option>
+                                        <option>华夏银行</option>
+                                        <option>浦发银行</option>
+                                        <option>青岛银行</option>
                                         <option>其他</option>
                                     </select>
                                         <!-- /btn-group -->
@@ -279,6 +284,11 @@
                                             <option>亚细亚银行</option>
                                             <option>农村信用社</option>
                                             <option>交通银行</option>
+                                            <option>济宁银行</option>
+                                            <option>招商银行</option>
+                                            <option>华夏银行</option>
+                                            <option>浦发银行</option>
+                                            <option>青岛银行</option>
                                             <option>其他</option>
                                         </select>
                                         <!-- /btn-group -->
@@ -375,6 +385,11 @@
                                             <option>亚细亚银行</option>
                                             <option>农村信用社</option>
                                             <option>交通银行</option>
+                                            <option>济宁银行</option>
+                                            <option>招商银行</option>
+                                            <option>华夏银行</option>
+                                            <option>浦发银行</option>
+                                            <option>青岛银行</option>
                                             <option>其他</option>
                                         </select>
                                         <!-- /btn-group -->

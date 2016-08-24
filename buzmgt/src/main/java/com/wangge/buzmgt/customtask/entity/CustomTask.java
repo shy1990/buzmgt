@@ -1,8 +1,10 @@
 package com.wangge.buzmgt.customtask.entity;
 
 import java.util.Set;
+import java.time.Instant;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.wangge.buzmgt.teammember.entity.SalesMan;
@@ -34,8 +37,6 @@ public class CustomTask {
 	@GenericGenerator(name = "idgen", strategy = "increment")
 	@GeneratedValue(generator = "idgen")
 	private Long id;
-	// 任务类型; 0:注册,1:售后,2:扣罚
-	// @Enumerated(EnumType.ORDINAL)
 	private int type;
 	// 标题
 	private String title;
@@ -43,7 +44,7 @@ public class CustomTask {
 	private String content;
 	// 扣罚
 	private int punishCount;
-	private Date createTime = new Date();
+	private Date createTime	=  Date.from(Instant.now());
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<SalesMan> salesmanSet;
 	// 回执状态,0未读,1已读,
@@ -104,16 +105,16 @@ public class CustomTask {
 	public void setSalesmanSet(Set<SalesMan> salesmanSet) {
 		this.salesmanSet = salesmanSet;
 	}
-
+//	@Column(columnDefinition="date default sysdate",nullable=false)
 	public Date getCreateTime() {
 		return createTime;
 	}
 
 	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    this.createTime = createTime;
+  }
 
-	public CustomTask() {
+  public CustomTask() {
 		super();
 	}
 
