@@ -11,6 +11,7 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -82,9 +83,8 @@ public class ImportOrderExcel {
       return "excel/result";
      
     } catch (Exception e) {
-      logger.error("login() occur error. ", e);
-      e.printStackTrace();
-      json.setMsg("excel导入异常！");
+      FileUtil.deleteFile(pathdir+filename);
+      json.setMsg("excel导入异常！  "+e.getMessage());
       request.setAttribute("message", json);
       return "excel/result";
     }
@@ -94,9 +94,10 @@ public class ImportOrderExcel {
     return "excel/result";
   }
   
-   private  void saveExcelData(String path) throws IOException {
+   private  void saveExcelData(String path) throws Exception {
      OrderSignfor xlsOrder = null;
-     List<OrderSignfor> list = readXls(path);
+     List<OrderSignfor> list;
+      list = readXls(path);
      //从数据库导出表
     /* try {
          XlsDto2Excel.xlsDto2Excel(list);
@@ -107,7 +108,9 @@ public class ImportOrderExcel {
        for (OrderSignfor os : list) {
          String[] orderno =  os.getOrderNo().split(",");
            for(int i=0;i<orderno.length;i++){
-             OrderSignfor orderSf = orderSignforService.findByOrderNo(orderno[i]);
+           //  List<OrderSignfor> orderSf = orderSignforService.findByOrderNo(orderno[i]);
+             OrderSignfor orderSf = findOrder(orderSignforService.findListByOrderNo(orderno[i]));
+             
              if(orderSf != null && (os.getFastmailNo() != null && !"".equals(os.getFastmailNo()))){
                  orderSf.setFastmailTime(os.getFastmailTime());
                  orderSf.setFastmailNo(os.getFastmailNo());
@@ -119,16 +122,32 @@ public class ImportOrderExcel {
      }
      
   }
-    
+    /**
+     * 
+      * findOrder:(订单去重). <br/> 
+      * @author Administrator 
+      * @param orderlist
+      * @return 
+      * @since JDK 1.8
+     */
+   private OrderSignfor findOrder(List<OrderSignfor> orderlist){
+      
+      if(orderlist.size() >= 1){
+        for(int i=1;i<orderlist.size();i++){
+          orderSignforService.deleteById(orderlist.get(i).getId());
+        }
+        return orderlist.get(0);
+      }
+     return null;
+   }
    
       /**
        * 读取xls文件内容
-       * 
        * @return List<XlsDto>对象
        * @throws IOException
        *             输入/输出(i/o)异常
        */
-      private List<OrderSignfor> readXls(String filePath) {
+      private List<OrderSignfor> readXls(String filePath) throws Exception {
         // filePath = "E:\\excel\\高新：三际平台和51蜂云平台新增渠道.xlsx";
        
         Workbook wb = ExcelUtil.getWorkbook(filePath);
@@ -155,29 +174,26 @@ public class ImportOrderExcel {
                       continue;
                   }
                   System.out.println("==================="+getValue(xy));*/
-                 
-                 Cell ordernum = hssfRow.getCell(0);
-                  if (ordernum == null) {
-                      continue;
-                  }
-                   orderSignfor.setOrderNo(ExcelUtil.getValue(ordernum).replace("\r\n", "").trim());
-                  Cell fastmailNo = hssfRow.getCell(1);
-                  if (fastmailNo == null) {
-                      continue;
-                  }
-                  orderSignfor.setFastmailNo(ExcelUtil.getValue(fastmailNo).replace("\r\n", "").trim());
-                 // member.setUsername(getFormatName(getValue(username)));
-                  Cell fastmailTime = hssfRow.getCell(2);
-                  if (fastmailTime == null) {
-                      continue;
-                  }
-                  SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-                  try {
-                    orderSignfor.setFastmailTime(date.parse(ExcelUtil.getValue(fastmailTime)) );
-                  } catch (ParseException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                  }
+                  
+                    Cell ordernum = hssfRow.getCell(0);
+                    if (ordernum == null) {
+                        continue;
+                    }
+                     orderSignfor.setOrderNo(isValidDate(ordernum));
+                    Cell fastmailNo = hssfRow.getCell(1);
+                    if (fastmailNo == null) {
+                        continue;
+                    }
+                    orderSignfor.setFastmailNo(validatFestmailNo(fastmailNo));
+                   // member.setUsername(getFormatName(getValue(username)));
+                    Cell fastmailTime = hssfRow.getCell(2);
+                    if (fastmailTime == null) {
+                        continue;
+                    }
+                    SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+                   
+                      orderSignfor.setFastmailTime(date.parse(ExcelUtil.getValue(fastmailTime)) );
+                  
                   
                    
                   
@@ -187,5 +203,65 @@ public class ImportOrderExcel {
           return list;
       }
    
-
+      /**
+       * 
+        * validatFestmailNo:(验证物流单号格式). <br/> 
+        * @author Administrator 
+        * @param param
+        * @return
+        * @throws Exception 
+        * @since JDK 1.8
+       */
+      private static String validatFestmailNo(Cell param)throws Exception{
+        String FestmailNo = ExcelUtil.getValue(param).replace("\r\n", "").trim();
+        if(!"非法字符".equals(FestmailNo) && !"未知类型".equals(FestmailNo) && !"".equals(FestmailNo)){
+          String[] arr = {"9","6"};
+          if(in(arr, FestmailNo.substring(0, 1))){
+             
+             return FestmailNo;
+          }
+          throw new Exception("物流单号格式不正确");
+        }
+        throw new Exception("非法字符 或 未知类型");
+        
+      }
+      /**
+       * 
+        * isValidDate:(验证订单号格式). <br/> 
+        * @author Administrator 
+        * @param param
+        * @return
+        * @throws Exception 
+        * @since JDK 1.8
+       */
+      private static String isValidDate(Cell param) throws Exception{
+        String str = ExcelUtil.getValue(param).replace("\r\n", "").trim();
+         // 指定日期格式为四位年/两位月份/两位日期，注意yyyy/MM/dd区分大小写；
+               
+        if(!"非法字符".equals(str) && !"未知类型".equals(str) && !"".equals(str)){
+          SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+          try {
+   // 设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
+             format.setLenient(false);
+             format.parse(str);
+          } catch (ParseException e) {
+            // e.printStackTrace();
+  // 如果throw java.text.ParseException或者NullPointerException，就说明格式不对
+            // convertSuccess=str;
+             throw new  Exception("订单格式不对！"); 
+         } 
+          return str;
+        }
+        throw new  Exception("非法字符或未知类型！"); 
+               
+        }
+      private static boolean in(String[] arr, String fNoString) {
+        for(int i=0; i < arr.length ;i++){
+          if(fNoString.equals(arr[i])) {
+            return true;
+          }
+           
+         }
+         return false;
+      }
 }

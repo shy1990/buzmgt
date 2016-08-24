@@ -30,10 +30,10 @@
 								<c:choose>
 									<c:when test="${not empty sub.url}">
 									<li id="z${sub.id }">
-									<a href="${sub.url }"><i class="${sub.icon } menu-icon"></i>${sub.name }<span class="left-mark">10</span></a>
+									<a href="${sub.url }"><i class="${sub.icon } menu-icon"></i>${sub.name }<!-- <span class="left-mark">10</span> --></a>
 									</c:when>
 									<c:otherwise>
-									<li> <a href=""><i class="${sub.icon } menu-icon"></i>${sub.name }<span class="left-mark">6</span></a></li>
+									<li> <a href=""><i class="${sub.icon } menu-icon"></i>${sub.name }<!-- <span class="left-mark">6</span> --></a></li>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>

@@ -110,17 +110,20 @@
 									</div>
 								</div>
 							</div>
-							<div class="date-jll">
+							
+
+							<div class="date-jjl">
+								<span class="text-bai" style="margin-right:20px">&nbsp; 筛选类型&nbsp;
+								<select id='sffb'  class="select-sffb">
+								 <option value=''>所有类型</option>
+								 <option value='0'>未完成</option>
+								 <option value='1'>已完成</option>
+								</select>
+								</span>
 								<a class="btn btn-default btn-sm" onclick="getTask(1)"><span
 									class="text-bule">筛选</span></a>
 							</div>
-
-							<!-- <div class="date-jlll">
-								<span class="text-bai"> 已派发 &nbsp;<span
-									class="text-bai-d">2</span> &nbsp; 个区域
-								</span>
-							</div>
-							-->
+							
 						</div>
 
 						<div class="col-md-2 input-jl ">
