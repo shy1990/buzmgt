@@ -9,6 +9,7 @@ import java.util.Random;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -17,11 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
 
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.service.AssessService;
@@ -75,6 +73,28 @@ public class TeamMembersController {
   private AssessService assessService;
   @Resource
   private SaojieDataService sds;
+
+  /**
+   * 跳转到业务等级设置
+   * @return
+   */
+  @RequestMapping("/levelSetting")
+  public String toLevelSetting(){
+
+    return "teammember/level_setting";
+  }
+
+  @RequestMapping(value = "/level/save",method = {RequestMethod.POST})
+  @ResponseBody
+  public String save(@RequestBody List<SalesmanLevel> salesmanLevels){
+    if (CollectionUtils.isNotEmpty(salesmanLevels)){
+      salesmanLevels.forEach(s -> {
+        salesManService.addSalesmanLevel(s);
+      });
+    }
+    return "";
+  }
+
   /**
    * 
   * @Title: toTeamMembers 

@@ -6,8 +6,10 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
+import com.wangge.buzmgt.teammember.repository.SalesmanLevelRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +37,8 @@ public  class SalesManServiceImpl implements SalesManService {
     private SaojieRepository SaojieRepository;
     @Resource
     private LogService logService;
+    @Resource
+    private SalesmanLevelRepository salesmanLevelRepository;
 
     @PersistenceContext
     private EntityManager em;
@@ -187,5 +191,10 @@ public  class SalesManServiceImpl implements SalesManService {
         }else{
             return null;
         }
+    }
+
+    @Override
+    public SalesmanLevel addSalesmanLevel(SalesmanLevel salesmanLevels) {
+       return salesmanLevelRepository.save(salesmanLevels);
     }
 }
