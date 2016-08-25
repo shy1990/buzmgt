@@ -98,7 +98,7 @@ public class AssessServiceImpl implements AssessService {
         BigDecimal str = null;
         List<BigDecimal> resultList = query.getResultList();
         if (resultList != null && resultList.size() > 0) {
-          str = (BigDecimal) resultList.get(0);
+          str = resultList.get(0);
           orderNum = str.doubleValue();
         }
         String sql1 = "select count(*) from (select m.id,count(o.id) total from SYS_REGISTDATA t "
@@ -110,7 +110,7 @@ public class AssessServiceImpl implements AssessService {
         BigDecimal big = null;
         resultList = query.getResultList();
         if (resultList != null && resultList.size() > 0) {
-          big = (BigDecimal) resultList.get(0);
+          big = resultList.get(0);
           active = big.doubleValue();
         }
       } else {
@@ -126,7 +126,7 @@ public class AssessServiceImpl implements AssessService {
         BigDecimal str = null;
         List<BigDecimal> resultList = query.getResultList();
         if (resultList != null && resultList.size() > 0) {
-          str = (BigDecimal) resultList.get(0);
+          str = resultList.get(0);
           double num = str.doubleValue();
           orderNum += num;
         }
@@ -141,7 +141,7 @@ public class AssessServiceImpl implements AssessService {
         BigDecimal big = null;
         resultList = query.getResultList();
         if (resultList != null && resultList.size() > 0) {
-          big = (BigDecimal) resultList.get(0);
+          big = resultList.get(0);
           double num = big.doubleValue();
           active += num;
         }
@@ -198,7 +198,7 @@ public class AssessServiceImpl implements AssessService {
         BigDecimal str = null;
         List<BigDecimal> resultList = query.getResultList();
         if (resultList != null && resultList.size() > 0) {
-          str = (BigDecimal) resultList.get(0);
+          str = resultList.get(0);
           double num = str.doubleValue();
           orderNum += num;
         }
@@ -213,7 +213,7 @@ public class AssessServiceImpl implements AssessService {
         BigDecimal big = null;
         resultList = query.getResultList();
         if (resultList != null && resultList.size() > 0) {
-          big = (BigDecimal) resultList.get(0);
+          big = resultList.get(0);
           double num = big.doubleValue();
           active += num;
         }
@@ -241,7 +241,7 @@ public class AssessServiceImpl implements AssessService {
     BigDecimal str = null;
     List<BigDecimal> resultList = query.getResultList();
     if (resultList != null && resultList.size() > 0) {
-      str = (BigDecimal) resultList.get(0);
+      str = resultList.get(0);
     }
     int stage = 0;
     if (str != null && !"".equals(str)) {

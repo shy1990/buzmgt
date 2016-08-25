@@ -3,7 +3,6 @@ package com.wangge.buzmgt.income.ywsalary.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +11,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -19,13 +21,12 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**
  * ClassName: BaseSalary <br/>
- * Function: TODO ADD FUNCTION. <br/>
+ * Function: ADD FUNCTION. <br/>
  * Reason: 1.新增时,2.修改时3.删除时 <br/>
  * date: 2016年8月20日 下午5:18:35 <br/>
  * 
@@ -33,6 +34,9 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
  * @version
  * @since JDK 1.8
  */
+@NamedEntityGraph(name = "user", attributeNodes = {
+    @NamedAttributeNode(value = "user", subgraph = "user.region") }, subgraphs = {
+        @NamedSubgraph(name = "user.region", attributeNodes = @NamedAttributeNode(value = "region")) })
 @Entity
 @Table(name = "sys_income_basicsalay")
 public class BaseSalary implements Serializable {
@@ -51,14 +55,16 @@ public class BaseSalary implements Serializable {
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USER_ID", insertable = false, updatable = false)
   private SalesMan user;
-  private Float salary;// 薪资
+  private Double salary;// 薪资
   
   @Temporal(TemporalType.TIMESTAMP)
-  private Date updateDate;// 修改日期
-  
-  @Enumerated(EnumType.STRING)
+  private Date deldate;// 修改日期
+  @Temporal(TemporalType.DATE)
+  private Date newdate = new Date();
+  @Enumerated(EnumType.ORDINAL)
   private FlagEnum flag = FlagEnum.NORMAL;// 是否删除 normal-正常,del-删除
   
+  private Integer times;
   public SalesMan getUser() {
     return user;
   }
@@ -75,6 +81,14 @@ public class BaseSalary implements Serializable {
     this.id = id;
   }
   
+  public Integer getTimes() {
+    return times;
+  }
+
+  public void setTimes(Integer times) {
+    this.times = times;
+  }
+
   public String getUserId() {
     return userId;
   }
@@ -83,20 +97,20 @@ public class BaseSalary implements Serializable {
     this.userId = userId;
   }
   
-  public Float getSalary() {
+  public Double getSalary() {
     return salary;
   }
   
-  public void setSalary(Float salary) {
+  public void setSalary(Double salary) {
     this.salary = salary;
   }
   
-  public Date getUpdateDate() {
-    return updateDate;
+  public Date getDeldate() {
+    return deldate;
   }
   
-  public void setUpdateDate(Date updateDate) {
-    this.updateDate = updateDate;
+  public void setDeldate(Date deldate) {
+    this.deldate = deldate;
   }
   
   public FlagEnum getFlag() {
@@ -107,10 +121,18 @@ public class BaseSalary implements Serializable {
     this.flag = flag;
   }
   
+  public Date getNewdate() {
+    return newdate;
+  }
+  
+  public void setNewdate(Date newdate) {
+    this.newdate = newdate;
+  }
+  
   @Override
   public String toString() {
     return "BaseSalary [id=" + id + ", userId=" + userId + ", user=" + user + ", salary=" + salary + ", updateDate="
-        + updateDate + "]";
+        + deldate + "]";
   }
   
 }

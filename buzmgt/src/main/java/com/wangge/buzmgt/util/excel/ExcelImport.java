@@ -1,10 +1,9 @@
 package com.wangge.buzmgt.util.excel;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -137,16 +136,16 @@ public class ExcelImport {
         String strCell;
 
         switch (cell.getCellType()) {
-            case HSSFCell.CELL_TYPE_STRING:
+            case Cell.CELL_TYPE_STRING:
                 strCell = cell.getStringCellValue();
                 break;
-            case HSSFCell.CELL_TYPE_NUMERIC:
+            case Cell.CELL_TYPE_NUMERIC:
                 strCell = String.valueOf(cell.getNumericCellValue());
                 break;
-            case HSSFCell.CELL_TYPE_BOOLEAN:
+            case Cell.CELL_TYPE_BOOLEAN:
                 strCell = String.valueOf(cell.getBooleanCellValue());
                 break;
-            case HSSFCell.CELL_TYPE_BLANK:
+            case Cell.CELL_TYPE_BLANK:
                 strCell = "空";
                 break;
             default:
@@ -185,7 +184,7 @@ public class ExcelImport {
                 case Cell.CELL_TYPE_FORMULA: {
 
                     // 判断当前的cell是否为Date
-                    if (HSSFDateUtil.isCellDateFormatted(cell)) {
+                    if (DateUtil.isCellDateFormatted(cell)) {
                         Date date = cell.getDateCellValue();
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         cellValue = sdf.format(date);

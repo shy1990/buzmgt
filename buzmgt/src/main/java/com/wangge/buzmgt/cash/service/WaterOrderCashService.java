@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
-import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 
 public interface WaterOrderCashService {
 

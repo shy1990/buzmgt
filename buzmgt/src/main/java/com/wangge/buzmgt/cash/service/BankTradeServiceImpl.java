@@ -1,13 +1,10 @@
 package com.wangge.buzmgt.cash.service;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,27 +14,16 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
-import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
-import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.repository.BankTradeRepository;
-import com.wangge.buzmgt.cash.repository.WaterOrderCashRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.salesman.entity.BankCard;
@@ -45,8 +31,6 @@ import com.wangge.buzmgt.salesman.entity.SalesmanData;
 import com.wangge.buzmgt.salesman.service.SalesmanDataService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
-import com.wangge.buzmgt.util.excel.ExcelImport;
-import com.wangge.buzmgt.util.file.FileUtils;
 
 @Service
 public class BankTradeServiceImpl implements BankTradeService {
@@ -297,10 +281,11 @@ public class BankTradeServiceImpl implements BankTradeService {
               break;
             case ISNULL:
               boolean value = Boolean.parseBoolean("true");
-              if (value)
+              if (value) {
                 predicates.add(cb.isNull(expression));
-              else
+              } else {
                 predicates.add(cb.isNotNull(expression));
+              }
 
               break;
             case ORMLK:

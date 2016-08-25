@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -203,7 +202,7 @@ public class ReceiptRemarkController {
 //        "remark","createTime", "order.yewuSignforTime"};
 
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-    String type=(String) request.getParameter("type");
+    String type=request.getParameter("type");
     switch (type) {
     //报备导出
     case "reported":

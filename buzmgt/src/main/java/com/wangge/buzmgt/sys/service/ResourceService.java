@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.wangge.buzmgt.sys.entity.Resource;
-import com.wangge.buzmgt.sys.service.ResourceService.Menu;
 import com.wangge.buzmgt.sys.vo.TreeData;
 
 public interface ResourceService {

@@ -205,8 +205,9 @@ public class CheckCashServiceImpl implements CheckCashService {
     try {
       List<WaterOrderCash> waterOrders = cc.getCashs();
 
-      if (waterOrders.size() == 0)
+      if (waterOrders.size() == 0) {
         return;
+      }
       Float stayMoney = cc.getStayMoney();// 待付金额
       Float incomeMoney = cc.getIncomeMoney();// 支付金额
       for (WaterOrderCash order : waterOrders) {
@@ -215,10 +216,11 @@ public class CheckCashServiceImpl implements CheckCashService {
         if (incomeMoney > cashMoney) {
           order.setPaymentMoney(cashMoney);
         } else {
-          if (incomeMoney < 0)
+          if (incomeMoney < 0) {
             order.setPaymentMoney(0f);
-          else
+          } else {
             order.setPaymentMoney(incomeMoney);
+          }
         }
         incomeMoney -= cashMoney;
 

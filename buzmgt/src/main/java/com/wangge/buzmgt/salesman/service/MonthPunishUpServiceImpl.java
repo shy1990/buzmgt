@@ -37,28 +37,26 @@ public class MonthPunishUpServiceImpl implements MonthPunishUpService{
         return page;
     }
 
+    @Override
     public Page<MonthPunishUp> findByPage(String timeStart,String timeEnd, Pageable pageable) {
 
         if(timeStart != null && !"".equals(timeStart) && timeEnd != null && !"".equals(timeEnd)){
 
-            Specification<MonthPunishUp> specification1 = new Specification<MonthPunishUp>() {
-                @Override
-                public Predicate toPredicate(Root<MonthPunishUp> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                    String timeStartUp =   timeStart+TIME_MIN;
-                    String timeEndUp =  timeEnd+TIME_MAX;
-                    Date time = null;
-                    Date time1 = null;
-                    try {
-                        time =  getDate(timeStartUp);
-                        time1 = getDate(timeEndUp);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    Predicate predicate = cb.greaterThanOrEqualTo(root.get("createDate").as(Date.class),time);//查询全部有"ce"
-                    Predicate predicate1 = cb.lessThanOrEqualTo(root.get("createDate").as(Date.class),time1);//查询全部有"ce"
-                    Predicate p = cb.and(predicate,predicate1);
-                    return p;
+            Specification<MonthPunishUp> specification1 = (root, query, cb) -> {
+                String timeStartUp =   timeStart+TIME_MIN;
+                String timeEndUp =  timeEnd+TIME_MAX;
+                Date time = null;
+                Date time1 = null;
+                try {
+                    time =  getDate(timeStartUp);
+                    time1 = getDate(timeEndUp);
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+                Predicate predicate = cb.greaterThanOrEqualTo(root.get("createDate").as(Date.class),time);//查询全部有"ce"
+                Predicate predicate1 = cb.lessThanOrEqualTo(root.get("createDate").as(Date.class),time1);//查询全部有"ce"
+                Predicate p = cb.and(predicate,predicate1);
+                return p;
             };
             return  mothPunishUpRepository.findAll(specification1,pageable);
         }

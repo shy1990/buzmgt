@@ -102,7 +102,7 @@ public class VisitTaskServiceImpl implements VisitTaskService {
       String str = null;
       List<Character>  resultList = query.getResultList();
       if(resultList != null && resultList.size() > 0){
-          str = ((Character)resultList.get(0)).toString();
+          str = resultList.get(0).toString();
       }
       return str;
   }

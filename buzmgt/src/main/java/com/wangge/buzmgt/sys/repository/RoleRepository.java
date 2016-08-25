@@ -13,6 +13,7 @@ import com.wangge.buzmgt.sys.entity.Role;
 public interface RoleRepository extends JpaRepository<Role, Long> {
   List<Role> findByUsersUsername(String username);
 
+  @Override
   Page<Role> findAll(Pageable pageRequest);
 
   Role findByName(String name);

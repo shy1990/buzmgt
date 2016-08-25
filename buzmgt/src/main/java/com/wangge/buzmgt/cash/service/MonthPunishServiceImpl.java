@@ -1,7 +1,5 @@
 package com.wangge.buzmgt.cash.service;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -248,10 +246,11 @@ public class MonthPunishServiceImpl implements MonthPunishService {
               break;
             case ISNULL:
               boolean value = Boolean.parseBoolean((String) filter.value);
-              if (value)
+              if (value) {
                 predicates.add(cb.isNull(expression));
-              else
+              } else {
                 predicates.add(cb.isNotNull(expression));
+              }
 
               break;
             case ORMLK:

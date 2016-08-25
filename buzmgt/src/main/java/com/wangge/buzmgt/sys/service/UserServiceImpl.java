@@ -99,13 +99,15 @@ public class UserServiceImpl implements UserService {
 		return roleRepository.findOne(id);
 	}
 
-	@Transactional
+	@Override
+  @Transactional
 	public User getById(String id) {
 		
 		return userRepository.findUserById(id);
 	}
 	
-	public List<Role> findAll() {
+	@Override
+  public List<Role> findAll() {
 		return roleRepository.findAll();
 	}
    /**

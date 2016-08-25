@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,12 +18,10 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.entity.User;
-import com.wangge.buzmgt.task.entity.Visit.VisitStatus;
 
 /**
  * 
@@ -58,6 +54,7 @@ public class SalesMan implements Serializable {
 
 	@Column(name = "ASSESS_STAGE")
 	private String assessStage;
+	
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")

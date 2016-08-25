@@ -19,9 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -71,7 +68,8 @@ public class Region implements Serializable {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
 	private Collection<Region> children;
-
+ private String namepath;
+	
 	@JoinColumn(name = "CENTER_POINT")
   private String centerPoint;
 	
@@ -96,7 +94,17 @@ public class Region implements Serializable {
 		this.type = type;
 	}
 
-	public RegionType getType() {
+	
+
+  public String getNamepath() {
+    return namepath;
+  }
+
+  public void setNamepath(String namepath) {
+    this.namepath = namepath;
+  }
+
+  public RegionType getType() {
 		return type;
 	}
 

@@ -75,47 +75,56 @@ public class PageData extends HashMap implements Map{
 		return map.remove(key);
 	}
 
-	public void clear() {
+	@Override
+  public void clear() {
 		map.clear();
 	}
 
-	public boolean containsKey(Object key) {
+	@Override
+  public boolean containsKey(Object key) {
 		// TODO Auto-generated method stub
 		return map.containsKey(key);
 	}
 
-	public boolean containsValue(Object value) {
+	@Override
+  public boolean containsValue(Object value) {
 		// TODO Auto-generated method stub
 		return map.containsValue(value);
 	}
 
-	public Set entrySet() {
+	@Override
+  public Set entrySet() {
 		// TODO Auto-generated method stub
 		return map.entrySet();
 	}
 
-	public boolean isEmpty() {
+	@Override
+  public boolean isEmpty() {
 		// TODO Auto-generated method stub
 		return map.isEmpty();
 	}
 
-	public Set keySet() {
+	@Override
+  public Set keySet() {
 		// TODO Auto-generated method stub
 		return map.keySet();
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
+  @SuppressWarnings("unchecked")
 	public void putAll(Map t) {
 		// TODO Auto-generated method stub
 		map.putAll(t);
 	}
 
-	public int size() {
+	@Override
+  public int size() {
 		// TODO Auto-generated method stub
 		return map.size();
 	}
 
-	public Collection values() {
+	@Override
+  public Collection values() {
 		// TODO Auto-generated method stub
 		return map.values();
 	}

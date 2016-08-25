@@ -19,9 +19,11 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>{
 	
 	List<Resource> findByRolesId(Long id);
 	
-	Page<Resource> findAll(Pageable pageRequest);
+	@Override
+  Page<Resource> findAll(Pageable pageRequest);
 	
-	List<Resource> findAll(Sort sort);
+	@Override
+  List<Resource> findAll(Sort sort);
 	
 	List<Resource> findByParentId(Long id);
 	

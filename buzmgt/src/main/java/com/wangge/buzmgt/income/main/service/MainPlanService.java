@@ -3,6 +3,7 @@ package com.wangge.buzmgt.income.main.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /** 
   * ClassName: MainPlanService <br/> 
@@ -18,7 +19,7 @@ import org.springframework.data.domain.Page;
   */  
 public interface MainPlanService {
   
-  Page<Object> findAll();
+  Page<?> findAll(String regionId, Pageable pageReq);
   List<Object> findByUser();
   void modifyUser();
   void deletePlan();

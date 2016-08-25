@@ -1,23 +1,14 @@
 package com.wangge.buzmgt.monthTarget.web;
 
-import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
 import com.wangge.buzmgt.monthTarget.entity.MothTargetData;
 import com.wangge.buzmgt.monthTarget.service.MothTargetDataService;
-import com.wangge.buzmgt.sys.entity.User;
-import com.wangge.buzmgt.util.excel.ExcelExport;
 import com.wangge.json.JSONFormat;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * Created by joe on 16-6-27.

@@ -94,7 +94,7 @@ public class VisitRecordServiceImpl implements VisitRecordService {
         int total = 0;
         List<BigDecimal>  resultList = query.getResultList();
         if(resultList != null && resultList.size() > 0){
-            total = ((BigDecimal)resultList.get(0)).intValue();
+            total = resultList.get(0).intValue();
         }
         return total;
     }

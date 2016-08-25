@@ -16,12 +16,14 @@ public interface OilRepository extends JpaRepository<OilParameters, Long>{
 	/*
 	 *添加自定义设置区域：公里系数设置
 	 */
-	public OilParameters save(OilParameters oilParameters);
+	@Override
+  public OilParameters save(OilParameters oilParameters);
 	 /*
 	  *查询全部自定义里程系数的信息 
 	  */
 //	@Query(" from OilParameters a where a.kmRatio != null")
-	public List<OilParameters> findAll();
+	@Override
+  public List<OilParameters> findAll();
 	/*
 	 * 根据regionId查询
 	 */

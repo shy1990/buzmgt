@@ -2,33 +2,21 @@ package com.wangge.buzmgt.saojie.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
-import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
-import com.wangge.buzmgt.sys.vo.SaojieDataVo;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 @Service
@@ -181,6 +169,7 @@ public class SaojieServiceImpl implements SaojieService {
     return null;
   }*/
   
+  @Override
   public List<Region> findRegionById(String id){
     return saojieRepository.findRegionById(id);
   }
@@ -190,6 +179,7 @@ public class SaojieServiceImpl implements SaojieService {
     return saojieRepository.findByOrderAndSalesman(ordernum,salesman);
   }
 
+  @Override
   public List<Saojie> findSaojie(SaojieStatus status, String userId) {
     return saojieRepository.findSaojie(status, userId);
   }

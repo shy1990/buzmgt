@@ -9,6 +9,7 @@ import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 
 public interface OrderSignforRepository extends JpaRepository<OrderSignfor, Long>,
 JpaSpecificationExecutor<OrderSignfor>,OrderSignforRepositoryCustom{
+  @Override
   public Page<OrderSignfor> findAll(Pageable pageRequest);
   
   public Page<OrderSignfor> findByCustomSignforException(String status,Pageable pageRequest);
