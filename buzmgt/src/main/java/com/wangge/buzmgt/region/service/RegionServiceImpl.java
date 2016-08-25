@@ -2,6 +2,7 @@ package com.wangge.buzmgt.region.service;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,6 @@ public class RegionServiceImpl implements RegionService {
     return listRegionTree;
   }
 	@Override
-	@Transactional
 	public List<RegionTree> getRegionByPid(String id) {
 		
 		List<RegionTree> voList = new ArrayList<RegionTree>();
@@ -91,10 +91,12 @@ public class RegionServiceImpl implements RegionService {
     return regionRepository.findByNameLike(regionName);
   }
 	
-	public List<Region> findByRegion(String regionId) {
+	@Override
+  public List<Region> findByRegion(String regionId) {
     return regionRepository.findByParentId(regionId);
   }
 	
+  @Override
   public List<Region> getListByIds(SalesMan  salesman) {
     
     List<Region> regonList  = new ArrayList<Region>();
@@ -180,6 +182,19 @@ public class RegionServiceImpl implements RegionService {
   @Override
   public List<Region> findByTypeOrderById(RegionType type) {
     return regionRepository.findByTypeOrderById(type);
+  }
+  @Override
+  public List<Map<String, Object>> getAllRegion(int type) {
+    RegionType regionType= RegionType.values()[type];
+    List<Region> relist=regionRepository.findByTypeOrderById(regionType);
+    List<Map<String, Object>> voList=new ArrayList<Map<String, Object>>();
+    for(Region r:relist){
+      Map<String, Object> remap=new HashMap<String, Object>();
+      remap.put("name", r.getName());
+      remap.put("id", r.getId());
+      voList.add(remap);
+    }
+    return voList;
   }
  
 }

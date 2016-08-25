@@ -115,19 +115,17 @@
 								</div>
 							</div>
 							<div class="select-jjl">
-								<span class="text-bai">&nbsp; 筛选类型&nbsp;
+								<span class="text-bai">&nbsp; 是否发布 &nbsp;
 								<select id='sffb'  class="select-sffb">
 								 <option value=''>所有类型</option>
 								 <option value='0'>未发布</option>
 								 <option value='1'>已发布</option>
-								 <option value='2'>设置未完成</option>
-								 <option value='3'>设置已完成</option>
 								</select>
 								</span>
 							</div>
 							
 							<div class="date-jll">
-								<a class="btn btn-default btn-sm" onclick="getTask(0);"
+								<a class="btn btn-default btn-sm" onclick="getTask();"
 									><span class="text-bule">筛选</span></a>
 							</div>
 							
@@ -144,7 +142,7 @@
 									name="truename" id="param" placeholder="请输入业务员姓名"
 									onkeypress="return check()"> <a
 									class="input-ini input-group-addon " id="goSearch"
-									onclick="getTask(0);"> <i class="icon icon-finds"></i>
+									onclick="getTask();"> <i class="icon icon-finds"></i>
 								</a>
 							</div>
 

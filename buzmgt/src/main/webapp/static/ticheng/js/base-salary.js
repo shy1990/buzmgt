@@ -17,11 +17,11 @@ function initModal() {
 	  modal.find('.modal-body #updSalary').val(recipient1)
 	})
 	$('#delModal').on('show.bs.modal', function (event) {
-		var button = $(event.relatedTarget) // Button that triggered the modal
-		var id = button.data('id') // Extract info from data-* attributes
-		var salary = button.data('salary') // Extract info from data-* attributes
-		var truename = button.data('truename') // Extract info from data-* attributes
-		var modal = $(this)
+		var button = $(event.relatedTarget) ;// Button that triggered the modal
+		var id = button.data('id') ;// Extract info from data-* attributes
+		var salary = button.data('salary'); // Extract info from data-* attributes
+		var truename = button.data('truename'); // Extract info from data-* attributes
+		var modal = $(this);
 		modal.find('.modal-body #delId').val(id);
 		modal.find('.modal-body #delSalary').text(salary);
 		modal.find('.modal-body #delName').text(truename);
@@ -59,6 +59,7 @@ function addSalary() {
 		}
 	})
 }
+
 function initRegionId(){
 	var regionId=$('#regionId').val();
 	var regionType=$('#regionType').val();
@@ -94,8 +95,8 @@ function deleteSalary(){
 		return false;
 	}
 	$.ajax({
-		url:base+'baseSalary/delete?Id='+id,
-		type:'get',
+		url:base+'baseSalary/'+id,
+		type:'delete',
 		dateType:'json',
 		success:function(data){
 			if (data.status != 'failure'){
@@ -109,26 +110,42 @@ function deleteSalary(){
 	})
 }
 /**
- * 检索
+ * 人名检索
  */
-function goSearch() {
+function goNameSearch() {
+	var researchData="";
 	var truename=$('#truename').val();
+	if(truename!=""){
+		researchData+="?sc_trueName="+truename;
+	}
 	$.ajax({
-		url:base+'baseSalary/'+truename,
+		url:base+'baseSalary'+researchData,
 		type:'GET',
 		dataType:'json',
 		success:function(data){
 			createTable(data);
 		}
-	})
+	});
 }
-/**
- * 选择区域
- * @param id
- */
-function getRegion(id){
-	window.location.href='/region/getPersonalRegion?id='+id+'&flag=baseSalary';
+/*
+ * 区域检索
+ * */
+function goRegionSearch(){
+	var researchData="";
+	var regionId= getRegionSelectVal();
+	if(regionId!=""){
+		researchData+="?sc_regionId="+regionId;
+	}
+	$.ajax({
+		url:base+'baseSalary'+researchData,
+		type:'GET',
+		dataType:'json',
+		success:function(data){
+			createTable(data);
+		}
+	});
 }
+
 /**
  * 导出
  */
@@ -136,6 +153,7 @@ $('#table-export').on('click', function() {
 	
 	window.location.href = base + "baseSalary/export";
 });
+
 function findBaseSalaryList(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
@@ -149,7 +167,6 @@ function findBaseSalaryList(page) {
 			var searchTotal = orderData.totalElements;
 			if (searchTotal != baseSalaryTotal || searchTotal == 0) {
 				baseSalaryTotal = searchTotal;
-
 				initPaging(orderData);
 			}
 		},

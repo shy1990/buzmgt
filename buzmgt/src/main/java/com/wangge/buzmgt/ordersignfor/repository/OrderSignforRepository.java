@@ -1,7 +1,5 @@
 package com.wangge.buzmgt.ordersignfor.repository;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +9,7 @@ import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 
 public interface OrderSignforRepository extends JpaRepository<OrderSignfor, Long>,
 JpaSpecificationExecutor<OrderSignfor>,OrderSignforRepositoryCustom{
+  @Override
   public Page<OrderSignfor> findAll(Pageable pageRequest);
   
   public Page<OrderSignfor> findByCustomSignforException(String status,Pageable pageRequest);
@@ -19,7 +18,5 @@ JpaSpecificationExecutor<OrderSignfor>,OrderSignforRepositoryCustom{
       String status,String startTime,String endTime,Pageable pageRequest);
 
   public OrderSignfor findByOrderNo(String orderNo);
-
-  public List<OrderSignfor> findAllByOrderNo(String orderNo);
   
 }

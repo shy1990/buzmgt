@@ -21,8 +21,9 @@ public class FileUtils {
         try {
             byte[] tmp = new byte[1024];
             int len = -1;
-            while ((len = src.read(tmp)) != -1)
-                dest.write(tmp, 0, len);
+            while ((len = src.read(tmp)) != -1) {
+              dest.write(tmp, 0, len);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

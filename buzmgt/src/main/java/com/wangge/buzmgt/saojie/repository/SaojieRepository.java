@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.entity.Saojie;
 import com.wangge.buzmgt.saojie.entity.Saojie.SaojieStatus;
-import com.wangge.buzmgt.saojie.entity.SaojieData;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 public interface SaojieRepository extends JpaRepository<Saojie, Long>{

@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
-
 import com.wangge.buzmgt.monthtask.entity.AppServer;
 
 @EnableConfigurationProperties({AppServer.class}) 

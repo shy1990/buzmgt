@@ -2,17 +2,12 @@ package com.wangge.buzmgt.oil.service;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.oil.entity.OilParameters;
 import com.wangge.buzmgt.oil.repository.OilRepository;
-import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.repository.RegionRepository;
-import com.wangge.buzmgt.sys.repository.UserRepository;
 
 @Service
 public class OilServiceImpl implements OilService {

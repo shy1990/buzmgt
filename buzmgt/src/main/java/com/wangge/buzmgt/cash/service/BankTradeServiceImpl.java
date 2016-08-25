@@ -14,7 +14,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.Cash.CashStatusEnum;
 import com.wangge.buzmgt.cash.repository.BankTradeRepository;
@@ -283,10 +281,11 @@ public class BankTradeServiceImpl implements BankTradeService {
               break;
             case ISNULL:
               boolean value = Boolean.parseBoolean("true");
-              if (value)
+              if (value) {
                 predicates.add(cb.isNull(expression));
-              else
+              } else {
                 predicates.add(cb.isNotNull(expression));
+              }
 
               break;
             case ORMLK:
@@ -319,10 +318,6 @@ public class BankTradeServiceImpl implements BankTradeService {
         return cb.conjunction();
       }
     };
-  }
-  @Override
-  public long countByIsArchiveAndImportDate(Integer tag, String importDate) {
-    return bankTradeRepository.countByIsArchiveAndImportDate(tag, importDate);
   }
 
 }

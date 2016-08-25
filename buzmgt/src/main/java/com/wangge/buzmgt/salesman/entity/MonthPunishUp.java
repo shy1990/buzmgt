@@ -20,6 +20,11 @@ import java.util.Date;
         attributeNodes = @NamedAttributeNode("region"))})
 //@JsonIgnoreProperties({"salesMan"})
 public class MonthPunishUp implements Serializable {
+    /** 
+   * serialVersionUID:TODO(用一句话描述这个变量表示什么). 
+   * @since JDK 1.8 
+   */ 
+  private static final long serialVersionUID = -6843474881912272577L;
     @Id
     @GenericGenerator(name = "idgen", strategy = "increment")
     @GeneratedValue(generator = "idgen")

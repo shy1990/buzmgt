@@ -1,16 +1,27 @@
 package com.wangge.buzmgt.teammember.entity;
 
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.entity.User;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 
@@ -44,6 +55,7 @@ public class SalesMan implements Serializable {
 	@Column(name = "ASSESS_STAGE")
 	private String assessStage;
 	
+	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "region_id")
 	private Region region;
@@ -63,10 +75,6 @@ public class SalesMan implements Serializable {
 	
 	@Column(name="ASSESS_STAGE_SUM")
 	private Integer assessStageSum;
-
-
-	@Temporal(TemporalType.DATE)
-	private Date fireddate;
 
 	public SalesMan() {
 		super();
@@ -184,15 +192,7 @@ public class SalesMan implements Serializable {
     this.assessStageSum = assessStageSum;
   }
 
-	public Date getFireddate() {
-		return fireddate;
-	}
-
-	public void setFireddate(Date fireddate) {
-		this.fireddate = fireddate;
-	}
-
-	@Override
+  @Override
   public String toString() {
     return "SalesMan [id=" + id + ", simId=" + simId + ", status=" + status
         + ", truename=" + truename + ", jobNum=" + jobNum + ", assessStage="

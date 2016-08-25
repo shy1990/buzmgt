@@ -15,8 +15,9 @@ public class FileUtil {
 	public static String saveFile(String filePath,String fileName, MultipartFile filedata,SimpleDateFormat dateformat) {
 	         /* 构建文件目录 */
         File filedir = new File(filePath);    
-         if (!filedir.exists())    
-             filedir.mkdirs();
+         if (!filedir.exists()) {
+          filedir.mkdirs();
+        }
  
         try {
           FileInputStream input = (FileInputStream) filedata.getInputStream();

@@ -15,7 +15,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,20 +53,7 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
     List<WaterOrderCash> waterOrderList = waterOrderCashRepository.findAll(spec);
     return waterOrderList;
   }
-  
-  public long count(Map<String, Object> searchParams){
-    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
-    return waterOrderCashRepository.count(spec);
-  }
 
-  @Override
-  public long countByPayStatusAndCreateDate(WaterPayStatusEnum overpay, String createDate) {
-    Map<String,Object> searchParams = new HashMap<>();
-    searchParams.put("EQ_createDate", createDate);
-    searchParams.put("EQ_payStatus", WaterPayStatusEnum.OverPay);
-    return this.count(searchParams);
-  }
   @Override
   public Page<WaterOrderCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     searchParams.put("EQ_flag", "NORMAL");
@@ -84,14 +70,12 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
   }
 
   @Override
-  @Transactional
   public void save(List<WaterOrderCash> waterOrders) {
 
     waterOrderCashRepository.save(waterOrders);
   }
   
   @Override
-  @Transactional
   public void save(WaterOrderCash waterOrder) {
     
     waterOrderCashRepository.save(waterOrder);

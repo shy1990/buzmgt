@@ -49,7 +49,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   @Override
   @Transactional(rollbackForClassName = "Exception")
   public MainIncome findIncomeMain(String salesmanId) {
-    String month = DateUtil.getPreMonth(new Date(), 1);
+    String month = DateUtil.getPreMonth(new Date(), 0);
     return findIncomeMain(salesmanId,month);
   }
 }

@@ -1,21 +1,16 @@
 package com.wangge.buzmgt.customtask.server;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.persistence.criteria.SetJoin;
 
 import org.apache.commons.logging.Log;
@@ -33,6 +28,9 @@ import com.wangge.buzmgt.customtask.entity.CustomTask;
 import com.wangge.buzmgt.customtask.repository.CustomMessagesRepository;
 import com.wangge.buzmgt.customtask.repository.CustomTaskRepository;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
+import com.wangge.buzmgt.income.main.entity.MainIncome;
+import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
+import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.monthtask.entity.AppServer;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
@@ -47,6 +45,11 @@ public class CustomTaskServeImpl implements CustomTaskServer {
   CustomMessagesRepository messageRep;
   @Autowired
   SalesManRepository salesmanRep;
+  @Autowired
+  MainIncomeService mainIncomeService;
+  @Autowired
+  MainIncomeRepository incomeRep;
+  
   private Log log = LogFactory.getLog(this.getClass());
   
   public static final String[] TASKTYPEARR = new String[] { "注册", "售后", "扣罚", "拜访", "小米" };
@@ -67,7 +70,7 @@ public class CustomTaskServeImpl implements CustomTaskServer {
   @Transactional(rollbackForClassName = "Exception")
   public void save(CustomTask customTask) throws Exception {
     try {
-      customTask.setCreateTime(Date.from(Instant.now()));
+      
       Collection<SalesMan> oldSet = customTask.getSalesmanSet();
       List<String> idList = new ArrayList<String>();
       for (SalesMan old : oldSet) {
@@ -77,13 +80,24 @@ public class CustomTaskServeImpl implements CustomTaskServer {
       customTask.setSalesmanSet(new HashSet<SalesMan>(newlist));
       customRep.save(customTask);
       
+      // 计算扣罚金额,每次有就叠加
+      if (customTask.getType() == 2) {
+        for (String salesManId : idList) {
+          MainIncome main = mainIncomeService.findIncomeMain(salesManId);
+          main.setPunish(main.getPunish() + customTask.getPunishCount());
+          incomeRep.save(main);
+        }
+        
+      }
+      
       // 开始推送操作
       String phone = "";
       for (SalesMan salesman : newlist) {
         phone += salesman.getMobile() + ",";
       }
-      if (phone.length() > 3)
+      if (phone.length() > 3) {
         phone = phone.substring(0, phone.length() - 1);
+      }
       Map<String, Object> talMap = new HashMap<String, Object>();
       talMap.put("mobiles", phone);
       talMap.put("msg", customTask.getTitle());
@@ -108,20 +122,16 @@ public class CustomTaskServeImpl implements CustomTaskServer {
   public Map<String, Object> findAll(Pageable page, Map<String, Object> searchParams) {
     String salesName = searchParams.get("salesName") == null ? "" : searchParams.get("salesName").toString();
     searchParams.remove("salesName");
-    Page<CustomTask> cpage = customRep.findAll(new Specification<CustomTask>() {
-      
-      @Override
-      public Predicate toPredicate(Root<CustomTask> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-        List<Predicate> predicates = new ArrayList<Predicate>();
-        if (!salesName.isEmpty()) {
-          SetJoin<CustomTask, SalesMan> setJion = root
-              .join(root.getModel().getDeclaredSet("salesmanSet", SalesMan.class), JoinType.LEFT);
-          predicates.add(cb.like(setJion.get("truename"), "%" + salesName + "%"));
-        }
-        PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
-        
-        return cb.and(predicates.toArray(new Predicate[] {}));
+    Page<CustomTask> cpage = customRep.findAll((Specification<CustomTask>) (root, query, cb) -> {
+      List<Predicate> predicates = new ArrayList<Predicate>();
+      if (!salesName.isEmpty()) {
+        SetJoin<CustomTask, SalesMan> setJion = root
+            .join(root.getModel().getDeclaredSet("salesmanSet", SalesMan.class), JoinType.LEFT);
+        predicates.add(cb.like(setJion.get("truename"), "%" + salesName + "%"));
       }
+      PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
+      
+      return cb.and(predicates.toArray(new Predicate[] {}));
     }, page);
     List<CustomTask> cList = cpage.getContent();
     Map<String, Object> allMap = new HashMap<String, Object>();
@@ -141,8 +151,9 @@ public class CustomTaskServeImpl implements CustomTaskServer {
       for (SalesMan man : saleList) {
         saleNames += man.getTruename() + " ";
       }
-      if (saleNames.length() > 1)
+      if (saleNames.length() > 1) {
         saleNames = saleNames.substring(0, saleNames.length() - 1);
+      }
       datamap.put("salesMan", saleNames);
       getCustomRecieve(task, datamap, saleList);
       mapList.add(datamap);

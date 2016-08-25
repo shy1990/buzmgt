@@ -1,7 +1,6 @@
 package com.wangge.buzmgt.sys.vo;
 
 import java.math.BigDecimal;
-import java.util.Date;
 //
 public class CustomerVo {
   private int registId;

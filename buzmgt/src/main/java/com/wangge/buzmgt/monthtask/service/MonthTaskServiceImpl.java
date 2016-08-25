@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -106,8 +105,9 @@ public class MonthTaskServiceImpl implements MonthTaskService {
     String saleManName = parameters.getFirst("salesManName") == null ? null : parameters.getFirst("salesManName") + "";
     String sffb = parameters.getFirst("sffb") == null ? null : parameters.getFirst("sffb") + "";
     String regionId = getDefaultRegionId();
-    if (null == month || "".equals(month))
+    if (null == month || "".equals(month)) {
       month = DateUtil.getPreMonth(new Date(), 1);
+    }
     Page<MonthTask> result = null;
     
     if (null == flag) {

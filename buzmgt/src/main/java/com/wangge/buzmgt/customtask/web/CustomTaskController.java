@@ -27,7 +27,6 @@ import com.wangge.buzmgt.customtask.server.CustomTaskServeImpl;
 import com.wangge.buzmgt.customtask.server.CustomTaskServer;
 import com.wangge.buzmgt.monthtask.service.MonthTaskService;
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
 

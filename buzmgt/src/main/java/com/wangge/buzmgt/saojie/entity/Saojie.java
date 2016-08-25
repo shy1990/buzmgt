@@ -3,7 +3,6 @@ package com.wangge.buzmgt.saojie.entity;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -20,7 +19,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;

@@ -23,26 +23,76 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
 <link rel="stylesheet" type="text/css"
-	href="static/ticheng/css/income-cash.css">
+	href="/static/ticheng/css/income-cash.css">
 <link rel="stylesheet" type="text/css"
 	href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<style>
+.icon-back {
+	width: 26px;
+	height: 26px;
+	background: url("img/arrow.png") no-repeat center;
+}
+
+.icon-back:hover {
+	width: 26px;
+	width: 26px;
+	background: url("img/Arrow 2 .png") no-repeat center;
+}
+
+.fl-right {
+	float: right;
+	margin-top: 25px;
+	margin-right: 25px;
+}
+
+.text-green {
+	color: #0c9969;
+}
+
+.btn-bluee {
+	height: 22px;
+	line-height: 10px;
+	font-size: 12px;
+	padding-left: 8px;
+}
+
+.new-table-box {
+	border-top: 3px solid #1e92d4;
+	min-height: 600px;
+	background: #FFF;
+}
+
+.new-table-box>table>tbody>tr:hover {
+	border-left: 3px solid #1e92d4;
+}
+
+.ph-select {
+	width: 180px;
+	height: 30px;
+	padding: 5px;
+	border: 1px solid #c6c6c6;
+	border-radius: 3px;
+	background: #ffffff;
+	color: #a7a7a7;
+}
+</style>
 <script id="baseSalary-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
-		<tr>
-			{{#with user}}
-      <td>{{truename}}</td>
-      <td>{{region.name}}</td>
-			{{/with}}
+	<tr>			
+      <td>{{userName}}</td>
+      <td>{{region}}</td>
+			
       <td>{{salary}}</td>
-      <td>{{updateDate}}</td>
+      <td>{{newdate}}</td>
+	  <td>{{daySalary}}</td>
       <td>
         <button class="xiugai  btn btn-blue btn-bluee"
 					 data-toggle="modal" data-target="#updModal" data-whatever="{{id}}" data-salary="{{salary}}">修改</button>
         <button class="btn btn-warning btn-bluee" data-toggle="modal"
-					 data-target="#delModal" data-id="{{id}}" data-salary="{{salary}}",data-truename="{{user.truename}}">删除</button>
+					 data-target="#delModal" data-id="{{id}}" data-salary="{{salary}}" data-truename="{{userName}}">删除</button>
       </td>
     </tr> 
 	{{/each}}
@@ -54,10 +104,10 @@
 </script>
 <script type="text/javascript">
 var	base='<%=basePath%>';
-var SearchData = {
-	'page' : '0',
-	'size' : '10'
-}	
+	var SearchData = {
+		'page' : '0',
+		'size' : '20'
+	}
 </script>
 </head>
 
@@ -65,34 +115,30 @@ var SearchData = {
 	<div class="content main">
 		<h4 class="page-header ">
 			<i class="ico icon-jcxz"></i>基础薪资表
-			<!--区域选择按钮-->
-			<div class="area-choose"></div>
+		
 			<!--/区域选择按钮-->
 			<a href="" class="btn btn-blue" data-toggle="modal"
 				data-target="#addModal" data-whatever="@mdo"> <i
 				class="ico icon-add"></i>基础薪资
 			</a>
-			<!--区域选择按钮-->
-        <div class="area-choose">
-            选择区域：<span>${regionName }</span>
-            <a class="are-line" onclick="getRegion(${regionId});" href="javascript:;">切换</a>
-           	<input type="hidden" id="regionId" value="${regionId }">
-           	<input type="hidden" id="regionType" value="${regionType }">
-        </div>
-        <!--/区域选择按钮-->
+
 		</h4>
-		<div class="row text-time">
-
-			<!-- <div class="salesman" style="margin-top: 5px">
-				<input class="cs-select  text-gery-hs" placeholder="  请选择区域">
+		<div class="row text-time" >
+			<!--区域选择按钮-->
+				<!--区域选择按钮-->
+			<div class="area-choose">
+				<label class="col-sm-4 control-label">选择区域：</label>
+				<div class="col-sm-7" style="width:310px">
+					<%@ include file="../region/regionProvinceSelect.jsp"%>
+				</div>
 				<button class="btn btn-blue btn-sm"
-					onclick="">检索</button>
-			</div> -->
-
+					onclick="goRegionSearch();">检索</button>
+			</div>
+			<!--区域选择按钮-->
 			<div class="link-posit-t pull-right export">
-				<input id="truename" class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
-				<button class="btn btn-blue btn-sm"
-					onclick="goSearch();">检索</button>
+				<input id="truename" class="cs-select  text-gery-hs"
+					placeholder="  请输入业务员名称">
+				<button class="btn btn-blue btn-sm" onclick="goNameSearch();">检索</button>
 				<a id="table-export" class="table-export" href="javascript:void(0);">导出excel</a>
 			</div>
 
@@ -110,11 +156,13 @@ var SearchData = {
 								<th>姓名</th>
 								<th>所属区域</th>
 								<th>基础薪资</th>
-								<th>日期</th>
+								<th>新增日期</th>
+								<th>日薪资</th>
 								<th>操作</th>
 							</tr>
 						</thead>
-						<tbody id="table-list"> </tbody>
+						<tbody id="table-list">
+						</tbody>
 					</table>
 				</div>
 				<!--table-box-->
@@ -125,7 +173,7 @@ var SearchData = {
 		<!--table-box-->
 		<!--油补记录-->
 	</div>
-	
+
 	<!---alert删除--->
 	<div id="delModal" class="modal fade" role="dialog">
 		<div class="modal-dialog " role="document">
@@ -157,7 +205,8 @@ var SearchData = {
 							</div>
 							<input id="delId" type="hidden">
 							<div class="btn-qx">
-								<button type="button" onclick="deleteSalary();" class="btn btn-danger btn-d">删除</button>
+								<button type="button" onclick="deleteSalary();"
+									class="btn btn-danger btn-d">删除</button>
 							</div>
 
 							<div class="btn-dd">
@@ -229,7 +278,74 @@ var SearchData = {
 	</div>
 	<!---alert新增业务--->
 
+	<!-- 选择区域 -->
+	<div id="zdyqy" class="modal fade" role="dialog">
+		<div class="modal-dialog " role="document">
+			<div class="modal-content modal-blue">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h3 class="modal-title">自定义区域</h3>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<form id="addd" class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-4 control-label">选择区域：</label>
+								<div class="col-sm-7">
+									<div class="input-group are-line">
+										<span class="input-group-addon"><i class="icon icon-qy"></i></span>
+										<select id="region" class="form-control input-h"
+											name="regionId">
+										</select> <input id="n" type="hidden" value="${regionId}" />
+										<div id="regionMenuContent" class="menuContent">
 
+											<ul id="regionTree" class="ztree"></ul>
+										</div>
+										<input type="hidden" id="towns" name="regionPid">
+										<!-- /btn-group -->
+									</div>
+								</div>
+							</div>
+							<div id="xiugai">
+								<div class="form-group">
+									<label class="col-sm-4 control-label">扣罚系数：</label>
+									<div class="col-sm-7">
+										<div class="input-group are-line">
+											<span class="input-group-addon"><i
+												class="icon icon-task-lk"></i></span> <select name="b" type=""
+												class="form-control input-w" aria-describedby="basic-addon1"
+												id="select">
+												<option value="10">10</option>
+												<option value="20">20</option>
+												<option value="30">30</option>
+												<option value="40">40</option>
+												<option value="50">50</option>
+											</select>
+											<!-- /btn-group -->
+										</div>
+									</div>
+									<div class="col-sm-1 control-label">
+										<span>元</span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-offset-4 col-sm-4 " id="href_div">
+										<a herf="javascript:return 0;" onclick="addd(this)"
+											class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 选择区域 -->
 
 	<!---alert修改--->
 	<div id="updModal" class="modal fade" role="dialog">
@@ -251,8 +367,9 @@ var SearchData = {
 								<div class="col-sm-7">
 									<div class="input-group are-line">
 										<span class="input-group-addon"><i
-											class="icon icon-jcxz"></i></span> 
-											<input id="updSalary" name="salary" type="text" class="form-control input-h" aria-describedby="basic-addon1">
+											class="icon icon-jcxz"></i></span> <input id="updSalary"
+											name="salary" type="text" class="form-control input-h"
+											aria-describedby="basic-addon1">
 									</div>
 								</div>
 							</div>
@@ -284,9 +401,6 @@ var SearchData = {
 		charset="utf-8"></script>
 	<script type="text/javascript"
 		src="static/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/static/bootstrap/js/fileinput.js"></script>
-	<script type="text/javascript"
-		src="static/bootstrap/js/fileinput_locale_zh.js"></script>
 	<script type="text/javascript"
 		src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 	<script type="text/javascript"
@@ -299,9 +413,8 @@ var SearchData = {
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script src="static/js/jqueryfileupload/js/vendor/jquery.ui.widget.js"></script>
 	<script src="static/js/jqueryfileupload/js/jquery.iframe-transport.js"></script>
-	<script src="static/js/jqueryfileupload/js/jquery.fileupload.js"></script>
-	<script type="text/javascript"
-		src="static/ticheng/js/base-salary.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/static/ticheng/js/base-salary.js"
+		charset="utf-8"></script>
 	<script type="text/javascript">
 		
 	</script>

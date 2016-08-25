@@ -55,7 +55,7 @@ function checkForm(){
 		return false;
 	}
 
-	if(reg.test(activeNum) || activeNum < 0){
+	if(!reg.test(activeNum) || activeNum < 0){
 		alert("数量必须为大于0的数字!");
 		return false;
 	}
@@ -65,7 +65,7 @@ function checkForm(){
 		return false;
 	}
 
-	if(reg.test(orderNum) || orderNum < 0){
+	if(!reg.test(orderNum) || orderNum < 0){
 		alert("数量必须为大于0的数字!");
 		return false;
 	}

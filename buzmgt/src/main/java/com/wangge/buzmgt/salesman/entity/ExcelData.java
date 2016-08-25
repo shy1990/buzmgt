@@ -1,7 +1,5 @@
 package com.wangge.buzmgt.salesman.entity;
 
-import java.util.Date;
-
 /**
  * Created by joe on 16-7-15.
  */

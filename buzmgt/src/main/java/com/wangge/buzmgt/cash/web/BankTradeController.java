@@ -25,9 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wangge.buzmgt.cash.entity.BankTrade;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
@@ -63,7 +61,6 @@ public class BankTradeController {
       "createDate", "id" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<BankTrade> bankTrades = bankTradeService.findAll(searchParams, pageable);
-    
     return bankTrades;
   }
 
@@ -89,24 +86,32 @@ public class BankTradeController {
     try {
 
       // ============查询是否归档+是否已经审核账单。
-      //重构查询条数
-      long count=bankTradeService.countByIsArchiveAndImportDate(1 , importDate);
+      Map<String, Object> searchParams = new HashMap<>();
+      searchParams.put("EQ_importDate", importDate);
+      searchParams.put("EQ_isArchive", 1);
+      List<BankTrade> bankTrades = bankTradeService.findAll(searchParams);
+      searchParams.remove("EQ_isArchive");
+      searchParams.remove("EQ_importDate");
+
       // 已归档
-      if (count > 0) {
+      if (bankTrades.size() > 0) {
         jsonObject.put("result", "failure");
         jsonObject.put("message", "已归档不能导入");
         return jsonObject;
       }
 
-      // 已审核 
-      //重构查询条数
-      long cashCounts=waterOrderCashService.countByPayStatusAndCreateDate(WaterPayStatusEnum.OverPay, importDate);
-      
-      if (cashCounts > 0) {
+      // 已审核
+      searchParams.put("EQ_createDate", importDate);
+      searchParams.put("EQ_payStatus", WaterPayStatusEnum.OverPay);
+      List<WaterOrderCash> orderCashs = waterOrderCashService.findAll(searchParams);
+      searchParams.remove("EQ_importDate");
+      searchParams.remove("EQ_payStatus");
+      if (orderCashs.size() > 0) {
         jsonObject.put("result", "failure");
         jsonObject.put("message", "已审核不能导入");
         return jsonObject;
       }
+
 
       mReq = (MultipartHttpServletRequest) request;
 
@@ -146,14 +151,13 @@ public class BankTradeController {
         Map<Integer, String> excelContent = ExcelImport.readExcelContent(fileRealPath);
 
         // ============读取文件完成后，导入到数据库=============
-        Map<String,Object> searchParams=new HashMap<>();
         searchParams.put("EQ_importDate", importDate);
-        List<BankTrade> bankTrades = bankTradeService.findAll(searchParams);
+        bankTrades = bankTradeService.findAll(searchParams);
         searchParams.remove("EQ_importDate");
         if (bankTrades.size() > 0) {
           bankTradeService.delete(bankTrades);
         }
-        // 保存。
+        // TODO 查询数据是否已经归档，否则不能经行导入保存。
         bankTradeService.save(excelContent, importDate);
 
         FileUtils.deleteFile(fileRealPath);

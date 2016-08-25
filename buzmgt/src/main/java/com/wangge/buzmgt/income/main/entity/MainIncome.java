@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.wangge.buzmgt.teammember.entity.SalesMan;
@@ -40,7 +39,7 @@ public class MainIncome {
    * 
    * @pdOid d0fb01aa-274f-453b-b882-baf589981587
    */
-  public double baeicSalary = 0;
+  public double basicSalary = 0;
   /**
    * 业务佣金
    * 
@@ -107,14 +106,16 @@ public class MainIncome {
     this.salesman = salesman;
   }
 
-  public double getBaeicSalary() {
-    return baeicSalary;
-  }
   
-  public void setBaeicSalary(double baeicSalary) {
-    this.baeicSalary = baeicSalary;
-  }
   
+  public double getBasicSalary() {
+    return basicSalary;
+  }
+
+  public void setBasicSalary(double basicSalary) {
+    this.basicSalary = basicSalary;
+  }
+
   public double getBusiIncome() {
     return busiIncome;
   }

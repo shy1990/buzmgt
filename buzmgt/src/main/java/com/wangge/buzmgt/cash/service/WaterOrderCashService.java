@@ -10,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
-import com.wangge.buzmgt.cash.entity.WaterOrderCash.WaterPayStatusEnum;
-import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 
 public interface WaterOrderCashService {
 
@@ -53,8 +51,6 @@ public interface WaterOrderCashService {
   
   public void ExportSetExcel(List<WaterOrderCash> waterOrders, HttpServletRequest request,
       HttpServletResponse response);
-
-  public long countByPayStatusAndCreateDate(WaterPayStatusEnum overpay, String createDate);
   
 }
 

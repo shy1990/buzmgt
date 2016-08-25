@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.wangge.buzmgt.assess.entity.Assess;
-import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 @Repository
 public interface AssessRepository extends JpaRepository<Assess, Long>{

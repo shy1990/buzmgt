@@ -24,10 +24,11 @@ public class Page {
 	}
 	
 	public int getTotalPage() {
-		if(totalResult%showCount==0)
-			totalPage = totalResult/showCount;
-		else
-			totalPage = totalResult/showCount+1;
+		if(totalResult%showCount==0) {
+      totalPage = totalResult/showCount;
+    } else {
+      totalPage = totalResult/showCount+1;
+    }
 		return totalPage;
 	}
 	
@@ -44,10 +45,12 @@ public class Page {
 	}
 	
 	public int getCurrentPage() {
-		if(currentPage<=0)
-			currentPage = 1;
-		if(currentPage>getTotalPage())
-			currentPage = getTotalPage();
+		if(currentPage<=0) {
+      currentPage = 1;
+    }
+		if(currentPage>getTotalPage()) {
+      currentPage = getTotalPage();
+    }
 		return currentPage;
 	}
 	
@@ -79,10 +82,11 @@ public class Page {
 			}
 			int endTag = startTag+showTag-1;
 			for(int i=startTag; i<=totalPage && i<=endTag; i++){
-				if(currentPage==i)
-					sb.append("<li><a><font color='#808080'>"+i+"</font></a></li>\n");
-				else
-					sb.append("	<li style=\"cursor:pointer;\"><a onclick=\"nextPage("+i+")\">"+i+"</a></li>\n");
+				if(currentPage==i) {
+          sb.append("<li><a><font color='#808080'>"+i+"</font></a></li>\n");
+        } else {
+          sb.append("	<li style=\"cursor:pointer;\"><a onclick=\"nextPage("+i+")\">"+i+"</a></li>\n");
+        }
 			}
 			if(currentPage==totalPage){
 				sb.append("	<li><a>下页</a></li>\n");
@@ -193,8 +197,9 @@ public class Page {
 	
 	public int getCurrentResult() {
 		currentResult = (getCurrentPage()-1)*getShowCount();
-		if(currentResult<0)
-			currentResult = 0;
+		if(currentResult<0) {
+      currentResult = 0;
+    }
 		return currentResult;
 	}
 	

@@ -7,10 +7,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
@@ -22,8 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -35,10 +31,6 @@ import com.wangge.buzmgt.cash.service.WaterOrderDetialService;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
-import com.wangge.buzmgt.receipt.entity.RemarkStatusEnum;
-import com.wangge.buzmgt.receipt.service.OrderReceiptServiceImpl;
-import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
@@ -297,16 +289,6 @@ public class OrderSignforServiceImpl implements OrderSignforService {
   @Override
   public void save(List<OrderSignfor> list) {
     orderSignforRepository.save(list);
-  }
-  @Override
-  public List<OrderSignfor> findListByOrderNo(String orderNo) {
-    // TODO Auto-generated method stub
-    return orderSignforRepository.findAllByOrderNo(orderNo);
-  }
-  @Override
-  public void deleteById(Long id) {
-    orderSignforRepository.delete(id);
-    
   }
   
 

@@ -14,7 +14,8 @@ public interface BankCardRepository extends JpaRepository<BankCard, Long>{
 	 */
 	public BankCard findByBankId(Long id);
 	
-	public BankCard save(BankCard bank);
+	@Override
+  public BankCard save(BankCard bank);
 	@Modifying
 	@Query("delete  from BankCard a where a.bankId= ?1")
 	public void deleteById(Long id);

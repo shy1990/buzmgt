@@ -61,7 +61,6 @@ public class BankTrade implements Serializable  {
   private Date importDate;
   
   private Integer isArchive;//是否归档
-
   
   @Enumerated(EnumType.STRING)
   private FlagEnum flag = FlagEnum.NORMAL;
@@ -146,9 +145,6 @@ public class BankTrade implements Serializable  {
   public void setImportDate(Date importDate) {
     this.importDate = importDate;
   }
-  
-  
-  
 
   public FlagEnum getFlag() {
     return flag;

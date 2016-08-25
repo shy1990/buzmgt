@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -17,8 +16,10 @@ import java.util.List;
 public interface MothPunishUpRepository extends PagingAndSortingRepository<MonthPunishUp,Integer> {
 
     public Page<MonthPunishUp> findAll(Specification specification, Pageable pageable);//分页查询
+    @Override
     @EntityGraph("graph.MonthPunishUp.salesMan")
     Page<MonthPunishUp> findAll(Pageable pageable);
+    @Override
     public List<MonthPunishUp> findAll();
 
     List<MonthPunishUp> findByOrderByCreateDateDesc();

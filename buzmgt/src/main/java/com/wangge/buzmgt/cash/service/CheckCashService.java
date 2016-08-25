@@ -16,33 +16,29 @@ import com.wangge.buzmgt.cash.entity.CheckCash;
 public interface CheckCashService {
   /**
    * 查询银行交易记录列表
-   * 
    * @param searchParams
    * @return
    */
-  public List<CheckCash> findAll(Map<String, Object> searchParams);
-
+  public  List<CheckCash> findAll(Map<String, Object> searchParams);
+  
   /**
    * 查询分页银行交易记录列表
-   * 
    * @param searchParams
    * @param pageRequest
    * @return
    */
-  public Page<CheckCash> findAll(Map<String, Object> searchParams, Pageable pageRequest);
+  public  Page<CheckCash> findAll(Map<String, Object> searchParams, Pageable pageRequest);
 
   /**
    * 账单审核
-   * 
    * @param userId
    * @param createDate
    * @return
    */
-  public JSONObject checkPendingByUserIdAndCreateDate(String userId, String createDate);
-
+  public JSONObject checkPendingByUserIdAndCreateDate(String userId,String createDate);
+  
   /**
    * 删除未匹配的银行交易记录
-   * 
    * @param userId
    * @param createDate
    * @return
@@ -51,18 +47,18 @@ public interface CheckCashService {
 
   public List<BankTrade> getUnCheckBankTrades();
 
+  public void exportSetExecl(List<CheckCash> content, HttpServletRequest request, HttpServletResponse response);
+
   /**
    * 查询木有流水单号的审核
    * 
    * 有扣罚+是否有银行交易记录
-   * 
    * @return
    */
   public List<CheckCash> getDebtChecks(String createDate);
 
   /**
    * 审核没有流水单号的交易记录
-   * 
    * @param userId
    * @param createDate
    * @return

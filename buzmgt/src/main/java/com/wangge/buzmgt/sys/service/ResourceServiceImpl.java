@@ -2,8 +2,6 @@ package com.wangge.buzmgt.sys.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +26,6 @@ import com.wangge.buzmgt.sys.entity.Resource.ResourceType;
 import com.wangge.buzmgt.sys.entity.Role;
 import com.wangge.buzmgt.sys.repository.ResourceRepository;
 import com.wangge.buzmgt.sys.repository.RoleRepository;
-import com.wangge.buzmgt.sys.util.SortUtil;
 import com.wangge.buzmgt.sys.vo.NodeData;
 import com.wangge.buzmgt.sys.vo.TreeData;
 
@@ -56,6 +53,7 @@ public class ResourceServiceImpl implements ResourceService {
     return resource2MenuByParent(resources).stream().collect(Collectors.toList());
   }
   
+  @Override
   public List<Menu> getMenusByRoleId(Long id) {
     List<Resource> resources = resourceRepository.findByRolesId(id);
     return resource2Menu(resources).stream().collect(Collectors.toList());
@@ -218,6 +216,7 @@ public class ResourceServiceImpl implements ResourceService {
     
   }
   
+  @Override
   public List<TreeData> getTreeData() {
     
     List<TreeData> treeDatas = new ArrayList<TreeData>();
@@ -272,6 +271,7 @@ public class ResourceServiceImpl implements ResourceService {
    *           changjun
    * @date 2015年12月28日
    */
+  @Override
   @Transactional
   public boolean saveRoleResource(Long roleId, String[] menuIds) {
     

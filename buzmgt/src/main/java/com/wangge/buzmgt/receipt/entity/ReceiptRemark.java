@@ -65,7 +65,7 @@ public class ReceiptRemark implements Serializable{
   @Column(name="salesman_id",insertable=false,updatable=false)
   private String salesmanId;
   
-  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
   @JoinColumn(name = "salesman_id")
   private SalesMan salesMan;
   

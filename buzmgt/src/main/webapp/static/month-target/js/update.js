@@ -8,7 +8,7 @@ function getRegionName() {
 	regionId = $("#regionId  option:selected").val();
 	$("#region").val(regionId);
 	$.ajax({
-		url : base + "monthtarget/regionName",
+		url : base + "monthTarget/regionName",
 		type : "GET",
 		data : {
 			"regionId" : regionId
@@ -29,7 +29,7 @@ function getRegionName() {
 
 function goSearch(){
 	$.ajax({
-		url : base + "monthtarget/orderNum",
+		url : base + "monthTarget/orderNum",
 		data : {
 			"regionId" : regionId
 		},
@@ -48,7 +48,7 @@ function goSearch(){
 	});
 
 	$.ajax({
-		url : base + "monthtarget/seller",
+		url : base + "monthTarget/seller",
 		data : {
 			"regionId" : regionId
 		},
@@ -67,7 +67,7 @@ function goSearch(){
 	});
 
 	$.ajax({
-		url : base + "monthtarget/merchant",
+		url : base + "monthTarget/merchant",
 		data : {
 			"regionId" : regionId
 		},
@@ -106,7 +106,7 @@ function toSubmit(id,flag) {
 		};
 		if (flag != 'update'){
 			$.ajax({
-				url : base + "monthtarget/save/"+$("#region").val(),
+				url : base + "monthTarget/save/"+$("#region").val(),
 				type : "post",
 				data : JSON.stringify(param),
 				dataType : "text",
@@ -117,7 +117,7 @@ function toSubmit(id,flag) {
 					// 提交成功后处理
 					if (msg == "ok") {
 						alert("保存成功!");
-						window.location.href = base + "monthtarget/monthSetting";
+						window.location.href = base + "monthTarget/monthSetting";
 					} else if (msg == "exists") {
 						alert("指标已存在!");
 						$("input[type='text']").each(function(){
@@ -131,7 +131,7 @@ function toSubmit(id,flag) {
 			});
 		}else {
 			$.ajax({
-				url : base + "monthtarget/update/"+id,
+				url : base + "monthTarget/update/"+id,
 				type : "post",
 				data : JSON.stringify(param),
 				dataType : "text",
@@ -142,7 +142,7 @@ function toSubmit(id,flag) {
 					// 提交成功后处理
 					if (msg == "ok") {
 						alert("修改成功!");
-						window.location.href = base + "monthtarget/monthSetting";
+						window.location.href = base + "monthTarget/monthSetting";
 					}
 				},
 				error : function() {
