@@ -9,6 +9,6 @@ import com.wangge.buzmgt.cash.entity.Cash;
 
 public interface BankTradeRepository extends JpaRepository<BankTrade, Integer>,
 JpaSpecificationExecutor<BankTrade>{
-  
+  Long countByIsArchiveAndImportDate(Integer tag, String importDate);
   
 }

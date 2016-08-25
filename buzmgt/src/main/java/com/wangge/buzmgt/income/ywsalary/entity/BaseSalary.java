@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.ywsalary.entity;
+package com.wangge.buzmgt.income.ywsalary.entity;
 
 import java.io.Serializable;
 import java.util.Date;
