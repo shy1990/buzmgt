@@ -8,31 +8,43 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="SYS_MACHINE_TYPE")
-public class MachineType implements Serializable{
+@Table(name = "SYS_MACHINE_TYPE")
+public class MachineType implements Serializable {
 
   private static final long serialVersionUID = 1L;
+  public MachineType(){
+    
+  }
+
+  public MachineType(String id, String name) {
+    this.id = id;
+    this.name = name;
+  }
 
   @Id
-  @Column(name="code")
+  @Column(name = "code")
   private String id;
   private String name;
-  
+
   public String getId() {
     return id;
   }
+
   public void setId(String id) {
     this.id = id;
   }
+
   public String getName() {
     return name;
   }
+
   public void setName(String name) {
     this.name = name;
   }
+
   @Override
   public String toString() {
     return "MachineType [id=" + id + ", name=" + name + "]";
   }
-  
+
 }

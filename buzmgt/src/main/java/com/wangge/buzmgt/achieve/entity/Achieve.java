@@ -2,17 +2,24 @@ package com.wangge.buzmgt.achieve.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.wangge.buzmgt.plan.entity.MachineType;
+import com.wangge.buzmgt.ywsalary.entity.FlagEnum;
 
 /**
  * 
@@ -32,8 +39,8 @@ public class Achieve implements Serializable {
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
   private Long achieveId; // 主键
-  @JoinColumn(name = "MARCH_TYPE")
   @OneToOne
+  @JoinColumn(name = "MACHINE_TYPE")
   private MachineType machineType; // 机型类别
   private String brandId; // 品牌ID
   private String goodId; // 型号ID
@@ -46,8 +53,23 @@ public class Achieve implements Serializable {
   private String auditor; // 审核人
   private String remark; // 备注
   private Date createDate; // 创建日期
-  private String flag; // 是否删除：normal-正常，del-删除
-  private String status; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
+  @Enumerated(EnumType.STRING)
+  private FlagEnum flag; // 是否删除：normal-正常，del-删除
+  @Enumerated(EnumType.STRING)
+  private PlanTypeEnum status; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
+  private String planId;
+  
+  @OneToMany(cascade=CascadeType.ALL)
+  @JoinTable(name="SYS_ACHIEVE_SET_RULE",
+     joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
+     inverseJoinColumns=@JoinColumn(name="RULE_ID"))
+  private List<RewardPunishRule> rewardPunishRules;//奖罚规则
+  
+  @OneToMany(cascade=CascadeType.ALL)
+  @JoinTable(name="SYS_ACHIEVE_SET_GROUP",
+      joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
+      inverseJoinColumns=@JoinColumn(name="GROUPING_ID"))
+  private List<GroupNumber> groupNumbers; //人员分组设置
 
   public Long getAchieveId() {
     return achieveId;
@@ -153,20 +175,44 @@ public class Achieve implements Serializable {
     this.createDate = createDate;
   }
 
-  public String getFlag() {
+  public FlagEnum getFlag() {
     return flag;
   }
 
-  public void setFlag(String flag) {
+  public void setFlag(FlagEnum flag) {
     this.flag = flag;
   }
 
-  public String getStatus() {
+  public PlanTypeEnum getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(PlanTypeEnum status) {
     this.status = status;
+  }
+
+  public String getPlanId() {
+    return planId;
+  }
+
+  public void setPlanId(String planId) {
+    this.planId = planId;
+  }
+
+  public List<RewardPunishRule> getRewardPunishRules() {
+    return rewardPunishRules;
+  }
+
+  public void setRewardPunishRules(List<RewardPunishRule> rewardPunishRules) {
+    this.rewardPunishRules = rewardPunishRules;
+  }
+
+  public List<GroupNumber> getGroupNumbers() {
+    return groupNumbers;
+  }
+
+  public void setGroupNumbers(List<GroupNumber> groupNumbers) {
+    this.groupNumbers = groupNumbers;
   }
 
   @Override
