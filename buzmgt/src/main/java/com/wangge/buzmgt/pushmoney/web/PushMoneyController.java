@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wangge.buzmgt.pushmoney.entity.Category;
+import com.wangge.buzmgt.goods.entity.Category;
 import com.wangge.buzmgt.pushmoney.entity.PriceScope;
 import com.wangge.buzmgt.pushmoney.entity.PushMoney;
 import com.wangge.buzmgt.pushmoney.entity.PushMoneyRegion;

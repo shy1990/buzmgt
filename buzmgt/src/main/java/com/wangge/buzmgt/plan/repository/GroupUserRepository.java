@@ -1,8 +1,8 @@
-package com.wangge.buzmgt.achieve.repository;
+package com.wangge.buzmgt.plan.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.wangge.buzmgt.achieve.entity.GroupUser;
+import com.wangge.buzmgt.plan.entity.GroupUser;
 
 /**
  * 

@@ -25,11 +25,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.wangge.buzmgt.pushmoney.entity.Category;
+import com.wangge.buzmgt.goods.entity.Category;
+import com.wangge.buzmgt.goods.repository.CategoryRepository;
 import com.wangge.buzmgt.pushmoney.entity.PriceScope;
 import com.wangge.buzmgt.pushmoney.entity.PushMoney;
 import com.wangge.buzmgt.pushmoney.entity.PushMoneyRegion;
-import com.wangge.buzmgt.pushmoney.repository.CategoryRepository;
 import com.wangge.buzmgt.pushmoney.repository.PriceScopeRepository;
 import com.wangge.buzmgt.pushmoney.repository.PushMoneyRegionRepository;
 import com.wangge.buzmgt.pushmoney.repository.PushMoneyRepository;

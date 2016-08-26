@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.pushmoney.entity;
+package com.wangge.buzmgt.goods.entity;
 
 import java.io.Serializable;
 
@@ -7,23 +7,27 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="SYS_CATEGORY")
-public class Category implements Serializable{
+@Table(name="SYS_BRAND")
+public class Brand implements Serializable {
 
-  /**
-   * 种类
-   */
   private static final long serialVersionUID = 1L;
-  @Id
-  private String id;
-  private String name;
-  private String remark;
   
+  @Id
+  private String  id  ; //  主键
+  private String  pid ; //  父ID
+  private String  name  ; //  名称
+  private String  remark  ; //  备注，详细信息
   public String getId() {
     return id;
   }
   public void setId(String id) {
     this.id = id;
+  }
+  public String getPid() {
+    return pid;
+  }
+  public void setPid(String pid) {
+    this.pid = pid;
   }
   public String getName() {
     return name;
@@ -37,7 +41,9 @@ public class Category implements Serializable{
   public void setRemark(String remark) {
     this.remark = remark;
   }
-  
-  
-  
+  @Override
+  public String toString() {
+    return "Brand [id=" + id + ", pid=" + pid + ", name=" + name + ", remark=" + remark + "]";
+  }
+
 }

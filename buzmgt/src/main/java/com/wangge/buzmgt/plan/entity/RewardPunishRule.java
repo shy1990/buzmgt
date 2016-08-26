@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.achieve.entity;
+package com.wangge.buzmgt.plan.entity;
 
 import java.io.Serializable;
 
@@ -36,7 +36,7 @@ public class RewardPunishRule implements Serializable{
   private Float money;
   @Enumerated(EnumType.STRING)
   private PlanTypeEnum type;
-  private FlagEnum flag;
+  private FlagEnum flag = FlagEnum.NORMAL;
   public Long getId() {
     return id;
   }

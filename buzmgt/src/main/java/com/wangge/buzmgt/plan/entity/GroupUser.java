@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.achieve.entity;
+package com.wangge.buzmgt.plan.entity;
 
 import java.io.Serializable;
 

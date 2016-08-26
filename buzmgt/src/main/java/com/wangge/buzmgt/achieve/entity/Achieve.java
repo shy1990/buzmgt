@@ -20,7 +20,11 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
+import com.wangge.buzmgt.goods.entity.Brand;
+import com.wangge.buzmgt.goods.entity.Goods;
+import com.wangge.buzmgt.plan.entity.GroupNumber;
 import com.wangge.buzmgt.plan.entity.MachineType;
+import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 
 /**
  * 
@@ -43,8 +47,13 @@ public class Achieve implements Serializable {
   @OneToOne
   @JoinColumn(name = "MACHINE_TYPE")
   private MachineType machineType; // 机型类别
-  private String brandId; // 品牌ID
-  private String goodId; // 型号ID
+  
+  @OneToOne
+  @JoinColumn(name = "BRAND_ID")
+  private Brand brand; // 品牌ID
+  @OneToOne
+  @JoinColumn(name = "GOOD_ID")
+  private Goods good; // 型号ID
   private Integer numberFirst; // 任务量一
   private Integer numberSecond; // 任务量2
   private Integer numberThird; // 任务量3
@@ -55,7 +64,7 @@ public class Achieve implements Serializable {
   private String remark; // 备注
   private Date createDate; // 创建日期
   @Enumerated(EnumType.STRING)
-  private FlagEnum flag; // 是否删除：normal-正常，del-删除
+  private FlagEnum flag = FlagEnum.NORMAL; // 是否删除：normal-正常，del-删除
   @Enumerated(EnumType.STRING)
   private PlanTypeEnum status; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
   private String planId;
@@ -88,20 +97,20 @@ public class Achieve implements Serializable {
     this.machineType = machineType;
   }
 
-  public String getBrandId() {
-    return brandId;
+  public Brand getBrand() {
+    return brand;
   }
 
-  public void setBrandId(String brandId) {
-    this.brandId = brandId;
+  public void setBrand(Brand brand) {
+    this.brand = brand;
   }
 
-  public String getGoodId() {
-    return goodId;
+  public Goods getGood() {
+    return good;
   }
 
-  public void setGoodId(String goodId) {
-    this.goodId = goodId;
+  public void setGood(Goods good) {
+    this.good = good;
   }
 
   public Integer getNumberFirst() {
@@ -218,8 +227,7 @@ public class Achieve implements Serializable {
 
   @Override
   public String toString() {
-    return "Achieve [achieveId=" + achieveId + ", machineType=" + machineType.getName() + ", brandId=" + brandId + ", goodId="
-        + goodId + ", numberFirst=" + numberFirst + ", numberSecond=" + numberSecond + ", numberThird=" + numberThird
+    return "Achieve [achieveId=" + achieveId + ", machineType=" + machineType.getName() + ", numberFirst=" + numberFirst + ", numberSecond=" + numberSecond + ", numberThird=" + numberThird
         + ", startDate=" + startDate + ", endDate=" + endDate + ", issuingDate=" + issuingDate + ", auditor=" + auditor
         + ", remark=" + remark + ", createDate=" + createDate + ", status=" + status + "]";
   }

@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.achieve.entity;
+package com.wangge.buzmgt.plan.entity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -36,7 +36,7 @@ public class GroupNumber implements Serializable{
   private PlanTypeEnum type;//type：ACHIEVE-达量，OVERLAY-叠加，REWARD-奖励
   private String groupName;//分组Grouping：A，B
   @Enumerated(EnumType.STRING)
-  private FlagEnum flag;//是否删除：normal-正常，del-删除
+  private FlagEnum flag = FlagEnum.NORMAL;//是否删除：normal-正常，del-删除
   
   @Transient
   @OneToMany(cascade=CascadeType.ALL)
