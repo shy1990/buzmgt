@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.wangge.buzmgt.income.ywsalary.repository;
 
 import java.util.List;
@@ -72,4 +71,3 @@ public interface BaseSalaryRepository extends JpaRepository<BaseSalary, Long>, J
   Integer findMaxTimesByUserId(String userId);
   
 }
->>>>>>> branch 'dev' of https://git.oschina.net/wgtechnology/buzmgt.git
