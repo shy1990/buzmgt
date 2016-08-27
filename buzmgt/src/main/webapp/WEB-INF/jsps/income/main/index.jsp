@@ -19,32 +19,14 @@
 <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-switch.min.css"
 	rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="/static/task/task.css" />
-<link rel="stylesheet" type="text/css" href="/static/oil/css/oil.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link rel="stylesheet" type="text/css"
 	href="/static/zTree/css/zTreeStyle/zTreeStyle.css" />
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<style type="text/css">
-.ztree {
-	margin-top: 34px;
-	border: 1px solid #ccc;
-	background: #FFF;
-	width: 100%;
-	overflow-y: scroll;
-	overflow-x: auto;
-}
-
-.menuContent {
-	width: 100%;
-	padding-right: 50px;
-	display: none;
-	position: absolute;
-	z-index: 800;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="/static/income/phone.css" />
+<link rel="stylesheet" type="text/css" href="/static/income/plan_index.css" />
 
 <script id="task-table-template" type="text/x-handlebars-template">
 {{#if content}}
@@ -62,184 +44,137 @@
 	</div>
 	{{/each}}
 {{/if}}
+
 </script>
 </head>
 
 <body>
-
-	<div class="content main ">
-		<h4 class="page-header">
-			<i class="ico ico-account-manage-oil"></i>月任务扣罚设置
-		</h4>
-		<!--公里系数设置-->
-		<div class="table-bordered bjc">
-			<div class="table-responsive  ">
-				<!--公里系数表头-->
-				<div class="text-tx row-d">
-					<span class="text-gery">缺少一次拜访扣罚：</span> <select id="defaultRate">
-						<option value="20">20</option>
-						<option value="30">30</option>
-						<option value="40">40</option>
-						<option value="50">50</option>
-					</select> <span class="text-gery ">&nbsp;元</span> <span
-						class="text-blue-s jl-">注：</span><span class="text-gery-hs">统默认所有区域均为该系数，自定义设置区域除外</span>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-4 control-label">选择区域：</label>
-					<div class="col-sm-7">
-						<select id="region" class="form-control input-h" name="regionId">
-								<option value="">全部区域</option>
-							<c:forEach var="region" items="${regions}">
-								<option value="${region.id}">${region.name}</option>
-							</c:forEach>
-						</select>
-
-					</div>
-				</div>
-				<!--设置扣罚系数表-->
-				<div class="bs-example">
-					<div id="acont" class="row"></div>
-				</div>
-				<div class="show-grid   row-jl ">
-					<div class="col-md-5"></div>
-					<div class="col-md-7  zdy-h ">
-						<button class=" col-sm-3 btn  btn btn-default" type="button"
-							data-toggle="modal" data-target="#zdyqy">添加区域</button>
-					</div>
-					<div id="abnormalCoordPager"></div>
-				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-sm-offset-4 col-sm-4" style="margin-top: 20px">
-				<button type="submit" onclick="saveDefault();"
-					class="col-sm-12 btn btn-primary ">保存</button>
-			</div>
-		</div>
-
-		<!-- /alert htmlg修改公里系数 -->
-		<div id="changed" class="modal fade" role="dialog">
-			<div class="modal-dialog " role="document">
-				<div class="modal-content modal-blue">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h3 class="modal-title">修改</h3>
-					</div>
-
-					<div class="modal-body">
-						<div class="container-fluid">
-							<form class="form-horizontal">
-								<div class="form-group">
-									<label class="col-sm-4 control-label">选择扣罚系数：</label>
-									<div class="col-sm-7">
-										<div class="input-group are-line">
-											<span class="input-group-addon"><i
-												class="icon icon-lk"></i></span> <select
-												class="form-control input-h" id="select_modify"
-												aria-describedby="basic-addon1">
-												<option value="10">10</option>
-												<option value="20">20</option>
-												<option value="30">30</option>
-												<option value="40">40</option>
-											</select>
-											<!-- /btn-group -->
-										</div>
-									</div>
-									<div class="col-sm-1 control-label">
-										<span>元</span>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="col-sm-offset-4 col-sm-4 ">
-										<button id="set_a" type="submit"
-											class="col-sm-12 btn btn-primary ">确定</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /alert html -->
+	
+<div class="content main">
+    <h4 class="page-header">
+        <i class="ico icon-new"></i>提成方案
+        <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
+    </h4>
 
 
-		<div id="zdyqy" class="modal fade" role="dialog">
-			<div class="modal-dialog " role="document">
-				<div class="modal-content modal-blue">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h3 class="modal-title">自定义区域</h3>
-					</div>
-					<div class="modal-body">
-						<div class="container-fluid">
-							<form id="addd" class="form-horizontal">
-								<div class="form-group">
-									<label class="col-sm-4 control-label">添加人员：</label>
-									<div class="col-sm-7">
-										<select id="region" class="form-control input-h"
-											name="regionId">
-											<c:forEach var="region" items="${regions}">
-												<option value="${region.id}">${region.name}</option>
-											</c:forEach>
-										</select>
+    <p style="margin-left: 20px">
+        <span class="text-gery text-strong">选择大区：</span>
+        <select class="ph-select">
+            <option>全部区域</option>
+            <option>aaaaaaaaa</option>
+            <option>bbbbbbbbbbb</option>
+            <option>vvvvvvvvv</option>
+        </select>
+    </p>
 
-									</div>
-								</div>
-								<div id="xiugai">
-									<div class="form-group">
-										<label class="col-sm-4 control-label">扣罚系数：</label>
-										<div class="col-sm-7">
-											<div class="input-group are-line">
-												<span class="input-group-addon"><i
-													class="icon icon-task-lk"></i></span> <select name="b" type=""
-													class="form-control input-w"
-													aria-describedby="basic-addon1" id="select">
-													<option value="10">10</option>
-													<option value="20">20</option>
-													<option value="30">30</option>
-													<option value="40">40</option>
-													<option value="50">50</option>
-												</select>
-												<!-- /btn-group -->
-											</div>
-										</div>
-										<div class="col-sm-1 control-label">
-											<span>元</span>
-										</div>
-									</div>
 
-									<div class="form-group">
-										<div class="col-sm-offset-4 col-sm-4 " id="href_div">
-											<a herf="javascript:return 0;" onclick="addd(this)"
-												class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>
-										</div>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+  <div class="row">
+        <div class="col-sm-5 tc-fangan" style="margin-right: 100px;margin-left: 30px" >
+            <div class="col-sm-2" style="margin-left: -30px">
+                <img src="static/img/fan1.png" alt="">
+            </div>
+            <div class="col-sm-7">
+               <span class="text-fa-1">方案一</span>
+            </div>
+            <div class="col-sm-2 icon-fl-right">
+                <a href="person(适用人员).html"><i class="icon-f icon-ren"
+                              data-container="body" data-toggle="popover" data-placement="top"
+                              data-content="添加人员"></i></a>
+                <i class="icon-f icon-dele" data-toggle="modal"  data-target="#del"></i>
+            </div>
 
-	</div>
+        </div>
+        <div class="col-sm-5 tc-fangan">
+            <div class="col-sm-2" style="margin-left: -30px">
+                <img src="static/img/fan3.png" alt="">
+            </div>
+            <div class="col-sm-7">
+                <span class="text-fa-2">方案二</span>
+            </div>
+            <div class="col-sm-2 icon-fl-right">
+                <a href="person(适用人员).html"><i class="icon-f icon-ren"
+                                               data-container="body" data-toggle="popover" data-placement="top"
+                                               data-content="添加人员"></i></a>
+                <i class="icon-f icon-dele"  data-container="body" data-toggle="popover" data-placement="right"
+                   data-content="删除方案"></i>
+            </div>
 
-	<script src="static/js/jquery/jquery-1.11.3.min.js"></script>
+
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top: 30px">
+        <div class="col-sm-5 tc-fangan"style="margin-right: 100px;margin-left: 30px" >
+            <div class="col-sm-2" style="margin-left: -30px">
+                <img src="static/img/fan2.png" alt="">
+            </div>
+            <div class="col-sm-7">
+                <span class="text-fa-3">方案三</span>
+            </div>
+            <div class="col-sm-2 icon-fl-right">
+                <a href="person(适用人员).html"><i class="icon-f icon-ren"
+                                               data-container="body" data-toggle="popover" data-placement="top"
+                                               data-content="添加人员"></i></a>
+                <i class="icon-f icon-dele"   ></i>
+            </div>
+
+        </div>
+        <div class="col-sm-5 tc-fangan" >
+            <div class="col-sm-2" style="margin-left: -30px">
+                <img src="static/img/fan4.png" alt="">
+            </div>
+            <div class="col-sm-7">
+                <span class="text-fa-4">添加方案</span>
+            </div>
+            <div class="col-sm-2 fa-tj ">
+                <a href="/mainPlan/newPlan"><i class="icon-f icon-tj "></i></a>
+              
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--删除-->
+<div id="del" class="modal fade" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content modal-blue">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">提示</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <p class="col-sm-12  ">当前还有使用人员，你确定要删除方案吗？？？</p>
+                            <p class="col-sm-12">删除后该方案将不复存在，所有提成规则及使用人员将使用到删除日期为止！！</p>
+                        </div>
+
+
+                        <div class="btn-qx">
+                            <button type="submit" class="btn btn-danger btn-d">删除</button>
+                        </div>
+
+                        <div class="btn-dd">
+                            <button type="submit" data-dismiss="modal" class="btn btn-primary btn-d">取消</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
-	<script src="static/bootstrap/js/bootstrap-switch.min.js"></script>
 	<script
 		src="static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js"
 		type="text/javascript" charset="utf-8"></script>
-
 	<script src="/static/js/common.js" type="text/javascript"
 		charset="utf-8"></script>
 	<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
@@ -249,7 +184,10 @@
 	<script src="/static/income/main/index.js" type="text/javascript"
 		charset="utf-8"></script>
 	<script type="text/javascript">
-		findMainPlanList(0);
+	 $(function () {
+	        $("[data-toggle='popover']").popover();
+	    });
+		
 	</script>
 
 </body>

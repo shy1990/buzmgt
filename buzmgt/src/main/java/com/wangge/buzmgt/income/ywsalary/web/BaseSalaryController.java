@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.income.ywsalary.web;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -7,8 +8,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -19,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
@@ -28,13 +26,10 @@ import com.wangge.buzmgt.income.ywsalary.entity.BaseSalary;
 import com.wangge.buzmgt.income.ywsalary.entity.BaseSalaryUser;
 import com.wangge.buzmgt.income.ywsalary.service.BaseSalaryService;
 import com.wangge.buzmgt.log.util.LogUtil;
-import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.sys.entity.User;
-import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
-import com.wangge.buzmgt.util.excel.ExcelExport;
-import com.wangge.json.JSONFormat;
+import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.MapedExcelExport;
 
 @Controller
 @RequestMapping("/baseSalary")
@@ -57,21 +52,9 @@ public class BaseSalaryController {
    * @return
    */
   @RequestMapping("/show")
-  public String toBaseSalary(@RequestParam(value = "regionId", required = false) Region region, Model model) {
+  public String toBaseSalary(Model model) {
     List<BaseSalaryUser> salaryUsers = baseSalaryService.getStaySetSalesMan();
     model.addAttribute("salaryUsers", salaryUsers);
-    if (region != null) {
-      model.addAttribute("regionName", region.getName());
-      model.addAttribute("regionId", region.getId());
-      model.addAttribute("regionType", region.getType());
-    } else {
-      Subject subject = SecurityUtils.getSubject();
-      User user = (User) subject.getPrincipal();
-      Manager manager = managerService.getById(user.getId());
-      model.addAttribute("regionName", manager.getRegion().getName());
-      model.addAttribute("regionId", manager.getRegion().getId());
-      model.addAttribute("regionType", manager.getRegion().getType());
-    }
     return "ywsalary/base_salary";
   }
   
@@ -89,8 +72,6 @@ public class BaseSalaryController {
     return new ResponseEntity<Map<String, Object>>(baseSalaryService.findAll(searchParams, pageRequest), HttpStatus.OK);
   }
   
-  
-  
   /**
    * 导出列表
    * 
@@ -98,14 +79,12 @@ public class BaseSalaryController {
    * @param response
    */
   @RequestMapping(value = "/export", method = RequestMethod.GET)
-  @JSONFormat(filterField = { "Region.children", "Region.parent",
-      "SalesMan.user" }, nonnull = true, dateFormat = "yyyy-MM-dd HH:mm")
   public void export(HttpServletRequest request, HttpServletResponse response) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-    String[] gridTitles = { "业务名称", "负责区域", "基础薪资", "日期" };
-    String[] coloumsKey = { "user.truename", "user.region.name", "salary", "updateDate" };
-    List<BaseSalary> list = baseSalaryService.findAll(searchParams);
-    ExcelExport.doExcelExport("业务员基础薪资表.xls", list, gridTitles, coloumsKey, request, response);
+    String[] gridTitles = { "业务名称", "负责区域", "基础薪资", "日工资(元/天)", "新增日期" };
+    String[] coloumsKey = { "userName", "region", "salary", "daySalary", "newdate" };
+    List<Map<String, Object>> list = baseSalaryService.findAll(searchParams);
+    MapedExcelExport.doExcelExport("业务员基础"+DateUtil.getPreMonth(new Date(), 0)+"薪资表.xls", list, gridTitles, coloumsKey, request, response, null);
   }
   
   /**
@@ -141,41 +120,11 @@ public class BaseSalaryController {
   @RequestMapping(value = "/{Id}", method = RequestMethod.PUT)
   @ResponseBody
   public JSONObject updateSalary(@PathVariable("Id") BaseSalary baseSalary, Double salary) {
-    // Float salary = Float.valueOf(request.getParameter("salary"));
     JSONObject json = new JSONObject();
-    if (baseSalary == null) {
-      json.put("status", "failure");
-      json.put("errorMsg", "操作失败！");
-      return json;
-    }
+    
     try {
-      if (salary != null) {
-        baseSalary.setSalary(salary);
-      }
-      baseSalaryService.save(baseSalary);
-      json.put("status", "success");
-      json.put("successMsg", "操作成功！");
-    } catch (Exception e) {
-      LogUtil.info(e.getMessage());
-      json.put("status", "failure");
-      json.put("errorMsg", "操作失败！");
-      return json;
-    }
-    return json;
-  }
-  
-  /**
-   * 
-   * @param baseSalary
-   * @param request
-   * @return
-   */
-  @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-  @ResponseBody
-  public JSONObject deleteSalary(@PathVariable("id") BaseSalary baseSalary, HttpServletRequest request) {
-    JSONObject json = new JSONObject();
-    try {
-      baseSalaryService.delete(baseSalary);
+      
+      baseSalaryService.update(baseSalary, salary);
       json.put("status", "success");
       json.put("successMsg", "操作成功！");
     } catch (Exception e) {

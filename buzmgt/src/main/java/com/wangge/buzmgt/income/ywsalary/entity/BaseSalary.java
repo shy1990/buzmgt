@@ -129,6 +129,18 @@ public class BaseSalary implements Serializable {
     this.newdate = newdate;
   }
   
+  public BaseSalary(String userId, SalesMan user, Double salary, Integer times) {
+    super();
+    this.userId = userId;
+    this.user = user;
+    this.salary = salary;
+    this.times = times;
+  }
+
+  public BaseSalary() {
+    super();
+  }
+
   @Override
   public String toString() {
     return "BaseSalary [id=" + id + ", userId=" + userId + ", user=" + user + ", salary=" + salary + ", updateDate="
