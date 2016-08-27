@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -28,6 +29,7 @@ public class GroupNumber implements Serializable{
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
+  @Column(name="GROUP_ID")
   private Long id;//主键
   private Integer numberFirstAdd;//第一阶段增加量
   private Integer numberSecondAdd;//第一阶段增加量
@@ -38,9 +40,8 @@ public class GroupNumber implements Serializable{
   @Enumerated(EnumType.STRING)
   private FlagEnum flag = FlagEnum.NORMAL;//是否删除：normal-正常，del-删除
   
-  @Transient
   @OneToMany(cascade=CascadeType.ALL)
-  @JoinColumn(name="id",referencedColumnName="GROUP_ID")
+  @JoinColumn(name="GROUP_ID")
   private List<GroupUser> groupUsers;
 
   public Long getId() {

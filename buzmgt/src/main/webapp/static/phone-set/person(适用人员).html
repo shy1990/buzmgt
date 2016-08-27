@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>适用人员</title>
+
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../static/order-detail/order_detail.css"/>
+    <link rel="stylesheet" href="../phone-set/css/phone.css">
+
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        .ph-select {
+
+            width: 160px;
+            height: 30px;
+            padding: 5px;
+            border: 1px solid #c6c6c6;
+            border-radius: 3px;
+            background: #ffffff;
+            color: #a7a7a7;
+        }
+
+        li {
+            padding-top: 28px;
+            border-bottom: 0px dashed #dedede;
+        }
+
+        .ph-search-date {
+            display: inline-block;
+            width: 10%;
+            min-width: 100px;
+            top: 12px;
+        }
+
+        .ph-search-date > input {
+            display: inline-block;
+            width: auto;
+            height: 30px;
+        }
+
+        .text-orger {
+            color: #fc781f;
+        }
+
+
+            .dl-horizontal dt {
+                float: left;
+                width: 160px;
+                overflow: hidden;
+                clear: left;
+                text-align: right;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                margin-top: 8px;
+            }
+
+        .text-pronce{
+            line-height: 30px;
+        }
+
+        .icon-ren{
+            background: url("img/syry.png") no-repeat center;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="content main">
+    <h4 class="page-header">
+        <i class="ico icon-ren"></i>适用人员
+        <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
+    </h4>
+
+
+    <div class="row">
+        <!--col begin-->
+        <div class="col-md-12">
+            <!--orderbox begin-->
+            <div class="order-box">
+                <ul>
+                    <li>
+                        <dl class="dl-horizontal">
+                            <dt>选择所属省份：</dt>
+                            <dd>
+                             <span class="text-pronce">山东省</span>
+
+                            </dd>
+                        </dl>
+
+
+                    </li>
+
+
+                    <li>
+                        <dl class="dl-horizontal">
+                            <dt>填写方案标题：</dt>
+                            <dd>
+                                <select class="ph-select">
+                                    <option>组织结构</option>
+                                    <option>山东省</option>
+                                    <option>广东省</option>
+                                    <option>河北省</option>
+                                </select>
+
+
+                                <div class="ph-search-date">
+
+                                    <span class=" " id="basic-addon1"></span>
+                                    <input type="text" class="form-control form_datetime input-sm" placeholder="选择日期"
+                                           readonly="readonly" style="background: #ffffff">
+
+                                </div>
+
+
+                                <select class="ph-select" style=" margin-left: 25px;">
+                                    <option>类别</option>
+                                    <option>山东省</option>
+                                    <option>广东省</option>
+                                    <option>河北省</option>
+                                </select>
+
+                                <select class="ph-select">
+                                    <option>品牌</option>
+                                    <option>山东省</option>
+                                    <option>广东省</option>
+                                    <option>河北省</option>
+                                </select>
+                            </dd>
+                        </dl>
+
+
+                    </li>
+
+                    <li>
+                        <dl class="dl-horizontal">
+                            <dt>填写副标题：</dt>
+                            <dd>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="icon-s icon-qb"></i></span>
+                                    <input type="text" class="form-control" placeholder="请填写方案标题"
+                                           aria-describedby="basic-addon1" style="width: 600px;margin-right: 10px;">
+                                    <span class="text-orger text-pronce">注：</span> <span class="text-gery text-pronce">50字以内</span>
+                                </div>
+
+                            </dd>
+                        </dl>
+                    </li>
+
+                    <li>
+                        <dl class="dl-horizontal">
+                            <dt>添加使用人员：</dt>
+
+                            <dd style="width: 750px;margin-bottom: 20px">
+
+
+                                <div class="col-sm-2" style="margin-bottom: 20px;margin-left: -20px">
+                                    <div class="s-addperson ">
+                                        李易峰
+                                        <i class="icon-s icon-close "></i>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-2">
+                                    <a class="J_addDire btn btn-default ph-btn-bluee icon-tj col-sm-6"
+                                       href="javascript:;"></a>
+                                </div>
+
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+
+                <button class="btn btn-primary col-sm-1" style="margin-left: 180px">确定</button>
+            </div>
+            <!--orderobx end-->
+        </div>
+        <!--col end-->
+    </div>
+
+</div>
+<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script>
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        pickerPosition: "bottom-right",
+        forceParse: 0
+    });
+
+    $('.J_addDire').click(function () {
+        var dirHtml = '<div class="col-sm-2"  style="margin-bottom: 20px;margin-left: -20px">' +
+                ' <div class="s-addperson ">' +
+                ' 李易峰' +
+                '  <i class="icon-s icon-close"></i>' +
+                ' </div>' +
+                ' </div>';
+        $(this).parents('.col-sm-2').before(dirHtml);
+    });
+
+
+</script>
+</body>
+</html>

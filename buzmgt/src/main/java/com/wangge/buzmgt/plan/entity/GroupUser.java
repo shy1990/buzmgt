@@ -2,6 +2,7 @@ package com.wangge.buzmgt.plan.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -27,6 +28,7 @@ public class GroupUser implements Serializable {
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
   private Long id;//主键
+  @Column(name="GROUP_ID")
   private Long groupId;//分组Id
   private String userId;//用户ID
   

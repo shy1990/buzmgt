@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -36,6 +38,17 @@ import com.wangge.buzmgt.plan.entity.RewardPunishRule;
  */
 @Entity
 @Table(name = "SYS_ACHIEVE_NUMBER_SET")
+//@NamedEntityGraph(
+//    name = "graph.Achieve",
+//    
+//    attributeNodes={
+//        @NamedAttributeNode(value="machineType"),
+//        @NamedAttributeNode(value="brand"),
+//        @NamedAttributeNode(value="good"),
+//        @NamedAttributeNode(value="rewardPunishRules"),
+//        @NamedAttributeNode(value="groupNumbers")
+//    }
+//)
 public class Achieve implements Serializable {
 
   private static final long serialVersionUID = 1L;
