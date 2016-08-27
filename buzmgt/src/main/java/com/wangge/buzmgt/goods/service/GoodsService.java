@@ -1,12 +1,18 @@
-package com.wangge.buzmgt.goods.repository;
+package com.wangge.buzmgt.goods.service;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.wangge.buzmgt.goods.entity.Goods;
 
-public interface GoodsRepository extends JpaRepository<Goods, String> {
+/**
+ * 
+* @ClassName: GoodsService
+* @Description: 商品业务处理 
+* @author ChenGuop
+* @date 2016年8月27日 下午1:54:42
+*
+ */
+public interface GoodsService {
   /**
    * 
   * @Title: findByBrandId 
@@ -36,5 +42,6 @@ public interface GoodsRepository extends JpaRepository<Goods, String> {
   * @return Goods    返回类型 
   * @throws
    */
-  Goods findOne(String Id);  
+  Goods findOne(String Id);
+  
 }
