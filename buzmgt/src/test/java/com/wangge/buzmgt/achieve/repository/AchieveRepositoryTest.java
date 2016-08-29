@@ -13,6 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.wangge.buzmgt.BuzmgtApplication;
 import com.wangge.buzmgt.achieve.entity.Achieve;
+import com.wangge.buzmgt.achieve.entity.Achieve.AchieveStatusEnum;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.plan.entity.MachineType;
@@ -68,7 +69,7 @@ public class AchieveRepositoryTest {
       achieve.setIssuingDate(now);
       MachineType machineType = machineTypeRepository.findOne("lj");
       achieve.setMachineType(machineType);
-      achieve.setStatus(PlanTypeEnum.ACHIEVE);
+      achieve.setStatus(AchieveStatusEnum.OVER);
       
       achieve.setRewardPunishRules(rprs);
 //      achieve.setGroupNumbers(groupNumbers);

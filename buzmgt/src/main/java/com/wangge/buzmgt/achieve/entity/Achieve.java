@@ -52,6 +52,17 @@ import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 public class Achieve implements Serializable {
 
   private static final long serialVersionUID = 1L;
+  
+  public static enum AchieveStatusEnum{
+    BACK("驳回"),WAIT("待审核"),OVER("已审核");    
+    private String name;
+    AchieveStatusEnum(String name){
+      this.name=name;
+    }
+    public String getName(){
+      return this.name;
+    }
+  }
 
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
@@ -79,7 +90,7 @@ public class Achieve implements Serializable {
   @Enumerated(EnumType.STRING)
   private FlagEnum flag = FlagEnum.NORMAL; // 是否删除：normal-正常，del-删除
   @Enumerated(EnumType.STRING)
-  private PlanTypeEnum status; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
+  private AchieveStatusEnum status; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
   private String planId;
   
   @OneToMany(cascade=CascadeType.ALL)
@@ -206,11 +217,11 @@ public class Achieve implements Serializable {
     this.flag = flag;
   }
 
-  public PlanTypeEnum getStatus() {
+  public AchieveStatusEnum getStatus() {
     return status;
   }
 
-  public void setStatus(PlanTypeEnum status) {
+  public void setStatus(AchieveStatusEnum status) {
     this.status = status;
   }
 

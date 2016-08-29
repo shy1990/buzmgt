@@ -43,7 +43,7 @@ public class AchieveController {
   
   /**
    * 
-  * @Title: showAchieveList 
+  * @Title: showAchieveList
   * @Description: 展示达量列表
   * @param @return    设定文件 
   * @return String    返回类型 
@@ -52,7 +52,6 @@ public class AchieveController {
   @RequestMapping(value="/show",method=RequestMethod.GET)
   public String showAchieveList(String planId,Model model){
     model.addAttribute("planId", planId);
-    model.addAttribute("machineTypes", mainPlanService.getAllMachineType());
     model.addAttribute("machineTypes", mainPlanService.getAllMachineType());
     return "achieve/achieve_list";
   }

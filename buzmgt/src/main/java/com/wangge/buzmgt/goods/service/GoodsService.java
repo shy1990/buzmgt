@@ -43,5 +43,15 @@ public interface GoodsService {
   * @throws
    */
   Goods findOne(String Id);
+  /**
+   * 
+  * @Title: findByNameLike 
+  * @Description: 根据商品名称模糊查询
+  * @param @param name
+  * @param @return    设定文件 
+  * @return List<String>    返回类型 
+  * @throws
+   */
+  List<String> findByNameLike(String name);
   
 }

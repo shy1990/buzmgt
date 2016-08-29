@@ -1,10 +1,12 @@
 package com.wangge.buzmgt.goods.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.goods.entity.Brand;
 import com.wangge.buzmgt.goods.entity.Goods;
 import com.wangge.buzmgt.goods.repository.GoodsRepository;
 
@@ -12,6 +14,8 @@ import com.wangge.buzmgt.goods.repository.GoodsRepository;
 public class GoodsServiceImpl implements GoodsService {
   @Autowired
   private GoodsRepository goodsRepository;
+  
+  
 
   @Override
   public List<Goods> findByBrandId(String brandId) {
@@ -26,6 +30,12 @@ public class GoodsServiceImpl implements GoodsService {
   @Override
   public Goods findOne(String Id) {
     return goodsRepository.findOne(Id);
+  }
+
+  @Override
+  public List<String> findByNameLike(String name) {
+    name="%"+name+"%";
+    return goodsRepository.findByNameLike(name);
   }
 
 }

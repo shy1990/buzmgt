@@ -26,6 +26,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.achieve.entity.Achieve;
+import com.wangge.buzmgt.achieve.entity.Achieve.AchieveStatusEnum;
 import com.wangge.buzmgt.achieve.repository.AchieveRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
@@ -87,6 +88,8 @@ public class AchieveServerImpl implements AchieveServer {
 
       private final static String TYPE_FlAG_TYPE = "com.wangge.buzmgt.common.FlagEnum";
       
+      private final static String TYPE_ACHIEVE_STATUS = "com.wangge.buzmgt.achieve.entity.Achieve$AchieveStatusEnum";
+      
       private final static String TYPE_DATE = "java.util.Date";
       
       @SuppressWarnings({"unchecked","rawtypes"})
@@ -142,10 +145,27 @@ public class AchieveServerImpl implements AchieveServer {
                   break;
                 }
                 predicates.add(cb.equal(expression, filter.value));
+              } else if(javaTypeName.equals(TYPE_ACHIEVE_STATUS)){
+                /**
+                 * FlagEnum格式转换
+                 */
+                try {
+                  String status = filter.value.toString();
+                  AchieveStatusEnum flagEnum = AchieveStatusEnum.valueOf(status);
+                  filter.value = flagEnum;
+                } catch (Exception e) {
+                  LogUtil.error(e.getMessage(), e);
+                  break;
+                }
+                predicates.add(cb.equal(expression, filter.value));
               } else {
                 predicates.add(cb.equal(expression, filter.value));
               }
 
+              break;
+            case IN:
+              predicates.add(cb.in(expression).value(filter.value));
+              
               break;
             case LIKE:
               predicates.add(cb.like(expression, "%" + filter.value + "%"));

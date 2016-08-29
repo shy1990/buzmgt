@@ -75,8 +75,8 @@ td.reason{
     font-size: 12px;
 }
 
-.bnt-jc:hover,
-.bnt-jc:focus {
+.bnt-ck:hover,
+.bnt-ck:focus {
     color: #ffffff;
 }
 
@@ -90,11 +90,10 @@ td.reason{
     font-size: 12px;
 }
 
-.bnt-jc:hover,
-.bnt-jc:focus {
+.btn-sc:hover,
+.btn-sc:focus {
     color: #ffffff;
 }
-
 
 .bnt-jc {
     width: 50px;
