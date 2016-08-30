@@ -19,6 +19,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.wangge.buzmgt.goods.entity.Category;
+
 @Entity
 @Table(name="SYS_PUSH_MONEY")
 @NamedEntityGraph(

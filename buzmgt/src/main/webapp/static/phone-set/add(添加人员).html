@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>添加人员</title>
+
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+
+
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+
+        .icon-tjry{
+            background: url("img/tjry.png") no-repeat center;
+        }
+        .icon-un{
+            background: url("img/un.png") no-repeat center;
+        }
+
+        .text-lv{
+            color: #02ae88;
+        }
+        .text-zi{
+            color: #ee038d;
+        }
+
+        .text-hong{
+            color: #7943dc;
+        }
+
+        .text-lan{
+            color: #1aaefb;
+        }
+        .icon-x {
+            display: inline-block;
+            position: relative;
+            z-index: 100;
+            width: 14px;
+            height: 13px;
+            margin-top: 3px;
+        }
+
+        .ico-xx{
+            background: url("img/start1.png") no-repeat center;
+        }
+        .icon-hui{
+            background: url("img/start2.png")no-repeat center;
+        }
+
+        .icon-back {
+            width: 26px;
+            height: 26px;
+            background: url("img/arrow.png") no-repeat center;
+        }
+
+        .icon-back:hover {
+            width: 26px;
+            background: url("img/Arrow 2 .png") no-repeat center;
+        }
+        .fl-right {
+            float: right;
+            margin-top: 25px;
+            margin-right: 25px;
+        }
+
+
+        .ph-select {
+
+            width: 180px;
+            height: 30px;
+            padding: 5px;
+            border: 1px solid #c6c6c6;
+            border-radius: 3px;
+            background: #ffffff;
+            color: #a7a7a7;
+            margin-bottom: 20px;
+        }
+
+
+        .link-posit-t {
+            display: inline-block;
+            text-align: right;
+            vertical-align: bottom;
+        }
+        .new-table-box {
+            border-top:3px solid #1e92d4 ;
+            min-height: 600px;
+            background: #FFF;
+        }
+
+        .new-table-box >table>tbody>tr:hover{
+            border-left: 3px solid #1e92d4 ;
+        }
+
+
+        .text-gery{
+            color: #999999;
+        }
+
+
+
+        .ph-search-date > input {
+            display: inline-block;
+            width: auto;
+            height: 30px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="content main">
+    <h4 class="page-header ">
+        <i class="ico icon-tjry"></i>添加人员
+        <!--区域选择按钮-->
+        <a href="javascript:history.back();" ><i class="ico icon-back fl-right"></i></a>
+
+    </h4>
+
+    <div class="clearfix"></div>
+    <div>
+        <select class="ph-select">
+            <option>山东省-德州市-武城县</option>
+            <option>山东省-德州市-武城县</option>
+            <option>山东省-德州市-武城县</option>
+        </select>
+
+        <select class="ph-select">
+            <option>全部角色</option>
+            <option>山东省-德州市-武城县</option>
+            <option>山东省-德州市-武城县</option>
+        </select>
+
+        <select class="ph-select">
+            <option>业务等级</option>
+            <option>山东省-德州市-武城县</option>
+            <option>山东省-德州市-武城县</option>
+        </select>
+
+        <select  class="ph-select" >
+            <option>区域星级</option>
+            <option>山东省-德州市-武城县</option>
+            <option>山东省-德州市-武城县</option>
+        </select>
+
+        <button class="btn btn-blue btn-sm" style="margin-left: 10px">
+            检索
+        </button>
+
+        <div class="link-posit-t pull-right export">
+            <input class="ph-select text-gery-hs" placeholder="  请输入业务员名称">
+            <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
+                检索
+            </button>
+            <a class="table-export" href="javascript:void(0);">导出excel</a>
+        </div>
+
+    </div>
+
+    <div class="tab-content ">
+        <!--table-box-->
+
+        <div class=" new-table-box table-overflow ">
+            <table class="table table-hover new-table">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>业务ID</th>
+                    <th>角色</th>
+                    <th>负责区域</th>
+                    <th>业务等级</th>
+                    <th>入职时间</th>
+                    <th>当前所属方案</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>01</td>
+                    <td>李易峰</td>
+                    <td>A1158584584854151</td>
+                    <td>服务站经理</td>
+                    <td>
+                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                        山东省济南市天桥区
+                    </td>
+                    <td> <span class="text-zi text-strong">大学生</span></td>
+                    <td>2016.08.19</td>
+                    <td><span class="text-gery">无</span></td>
+                    <td><i></i></td>
+                </tr>
+
+                <tr>
+                    <td>01</td>
+                    <td>李易峰</td>
+                    <td>A1158584584854151</td>
+                    <td>服务站经理</td>
+                    <td>
+                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x icon-hui"></i>
+                        山东省济南市天桥区
+                    </td>
+                    <td> <span class="text-hong text-strong">中学生</span></td>
+                    <td>2016.08.19</td>
+                    <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                    <td><i class="icon icon-un"></i></td>
+                </tr>
+
+                <tr>
+                    <td>01</td>
+                    <td>李易峰</td>
+                    <td>A1158584584854151</td>
+                    <td>服务站经理</td>
+                    <td>
+                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                        山东省济南市天桥区
+                    </td>
+                    <td> <span class="text-lan text-strong">小学生</span></td>
+                    <td>2016.08.19</td>
+                    <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                    <td><i class="icon icon-un"></i></td>
+                </tr>
+
+
+
+
+
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+        <!--table-box-->
+
+        <!--待审核账单-->
+    </div>
+
+    <!--油补记录-->
+</div>
+
+<![endif]-->
+<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+

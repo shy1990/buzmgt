@@ -1,28 +1,5 @@
 package com.wangge.buzmgt.region.web;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
@@ -41,9 +18,29 @@ import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.RegionUtil;
 import com.wangge.json.JSONFormat;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(value = "/region")
@@ -128,7 +125,28 @@ public class RegionController {
     }
     return new ResponseEntity<RegionTree>(RegionUtil.getRegionTree(newRegion), HttpStatus.OK);
   }
-  
+
+
+  /**
+   *
+   * @param id
+   * @return
+   */
+  @RequestMapping(value = "/regionStarsLeave", method = RequestMethod.POST)
+  @ResponseBody
+  public ResponseEntity<Integer> regionStarsLeave(String id) {
+    Region region = regionService.findListRegionbyid(id);
+    return new ResponseEntity<Integer>(region.getStarsLeave(), HttpStatus.OK);
+  }
+
+
+  @RequestMapping(value = "/updateStarsLeave", method = RequestMethod.POST)
+  public void updateStarsLeave(String id,int statsLevae) {
+    Region region = regionService.findListRegionbyid(id);
+    region.setStarsLeave(statsLevae);
+    regionService.saveRegion(region);
+  }
+
   /**
    * 
    * @Title: editRegion @Description: (这里用一句话描述这个方法的作用) @param @param
@@ -313,7 +331,7 @@ public class RegionController {
    * @author jiabin
    * @param id
    * @param flag
-   * @param request
+   * @param
    * @return
    * @since JDK 1.8
    */

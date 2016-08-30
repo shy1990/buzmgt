@@ -85,14 +85,12 @@
       <td>{{userName}}</td>
       <td>{{region}}</td>
 			
-      <td>{{salary}}</td>
+      <td><span class="text-blue">{{salary}}</span></td>
       <td>{{newdate}}</td>
-	  <td>{{daySalary}}</td>
+	  <td><span class="text-green">{{daySalary}}元/天</span></td>
       <td>
         <button class="xiugai  btn btn-blue btn-bluee"
 					 data-toggle="modal" data-target="#updModal" data-whatever="{{id}}" data-salary="{{salary}}">修改</button>
-        <button class="btn btn-warning btn-bluee" data-toggle="modal"
-					 data-target="#delModal" data-id="{{id}}" data-salary="{{salary}}" data-truename="{{userName}}">删除</button>
       </td>
     </tr> 
 	{{/each}}
@@ -102,20 +100,14 @@
 	</tr>
 	{{/if}}
 </script>
-<script type="text/javascript">
-var	base='<%=basePath%>';
-	var SearchData = {
-		'page' : '0',
-		'size' : '20'
-	}
-</script>
+
 </head>
 
 <body>
 	<div class="content main">
 		<h4 class="page-header ">
 			<i class="ico icon-jcxz"></i>基础薪资表
-		
+
 			<!--/区域选择按钮-->
 			<a href="" class="btn btn-blue" data-toggle="modal"
 				data-target="#addModal" data-whatever="@mdo"> <i
@@ -123,16 +115,12 @@ var	base='<%=basePath%>';
 			</a>
 
 		</h4>
-		<div class="row text-time" >
+		<div class="row text-time">
 			<!--区域选择按钮-->
-				<!--区域选择按钮-->
+			<!--区域选择按钮-->
 			<div class="area-choose">
-				<label class="col-sm-4 control-label">选择区域：</label>
-				<div class="col-sm-7" style="width:310px">
-					<%@ include file="../region/regionProvinceSelect.jsp"%>
-				</div>
-				<button class="btn btn-blue btn-sm"
-					onclick="goRegionSearch();">检索</button>
+				<%@ include file="../region/regionProvinceSelect.jsp"%>
+				<button class="btn btn-blue btn-sm" onclick="goRegionSearch();">区域检索</button>
 			</div>
 			<!--区域选择按钮-->
 			<div class="link-posit-t pull-right export">
@@ -389,14 +377,13 @@ var	base='<%=basePath%>';
 	</div>
 
 	<!---alert---->
-
-	<!-- Bootstrap core JavaScript================================================== -->
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+	<script type="text/javascript">
+		var	base='<%=basePath%>';
+		var SearchData = {
+			'page' : '0',
+			'size' : '20'
+		}
+	</script>
 	<script type="text/javascript" src="static/js/common.js"
 		charset="utf-8"></script>
 	<script type="text/javascript"
@@ -415,9 +402,7 @@ var	base='<%=basePath%>';
 	<script src="static/js/jqueryfileupload/js/jquery.iframe-transport.js"></script>
 	<script type="text/javascript" src="/static/ticheng/js/base-salary.js"
 		charset="utf-8"></script>
-	<script type="text/javascript">
-		
-	</script>
+
 </body>
 
 </html>

@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.income.main.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
+import com.wangge.buzmgt.income.main.vo.BrandType;
+import com.wangge.buzmgt.income.main.vo.MachineType;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
 
@@ -51,5 +54,17 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   public MainIncome findIncomeMain(String salesmanId) {
     String month = DateUtil.getPreMonth(new Date(), 0);
     return findIncomeMain(salesmanId,month);
+  }
+
+  @Override
+  public List<MachineType> getAllMachineType() {
+    
+    return null;
+  }
+
+  @Override
+  public List<BrandType> getAllBrandType() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

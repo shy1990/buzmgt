@@ -23,14 +23,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.achieve.entity.Achieve;
+import com.wangge.buzmgt.achieve.entity.Achieve.AchieveStatusEnum;
 import com.wangge.buzmgt.achieve.repository.AchieveRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.util.SearchFilter;
-
+@Service
 public class AchieveServerImpl implements AchieveServer {
 
   @Autowired
@@ -43,6 +45,8 @@ public class AchieveServerImpl implements AchieveServer {
    * 处理条件参数
    */
   public Specification<Achieve> dispose(Map<String, Object> searchParams){
+    //过滤删除
+    searchParams.put("EQ_flag", "NORMAL");
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<Achieve> spec = achieveSearchFilter(filters.values(), Achieve.class);
     return spec;
@@ -80,9 +84,11 @@ public class AchieveServerImpl implements AchieveServer {
 
       private final static String TIME_MAX = " 23:59:59 999";
 
-      private final static String TYPE_PLAN_TYPE = "com.wangge.buzmgt.achieve.entity.PlanTypeEnum";
+      private final static String TYPE_PLAN_TYPE = "com.wangge.buzmgt.common.PlanTypeEnum";
 
-      private final static String TYPE_FlAG_TYPE = "com.wangge.buzmgt.ywsalary.entity.FlagEnum";
+      private final static String TYPE_FlAG_TYPE = "com.wangge.buzmgt.common.FlagEnum";
+      
+      private final static String TYPE_ACHIEVE_STATUS = "com.wangge.buzmgt.achieve.entity.Achieve$AchieveStatusEnum";
       
       private final static String TYPE_DATE = "java.util.Date";
       
@@ -139,10 +145,27 @@ public class AchieveServerImpl implements AchieveServer {
                   break;
                 }
                 predicates.add(cb.equal(expression, filter.value));
+              } else if(javaTypeName.equals(TYPE_ACHIEVE_STATUS)){
+                /**
+                 * FlagEnum格式转换
+                 */
+                try {
+                  String status = filter.value.toString();
+                  AchieveStatusEnum flagEnum = AchieveStatusEnum.valueOf(status);
+                  filter.value = flagEnum;
+                } catch (Exception e) {
+                  LogUtil.error(e.getMessage(), e);
+                  break;
+                }
+                predicates.add(cb.equal(expression, filter.value));
               } else {
                 predicates.add(cb.equal(expression, filter.value));
               }
 
+              break;
+            case IN:
+              predicates.add(cb.in(expression).value(filter.value));
+              
               break;
             case LIKE:
               predicates.add(cb.like(expression, "%" + filter.value + "%"));
@@ -237,8 +260,12 @@ public class AchieveServerImpl implements AchieveServer {
 
             }
           }
+       // 将所有条件用 and 联合起来
+          if (!predicates.isEmpty()) {
+            return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+          }
         }
-        return null;
+        return cb.conjunction();
       }
     };
   }

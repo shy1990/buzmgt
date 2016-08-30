@@ -242,6 +242,31 @@
     vertical-align: top;
 }
 
+
+.ztree li span.button.starsone {
+    background-position: -272px -140px;
+    margin-right: 2px;
+    vertical-align: top;
+}
+
+.ztree li span.button.starstwo {
+    background-position: -272px -157px;
+    margin-right: 2px;
+    vertical-align: top;
+}
+
+.ztree li span.button.whitespace {
+    background-position: -265px -180px;
+    margin-right: 2px;
+    vertical-align: top;
+}
+
+.ztree li span.button.starsthree {
+    background-position:-272px -157px;
+    margin-right: 2px;
+    vertical-align: top;
+}
+
 .ztree li span.button.remove {
     background-position: -270px -41px;
     margin-right: 2px;

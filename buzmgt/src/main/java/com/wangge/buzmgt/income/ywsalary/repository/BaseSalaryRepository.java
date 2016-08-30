@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.income.ywsalary.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,6 @@ public interface BaseSalaryRepository extends JpaRepository<BaseSalary, Long>, J
   List<BaseSalary> findByFlagAndUser_Id(FlagEnum flag, String id);
   
   @Query("select max(s.times) from BaseSalary s where s.userId=?1")
-  Integer findMaxTimesByUserId(String userId);
+  Optional<Integer> findMaxTimesByUserId(String userId);
   
 }

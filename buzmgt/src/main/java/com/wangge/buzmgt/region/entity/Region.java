@@ -1,30 +1,13 @@
 package com.wangge.buzmgt.region.entity;
 
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SecondaryTable;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_EMPTY)
 @Entity
@@ -72,7 +55,11 @@ public class Region implements Serializable {
 	
 	@JoinColumn(name = "CENTER_POINT")
   private String centerPoint;
-	
+
+	@JoinColumn(name = "STARS_LEAVE")
+	private Integer starsLeave;
+
+
 	public String getId() {
 		return id;
 	}
@@ -145,6 +132,14 @@ public class Region implements Serializable {
 		this.coordinates = coordinates;
 	}
 
+	public int getStarsLeave() {
+		return starsLeave;
+	}
+
+	public void setStarsLeave(Integer starsLeave) {
+		this.starsLeave = starsLeave;
+	}
+
 	public Collection<Region> getChildren() {
 		return Collections.unmodifiableCollection(children);
 	}
@@ -161,8 +156,8 @@ public class Region implements Serializable {
     this.centerPoint = centerPoint;
   }
 
-  
-	
-	
-	
+
+
+
+
 }

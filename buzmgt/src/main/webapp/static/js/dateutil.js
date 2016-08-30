@@ -1,3 +1,9 @@
+//日期格式(yyyy.MM.dd)
+function changeDateToString_(DateIn){
+	var date = changeDateToString(DateIn);
+	return date.replace(/-/g, ".");
+}
+
 //日期格式（yyyy-MM-dd ）
 function changeDateToString(DateIn) {
 	var year = 0;

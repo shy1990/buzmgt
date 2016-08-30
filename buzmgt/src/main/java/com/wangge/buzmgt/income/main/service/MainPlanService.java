@@ -5,6 +5,11 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.wangge.buzmgt.income.main.vo.BrandType;
+import com.wangge.buzmgt.income.main.vo.MachineType;
+
+import net.sf.json.JSONArray;
+
 /** 
   * ClassName: MainPlanService <br/> 
   * Function: 提供计划主表的服务 <br/> 
@@ -24,4 +29,25 @@ public interface MainPlanService {
   void modifyUser();
   void deletePlan();
   void assemblebeforeNew();
+  /** 
+   * getAllMachineType:获得所有的机型分类. <br/> 
+   * @author yangqc 
+   * @return 
+   * @since JDK 1.8 
+   */  
+ List<MachineType> getAllMachineType();
+ /** 
+   * getAllBrandType:获得所有的品牌. <br/> 
+   * @author yangqc 
+   * @return 
+   * @since JDK 1.8 
+   */  
+ JSONArray getAllBrandType();
+ /** 
+  * getAllBrandType:根据机型查询品牌. <br/> 
+  * @author ChenGoup
+  * @return 
+  * @since JDK 1.8 
+  */  
+ List<BrandType> findCodeByMachineType(String machineType);
 }

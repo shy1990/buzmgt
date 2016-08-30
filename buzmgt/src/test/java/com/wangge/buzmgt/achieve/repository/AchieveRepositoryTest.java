@@ -13,10 +13,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.wangge.buzmgt.BuzmgtApplication;
 import com.wangge.buzmgt.achieve.entity.Achieve;
-import com.wangge.buzmgt.achieve.entity.RewardPunishRule;
+import com.wangge.buzmgt.achieve.entity.Achieve.AchieveStatusEnum;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.plan.entity.MachineType;
+import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 import com.wangge.buzmgt.plan.repository.MachineTypeRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -60,15 +61,15 @@ public class AchieveRepositoryTest {
 //      }
       Date now = new Date();
       achieve.setAuditor("ceshi");;
-      achieve.setBrandId("23523");
-      achieve.setGoodId("sadasd212");
+//      achieve.setBrandId("23523");
+//      achieve.setGoodId("sadasd212");
       achieve.setStartDate(now);
       achieve.setEndDate(now);
       achieve.setCreateDate(now);
       achieve.setIssuingDate(now);
       MachineType machineType = machineTypeRepository.findOne("lj");
       achieve.setMachineType(machineType);
-      achieve.setStatus(PlanTypeEnum.ACHIEVE);
+      achieve.setStatus(AchieveStatusEnum.OVER);
       
       achieve.setRewardPunishRules(rprs);
 //      achieve.setGroupNumbers(groupNumbers);
