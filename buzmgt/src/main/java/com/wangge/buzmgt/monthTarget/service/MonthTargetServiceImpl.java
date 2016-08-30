@@ -1,8 +1,8 @@
-package com.wangge.buzmgt.monthTarget.service;
+package com.wangge.buzmgt.monthtarget.service;
 
 import com.wangge.buzmgt.assess.service.RegistDataService;
-import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
-import com.wangge.buzmgt.monthTarget.repository.MonthTargetRepository;
+import com.wangge.buzmgt.monthtarget.entity.MonthTarget;
+import com.wangge.buzmgt.monthtarget.repository.MonthTargetRepository;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.entity.User;
@@ -214,6 +214,11 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         sqlQuery.setParameter(2, 5);
         map = getMap(sqlQuery,map,5);
         return map;
+    }
+
+    @Override
+    public MonthTarget findOne(Long id) {
+        return mtr.findOne(id);
     }
 
     @Override

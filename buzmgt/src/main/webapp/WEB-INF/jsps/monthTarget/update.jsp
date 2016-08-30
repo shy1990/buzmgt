@@ -63,7 +63,7 @@
     <!--地区-->
 
     <div class="text-blue text-strong" style="margin-top: 25px; margin-bottom: 25px ">
-        <c:if test="${flag ne 'update'}">
+        <c:if test="${flag eq 'save'}">
             <div style="width: 180px ; float: left;margin-right: 20px">
                 <form>
                     <select name="basic[]" multiple="multiple" class="demo3" id="regionId" onchange="getRegionName();">
@@ -85,8 +85,12 @@
             <button class="btn btn-blue btn-sm" onclick="goSearch();">
                 检索
             </button>
+            <span style="color: #a6a6a6" id="regionName">  </span> </div>
         </c:if>
-     <span style="color: #a6a6a6" id="regionName">  </span> </div>
+        <c:if test="${flag eq 'update' || flag eq 'look'}">
+            地区: <span style="color: #a6a6a6">${monthTarget.region.parent.parent.name} ${monthTarget.region.parent.name} ${monthTarget.region.name}</span> </div>
+            <input type="hidden" value="${monthTarget.region.id}" id="rId">
+        </c:if>
     <!--地区-->
 
     <div class="row" >
@@ -118,11 +122,20 @@
                              <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="adviseOrder">0 台</div></td>
 
                          </tr>
-                         <tr>
-                             <td>请录入 <input class="input-th" type="text" placeholder="提货量" name="orderNum"> &nbsp;台
-                                 <label class="pull-right col-md-8 control-label msg-error"></label>
-                             </td>
-                         </tr>
+                         <c:if test="${flag ne 'look'}">
+                             <tr>
+                                 <td>请录入 <input class="input-th" type="text" placeholder="提货量" name="orderNum"> &nbsp;台
+                                     <label class="pull-right col-md-8 control-label msg-error"></label>
+                                 </td>
+                             </tr>
+                         </c:if>
+                         <c:if test="${flag eq 'look'}">
+                             <tr>
+                                 <td>提货量指标 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">${monthTarget.orderNum} 台</div>
+                                     <label class="pull-right col-md-8 control-label msg-error"></label>
+                                 </td>
+                             </tr>
+                         </c:if>
                          </table>
                      </div>
 
@@ -156,11 +169,20 @@
                             <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="merAd">0 台</div></td>
 
                         </tr>
-                        <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="提货商家" name="merchantNum"> &nbsp;家
-                                <label class="pull-right col-md-8 control-label msg-error"></label>
-                            </td>
-                        </tr>
+                        <c:if test="${flag ne 'look'}">
+                            <tr>
+                                <td>请录入 <input class="input-th" type="text" placeholder="提货商家" name="merchantNum"> &nbsp;家
+                                    <label class="pull-right col-md-8 control-label msg-error"></label>
+                                </td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${flag eq 'look'}">
+                            <tr>
+                                <td>提货商家指标 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">${monthTarget.merchantNum} 台</div>
+                                    <label class="pull-right col-md-8 control-label msg-error"></label>
+                                </td>
+                            </tr>
+                        </c:if>
                     </table>
                 </div>
 
@@ -193,11 +215,20 @@
                             <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="acAd">0 家</div></td>
 
                         </tr>
-                        <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="活跃商家" name="activeNum"> &nbsp;家
-                                <label class="pull-right col-md-8 control-label msg-error"></label>
-                            </td>
-                        </tr>
+                        <c:if test="${flag ne 'look'}">
+                            <tr>
+                                <td>请录入 <input class="input-th" type="text" placeholder="活跃商家" name="activeNum"> &nbsp;家
+                                    <label class="pull-right col-md-8 control-label msg-error"></label>
+                                </td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${flag eq 'look'}">
+                            <tr>
+                                <td>活跃商家指标 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">${monthTarget.activeNum} 台</div>
+                                    <label class="pull-right col-md-8 control-label msg-error"></label>
+                                </td>
+                            </tr>
+                        </c:if>
                     </table>
                 </div>
 
@@ -230,12 +261,22 @@
                             <td>系统建议 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee" id="maAd">0 家</div></td>
 
                         </tr>
-                        <tr>
-                            <td>请录入 <input class="input-th" type="text" placeholder="成熟商家" name="matureNum"> &nbsp;家
-                                <label class="pull-right col-md-8 control-label msg-error"></label>
-                            </td>
-                        </tr>
-						<input class="input-th" type="hidden" name="salesman.id" value="" id="region">
+                        <c:if test="${flag ne 'look'}">
+                            <tr>
+                                <td>请录入 <input class="input-th" type="text" placeholder="成熟商家" name="matureNum"> &nbsp;家
+                                    <label class="pull-right col-md-8 control-label msg-error"></label>
+                                </td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${flag eq 'look'}">
+                            <tr>
+                                <td>成熟商家指标 <div class=" text-right "   style="margin-top: -15px;color: #00b7ee">${monthTarget.matureNum} 台</div>
+                                    <label class="pull-right col-md-8 control-label msg-error"></label>
+                                </td>
+                            </tr>
+                        </c:if>
+						<input class="input-th" type="hidden" value="" id="region">
+                        <input type="hidden" value="${flag}" id="flag">
                     </table>
                 </div>
             </div>
@@ -244,7 +285,7 @@
     </div>
 </div>
 
-    <c:if test="${flag ne 'update'}">
+    <c:if test="${flag eq 'save'}">
         <div style="text-align: center;background-color: #fafafa">
             <button class="btn btn-primary btn-blue btn-ok" onclick="toSubmit('','add');" id="btn">保存</button>
         </div>

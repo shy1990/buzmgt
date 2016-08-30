@@ -43,10 +43,11 @@
             <td>-- / {{matureNum}}</td>
             <td>{{targetCycle}}</td>
             <td>
-                <button class="btn btn-blue btn-bn-style" onclick="update('{{id}}','update');">查看</button>
                 {{#if view}}
+                <button class="btn btn-blue btn-bn-style" onclick="update('{{id}}','update');">查看</button>
                 <button class="btn btn-green btn-bn-style" onclick="publish('{{id}}');" id="{{id}}">发布</button>
                 {{else}}
+                <button class="btn btn-blue btn-bn-style" onclick="update('{{id}}','look');">查看</button>
                 <button class="btn btn-green btn-bn-style" disabled="disabled">已发布</button>
                 {{/if}}
             </td>
@@ -66,7 +67,7 @@
 
         </div>
         <!--/区域选择按钮-->
-        <a href="javascript:;" onclick="toUpdate();" class="btn btn-blue"
+        <a href="javascript:;" onclick="toUpdate('save');" class="btn btn-blue"
            data-toggle="modal" data-target="#xzyw" data-whatever="@mdo">
             <i class="ico icon-add"></i>添加
         </a>

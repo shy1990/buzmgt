@@ -5,8 +5,8 @@ $(function() {
 	goSearch();
 });
 
-function toUpdate(){
-	window.location.href = "/monthtarget/toUpdate";
+function toUpdate(flag){
+	window.location.href = "/monthtarget/toUpdate?flag="+flag;
 }
 
 /**
@@ -88,9 +88,11 @@ function seachSuccessTable(data) {
 }
 
 function update(id,flag){
-	if(flag == "update"){
-		window.location.href = "/monthtarget/toUpdate?flag="+flag+"&id="+id;
+	var btnId = $("#"+id).text();
+	if (btnId == "已发布"){
+		flag = "look";
 	}
+	window.location.href = "/monthtarget/toUpdate?flag="+flag+"&id="+id;
 }
 
 function publish(id) {

@@ -1,6 +1,6 @@
-package com.wangge.buzmgt.monthTarget.repository;
+package com.wangge.buzmgt.monthtarget.repository;
 
-import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
+import com.wangge.buzmgt.monthtarget.entity.MonthTarget;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import org.springframework.data.domain.Page;

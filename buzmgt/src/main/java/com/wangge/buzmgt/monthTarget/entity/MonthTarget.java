@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.monthTarget.entity;
+package com.wangge.buzmgt.monthtarget.entity;
 
 import java.io.Serializable;
 

@@ -2,6 +2,11 @@
 var regionId;
 $(function() {
 	getRegionName();
+	var flag = $("#flag").val();
+	if (flag == "update" || flag == "look"){
+		regionId = $("#rId").val();
+		goSearch();
+	}
 });
 
 function getRegionName() {
