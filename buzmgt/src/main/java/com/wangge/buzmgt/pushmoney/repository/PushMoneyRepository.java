@@ -13,6 +13,7 @@ import com.wangge.buzmgt.pushmoney.entity.PushMoney;
 public interface PushMoneyRepository extends JpaRepository<PushMoney, Integer>,
 JpaSpecificationExecutor<PushMoney> {
 
+  @Override
   @EntityGraph("graph.PushMoney.category")
   Page<PushMoney> findAll(Specification<PushMoney> spec, Pageable pageable);
 }

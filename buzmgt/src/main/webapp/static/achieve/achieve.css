@@ -1,0 +1,39 @@
+.left-side li {
+    width: 200px;
+    height: 60px;
+    color: #4c4c4c;
+    text-align: center;
+    line-height: 60px;
+    cursor: pointer;
+    background: #ebebeb;
+    border: 1px solid #e5e5e5;
+}
+.sidebar > .sidebar li:active,
+.sidebar li:hover ,
+.sidebar li.active{
+    color: #2b86ba;
+    border-left: 3px solid #44a6dd;
+}
+.sidebar li:first-child{
+    border-left: 0;
+    padding-left: 3px;
+    color: #4c4c4c;
+    cursor: default;
+}
+td .bnt-jc:hover,
+td .bnt-jc:ACTIVE,
+td .bnt-jc:focus {
+    color: #ffffff;
+}
+.bnt-ck:hover,
+.bnt-ck:focus {
+    color: #ffffff;
+}
+.btn-sc:hover,
+.btn-sc:focus {
+    color: #ffffff;
+}
+.bnt-ss:hover,
+.btn-ss:focus {
+    color: #ffffff;
+}

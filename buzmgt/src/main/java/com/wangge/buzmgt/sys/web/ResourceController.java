@@ -3,7 +3,6 @@ package com.wangge.buzmgt.sys.web;
 import java.util.Date;
 import java.util.Set;
 
-import javax.annotation.Resources;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wangge.buzmgt.log.entity.Log.EventType;
-import com.wangge.buzmgt.log.service.LogService;
+import com.alibaba.fastjson.JSON;
 import com.wangge.buzmgt.sys.base.BaseController;
 import com.wangge.buzmgt.sys.entity.Resource;
 import com.wangge.buzmgt.sys.service.ResourceService;
@@ -26,8 +24,6 @@ import com.wangge.buzmgt.sys.util.Chinese2English;
 import com.wangge.buzmgt.sys.util.PageData;
 import com.wangge.buzmgt.sys.util.PageNavUtil;
 import com.wangge.buzmgt.sys.util.SortUtil;
-
-import com.wangge.json.JSONFormat;
 
 //import net.sf.json.JSONArray;
 import org.apache.log4j.Logger;
@@ -97,7 +93,7 @@ public class ResourceController extends BaseController {
 	@ResponseBody
 	public String getAllMenus(){
 		Set<Menu> mlist = res.getAllMenus(null); 
-		String jsonText =  com.alibaba.fastjson.JSONArray.toJSONString(mlist, true); 
+		String jsonText =  JSON.toJSONString(mlist, true); 
 //		JSONArray list1 = JSONArray.fromObject(mlist);
 		return jsonText;
 	}

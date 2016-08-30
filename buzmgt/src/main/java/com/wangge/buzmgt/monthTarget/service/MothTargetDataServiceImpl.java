@@ -4,7 +4,6 @@ import com.wangge.buzmgt.monthTarget.entity.MothTargetData;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**

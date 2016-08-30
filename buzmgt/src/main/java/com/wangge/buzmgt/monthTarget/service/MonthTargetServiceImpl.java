@@ -245,24 +245,19 @@ public class MonthTargetServiceImpl implements MonthTargetService {
 
     @Override
     public Page<MonthTarget> findAll(String targetCycle, String userName, Pageable pageRequest) {
-        Page<MonthTarget> page = mtr.findAll(new Specification<MonthTarget>() {
-
-            public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query,
-                                         CriteriaBuilder cb) {
-                Predicate predicate = cb.equal(root.get("targetCycle").as(String.class), targetCycle);
+        Page<MonthTarget> page = mtr.findAll((root, query, cb) -> {
+        Predicate predicate = cb.equal(root.get("targetCycle").as(String.class), targetCycle);
 //                Predicate predicate2 = cb.equal(root.get("managerRegion").as(String.class),getManager().getRegion().getId());
-                if (StringUtils.isNotBlank(userName)) {
-                    Join<MonthTarget, SalesMan> salesmanJoin = root.join(root.getModel()
-                            .getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
-                    Predicate predicate1 = (cb.like(salesmanJoin.get("truename").as(String.class),
-                            "%" + userName + "%"));
-                    predicate = cb.and(predicate, predicate1);
-                }
+        if (StringUtils.isNotBlank(userName)) {
+          Join<MonthTarget, SalesMan> salesmanJoin = root.join(root.getModel()
+              .getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
+          Predicate predicate1 = (cb.like(salesmanJoin.get("truename").as(String.class),
+              "%" + userName + "%"));
+          predicate = cb.and(predicate, predicate1);
+        }
 
-                return predicate;
-            }
-
-        }, pageRequest);
+        return predicate;
+      }, pageRequest);
         List<MonthTarget> list = page.getContent();
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(m -> {
@@ -325,34 +320,28 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         //判断是不是root用户
         if ("1".equals(m.getId().trim())) {
             logger.info("--------------- go root ----------------");
-            specification1 = new Specification<MonthTarget>() {
-                @Override
-                public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                    Predicate predicate = cb.like(root.get("targetCycle").as(String.class), "%" + time + "%");//插入查询时间
-                    //根据姓名检索
-                    if (truename != null && !"".equals(truename)) {
-                        Join<MonthTarget, SalesMan> salesManJoin = root.join(root.getModel().getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
-                        Predicate predicate2 = cb.like(salesManJoin.get("truename").as(String.class), "%" + truename + "%");
-                        predicate = cb.and(predicate, predicate2);
-                    }
-                    return predicate;
+            specification1 = (root, query, cb) -> {
+                Predicate predicate = cb.like(root.get("targetCycle").as(String.class), "%" + time + "%");//插入查询时间
+                //根据姓名检索
+                if (truename != null && !"".equals(truename)) {
+                    Join<MonthTarget, SalesMan> salesManJoin = root.join(root.getModel().getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
+                    Predicate predicate2 = cb.like(salesManJoin.get("truename").as(String.class), "%" + truename + "%");
+                    predicate = cb.and(predicate, predicate2);
                 }
+                return predicate;
             };
         } else {
-            specification1 = new Specification<MonthTarget>() {
-                @Override
-                public Predicate toPredicate(Root<MonthTarget> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                    Predicate predicate = cb.like(root.get("targetCycle").as(String.class), "%" + time + "%");//插入查询时间
-                    Predicate predicate1 = cb.like(root.get("managerRegion").as(String.class), "%" + managerRegion + "%");//插入当前的区域经理的id
-                    Predicate p = cb.and(predicate, predicate1);
-                    //根据姓名检索
-                    if (truename != null && !"".equals(truename)) {
-                        Join<MonthTarget, SalesMan> salesManJoin = root.join(root.getModel().getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
-                        Predicate predicate2 = cb.like(salesManJoin.get("truename").as(String.class), "%" + truename + "%");
-                        p = cb.and(predicate, predicate1, predicate2);
-                    }
-                    return p;
+            specification1 = (root, query, cb) -> {
+                Predicate predicate = cb.like(root.get("targetCycle").as(String.class), "%" + time + "%");//插入查询时间
+                Predicate predicate1 = cb.like(root.get("managerRegion").as(String.class), "%" + managerRegion + "%");//插入当前的区域经理的id
+                Predicate p = cb.and(predicate, predicate1);
+                //根据姓名检索
+                if (truename != null && !"".equals(truename)) {
+                    Join<MonthTarget, SalesMan> salesManJoin = root.join(root.getModel().getSingularAttribute("salesman", SalesMan.class), JoinType.LEFT);
+                    Predicate predicate2 = cb.like(salesManJoin.get("truename").as(String.class), "%" + truename + "%");
+                    p = cb.and(predicate, predicate1, predicate2);
                 }
+                return p;
             };
         }
 

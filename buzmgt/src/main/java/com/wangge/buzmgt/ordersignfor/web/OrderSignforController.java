@@ -29,7 +29,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.service.AssessService;
-import com.wangge.buzmgt.cash.entity.CheckCash;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.service.RegionService;

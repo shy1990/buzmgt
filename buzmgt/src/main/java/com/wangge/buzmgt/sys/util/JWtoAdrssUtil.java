@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -110,8 +109,9 @@ public class JWtoAdrssUtil {
 					}
 					for (int j = 0; j < b.length; j++) {
 						int k = b[j];
-						if (k < 0)
-							k += 256;
+						if (k < 0) {
+              k += 256;
+            }
 						sb.append("%" + Integer.toHexString(k).toUpperCase());
 					}
 				}

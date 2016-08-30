@@ -3,9 +3,6 @@ package com.wangge.buzmgt.monthTarget.service;
 import com.wangge.buzmgt.monthTarget.entity.MothTargetData;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by joe on 16-6-27.
  */

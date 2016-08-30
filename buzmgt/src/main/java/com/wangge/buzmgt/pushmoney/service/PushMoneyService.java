@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.wangge.buzmgt.pushmoney.entity.Category;
+import com.wangge.buzmgt.goods.entity.Category;
 import com.wangge.buzmgt.pushmoney.entity.PriceScope;
 import com.wangge.buzmgt.pushmoney.entity.PushMoney;
 import com.wangge.buzmgt.pushmoney.entity.PushMoneyRegion;

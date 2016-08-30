@@ -18,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
 
 /**
  * excel 导出类 <br />
@@ -94,16 +95,16 @@ public class ExcelExport {
   private static HSSFWorkbook getExcelContent(List<?> dataList, String[] gridTitles, String[] coloumsKey) {
     HSSFWorkbook workBook = new HSSFWorkbook();
     HSSFSheet sheet = workBook.createSheet();
-    HSSFRow row = sheet.createRow((int) 0);
+    HSSFRow row = sheet.createRow(0);
     HSSFCellStyle style = workBook.createCellStyle();
-    style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+    style.setAlignment(CellStyle.ALIGN_CENTER); // 创建一个居中格式
     for (int i = 0; i < gridTitles.length; i++) {
       row.createCell(i).setCellValue(new HSSFRichTextString(gridTitles[i]));
     }
     if (dataList.size() > 0) {
       String type = getGenType(dataList);
       for (int i = 0; i < dataList.size(); i++) {
-        row = sheet.createRow((int) i + 1);
+        row = sheet.createRow(i + 1);
         for (int j = 0; j < coloumsKey.length; j++) {
           row.createCell(j).setCellValue(new HSSFRichTextString(getValue(dataList.get(i), type, coloumsKey[j])));
         }

@@ -253,7 +253,7 @@ public class AssessController {
     * @since JDK 1.8
    */
   @RequestMapping("/toAccessDet")
-  public String toAccessDet(String salesmanId,@RequestParam("asssessid") Assess assess,String regionid,String baifen,Integer active,Integer orderNum,Model model){
+  public String toAccessDet(String salesmanId,@RequestParam("asssessid") Assess assess,String regionid,String baifen,Integer active,Integer orderNum,Model model) throws ParseException{
     SalesMan salesman = salesManService.findByUserId(salesmanId.trim());
 //    Assess assess=assessService.findAssess(Long.parseLong(asssessid.trim()));
     model.addAttribute("assess", assess);
@@ -263,12 +263,8 @@ public class AssessController {
     model.addAttribute("regionId",regionid != null ? regionid : "");
     model.addAttribute("startDate", DateUtil.date2String(assess.getAssessTime()));
     model.addAttribute("endDate", DateUtil.date2String(assess.getAssessEndTime()));
-    try {
-      int timing = DateUtil.daysBetween(assess.getAssessTime(), assess.getAssessEndTime());
-      model.addAttribute("timing",timing);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+    int timing = DateUtil.daysBetween(assess.getAssessTime(), assess.getAssessEndTime());
+    model.addAttribute("timing",timing);
     if("2".equals(assess.getAssessStage())){
       Assess firstStage = assessService.findByStageAndSalesman("1", salesmanId.trim());
       model.addAttribute("passType",firstStage.getPassType());

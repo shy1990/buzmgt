@@ -1,22 +1,11 @@
 package com.wangge.buzmgt;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.transaction.Transactional;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import com.wangge.buzmgt.BuzmgtApplication;
 import com.wangge.buzmgt.region.repository.RegionRepository;
-import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.repository.ResourceRepository;
 import com.wangge.buzmgt.sys.service.ResourceService;
-import com.wangge.buzmgt.sys.service.ResourceService.Menu;
 
 
 //@RunWith(SpringJUnit4ClassRunner.class)

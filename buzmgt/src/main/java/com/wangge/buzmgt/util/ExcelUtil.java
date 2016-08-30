@@ -8,10 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -95,8 +94,8 @@ public class ExcelUtil {
         if (null != hssfCell){  
               // 以下是判断数据的类型  
            switch (hssfCell.getCellType()){  
-              case HSSFCell.CELL_TYPE_NUMERIC: // 数字  
-                if(HSSFDateUtil.isCellDateFormatted(hssfCell)){
+              case Cell.CELL_TYPE_NUMERIC: // 数字  
+                if(DateUtil.isCellDateFormatted(hssfCell)){
                   short format = hssfCell.getCellStyle().getDataFormat();  
                   SimpleDateFormat sdf = null;  
                   if(format == 14 || format == 22 || format == 31 || format == 57 || format == 58){  
@@ -116,23 +115,23 @@ public class ExcelUtil {
            
                   break;  
 
-              case HSSFCell.CELL_TYPE_STRING: // 字符串  
+              case Cell.CELL_TYPE_STRING: // 字符串  
                   cellValue = hssfCell.getStringCellValue();  
                   break;
 
-              case HSSFCell.CELL_TYPE_BOOLEAN: // Boolean  
+              case Cell.CELL_TYPE_BOOLEAN: // Boolean  
                   cellValue = String.valueOf(hssfCell.getBooleanCellValue());  
                   break;  
 
-              case HSSFCell.CELL_TYPE_FORMULA: // 公式  
+              case Cell.CELL_TYPE_FORMULA: // 公式  
                   cellValue = hssfCell.getCellFormula();  
                   break;  
 
-              case HSSFCell.CELL_TYPE_BLANK: // 空值  
+              case Cell.CELL_TYPE_BLANK: // 空值  
                   cellValue = "";  
                   break;  
 
-              case HSSFCell.CELL_TYPE_ERROR: // 故障  
+              case Cell.CELL_TYPE_ERROR: // 故障  
                   cellValue = "非法字符";  
                   break;  
 

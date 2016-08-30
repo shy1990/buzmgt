@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>提成区域属性设置</title>
+
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/income-cash.css">
+
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        .ico-quy {
+            background: url("../phone-set/img/sz.png") no-repeat center;
+        }
+
+        .text-green {
+            font-size: 14px;
+            color: #0c9b2a;
+            font-weight: bold;
+        }
+
+        .ico-ss {
+            background: url("../phone-set/img/ss.png") no-repeat center;
+        }
+
+        .label-blue-s{
+            display: inline-block;
+            background-color: #2385ff;
+            width:28px;
+            height:23px;
+            padding-top: 6px;
+            padding-left: 5px;
+            border-radius: inherit;
+        }
+
+        .text-lv{
+            color: #0c9b2a;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<!---扣罚设置表头-->
+<div class="content main">
+    <h4 class="page-header">
+        <i class="ico ico-quy"></i>提成区域属性设置
+
+        <div class="area-choose">
+
+        </div>
+        <!--/区域选择按钮-->
+        <a href="add_payment_set(提成区域属性设置).html" target="_blank" class="btn btn-blue"
+           data-toggle="modal" data-target="">
+            <i class="ico icon-add"></i>添加
+        </a>
+    </h4>
+
+    <h4 class="text-hd">属性设置：</h4>
+
+    <!----扣罚设置--->
+    <div class="table-bordered bg-color">
+        <div class="table-responsive  ">
+            <!--公里系数表头-->
+            <div class="text-tx row-d">
+                <span class="text-gery">提成金额：</span>
+
+                <span class="text-green ">&nbsp;5  </span>
+
+                <span class="text-gery"> 元/台</span>
+            </div>
+
+            <!--设置公里系数表-->
+            <div class="bs-example">
+                <div id="acont" class="row">
+
+                    <div  v-for="ticheng of tichengs" class="col-sm-3 cl-padd">
+                        <div class="ratio-box">
+                            <div class="ratio-box-dd">
+                                <span class="label  label-blue-s">{{ $index+1 }}</span>
+                                <span class="text-black jll">{{ticheng.sheng + ticheng.shi+ticheng.xian}}</span>
+                                <a class="text-redd jll  " v-bind:class="{ 'text-lv': ticheng.xishu>0}" href="" data-target="">{{ticheng.xishu}}</a>
+                                <span class="text-gray">元</span>
+                                <a v-on:click.prevent="showEdit($index)" class="text-blue-s jll" href="">修改</a>
+                                <a v-on:click.prevent="remove($index)" class="text-blue-s jll" href="" data-toggle="modal" data-targt="">删除</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!--扣罚设置--->
+</div><!---扣罚设置表头-->
+
+<!-- / alert 修改--->
+<div id="changed" class="modal fade" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content modal-blue">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">设置区域提成</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">设置提成金额：</label>
+                            <div class="col-sm-7">
+                                <div class="input-group are-line">
+                                    <span class="input-group-addon"><i class="icon icon-task-je"></i></span>
+                                    <select type="" class="form-control input-h" aria-describedby="basic-addon1">
+                                        <option></option>
+                                        <option>10</option>
+                                        <option>20</option>
+                                        <option>30</option>
+                                        <option>40</option>
+                                    </select>
+                                    <!-- /btn-group -->
+                                </div>
+                            </div>
+                            <div class="col-sm-1 control-label"><span>%</span></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-4 ">
+                                <button type="submit" class="col-sm-12 btn btn-primary ">确定</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / alert 修改--->
+
+
+<!---alert自定义---->
+<div id="zdyqy" class="modal fade" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content modal-blue">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">设置区域提成</h3>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form id="addd" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">设置提成金额：</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="spinner" style="width: 45px;text-align: center">
+                            </div>
+                            <span class="text-gery">元/台</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">方案实施日期：</label>
+                            <div class="col-sm-6">
+                                <div class="input-group are-line">
+                                    <span class="input-group-addon"><i class="icon ico-ss"></i></span>
+                                    <select name="b" type="" class="form-control input-h"
+                                            aria-describedby="basic-addon1">
+                                        <option></option>
+                                        <option>20%</option>
+                                        <option>30%</option>
+                                        <option>40%</option>
+                                        <option>50%</option>
+                                    </select>
+                                    <!-- /btn-group -->
+                                </div>
+                            </div>
+                            <div class="col-sm-1 control-label"><span>起</span></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">指派审核人员：</label>
+                            <div class="col-sm-6">
+                                <div class="input-group are-line">
+                                    <span class="input-group-addon"><i class="icon ico-ss"></i></span>
+                                    <select name="b" type="" class="form-control input-h"
+                                            aria-describedby="basic-addon1">
+                                        <option></option>
+                                        <option>20%</option>
+                                        <option>30%</option>
+                                        <option>40%</option>
+                                        <option>50%</option>
+                                    </select>
+                                    <!-- /btn-group -->
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-4 ">
+                                <a herf="javascript:return 0;" onclick="updatea();"
+                                   class="Zdy_add  col-sm-12 btn btn-primary">确定
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!---alert自定义---->
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-switch.min.js"></script>
+<script src="js/jquery.spinner.js"></script>
+<script src="../static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="//cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
+<script type="text/javascript">
+
+   var vm= new Vue({
+        el:'#acont',
+        data:{
+            curentUpdateIndex:undefined,
+//            从add中传过来的值
+            tichengs:[{sheng:'山东',shi:'济南',xian:'天桥',xishu:10},{sheng:'山东',shi:'济南',xian:'天桥',xishu:-10}]
+        },
+       methods:{
+           remove:function(index){
+               this.tichengs.splice(index,1);
+           },
+           showEdit:function(index){
+               this.curentUpdateIndex=index;
+               $('#zdyqy').modal();
+           },
+           update:function(ticheng){
+               if(this.curentUpdateIndex==undefined) return;
+               this.tichengs.$set(this.curentUpdateIndex,ticheng);
+               this.curentUpdateIndex=undefined;
+           }
+       }
+    });
+
+function updatea(){
+    var ticheng={sheng:'山qe东',shi:'济南d',xian:'天桥we',xishu:-110};
+    vm.update(ticheng);
+    $('#zdyqy').modal('hide');
+}
+    function addTicheng(ticheng) {
+        console.log(ticheng);
+        vm.tichengs.push(ticheng);
+
+    }
+
+    $(function resetTabullet() {
+        $("#table").tabullet({
+            data: source,
+            action: function (mode, data) {
+                console.dir(mode);
+                if (mode === 'save') {
+                    source.push(data);
+                }
+                if (mode === 'edit') {
+                    for (var i = 0; i < source.length; i++) {
+                        if (source[i].id == data.id) {
+                            source[i] = data;
+                        }
+                    }
+                }
+                if (mode == 'delete') {
+                    for (var i = 0; i < source.length; i++) {
+                        if (source[i].id == data) {
+                            source.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+                resetTabullet();
+            }
+        });
+        resetTabullet();
+    });
+
+    function addd(toil) {
+        console.log($("#addd").serializeArray());
+        addCustom($("#addd").serializeArray());
+    }
+    var i = 1;
+
+    function addCustom(o) {
+        var qy = o[0]["value"];
+        var glxs = o[1]["value"];
+        var html =
+        $("#acont").append(html);
+    }
+    ;
+
+    $('.spinner').spinner();
+
+
+</script>
+
+</body>
+</html>

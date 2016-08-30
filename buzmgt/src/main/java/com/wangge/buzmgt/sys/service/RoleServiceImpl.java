@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.sys.entity.Role;
@@ -25,7 +23,8 @@ public class RoleServiceImpl implements RoleService {
 	private RoleRepository roleRepository;
 
 //	@Transactional 非CUD别用事务
-	public List<RoleVo> findAll() {
+	@Override
+  public List<RoleVo> findAll() {
 		List<RoleVo> voList = new ArrayList<RoleVo>();
 		List<Role> list = roleRepository.findAll();
 		for(Role r : list){

@@ -1,7 +1,6 @@
 package com.wangge.buzmgt.config;
 
 import com.wangge.json.JSONFormatMethodProcessor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;

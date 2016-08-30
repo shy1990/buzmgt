@@ -8,6 +8,7 @@ import com.wangge.buzmgt.oilcost.entity.OilCost;
 @Repository
 public interface OilCostRepository extends JpaRepository<OilCost, Long>,
 JpaSpecificationExecutor<OilCost>{
+  @Override
   public OilCost findOne(Long id);
 
 }

@@ -22,7 +22,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.teammember.entity.SalesMan;

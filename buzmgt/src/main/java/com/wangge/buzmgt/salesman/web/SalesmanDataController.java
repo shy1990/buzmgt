@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wangge.buzmgt.salesman.entity.ExcelData;
-import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

@@ -1,21 +1,16 @@
 package com.wangge.buzmgt.oilcost.entity;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,8 +19,6 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.sys.entity.Organization;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesManPart;
 

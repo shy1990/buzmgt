@@ -44,7 +44,7 @@ public class Organization implements Serializable {
 	private String description;
 	private int lev;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "parent_id")
 	private Organization parent;
 

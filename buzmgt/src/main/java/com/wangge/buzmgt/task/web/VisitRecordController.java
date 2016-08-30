@@ -1,7 +1,5 @@
 package com.wangge.buzmgt.task.web;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.assess.service.AssessService;
@@ -21,7 +18,6 @@ import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.vo.VisitVo;
 import com.wangge.buzmgt.task.entity.Visit;
 import com.wangge.buzmgt.task.service.VisitRecordService;
-import com.wangge.buzmgt.task.service.VisitTaskService;
 import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.ManagerService;

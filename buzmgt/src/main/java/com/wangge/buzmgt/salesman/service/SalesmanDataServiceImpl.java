@@ -7,15 +7,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import com.wangge.buzmgt.salesman.entity.ExcelData;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Persistent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -82,24 +78,9 @@ public class SalesmanDataServiceImpl implements SalesmanDataService {
     public Page<SalesmanData> findAll(String name, Pageable pageable) {
         if (name != null && !"".equals(name)) {
             // 通常使用 Specification 的匿名内部类
-            Specification<SalesmanData> specification = new Specification<SalesmanData>() {
-                /**
-                 * @param *root:
-                 *            代表查询的实体类.
-                 * @param query:
-                 *            可以从中可到 Root 对象, 即告知 JPA Criteria 查询要查询哪一个实体类. 还可以
-                 *            来添加查询条件, 还可以结合 EntityManager 对象得到最终查询的 TypedQuery 对象.
-                 * @param *cb:
-                 *            CriteriaBuilder 对象. 用于创建 Criteria 相关对象的工厂. 当然可以从中获取到
-                 *            Predicate 对象
-                 * @return: *Predicate 类型, 代表一个查询条件.
-                 */
-                @Override
-                public Predicate toPredicate(Root<SalesmanData> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                    Predicate predicate = cb.like(root.get("name").as(String.class), "%" + name + "%");
-                    return predicate;
-                }
-
+            Specification<SalesmanData> specification = (root, query, cb) -> {
+                Predicate predicate = cb.like(root.get("name").as(String.class), "%" + name + "%");
+                return predicate;
             };
             return salesmanDataRepository.findAll(specification, pageable);
         }

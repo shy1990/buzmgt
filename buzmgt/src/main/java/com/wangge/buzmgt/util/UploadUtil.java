@@ -11,8 +11,9 @@ public class UploadUtil {
 	public static String saveFile(String filePath,String fileName, MultipartFile filedata) {
         /* 构建文件目录 */
         File filedir = new File(filePath);    
-         if (!filedir.exists())    
-             filedir.mkdirs();
+         if (!filedir.exists()) {
+          filedir.mkdirs();
+        }
  
         try {
             FileOutputStream out = new FileOutputStream(filePath + fileName);

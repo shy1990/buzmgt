@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -76,41 +75,37 @@ public  class SalesManServiceImpl implements SalesManService {
     public Page<SalesMan> getSalesmanList(SalesMan salesMan, int pageNum) {
 
         // salesManRepository.findAll(new PageRequest(0, 20,new Sort(Sort.Direction.DESC)));
-        return   salesManRepository.findAll(new Specification<SalesMan> () {
-
-            public Predicate toPredicate(Root<SalesMan> root,
-                                         CriteriaQuery<?> query, CriteriaBuilder cb) {
-                List<Predicate> predicates = new ArrayList<Predicate>();
-                /*************第一种写法*************/
+        return   salesManRepository.findAll((root, query, cb) -> {
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        /*************第一种写法*************/
 //   Path<String> namePath = root.get("name");
 //   Path<String> truenamePath = root.get("truename");
 //   Path<Enum<SalesmanStatus>> statusPath = root.get("salesmanStatus");
 //   Path<Region> regionPath = root.get("region");
 //   query.where(/*cb.like(namePath, "%"+salesMan.getTruename()+"%"),*/ cb.like(truenamePath, "%"+salesMan.getTruename()+"%"), cb.equal(statusPath,salesMan.getSalesmanStatus()), cb.equal(regionPath, salesMan.getRegion())); //这里可以设置任意条查询条件
-                /*************第二种写法*************/
+        /*************第二种写法*************/
 
-                if((salesMan.getTruename() != null && salesMan.getTruename().length() > 0) || (salesMan.getJobNum() != null && salesMan.getJobNum().length() > 0)){
-                    Predicate p1=cb.like(root.get("truename").as(String.class), "%"+salesMan.getTruename()+"%");
-                    Predicate p2=cb.equal(root.get("jobNum").as(String.class), salesMan.getJobNum());
-                    predicates.add(cb.or(p1,p2));
-                }
-                if( salesMan.getStatus()!= null){
-                    predicates.add(cb.equal(root.get("salesmanStatus").as(SalesmanStatus.class), salesMan.getStatus()));
-                }else{
-                    predicates.add(cb.equal(root.get("salesmanStatus").as(SalesmanStatus.class), SalesmanStatus.saojie));
-                }
+        if((salesMan.getTruename() != null && salesMan.getTruename().length() > 0) || (salesMan.getJobNum() != null && salesMan.getJobNum().length() > 0)){
+          Predicate p1=cb.like(root.get("truename").as(String.class), "%"+salesMan.getTruename()+"%");
+          Predicate p2=cb.equal(root.get("jobNum").as(String.class), salesMan.getJobNum());
+          predicates.add(cb.or(p1,p2));
+        }
+        if( salesMan.getStatus()!= null){
+          predicates.add(cb.equal(root.get("salesmanStatus").as(SalesmanStatus.class), salesMan.getStatus()));
+        }else{
+          predicates.add(cb.equal(root.get("salesmanStatus").as(SalesmanStatus.class), SalesmanStatus.saojie));
+        }
 
-                if(salesMan.getRegion() != null){
-                    Join<SalesMan, Region> regionJoin =   root.join(root.getModel().getSingularAttribute("region",Region.class) , JoinType.LEFT);
-                    predicates.add(cb.equal(regionJoin.get("id").as(String.class), salesMan.getRegion().getId()));
-                }
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-
-        }, new PageRequest(pageNum, 20,new Sort(Sort.Direction.DESC)));
+        if(salesMan.getRegion() != null){
+          Join<SalesMan, Region> regionJoin =   root.join(root.getModel().getSingularAttribute("region",Region.class) , JoinType.LEFT);
+          predicates.add(cb.equal(regionJoin.get("id").as(String.class), salesMan.getRegion().getId()));
+        }
+        return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+      }, new PageRequest(pageNum, 20,new Sort(Sort.Direction.DESC)));
 
     }
 
+    @Override
     public Page<SalesMan> getSalesmanList(SalesMan salesMan,String salesmanStatus, int pageNum, String regionName,String stage){
         String whereql = stage!=null && !"".equals(stage.trim()) ?  stage : "1 = 1" ;
         String hql = "select t.* from SYS_SALESMAN t where  "+whereql+" and  t.region_id in "
@@ -141,10 +136,12 @@ public  class SalesManServiceImpl implements SalesManService {
     }
 
     //获取添加扫街业务
+    @Override
     public List<Object> gainSaojieMan(SalesmanStatus status) {
         return salesManRepository.getSaojieMan(status);
     }
 
+    @Override
     public SalesMan findById(String id) {
         return salesManRepository.findById(id);
     }

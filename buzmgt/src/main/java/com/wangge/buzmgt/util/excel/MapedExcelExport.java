@@ -2,14 +2,10 @@ package com.wangge.buzmgt.util.excel;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 /**
@@ -129,16 +126,16 @@ public class MapedExcelExport {
 			String[] coloumsKey, List<Map<String, Object>> marginList) {
 		HSSFWorkbook workBook = new HSSFWorkbook();
 		HSSFSheet sheet = workBook.createSheet();
-		HSSFRow row = sheet.createRow((int) 0);
+		HSSFRow row = sheet.createRow(0);
 		HSSFCellStyle style = workBook.createCellStyle();
-		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);// 水平
+		style.setAlignment(CellStyle.ALIGN_CENTER);
+		style.setAlignment(CellStyle.ALIGN_CENTER);// 水平
 		for (int i = 0; i < gridTitles.length; i++) {
 			row.createCell(i).setCellValue(new HSSFRichTextString(gridTitles[i]));
 		}
 		if (dataList.size() > 0) {
 			for (int i = 0; i < dataList.size(); i++) {
-				row = sheet.createRow((int) i + 1);
+				row = sheet.createRow(i + 1);
 				Map<String, Object> dmap = dataList.get(i);
 				int j = 0;
 				for (String key : coloumsKey) {
@@ -160,8 +157,9 @@ public class MapedExcelExport {
 								val = getVal(listItem);
 							}
 							HSSFCell cell = row.createCell(j);
-							if (null != val)
-								cell.setCellValue(new HSSFRichTextString(val));
+							if (null != val) {
+                cell.setCellValue(new HSSFRichTextString(val));
+              }
 							cell.setCellStyle(style);
 							j++;
 						}
