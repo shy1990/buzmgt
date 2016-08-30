@@ -10,6 +10,7 @@ import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.teammember.repository.SalesmanLevelRepository;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -191,7 +192,28 @@ public  class SalesManServiceImpl implements SalesManService {
     }
 
     @Override
-    public SalesmanLevel addSalesmanLevel(SalesmanLevel salesmanLevels) {
-       return salesmanLevelRepository.save(salesmanLevels);
+    public String addSalesmanLevel(String smallSales,String stuSalesMin,String stuSalesMax,String bigStuSales) {
+        List<SalesmanLevel> salesmanLevel = salesmanLevelRepository.findAll();
+        if (CollectionUtils.isEmpty(salesmanLevel)){
+            for (int i = 0;i < 3;i++){
+                SalesmanLevel sl = new SalesmanLevel();
+                if (i == 0){
+                    sl.setLevelName("小学生");
+                    sl.setSalesRange(smallSales);
+                }else if (i == 1){
+                    sl.setLevelName("中学生");
+                    sl.setSalesRange(stuSalesMin + "-" +stuSalesMax);
+                }else if (i == 2){
+                    sl.setLevelName("大学生");
+                    sl.setSalesRange(bigStuSales);
+                }
+                salesmanLevelRepository.save(sl);
+                logService.log(null,sl,EventType.SAVE);
+            }
+            return "ok";
+        }else {
+            return "exist";
+        }
+
     }
 }

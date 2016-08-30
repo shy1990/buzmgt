@@ -9,6 +9,8 @@ import java.util.Random;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -44,7 +46,7 @@ import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.json.JSONFormat;
 
 /**
- * 
+ *
 * @ClassName: teamMembersController
 * @Description: TODO(这里用一句话描述这个类的作用)
 * @author SongBaozhen
@@ -86,28 +88,24 @@ public class TeamMembersController {
 
   @RequestMapping(value = "/level/save",method = {RequestMethod.POST})
   @ResponseBody
-  public String save(@RequestBody List<SalesmanLevel> salesmanLevels){
-    if (CollectionUtils.isNotEmpty(salesmanLevels)){
-      salesmanLevels.forEach(s -> {
-        salesManService.addSalesmanLevel(s);
-      });
-    }
-    return "";
+  public String save(String smallSales,String stuSalesMin,String stuSalesMax,String bigStuSales){
+    String result = salesManService.addSalesmanLevel(smallSales,stuSalesMin,stuSalesMax,bigStuSales);
+    return result;
   }
 
   /**
-   * 
-  * @Title: toTeamMembers 
-  * @Description: TODO(跳转到业务员列表) 
+   *
+  * @Title: toTeamMembers
+  * @Description: TODO(跳转到业务员列表)
   * @param @param salesManList
   * @param @param Status
   * @param @param model
   * @param @param salesman
-  * @param @return    设定文件 
-  * @return String    返回类型 
+  * @param @return    设定文件
+  * @return String    返回类型
   * @throws
    */
-  
+
   @RequestMapping("/salesManList")
   public String toTeamMembers(String salesManList, String salesmanStatus, Model model,SalesMan salesman,String regionId){
     int pageNum = 0;
@@ -118,7 +116,7 @@ public class TeamMembersController {
     model.addAttribute("list", list);
     model.addAttribute("Status", "全部");
     model.addAttribute("salesManList", salesManList);
-    
+
      if(null!=manager.getRegion().getCoordinates()){
        model.addAttribute("pcoordinates", manager.getRegion().getCoordinates());
      }
@@ -126,15 +124,15 @@ public class TeamMembersController {
      model.addAttribute("regionId", manager.getRegion().getId());
     return "teammember/salesman_list";
   }
-  
+
   /**
-   * 
-  * @Title: toAddTeamMembers 
-  * @Description: TODO(跳转到添加团队成员页面) 
+   *
+  * @Title: toAddTeamMembers
+  * @Description: TODO(跳转到添加团队成员页面)
   * @param @param add
   * @param @param model
-  * @param @return    设定文件 
-  * @return String    返回类型 
+  * @param @return    设定文件
+  * @return String    返回类型
   * @throws
    */
   @RequestMapping("/toAdd")
@@ -143,9 +141,9 @@ public class TeamMembersController {
     return "teammember/team_member_add";
   }
   /**
-   * 
-  * @Title: addTeamMembers 
-  * @Description: TODO(添加团队成员) 
+   *
+  * @Title: addTeamMembers
+  * @Description: TODO(添加团队成员)
   * @param @param salesman
   * @param @param username
   * @param @param regionId
@@ -153,8 +151,8 @@ public class TeamMembersController {
   * @param @param roleId
   * @param @param regionPid
   * @param @param model
-  * @param @return    设定文件 
-  * @return String    返回类型 
+  * @param @return    设定文件
+  * @return String    返回类型
   * @throws
    */
   @RequestMapping(value = "/addTeamMember",method = RequestMethod.POST)
@@ -168,7 +166,7 @@ public class TeamMembersController {
     u.setUsername(username);
     u.setStatus(UserStatus.NORMAL);
     if("服务站经理".equals(o.getName())){
-      
+
       if(!"".equals(regionPid)){
         salesman.setRegion(regionService.getRegionById(regionPid.trim()));
         salesman.setTowns(regionId);
@@ -177,7 +175,7 @@ public class TeamMembersController {
           u.setId(createUerId(regionId.trim(),o));
           salesman.setRegion(regionService.getRegionById(regionId.trim()));
       }
-    
+
       u = userService.addUser(u);
       salesman.setRegion(regionService.getRegionById(regionId.trim()));
       if(salesman.getIsOldSalesman()==1){
@@ -190,7 +188,7 @@ public class TeamMembersController {
       salesman.setIsPrimaryAccount(1);
       salesManService.addSalesman(salesman);
     //  return "redirect:/salesman/salesManList";
-      
+
     }else{
       u.setId(createUerId(regionId.trim(),o));
       u = userService.addUser(u);
@@ -201,10 +199,10 @@ public class TeamMembersController {
       m.setRegdate(new Date());
       m.setRegion(regionService.getRegionById(regionId.trim()));
       m.setUser(u);
-      
+
       managerService.addManager(m);
     //  return Redirect("/User/Edit");"salesman/salesman_list";
-      
+
     }
       return "redirect:/teammember/salesManList";
     }else{
@@ -213,18 +211,18 @@ public class TeamMembersController {
       return "teammember/team_member_add";
     }
   }
-  
+
   /**
-   * 
-  * @Title: getSalesManList 
-  * @Description: TODO(获取业务员列表) 
+   *
+  * @Title: getSalesManList
+  * @Description: TODO(获取业务员列表)
   * @param @param model
   * @param @param salesman
   * @param @param Status
   * @param @param page
   * @param @param requet
-  * @param @return    设定文件 
-  * @return String    返回类型 
+  * @param @return    设定文件
+  * @return String    返回类型
   * @throws
    */
   @RequestMapping(value = "/getSalesManList",method=RequestMethod.GET)
@@ -232,11 +230,11 @@ public class TeamMembersController {
         String name = salesmanStatus != null ? salesmanStatus : "全部";
         int pageNum = Integer.parseInt(page != null ? page : "0");
         if(SalesmanStatus.saojie.getName().equals(name) ){
-          salesman.setStatus(SalesmanStatus.saojie); 
+          salesman.setStatus(SalesmanStatus.saojie);
         }else if(SalesmanStatus.kaifa.getName().equals(name)){
-          salesman.setStatus(SalesmanStatus.kaifa); 
+          salesman.setStatus(SalesmanStatus.kaifa);
         }else if(SalesmanStatus.weihu.getName().equals(name)){
-          salesman.setStatus(SalesmanStatus.weihu); 
+          salesman.setStatus(SalesmanStatus.weihu);
         }else if(SalesmanStatus.zhuanzheng.getName().equals(name)){
           salesman.setStatus(SalesmanStatus.zhuanzheng);
         }else if(SalesmanStatus.shenhe.getName().equals(name)){
@@ -270,12 +268,12 @@ public class TeamMembersController {
     model.addAttribute("Status", salesmanStatus);
     return "teammember/salesman_list";
   }
-  
+
   @RequestMapping("/salesmanInfo")
   public String salesmanInfo(String userId){
     salesManService.findByUserId(userId);
     return null;
-  } 
+  }
   @RequestMapping("/{truename}")
   @ResponseBody
   public String getUserIdByTurename(@PathVariable("truename") String truename){
@@ -285,16 +283,16 @@ public class TeamMembersController {
     }
     return "";
   }
-  
+
   /**
-   * 
-    * getSalesManInfo:(跳转到扫街详情页). <br/> 
-    * 
-    * @author Administrator 
+   *
+    * getSalesManInfo:(跳转到扫街详情页). <br/>
+    *
+    * @author Administrator
     * @param saojie
     * @param flag
     * @param model
-    * @return 
+    * @return
     * @since JDK 1.8
    */
   @RequestMapping(value = "/toSalesManInfo", method = RequestMethod.GET)
@@ -304,7 +302,7 @@ public class TeamMembersController {
 	   if(null!=regionId){
 	     saojie = saojieService.findByregion(regionService.getRegionById(regionId.trim()));
 	   }
-	  
+
        SalesMan salesMan  =  salesManService.getSalesmanByUserId(saojie.getSalesman().getId());
        List<Region> rList = regionService.getListByIds(salesMan);
        model.addAttribute("salesMan", salesMan);
@@ -314,7 +312,7 @@ public class TeamMembersController {
        model.addAttribute("saojieId",saojie.getId());
        //判断业务员所处的模式
        List<Assess> listAssess=assessService.findBysalesman(salesMan);
-       
+
        if(salesMan.getStatus().equals(SalesmanStatus.kaifa)&&listAssess.size()==0){
          model.addAttribute("salesStatus", "kaifa");
        }else{
@@ -323,7 +321,7 @@ public class TeamMembersController {
             model.addAttribute("salesStatus", "kaifa");
           }
        }
-       
+
        if("saojie".equals(flag)){
          model.addAttribute("saojie",saojie);
          return "saojie/saojie_det";
@@ -331,15 +329,15 @@ public class TeamMembersController {
          return "teammember/saojie_det";
        }
   }
-  
+
   /**
-   * 
-    * getSaojiedataMap:(异步获取扫街详情地图数据). <br/> 
-    * 
-    * @author peter 
+   *
+    * getSaojiedataMap:(异步获取扫街详情地图数据). <br/>
+    *
+    * @author peter
     * @param saojie
     * @param regionId
-    * @return 
+    * @return
     * @since JDK 1.8
    */
   @RequestMapping(value = "/getSaojiedataMap", method = RequestMethod.GET)
@@ -355,17 +353,17 @@ public class TeamMembersController {
     }
     return saojiedatalist;
   }
-  
+
   /**
-   * 
-    * getSojieDtaList:(加载扫街详情列表). <br/> 
-    * 
-    * @author Administrator 
+   *
+    * getSojieDtaList:(加载扫街详情列表). <br/>
+    *
+    * @author Administrator
     * @param userId
     * @param regionId
     * @param page
     * @param size
-    * @return 
+    * @return
     * @since JDK 1.8
    */
   @RequestMapping(value = "/getSaojiedataList", method = RequestMethod.GET)
@@ -376,7 +374,7 @@ public class TeamMembersController {
     Page<SaojieData> dataPage  = sds.getsaojieDataList(salesMan.getId(), regionId,pageNum,limit);
     return dataPage;
   }
-  
+
   @RequestMapping(value = "/percent", method = RequestMethod.GET)
   @ResponseBody
   public String getPercent(@RequestParam(value = "userId",required = false)SalesMan salesMan,String regionId){
@@ -396,15 +394,15 @@ public class TeamMembersController {
     }
     return sdv.getPercent();
   }
-  
+
   /**
-   * 
-  * @Title: createUerId 
-  * @Description: TODO(创建userId) 
+   *
+  * @Title: createUerId
+  * @Description: TODO(创建userId)
   * @param @param id
   * @param @param o
-  * @param @return    设定文件 
-  * @return String    返回类型 
+  * @param @return    设定文件
+  * @return String    返回类型
   * @throws
    */
   private String  createUerId(String id,Organization o){
@@ -415,7 +413,7 @@ public class TeamMembersController {
     List<User> uList = salesManService.findByReginId(id);
     List<Manager> umList=managerService.findByReginId(id);
     if("服务站经理".equals(o.getName())){
-      
+
       if(uList.size() > 0){
           for(int i=0;i<uList.size();i++){
             userId += num[uList.size()]+id+time+"0";
@@ -438,27 +436,27 @@ public class TeamMembersController {
 //          userId += num[0]+id+time+"0";
 //          break;
 //        }
-    	
+
 //      }
     	String  str=getRandomString(4);
     	userId+="M"+id+str+"0";
     }
     return userId;
   }
-  
+
   /**
    * 随机字符串
    * @param length
    * @return
    */
-  public static String getRandomString(int length) {   
-      StringBuffer buffer = new StringBuffer("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");   
-      StringBuffer sb = new StringBuffer();   
-      Random random = new Random();   
-      int range = buffer.length();   
-      for (int i = 0; i < length; i ++) {   
-          sb.append(buffer.charAt(random.nextInt(range)));   
-      }   
-      return sb.toString();   
-  }  
+  public static String getRandomString(int length) {
+      StringBuffer buffer = new StringBuffer("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+      StringBuffer sb = new StringBuffer();
+      Random random = new Random();
+      int range = buffer.length();
+      for (int i = 0; i < length; i ++) {
+          sb.append(buffer.charAt(random.nextInt(range)));
+      }
+      return sb.toString();
+  }
 }

@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.monthTarget.service;
+package com.wangge.buzmgt.monthtarget.service;
 
 import com.wangge.buzmgt.BuzmgtApplication;
 import org.junit.runner.RunWith;
