@@ -1,13 +1,18 @@
-package com.wangge.buzmgt.goods.repository;
+package com.wangge.buzmgt.goods.service;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
 import com.wangge.buzmgt.goods.entity.Goods;
 
-public interface GoodsRepository extends JpaRepository<Goods, String> {
+/**
+ * 
+* @ClassName: GoodsService
+* @Description: 商品业务处理 
+* @author ChenGuop
+* @date 2016年8月27日 下午1:54:42
+*
+ */
+public interface GoodsService {
   /**
    * 
   * @Title: findByBrandId 
@@ -41,12 +46,12 @@ public interface GoodsRepository extends JpaRepository<Goods, String> {
   /**
    * 
   * @Title: findByNameLike 
-  * @Description: 根据名称模糊查询ID
+  * @Description: 根据商品名称模糊查询
   * @param @param name
   * @param @return    设定文件 
   * @return List<String>    返回类型 
   * @throws
    */
-  @Query("select good.id from Goods good where good.name like ?1")
   List<String> findByNameLike(String name);
+  
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
 
 import net.sf.json.JSONArray;
@@ -42,4 +43,11 @@ public interface MainPlanService {
    * @since JDK 1.8 
    */  
  JSONArray getAllBrandType();
+ /** 
+  * getAllBrandType:根据机型查询品牌. <br/> 
+  * @author ChenGoup
+  * @return 
+  * @since JDK 1.8 
+  */  
+ List<BrandType> findCodeByMachineType(String machineType);
 }

@@ -64,6 +64,16 @@ public class MainPlanServiceImpl implements MainPlanService {
     }
     return mList;
   }
+  @Override
+  public List<BrandType> findCodeByMachineType(String machineType){
+    List<Object> list = mainPlanRep.findCodeByMachineType(machineType);
+    List<BrandType> mList = new ArrayList<BrandType>();
+    for (Object o : list) {
+      Object[] ob = (Object[]) o;
+      mList.add(getType(ob));
+    }
+    return mList;
+  }
   
   private MachineType getMachine(Object[] ob) {
     String name = null == ob[0] ? "" : ob[0].toString();
