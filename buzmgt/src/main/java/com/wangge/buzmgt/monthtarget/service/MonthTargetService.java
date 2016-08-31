@@ -28,6 +28,8 @@ public interface MonthTargetService {
 
   String publishAll();
 
+  MonthTarget findOne(Long id);
+
   public Page<MonthTarget> findByTargetCycleAndManagerId(String truename,String time,Pageable pageable);
 
 

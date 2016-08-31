@@ -13,6 +13,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -67,25 +68,25 @@ public class CheckCashController {
   }
 
   @RequestMapping(value = "/salesmanName", method = RequestMethod.GET)
-  @ResponseBody
-  public String findBySalesManName(@RequestParam String salesmanName, @RequestParam String createDate) {
-    JSONObject json = new JSONObject();
-    String jsonStr = "";
+  @JSONFormat(filterField = { "OrderSignfor.salesMan" }, nonnull = true, dateFormat = "yyyy-MM-dd")
+  public Page<CheckCash> findBySalesManName(@RequestParam String salesmanName, @RequestParam String createDate) {
+    Page<CheckCash> page = null;
     try {
 
       List<String> userIds = salesManService.findByTruename(salesmanName);
+      if(userIds.isEmpty()){
+        return new PageImpl(new ArrayList<CheckCash>());
+      }
       Map<String, Object> secp = new HashMap<>();
       secp.put("IN_userId", userIds);
       secp.put("EQ_createDate", createDate);
       List<CheckCash> list = checkCashService.findAll(secp);
-      json.put("content", list);
-      json.put("status", "success");
-      json.put("successMsg", "操作成功");
-      jsonStr = JSON.toJSONString(json, SerializerFeature.DisableCircularReferenceDetect);
+      page = new PageImpl<>(list,null,list.size());
+      
     } catch (Exception e) {
       logger.info(e.getMessage());
     }
-    return jsonStr;
+    return page;
   }
 
   /**

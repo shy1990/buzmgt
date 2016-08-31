@@ -67,10 +67,13 @@ public class MonthTargetController {
   @RequestMapping(value = "/toUpdate")
   public String toUpdate(String flag,Long id,Model model){
     Region region = mtService.getRegion();
-    if(!"update".equals(flag)){
+    if("save".equals(flag)){
       Set<SalesMan> salesSet = new HashSet<SalesMan>();
       salesSet.addAll(smService.findForTargetByReginId(region.getId()));
       model.addAttribute("salesList", salesSet);
+    }else {
+      MonthTarget monthTarget = mtService.findOne(id);
+      model.addAttribute("monthTarget",monthTarget);
     }
     model.addAttribute("region", region);
     model.addAttribute("flag",flag);

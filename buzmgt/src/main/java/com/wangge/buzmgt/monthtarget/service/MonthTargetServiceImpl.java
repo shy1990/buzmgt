@@ -174,25 +174,29 @@ public class MonthTargetServiceImpl implements MonthTargetService {
                 "        HAVING COUNT(t.MEMBERID) >= ?) active\n" +
                 " where active.parentid = ?\n" +
                 " union all\n" +
-                "SELECT 'three', COUNT(1)/3 active_num1\n" +
-                "  FROM (SELECT COUNT(t.MEMBERID), t.parentid\n" +
-                "          FROM (SELECT m.MEMBERID,\n" +
-                "                       m.parentid,\n" +
-                "                       COUNT(TO_CHAR(m.CREATETIME, 'YYYY-MM-DD'))\n" +
-                "                  FROM mothtargetdata m\n" +
-                "                 WHERE TO_CHAR(m.CREATETIME, 'YYYY/MM/DD') between\n" +
-                "                       (select to_char(add_months(last_day(sysdate), -4) + 1,\n" +
-                "                                       'yyyy/mm/dd')\n" +
-                "                          from dual) and\n" +
-                "                       (select to_char(add_months(last_day(sysdate), -1),\n" +
-                "                                       'yyyy/mm/dd')\n" +
-                "                          from dual)\n" +
-                "                 GROUP BY TO_CHAR(m.CREATETIME, 'YYYY-MM-DD'),\n" +
-                "                          m.MEMBERID,\n" +
-                "                          m.parentid\n" +
-                "                ) t\n" +
-                "         GROUP BY t.MEMBERID, t.parentid\n" +
-                "        HAVING COUNT(t.MEMBERID) >= ?) active\n" +
+                "SELECT 'three', COUNT(1) / 3 active_num1\n" +
+                "  FROM (select *\n" +
+                "          from (SELECT COUNT(t.MEMBERID) total, t.parentid\n" +
+                "                  FROM (SELECT m.MEMBERID,\n" +
+                "                               m.parentid,\n" +
+                "                               TO_CHAR(m.CREATETIME, 'YYYY-MM-DD') createtime,\n" +
+                "                               COUNT(TO_CHAR(m.CREATETIME, 'YYYY-MM-DD'))\n" +
+                "                          FROM mothtargetdata m\n" +
+                "                         WHERE TO_CHAR(m.CREATETIME, 'YYYY/MM/DD') between\n" +
+                "                               (select to_char(add_months(last_day(sysdate), -4) + 1,\n" +
+                "                                               'yyyy/mm/dd')\n" +
+                "                                  from dual) and\n" +
+                "                               (select to_char(add_months(last_day(sysdate), -1),\n" +
+                "                                               'yyyy/mm/dd')\n" +
+                "                                  from dual)\n" +
+                "                         GROUP BY TO_CHAR(m.CREATETIME, 'YYYY-MM-DD'),\n" +
+                "                                  m.MEMBERID,\n" +
+                "                                  m.parentid) t\n" +
+                "                 GROUP BY t.MEMBERID,\n" +
+                "                          t.parentid,\n" +
+                "                          to_char(to_date(t.createtime, 'YYYY-MM-DD'),\n" +
+                "                                  'YYYY-MM')) shop\n" +
+                "         where shop.total >= ?) active\n" +
                 " where active.parentid = ?";
 
         Query query = null;
@@ -210,6 +214,11 @@ public class MonthTargetServiceImpl implements MonthTargetService {
         sqlQuery.setParameter(2, 5);
         map = getMap(sqlQuery,map,5);
         return map;
+    }
+
+    @Override
+    public MonthTarget findOne(Long id) {
+        return mtr.findOne(id);
     }
 
     @Override
