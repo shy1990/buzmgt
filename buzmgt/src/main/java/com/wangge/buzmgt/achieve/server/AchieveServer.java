@@ -49,5 +49,14 @@ public interface AchieveServer {
   * @throws
    */
   List<Achieve> findByMachineTypeAndPlanId(String machineType,String planId);
+  /**
+   * 
+  * @Title: save 
+  * @Description: 保存达量提成
+  * @param @param achieve    设定文件 
+  * @return void    返回类型 
+  * @throws
+   */
+  void save(Achieve achieve);
   
 }

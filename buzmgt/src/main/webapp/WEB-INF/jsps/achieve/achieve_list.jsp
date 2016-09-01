@@ -37,7 +37,7 @@
       <td>{{brand.name}}</td>
       <td>{{good.name}}</td>
       <td class="reason">
-				约定时间内达量{{numberFirst}} | {{numberSecond}} | {{numberThird}}
+				<span class="text-red">{{numberFirst}} | {{numberSecond}} | {{numberThird}}</span>
 			</td>
       <td>
 				<span class="text-blue">{{formDate startDate}}-{{formDate endDate}}</span>
@@ -116,7 +116,7 @@ var	base='<%=basePath%>';
 						<!--达量设置-->
 						<div class="tab-pane fade in active right-body" id="dlsz">
 							<div class="ph-btn-set">
-								<a href="" class="btn ph-blue"> <i class="ico icon-xj"></i>
+								<a href="javascript:add();" class="btn ph-blue"> <i class="ico icon-xj"></i>
 									<span class="text-gery">添加</span>
 								</a> <a href="" class="btn ph-blue" style="margin-right: 30px">
 									<i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
@@ -278,7 +278,7 @@ var	base='<%=basePath%>';
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script type="text/javascript"
-		src="static/achieve/acieve_list.js" charset="utf-8"></script>
+		src="static/achieve/achieve_list.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(".J_MachineType li").on("click",function(){
 			$(this).addClass("active");

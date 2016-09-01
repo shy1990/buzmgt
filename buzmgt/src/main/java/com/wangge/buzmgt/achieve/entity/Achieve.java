@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -69,15 +70,20 @@ public class Achieve implements Serializable {
   @GeneratedValue(generator = "idgen")
   private Long achieveId; // 主键
   @OneToOne
-  @JoinColumn(name = "MACHINE_TYPE")
+  @JoinColumn(name = "MACHINE_TYPE", updatable = false, insertable = false)
   private MachineType machineType; // 机型类别
-  
+  @Column(name = "MACHINE_TYPE")
+  private String machineTypeId; // 机型类别
   @OneToOne
-  @JoinColumn(name = "BRAND_ID")
+  @JoinColumn(name = "BRAND_ID", updatable = false, insertable = false)
   private Brand brand; // 品牌ID
+  @Column(name = "BRAND_ID")
+  private String brandId; // 品牌ID
   @OneToOne
-  @JoinColumn(name = "GOOD_ID")
+  @JoinColumn(name = "GOOD_ID", updatable = false, insertable = false)
   private Goods good; // 型号ID
+  @Column(name = "GOOD_ID")
+  private String goodId; // 型号ID
   private Integer numberFirst; // 任务量一
   private Integer numberSecond; // 任务量2
   private Integer numberThird; // 任务量3
@@ -90,7 +96,7 @@ public class Achieve implements Serializable {
   @Enumerated(EnumType.STRING)
   private FlagEnum flag = FlagEnum.NORMAL; // 是否删除：normal-正常，del-删除
   @Enumerated(EnumType.STRING)
-  private AchieveStatusEnum status; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
+  private AchieveStatusEnum status = AchieveStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
   private String planId;
   
   @OneToMany(cascade=CascadeType.ALL)
@@ -121,6 +127,14 @@ public class Achieve implements Serializable {
     this.machineType = machineType;
   }
 
+  public String getMachineTypeId() {
+    return machineTypeId;
+  }
+
+  public void setMachineTypeId(String machineTypeId) {
+    this.machineTypeId = machineTypeId;
+  }
+
   public Brand getBrand() {
     return brand;
   }
@@ -129,12 +143,28 @@ public class Achieve implements Serializable {
     this.brand = brand;
   }
 
+  public String getBrandId() {
+    return brandId;
+  }
+
+  public void setBrandId(String brandId) {
+    this.brandId = brandId;
+  }
+
   public Goods getGood() {
     return good;
   }
 
   public void setGood(Goods good) {
     this.good = good;
+  }
+
+  public String getGoodId() {
+    return goodId;
+  }
+
+  public void setGoodId(String goodId) {
+    this.goodId = goodId;
   }
 
   public Integer getNumberFirst() {
@@ -251,9 +281,11 @@ public class Achieve implements Serializable {
 
   @Override
   public String toString() {
-    return "Achieve [achieveId=" + achieveId + ", machineType=" + machineType.getName() + ", numberFirst=" + numberFirst + ", numberSecond=" + numberSecond + ", numberThird=" + numberThird
-        + ", startDate=" + startDate + ", endDate=" + endDate + ", issuingDate=" + issuingDate + ", auditor=" + auditor
-        + ", remark=" + remark + ", createDate=" + createDate + ", status=" + status + "]";
+    return "Achieve [achieveId=" + achieveId + ", machineTypeId=" + machineTypeId +  ", brandId="
+        + brandId + ", goodId=" + goodId + ", numberFirst=" + numberFirst + ", numberSecond="
+        + numberSecond + ", numberThird=" + numberThird + ", startDate=" + startDate + ", endDate=" + endDate
+        + ", issuingDate=" + issuingDate + ", auditor=" + auditor + ", remark=" + remark + ", createDate=" + createDate
+        + ", flag=" + flag + ", status=" + status + ", planId=" + planId + "]";
   }
 
 }

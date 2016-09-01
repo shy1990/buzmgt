@@ -5,7 +5,16 @@ $(function() {
 	findAchieveList();// 查询列表
 	initFunction();
 })
-
+/**
+ * 跳转添加页面
+ * 获取planId和machineType
+ */
+function add(){
+	var planId = $("#planId").val();
+	var machineType = $(".J_MachineType li.active").attr('title');
+	window.location.href = base + "achieve/add?planId="+planId+"&machineType="+machineType  
+	
+}
 /**
  * 检索模糊查询
  */
