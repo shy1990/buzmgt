@@ -18,6 +18,7 @@ import java.util.Collections;
 public class Region implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+
 	public static enum RegionType {
 		COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他");
 		private String name;
@@ -56,8 +57,8 @@ public class Region implements Serializable {
 	@JoinColumn(name = "CENTER_POINT")
   private String centerPoint;
 
-	@JoinColumn(name = "STARS_LEAVE")
-	private Integer starsLeave;
+	@JoinColumn(name = "STARS_LEVEL")
+	private Integer starsLevel;
 
 
 	public String getId() {
@@ -132,12 +133,12 @@ public class Region implements Serializable {
 		this.coordinates = coordinates;
 	}
 
-	public int getStarsLeave() {
-		return starsLeave;
+	public Integer getStarsLevel() {
+		return starsLevel;
 	}
 
-	public void setStarsLeave(Integer starsLeave) {
-		this.starsLeave = starsLeave;
+	public void setStarsLevel(Integer starsLevel) {
+		this.starsLevel = starsLevel;
 	}
 
 	public Collection<Region> getChildren() {

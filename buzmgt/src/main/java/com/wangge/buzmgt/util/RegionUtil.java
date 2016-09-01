@@ -59,7 +59,7 @@ public class RegionUtil {
 	    regionTree.setpId(region.getParent().getId());
 		}
 
-		regionTree.setStarsLevel(region.getStarsLeave());
+		regionTree.setStarsLevel(region.getStarsLevel());
 
 		return regionTree;
 	}
