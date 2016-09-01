@@ -1,19 +1,40 @@
 package com.wangge.buzmgt.income.main.service;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.lang.ObjectUtils;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
+import com.wangge.buzmgt.common.FlagEnum;
+import com.wangge.buzmgt.customtask.util.PredicateUtil;
+import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
+import com.wangge.buzmgt.income.main.entity.PlanUserVo;
+import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
+import com.wangge.buzmgt.income.main.repository.PlanUserVoRepository;
 import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
+import com.wangge.buzmgt.income.ywsalary.entity.BaseSalary;
+import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.region.entity.Region.RegionType;
+import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.sys.service.RoleService;
 
 import net.sf.json.JSONArray;
 
@@ -21,7 +42,14 @@ import net.sf.json.JSONArray;
 public class MainPlanServiceImpl implements MainPlanService {
   @Autowired
   MainIncomePlanRepository mainPlanRep;
-  
+  @Autowired
+  IncomeMainplanUsersRepository planUserRep;
+  @Autowired
+  RegionService regionService;
+  @Autowired
+  RoleService roleService;
+  @Autowired
+  PlanUserVoRepository planUserVorep;
   @Override
   public List<Object> findByUser() {
     // TODO Auto-generated method stub
@@ -41,17 +69,28 @@ public class MainPlanServiceImpl implements MainPlanService {
   }
   
   @Override
-  public void assemblebeforeNew() {
-    // TODO Auto-generated method stub
-    
+  public Map<String, Object> findAll(String regionId, Pageable pageReq) {
+    Page<MainIncomePlan> repage = null;
+    Map<String, Object> remap = new HashMap<String, Object>();
+    if (!StringUtils.isBlank(regionId)) {
+      repage = mainPlanRep.findByRegionIdAndState(regionId, FlagEnum.NORMAL, pageReq);
+    } else {
+      repage = mainPlanRep.findByState(FlagEnum.NORMAL, pageReq);
+    }
+    remap.put("number", repage.getTotalElements());
+    remap.put("content", convertToView(repage.getContent()));
+    return remap;
   }
   
-  @Override
-  public Page<MainIncomePlan> findAll(String regionId, Pageable pageReq) {
-    if (!StringUtils.isBlank(regionId)) {
-      return mainPlanRep.findByRegion_Id(regionId, pageReq);
+  private Object convertToView(List<MainIncomePlan> cList) {
+    List<Map<String, Object>> vList = new ArrayList<>();
+    for (MainIncomePlan mp : cList) {
+      Map<String, Object> remap = new HashMap<String, Object>();
+      remap.put("id", mp.getId());
+      remap.put("maintitle", mp.getMaintitle());
+      vList.add(remap);
     }
-    return mainPlanRep.findAll(pageReq);
+    return vList;
   }
   
   @Override
@@ -89,7 +128,7 @@ public class MainPlanServiceImpl implements MainPlanService {
       Object[] ob = (Object[]) o;
       bList.add(getType(ob));
     }
-    JSONArray json=JSONArray.fromObject(bList);
+    JSONArray json = JSONArray.fromObject(bList);
     return json;
   }
   
@@ -98,5 +137,80 @@ public class MainPlanServiceImpl implements MainPlanService {
     String machineType = null == ob[1] ? "" : ob[1].toString();
     String name = null == ob[2] ? "" : ob[2].toString();
     return new BrandType(brandId, machineType, name);
+  }
+  
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void save(MainIncomePlan plan) throws Exception {
+    try {
+      List<IncomeMainplanUsers> usList = plan.getUsers();
+      List<IncomeMainplanUsers> newList = new ArrayList<IncomeMainplanUsers>();
+      for (IncomeMainplanUsers u : usList) {
+        newList.add(new IncomeMainplanUsers(u.getSalesmanId(), plan));
+      }
+      plan.setUsers(newList);
+      plan = mainPlanRep.save(plan);
+    } catch (Exception e) {
+      LogUtil.error("保存主计划失败", e);
+      throw new RuntimeException("保存主计划失败");
+    }
+  }
+  
+  /**
+   * 1.删除主方案从本天生效 TODO 2.重新计算当天收益
+   */
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void delete(MainIncomePlan plan) throws Exception {
+    try {
+      plan.setState(FlagEnum.DEL);
+      plan.setFqtime(new Date());
+    } catch (Exception e) {
+      LogUtil.error("删除方案出错!!", e);
+    }
+    
+  }
+  
+  @Override
+  public List<Map<String, Object>> findUserList(Long pid) {
+    List<IncomeMainplanUsers> uList = planUserRep.findByMainplan_IdAndState(pid, FlagEnum.NORMAL);
+    List<Map<String, Object>> rList = new ArrayList<>();
+    for (IncomeMainplanUsers inc : uList) {
+      Map<String, Object> remap = new HashMap<>();
+      remap.put("salesId", inc.getSalesmanId());
+      remap.put("name", inc.getSalesmanname());
+      remap.put("id", inc.getId());
+      rList.add(remap);
+    }
+    return rList;
+    
+  }
+
+  /** 
+    * TODO 将事件存入数据库,定时执行 
+    * 1.删除日期是否要大于今天;
+    *  
+    */ 
+  @Transactional(rollbackFor = Exception.class)
+  @Override
+  public void deleteUser(IncomeMainplanUsers user) {
+    user.setFqtime(new Date());
+    user.setState(FlagEnum.DEL);
+  }
+
+  @Override
+  public void assembleBeforeUpdate(Model model) {
+    model.addAttribute("regions", regionService.findByTypeOrderById(RegionType.PROVINCE));
+    model.addAttribute("roles", roleService.findAll());
+  }
+
+  @Override
+  public Page<PlanUserVo> getUserpage(Pageable pageReq, Map<String, Object> searchParams) {
+    Page<PlanUserVo> page=planUserVorep.findAll((Specification<PlanUserVo>) (root, query, cb) -> {
+      List<Predicate> predicates = new ArrayList<Predicate>();
+      PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
+      return cb.and(predicates.toArray(new Predicate[] {}));
+    }, pageReq);
+    return page;
   }
 }

@@ -67,7 +67,7 @@ public class RegionController {
   /**
    * 
    * @Title: initRegion @Description: 初始化区域划分页面 @param @param test @param @param
-   * model @param @return 设定文件 @return String 返回类型 @throws
+   *         model @param @return 设定文件 @return String 返回类型 @throws
    */
   
   @RequestMapping("/initRegion")
@@ -78,8 +78,8 @@ public class RegionController {
   /**
    * 
    * @Title: findOneRegion @Description: 查询一级区域 @param @param
-   * request @param @return @return ResponseEntity<List<RegionTree>>
-   * 返回类型 @throws
+   *         request @param @return @return ResponseEntity<List<RegionTree>>
+   *         返回类型 @throws
    */
   
   @RequestMapping(value = "/findOneRegion", method = RequestMethod.POST)
@@ -94,8 +94,8 @@ public class RegionController {
   /**
    * 
    * @Title: findRegionByid @Description: 通过id查询树型结构，包含子节点 @param @param
-   * request @param @param id @param @return 设定文件 @return
-   * ResponseEntity<List<RegionTree>> 返回类型 @throws
+   *         request @param @param id @param @return 设定文件 @return
+   *         ResponseEntity<List<RegionTree>> 返回类型 @throws
    */
   @RequestMapping(value = "/findRegionByid", method = RequestMethod.POST)
   @ResponseBody
@@ -109,7 +109,7 @@ public class RegionController {
   /**
    * 
    * @Title: addRegion @Description: 添加区域方法 @param @param pid @param @param
-   * name @param @return @return ResponseEntity<RegionTree> 返回类型 @throws
+   *         name @param @return @return ResponseEntity<RegionTree> 返回类型 @throws
    */
   @RequestMapping(value = "/addRegion", method = RequestMethod.POST)
   @ResponseBody
@@ -125,8 +125,7 @@ public class RegionController {
     }
     return new ResponseEntity<RegionTree>(RegionUtil.getRegionTree(newRegion), HttpStatus.OK);
   }
-
-
+  
   /**
    *
    * @param id
@@ -138,20 +137,19 @@ public class RegionController {
     Region region = regionService.findListRegionbyid(id);
     return new ResponseEntity<Integer>(region.getStarsLevel(), HttpStatus.OK);
   }
-
-
+  
   @RequestMapping(value = "/updateStarsLeave", method = RequestMethod.POST)
-  public void updateStarsLeave(String id,int statsLevae) {
+  public void updateStarsLeave(String id, int statsLevae) {
     Region region = regionService.findListRegionbyid(id);
     region.setStarsLevel(statsLevae);
     regionService.saveRegion(region);
   }
-
+  
   /**
    * 
    * @Title: editRegion @Description: (这里用一句话描述这个方法的作用) @param @param
-   * request @param @param pid @param @param name @param @return 设定文件 @return
-   * boolean 返回类型 @throws
+   *         request @param @param pid @param @param name @param @return
+   *         设定文件 @return boolean 返回类型 @throws
    */
   @RequestMapping(value = "/editRegion", method = RequestMethod.POST)
   @ResponseBody
@@ -172,7 +170,7 @@ public class RegionController {
   /**
    * 
    * @Title: dragRegion @Description: 拖拽后方法 @param @param id @param @param
-   * pid @param @return 设定文件 @return String 返回类型 @throws
+   *         pid @param @return 设定文件 @return String 返回类型 @throws
    */
   @RequestMapping(value = "/dragRegion", method = RequestMethod.POST)
   public void dragRegion(String id, String pid) {
@@ -184,7 +182,7 @@ public class RegionController {
   /**
    * 
    * @Title: deleteRegionbyId @Description: 删除方法 @param @param id @param @param
-   * pid @param @return 设定文件 @return boolean 返回类型 @throws
+   *         pid @param @return 设定文件 @return boolean 返回类型 @throws
    */
   @RequestMapping(value = "/deleteRegionbyId", method = RequestMethod.POST)
   @ResponseBody
@@ -201,8 +199,8 @@ public class RegionController {
   /**
    * 
    * @Title: initRegionMap @Description: 初始化地图页面 @param @param
-   * regionName @param @param parentid @param @param model @param @return
-   * 设定文件 @return String 返回类型 @throws
+   *         regionName @param @param parentid @param @param
+   *         model @param @return 设定文件 @return String 返回类型 @throws
    */
   @RequestMapping("/initRegionMap")
   public String initRegionMap(String regionName, String parentid, Model model) {
@@ -233,7 +231,8 @@ public class RegionController {
   /**
    * 
    * @Title: addPoints @Description: 添加地图轮廓 @param @param points @param @param
-   * parentid @param @param name @param @return 设定文件 @return String 返回类型 @throws
+   *         parentid @param @param name @param @return 设定文件 @return String
+   *         返回类型 @throws
    */
   @RequestMapping(value = "/addPoints", method = RequestMethod.POST)
   @ResponseBody
@@ -258,7 +257,8 @@ public class RegionController {
   /**
    * 
    * @Title: getMaxId @Description: 得到最大regionid @param @param
-   * request @param @param pid @param @return 设定文件 @return int 返回类型 @throws
+   *         request @param @param pid @param @return 设定文件 @return int
+   *         返回类型 @throws
    */
   public Long getMaxId(String pid) {
     // 国 0, 大区1,省2,区3,市 4,县5, 镇6;
@@ -302,8 +302,8 @@ public class RegionController {
   /**
    * 
    * @Title: getRegionById @Description: TODO(根据用户区域id获取下级区域) @param @param
-   * id @param @param request @param @return 设定文件 @return
-   * ResponseEntity<List<RegionVo>> 返回类型 @throws
+   *         id @param @param request @param @return 设定文件 @return
+   *         ResponseEntity<List<RegionVo>> 返回类型 @throws
    */
   
   @RequestMapping(value = "/getRegionById", method = RequestMethod.POST)
