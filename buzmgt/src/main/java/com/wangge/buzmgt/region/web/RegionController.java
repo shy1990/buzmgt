@@ -135,13 +135,13 @@ public class RegionController {
   @ResponseBody
   public ResponseEntity<Integer> regionStarsLeave(String id) {
     Region region = regionService.findListRegionbyid(id);
-    return new ResponseEntity<Integer>(region.getStarsLevel(), HttpStatus.OK);
+    return new ResponseEntity<Integer>(region.getStartsLevel(), HttpStatus.OK);
   }
   
   @RequestMapping(value = "/updateStarsLeave", method = RequestMethod.POST)
   public void updateStarsLeave(String id, int statsLevae) {
     Region region = regionService.findListRegionbyid(id);
-    region.setStarsLevel(statsLevae);
+    region.setStartsLevel(statsLevae);
     regionService.saveRegion(region);
   }
   
