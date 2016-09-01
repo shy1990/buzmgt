@@ -1,28 +1,5 @@
 package com.wangge.buzmgt.region.web;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
@@ -41,9 +18,29 @@ import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.RegionUtil;
 import com.wangge.json.JSONFormat;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(value = "/region")
@@ -70,7 +67,7 @@ public class RegionController {
   /**
    * 
    * @Title: initRegion @Description: 初始化区域划分页面 @param @param test @param @param
-   * model @param @return 设定文件 @return String 返回类型 @throws
+   *         model @param @return 设定文件 @return String 返回类型 @throws
    */
   
   @RequestMapping("/initRegion")
@@ -81,8 +78,8 @@ public class RegionController {
   /**
    * 
    * @Title: findOneRegion @Description: 查询一级区域 @param @param
-   * request @param @return @return ResponseEntity<List<RegionTree>>
-   * 返回类型 @throws
+   *         request @param @return @return ResponseEntity<List<RegionTree>>
+   *         返回类型 @throws
    */
   
   @RequestMapping(value = "/findOneRegion", method = RequestMethod.POST)
@@ -97,8 +94,8 @@ public class RegionController {
   /**
    * 
    * @Title: findRegionByid @Description: 通过id查询树型结构，包含子节点 @param @param
-   * request @param @param id @param @return 设定文件 @return
-   * ResponseEntity<List<RegionTree>> 返回类型 @throws
+   *         request @param @param id @param @return 设定文件 @return
+   *         ResponseEntity<List<RegionTree>> 返回类型 @throws
    */
   @RequestMapping(value = "/findRegionByid", method = RequestMethod.POST)
   @ResponseBody
@@ -112,7 +109,7 @@ public class RegionController {
   /**
    * 
    * @Title: addRegion @Description: 添加区域方法 @param @param pid @param @param
-   * name @param @return @return ResponseEntity<RegionTree> 返回类型 @throws
+   *         name @param @return @return ResponseEntity<RegionTree> 返回类型 @throws
    */
   @RequestMapping(value = "/addRegion", method = RequestMethod.POST)
   @ResponseBody
@@ -130,10 +127,29 @@ public class RegionController {
   }
   
   /**
+   *
+   * @param id
+   * @return
+   */
+  @RequestMapping(value = "/regionStarsLeave", method = RequestMethod.POST)
+  @ResponseBody
+  public ResponseEntity<Integer> regionStarsLeave(String id) {
+    Region region = regionService.findListRegionbyid(id);
+    return new ResponseEntity<Integer>(region.getStartsLevel(), HttpStatus.OK);
+  }
+  
+  @RequestMapping(value = "/updateStarsLeave", method = RequestMethod.POST)
+  public void updateStarsLeave(String id, int statsLevae) {
+    Region region = regionService.findListRegionbyid(id);
+    region.setStartsLevel(statsLevae);
+    regionService.saveRegion(region);
+  }
+  
+  /**
    * 
    * @Title: editRegion @Description: (这里用一句话描述这个方法的作用) @param @param
-   * request @param @param pid @param @param name @param @return 设定文件 @return
-   * boolean 返回类型 @throws
+   *         request @param @param pid @param @param name @param @return
+   *         设定文件 @return boolean 返回类型 @throws
    */
   @RequestMapping(value = "/editRegion", method = RequestMethod.POST)
   @ResponseBody
@@ -154,7 +170,7 @@ public class RegionController {
   /**
    * 
    * @Title: dragRegion @Description: 拖拽后方法 @param @param id @param @param
-   * pid @param @return 设定文件 @return String 返回类型 @throws
+   *         pid @param @return 设定文件 @return String 返回类型 @throws
    */
   @RequestMapping(value = "/dragRegion", method = RequestMethod.POST)
   public void dragRegion(String id, String pid) {
@@ -166,7 +182,7 @@ public class RegionController {
   /**
    * 
    * @Title: deleteRegionbyId @Description: 删除方法 @param @param id @param @param
-   * pid @param @return 设定文件 @return boolean 返回类型 @throws
+   *         pid @param @return 设定文件 @return boolean 返回类型 @throws
    */
   @RequestMapping(value = "/deleteRegionbyId", method = RequestMethod.POST)
   @ResponseBody
@@ -183,8 +199,8 @@ public class RegionController {
   /**
    * 
    * @Title: initRegionMap @Description: 初始化地图页面 @param @param
-   * regionName @param @param parentid @param @param model @param @return
-   * 设定文件 @return String 返回类型 @throws
+   *         regionName @param @param parentid @param @param
+   *         model @param @return 设定文件 @return String 返回类型 @throws
    */
   @RequestMapping("/initRegionMap")
   public String initRegionMap(String regionName, String parentid, Model model) {
@@ -215,7 +231,8 @@ public class RegionController {
   /**
    * 
    * @Title: addPoints @Description: 添加地图轮廓 @param @param points @param @param
-   * parentid @param @param name @param @return 设定文件 @return String 返回类型 @throws
+   *         parentid @param @param name @param @return 设定文件 @return String
+   *         返回类型 @throws
    */
   @RequestMapping(value = "/addPoints", method = RequestMethod.POST)
   @ResponseBody
@@ -240,7 +257,8 @@ public class RegionController {
   /**
    * 
    * @Title: getMaxId @Description: 得到最大regionid @param @param
-   * request @param @param pid @param @return 设定文件 @return int 返回类型 @throws
+   *         request @param @param pid @param @return 设定文件 @return int
+   *         返回类型 @throws
    */
   public Long getMaxId(String pid) {
     // 国 0, 大区1,省2,区3,市 4,县5, 镇6;
@@ -284,8 +302,8 @@ public class RegionController {
   /**
    * 
    * @Title: getRegionById @Description: TODO(根据用户区域id获取下级区域) @param @param
-   * id @param @param request @param @return 设定文件 @return
-   * ResponseEntity<List<RegionVo>> 返回类型 @throws
+   *         id @param @param request @param @return 设定文件 @return
+   *         ResponseEntity<List<RegionVo>> 返回类型 @throws
    */
   
   @RequestMapping(value = "/getRegionById", method = RequestMethod.POST)
@@ -313,7 +331,7 @@ public class RegionController {
    * @author jiabin
    * @param id
    * @param flag
-   * @param request
+   * @param
    * @return
    * @since JDK 1.8
    */

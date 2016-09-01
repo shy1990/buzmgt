@@ -2,27 +2,26 @@ package com.wangge.buzmgt.income.main.entity;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.wangge.buzmgt.common.FlagEnum;
-import com.wangge.buzmgt.region.entity.Region;
 
 /**
  * ClassName: MainIncomePlan <br/>
  * Function: 收益方案主表 <br/>
- * Reason: TODO ADD REASON(可选). <br/>
  * date: 2016年8月20日 下午5:22:45 <br/>
  * 
  * @author yangqc
@@ -46,15 +45,15 @@ public class MainIncomePlan {
   private Date fqtime;
   // 状态
   // 是否删除 normal-正常,del-删除
-  @Enumerated(EnumType.STRING)
+  @Enumerated(EnumType.ORDINAL)
   private FlagEnum state = FlagEnum.NORMAL;
   // 大区
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "region_id")
-  Region region = new Region();
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "mainplan")
-  private Collection<IncomeMainplanUsers> users;
+  @Column(name="region_id")
+  private String regionId;
+  private String regionname;
   
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "mainplan",cascade=CascadeType.ALL)
+  private List<IncomeMainplanUsers> users;
   public Long getId() {
     return id;
   }
@@ -103,20 +102,29 @@ public class MainIncomePlan {
     this.state = state;
   }
 
-  public Region getRegion() {
-    return region;
-  }
 
-  public void setRegion(Region region) {
-    this.region = region;
-  }
-
-  public Collection<IncomeMainplanUsers> getUsers() {
+  public List<IncomeMainplanUsers> getUsers() {
     return users;
   }
 
-  public void setUsers(Collection<IncomeMainplanUsers> users) {
+  public void setUsers(List<IncomeMainplanUsers> users) {
     this.users = users;
+  }
+
+  public String getRegionId() {
+    return regionId;
+  }
+
+  public void setRegionId(String regionId) {
+    this.regionId = regionId;
+  }
+
+  public String getRegionname() {
+    return regionname;
+  }
+
+  public void setRegionname(String regionname) {
+    this.regionname = regionname;
   }
 
   public MainIncomePlan(String maintitle, String subtitle, Date createtime) {

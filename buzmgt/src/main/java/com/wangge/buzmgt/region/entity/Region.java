@@ -56,8 +56,8 @@ public class Region implements Serializable {
 	@JoinColumn(name = "CENTER_POINT")
   private String centerPoint;
 
-	@JoinColumn(name = "STARS_LEAVE")
-	private Integer starsLeave;
+	@JoinColumn(name = "STARS_LEVEL")
+	private Integer startsLevel;
 
 
 	public String getId() {
@@ -132,12 +132,12 @@ public class Region implements Serializable {
 		this.coordinates = coordinates;
 	}
 
-	public int getStarsLeave() {
-		return starsLeave;
+	public Integer getStartsLevel() {
+		return startsLevel;
 	}
 
-	public void setStarsLeave(Integer starsLeave) {
-		this.starsLeave = starsLeave;
+	public void setStartsLevel(Integer startsLevel) {
+		this.startsLevel = startsLevel;
 	}
 
 	public Collection<Region> getChildren() {

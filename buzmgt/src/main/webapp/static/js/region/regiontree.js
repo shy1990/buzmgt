@@ -321,18 +321,151 @@ function addHoverDom(treeId, treeNode) {
 		return false;
 	});
 	/******************添加区域 end***************************************/
-	
 	if (treeNode.editNameFlag || $("#mapBtn_"+treeNode.tId).length>0) return;
-	var mapStr = "<span class='button map' id='mapBtn_" + treeNode.tId
-	+ "' title='绘制子区域地图' onfocus='this.blur();'></span>";
+	var mapStr = "<span class='button map' id='mapBtn_" + treeNode.tId + "' title='绘制子区域地图' onfocus='this.blur();'></span>";
 	sObj.after(mapStr);
 	var btn = $("#mapBtn_"+treeNode.tId);
 	if (btn) btn.bind("click", function(){
-		
 		window.location.href='/region/initRegionMap?regionName='+treeNode.name+"&parentid="+treeNode.id;
-				
+	});
+
+	getStars(treeNode,sObj);
+
+
+}
+
+
+  function getStars(treeNode,sObj) {
+	  <!--------------------------------区域星级end-------------------------------------->
+	  $.ajax({
+		  async : true, // 是否异步
+		  cache : false, // 是否使用缓存
+		  type : 'post', // 请求方式,post
+		  data : {
+			  id : treeNode.id
+		  },
+		  dataType : "text", // 数据传输格式
+		  url : "region/regionStarsLeave", // 请求链接
+		  error : function() {
+			  BootstrapDialog.alert("访问服务器出错");
+		  },
+
+		  success : function(data) {
+			  var regionid=treeNode.id;
+			  var starsOneclass="button starstwo";
+			  var starstwoclass="button starstwo";
+			  var starsthreeclass="button starstwo";
+
+			  var starsLevae = eval("(" + data + ")"); // 将string类型转换成json对象
+			  if(starsLevae===1){
+				  starsOneclass="button starsone";//一个实心的
+			  }
+			  if(starsLevae===2){
+				  starsOneclass="button starsone";
+				  starstwoclass="button starsone";
+			  }
+			  if(starsLevae===3){
+				  starsOneclass="button starsone";
+				  starstwoclass="button starsone";
+				  starsthreeclass="button starsone";
+			  }
+			  var classid=treeNode.tId+"";
+			  var starsthreeStr = "<span class='" + starsthreeclass + "' id='starsthreeBtn_" + treeNode.id + "' " +
+				  "title='三星' onclick='clickStars(3,"+regionid+")'></span>";
+			  $("#"+treeNode.tId+"_remove").after(starsthreeStr);
+
+			  var starstwoStr = "<span class='"+starstwoclass+"' id='starstwoBtn_" + treeNode.id
+				  + "' title='二星' onclick='clickStars(2,"+regionid+")'></span>";
+			  $("#"+treeNode.tId+"_remove").after(starstwoStr);
+
+			  var starsoneStr = "<span class='"+starsOneclass+"' id='starsoneBtn_" + treeNode.id + "' " +
+				  "title='一星' onclick='clickStars(1,"+regionid+")'></span>";
+			  $("#"+treeNode.tId+"_remove").after(starsoneStr);
+
+			  var whitespace = "<span class='button whitespace' id='whitespace" + treeNode.id
+				  + "' ></span>";
+			  $("#"+treeNode.tId+"_remove").after(whitespace);
+		  }
+	  });
+	  return false;
+  }
+
+  //点击星方法
+  function clickStars(flag,id){
+	  console.log(flag+"**"+id);
+	  var statsLevae;
+    if(flag===1){ //点击第一颗星
+		var towClass=$("#starstwoBtn_"+id+"").attr("class");
+		console.log(towClass);
+		if(towClass==='button starsone'){//实心的
+			alert("请先点击第二颗或者第三颗星");
+			return;
+		}else{//正常
+			var oneClass=$("#starsoneBtn_"+id+"").attr("class");
+			if(oneClass==='button starsone'){//判断1星当前状态 实心
+				statsLevae=0;
+			}else{
+				statsLevae=1;
+			}
+		}
+	}
+
+	  if(flag===2){ //点击第二颗星
+		  var oneClass=$("#starsoneBtn_"+id+"").attr("class");
+		  var threeClass=$("#starsthreeBtn_"+id+"").attr("class");
+		  console.log(towClass);
+		  if(oneClass==='button starsone'&&threeClass==='button starsone'){//实心的
+			  alert("请点击第三颗星");
+			  return;
+		  }else if(oneClass==='button starstwo'){//第一颗星是空的
+			  alert("请点击第一颗星");
+			  return;
+		  }else{//正常
+			  var twoClass=$("#starstwoBtn_"+id+"").attr("class");
+			  if(twoClass==='button starsone'){//判断2星当前状态 实心
+				  statsLevae=1;
+			  }else{
+				  statsLevae=2;
+			  }
+		  }
+	  }
+
+	  if(flag===3) { //点击第三颗星
+		  var towClass=$("#starstwoBtn_"+id+"").attr("class");
+		  if(towClass==='button starstwo'){//第二个是空的
+			  alert("请先点击第一颗或者第二颗星");
+			  return;
+		  }else{//正常
+			  var threeClass=$("#starsthreeBtn_"+id+"").attr("class");
+			  if(threeClass==='button starsone'){//判断3星当前状态 实心
+				  statsLevae=2;
+			  }else{
+				  statsLevae=3;
+			  }
+		  }
+	   }
+	  updateStarsLeave(statsLevae,id);
+  }
+
+/**
+ * 后台更改星级
+ */
+function  updateStarsLeave(statsLevae,id){
+	$.ajax({
+		async : true, // 是否异步
+		cache : false, // 是否使用缓存
+		type : 'post', // 请求方式,post
+		data : {
+			id : id,
+			statsLevae : statsLevae
+
+		},
+		dataType : "text", // 数据传输格式
+		url : "region/updateStarsLeave" // 请求链接
 	});
 }
+
+
 
 /**
  * 功能：用于当鼠标移出节点时，隐藏用户自定义控件，显示隐藏状态同 zTree 内部的编辑、删除按钮
@@ -347,6 +480,10 @@ function removeHoverDom(treeId, treeNode) {
 	$("#diyBtn_" + treeNode.id).unbind().remove();
 	$("#addBtn_" + treeNode.tId).unbind().remove();
 	$("#mapBtn_" + treeNode.tId).unbind().remove();
+	$("#starsoneBtn_" + treeNode.id).unbind().remove();
+	$("#starstwoBtn_" + treeNode.id).unbind().remove();
+	$("#starsthreeBtn_" + treeNode.id).unbind().remove();
+	$("#whitespace" + treeNode.id).unbind().remove();
 	$("#diyBtn_space_" +treeNode.id).unbind().remove();
 
 };
@@ -491,6 +628,7 @@ function onloadZTree() {
 		},
 		success : function(data) {
 			ztreeNodes = eval("(" + data + ")"); // 将string类型转换成json对象
+			console.log(data)
 			zNodes = zNodes.concat(ztreeNodes);
 			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
 			rMenu = $("#rMenu");

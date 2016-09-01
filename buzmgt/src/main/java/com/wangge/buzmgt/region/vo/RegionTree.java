@@ -22,6 +22,9 @@ public class RegionTree {
 	
 	private String open;//默认打开
 
+
+	private int starsLevel;//星级
+
 	public String getId() {
 		return id;
 	}
@@ -84,6 +87,14 @@ public class RegionTree {
 		return iconClose;
 	}
 
+	public int getStarsLevel() {
+		return starsLevel;
+	}
+
+	public void setStarsLevel(int starsLevel) {
+		this.starsLevel = starsLevel;
+	}
+
 	public void setIconClose(String iconClose) {
 		this.iconClose = iconClose;
 	}
@@ -95,7 +106,6 @@ public class RegionTree {
 	public void setRegiontype(String regiontype) {
 		this.regiontype = regiontype;
 	}
-	
-	
-	
-}	
+
+
+}
