@@ -140,7 +140,7 @@ public class MainPlanController {
       repMap.put("id", plan.getId());
       repMap.put("mainTitle", plan.getMaintitle());
       repMap.put("subTitle", plan.getSubtitle());
-      repMap.put("regionName", plan.getRegionname()());
+      repMap.put("regionName", plan.getRegionname());
       
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.OK);
     } catch (Exception e) {

@@ -58,7 +58,7 @@ public class MainPlanUserController {
     Map<String, Object> repMap = new HashMap<String, Object>();
     repMap.put("code", "1");
     try {
-      mainPlanService.deleteUser(delMap);
+      mainPlanService.deleteUser(user);
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.OK);
     } catch (Exception e) {
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.INTERNAL_SERVER_ERROR);
