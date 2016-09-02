@@ -5,6 +5,7 @@
 $(function() {
 	initSelectBrand();
 	initSelectMachineType();
+	initFunction();
 });
 function addNumber() {
 	var name = $(this).prev("input").attr("name");
@@ -26,64 +27,151 @@ function addNumber() {
 }
 // 动态添加规则
 function addRule() {
-	$('.J_RULE').html("");
+//	$('.J_RULE').html("");
+	rule =new Array();
 	var html = '';
 	var first = $('.J_numberFirst').val();
 	var second = $('.J_numberSecond').val();
 	var third = $('.J_numberThird').val();
-	
-	console.info(first + "," + second + "," + third);
-	if (third != "") {
-		
-	} else if (second != "") {
-
-		html += '<input type="text" data-min="" data-max="'
-				+ first
-				+ '" name="money" '
-				+ 'onkeyup="this.value=this.value.replace(/[^\\d,.]/g,\'\') " '
-				+ 'onafterpaste="this.value=this.value.replace(/[^\\d,.]/g,\'\') " />';
-		html += '<input type="text" data-min="'
-				+ first
-				+ '" data-max="'
-				+ second
-				+ '" name="money" '
-				+ 'onkeyup="this.value=this.value.replace(/[^\\d,.]/g,\'\') " '
-				+ 'onafterpaste="this.value=this.value.replace(/[^\\d,.]/g,\'\') " />';
-		html += '<input type="text" data-min="'
-				+ second
-				+ '" data-max="" name="money" '
-				+ 'onkeyup="this.value=this.value.replace(/[^\\d,.]/g,\'\') " '
-				+'onafterpaste="this.value=this.value.replace(/[^\d,\.]/g,\'\') " />';
-	} else {
-		html += '<input type="text" data-min="" data-max="'
-				+ first
-				+ '" name="money" '
-				+ 'onkeyup="this.value=this.value.replace(/[^\\d,.]/g,\'\') " '
-				+ 'onafterpaste="this.value=this.value.replace(/[^\\d,.]/g,\'\') " />';
-
-		html += '<input type="text" data-min="'
-				+ first
-				+ '" data-max="" name="money" '
-				+ 'onkeyup="this.value=this.value.replace(/[^\\d,.]/g,\'\') " '
-				+ 'onafterpaste="this.value=this.value.replace(/[^\\d,.]/g,\'\')" />';
+	var number = first + "," + second + "," + third;
+	var numArr =number.split(",");
+	//显示数据
+	createNumber(numArr);
+	//赋值
+	var $numberInput = $(".J_number_box input");
+	for(var i=0; i<numArr.length; i++){
+		$numberInput[i].value = numArr[i];
 	}
-//	$('.J_RULE').append(html);
+	//1.更改周期量显示
+	//2.增加奖罚规则
+//	var rule =new Array();
+	var leng = 0; //rule = n(*number*)+1;
+	if (third != "") {
+		leng = 4;
+	} else if (second != "") {
+		leng = 3;
+	} else {
+		leng = 2;
+	}
+	
+	var ave = "";
+	for(var i=0;i<leng;i++){
+		var min = "";
+		var max = "";
+		min = ave;
+		max = numArr[i]==undefined ? '': numArr[i];
+		ave = max;
+		rule[i]= {'num':i,'min':min,'max':max,"type": "ACHIEVE",
+		          "flag": "NORMAL"};
+	}
+	console.info(rule);
+	createRules(rule);
+	$('#zzrwul').modal('hide');
+	
 }
-function chkFirstValue(){
+function addMoney(num,value){
+	rule[num]["money"] = Number(value);
+	console.info(rule);
+}
+function initFunction(){
+	$('.J_startDate').datetimepicker({
+		format : "yyyy-mm-dd",
+		language : 'zh-CN',
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 2,
+		minView : 2,
+		pickerPosition : "bottom-right",
+		forceParse : 0
+	}).on('changeDate', function(ev) {
+		$('.form_date_start').removeClass('has-error');
+		$('.form_date_end').removeClass('has-error');
+		var endInputDateStr = $('.J_endDate').val();
+		if (endInputDateStr != "" && endInputDateStr != null) {
+			var endInputDate = stringToDate(endInputDateStr).valueOf();
+			if (ev.date.valueOf() - endInputDate >= 0) {
+				$('.form_date_start').addClass('has-error');
+				alert("请输入正确的日期");
+			}
+		}
+	});
+	$('.J_endDate').datetimepicker({
+		format : "yyyy-mm-dd",
+		language : 'zh-CN',
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 2,
+		minView : 2,
+		pickerPosition : "bottom-right",
+		forceParse : 0
+	}).on('changeDate', function(ev) {
+		$('.form_date_start').removeClass('has-error');
+		$('.form_date_end').removeClass('has-error');
+		var startInputDateStr = $('.J_startDate').val();
+		if (startInputDateStr != "" && startInputDateStr != null) {
+			var startInputDate = stringToDate(startInputDateStr).valueOf();
+			if (ev.date.valueOf() - startInputDate < 0) {
+				$('.form_date_end').addClass('has-error');
+				alert("请输入正确的日期");
+			}
+		}
+	});
+	$('.J_issuingDate').datetimepicker({
+		format : "yyyy-mm-10",
+		language : 'zh-CN',
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 3,
+		minView : 3,
+		pickerPosition : "bottom-right",
+		forceParse : 0
+	});
+}
+/**
+ * 验证二阶段数量
+ * @returns {Boolean}
+ */
+function chkScendValue(){
 	var first = $('.J_numberFirst').val();
-	var second = $(this).val()
-	console.info(first+","+second);
-	if(Number(second)<=Number(first)){
+	var second = $('.J_numberSecond').val()
+	if(first == "" ){
+		alert("请输入阶段一任务量");
+		return false;
+	}
+	if(second != "" && Number(second)<=Number(first)){
 		alert("请输入正确的阶段二任务量");
+		$('.J_numberSecond').val("");
+		$('.J_numberSecond').focus();
 		return false;
 	}
 }
-function chkScendValue(){
-	var third = $(this).val();
+/**
+ * 验证三阶段数量
+ * @returns {Boolean}
+ */
+function chkThirdValue(){
+	var first = $('.J_numberFirst').val();
+	var third = $(".J_numberThird").val();
 	var second = $('.J_numberSecond').val();
-	console.info(third+","+second);
-	if(Number(third)<=Number(second)){
-		alert("请输入正确的阶段二任务量");
+	if(first == "" ){
+		alert("请输入阶段一任务量");
+		return false;
+	}
+	if(second == "" ){
+		alert("请输入阶段二任务量");
+		return false;
+	}
+	
+	if( third != "" && Number(third)<=Number(second)){
+		alert("请输入正确的阶段三任务量");
+		$('.J_numberThird').val("");
+		$('.J_numberThird').focus();
 		return false;
 	}
 }
@@ -161,22 +249,35 @@ function createGoods(data) {
 	var myTemplate = Handlebars.compile($("#goods-template").html());
 	$('#goodList').html(myTemplate(data));
 }
+/**
+ * createRules()
+ * @param data
+ */
+function createRules(data) {
+	var myTemplate = Handlebars.compile($("#rules-template").html());
+	$('#ruleList').html(myTemplate(data));
+}
+function createNumber(data) {
+	var myTemplate = Handlebars.compile($("#numbers-template").html());
+	$('#numberList').html(myTemplate(data));
+}
 function toSubmit() {
 //	var jsonStr = $("#achieveForm").serialize();
 	var jsonStr = {
-		"planId": $("#achieveForm input[name='planId']").val(),
-		"machineTypeId" : $("#achieveForm input[name='machineType']").val(),
+		"planId": $(".J_planId").val(),
+		"machineTypeId" : $(".J_machineType").val(),
 		"brandId" : $(".J_brand").val(),
-		"goodId" : $("#goodList").val(),
-		"numberFirst": $("#achieveForm input[name='numberFirst']").val(),
-        "numberSecond": $("#achieveForm input[name='numberSecond']").val(),
-        "numberThird": $("#achieveForm input[name='numberThird']").val(),
-        "startDate": $("#achieveForm input[name='startDate']").val(),
-        "endDate": $("#achieveForm input[name='endDate']").val(),
-        "issuingDate": $("#achieveForm input[name='issuingDate']").val(),
+		"goodId" : $(".J_goods").val(),
+		"numberFirst": $(".J_numberFirst_").val(),
+        "numberSecond": $(".J_numberSecond_").val(),
+        "numberThird": $(".J_numberThird_").val(),
+        "startDate": $(".J_startDate").val(),
+        "endDate": $(".J_endDate").val(),
+        "issuingDate": $(".J_issuingDate").val(),
         "auditor":  $(".J_auditor").val(),
         "remark":  $(".J_remark").val()
 	};
+	jsonStr["rewardPunishRules"] = rule;
 /*	
 	'rewardPunishRules':[
         {
@@ -222,6 +323,7 @@ function toSubmit() {
 	
 //============需要转换成字符串的json格式传递参数==============================	
 	jsonStr = JSON.stringify(jsonStr);
+	console.info(jsonStr);
 	$.ajax({
 		url : "/achieve",
 		type : "POST",
@@ -229,10 +331,13 @@ function toSubmit() {
 		dataType : "json",
 		data : jsonStr,
 		success : function(data) {
-			alert(data);
+			alert(data.message);
+			if(data.result == "success"){
+				window.location.href = base + "achieve/list?planId="+$(".J_planId").val();
+			}
 		},
 		error : function(res) {
-			alert(res.responseText);
+			alert("网络异常，稍后重试！");
 		}
 	});
 }

@@ -36,6 +36,7 @@ public class RewardPunishRule implements Serializable{
   private Float money;
   @Enumerated(EnumType.STRING)
   private PlanTypeEnum type;
+  @Enumerated(EnumType.STRING)
   private FlagEnum flag = FlagEnum.NORMAL;
   public Long getId() {
     return id;

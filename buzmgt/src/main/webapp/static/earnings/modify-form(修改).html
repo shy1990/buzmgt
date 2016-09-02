@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>修改</title>
+
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/income-cash.css">
+    <link rel="stylesheet" href="css/phone.css">
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        .table-bordered{
+            border: none;
+        }
+
+        .ml{
+            margin-left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<!---扣罚设置表头-->
+<div class="content main">
+    <h4 class="page-header">
+        <i class="ico ico-form-jage"></i>修改
+        <a href="javascript:history.back();" ><i class="ico icon-back fl-right"></i></a>
+    </h4>
+
+    <div style="margin-bottom: 30px">
+        <span class="text-hui text-strong" >方案实施日期：</span>
+
+        <div class="search-date" style="width: 300px;">
+            <div class="input-group input-group-sm">
+	                <span class="input-group-addon " id="basic-addon1"><i
+                            class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+                <input type="text" class="form-control form_datetime input-sm" placeholder="选择日期"
+                       readonly="readonly">
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!----扣罚设置--->
+    <div class="table-bordered bg-color">
+
+        <div class="table-responsive " style="overflow-x: hidden">
+
+
+            <div class="text-tx " style="margin-top: 20px;margin-bottom: 20px">
+
+                <span class="text-hui text-strong">状态：</span> <span class="text-zise text-strong">被驳回 &nbsp;  </span>
+                <a href="" class="btn ph-blue">
+                    <i class="ico ico-form-jage"></i> <span class="text-gery-hs">新建区间值</span>
+                </a>
+            </div>
+            <hr>
+
+            <div>
+                <p style="margin-left: 30px">
+                    <span class="text-zise text-strong ml ">0-50 </span>
+                    <span class="text-zise text-strong ml">50-200 </span>
+                    <span class="text-zise text-strong ml">200-500 </span>
+                    <span class="text-zise text-strong ml">1000-1500 </span>
+                    <span class="text-zise text-strong ml">1500-2000 </span>
+                    <span class="text-zise text-strong ml">2000-3000 </span>
+                    <span class="text-zise text-strong ml">3000-5000 </span>
+                    <span class="text-zise text-strong ml">5000-8000 </span>
+                    <span class="text-zise text-strong ml">8000-30000 </span>
+                </p>
+            </div>
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-sm-offset-4 col-sm-4" style="margin-top: 50px;margin-bottom: 35px;">
+                        <button type="submit" class="col-sm-12 btn btn-primary text-strong">下一步</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!--扣罚设置--->
+</div><!---扣罚设置表头-->
+
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-switch.min.js"></script>
+
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script type="text/javascript">
+
+</script>
+
+</body>
+</html>

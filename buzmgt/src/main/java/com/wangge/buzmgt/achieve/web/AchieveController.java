@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.achieve.web;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.achieve.entity.Achieve;
 import com.wangge.buzmgt.achieve.server.AchieveServer;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
-import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.plan.server.MachineTypeServer;
@@ -85,7 +85,7 @@ public class AchieveController {
   }
 
   @RequestMapping(value="add",method=RequestMethod.GET)
-  public String showAddAchieve(@RequestParam String planId,@RequestParam String machineType, Model model){
+  public String showAddAchieve(@RequestParam String planId, Model model){
     
     List<MachineType> machineTypes = machineTypeServer.findAll();
     model.addAttribute("planId",planId);
@@ -107,6 +107,7 @@ public class AchieveController {
     JSONObject json =new JSONObject();
     
     try {
+      achieve.setCreateDate(new Date());
       achieveServer.save(achieve);
       json.put("result", "success"); 
       json.put("message", "操作成功"); 
