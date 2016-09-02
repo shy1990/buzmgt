@@ -73,7 +73,7 @@ public class IncomeMainplanUsers {
    * @pdOid 7705ac90-3651-447c-b62c-42bbd736b2c0
    */
   private Date fqtime;
-  @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "PLAIN_ID")
   private MainIncomePlan mainplan;
   

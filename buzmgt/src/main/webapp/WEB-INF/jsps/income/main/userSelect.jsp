@@ -180,10 +180,10 @@
 					false);
 		}
 		$('#user').modal('hide');
-		salesAddArr = [];
+		/*salesAddArr = [];
 		$('input:checkbox:checked').each(function(i) {
 			$(this).prop('checked', false);
-		});
+		});*/
 	}
 </script>
 

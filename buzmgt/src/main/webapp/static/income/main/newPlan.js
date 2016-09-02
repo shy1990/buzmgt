@@ -30,7 +30,7 @@ function newPlan() {
 		dataType : "json",
 		success : function(orderData) {
 			alert("新增成功!!");
-			history.back();
+			location.href="/mainPlan/index";
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");
