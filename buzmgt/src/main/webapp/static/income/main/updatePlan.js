@@ -73,8 +73,6 @@ function deleteUser() {
 }
 
 function removeDiv() {
-	//新增salesAddArr里删除该用户
-	salesAddArr.remove(salesArr[gloIndex -1]);
 	salesArr[gloIndex -1] = "";
 	$("#saleDiv" + gloIndex).empty();
 	$("#saleDiv" + gloIndex).remove();

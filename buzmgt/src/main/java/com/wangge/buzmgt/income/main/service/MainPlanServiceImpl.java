@@ -150,8 +150,6 @@ public class MainPlanServiceImpl implements MainPlanService {
       for (IncomeMainplanUsers u : usList) {
         u.setMainplan(plan);
       }
-      plan = mainPlanRep.save(plan);
-      planUserRep.save(usList);
     } catch (Exception e) {
       LogUtil.error("保存主计划失败", e);
       throw new RuntimeException("保存主计划失败");

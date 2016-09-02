@@ -92,7 +92,7 @@ function oilCostPaging(data) {
 // 查找数组下标
 Array.prototype.indexOf = function(val) {
 	for (var i = 0; i < this.length; i++) {
-		if (this[i].salesmanname == val.salesmanname)
+		if (this[i].salesmanId == val.salesmanId)
 			return i;
 	}
 	return -1;
