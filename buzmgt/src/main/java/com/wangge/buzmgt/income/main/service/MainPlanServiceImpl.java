@@ -50,6 +50,7 @@ public class MainPlanServiceImpl implements MainPlanService {
   RoleService roleService;
   @Autowired
   PlanUserVoRepository planUserVorep;
+  
   @Override
   public List<Object> findByUser() {
     // TODO Auto-generated method stub
@@ -103,8 +104,9 @@ public class MainPlanServiceImpl implements MainPlanService {
     }
     return mList;
   }
+  
   @Override
-  public List<BrandType> findCodeByMachineType(String machineType){
+  public List<BrandType> findCodeByMachineType(String machineType) {
     List<Object> list = mainPlanRep.findCodeByMachineType(machineType);
     List<BrandType> mList = new ArrayList<BrandType>();
     for (Object o : list) {
@@ -143,13 +145,13 @@ public class MainPlanServiceImpl implements MainPlanService {
   @Transactional(rollbackFor = Exception.class)
   public void save(MainIncomePlan plan) throws Exception {
     try {
-      List<IncomeMainplanUsers> usList = plan.getUsers();
-      List<IncomeMainplanUsers> newList = new ArrayList<IncomeMainplanUsers>();
-      for (IncomeMainplanUsers u : usList) {
-        newList.add(new IncomeMainplanUsers(u.getSalesmanId(), plan));
-      }
-      plan.setUsers(newList);
       plan = mainPlanRep.save(plan);
+      List<IncomeMainplanUsers> usList = plan.getUsers();
+      for (IncomeMainplanUsers u : usList) {
+        u.setMainplan(plan);
+      }
+      plan = mainPlanRep.save(plan);
+      planUserRep.save(usList);
     } catch (Exception e) {
       LogUtil.error("保存主计划失败", e);
       throw new RuntimeException("保存主计划失败");
@@ -185,32 +187,50 @@ public class MainPlanServiceImpl implements MainPlanService {
     return rList;
     
   }
-
-  /** 
-    * TODO 将事件存入数据库,定时执行 
-    * 1.删除日期是否要大于今天;
-    *  
-    */ 
+  
+  /**
+   * TODO 将事件存入数据库,定时执行 1.删除日期是否要大于今天;
+   * 
+   */
   @Transactional(rollbackFor = Exception.class)
   @Override
   public void deleteUser(IncomeMainplanUsers user) {
-    user.setFqtime(new Date());
-    user.setState(FlagEnum.DEL);
+    IncomeMainplanUsers standardUser = planUserRep.findOne(user.getId());
+    standardUser.setFqtime(user.getFqtime());
+//    standardUser.set(user.getFqtime());
+    planUserRep.delete(user.getId());
   }
-
+  
   @Override
   public void assembleBeforeUpdate(Model model) {
     model.addAttribute("regions", regionService.findByTypeOrderById(RegionType.PROVINCE));
     model.addAttribute("roles", roleService.findAll());
   }
-
+  
   @Override
   public Page<PlanUserVo> getUserpage(Pageable pageReq, Map<String, Object> searchParams) {
-    Page<PlanUserVo> page=planUserVorep.findAll((Specification<PlanUserVo>) (root, query, cb) -> {
+    Page<PlanUserVo> page = planUserVorep.findAll((Specification<PlanUserVo>) (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<Predicate>();
       PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
       return cb.and(predicates.toArray(new Predicate[] {}));
     }, pageReq);
     return page;
+  }
+  
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public Map<String, Object> saveUser(MainIncomePlan plan, List<IncomeMainplanUsers> ulist) throws Exception {
+    Map<String, Object> remap = new HashMap<String, Object>();
+    try {
+      for (IncomeMainplanUsers usr : ulist) {
+        usr.setMainplan(plan);
+      }
+      planUserRep.save(ulist);
+  
+    } catch (Exception e) {
+      LogUtil.error("保存收益主计划人员出错", e);
+      throw new Exception("保存收益主计划人员出错");
+    }
+    return remap;
   }
 }

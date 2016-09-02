@@ -1,23 +1,19 @@
 var itemTotal = 0;// 补统计总条数
-var page = 0;
-var size = 20;
-// 已自定义区域数组
-var regionArr = new Array();
+var searchData = {
+		"page" : 0,
+		"size" : 15,
+	};
 function findMainPlanList(page) {
 	page = page == null || page == '' ? 0 : page;
-	var searchData = {
-		"page" : page,
-		"size" : size,
-	};
-  var region = $("#region").val();
+	searchData.page=page;
+	searchData.regionId = $("#region").val();
 	$.ajax({
-		url : "/mainPlan/queryPlan",
+		url : base+"mainPlan/queryPlan",
 		type : "GET",
-		data : {regionId:region},
+		data : searchData,
 		dataType : "json",
 		success : function(orderData) {
 			createTaskTable(orderData);
-//			initRegionArr(orderData.content);
 			var searchTotal = orderData.number;
 			if (searchTotal != itemTotal || searchTotal == 0 || page == 0) {
 				itemTotal = searchTotal;
@@ -27,24 +23,15 @@ function findMainPlanList(page) {
 		error : function(data) {
 			alert("系统异常，请稍后重试！");
 		}
-	})
+	});
 }
 
 function createTaskTable(data) {
-	Handlebars.registerHelper("addOne", function(index) {
-		// 返回+1之后的结果
-		return index + 1;
-	});
-	// 大于
-	Handlebars.registerHelper("gt", function(num1, num2) {
-		if (num1 > num2) {
-			return "是";
-		} else {
-			return "否";
-		}
+	Handlebars.registerHelper("getImg", function(index) {
+		return index%3+1;
 	});
 	var myTemplate = Handlebars.compile($("#task-table-template").html());
-	$('#acont').html(myTemplate(data));
+	$('#planList').html(myTemplate(data));
 }
 /**
  * 报备的分页
@@ -52,13 +39,30 @@ function createTaskTable(data) {
  * @param data
  */
 function oilCostPaging(data) {
-	var totalCount = data.totalElements, limit = data.size;
+	var totalCount = data.number, limit = searchData.size;
 	$('#abnormalCoordPager').extendPagination({
 		totalCount : totalCount,
 		showCount : 5,
 		limit : limit,
 		callback : function(curr, limit, totalCount) {
-			findTaskList(curr - 1);
+			findMainPlanList(curr - 1);
 		}
 	});
 }
+
+function  deletePlan(){
+	$.ajax({
+		url : "/mainPlan/delete/"+gloPlanId,
+		type : "post",
+		dataType : "json",
+		beforeSend : function(request) {
+			request.setRequestHeader("Content-Type", "application/json");
+		},
+		success : function(data) {
+			alert("删除成功,今天已算收益将会重新计算!!");
+		},
+		error : function(data) {
+			alert("系统异常，请稍后重试！");
+		}
+	});
+	}

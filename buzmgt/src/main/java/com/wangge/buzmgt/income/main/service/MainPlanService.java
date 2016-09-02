@@ -1,17 +1,19 @@
 package com.wangge.buzmgt.income.main.service;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.ui.Model;
+
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
 import com.wangge.buzmgt.income.main.entity.PlanUserVo;
 import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
-import net.sf.json.JSONArray;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.ui.Model;
 
-import java.util.List;
-import java.util.Map;
+import net.sf.json.JSONArray;
 
 /**
  * ClassName: MainPlanService <br/>
@@ -50,7 +52,13 @@ public interface MainPlanService {
    */
   JSONArray getAllBrandType();
   
-  /**
+  /** 
+   * getAllBrandType:根据机型查询品牌. <br/> 
+   * @author ChenGoup
+   * @return 
+   * @since JDK 1.8 
+   */  
+  List<BrandType> findCodeByMachineType(String machineType);  /**
    * save:保存方案. <br/>
    * 
    * @author yangqc
@@ -80,8 +88,6 @@ public interface MainPlanService {
    */
   List<Map<String, Object>> findUserList(Long pid);
   
-  void deleteUser(IncomeMainplanUsers user);
-  
   void assembleBeforeUpdate(Model model);
   
   /**
@@ -95,11 +101,17 @@ public interface MainPlanService {
    */
   Page<PlanUserVo> getUserpage(Pageable pageReq, Map<String, Object> searchParams);
 
-  /**
-   * getAllBrandType:根据机型查询品牌. <br/>
-   * @author ChenGoup
-   * @return
-   * @since JDK 1.8
-   */
-  List<BrandType> findCodeByMachineType(String machineType);
+  /** 
+    * 保存主计划的用户 <br/> 
+    * @author yangqc 
+    * @param plan
+    * @param ulist 
+   * @throws Exception 
+    * @since JDK 1.8 
+    */  
+  Map<String, Object> saveUser(MainIncomePlan plan, List<IncomeMainplanUsers> ulist) throws Exception;
+
+  void deleteUser(IncomeMainplanUsers user);
+
+ 
 }

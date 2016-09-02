@@ -4,23 +4,33 @@
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-
+<link rel="stylesheet" type="text/css" href="/static/income/phone.css">
+<link rel="stylesheet" type="text/css"
+	href="/static/income/plan_index.css" />
 <script id="user-table-template" type="text/x-handlebars-template">
 {{#if content}}
 	{{#each content}}
      <tr>
-									<td>01</td>
-									<td>李易峰</td>
-									<td>A1158584584854151</td>
-									<td>服务站经理</td>
-									<td><i class=" icon-x ico-xx"></i><i
-										class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-										山东省济南市天桥区</td>
-									<td><span class="text-zi text-strong">大学生</span></td>
-									<td>2016.08.19</td>
-									<td><span class="text-gery">无</span></td>
-									<td><label for="input-2"></label> <input id="input-2"
-										type="checkbox" checked></td>
+									<td>{{addOne @index}}</td>
+									<td>{{truename}}</td>
+									<td>{{userId}}</td>
+									<td>{{rolename}}</td>
+									<td><i class="icon-x {{getImg starsLevel 2}}"></i><i
+										class="icon-x {{getImg starsLevel 2}}"></i><i class=" icon-x {{getImg starsLevel 2}}"></i>
+										{{namepath}}
+										</td>
+									<td><span class="text-{{getColore levelName}} text-strong">{{levelName}}</span></td>
+									<td>{{regdate}}</td>
+								{{#if planId}}
+									<td><a   href="javascript:openPlan('{{planId}}');"><span class="text-lv text-strong">{{plantitle}}</span></a>
+									</td>
+									<td><i class="icon icon-un" title="已有所属方案，不可勾选"></i></td>
+								{{else}}
+									<td><span class="text-gery"></span></td>
+									<td><label for="input-2"></label> <input 
+										type="checkbox" onclick="addUserArr('{{userId}}','{{truename}}')"></td>
+								{{/if}}
+
 	  </tr>
 	{{/each}}
 {{/if}}
@@ -28,7 +38,7 @@
 </script>
 
 
-<div class="modal-dialog " role="document" style="width: 980px;">
+<div class="modal-dialog" role="document" style="width: 980px;">
 	<div class="modal-content modal-blue">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
@@ -138,7 +148,8 @@
 
 				</div>
 				<div id="usersPager"></div>
-				<button class="btn btn-blue col-sm-3" style="margin-left: 40%">确定</button>
+				<button class="btn btn-blue col-sm-3" style="margin-left: 40%"
+					onclick="pushAll();">确定</button>
 				<!--待审核账单-->
 				<!--油补记录-->
 			</div>
@@ -148,7 +159,32 @@
 <script src="/static/income/main/userSelect.js" type="text/javascript"
 	charset="utf-8"></script>
 <script type="text/javascript">
-	
+	var salesAddArr = [];
+	//向salesAddArr里添加元素
+	function addUserArr(saleId, username) {
+		var salesman = {
+			"salesmanId" : saleId,
+			"salesmanname" : username
+		};
+		var index = salesAddArr.indexOf(salesman);
+		if (index > -1) {
+			salesAddArr.splice(index, 1);
+		} else {
+			salesAddArr.push(salesman);
+		}
+	}
+	//全部添加
+	function pushAll() {
+		for (var i = 0; i < salesAddArr.length; i++) {
+			addUser(salesAddArr[i].salesmanId, salesAddArr[i].salesmanname,
+					false);
+		}
+		$('#user').modal('hide');
+		salesAddArr = [];
+		$('input:checkbox:checked').each(function(i) {
+			$(this).prop('checked', false);
+		});
+	}
 </script>
 
 

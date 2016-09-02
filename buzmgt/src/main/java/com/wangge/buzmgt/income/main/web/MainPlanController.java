@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
@@ -128,16 +129,24 @@ public class MainPlanController {
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  
-  @RequestMapping(value = "/deleteUser/{id}", method = RequestMethod.POST)
-  public ResponseEntity<Map<String, Object>> deletePlanUser(@PathVariable("id")IncomeMainplanUsers user, HttpServletRequest request) {
+  @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+  public ResponseEntity<Map<String, Object>> getPlan(@PathVariable("id") MainIncomePlan plan,
+      HttpServletRequest request) {
     Map<String, Object> repMap = new HashMap<String, Object>();
     repMap.put("code", "1");
     try {
-      mainPlanService.deleteUser(user);
+      List<Map<String, Object>> uList = mainPlanService.findUserList(plan.getId());
+      repMap.put("data", uList);
+      repMap.put("id", plan.getId());
+      repMap.put("mainTitle", plan.getMaintitle());
+      repMap.put("subTitle", plan.getSubtitle());
+      repMap.put("regionName", plan.getRegionname()());
+      
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.OK);
     } catch (Exception e) {
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  
+ 
 }
