@@ -1,5 +1,3 @@
-var salesArr = [];
-
 /*
  * 类别与品牌的联动
  */
@@ -13,45 +11,6 @@ function changeBranch() {
 			options.add(new Option(branchs[i].name, branchs[i].name));
 		}
 	}
-}
-// 初始化时间框
-function initDateInput() {
-	$(".form_datetime").datetimepicker({
-		format : "yyyy-mm-dd",
-		language : 'zh-CN',
-		weekStart : 1,
-		todayBtn : 1,
-		autoclose : 1,
-		todayHighlight : 1,
-		startView : 2,
-		minView : 2,
-		pickerPosition : "bottom-right",
-		forceParse : 0
-	});
-}
-// 添加业务员
-function addUser(salesId, salesName) {
-	if (jQuery.inArray(salesId, salesArr) > -1) {
-		alert("请勿重复添加业务员");
-		return;
-	}
-	salesArr.push(salesId);
-	var dirHtml = '<div class="col-sm-2"  style="margin-bottom: 20px;margin-left: -20px"  id="saleDiv'
-			+ salesArr.length
-			+ '">'
-			+ ' <div class="s-addperson ">'
-			+ salesName
-			+ '  <i class="icon-s icon-close" onclick="deletediv('
-			+ salesArr.length + ');" ></i>' + ' </div>' + ' </div>';
-	$('.J_addDire').parents('.col-sm-2').before(dirHtml);
-
-}
-
-// 删除选中的业务员
-function deletediv(index) {
-	salesArr[index - 1] = "";
-	$("#saleDiv" + index).empty();
-	$("#saleDiv" + index).remove();
 }
 
 // 新增一个收益主计划
@@ -71,6 +30,7 @@ function newPlan() {
 		dataType : "json",
 		success : function(orderData) {
 			alert("新增成功!!");
+			history.back();
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");
@@ -119,9 +79,10 @@ function getPlan() {
 		return;
 	}
 	for (var i = 0; i < salesArr.length; i++) {
-		if (salesArr[i] != '') {
+		if ('' != salesArr[i] && ('' == salesArr[i].id||undefined == salesArr[i].id)) {
 			salesSet.push({
-				"salesmanId" : salesArr[i]
+				"salesmanId" : salesArr[i].salesmanId,
+				"salesmanname" : salesArr[i].salesmanname
 			});
 		}
 	}
@@ -134,7 +95,6 @@ function getPlan() {
 		"regionId" : region,
 		"regionname" : regionName,
 		"maintitle" : organization + newDate + machineType + allBrand,
-		"users" : null,
 		"subtitle" : subtitle,
 		"users" : salesSet
 	};
