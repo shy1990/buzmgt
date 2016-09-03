@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
   String path = request.getContextPath();
-			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 					+ path + "/";
 %>
 <!DOCTYPE html>
@@ -110,7 +110,7 @@
 					<button class="btn btn-blue btn-sm" onclick="nameSearch()">检索</button>
 				</div>
 				<div class="link-posit-t pull-right export">
-					<a class="table-export" href="javascript:void(0);">导出excel</a>
+					<a class="table-export" href="javascript:dochu();">导出excel</a>
 				</div>
 			</div>
 		</div>
@@ -163,6 +163,7 @@
 	<script src="/static/income/main/income.js" type="text/javascript"
 		charset="utf-8"></script>
 	<script type="text/javascript">
+	var	base='<%=basePath%>';
 		$(function() {
 			initDateInput();
 			findPlanUserList(0);

@@ -82,8 +82,7 @@ public class MainIncomeVo {
    * 
    * @pdOid 4141425b-daa4-487b-8b9a-3e426735dede
    */
-  @Enumerated(EnumType.ORDINAL)
-  private FlagEnum state = FlagEnum.NORMAL;
+  private String  state ;
   
   /**
    * 月份
@@ -191,12 +190,11 @@ public class MainIncomeVo {
     this.allresult = allresult;
   }
 
-
-  public FlagEnum getState() {
+  public String getState() {
     return state;
   }
 
-  public void setState(FlagEnum state) {
+  public void setState(String state) {
     this.state = state;
   }
 

@@ -26,8 +26,6 @@
 	href="/static/ticheng/css/income-cash.css">
 <link rel="stylesheet" type="text/css"
 	href="static/bootStrapPager/css/page.css" />
-	<link rel="stylesheet" type="text/css" href="/static/task/detail.css">
-<link rel="stylesheet" type="text/css" href="/static/oil/css/oil.css">
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <style>

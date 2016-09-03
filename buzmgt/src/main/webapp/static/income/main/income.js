@@ -28,8 +28,8 @@ function findPlanUserList(page) {
 }
 
 function createTaskTable(data) {
-	Handlebars.registerHelper("isfh", function(v1, options) {
-		if (v1 == 1) {
+	Handlebars.registerHelper("isfh", function(state, options) {
+		if (state == '已审核') {
 			// 满足添加继续执行
 			return options.fn(this);
 		} else {
@@ -45,7 +45,7 @@ function createTaskTable(data) {
 			+ (month < 10 ? "0" + month : month);
 	Handlebars.registerHelper("canfh", function(state, month, options) {
 		return options.fn(this);
-		/*if (state == 0 && yearMonth == month && days > 9) {
+		/*if (state == '已审核'&& yearMonth == month && days > 9) {
 			return options.fn(this);
 		} else {
 			return options.inverse(this);
@@ -147,4 +147,10 @@ function nameSearch(){
 function getMonth(){
 	var time = $('body input').val();
 	return time.substr(0,7);
+}
+/**
+ * 导出
+ */
+function dochu(){
+	window.location.href = base + "mainIncome/export?SC_EQ_month="+getMonth();
 }
