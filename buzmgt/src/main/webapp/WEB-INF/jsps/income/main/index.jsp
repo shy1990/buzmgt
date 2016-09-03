@@ -82,6 +82,7 @@
 					<option value="${region.id}">${region.name}</option>
 				</c:forEach>
 			</select>
+			<button class="btn btn-blue btn-sm" onclick="findMainPlanList();">区域检索</button>
 		</p>
 
 

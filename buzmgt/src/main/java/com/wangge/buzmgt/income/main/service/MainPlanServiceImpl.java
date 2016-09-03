@@ -24,12 +24,12 @@ import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
-import com.wangge.buzmgt.income.main.entity.PlanUserVo;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
-import com.wangge.buzmgt.income.main.repository.PlanUserVoRepository;
 import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
+import com.wangge.buzmgt.income.main.vo.repository.PlanUserVoRepository;
 import com.wangge.buzmgt.income.ywsalary.entity.BaseSalary;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.region.entity.Region.RegionType;
@@ -195,23 +195,29 @@ public class MainPlanServiceImpl implements MainPlanService {
   public void deleteUser(IncomeMainplanUsers user) {
     IncomeMainplanUsers standardUser = planUserRep.findOne(user.getId());
     standardUser.setFqtime(user.getFqtime());
-//    standardUser.set(user.getFqtime());
+    // standardUser.set(user.getFqtime());
     planUserRep.delete(user.getId());
   }
   
   @Override
   public void assembleBeforeUpdate(Model model) {
     model.addAttribute("regions", regionService.findByTypeOrderById(RegionType.PROVINCE));
-    model.addAttribute("roles", roleService.findAll());
+//    model.addAttribute("roles", roleService.findAll());
   }
   
   @Override
-  public Page<PlanUserVo> getUserpage(Pageable pageReq, Map<String, Object> searchParams) {
-    Page<PlanUserVo> page = planUserVorep.findAll((Specification<PlanUserVo>) (root, query, cb) -> {
-      List<Predicate> predicates = new ArrayList<Predicate>();
-      PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
-      return cb.and(predicates.toArray(new Predicate[] {}));
-    }, pageReq);
+  public Page<PlanUserVo> getUserpage(Pageable pageReq, Map<String, Object> searchParams) throws Exception {
+    Page<PlanUserVo> page = null;
+    try {
+      page = planUserVorep.findAll((Specification<PlanUserVo>) (root, query, cb) -> {
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
+        return cb.and(predicates.toArray(new Predicate[] {}));
+      }, pageReq);
+    } catch (Exception e) {
+      LogUtil.error("查询主计划人员失败", e);
+      throw new Exception("查询主计划人员失败");
+    }
     return page;
   }
   
@@ -224,7 +230,7 @@ public class MainPlanServiceImpl implements MainPlanService {
         usr.setMainplan(plan);
       }
       planUserRep.save(ulist);
-  
+      
     } catch (Exception e) {
       LogUtil.error("保存收益主计划人员出错", e);
       throw new Exception("保存收益主计划人员出错");

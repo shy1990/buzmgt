@@ -9,9 +9,9 @@ import org.springframework.ui.Model;
 
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
-import com.wangge.buzmgt.income.main.entity.PlanUserVo;
 import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 
 import net.sf.json.JSONArray;
 
@@ -97,9 +97,10 @@ public interface MainPlanService {
    * @param pageReq
    * @param searchParams
    * @return
+   * @throws Exception 
    * @since JDK 1.8
    */
-  Page<PlanUserVo> getUserpage(Pageable pageReq, Map<String, Object> searchParams);
+  Page<PlanUserVo> getUserpage(Pageable pageReq, Map<String, Object> searchParams) throws Exception;
 
   /** 
     * 保存主计划的用户 <br/> 

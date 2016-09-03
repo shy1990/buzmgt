@@ -4,8 +4,9 @@ var WsearchData = {
 };
 var itemTotal = 0;
 function findPlanUserList(page) {
-	page = page == null || page == '' ? 0 : page;
+	page = page == null || page == '' ? WsearchData.page: page;
 	WsearchData.page = page;
+	getSearchData();
 	$.ajax({
 		url : "/mainPlanUsers/",
 		type : "GET",
@@ -104,9 +105,17 @@ Array.prototype.remove = function(val) {
 		this.splice(index, 1);
 	}
 };
-function openPlan(planId){
+function openPlan(planId) {
 	initOtherPlan(planId);
-	otherPlanFlag=true;
+	otherPlanFlag = true;
 	$('#otherPlan').modal('show');
 	$('#user').modal('hide');
+}
+
+function getSearchData() {
+	WsearchData.SC_LK_namepath = $("#namePath").val();
+	WsearchData.SC_EQ_roleId = $("#roleId").val();
+	WsearchData.SC_EQ_levelName = $("#levelName").val();
+	WsearchData.SC_EQ_starsLevel = $("#starsLevel").val();
+	WsearchData.SC_LK_truename = $("#trueName").val();
 }

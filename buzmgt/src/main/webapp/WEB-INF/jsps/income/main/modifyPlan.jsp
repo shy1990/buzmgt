@@ -198,7 +198,6 @@
 		var otherPlanFlag=false;
 		$(function() {
 			initUsers();
-			initDateInput();
 			findPlanUserList(0);
 			//页面未知原因刷新
 			$('#otherPlan').on('hide.bs.modal', function (e) {  

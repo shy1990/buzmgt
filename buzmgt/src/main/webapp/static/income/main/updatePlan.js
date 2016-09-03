@@ -97,21 +97,7 @@ function initUsers() {
 	});
 }
 
-// 初始化时间框
-function initDateInput() {
-	$(".form_datetime").datetimepicker({
-		format : "yyyy-mm-dd",
-		language : 'zh-CN',
-		weekStart : 1,
-		todayBtn : 1,
-		autoclose : 1,
-		todayHighlight : 1,
-		startView : 2,
-		minView : 2,
-		pickerPosition : "bottom-right",
-		forceParse : 0
-	});
-}
+
 // 打开用户列表
 function openUser() {
 	$('#user').modal('show');

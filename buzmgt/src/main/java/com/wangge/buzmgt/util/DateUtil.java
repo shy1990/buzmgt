@@ -255,6 +255,8 @@ public class DateUtil {
     
   }
   
+ 
+  public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");// 定义日期显示格式
   /**
    * 得到前一个月的时间
    * 
@@ -263,8 +265,6 @@ public class DateUtil {
    *          正数为前移,负数为后移
    * @return
    */
-  public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");// 定义日期显示格式
-  
   public static String getPreMonth(Date date, int flag) {
     Calendar calendar = new GregorianCalendar();
     calendar.setTime(date);
