@@ -112,11 +112,11 @@
 
 
 							<div class="btn-qx">
-								<button type="submit" class="btn btn-danger btn-d" onclick="deletePlan()">删除</button>
+								<button class="btn btn-danger btn-d" onclick="deletePlan()">删除</button>
 							</div>
 
 							<div class="btn-dd">
-								<button type="submit" data-dismiss="modal"
+								<button data-dismiss="modal"
 									class="btn btn-primary btn-d">取消</button>
 							</div>
 

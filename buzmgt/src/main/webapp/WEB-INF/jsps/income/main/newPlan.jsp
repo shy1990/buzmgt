@@ -175,7 +175,7 @@
 								</div>
 
 								<div class="btn-dd">
-									<button type="submit" data-dismiss="modal"
+									<button data-dismiss="modal"
 										class="btn btn-primary btn-d">取消</button>
 								</div>
 							</div>

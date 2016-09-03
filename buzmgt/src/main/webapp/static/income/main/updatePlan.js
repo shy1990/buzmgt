@@ -48,11 +48,11 @@ function deleteUser() {
 		return;
 	}
 	salesArr[gloIndex - 1].fqtime = newDate;
-	var user=salesArr[gloIndex - 1];
+	var user=JSON.stringify(salesArr[gloIndex - 1]);
 	$.ajax({
 		url : "mainPlanUsers/deleteUser",
 		type : "post",
-		data : JSON.stringify(user),
+		data : user,
 		beforeSend : function(request) {
 			request.setRequestHeader("Content-Type", "application/json");
 		},
@@ -60,10 +60,10 @@ function deleteUser() {
 		success : function(orderData) {
 			//alert("已删除!!");
 			removeDiv();
-			if(otherPlanFlag){
+			/*if(otherPlanFlag){
 				$('#del').modal('hide');
 				$('#otherPlan').modal('show');
-			}
+			}*/
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");

@@ -151,12 +151,12 @@
 
 								</div>
 								<div class="btn-qx">
-									<button type="submit" class="btn btn-danger btn-d"
+									<button class="btn btn-danger btn-d"
 										onclick="deleteUser()">确定</button>
 								</div>
 
 								<div class="btn-dd">
-									<button type="submit" data-dismiss="modal"
+									<button  data-dismiss="modal"
 										class="btn btn-primary btn-d">取消</button>
 								</div>
 							</div>
@@ -183,8 +183,8 @@
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
 	<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-	<script src="/static/js/common.js" type="text/javascript"
-		charset="utf-8"></script>
+	<!-- <script src="/static/js/common.js" type="text/javascript"
+		charset="utf-8"></script> -->
 	<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
 		charset="utf-8"></script>
 	<script type="text/javascript"
