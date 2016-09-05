@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.achieve.web;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -27,6 +29,7 @@ import com.wangge.buzmgt.achieve.entity.Achieve;
 import com.wangge.buzmgt.achieve.service.AchieveService;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.log.entity.Log.EventType;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
@@ -59,7 +62,7 @@ public class AchieveController {
   /**
    * 
    * @Title: showAchieveList @Description: 展示达量列表 @param @return 设定文件 @return
-   * String 返回类型 @throws
+   *         String 返回类型 @throws
    */
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public String showAchieveList(String planId, Model model) {
@@ -71,9 +74,9 @@ public class AchieveController {
   /**
    * 
    * @Title: findByMachineTypeAndPlanId @Description: 根据方案Id查询对应的达量分页,
-   * 参数格式：sc_EQ_xxxx=yyyy; @param @param request @param @param
-   * planId @param @param pageable @param @return 设定文件 @return Page<Achieve>
-   * 返回类型 @throws
+   *         参数格式：sc_EQ_xxxx=yyyy; @param @param request @param @param
+   *         planId @param @param pageable @param @return 设定文件 @return Page
+   *         <Achieve> 返回类型 @throws
    */
   @RequestMapping(value = "/{planId}", method = RequestMethod.GET)
   @ResponseBody
@@ -88,7 +91,8 @@ public class AchieveController {
   /**
    * 
    * @Title: showAddAchieve @Description: 达量添加 @param @param
-   * planId @param @param model @param @return 设定文件 @return String 返回类型 @throws
+   *         planId @param @param model @param @return 设定文件 @return String
+   *         返回类型 @throws
    */
   @RequestMapping(value = "/add", method = RequestMethod.GET)
   public String showAddAchieve(@RequestParam String planId, Model model) {
@@ -102,7 +106,7 @@ public class AchieveController {
   /**
    * 
    * @Title: addAchieve @Description: 添加操作 @param @param achieve @param @return
-   * 设定文件 @return String 返回类型 @throws
+   *         设定文件 @return String 返回类型 @throws
    */
   @RequestMapping(value = "", method = RequestMethod.POST)
   @ResponseBody
@@ -128,8 +132,8 @@ public class AchieveController {
   /**
    * 
    * @Title: exportWaterOrderCash @Description: 导出达量列表 @param @param
-   * request @param @param response @param @param pageRequest 设定文件 @return void
-   * 返回类型 @throws
+   *         request @param @param response @param @param pageRequest
+   *         设定文件 @return void 返回类型 @throws
    */
   @RequestMapping("/export")
   public void exportWaterOrderCash(HttpServletRequest request, HttpServletResponse response,
@@ -145,7 +149,8 @@ public class AchieveController {
   /**
    * 
    * @Title: showAchieveRecord @Description: 设置记录页面 @param @param
-   * planId @param @param model @param @return 设定文件 @return String 返回类型 @throws
+   *         planId @param @param model @param @return 设定文件 @return String
+   *         返回类型 @throws
    */
   @RequestMapping(value = "/record", method = RequestMethod.GET)
   public String showAchieveRecord(@RequestParam String planId, Model model) {
@@ -156,7 +161,7 @@ public class AchieveController {
   /**
    * 
    * @Title: delete @Description: 删除：更改flag状态DEL @param @param
-   * achieve @param @return 设定文件 @return JSONObject 返回类型 @throws
+   *         achieve @param @return 设定文件 @return JSONObject 返回类型 @throws
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public JSONObject delete(@PathVariable("id") Achieve achieve) {
@@ -185,7 +190,7 @@ public class AchieveController {
   /**
    * 
    * @Title: updAchieve @Description: 修改Achieve @param @param
-   * achieve @param @return 设定文件 @return String 返回类型 @throws
+   *         achieve @param @return 设定文件 @return String 返回类型 @throws
    */
   @RequestMapping(value = "", method = RequestMethod.PUT)
   @ResponseBody
@@ -210,18 +215,37 @@ public class AchieveController {
 
   /**
    * 
-  * @Title: showDetial 
-  * @Description: 查看
-  * @param @param achieve
-  * @param @param model
-  * @param @return    设定文件 
-  * @return String    返回类型 
-  * @throws
+   * @Title: showDetial @Description: 查看 @param @param achieve @param @param
+   * model @param @return 设定文件 @return String 返回类型 @throws
    */
   @RequestMapping(value = "/detial")
   public String showDetial(@RequestParam(name = "achieveId") Achieve achieve, Model model) {
     model.addAttribute("achieve", achieve);
     return "achieve/achieve_detial";
   }
-  
+
+  /**
+   * 
+  * @Title: getPlanUsers 
+  * @Description: 查询方案的所有用户
+  * @param @param planId
+  * @param @param pageRequest
+  * @param @return    设定文件 
+  * @return Page<PlanUserVo>    返回类型 
+  * @throws
+   */
+  @RequestMapping(value = "/planUsers")
+  @ResponseBody
+  public Page<PlanUserVo> getPlanUsers(@RequestParam String planId,
+      @PageableDefault(page = 0, size = 10, sort = { "createDate" }, direction = Direction.DESC) Pageable pageRequest) {
+    Map<String, Object> searchParams = new HashMap<>();
+    Page<PlanUserVo> page = new PageImpl<>(null);
+    try {
+      searchParams.put("EQ_planId", Integer.parseInt(planId));
+      page = mainPlanService.getUserpage(pageRequest, searchParams);
+    } catch (Exception e) {
+      LogUtil.error("查询planId=" + planId + "方案人员失败", e);
+    }
+    return page;
+  }
 }
