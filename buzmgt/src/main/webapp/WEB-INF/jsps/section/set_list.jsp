@@ -70,6 +70,28 @@
     <hr class="hr-solid-sm" style="margin-top: 25px">
 
 
+
+    <div style="padding-left: 0">
+        <div class=" sidebar left-side" style="padding-top:0;margin-top:5px">
+            <h5 class="line-h">
+                <i class="ico ico-fl"></i>请选择类别
+            </h5>
+            <%--手机类型导航栏--%>
+            <ul id="ul" class="nav nav-sidebar menu">
+                <c:forEach items="${machineTypes}" var="machineType">
+                    <li class="current">
+                        <a href="<%=basePath%>section/toNotExpiredJsp?type=${machineType.id}"> ${machineType.name}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+
+        </div>
+    </div>
+
+
+
+
+
     <ul class="nav nav-pills  nav-top" id="myTab">
         <li class="active"><a data-toggle="tab" href="#newon"> &nbsp;当前进行 &nbsp;  </a></li>
         <li><a data-toggle="tab" href="#yguoq">  &nbsp; 已过期 &nbsp; </a></li>
@@ -135,90 +157,6 @@
 
                                     </c:forEach>
                                 </c:if>
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-new">新建</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-hong text-strong">待审核</span></td>--%>
-                                <%--<td><span class="ph-on">进行中</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
-                                <%--</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-zi text-strong">被驳回</span></td>--%>
-                                <%--<td><span class="ph-on">进行中</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn bnt-sm btn-zz" data-toggle="modal" data-target="#del">修改--%>
-                                <%--</button>--%>
-                                <%--<button class="btn bnt-sm btn-sc " data-toggle="modal" data-target="#xgywxx">--%>
-                                <%--删除--%>
-                                <%--</button>--%>
-
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
-                                <%--<td><span class="ph-weihes">未使用</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
-                                <%--</button>--%>
-                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
-                                <%--</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
-                                <%--<td><span class="ph-weihes">未使用</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
-                                <%--</button>--%>
-                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
-                                <%--</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-zi text-strong">被驳回</span></td>--%>
-                                <%--<td><span class="ph-on">进行中</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn bnt-sm btn-zz" data-toggle="modal" data-target="#del">修改--%>
-                                <%--</button>--%>
-                                <%--<button class="btn bnt-sm btn-sc " data-toggle="modal" data-target="#xgywxx">--%>
-                                <%--删除--%>
-                                <%--</button>--%>
-                                <%--<button class="btn  bnt-sm bnt-zza" data-toggle="modal" data-target="#">终止</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
                                 </tbody>
                             </table>
                         </div>
