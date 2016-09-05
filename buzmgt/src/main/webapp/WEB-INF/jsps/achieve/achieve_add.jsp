@@ -18,124 +18,348 @@
 
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css"
-	href="static/phone-set/css/phone.css">
-<link rel="stylesheet" type="text/css"
-	href="static/phone-set/css/comminssion.css">
+<link rel="stylesheet" href="static/multiselect/css/jquery.multiselect.css">
+<link rel="stylesheet" href="static/earnings/css/phone.css">
+<link rel="stylesheet" href="static/earnings/css/comminssion.css">
 <link rel="stylesheet" type="text/css"
 	href="static/achieve/achieve.css">
 <link rel="stylesheet" type="text/css"
 	href="static/bootStrapPager/css/page.css" />
+<style type="text/css">
+.text-gery {
+            color: #757575;
+        }
+
+
+        .ph-search-date > input {
+            display: inline-block;
+            width: auto;
+            height: 30px;
+        }
+
+        body {
+
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #5D5D5D;
+            background-color: #fff;
+        }
+</style>
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script id="achieve-table-template" type="text/x-handlebars-template">
-	{{#if content}}
-	{{#each content}}
-   <tr>
-      <td>{{addOne @index}}</td>
-      <td>{{brand.name}}</td>
-      <td>{{good.name}}</td>
-      <td class="reason">
-				约定时间内达量{{numberFirst}} | {{numberSecond}} | {{numberThird}}
-			</td>
-      <td>
-				<span class="text-blue">{{formDate startDate}}-{{formDate endDate}}</span>
-      </td>
-      <td><span class="text-blue">{{formDate issuingDate}}</span></td>
-      <td><span class="ph-on">进行中</span></td>
-      <td>{{formDate createDate}}</td>
-      <td>
-        <button class="btn bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看</button>
-        <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程</button>
-        <button class="btn btn-sm btn-sc " data-toggle="modal" data-target="#">删除</button>
-      </td>
-    </tr>
-	{{/each}}
-	{{else}}
-	<tr>
-		<td colspan="100">没有相关数据</td>
-	</tr>
-	{{/if}}
-</script>
 <script id="goods-template" type="text/x-handlebars-template">
 {{#if this}}
-<option value="{{id}}">型号</option>
+<option value="">型号</option>
 {{#each this}}
 <option value="{{id}}">{{name}}</option>
 {{/each}}
 {{else}}
-<option value="{{id}}">型号</option>
+<option value="">型号</option>
 {{/if}}
 </script>
+<script id="brands-template" type="text/x-handlebars-template">
+{{#if this}}
+<option value="">品牌</option>
+{{#each this}}
+<option value="{{brandId}}">{{name}}</option>
+{{/each}}
+{{else}}
+<option value="">品牌</option>
+{{/if}}
+</script>
+<script id="rules-template" type="text/x-handlebars-template">
+{{#each this}}
+ <div class="col-sm-4 jfbox-box">
+	{{#if min}}
+	<span class="text-nub">{{min}}</span>
+	<span class="text-publ"> 台 ≤</span>
+	{{/if}}
+	<span class="text-publ">实际销量 </span>
+	{{#if max}}
+	<span class="text-publ">＜ </span>
+	<span class="text-nub">{{max}}</span>
+	<span class="text-publ">台</span> &nbsp;&nbsp;
+	{{/if}}
+	<span class="text-gery text-size-12">提成：</span>
+	<input type="text" class="ph-inpt" placeholder="0.00"
+	onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
+	onafterpaste="this.value=this.value.replace(/[^\d]/g,'')"
+	onblur="addMoney({{num}},this.value);" /> 
+	<span class="text-publ">元/台</span>
+</div>
+{{/each}}
+</script>
+<script id="numbers-template" type="text/x-handlebars-template">
+{{#each this}}
+{{#if this}}
+<span class=" hden-rwl" data-toggle="modal" data-target="#zzrwul">{{this}}台</span>
+{{/if}}
+{{/each}}
+</script>
+
 <script type="text/javascript">
 var	base='<%=basePath%>';
+var rule =new Array();//全局变量
 </script>
-</head>
 <body>
-    <form id="achieveForm" action="" onsubmit="return false;" method="post">
-    	<input type="hidden" name="planId" value="${planId }">
-    	<input type="hidden" name="machineType" value="${machineType }">
-      <div class="">
-        <label>请选择品牌型号</label>
-        <select name="brand" class="J_brand">
-          <option value="">品牌</option>
-          <c:forEach var="brand" items="${brands }" varStatus="status">
-	          <option value="${brand.brandId }">${brand.name }</option>
-          </c:forEach>
-        </select>
-        <select id="goodList" name="good.id" >
-          <option value="">型号</option>
-        </select>
-      </div>
-      <div class="">
-      	<label>周期任务量：</label>
-        <input type="text" name="numberFirst" value="" />台
-      	<input type="text" name="numberSecond" value="" />台
-      	<input type="text" name="numberThird" value="" />台
-      </div>
-      <div>
-      	<button type="button" onclick="addRule();" >添加奖罚</button>
-        <label>一阶段提成奖罚：</label>
-				<div class="J_RULE"></div>	
-      </div>
-      <div class="J_groupNumber">
-        <p>人员分组设置</p>
-        <dd>A</dd>组 一阶段达量：<input type="text" name="numberFirstAdd"/>
-        二阶段达量：<input type ="text" name="numberSecondAdd"/>
-        三阶段达量：<input type="text" name="numberThirdAdd"/>
-                      人员：<input type="text" name=""><br />
-        B组 一阶段达量：<input type="text" name="numberFirstAdd"/>
-        二阶段达量：<input type ="text" name="numberSecondAdd"/>
-        三阶段达量：<input type="text" name="numberThirdAdd"/>
-                      人员：<input type="text" name=""><br />
-        C组 一阶段达量：<input type="text" name="numberFirstAdd"/>
-        二阶段达量：<input type ="text" name="numberSecondAdd"/>
-        三阶段达量：<input type="text" name="numberThirdAdd"/>
-                      人员：<input type="text" name=""><br />
-      </div>
-      <div class="">
-        <label>补充说明：</label>
-        <textarea class="J_remark" cols="4" name="remark"></textarea>
-      </div>
-      <div class="">
-        <label>方案起止日期</label>
-        <input type="date" name="startDate"/>-<input type="date" name="endDate" />
-      </div>
-      <div class="">
-      	<label>提成发放日期</label>
-        <input type="date" name="issuingDate"/>
-      </div>
-      <div class="">
-      	<label>指派审核人</label>
-      	<select class="J_auditor" name="auditor">
-      		<option value="admin">老张</option>
-      		<option value="admin">老张</option>
-      	</select>
-      </div>
-      <input type="button" value="submit" onclick="toSubmit();"/>
-    </form>
-    
+
+<div class="content main">
+    <h4 class="page-header ">
+        <i class="ico ico-ph-tj"></i>创建
+        <!--区域选择按钮-->
+        <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
+    </h4>
+		<form id="achieveForm" onsubmit="return false;">
+		<input type="hidden" class="J_planId" name="planId" value="${planId }">
+    <div class="row ">
+        <!--选择-->
+        <ul class="mmr-l">
+            <li>
+                <span class="text-gery text-strong">请选择：</span>
+                <select class="visit-times J_machineType">
+                    <option value="">类别</option>
+                    <c:forEach var="machineType" items="${machineTypes }" varStatus="status">
+                    <option value="${machineType.id }">${machineType.name }</option>
+                    </c:forEach>
+                </select>
+
+                <select id="brandList" class="visit-times J_brand">
+                    <option>品牌</option>
+                </select>
+
+                <select id="goodList" class="visit-times J_goods">
+                    <option>型号</option>
+                </select>
+<!--                 <button class="btn  bnt-sm ph-btn-add" id="btnadd"><span class="text-strong">+</span></button> -->
+            </li>
+        </ul>
+        <!--阶梯提成设置-->
+        <div class="jttcsz">
+            <i class="ico icon-jtsz"></i><span class="text-head text-strong">阶梯提成设置</span> <span
+                class="text-red">*必填</span>
+            <hr>
+            <div class="rwzsql J_number_box">
+                <span class="text-gery text-strong  ">周期任务量：</span>
+                <!-- 周期任务量 -->
+	            	<span id="numberList" class="J_number">
+	            	</span>
+                <i class="new-icon ph-jiaj" data-toggle="modal"
+                   data-target="#zzrwul"></i>
+                <input type="hidden" class="J_numberFirst_" name="numberFirst" value="" />
+      					<input type="hidden" class="J_numberSecond_" name="numberSecond" value="" />
+      					<input type="hidden" class="J_numberThird_" name="numberThird" value="" />
+            </div>
+
+            <div class="jfgz">
+                <span class="text-gery text-strong  ">奖罚规则：</span>
+                <div id="ruleList" class="jfbox J_RULE" ></div>
+            </div>
+        </div>
+
+        <!--人员分组设置-->
+        <div class="jttcsz">
+            <i class="ico icon-ry"></i><span class="text-head text-strong">人员分组设置</span>
+            <hr>
+
+            <div class="jfbox">
+                <div class="col-sm-6 ryfz-box">
+                    <a href=""><span class="text-big-green">A组（5人）</span></a> &nbsp; <span
+                        class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input
+                        type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
+                    <span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input
+                        type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>
+                </div>
+                <div class="col-sm-6 ryfz-box" style=" ">
+                    <a href=""><span class="text-big-blue">B组（3人）</span></a> &nbsp; <span
+                        class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input
+                        type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
+                    <span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input
+                        type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>
+                </div>
+
+                <div class="col-sm-6 ryfz-box">
+                    <a href=""><span class="text-big-org">C组（7人）</span></a> &nbsp; <span
+                        class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input
+                        type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
+                    <span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input
+                        type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>
+                </div>
+
+                <div class="col-sm-6 ryfz-box box-add tianjz">
+                    <i class="ico ico-ph-tj "></i> <a href=""> <span class="text-gery">添加组</span></a>
+                </div>
+            </div>
+        </div>
+        
+        <!--补充说明-->
+        <!--时间日期人员-->
+
+        <ul>
+            <li>
+                <dl class="dl-horizontal">
+                    <dt>补充说明：</dt>
+                    <dd>
+                        <textarea rows="10" cols="150" class="fl-left J_remark"></textarea>
+
+                    </dd>
+                </dl>
+
+
+            </li>
+            <li style="margin-top: 30px">
+                <dl class="dl-horizontal">
+                    <dt>方案起止时间：</dt>
+                    <dd>
+                        <div class="ph-search-date fl-left form_date_start">
+                            <input name="startDate" type="text" class="form-control form_datetime input-sm J_startDate" placeholder="开始日期" readonly="readonly" style="background: #ffffff;margin-right: 20px">
+                        </div>
+
+                        <div class="ph-search-date fl-left form_date_end">
+                            <input name="endDate" type="text" class="form-control form_datetime input-sm J_endDate" placeholder="结束日期" readonly="readonly" style="background: #ffffff;margin-right: 20px">
+                        </div>
+                        <span class="text-red" style="line-height: 10px">*必填</span>
+
+                    </dd>
+                </dl>
+            </li>
+
+            <li>
+                <dl class="dl-horizontal">
+                    <dt>提成发放日期：</dt>
+                    <dd>
+                        <div class="ph-search-date fl-left">
+                            <input name="issuingDate" type="text" class="form-control form_datetime input-sm J_issuingDate" placeholder="选择日期" readonly="readonly" style="background: #ffffff;margin-right: 20px">
+                            <span class="text-red">注：</span> <span class="text-gery text-size-12">该提成将在该月计算到总体收益内</span>
+                        </div>
+
+                    </dd>
+                </dl>
+            </li>
+
+            <li style="margin-bottom: 200px">
+                <dl class="dl-horizontal">
+                    <dt>指派审核人员：</dt>
+                    <dd>
+                        <div class="input-group ">
+                            <span class="input-group-addon "><i class="icon-s icon-man"></i></span>
+                            <!--<input type="text" class="form-control" placeholder="请选择指派审核人员" aria-describedby="basic-addon1">-->
+                            <div class="inpt-search">
+															<select name="basic[]"
+																class="form-control demo3 J_auditor">
+					
+																<option value="UT">胡老大</option>
+																<option value="VT">横额啊</option>
+																<option value="VA">张二啦</option>
+																<option value="VA">王晓晓</option>
+																<option value="WV">杭大大</option>
+																<option value="WV">曹大大</option>
+																<option value="WI">槽大小</option>
+															</select>
+														</div>
+                        </div>
+                    </dd>
+                </dl>
+            </li>
+         </ul>
+
+        <div class="widget-register widget-welcome-question mt20 hidden-xs widget-welcome widget-register-slideUp" style="margin-left: -10px;height: 70px">
+            <div class="container">
+                <div class="row flex-vertical-center">
+                    <div class="form-group ">
+                        <div class="row" style="height: 70px">
+                            <div class="col-sm-offset-4 col-sm-4" style="margin-top: 50px;margin-bottom: 35px;">
+                                <button type="button" onclick="toSubmit();" class="col-sm-12 btn btn-primary text-strong" style="margin-top: -25px">确认提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <!-- row -->
+</form>    
+<!-- end form -->
+
+<!--设置任务量-->
+<div id="zzrwul" class="modal fade" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content modal-blue">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">设置任务量</h3>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form id="addNumberForm" class="form-horizontal">
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">阶段一：</label>
+                            <div class="col-sm-7">
+                                <div class="input-group are-line">
+                                    <span class="input-group-addon "><i class="ph-icon   ph-renwu"></i></span>
+                                    <!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
+                                    <input type="text" class="form-control input-h J_numberFirst"
+                                           aria-describedby="basic-addon1" placeholder="请输入阶段一任务量"
+                                           onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
+                                           onafterpaste="this.value=this.value.replace(/[^\d]/g,'')" >
+                                    </input>
+                                </div>
+                                <span class="text-gery "
+                                      style="float: right;margin-right: -30px;margin-top: -25px">台</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">阶段二：</label>
+                            <div class="col-sm-7">
+                                <div class="input-group are-line">
+                                    <span class="input-group-addon "><i class=" ph-icon ph-renwu"></i></span>
+                                    <input type="text" class="form-control input-h J_numberSecond" onblur="chkScendValue();"
+                                           aria-describedby="basic-addon1" placeholder="请输入阶段二任务量"
+                                           onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
+                                           onafterpaste="this.value=this.value.replace(/[^\d]/g,'')" >
+                                    </input>
+                                </div>
+                                <span class="text-gery "
+                                      style="float: right;margin-right: -30px;margin-top: -25px">台</span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">阶段三：</label>
+                            <div class="col-sm-7">
+                                <div class="input-group are-line">
+                                    <span class="input-group-addon "><i class=" ph-icon ph-renwu"></i></span>
+                                    <input type="text" class="form-control input-h J_numberThird" onblur="chkThirdValue();"
+                                           aria-describedby="basic-addon1" placeholder="请输入阶段三任务量"
+                                           onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
+                                           onafterpaste="this.value=this.value.replace(/[^\d]/g,'')" >
+                                    </input>
+                                </div>
+                                <span class="text-gery "
+                                      style="float: right;margin-right: -30px;margin-top: -25px">台</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-4 ">
+                                <a herf="javascript:return 0;" onclick="addRule(this)"
+                                   class="Zdy_add  col-sm-12 btn btn-primary ">保存
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 	<!--[if lt IE 9]>
       <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
@@ -144,6 +368,9 @@ var	base='<%=basePath%>';
 		charset="utf-8"></script>
 	<script type="text/javascript"
 		src="static/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script type="text/javascript" src="static/js/H-select.js"></script>
 	<script src="static/js/dateutil.js" type="text/javascript"
 		charset="utf-8"></script>
 	<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
@@ -153,11 +380,12 @@ var	base='<%=basePath%>';
 	<script type="text/javascript"
 		src="static/achieve/achieve_add.js" charset="utf-8"></script>
 	<script type="text/javascript">
-// 		$(".J_MachineType li").on("click",function(){
-// 			$(this).addClass("active");
-// 			$(this).siblings("li").removeClass("active");
-// 		});
-		
+// 	$('.J_auditor').multiselect({
+//         columns: 1,
+//         placeholder: '请选择指派审核人员',
+//         search: true,
+// //         selectGroup: true
+//     });		
 	</script>
 </body>
 

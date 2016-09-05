@@ -86,9 +86,8 @@ function initSearchData() {
 	var $machineType=$(".J_MachineType li.active").attr('title');
 	SearchData['sc_GTE_endDate'] = nowDate;
 	SearchData['sc_LTE_startDate'] = nowDate;
-	SearchData['sc_EQ_status'] = "OVER";
+//	SearchData['sc_EQ_status'] = "OVER";
 	SearchData['sc_EQ_machineType.id'] = $machineType;
-
 }
 
 function findAchieveList(page) {

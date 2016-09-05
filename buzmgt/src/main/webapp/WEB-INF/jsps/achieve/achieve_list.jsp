@@ -118,7 +118,7 @@ var	base='<%=basePath%>';
 							<div class="ph-btn-set">
 								<a href="javascript:add();" class="btn ph-blue"> <i class="ico icon-xj"></i>
 									<span class="text-gery">添加</span>
-								</a> <a href="" class="btn ph-blue" style="margin-right: 30px">
+								</a> <a href="JavaScript:;" class="btn ph-blue" style="margin-right: 30px">
 									<i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
 								</a>
 								<div class="link-posit pull-right">
@@ -146,103 +146,6 @@ var	base='<%=basePath%>';
 										</tr>
 									</thead>
 									<tbody id="achieveList">
-										
-										<tr>
-											<td>01</td>
-											<td>小米/xiaomi</td>
-											<td>小米手机MAX</td>
-											<td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
-											<td><a href="">2016.08.22-2016.08.29</a></td>
-											<td><span class="text-blue">2016.08.28</span></td>
-											<td><span class="ph-on">进行中</span></td>
-											<td>2016.08.28</td>
-											<td>
-												<button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-													data-target="#">查看</button>
-												<button class="btn btn-sm bnt-jc " data-toggle="modal"
-													data-target="#">进程</button>
-												<button class="btn btn-sm btn-sc " data-toggle="modal"
-													data-target="#">删除</button>
-											</td>
-										</tr>
-
-
-										<tr>
-											<td>01</td>
-											<td>小米/xiaomi</td>
-											<td>小米手机MAX</td>
-											<td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
-											<td><a href="">2016.08-22-2016.08.29</a></td>
-											<td><span class="text-blue">2016.08.28</span></td>
-											<td><span class="ph-weihes">未核算</span></td>
-											<td>2016.08.28</td>
-											<td>
-												<button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-													data-target="#">查看</button>
-												<button class="btn btn-sm bnt-jc " data-toggle="modal"
-													data-target="#">进程</button>
-												<button class="btn btn-sm btn-sc " data-toggle="modal"
-													data-target="#">删除</button>
-											</td>
-										</tr>
-
-										<tr>
-											<td>01</td>
-											<td>小米/xiaomi</td>
-											<td>小米手机MAX</td>
-											<td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
-											<td><a href="">2016.08-22-2016.08.29</a></td>
-											<td><span class="text-blue">2016.08.28</span></td>
-											<td><span class="ph-on">进行中</span></td>
-											<td>2016.08.28</td>
-											<td>
-												<button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-													data-target="#">查看</button>
-												<button class="btn btn-sm bnt-jc " data-toggle="modal"
-													data-target="#">进程</button>
-												<button class="btn btn-sm btn-sc " data-toggle="modal"
-													data-target="#">删除</button>
-											</td>
-										</tr>
-
-										<tr>
-											<td>01</td>
-											<td>小米/xiaomi</td>
-											<td>小米手机MAX</td>
-											<td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
-											<td><a href="">2016.08-22-2016.08.29</a></td>
-											<td><span class="text-blue">2016.08.28</span></td>
-											<td><span class="ph-on">进行中</span></td>
-											<td>2016.08.28</td>
-											<td>
-												<button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-													data-target="#">查看</button>
-												<button class="btn btn-sm bnt-jc " data-toggle="modal"
-													data-target="#">进程</button>
-												<button class="btn btn-sm btn-sc " data-toggle="modal"
-													data-target="#">删除</button>
-											</td>
-										</tr>
-
-										<tr>
-											<td>01</td>
-											<td>小米/xiaomi</td>
-											<td>小米手机MAX</td>
-											<td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
-											<td><a href="">2016.08-22-2016.08.29</a></td>
-											<td><span class="text-blue">2016.08.28</span></td>
-											<td><span class="ph-on">进行中</span></td>
-											<td>2016.08.28</td>
-											<td>
-												<button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-													data-target="#">查看</button>
-												<button class="btn btn-sm bnt-jc " data-toggle="modal"
-													data-target="#">进程</button>
-												<button class="btn btn-sm btn-sc " data-toggle="modal"
-													data-target="#">删除</button>
-											</td>
-										</tr>
-
 									</tbody>
 								</table>
 							</div>

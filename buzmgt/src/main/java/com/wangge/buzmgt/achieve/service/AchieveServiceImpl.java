@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.achieve.server;
+package com.wangge.buzmgt.achieve.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,7 +36,7 @@ import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 @Service
-public class AchieveServerImpl implements AchieveServer {
+public class AchieveServiceImpl implements AchieveService {
 
   @Autowired
   private AchieveRepository achieveRepository;
@@ -83,7 +83,6 @@ public class AchieveServerImpl implements AchieveServer {
   public void save(Achieve achieve) {
     try {
       achieveRepository.save(achieve);
-      logService.log(null, achieve.toString(), EventType.SAVE);
     } catch (Exception e) {
       LogUtil.error(e.getMessage(), e);
       throw e;
