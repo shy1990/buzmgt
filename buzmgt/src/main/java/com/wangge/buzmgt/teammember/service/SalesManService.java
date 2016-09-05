@@ -48,4 +48,6 @@ public interface SalesManService {
     * @throws
      */
     void disposeSearchParams(String filedAttribute, Map<String, Object> searchParams);
+
+
 }

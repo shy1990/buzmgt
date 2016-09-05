@@ -1,14 +1,9 @@
 package com.wangge.buzmgt.MothPunishUp;
 
 import com.wangge.buzmgt.BuzmgtApplication;
-import com.wangge.buzmgt.monthTask.entity.AppServer;
 import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
 import com.wangge.buzmgt.salesman.repository.MothPunishUpRepository;
 import com.wangge.buzmgt.salesman.service.MonthPunishUpService;
-import com.wangge.buzmgt.util.HttpUtil;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by 神盾局 on 2016/5/21.

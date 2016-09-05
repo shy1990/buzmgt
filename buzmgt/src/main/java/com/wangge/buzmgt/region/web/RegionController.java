@@ -1,27 +1,6 @@
 package com.wangge.buzmgt.region.web;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
@@ -40,9 +19,27 @@ import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.RegionUtil;
 import com.wangge.json.JSONFormat;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(value = "/region")
@@ -66,7 +63,7 @@ public class RegionController {
 	@Resource
 	private SaojieService saojieService;
 	private static final String ONELEAVE="0";
-	
+	private 	Pattern p = Pattern.compile("\\s*|\t|\r|\n");
 	/**
 	 * 
 	* @Title: initRegion 
@@ -232,7 +229,6 @@ public class RegionController {
 		Region region = regionService.findListRegionbyid(parentid);
 		List<Region> listRegion =new ArrayList<Region>();
 		for(Region reg:region.getChildren()){
-			Pattern p = Pattern.compile("\\s*|\t|\r|\n");
             Matcher m = p.matcher(reg.getName());
             String name = m.replaceAll("");
             reg.setName(name);
@@ -369,7 +365,7 @@ public class RegionController {
 	    * @author jiabin 
 	    * @param id
 	    * @param flag
-	    * @param request
+	    * @param
 	    * @return 
 	    * @since JDK 1.8
 	   */
@@ -407,7 +403,7 @@ public class RegionController {
 	    regionService.saveRegion(region);
 	    
 	    Region parentReigon =region.getParent();
-	     SalesMan man=salesmanservice.findSaleamanByRegionId(region.getParent().getId());
+	     SalesMan man=salesmanservice.findByRegionAndStatus(region.getParent());
 	     if(man==null){
 	    	 model.addAttribute("man","此区域没有业务员");
 	     }else{
@@ -415,17 +411,26 @@ public class RegionController {
 	    	 SaojieDataVo saojiedatalist  = sds.getsaojieDataList(man.getId(),null);
 	 	    List<SaojieData> list = saojiedatalist.getList();
 	 	    int size = 0;
+				 List<SaojieData> listNewSaojieData=new ArrayList<SaojieData>();
 	 	    if(list!=null && !list.isEmpty()){
 	 	      size = list.size();
 	 	      saojiedatalist.setShopNum(size);
+
+					for(SaojieData saojiedata:list){
+
+						Matcher m = p.matcher(saojiedata.getName());
+						String saojiedataName = m.replaceAll("");
+						saojiedata.setName(saojiedataName);
+						listNewSaojieData.add(saojiedata);
+					}
 	 	    }
+				 saojiedatalist.setList(listNewSaojieData);
 	 	    model.addAttribute("saojiedatalist",saojiedatalist);
 	     }
 	     
 	     List<Region> listRegion=regionService.findByRegion(parentReigon.getId());
 	     List<Region> listNewRegion=new ArrayList<Region>();
 	 	for(Region reg:listRegion){
-			Pattern p = Pattern.compile("\\s*|\t|\r|\n");
             Matcher m = p.matcher(reg.getName());
             String regionName = m.replaceAll("");
             reg.setName(regionName);
@@ -442,12 +447,10 @@ public class RegionController {
 	    
 	  }
 	  
-	  
-	  
+
 	  @RequestMapping(value = "/getSaojiedataMap", method = RequestMethod.POST)
 	  @JSONFormat(filterField={"SaojieData.saojie","SaojieData.registData","Region.children","Region.parent"})
 	  public SaojieDataVo getSaojiedataMap(String regionid){
-		  System.out.println(regionid);
 	    SaojieDataVo saojiedatalist  = sds.getsaojieDataList(null, regionid);
 	    List<SaojieData> list = saojiedatalist.getList();
 	    int size = 0;
