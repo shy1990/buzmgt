@@ -38,4 +38,6 @@ public interface SalesManService {
     SalesMan findByRegionAndisPrimaryAccount(Region region);
 
     String addSalesmanLevel(String smallSales,String stuSalesMin,String stuSalesMax,String bigStuSales);
+
+    SalesMan save(SalesMan salesMan);
 }

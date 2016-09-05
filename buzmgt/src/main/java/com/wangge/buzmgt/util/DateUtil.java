@@ -784,4 +784,32 @@ public class DateUtil {
     int month = Integer.valueOf(date.split("-")[1]);
     return getDaysOfMonth2(year, month);
   }
+
+  /**
+   * 名称:  compareDate
+   * 功能:  比较两个日期大小
+   * 参数:  @param beginDate
+   * 参数:  @param endDate
+   * 注: 第二个参数大 为true
+   */
+  public static boolean compareDate(String beginDate, String endDate) throws ParseException {
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    Date nowBegin = sdf.parse(beginDate);
+
+    Date nowEnd = sdf.parse(endDate);
+
+    if (nowBegin.getTime() <= nowEnd.getTime()) {
+
+      return true;
+
+    } else {
+
+      return false;
+
+    }
+
+  }
+
 }

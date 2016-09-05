@@ -55,13 +55,18 @@ public  class SalesManServiceImpl implements SalesManService {
         logService.log(null, salesman, EventType.UPDATE);
     }
 
+    @Override
+    public SalesMan save(SalesMan salesMan) {
+        return salesManRepository.save(salesMan);
+    }
+
     /*
-    * <p>Title: findByReginId</p>
-    * <p>Description:根据id查询区域 </p>
-    * @param regionId
-    * @return
-    * @see com.wangge.buzmgt.salesman.service.salesManService#findByReginId(java.lang.String)
-     */
+        * <p>Title: findByReginId</p>
+        * <p>Description:根据id查询区域 </p>
+        * @param regionId
+        * @return
+        * @see com.wangge.buzmgt.salesman.service.salesManService#findByReginId(java.lang.String)
+         */
     @Override
     @Transactional
     public List<User> findByReginId(String regionId) {
