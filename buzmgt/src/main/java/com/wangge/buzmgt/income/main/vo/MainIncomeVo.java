@@ -3,7 +3,7 @@
  * Author:  yangqc
  * Purpose: Defines the Class SysIncomeMain
  ***********************************************************************/
-package com.wangge.buzmgt.income.main.entity;
+package com.wangge.buzmgt.income.main.vo;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,30 +20,21 @@ import org.hibernate.annotations.GenericGenerator;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
-/** 
- * 收入明细表
-  * date: 2016年9月3日 下午4:58:31 <br/> 
-  * 
-  * @author yangqc 
-  * @version  
-  * @since JDK 1.8 
-  */  
+/** @pdOid 2df595ee-7322-4363-aad1-9e7cfb79c835 */
 @Entity
-@Table(name = "sys_income_main")
-public class MainIncome {
+@Table(name = "view_income_main")
+public class MainIncomeVo {
   /** @pdOid 08793dc7-7b0c-45cf-9e6e-4cb30870c2f9 */
   @Id
-  @GenericGenerator(name = "idgen", strategy = "increment")
-  @GeneratedValue(generator = "idgen")
   private Long id;
+  private Long roleId;
   /**
    * 业务员id
    * 
    * @pdOid 00f5a3a0-8082-4edd-84fd-93f1b7aeba43
    */
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  private SalesMan salesman;
+  //用户id,业务名称,区域路径,角色名称
+  private String  userId,truename,namepath,rolename;
   /**
    * 基本工资
    * 
@@ -88,9 +79,11 @@ public class MainIncome {
   private double allresult = 0;
   /**
    * 状态(0,未审核,1已审核)
+   * 
+   * @pdOid 4141425b-daa4-487b-8b9a-3e426735dede
    */
-  @Enumerated(EnumType.ORDINAL)
-  private FlagEnum state = FlagEnum.NORMAL;
+  private String  state ;
+  
   /**
    * 月份
    * 
@@ -98,102 +91,127 @@ public class MainIncome {
    */
   private String month;
   
+  
+
   public Long getId() {
     return id;
   }
-  
+
   public void setId(Long id) {
     this.id = id;
   }
+
   
-  public SalesMan getSalesman() {
-    return salesman;
+  public String getUserId() {
+    return userId;
   }
-  
-  public void setSalesman(SalesMan salesman) {
-    this.salesman = salesman;
+
+  public void setUserId(String userId) {
+    this.userId = userId;
   }
-  
+
+  public String getTruename() {
+    return truename;
+  }
+
+  public void setTruename(String truename) {
+    this.truename = truename;
+  }
+
+  public String getNamepath() {
+    return namepath;
+  }
+
+  public void setNamepath(String namepath) {
+    this.namepath = namepath;
+  }
+
+  public String getRolename() {
+    return rolename;
+  }
+
+  public void setRolename(String rolename) {
+    this.rolename = rolename;
+  }
+
   public double getBasicSalary() {
     return basicSalary;
   }
-  
+
   public void setBasicSalary(double basicSalary) {
     this.basicSalary = basicSalary;
   }
-  
+
   public double getBusiIncome() {
     return busiIncome;
   }
-  
+
   public void setBusiIncome(double busiIncome) {
     this.busiIncome = busiIncome;
   }
-  
+
   public double getOilIncome() {
     return oilIncome;
   }
-  
+
   public void setOilIncome(double oilIncome) {
     this.oilIncome = oilIncome;
   }
-  
+
   public double getPunish() {
     return punish;
   }
-  
+
   public void setPunish(double punish) {
     this.punish = punish;
   }
-  
+
   public double getReachIncome() {
     return reachIncome;
   }
-  
+
   public void setReachIncome(double reachIncome) {
     this.reachIncome = reachIncome;
   }
-  
+
   public double getOverlyingIncome() {
     return overlyingIncome;
   }
-  
+
   public void setOverlyingIncome(double overlyingIncome) {
     this.overlyingIncome = overlyingIncome;
   }
-  
+
   public double getAllresult() {
     return allresult;
   }
-  
+
   public void setAllresult(double allresult) {
     this.allresult = allresult;
   }
-  
-  public FlagEnum getState() {
+
+  public String getState() {
     return state;
   }
-  
-  public void setState(FlagEnum state) {
+
+  public void setState(String state) {
     this.state = state;
   }
-  
+
   public java.lang.String getMonth() {
     return month;
   }
-  
+
+  public Long getRoleId() {
+    return roleId;
+  }
+
+  public void setRoleId(Long roleId) {
+    this.roleId = roleId;
+  }
+
   public void setMonth(java.lang.String month) {
     this.month = month;
-  }
-  
-  public MainIncome(SalesMan salesman, String month) {
-    super();
-    this.salesman = salesman;
-    this.month = month;
-  }
-  
-  public MainIncome() {
-    super();
   }
   
 }

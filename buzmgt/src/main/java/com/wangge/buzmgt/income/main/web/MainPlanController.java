@@ -57,7 +57,7 @@ public class MainPlanController {
   
   @RequestMapping(value = "/newPlan")
   public String initNew(Model model) {
-    model.addAttribute("regions", regionService.findByTypeOrderById(RegionType.PROVINCE));
+    mainPlanService.assembleBeforeUpdate(model);
     Subject subject = SecurityUtils.getSubject();
     User user = (User) subject.getPrincipal();
     user = userService.getById(user.getId());

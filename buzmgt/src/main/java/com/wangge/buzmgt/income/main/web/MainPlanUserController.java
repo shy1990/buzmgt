@@ -22,8 +22,8 @@ import org.springframework.web.util.WebUtils;
 
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
-import com.wangge.buzmgt.income.main.entity.PlanUserVo;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.log.util.LogUtil;
 
 @RestController
@@ -34,7 +34,7 @@ public class MainPlanUserController {
   private static final String SEARCH_OPERTOR = "SC_";
   
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public Page<PlanUserVo> getUser(HttpServletRequest request, HttpServletResponse response, Pageable pageReq) {
+  public Page<PlanUserVo> getUser(HttpServletRequest request, HttpServletResponse response, Pageable pageReq) throws Exception {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<PlanUserVo> page = mainPlanService.getUserpage(pageReq, searchParams);
     return page;

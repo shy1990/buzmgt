@@ -11,7 +11,7 @@
 {{#if content}}
 	{{#each content}}
      <tr>
-									<td>{{addOne @index}}</td>
+									<td>{{rindex}}</td>
 									<td>{{truename}}</td>
 									<td>{{userId}}</td>
 									<td>{{rolename}}</td>
@@ -54,33 +54,35 @@
 			<div class="content main">
 				<div class="clearfix"></div>
 				<div class="group-search">
-					<select class="ph-select" id="region">
+					<select class="ph-select" id="namepath">
 						<option value=''>选择区域</option>
 						<c:forEach var="region" items="${regions}">
 							<option value="${region.id}">${region.name}</option>
 						</c:forEach>
-					</select> <select class="ph-select" id="role">
-						<option value=''>全部角色</option>
-						<c:forEach var="region" items="${roles}">
-							<option value="${region.name}">${region.name}</option>
-						</c:forEach>
-					</select> <select class="ph-select" id="busiLevel">
+					</select> 
+					<select class="ph-select" id="roleId">
+						<option value=''>业务角色</option>
+						<option value="262144">服务站经理</option>
+						<option value="294914">扩展经理</option>
+					</select> 
+					<select class="ph-select" id="levelName">
 						<option value=''>业务等级</option>
 						<option value='大学生'>大学生</option>
 						<option value='中学生'>中学生</option>
 						<option value='小学生'>小学生</option>
 
-					</select> <select class="ph-select" id='starLevel'>
+					</select> 
+					<select class="ph-select" id='starsLevel'>
 						<option value=''>区域星级</option>
 						<option value='1'>一星</option>
 						<option value='2'>二星</option>
 						<option value='3'>三星</option>
 					</select>
 
-					<button class="btn btn-blue btn-sm" style="margin-left: 10px">
-						检索</button>
+					<button class="btn btn-blue btn-sm" style="margin-left: 10px"
+						onclick="findPlanUserList(0)">检索</button>
 
-					<input type="text" class="col-sm-12 big-seach"
+					<input type="text" id="trueName" class="col-sm-12 big-seach"
 						placeholder="请搜索业务人员姓名">
 				</div>
 
@@ -104,42 +106,6 @@
 								<tr>
 							</thead>
 							<tbody id="userList">
-								<tr>
-									<td>01</td>
-									<td>李易峰</td>
-									<td>A1158584584854151</td>
-									<td>服务站经理</td>
-									<td><i class=" icon-x ico-xx"></i><i
-										class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-										山东省济南市天桥区</td>
-									<td><span class="text-zi text-strong">大学生</span></td>
-									<td>2016.08.19</td>
-									<td><span class="text-gery">无</span></td>
-									<td><label for="input-2"></label> <input id="input-2"
-										type="checkbox" checked></td>
-								</tr>
-
-								<tr>
-									<td>03</td>
-									<td>李易峰</td>
-									<td>A1158584584854151</td>
-									<td>服务站经理</td>
-									<td><i class=" icon-x ico-xx"></i><i
-										class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-										山东省济南市天桥区</td>
-									<td><span class="text-lan text-strong">小学生</span></td>
-									<td>2016.08.19</td>
-									<td><a href=""><span class="text-lv text-strong">代理商C方案</span></a>
-									</td>
-									<td><i class="icon icon-un" title="已有所属方案，不可勾选"></i></td>
-								</tr>
-
-
-
-
-
-
-
 							</tbody>
 						</table>
 

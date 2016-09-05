@@ -255,6 +255,8 @@ public class DateUtil {
     
   }
   
+ 
+  public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");// 定义日期显示格式
   /**
    * 得到前一个月的时间
    * 
@@ -263,8 +265,6 @@ public class DateUtil {
    *          正数为前移,负数为后移
    * @return
    */
-  public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");// 定义日期显示格式
-  
   public static String getPreMonth(Date date, int flag) {
     Calendar calendar = new GregorianCalendar();
     calendar.setTime(date);
@@ -783,5 +783,24 @@ public class DateUtil {
     int year = Integer.valueOf(date.split("-")[0]);
     int month = Integer.valueOf(date.split("-")[1]);
     return getDaysOfMonth2(year, month);
+  }
+
+  /**
+   * 名称:  compareDate
+   * 功能:  比较两个日期大小
+   * 参数:  @param beginDate
+   * 参数:  @param endDate
+   * 注: 第二个参数大 为true
+   */
+  public static boolean compareDate(String beginDate, String endDate) throws ParseException {
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    Date nowBegin = sdf.parse(beginDate);
+
+    Date nowEnd = sdf.parse(endDate);
+
+    return nowBegin.getTime() <= nowEnd.getTime();
+
   }
 }
