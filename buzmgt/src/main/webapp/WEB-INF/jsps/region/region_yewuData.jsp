@@ -139,7 +139,7 @@
 									<%	if(null!=request.getAttribute("jsonData")){%>
 									], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
 								<%}else{%>
-								], {strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
+								], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
 								<%}%>
 									
 									
@@ -154,21 +154,21 @@
 				}else{%>
 		 		
 			 		var bdary = new BMap.Boundary();
-			 		
+
 			 		bdary.get(name, function(rs){ //获取行政区域
 			 		var count = rs.boundaries.length; //行政区域的点有多少个
-		
+
 			 		for(var i = 0; i < count; i++){
 			 		<%	if(null!=request.getAttribute("jsonData")){%>
-			 			var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+			 			var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "", fillColor: "red", fillOpacity: 0.3}); //建立多边形覆盖物
 					<%}else{%>
-						var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "", fillColor: "", fillOpacity: 0.3}); //建立多边形覆盖物
+						var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight:1, strokeColor: "", fillColor: "red", fillOpacity: 0.3}); //建立多边形覆盖物
 					<%}%>
 			 		map.addOverlay(ply); //添加覆盖物
-			 		map.setViewport(ply.getPath()); //调整视野 
-			 		} 
+			 		map.setViewport(ply.getPath()); //调整视野
+			 		}
 			 		map.centerAndZoom(name, 11);
-			 		map.enableScrollWheelZoom(true); 
+			 		map.enableScrollWheelZoom(true);
 			 		}); 
 		 		
 		 		<%}%>
@@ -200,12 +200,12 @@
 					 
 					 <%}
 							}%>
-								], {strokeColor:"blue", strokeWeight:2,fillColor: "", strokeOpacity:0.5});  //创建多边形
+								], {strokeColor:"blue", strokeWeight:2,fillColor: "red", strokeOpacity:0.5});  //创建多边形
 				 				map.addOverlay(polygon); 	
 								//色块上的文字shuomi
 				 				<%
 										if(null !=centerPoint){
-										double lng = Double.parseDouble(centerPoint.split("-")[0]);//经度 
+										double lng = Double.parseDouble(centerPoint.split("-")[0]);//经度
 										double lat = Double.parseDouble(centerPoint.split("-")[1]);//纬度%>
 										var secRingCenter = new BMap.Point(<%=lng%>,<%=lat%>)
 										var secRingLabel2 = new BMap.Label("<%=name%>",{offset: new BMap.Size(10,-30), position: secRingCenter});
