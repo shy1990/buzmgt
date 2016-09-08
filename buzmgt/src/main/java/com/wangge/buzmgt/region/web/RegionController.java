@@ -542,7 +542,7 @@ public class RegionController {
 	    SaojieData saojiedata=saojieDateService.findById(Long.parseLong(id));
 	    Region region=regionService.findListRegionbyid(pid);
 	    
-	    SalesMan salesman= salesmanservice.findSaleamanByRegionId(region.getParent().getId());
+	    SalesMan salesman= salesmanservice.findByRegionAndStatus(region.getParent());
 	    if(null==salesman){
 	    	return "false";
 	    }
