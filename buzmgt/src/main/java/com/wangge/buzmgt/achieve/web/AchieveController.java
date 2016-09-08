@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.achieve.web;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -237,9 +238,9 @@ public class AchieveController {
   @RequestMapping(value = "/planUsers")
   @ResponseBody
   public Page<PlanUserVo> getPlanUsers(@RequestParam String planId,
-      @PageableDefault(page = 0, size = 10, sort = { "createDate" }, direction = Direction.DESC) Pageable pageRequest) {
+      @PageableDefault(page = 0, size = 10, sort = { "regdate" }, direction = Direction.DESC) Pageable pageRequest) {
     Map<String, Object> searchParams = new HashMap<>();
-    Page<PlanUserVo> page = new PageImpl<>(null);
+    Page<PlanUserVo> page = new PageImpl<>(new ArrayList<>());
     try {
       searchParams.put("EQ_planId", Integer.parseInt(planId));
       page = mainPlanService.getUserpage(pageRequest, searchParams);
