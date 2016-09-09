@@ -19,7 +19,7 @@ public class EventProducer {
   private static final EventTranslatorOneArg<MallOrder, MallOrder> TRANSLATOR =
       new EventTranslatorOneArg<MallOrder, MallOrder>() {
         public void translateTo(MallOrder mallOrder, long sequence, MallOrder order) {
-          mallOrder.setOrderNum(mallOrder.getOrderNum());
+          mallOrder.setOrderNum(order.getOrderNum());
           mallOrder.setMember_id(order.getMember_id());
         }
       };
@@ -37,9 +37,9 @@ public class EventProducer {
   /**
    * 获取前十分钟订单
    */
-  public  void getMallOrder(EntityManager em){
-    //String timeoftenMinutes= DateUtil.getTimeofTenMinutes();//十分钟之前的时间
-    String timeoftenMinutes="";
+  public  void getMallOrder(EntityManager em)  {
+    String timeoftenMinutes= DateUtil.getTimeofTenMinutes();//十分钟之前的时间
+   // String timeoftenMinutes="";
     String nowTime=DateUtil.currentDateTimeToString();
     String tenMinutesOrderSql=ORDER_SQL+" WHERE  O.SHIP_TIME BETWEEN to_date('"+timeoftenMinutes+"','yyyy-mm-dd hh24:mi:ss') AND to_date('"+nowTime+"','yyyy-mm-dd hh24:mi:ss')";
 
@@ -67,6 +67,11 @@ public class EventProducer {
       mallorder.setOrderNum(order[2]+"");
       ringBuffer.publishEvent(TRANSLATOR, mallorder);
 
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
     }
   }
 

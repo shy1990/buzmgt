@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.disruptor;
 
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -15,7 +16,7 @@ import javax.persistence.PersistenceContext;
 public class TaskJob {
   @PersistenceContext
   private EntityManager em;
-  //@Scheduled(fixedRate=1000)
+  @Scheduled(fixedRate=1000*20)
   public void work(){
     //System.out.println("1秒执行了"+"hahhahahahah");
     EventBridge.executeProducer(em);
