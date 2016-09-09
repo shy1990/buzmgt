@@ -186,91 +186,6 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-new">新建</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-hong text-strong">待审核</span></td>--%>
-                                <%--<td><span class="ph-on">进行中</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
-                                <%--</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-zi text-strong">被驳回</span></td>--%>
-                                <%--<td><span class="ph-on">进行中</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn bnt-sm btn-xg" data-toggle="modal" data-target="#del">修改--%>
-                                <%--</button>--%>
-                                <%--<button class="btn bnt-sm btn-sc " data-toggle="modal" data-target="#xgywxx">--%>
-                                <%--删除--%>
-                                <%--</button>--%>
-
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
-                                <%--<td><span class="ph-weihes">未使用</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
-                                <%--</button>--%>
-                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
-                                <%--</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
-                                <%--<td><span class="ph-weihes">未使用</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
-                                <%--</button>--%>
-                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
-                                <%--</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-zi text-strong">被驳回</span></td>--%>
-                                <%--<td><span class="ph-on">进行中</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn bnt-sm btn-xg" data-toggle="modal" data-target="#del">修改--%>
-                                <%--</button>--%>
-                                <%--<button class="btn bnt-sm btn-sc " data-toggle="modal" data-target="#xgywxx">--%>
-                                <%--删除--%>
-                                <%--</button>--%>
-                                <%--<button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
                                 <c:if test="${list.size() >=1}">
                                     <c:forEach items="${list}" var="production">
                                         <tr>
@@ -548,7 +463,7 @@
 <script src="../static/bootstrap/js/bootstrap.js"></script>
 <script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 <script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+<%--<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>--%>
 <script>
     $('#tab li').click(function () {
         $(this).addClass('active');

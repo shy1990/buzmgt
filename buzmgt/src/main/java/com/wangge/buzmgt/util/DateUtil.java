@@ -799,7 +799,6 @@ public class DateUtil {
     Date nowBegin = sdf.parse(beginDate);
 
     Date nowEnd = sdf.parse(endDate);
-
     return nowBegin.getTime() <= nowEnd.getTime();
 
   }
