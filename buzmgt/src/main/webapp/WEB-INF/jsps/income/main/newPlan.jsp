@@ -22,120 +22,125 @@
 <link href="static/bootStrapPager/css/page.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/static/income/phone.css">
 <link rel="stylesheet" type="text/css"
+	href="/static/income/order_detail.css">
+<link rel="stylesheet" type="text/css"
 	href="/static/income/plan_index.css" />
+<link rel="stylesheet" type="text/css"
+	href="/static/incomeCash/css/income-cash.css">
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 </head>
 
 <body>
-	<h4 class="page-header">
-		<i class="ico icon-new"></i>创建方案 <a href="javascript:history.back();"><i
-			class="ico icon-back fl-right"></i></a>
-	</h4>
+	<div class="content main">
+		<h4 class="page-header">
+			<i class="ico icon-new"></i>创建方案 <a href="javascript:history.back();"><i
+				class="ico icon-back fl-right"></i></a>
+		</h4>
 
-	<div class="row">
-		<!--col begin-->
-		<div class="col-md-12">
-			<!--orderbox begin-->
-			<div class="order-box">
-				<ul>
-					<li>
-						<dl class="dl-horizontal">
-							<dt>选择所属省份：</dt>
-							<dd>
-								<select id="region" class="ph-select">
-									<option value="">全部区域</option>
-									<c:forEach var="region" items="${regions}">
-										<option value="${region.id}">${region.name}</option>
-									</c:forEach>
-								</select>
-							</dd>
-						</dl>
-
-
-					</li>
+		<div class="row">
+			<!--col begin-->
+			<div class="col-md-12">
+				<!--orderbox begin-->
+				<div class="order-box">
+					<ul>
+						<li>
+							<dl class="dl-horizontal">
+								<dt>选择所属省份：</dt>
+								<dd>
+									<select id="region" class="ph-select">
+										<option value="">全部区域</option>
+										<c:forEach var="region" items="${regions}">
+											<option value="${region.id}">${region.name}</option>
+										</c:forEach>
+									</select>
+								</dd>
+							</dl>
 
 
-					<li>
-						<dl class="dl-horizontal">
-							<dt>填写方案标题：</dt>
-							<dd>
-								<select id="organization" class="ph-select">
-									<option value="">组织机构</option>
-									<c:forEach var="organization" items="${organizations}">
-										<option value="${organization.name}">${organization.name}</option>
-									</c:forEach>
-								</select>
-
-								<div class="ph-search-date">
-
-									<span class=" " id="basic-addon1"></span> <input type="text"
-										id="newDate" class="form-control form_datetime input-sm"
-										placeholder="选择日期" readonly="readonly"
-										style="background: #ffffff" />
-
-								</div>
+						</li>
 
 
-								<select id="machineType" class="ph-select"
-									style="margin-left: 25px" onchange="changeBranch();">
-									<option value="">类别</option>
-									<c:forEach var="organization" items="${machineTypes}">
-										<option value="${organization.code}">${organization.name}</option>
-									</c:forEach>
-								</select> <select class="ph-select" id="allBrand">
-									<option value="">品牌</option>
-								</select>
-							</dd>
-						</dl>
+						<li>
+							<dl class="dl-horizontal">
+								<dt>填写方案标题：</dt>
+								<dd>
+									<select id="organization" class="ph-select">
+										<option value="">组织机构</option>
+										<c:forEach var="organization" items="${organizations}">
+											<option value="${organization.name}">${organization.name}</option>
+										</c:forEach>
+									</select>
+
+									<div class="ph-search-date">
+
+										<span class=" " id="basic-addon1"></span> <input type="text"
+											id="newDate" class="form-control form_datetime input-sm"
+											placeholder="选择日期" readonly="readonly"
+											style="background: #ffffff" />
+
+									</div>
 
 
-					</li>
+									<select id="machineType" class="ph-select"
+										style="margin-left: 25px" onchange="changeBranch();">
+										<option value="">类别</option>
+										<c:forEach var="organization" items="${machineTypes}">
+											<option value="${organization.code}">${organization.name}</option>
+										</c:forEach>
+									</select> <select class="ph-select" id="allBrand">
+										<option value="">品牌</option>
+									</select>
+								</dd>
+							</dl>
 
-					<li>
-						<dl class="dl-horizontal">
-							<dt>填写副标题：</dt>
-							<dd>
-								<div class="input-group">
-									<span class="input-group-addon"><i
-										class="icon-s icon-qb"></i></span> <input type="text" id="subtitle"
-										class="form-control" placeholder="请填写方案标题"
-										aria-describedby="basic-addon1"
-										style="width: 600px; margin-right: 10px;"> <span
-										class="text-orger text-pronce">注：</span> <span
-										class="text-gery text-pronce">50字以内</span>
-								</div>
 
-							</dd>
-						</dl>
-					</li>
+						</li>
 
-					<li>
-						<dl class="dl-horizontal">
-							<dt>添加使用人员：</dt>
+						<li>
+							<dl class="dl-horizontal">
+								<dt>填写副标题：</dt>
+								<dd>
+									<div class="input-group">
+										<span class="input-group-addon"><i
+											class="icon-s icon-qb"></i></span> <input type="text" id="subtitle"
+											class="form-control" placeholder="请填写方案标题"
+											aria-describedby="basic-addon1"
+											style="width: 600px; margin-right: 10px;"> <span
+											class="text-orger text-pronce">注：</span> <span
+											class="text-gery text-pronce">50字以内</span>
+									</div>
 
-							<dd style="width: 750px; margin-bottom: 20px">
+								</dd>
+							</dl>
+						</li>
 
-								<div class="col-sm-2">
-									<a
-										class="J_addDire btn btn-default ph-btn-bluee icon-tj col-sm-6"
-										onclick="openUser();"></a>
-								</div>
+						<li>
+							<dl class="dl-horizontal">
+								<dt>添加使用人员：</dt>
 
-							</dd>
-						</dl>
-					</li>
-				</ul>
+								<dd style="width: 750px; margin-bottom: 20px">
 
-				<button class="btn btn-primary col-sm-1" style="margin-left: 180px"
-					onclick="newPlan()">提交</button>
+									<div class="col-sm-2">
+										<a
+											class="J_addDire btn btn-default ph-btn-bluee icon-tj col-sm-6"
+											onclick="openUser();"></a>
+									</div>
+
+								</dd>
+							</dl>
+						</li>
+					</ul>
+
+					<button class="btn btn-primary col-sm-1" style="margin-left: 180px"
+						onclick="newPlan()">提交</button>
+				</div>
+				<!--orderobx end-->
 			</div>
-			<!--orderobx end-->
+			<!--col end-->
 		</div>
-		<!--col end-->
 	</div>
-
 	<!--删除-->
 	<div id="del" class="modal fade" role="dialog">
 		<div class="modal-dialog " role="document">
@@ -170,13 +175,11 @@
 
 								</div>
 								<div class="btn-qx">
-									<button  class="btn btn-danger btn-d"
-										onclick="deleteUser()">确定</button>
+									<button class="btn btn-danger btn-d" onclick="deleteUser()">确定</button>
 								</div>
 
 								<div class="btn-dd">
-									<button data-dismiss="modal"
-										class="btn btn-primary btn-d">取消</button>
+									<button data-dismiss="modal" class="btn btn-primary btn-d">取消</button>
 								</div>
 							</div>
 						</form>
@@ -218,9 +221,9 @@
 			initDateInput();
 			findPlanUserList(0);
 			//页面未知原因刷新
-			$('#otherPlan').on('hide.bs.modal', function (e) {  
-				otherPlanFlag=false;
-			}); 
+			$('#otherPlan').on('hide.bs.modal', function(e) {
+				otherPlanFlag = false;
+			});
 		});
 	</script>
 

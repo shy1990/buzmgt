@@ -52,6 +52,9 @@ public class MainIncomePlan {
   private String regionId;
   private String regionname;
   
+  //操作人id,用户名
+  private String  authorId;
+  private String  authorName;
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "mainplan",cascade=CascadeType.ALL)
   private List<IncomeMainplanUsers> users;
   public Long getId() {
@@ -132,6 +135,22 @@ public class MainIncomePlan {
     this.maintitle = maintitle;
     this.subtitle = subtitle;
     this.createtime = createtime;
+  }
+
+  public String getAuthorId() {
+    return authorId;
+  }
+
+  public void setAuthorId(String authorId) {
+    this.authorId = authorId;
+  }
+
+  public String getAuthorName() {
+    return authorName;
+  }
+
+  public void setAuthorName(String authorName) {
+    this.authorName = authorName;
   }
 
   public MainIncomePlan() {

@@ -13,5 +13,5 @@ import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 public interface IncomeMainplanUsersRepository
     extends JpaRepository<IncomeMainplanUsers, Long>, JpaSpecificationExecutor<IncomeMainplanUsers> {
   List<IncomeMainplanUsers> findByMainplan_IdAndState(Long pid, FlagEnum flag);
-  
+  List<IncomeMainplanUsers> findByMainplan_Id(Long pid);
 }

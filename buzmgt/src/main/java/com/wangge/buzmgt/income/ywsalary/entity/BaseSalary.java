@@ -60,11 +60,13 @@ public class BaseSalary implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date deldate;// 修改日期
   @Temporal(TemporalType.DATE)
-  private Date newdate = new Date();
+  private Date newdate;
   @Enumerated(EnumType.ORDINAL)
   private FlagEnum flag = FlagEnum.NORMAL;// 是否删除 normal-正常,del-删除
   
-  private Integer times;
+  //操作人id,用户名
+  private String  authorId;
+  private String  authorName;
   public SalesMan getUser() {
     return user;
   }
@@ -81,13 +83,6 @@ public class BaseSalary implements Serializable {
     this.id = id;
   }
   
-  public Integer getTimes() {
-    return times;
-  }
-
-  public void setTimes(Integer times) {
-    this.times = times;
-  }
 
   public String getUserId() {
     return userId;
@@ -129,16 +124,32 @@ public class BaseSalary implements Serializable {
     this.newdate = newdate;
   }
   
-  public BaseSalary(String userId, SalesMan user, Double salary, Integer times) {
+  public BaseSalary(String userId, SalesMan user, Double salary, Date newdate) {
     super();
     this.userId = userId;
     this.user = user;
     this.salary = salary;
-    this.times = times;
+    this.newdate = newdate;
   }
 
   public BaseSalary() {
     super();
+  }
+
+  public String getAuthorId() {
+    return authorId;
+  }
+
+  public void setAuthorId(String authorId) {
+    this.authorId = authorId;
+  }
+
+  public String getAuthorName() {
+    return authorName;
+  }
+
+  public void setAuthorName(String authorName) {
+    this.authorName = authorName;
   }
 
   @Override
