@@ -1,33 +1,10 @@
-//模拟创建的组
-// var groupList = [
-//     {
-//         name: 'A组',
-//         oneAdd:0,
-//         twoAdd: 0,
-//         threeAdd:0,
-//         members: [{name: 'xiaoming', userId: '4556644'}, {name: 'lidong', userId: '97854345'}]
-//
-//     },
-//     {
-//         name: 'B组',
-//         oneAdd: 0,
-//         twoAdd: 0,
-//         threeAdd: 0,
-//         members: [{name: 'dahai', userId: '4556644'}, {name: 'huanghe', userId: '97854345'}]
-//     },
-//
-// ];
-// $(function(){
-//     var jsonData = JSON.parse(window.name);
-//     console.log(jsonData);
-//
-// });
-var groupList = JSON.parse(window.name);
-
 /**
- * 叠加
+ * 叠加类设置
  *
  */
+//获取组成员信息
+var groupList = JSON.parse(window.name);
+//页面初始化
 $(function () {
     initSelectBrand();
     initSelectMachineType();
@@ -341,7 +318,10 @@ function createNumber(data) {
 }
 
 
-//添加商品类型
+/**
+ * 添加商品类型
+ * @type {Array}
+ */
 var goodsTypeList = new Array();
 var a = 0;
 function addGood() {
@@ -393,33 +373,12 @@ function toSubmit() {
         "auditor": $(".J_auditor").val(),
         "remark": $(".J_remark").val()
     };
-    jsonStr["ruleList"] = rule;
-    jsonStr["goodsTypeList"] = goodsTypeList;
 
 
-    // //模拟创建的组
-    // var groupList = [
-    //     {
-    //         name: 'A组',
-    //         oneAdd:0,
-    //         twoAdd: 0,
-    //         threeAdd:0,
-    //         members: [{name: 'xiaoming', userId: '4556644'}, {name: 'lidong', userId: '97854345'}]
-    //
-    //     },
-    //     {
-    //         name: 'B组',
-    //         oneAdd: 0,
-    //         twoAdd: 0,
-    //         threeAdd: 0,
-    //         members: [{name: 'dahai', userId: '4556644'}, {name: 'huanghe', userId: '97854345'}]
-    //     },
-    //
-    // ];
 
-
-//============需要转换成字符串的json格式传递参数==============================
-    jsonStr.groupList = groupList;
+    jsonStr.ruleList = rule;//添加规则
+    jsonStr.goodsTypeList = goodsTypeList;//添加商品类型
+    jsonStr.groupList = groupList;//添加组
     var superposition = $.toJSON(jsonStr);
     console.info(jsonStr);
     // $.ajax({
@@ -427,10 +386,14 @@ function toSubmit() {
     //     type: 'POST',
     //     contentType: 'application/json;charset=utf-8',
     //     data: superposition,
-    //     success: function (data) {
-    //         console.log(data)
+    //     success: function (result) {
+    //         if(result.status == 1){
+    //             alert('添加成功');
+    //             window.location.href = '';
+    //         }
     //     },
     //     error: function () {
+    //         alert('系统故障,添加失败');
     //     }
     //
     // });

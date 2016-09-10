@@ -4,18 +4,36 @@ import com.wangge.buzmgt.superposition.entity.Group;
 import com.wangge.buzmgt.superposition.entity.Superposition;
 import com.wangge.buzmgt.superposition.entity.SuperpositionRule;
 import com.wangge.buzmgt.superposition.repository.SuperpositionRepository;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.service.ManagerService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.persistence.Transient;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 /**
  * Created by joe on 16-9-7.
  */
 @Service
+
 public class SuperpositionServiceImpl implements SuperpositonService {
     @Autowired
     private SuperpositionRepository repository;
+
+    @Resource
+    private ManagerService managerService;
 
     /**
      * 添加叠加任务设置
@@ -27,9 +45,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     public Superposition save(Superposition superposition) {
         List<Group> groupList = superposition.getGroupList();
         List<SuperpositionRule> ruleList = superposition.getRuleList();
-
-
-
+//        Integer.parseInt("ss");
         Superposition superposition1 = repository.save(superposition);
         return superposition1;
     }
@@ -139,29 +155,49 @@ public class SuperpositionServiceImpl implements SuperpositonService {
             return superposition;
         }
 
-        //2.判断人员属于哪一个
-//
-//        List<Group> groupList = superposition.getGroupList();//获取分组的
-//        groupList.forEach(group -> {
-//            group.getMembers().forEach(member -> {
-//                if (memberId.equals(member.getUserId())) {
-//                    Integer oneAdd = group.getOneAdd();
-//                    Integer twoAdd = group.getTwoAdd();
-//                    Integer threeAdd = group.getThreeAdd();
-//                    superposition.setTaskOne(oneAdd);
-//                    superposition.setTaskTwo(twoAdd);
-//                    superposition.setTaskThree(threeAdd);
-//                    ruleList.get(0).setMax(oneAdd);
-//                    ruleList.get(1).setMin(oneAdd);
-//                    ruleList.get(1).setMax(twoAdd);
-//                    ruleList.get(2).setMin(twoAdd);
-//                    ruleList.get(2).setMax(threeAdd);
-//                    ruleList.get(3).setMin(threeAdd);
-//                }
-//            });
-//
-//        });
-
         return null;
     }
+
+    /**
+     *根据id查询
+     * @param id
+     * @return
+     */
+    @Override
+    public Superposition findById(Long id) {
+        Superposition superposition = repository.findOne(id);
+        return superposition;
+    }
+
+    /**
+     * 查询全部的
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Superposition> findAll(Pageable pageable) {
+
+        Page<Superposition> page = repository.findAll(new Specification() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+
+                return null;
+            }
+        },pageable);
+        return page;
+    }
+
+
+
+
+    /**
+     * 获取用户的id
+     * @return
+     */
+    public String getUserID(){
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        return  user.getId();
+    }
+
 }
