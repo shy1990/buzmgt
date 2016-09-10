@@ -49,6 +49,7 @@
     </style>
     <script src="static/js/jquery/jquery-1.11.3.min.js"
             type="text/javascript" charset="utf-8"></script>
+    <script language="JavaScript" src="../static/js/section/jquery.json.js"></script>
     <script id="goods-template" type="text/x-handlebars-template">
         {{#if this}}
         <option value="">型号</option>
@@ -86,7 +87,7 @@
             <input type="text" class="ph-inpt" placeholder="0.00"
                    onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
                    onafterpaste="this.value=this.value.replace(/[^\d]/g,'')"
-                   onblur="addMoney({{num}},this.value);"/>
+                   onblur="addMoney('{{num}}',this.value);"/>
             <span class="text-publ">元/台</span>
         </div>
         {{/each}}
@@ -132,9 +133,10 @@
                     <select id="goodList" class="visit-times J_goods">
                         <option>型号</option>
                     </select>
-                    <!--                 <button class="btn  bnt-sm ph-btn-add" id="btnadd"><span class="text-strong">+</span></button> -->
                 </li>
+                <button class="btn  bnt-sm ph-btn-add" onclick="addGood()"><span class="text-strong">添加</span></button>
             </ul>
+
             <!--阶梯提成设置-->
             <div class="jttcsz">
                 <i class="ico icon-jtsz"></i><span class="text-head text-strong">阶梯提成设置</span> <span
@@ -158,38 +160,78 @@
                 </div>
             </div>
 
+
+            <script id="ceshi-template" type="text/x-handlebars-template">
+                {{#each this}}
+                <div class="col-sm-6 ryfz-box">
+                    <a href=""><span class="text-big-green">{{name}}</span></a> &nbsp;
+
+                    {{#if oneAdd}}
+                    <span class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">{{oneAdd}}+</span> <input
+                        type="text" class="ph-inpt" onblur="addCount1('{{num}}',this.value);"> <span
+                        class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
+                    {{/if}}
+                    {{#if twoAdd}}
+                    <span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">{{twoAdd}}+</span> <input
+                        type="text" class="ph-inpt" onblur="addCount2('{{num}}',this.value);"> <span
+                        class="text-gery text-size-12">台</span>
+                    {{/if}}
+                    {{#if threeAdd}}
+                    <span class="text-gery text-size-12">三阶段达量：</span> <span class="text-nub">{{threeAdd}}+</span>
+                    <input
+                            type="text" class="ph-inpt" onblur="addCount3('{{num}}',this.value);"> <span
+                        class="text-gery text-size-12">台</span>
+                    {{/if}}
+
+
+                </div>
+                {{/each}}
+                <%--{{#each groups}}--%>
+                <%--<tr>--%>
+                <%--<td>{{name}}</td>--%>
+                <%--</tr>--%>
+                <%--{{/each}}--%>
+            </script>
+
+
             <!--人员分组设置-->
             <div class="jttcsz">
                 <i class="ico icon-ry"></i><span class="text-head text-strong">人员分组设置</span>
                 <hr>
 
-                <div class="jfbox">
-                    <div class="col-sm-6 ryfz-box">
-                        <a href=""><span class="text-big-green">A组（5人）</span></a> &nbsp; <span
-                            class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input
-                            type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
-                        <span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input
-                            type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>
-                    </div>
-                    <div class="col-sm-6 ryfz-box" style=" ">
-                        <a href=""><span class="text-big-blue">B组（3人）</span></a> &nbsp; <span
-                            class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input
-                            type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
-                        <span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input
-                            type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>
-                    </div>
+                <div class="jfbox" id="groupJoe">
+                    <%--<div class="col-sm-6 ryfz-box">--%>
+                    <%--<a href=""><span class="text-big-green">A组（5人）</span></a> &nbsp;--%>
 
-                    <div class="col-sm-6 ryfz-box">
-                        <a href=""><span class="text-big-org">C组（7人）</span></a> &nbsp; <span
-                            class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input
-                            type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
-                        <span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input
-                            type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>
-                    </div>
 
-                    <div class="col-sm-6 ryfz-box box-add tianjz">
-                        <i class="ico ico-ph-tj "></i> <a href=""> <span class="text-gery">添加组</span></a>
-                    </div>
+                    <%--<span class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input--%>
+                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;--%>
+
+
+                    <%--<span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input--%>
+                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>--%>
+
+                    <%--</div>--%>
+
+                    <%--<div class="col-sm-6 ryfz-box" style=" ">--%>
+                    <%--<a href=""><span class="text-big-blue">B组（3人）</span></a> &nbsp; <span--%>
+                    <%--class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input--%>
+                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;--%>
+                    <%--<span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input--%>
+                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>--%>
+                    <%--</div>--%>
+
+                    <%--<div class="col-sm-6 ryfz-box">--%>
+                    <%--<a href=""><span class="text-big-org">C组（7人）</span></a> &nbsp; <span--%>
+                    <%--class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input--%>
+                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;--%>
+                    <%--<span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input--%>
+                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>--%>
+                    <%--</div>--%>
+
+                    <%--<div class="col-sm-6 ryfz-box box-add tianjz">--%>
+                    <%--<i class="ico ico-ph-tj "></i> <a href=""> <span class="text-gery">添加组</span></a>--%>
+                    <%--</div>--%>
                 </div>
             </div>
 
@@ -389,7 +431,7 @@
     <script type="text/javascript"
             src="static/bootStrapPager/js/extendPagination.js"></script>
     <script type="text/javascript"
-            src="static/achieve/achieve_add.js" charset="utf-8"></script>
+            src="static/superposition/superposition_add.js" charset="utf-8"></script>
     <script type="text/javascript">
         // 	$('.J_auditor').multiselect({
         //         columns: 1,

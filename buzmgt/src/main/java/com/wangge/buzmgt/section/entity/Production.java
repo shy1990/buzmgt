@@ -53,6 +53,10 @@ public class Production {
     @JoinColumn(name = "PRODUCTION_ID")
     private List<PriceRange> priceRanges;
 
+//    @ManyToOne
+//    关联方案的id
+//    private String planId;
+
 
     public String getStatus() {
         return status;

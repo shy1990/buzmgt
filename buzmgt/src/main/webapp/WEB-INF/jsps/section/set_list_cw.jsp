@@ -18,7 +18,7 @@
     <link href="<%=basePath%>static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/phone.css">
-    <link rel="stylesheet" href="<%=basePath%>static/css/comminssion.css">
+    <link rel="stylesheet" href="<%=basePath%>static/css/section/comminssion.css">
 
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 
@@ -28,43 +28,19 @@
             min-height: 600px;
             background: #FFF;
         }
+
+        .nav-sidebar > li.current > a, .nav-sidebar > li .current > a:focus, .nav-sidebar > li.current > a:hover {
+            color: #2b86ba;
+            border-left: 3px solid #44a6dd;
+            background: #ffffff;
+        }
+
+
     </style>
     <script type="text/javascript">
         function see(id) {
-            window.location.href = '<%=basePath%>section/findToOne/' + id;
+            window.location.href = '<%=basePath%>section/findOne/'+id;
         }
-
-        function oYes(id) {
-            $.ajax({
-                url: '<%=basePath%>section/reviewPrice/' + id,
-                type: 'post',
-                data: {status: '3'},
-                success: function () {
-                    alert("审核成功");
-                    refresh();
-                }
-            })
-
-
-        }
-
-        function oNo(id) {
-            $.ajax({
-                url: '<%=basePath%>section/reviewPrice/' + id,
-                type: 'post',
-                data: {status: '2'},
-                success: function () {
-                    alert("以驳回");
-                    refresh();
-                }
-            })
-        }
-
-        /*页面刷新*/
-        function refresh() {
-            window.location.reload();//刷新当前页面.
-        }
-
 
     </script>
 </head>
@@ -99,25 +75,7 @@
 
     </div>
 
-    <div style="padding-left: 0">
-        <div class=" sidebar left-side" style="padding-top:0;margin-top:5px">
-            <h5 class="line-h">
-                <i class="ico ico-fl"></i>请选择类别
-            </h5>
-            <%--手机类型导航栏--%>
-            <ul id="ul" class="nav nav-sidebar menu">
-                <c:forEach items="${machineTypes}" var="machineType">
-                    <li class="current">
-                        <a href="<%=basePath%>section/toReviewJsp?type=${machineType.id}"> ${machineType.name}</a>
-                    </li>
-                </c:forEach>
-            </ul>
-
-        </div>
-    </div>
-
     <hr class="hr-solid-sm" style="margin-top: 25px">
-
 
     <ul class="nav nav-pills  nav-top" id="myTab">
         <li class="active"><a data-toggle="tab" href="#newon"> &nbsp;当前进行 &nbsp;  </a></li>
@@ -129,19 +87,31 @@
 
 
     <div class="row">
-        <!--col begin-->
         <div class="col-md-12">
-            <!--orderbox begin-->
-
             <div class="order-box">
 
-                <div class="tab-content">
 
+                <div style="padding-left: 0">
+                    <div class=" sidebar left-side" style="padding-top:0;margin-top:5px">
+                        <h5 class="line-h">
+                            <i class="ico ico-fl"></i>请选择类别
+                        </h5>
 
+                        <%--手机类型导航栏--%>
+                        <ul id="ul" class="nav nav-sidebar menu">
+                            <c:forEach items="${machineTypes}" var="machineType">
+                                <li class="current">
+                                    <a href="<%=basePath%>section/toNotExpiredJsp?type=${machineType.id}"> ${machineType.name}</a>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tab-content" style="margin-left: 200px;">
                     <!--当前进行-->
                     <div class="tab-pane fade  in active  " id="newon">
                         <!--导航开始-->
-
                         <div class=" new-table-box table-overflow">
                             <table class="table table-hover new-table">
                                 <thead>
@@ -175,7 +145,8 @@
 
                                             <td>2016.08.28-2016.08.29</td>
                                             <td>
-                                                <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">
+                                                <button class="btn  bnt-sm bnt-ck"
+                                                        onclick="see('${production.productionId}')">
                                                     查看
                                                 </button>
                                             </td>
@@ -234,8 +205,6 @@
                         </div>
 
                     </div>
-
-
                     <!--新建审核-->
 
                     <div class="tab-pane fade  " id="new_review">
@@ -268,8 +237,8 @@
                                                 <td><span class="ph-on">---</span></td>
                                                 <td>2016.08.28-2016.08.29</td>
                                                 <td>
-                                                    <button class="btn  bnt-sm bnt-ck"
-                                                            onclick="see('${production.productionId}')">
+                                                    <button class="btn  bnt-sm bnt-ck" data-toggle="modal"
+                                                            data-target="#">
                                                         查看
                                                     </button>
                                                 </td>
@@ -289,7 +258,6 @@
 
                     <div class="tab-pane fade  " id="modify_review">
                         <!--导航开始-->
-
                         <div class=" new-table-box table-overflow">
                             <table class="table table-hover new-table">
                                 <thead>
@@ -316,13 +284,8 @@
                                             <td><span class="ph-weihes">----</span></td>
                                             <td>${priceRange.priceRangeCreateDate}</td>
                                             <td>
-                                                <button class="btn  bnt-sm bnt-ck"
-                                                        onclick="oYes('${priceRange.priceRangeId}')">
-                                                    通过
-                                                </button>
-                                                <button class="btn  bnt-sm bnt-ck"
-                                                        onclick="oNo('${priceRange.priceRangeId}')">
-                                                    驳回
+                                                <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">
+                                                    查看
                                                 </button>
                                             </td>
                                         </tr>
@@ -334,7 +297,6 @@
                         </div>
 
                     </div>
-
 
                 </div>
 

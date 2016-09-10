@@ -18,7 +18,7 @@
     <link href="<%=basePath%>static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/phone.css">
-    <link rel="stylesheet" href="<%=basePath%>static/css/comminssion.css">
+    <link rel="stylesheet" href="<%=basePath%>static/css/section/comminssion.css">
 
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 
@@ -28,6 +28,14 @@
             min-height: 600px;
             background: #FFF;
         }
+
+        .nav-sidebar > li.current > a, .nav-sidebar > li .current > a:focus, .nav-sidebar > li.current > a:hover {
+            color: #2b86ba;
+            border-left: 3px solid #44a6dd;
+            background: #ffffff;
+        }
+
+
     </style>
     <script type="text/javascript">
         function see(id) {
@@ -99,25 +107,7 @@
 
     </div>
 
-    <div style="padding-left: 0">
-        <div class=" sidebar left-side" style="padding-top:0;margin-top:5px">
-            <h5 class="line-h">
-                <i class="ico ico-fl"></i>请选择类别
-            </h5>
-            <%--手机类型导航栏--%>
-            <ul id="ul" class="nav nav-sidebar menu">
-                <c:forEach items="${machineTypes}" var="machineType">
-                    <li class="current">
-                        <a href="<%=basePath%>section/toReviewJsp?type=${machineType.id}"> ${machineType.name}</a>
-                    </li>
-                </c:forEach>
-            </ul>
-
-        </div>
-    </div>
-
     <hr class="hr-solid-sm" style="margin-top: 25px">
-
 
     <ul class="nav nav-pills  nav-top" id="myTab">
         <li class="active"><a data-toggle="tab" href="#newon"> &nbsp;当前进行 &nbsp;  </a></li>
@@ -129,19 +119,58 @@
 
 
     <div class="row">
-        <!--col begin-->
         <div class="col-md-12">
-            <!--orderbox begin-->
-
             <div class="order-box">
 
-                <div class="tab-content">
 
+                <div style="padding-left: 0">
+                    <div class=" sidebar left-side" style="padding-top:0;margin-top:5px">
+                        <h5 class="line-h">
+                            <i class="ico ico-fl"></i>请选择类别
+                        </h5>
 
+                        <%--<ul class="nav nav-sidebar menu" id="leftnav">--%>
+                        <%--<li class="current">--%>
+                        <%--<a href="##" data-toggle="tab">智能机</a>--%>
+                        <%--</li>--%>
+                        <%--<li>--%>
+                        <%--<a href="##" data-toggle="tab">定制机</a>--%>
+                        <%--</li>--%>
+                        <%--<li>--%>
+                        <%--<a href="##" data-toggle="tab">功能机</a>--%>
+                        <%--</li>--%>
+                        <%--<li>--%>
+                        <%--<a href="##" data-toggle="tab">平板</a>--%>
+                        <%--</li>--%>
+                        <%--<li>--%>
+                        <%--<a href="##" data-toggle="tab">智能生活</a>--%>
+                        <%--</li>--%>
+                        <%--<li>--%>
+                        <%--<a href="##" data-toggle="tab">配件</a>--%>
+                        <%--</li>--%>
+                        <%--</ul>--%>
+                        <%--手机类型导航栏--%>
+                        <ul id="ul" class="nav nav-sidebar menu">
+                            <c:forEach items="${machineTypes}" var="machineType">
+                                <li class="current">
+                                    <a href="<%=basePath%>section/toReviewJsp?type=${machineType.id}"> ${machineType.name}</a>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                        <script>
+                            $('#leftnav li').click(function () {
+                                $(this).addClass('current');
+                                $(this).siblings('li').removeClass('current');
+                                $('#tab li:eq(1) a').tab('show');
+                            });
+                        </script>
+                    </div>
+                </div>
+
+                <div class="tab-content" style="margin-left: 200px;">
                     <!--当前进行-->
                     <div class="tab-pane fade  in active  " id="newon">
                         <!--导航开始-->
-
                         <div class=" new-table-box table-overflow">
                             <table class="table table-hover new-table">
                                 <thead>
@@ -210,6 +239,88 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <%--<tr>--%>
+                                <%--<td><span class="ph-new">新建</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
+                                <%--<td class="reason">2016.08.01</td>--%>
+                                <%--<td><span class=""> -- -- -- </span></td>--%>
+                                <%--<td>刘强</td>--%>
+                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
+                                <%--<td><span class="ph-weihes">已过期</span></td>--%>
+                                <%--<td>2016.08.28-2016.08.29</td>--%>
+                                <%--<td>--%>
+                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
+                                <%--</button>--%>
+                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
+                                <%--</button>--%>
+                                <%--</td>--%>
+                                <%--</tr>--%>
+
+
+                                <%--<tr>--%>
+                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
+                                <%--<td class="reason">2016.08.01</td>--%>
+                                <%--<td><span class=""> -- -- -- </span></td>--%>
+                                <%--<td>刘强</td>--%>
+                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
+                                <%--<td><span class="ph-weihes">已过期</span></td>--%>
+                                <%--<td>2016.08.28-2016.08.29</td>--%>
+                                <%--<td>--%>
+                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
+                                <%--</button>--%>
+                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
+                                <%--</button>--%>
+                                <%--</td>--%>
+                                <%--</tr>--%>
+
+                                <%--<tr>--%>
+                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
+                                <%--<td class="reason">2016.08.01</td>--%>
+                                <%--<td><span class=""> -- -- -- </span></td>--%>
+                                <%--<td>刘强</td>--%>
+                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
+                                <%--<td><span class="ph-weihes">未使用</span></td>--%>
+                                <%--<td>2016.08.28-2016.08.29</td>--%>
+                                <%--<td>--%>
+                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程</button>--%>
+                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看</button>--%>
+
+                                <%--</td>--%>
+                                <%--</tr>--%>
+
+
+                                <%--<tr>--%>
+                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
+                                <%--<td class="reason">2016.08.01</td>--%>
+                                <%--<td><span class=""> -- -- -- </span></td>--%>
+                                <%--<td>刘强</td>--%>
+                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
+                                <%--<td><span class="ph-weihes">已过期</span></td>--%>
+                                <%--<td>2016.08.28-2016.08.29</td>--%>
+                                <%--<td>--%>
+                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
+                                <%--</button>--%>
+                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
+                                <%--</button>--%>
+                                <%--</td>--%>
+                                <%--</tr>--%>
+
+
+                                <%--<tr>--%>
+                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
+                                <%--<td class="reason">2016.08.01</td>--%>
+                                <%--<td><span class=""> -- -- -- </span></td>--%>
+                                <%--<td>刘强</td>--%>
+                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
+                                <%--<td><span class="ph-weihes">已过期</span></td>--%>
+                                <%--<td>2016.08.28-2016.08.29</td>--%>
+                                <%--<td>--%>
+                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
+                                <%--</button>--%>
+                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
+                                <%--</button>--%>
+
+                                <%--</td>--%>
+                                <%--</tr>--%>
                                 <c:if test="${listExpired.size() >=1}">
                                     <c:forEach items="${listExpired}" var="production">
                                         <tr>
@@ -229,13 +340,12 @@
 
                                     </c:forEach>
                                 </c:if>
+
                                 </tbody>
                             </table>
                         </div>
 
                     </div>
-
-
                     <!--新建审核-->
 
                     <div class="tab-pane fade  " id="new_review">
@@ -260,7 +370,9 @@
                                     <c:forEach items="${list}" var="production">
                                         <c:if test="${production.productStatus=='1'}">
                                             <tr>
-                                                <td><span class="ph-new">新建</span> ${production.implDate} 开始 方案区间</td>
+                                                <td><span class="ph-new">新建</span> ${production.implDate} 开始
+                                                    方案区间
+                                                </td>
                                                 <td class="reason">${production.implDate}</td>
                                                 <td><span class=""> ${production.endTime} </span></td>
                                                 <td>${production.productionAuditor}</td>
@@ -289,7 +401,6 @@
 
                     <div class="tab-pane fade  " id="modify_review">
                         <!--导航开始-->
-
                         <div class=" new-table-box table-overflow">
                             <table class="table table-hover new-table">
                                 <thead>
@@ -308,7 +419,9 @@
                                 <c:if test="${priceRanges.size() >=1}">
                                     <c:forEach items="${priceRanges}" var="priceRange">
                                         <tr>
-                                            <td><span class="ph-new">修改</span> ${priceRange.priceRange}区间 修改提成</td>
+                                            <td><span class="ph-new">修改</span> ${priceRange.priceRange}区间
+                                                修改提成
+                                            </td>
                                             <td class="reason">${priceRange.implementationDate}</td>
                                             <td><span class=""> ${priceRange.percentage} 元</span></td>
                                             <td>${priceRange.priceRangeAuditor}</td>
@@ -334,7 +447,6 @@
                         </div>
 
                     </div>
-
 
                 </div>
 

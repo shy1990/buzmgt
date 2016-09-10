@@ -1,12 +1,13 @@
 package com.wangge.buzmgt.section.web;
 
+import com.wangge.buzmgt.plan.entity.MachineType;
+import com.wangge.buzmgt.plan.server.MachineTypeServer;
 import com.wangge.buzmgt.section.entity.PriceRange;
 import com.wangge.buzmgt.section.entity.Production;
 import com.wangge.buzmgt.section.service.PriceRangeService;
 import com.wangge.buzmgt.section.service.ProductionService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,6 +33,9 @@ public class SectionController {
 
     @Autowired
     private PriceRangeService priceRangeService;
+
+    @Autowired
+    private MachineTypeServer machineTypeServer;
 //--------------------------------- 财务的操作 -----------------------------------------------------//
 
     /**
@@ -40,9 +44,8 @@ public class SectionController {
      * @return
      */
     @RequestMapping(value = "addPriceRanges", method = RequestMethod.GET)
-    public String toAddJSP(String type,Model model) {
-        model.addAttribute("type",type);
-//        return "section/test_add";
+    public String toAddJSP(String type, Model model) {
+        model.addAttribute("type", type);
         return "section/add_form";
     }
 
@@ -75,8 +78,6 @@ public class SectionController {
     public String addPriceRanges(@PathVariable("id") Production production, Model model) {
 
         model.addAttribute("production", production);
-
-//        return "section/test_list";
         return "section/add_form2";
     }
 
@@ -107,36 +108,14 @@ public class SectionController {
                                     @RequestParam(value = "size", defaultValue = "20") Integer size
     ) {
 
-        List<Production> ps = productionService.findNotExpired(type);//当前进行的:审核中,驳回
-
-        Sort sort = new Sort(Sort.Direction.ASC, "productionId");
-        Pageable pageable = new PageRequest(page, size, sort);
-        List<Production> list_expired = productionService.findAll(type, pageable).getContent();//过期
-
-        List<PriceRange> price_review = productionService.findReview(type);//修改小区间 审核的
-
-        model.addAttribute("list", ps);
-        model.addAttribute("listExpired",list_expired);
-        model.addAttribute("listExpired",list_expired);
-        model.addAttribute("priceRanges",price_review);
-        return "section/set_list";
+        Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.ASC, "productionId"));
+        model.addAttribute("list", productionService.findNotExpired(type));//当前进行的
+        model.addAttribute("listExpired", productionService.findAll(type, pageable).getContent());//过期的
+        model.addAttribute("priceRanges", productionService.findReview(type));//修改小区间的
+        model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
+//        return "section/set_list";
+        return "section/set_list_cw";
     }
-
-
-    /**
-     * 修改区间值:第一种方式(直接在页面新设置的区间)
-     *
-     * @param priceRange
-     * @return
-     */
-    @RequestMapping(value = "/modifyPriceRange", method = RequestMethod.POST)
-    @ResponseBody
-    public String modifyPriceRange(@RequestBody PriceRange priceRange) {
-        logger.info(priceRange);
-//        priceRangeService.modifyPriceRange(priceRange);
-        return null;
-    }
-
 
     /**
      * 修改区间值
@@ -146,34 +125,32 @@ public class SectionController {
      */
     @RequestMapping(value = "/modifyPriceRange/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public String modifyPriceRange(Long productionId,String auditorId,Double percentage,String implDate,@PathVariable("id") PriceRange priceRange) {
+    public String modifyPriceRange(Long productionId,
+                                   String auditorId,
+                                   Double percentage,
+                                   String implDate,
+                                   @PathVariable("id") PriceRange priceRange) {
 
         logger.info(priceRange);
-        priceRangeService.modifyPriceRange(productionId,auditorId,percentage,implDate,priceRange);
+        priceRangeService.modifyPriceRange(productionId, auditorId, percentage, implDate, priceRange);
         return "cheng gong";
     }
 
     /**
      * 展示详情
+     *
      * @param production
      * @param model
      * @return
      */
     @RequestMapping(value = "/findOne/{id}", method = RequestMethod.GET)
-    public String findOneProduction(@PathVariable("id") Production production,Model model){
-        model.addAttribute("production",production);
+    public String findOneProduction(@PathVariable("id") Production production, Model model) {
+        model.addAttribute("production", production);
         return "section/list_one_cw";
     }
 
 
-
 //--------------------------------- end -----------------------------------------------------//
-
-
-
-
-
-
 
 
 //--------------------------------- 渠道的操作 -----------------------------------------------------//
@@ -189,25 +166,14 @@ public class SectionController {
                               Model model,
                               @RequestParam(value = "page", defaultValue = "0") Integer page,
                               @RequestParam(value = "size", defaultValue = "20") Integer size) {
-
-
-
-        List<Production> ps = productionService.findNotExpired(type);//当前进行
-
-        Sort sort = new Sort(Sort.Direction.ASC, "productionId");
-        Pageable pageable = new PageRequest(page, size, sort);
-        List<Production> list_expired = productionService.findAll(type, pageable).getContent();//过期
-
-        List<PriceRange> price_review = productionService.findReview(type);//修改小区间 审核的
-
-        model.addAttribute("list", ps);
-        model.addAttribute("listExpired",list_expired);
-        model.addAttribute("listExpired",list_expired);
-        model.addAttribute("priceRanges",price_review);
-
-        return "section/review";
+        Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.ASC, "productionId"));
+        model.addAttribute("list", productionService.findNotExpired(type));//当前进行的
+        model.addAttribute("listExpired", productionService.findAll(type, pageable).getContent());//过期的
+        model.addAttribute("priceRanges", productionService.findReview(type));//修改小区间的
+        model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
+//        return "section/review";
+        return "section/review_qd";
     }
-
 
 
     /**
@@ -225,23 +191,23 @@ public class SectionController {
 
     /**
      * 渠道审核小区间修改
+     *
      * @param priceRange
      * @param status
      * @return
      */
-    @RequestMapping(value = "reviewPrice/{id}",method = RequestMethod.POST)
+    @RequestMapping(value = "reviewPrice/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public String reviewPriceRange(@PathVariable("id") PriceRange priceRange,String status){
-        priceRangeService.reviewPriceRange(priceRange,status);
+    public String reviewPriceRange(@PathVariable("id") PriceRange priceRange, String status) {
+        priceRangeService.reviewPriceRange(priceRange, status);
         return "hehehehehehh";
 
     }
 
 
-
     @RequestMapping(value = "/findToOne/{id}", method = RequestMethod.GET)
-    public String findOneProduction1(@PathVariable("id") Production production,Model model){
-        model.addAttribute("production",production);
+    public String findOneProduction1(@PathVariable("id") Production production, Model model) {
+        model.addAttribute("production", production);
         return "section/list_one_qd";
     }
 //------------------------------------ end ------------------------------------------------------//
@@ -249,35 +215,24 @@ public class SectionController {
 
     /**
      * 查询正在使用的区间方案
+     *
      * @param type
      * @param model
      * @return
      */
 
     @RequestMapping(value = "findNow", method = RequestMethod.GET)
-    public String findNowToJSP(String type,Model model) {
-        Map<String,Object> map = productionService.findNowCW(type);
-        List<PriceRange> pc = (List)map.get("list");
+    public String findNowToJSP(String type, Model model) {
+        Map<String, Object> map = productionService.findNowCW(type);
+        List<PriceRange> pc = (List) map.get("list");
+        List<MachineType> machineTypes = machineTypeServer.findAll();//手机类型
         Long productionId = (Long) map.get("productionId");
-        model.addAttribute("list",pc);
-        model.addAttribute("productionId",productionId);
-        model.addAttribute("type",type);
-//        return "section/test_now";
+        model.addAttribute("list", pc);
+        model.addAttribute("productionId", productionId);
+        model.addAttribute("type", type);
+        model.addAttribute("machineTypes", machineTypes);
         return "section/cw_set";
     }
-
-    /**
-     * 查询正在使用的
-     *
-     * @param type:手机类型
-     * @return
-     */
-//    @RequestMapping(value = "findNow", method = RequestMethod.POST)
-//    @ResponseBody
-//    public Production findNow(String type) {
-//        Production p = productionService.findNow(type);
-//        return p;
-//    }
 
 
 }
