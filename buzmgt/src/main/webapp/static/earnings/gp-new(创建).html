@@ -75,15 +75,21 @@
         }
 
         .notice {
+            display: inline-block;
+            position: relative;
+            top: -10px;
             background: url("img/sc-b.png") no-repeat center;
-            padding: 20px 30px;
+            width: 95px;
+            height: 33px;
+           padding-top: 10px;
             text-align: center;
         }
 
         .notice:hover {
             background: url("img/sc-bg.png") no-repeat center;
-            padding: 20px 30px;
+           padding-top: 10px;
             color: #FFFFFF;
+            cursor: pointer;
         }
 
         .text-b {
@@ -152,7 +158,6 @@
             background: url("img/del.png") no-repeat center;
         }
 
-
     </style>
 
 </head>
@@ -170,8 +175,6 @@
         <div class="col-md-12">
             <!--orderbox begin-->
             <div class="order-box">
-
-
                 <ul>
                     <li>
                         <dl class="dl-horizontal ">
@@ -180,8 +183,6 @@
 
 
                     </li>
-
-
                     <li>
                         <dl class="dl-horizontal">
                             <dt><span class="text-green">A组：</span></dt>
@@ -191,7 +192,7 @@
                                 <span class="notice"> 李易峰</span>
                                 <span class="notice"> 李易峰</span>
                                 <span class="notice"> 李易峰</span>
-                                <a href="">修改组</a>
+                                <a href="#" data-target="#tjry" data-toggle="modal"> <i class="icon-bg icon-jiahui"></i></a>
                             </dd>
                         </dl>
                     </li>
@@ -229,7 +230,7 @@
                             <dl class="dl-horizontal">
                                 <dt><span class="text-d">D组：</span></dt>
                                 <dd>
-                                    <a data-target="#tjry" data-toggle="modal"> <i class="icon-bg icon-jiahui"></i></a>
+                                    <a href="#" data-target="#tjry" data-toggle="modal"> <i class="icon-bg icon-jiahui"></i></a>
                                 </dd>
                             </dl>
                         </dl>
@@ -381,7 +382,7 @@
                                     <td><span class="text-hong text-strong">中学生</span></td>
                                     <td><span class="text-gery text-strong">无</span></td>
                                     <td>
-                                        <button class="btn bnt-sm bnt-ck" id="addBtn">添加</button>
+                                        <button class="btn bnt-sm bnt-ck J_addDire">添加</button>
                                     </td>
                                 </tr>
 
@@ -510,8 +511,6 @@
                 </body>
 
                 </html>
-
-
             </div>
         </div>
 
