@@ -370,6 +370,7 @@ function toSubmit() {
 		}
 	});
 }
+//下一步
 function nextGroup(){
 	$(".J_groupUser_show").hide();
 	$("#achieveForm").show();
