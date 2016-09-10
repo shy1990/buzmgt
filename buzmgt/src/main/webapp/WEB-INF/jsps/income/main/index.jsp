@@ -31,7 +31,7 @@
 {{#if content}}
 	{{#each content}}
      <div class="col-sm-5 tc-fangan"
-				style="margin-right: 100px; margin-left: 30px">
+				style="margin-right: 100px; margin-left: 30px;margin-bottom:7px">
 				<div class="col-sm-2" style="margin-left: -30px">
 					<img src="static/img/fan{{getImg @index}}.png" alt="">
 				</div>
@@ -48,7 +48,7 @@
 	{{/each}}
 	
 {{/if}}
-	<div class="col-sm-5 tc-fangan">
+	<div class="col-sm-5 tc-fangan" style="margin-right: 100px; margin-left: 30px;margin-bottom:7px">
 				<div class="col-sm-2" style="margin-left: -30px">
 					<img src="static/img/fan4.png" alt="">
 				</div>

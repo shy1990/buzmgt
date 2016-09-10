@@ -159,7 +159,7 @@ button:active {
   border-bottom-right-radius: 4px;
 }
 
-@media (max-width:768px) {
+@media(max-width:768px) {
   .box-body {
     padding: 15px 26px;
   }
@@ -675,9 +675,9 @@ a.table-export:focus {
 	background-color:#000; 
 	background:rgba(0,0,0,0.3);  
   background:#000 9;/*CSS Hack,只能对ie9以下浏览器ie6,ie7,ie8有效，否侧ie10,FF,Cherome会失去透明效果*/  
-  filter:Alpha(opacity=30);/*只对ie7,ie8有效*/  
+  filter:Alpha(opacity=30); /*只对ie7,ie8有效*/  
  /* 	opacity:0.3; */
-  z-index: 1000;
+  z-index:1000;
 }
 
 .loading-box img {
@@ -735,10 +735,3 @@ a.table-export:focus {
 .marg-t-30{
 	margin-top: 30px;
 }
-
-
-
-
-
-
->>>>>>> refs/heads/shouyi

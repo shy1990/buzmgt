@@ -23,6 +23,12 @@
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 
     <style>
+        /*#ul li{*/
+            /*color: blue;*/
+        /*}*/
+        /*a:hover{*/
+            /*color: red;*/
+        /*}*/
         .new-table-box {
             border-top: none;
             min-height: 600px;
@@ -54,6 +60,8 @@
         .icon-reny {
             background: url("<%=basePath%>static/img/shry.png") no-repeat center;
         }
+
+
     </style>
     <script type="text/javascript">
         /**
@@ -139,36 +147,24 @@
                         <h5 class="line-h">
                             <i class="ico ico-fl"></i>请选择类别
                         </h5>
-
-                        <ul class="nav nav-sidebar menu">
-                            <li class="current">
-                                <a href="##">智能机</a>
-                            </li>
-                            <li>
-                                定制机
-                            </li>
-                            <li>
-                                功能机
-                            </li>
-                            <li>
-                                平板
-                            </li>
-                            <li>
-                                智能生活
-                            </li>
-                            <li>
-                                配件
-                            </li>
+                        <%--手机类型导航栏--%>
+                        <ul id="ul" class="nav nav-sidebar menu">
+                            <c:forEach items="${machineTypes}" var="machineType">
+                                <li class="current">
+                                    <a href="<%=basePath%>section/findNow?type=${machineType.id}"> ${machineType.name}</a>
+                                </li>
+                            </c:forEach>
                         </ul>
+
                     </div>
                 </div>
-                <script>
-                    $('a[data-toggle="phone"]').on('shown.bs.tab', function (e) {
-                        e.target // newly activated tab
-                        e.relatedTarget // previous active tab
-                    })
+                <%--<script>--%>
+                    <%--$('a[data-toggle="phone"]').on('shown.bs.tab', function (e) {--%>
+                        <%--e.target // newly activated tab--%>
+                        <%--e.relatedTarget // previous active tab--%>
+                    <%--})--%>
 
-                </script>
+                <%--</script>--%>
                 <!--左侧导航结束-->
                 <div class="tab-content">
                     <!--右侧内容开始-->

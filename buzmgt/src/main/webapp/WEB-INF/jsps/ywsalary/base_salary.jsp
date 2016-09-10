@@ -28,56 +28,10 @@
 	href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<style>
-.icon-back {
-	width: 26px;
-	height: 26px;
-	background: url("img/arrow.png") no-repeat center;
-}
-
-.icon-back:hover {
-	width: 26px;
-	width: 26px;
-	background: url("img/Arrow 2 .png") no-repeat center;
-}
-
-.fl-right {
-	float: right;
-	margin-top: 25px;
-	margin-right: 25px;
-}
-
-.text-green {
-	color: #0c9969;
-}
-
-.btn-bluee {
-	height: 22px;
-	line-height: 10px;
-	font-size: 12px;
-	padding-left: 8px;
-}
-
-.new-table-box {
-	border-top: 3px solid #1e92d4;
-	min-height: 600px;
-	background: #FFF;
-}
-
-.new-table-box>table>tbody>tr:hover {
-	border-left: 3px solid #1e92d4;
-}
-
-.ph-select {
-	width: 180px;
-	height: 30px;
-	padding: 5px;
-	border: 1px solid #c6c6c6;
-	border-radius: 3px;
-	background: #ffffff;
-	color: #a7a7a7;
-}
-</style>
+<link href="/static/customTask/searchSelect/css/jquery.multiselect.css"
+	type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css"
+	href="/static/income/baicsalary.css">
 <script id="baseSalary-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
@@ -88,10 +42,16 @@
       <td><span class="text-blue">{{salary}}</span></td>
       <td>{{newdate}}</td>
 	  <td><span class="text-green">{{daySalary}}元/天</span></td>
-      <td>
-        <button class="xiugai  btn btn-blue btn-bluee"
-					 data-toggle="modal" data-target="#updModal" data-whatever="{{id}}" data-salary="{{salary}}">修改</button>
-      </td>
+	  <td>{{state}}</td>
+     	{{#isvalid state}}
+      		<td>
+        	<button class="xiugai  btn btn-blue btn-bluee"
+					onclick="openModify('{{id}}','{{salary}}','{{newdate}}');" >修改</button>
+      		</td>
+    	{{else}}
+			<td>
+	    	</td>
+		{{/isvalid}}
     </tr> 
 	{{/each}}
 	{{else}}
@@ -115,11 +75,17 @@
 			</a>
 
 		</h4>
-		<div class="row text-time">
+		<div class="row text-time" id="searchDiv">
 			<!--区域选择按钮-->
 			<!--区域选择按钮-->
 			<div class="area-choose">
-				<%@ include file="../region/regionProvinceSelect.jsp"%>
+				<%--<%@ include file="../region/regionProvinceSelect.jsp"%> --%>
+				<select class="ph-select" id="region">
+					<option value="">选择省区</option>
+					<c:forEach var="region" items="${regions}">
+						<option value="${region.name}">${region.name}</option>
+					</c:forEach>
+				</select>
 				<button class="btn btn-blue btn-sm" onclick="goRegionSearch();">区域检索</button>
 			</div>
 			<!--区域选择按钮-->
@@ -146,6 +112,7 @@
 								<th>基础薪资</th>
 								<th>新增日期</th>
 								<th>日薪资</th>
+								<th>状态</th>
 								<th>操作</th>
 							</tr>
 						</thead>
@@ -161,55 +128,6 @@
 		<!--table-box-->
 		<!--油补记录-->
 	</div>
-
-	<!---alert删除--->
-	<div id="delModal" class="modal fade" role="dialog">
-		<div class="modal-dialog " role="document">
-			<div class="modal-content modal-blue">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h3 class="modal-title">是否删除</h3>
-				</div>
-
-				<div class="modal-body">
-					<div class="container-fluid">
-						<form class="form-horizontal">
-							<div class="form-group">
-								<label class="col-sm-4 control-label text-dk">姓 &nbsp;
-									&nbsp; 名：</label>
-								<div class="col-sm-8">
-									<p id="delName" class="form-control-static text-bg">胡 老 大</p>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label class="col-sm-4 control-label text-dk">基础薪资：</label>
-								<div class="col-sm-8">
-									<p id="delSalary" class="form-control-static text-bg"></p>
-								</div>
-							</div>
-							<input id="delId" type="hidden">
-							<div class="btn-qx">
-								<button type="button" onclick="deleteSalary();"
-									class="btn btn-danger btn-d">删除</button>
-							</div>
-
-							<div class="btn-dd">
-								<button type="button" data-dismiss="modal"
-									class="btn btn-primary btn-d">取消</button>
-							</div>
-
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!---alert删除--->
-
 	<!---alert新增--->
 	<div id="addModal" class="modal fade" role="dialog">
 		<div class="modal-dialog " role="document">
@@ -223,117 +141,73 @@
 				</div>
 				<div class="modal-body">
 					<div class="container-fluid">
-						<form id="addForm" class="form-horizontal" onsubmit="return false">
+						<div class="form-horizontal">
 							<div class="form-group">
 								<label class="col-sm-4 control-label">待设置业务：</label>
 								<div class="col-sm-7">
-									<div class="input-group are-line">
-										<span class="input-group-addon"><i class="icon icon-sz"></i></span>
-										<select name="userId" class="form-control input-h"
-											aria-describedby="basic-addon1">
-											<c:forEach var="user" items="${salaryUsers }">
-												<option value="${user.userId }">${user.truename}</option>
-											</c:forEach>
-										</select>
+									<div class=" input-search"
+										style="margin-left: 5px; height: 30px">
+										<div class="input-group ">
+											<span class="input-group-addon"><i
+												class="icon-s icon-man"></i></span>
+
+											<div class="inpt-search">
+												<form>
+													<select name="basic[]" multiple="multiple"
+														class="form-control demo3" style="padding: 0px">
+														<c:forEach var="user" items="${salaryUsers}">
+															<option value="${user.userId }">${user.truename}</option>
+														</c:forEach>
+													</select>
+												</form>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
-
 							<div class="form-group">
 								<label class="col-sm-4 control-label">基础薪资：</label>
 								<div class="col-sm-7">
 									<div class="input-group are-line">
 										<span class="input-group-addon"><i class="icon icon-xz"></i></span>
-										<input name="salary" type="text" style="width: 200px"
+										<input id="salary" type="number" style="width: 200px"
 											class="form-control input-h" aria-describedby="basic-addon1">
 									</div>
 									<div class="text-strong"
 										style="float: right; margin-top: -20px">元</div>
 								</div>
+
+							</div>
+							<div class="form-group">
+								<label class="col-sm-4 control-label">添加日期：</label>
+								<div class="col-sm-7">
+									<div class=" input-search"
+										style="margin-left: 5px; height: 30px">
+										<div class="input-group ">
+											<span class="input-group-addon " id="basic-addon1"><i
+												class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+											<input id="newdate" type="text"
+												class="form-control form_datetime input-sm"
+												placeholder="年-月-日" readonly="readonly" />
+										</div>
+									</div>
+								</div>
 							</div>
 
 							<div class="form-group">
 								<div class="col-sm-offset-4 col-sm-4 ">
-									<a herf="javascript:return 0;" onclick="addSalary()"
+									<a onclick="addSalary()"
 										class="Zdy_add  col-sm-12 btn btn-primary">保存 </a>
 								</div>
 							</div>
-						</form>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<!---alert新增业务--->
 	</div>
-	<!---alert新增业务--->
 
-	<!-- 选择区域 -->
-	<div id="zdyqy" class="modal fade" role="dialog">
-		<div class="modal-dialog " role="document">
-			<div class="modal-content modal-blue">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h3 class="modal-title">自定义区域</h3>
-				</div>
-				<div class="modal-body">
-					<div class="container-fluid">
-						<form id="addd" class="form-horizontal">
-							<div class="form-group">
-								<label class="col-sm-4 control-label">选择区域：</label>
-								<div class="col-sm-7">
-									<div class="input-group are-line">
-										<span class="input-group-addon"><i class="icon icon-qy"></i></span>
-										<select id="region" class="form-control input-h"
-											name="regionId">
-										</select> <input id="n" type="hidden" value="${regionId}" />
-										<div id="regionMenuContent" class="menuContent">
-
-											<ul id="regionTree" class="ztree"></ul>
-										</div>
-										<input type="hidden" id="towns" name="regionPid">
-										<!-- /btn-group -->
-									</div>
-								</div>
-							</div>
-							<div id="xiugai">
-								<div class="form-group">
-									<label class="col-sm-4 control-label">扣罚系数：</label>
-									<div class="col-sm-7">
-										<div class="input-group are-line">
-											<span class="input-group-addon"><i
-												class="icon icon-task-lk"></i></span> <select name="b" type=""
-												class="form-control input-w" aria-describedby="basic-addon1"
-												id="select">
-												<option value="10">10</option>
-												<option value="20">20</option>
-												<option value="30">30</option>
-												<option value="40">40</option>
-												<option value="50">50</option>
-											</select>
-											<!-- /btn-group -->
-										</div>
-									</div>
-									<div class="col-sm-1 control-label">
-										<span>元</span>
-									</div>
-								</div>
-
-								<div class="form-group">
-									<div class="col-sm-offset-4 col-sm-4 " id="href_div">
-										<a herf="javascript:return 0;" onclick="addd(this)"
-											class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- 选择区域 -->
 
 	<!---alert修改--->
 	<div id="updModal" class="modal fade" role="dialog">
@@ -348,40 +222,67 @@
 				</div>
 				<div class="modal-body">
 					<div class="container-fluid">
-						<form id="updateForm" class="form-horizontal">
-							<input id="updateId" type="hidden" name="id">
+						<div class="form-horizontal">
+
 							<div class="form-group">
 								<label class="col-sm-4 control-label">基础薪资：</label>
 								<div class="col-sm-7">
-									<div class="input-group are-line">
-										<span class="input-group-addon"><i
-											class="icon icon-jcxz"></i></span> <input id="updSalary"
-											name="salary" type="text" class="form-control input-h"
-											aria-describedby="basic-addon1">
+									<div class=" input-search"
+										style="margin-left: 5px; height: 30px">
+										<div class="input-group ">
+											<span class="input-group-addon "><i
+												class="icon-s icon-qian"></i></span>
+
+											<div class="inpt-search">
+												<input type="number" min="0" id="updSalary"
+													placeholder="请输入基础薪资" class="form-control" />
+											</div>
+
+										</div>
+										<div class="a-yuan">元</div>
 									</div>
 								</div>
 							</div>
+
 							<div class="form-group">
-								<div class="col-sm-offset-4 col-sm-4 ">
-									<a herf="javascript:return 0;" onclick="updateSalary()"
-										class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>
+								<label class="col-sm-4 control-label">生效日期：</label>
+								<div class="col-sm-7">
+									<div class=" input-search"
+										style="margin-left: 5px; height: 30px">
+										<div class="input-group ">
+											<span class="input-group-addon "><i
+												class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+											<input type="text" id="updateTime"
+												class="form-control form_datetime input-sm"
+												placeholder="选择日期" readonly="readonly" />
+										</div>
+									</div>
 								</div>
 							</div>
-						</form>
+
+							<div class="form-group">
+								<div class="col-sm-offset-4 col-sm-4 ">
+									<a onclick="updateSalary();" class="col-sm-12 btn btn-primary">保存
+									</a>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!---alert修改--->
-	</div>
 
 	<!---alert---->
 	<script type="text/javascript">
 		var	base='<%=basePath%>';
+		var salesId = '${salesId}';
+		var month='${month}';
 		var SearchData = {
 			'page' : '0',
-			'size' : '20'
+			'size' : '20',
+			"sort" : 'flag'
 		}
 	</script>
 	<script type="text/javascript" src="static/js/common.js"
@@ -400,9 +301,13 @@
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script src="static/js/jqueryfileupload/js/vendor/jquery.ui.widget.js"></script>
 	<script src="static/js/jqueryfileupload/js/jquery.iframe-transport.js"></script>
+	<script type="text/javascript"
+		src="/static/multiselect/js/jquery.multiselect.js"></script>
+
+	<script type="text/javascript" src="/static/customTask/add.js"></script>
+	<script src="/static/bootstrap/js/bootstrap-select.min.js"></script>
 	<script type="text/javascript" src="/static/ticheng/js/base-salary.js"
 		charset="utf-8"></script>
-
 </body>
 
 </html>

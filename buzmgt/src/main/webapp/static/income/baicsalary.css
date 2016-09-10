@@ -1,0 +1,109 @@
+li {
+	list-style-type: none;
+}
+
+.sj-ms-btn-ok {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	text-align: center;
+	background-color: #eee;
+	padding-top: 5px;
+	border-bottom-width: 0px;
+	padding-bottom: 5px;
+}
+
+.sj-ms-btn-ok>button {
+	padding-right: 15px;
+	padding-left: 15px;
+	background-color: #fff;
+	border: 1px solid #aaaaaa;
+	color: #555555;
+}
+
+.text-time {
+	font-size: 12px;
+	color: #636363;
+	margin-top: 35px;
+	margin-bottom: 0px;
+}
+
+.icon-back {
+	width: 26px;
+	height: 26px;
+	background: url("../img/arrow.png") no-repeat center;
+}
+
+.icon-back:hover {
+	width: 26px;
+	width: 26px;
+	background: url("../img/Arrow 2 .png") no-repeat center;
+}
+
+.fl-right {
+	float: right;
+	margin-top: 25px;
+	margin-right: 25px;
+}
+
+.text-green {
+	color: #0c9969;
+}
+
+.btn-bluee {
+	height: 22px;
+	line-height: 10px;
+	font-size: 12px;
+	padding-left: 8px;
+}
+
+.new-table-box {
+	border-top: 3px solid #1e92d4;
+	min-height: 600px;
+	background: #FFF;
+}
+
+.new-table-box>table>tbody>tr:hover {
+	border-left: 3px solid #1e92d4;
+}
+
+.ph-select {
+	width: 180px;
+	height: 30px;
+	padding: 5px;
+	border: 1px solid #c6c6c6;
+	border-radius: 3px;
+	background: #ffffff;
+	color: #a7a7a7;
+}
+
+.icon-man {
+	background: url("../img/mana.png") no-repeat center;
+}
+
+.icon-s {
+	display: inline-block;
+	position: relative;
+	width: 15px;
+	height: 15px;
+}
+
+.icon-qian {
+	background: url("../img/money.png") no-repeat center;
+}
+
+.a-yuan {
+	float: left;
+	margin-top: -25px;
+	margin-left: 300px;
+}
+
+.inpt-search {
+	font-size: 10px;
+}
+
+.form-control {
+	padding: 6px;
+	font-size: 10px;
+	color: #aaaaaa;
+	background-color: #fff;
+}

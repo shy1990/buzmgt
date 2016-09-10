@@ -192,3 +192,20 @@ Date.prototype.format = function (format) {
 					 : ("00" + o[k]).substr(("" + o[k]).length));
 	return format;
 }
+Date.prototype.setFullTime =function(hour,minute,second){
+	this.setHour(0);
+	this.setMinutes(0);
+	this.setSeconds(0);
+}
+//得到月份 reduceNum:0是下个月份,1是本月份
+function getNextMonth(date,reduceNum) {
+	var month = date.getMonth()-reduceNum;
+	var year = date.getFullYear();
+	if (month < 9) {
+		month = "0" + (month + 2);
+	} else {
+		month = (month + 2);
+	}
+	month = year + "-" + month;
+	return month;
+}

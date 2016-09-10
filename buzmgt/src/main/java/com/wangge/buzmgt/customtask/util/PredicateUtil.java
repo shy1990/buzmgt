@@ -38,6 +38,9 @@ public class PredicateUtil {
     for (Map.Entry<String, Object> search : params.entrySet()) {
       String keyAndFilter = search.getKey();
       Object value = search.getValue();
+      if (!keyAndFilter.contains("_")) {
+        continue;
+      }
       String key = keyAndFilter.split("_")[1];
       String filter = keyAndFilter.split("_")[0];
       Path expression = root.get(key);
@@ -45,41 +48,47 @@ public class PredicateUtil {
         continue;
       }
       String javaTypeName = expression.getJavaType().getName();
-      switch (filter) {
-        case "EQ":
-          predicates.add(cb.equal(root.get(key), value));
-          break;
-        case "LK":
-          predicates.add(cb.like(root.get(key), "%" + value + "%"));
-          break;
-        case "GT":
-          if (javaTypeName.equals(TYPE_DATE)) {
-            try {
+      try {
+        switch (filter) {
+          case "EQ":
+            if (javaTypeName.equals(TYPE_DATE)) {
+              predicates.add(cb.equal(root.get(key), new SimpleDateFormat(DATE_FORMAT).parse(value.toString())));
+              
+            } else {
+              predicates.add(cb.equal(root.get(key), value));
+            }
+            break;
+          case "LK":
+            predicates.add(cb.like(root.get(key), "%" + value + "%"));
+            break;
+          case "GT":
+            if (javaTypeName.equals(TYPE_DATE)) {
               // 大于最大值
               predicates.add(
                   cb.greaterThan(expression, new SimpleDateFormat(DATE_FORMAT).parse(value.toString() + TIME_MIN)));
-            } catch (ParseException e) {
-              throw new RuntimeException("日期格式化失败!");
+              
+            } else {
+              predicates.add(cb.greaterThan(expression, (Comparable) value));
             }
-          } else {
-            predicates.add(cb.greaterThan(expression, (Comparable) value));
-          }
-          
-          break;
-        case "LT":
-          if (javaTypeName.equals(TYPE_DATE)) {
-            try {
-              // 小于最小值
-              predicates
-                  .add(cb.lessThan(expression, new SimpleDateFormat(DATE_FORMAT).parse(value.toString() + TIME_MAX)));
-            } catch (ParseException e) {
-              throw new RuntimeException("日期格式化失败!");
+            
+            break;
+          case "LT":
+            if (javaTypeName.equals(TYPE_DATE)) {
+              try {
+                // 小于最小值
+                predicates
+                    .add(cb.lessThan(expression, new SimpleDateFormat(DATE_FORMAT).parse(value.toString() + TIME_MAX)));
+              } catch (ParseException e) {
+                throw new RuntimeException("日期格式化失败!");
+              }
+            } else {
+              predicates.add(cb.lessThan(expression, (Comparable) value));
             }
-          } else {
-            predicates.add(cb.lessThan(expression, (Comparable) value));
-          }
-          
-          break;
+            
+            break;
+        }
+      } catch (ParseException e) {
+        throw new RuntimeException("日期格式化失败!");
       }
     }
   }

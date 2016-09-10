@@ -3,9 +3,9 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+  String path = request.getContextPath();
+			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+					+ path + "/";
 %>
 <!DOCTYPE html>
 <html>
@@ -21,8 +21,9 @@
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="/static/customTask/type.css">
-	<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css"
+	href="/static/customTask/type.css">
+<link href="static/bootStrapPager/css/page.css" rel="stylesheet">
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
@@ -57,7 +58,6 @@
 
 /* 省略号*/
 .ssh {
-	
 	height: auto;
 }
 
@@ -83,12 +83,12 @@ p {
 			<i class="ico icon-dy"></i>自定义模块
 			<div class="area-choose"></div>
 			<!--/区域选择按钮-->
-			<a href="<%=basePath%>customTask/add" class="btn btn-blue" > <i
+			<a href="<%=basePath%>customTask/add" class="btn btn-blue"> <i
 				class="ico icon-add"></i>新建自定义事件
 			</a>
 		</h4>
 
-		<div class="row text-time">
+		<div id="searchDiv" class="row text-time">
 			<div style="margin-left: 20px">
 				<div class="search-date">
 					<div class="input-group input-group-sm">
@@ -112,11 +112,11 @@ p {
 
 				<select class="box-sty-s" id="customType">
 					<option value="">---请选择类型---</option>
-									<option value="0">店铺注册</option>
-									<option value="1">售后处理</option>
-									<option value="2">扣罚通知</option>
-									<option value="3">客户拜访</option>
-									<option value="4">小米分销</option>
+					<option value="0">店铺注册</option>
+					<option value="1">售后处理</option>
+					<option value="2">扣罚通知</option>
+					<option value="3">客户拜访</option>
+					<option value="4">小米分销</option>
 				</select>
 
 				<button class="btn btn-blue btn-sm"
@@ -165,32 +165,19 @@ p {
 		charset="utf-8"></script>
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
+		<script src='/static/js/dateutil.js'></script>
 	<script type="text/javascript" src="/static/customTask/index.js"></script>
-	
+
 	<script type="text/javascript">
-		$('body input').val('');
-		$(".form_datetime").datetimepicker({
-			format : "yyyy-mm-dd",
-			language : 'zh-CN',
-			weekStart : 1,
-			todayBtn : 1,
-			autoclose : 1,
-			todayHighlight : 1,
-			startView : 2,
-			minView : 2,
-			pickerPosition : "bottom-right",
-			forceParse : 0
+		var glomonth="${month}";
+		var salesId="${salesId}";
+		$(function() {
+			initDate();
+			handlePunish();
+			findTaskList(0);
 		});
-		var $_haohe_plan = $('.J_kaohebar').width();
-		var $_haohe_planw = $('.J_kaohebar_parents').width();
-		$(".J_btn").attr("disabled", 'disabled');
-		if ($_haohe_planw === $_haohe_plan) {
-			$(".J_btn").removeAttr("disabled");
-		}
-		
-		findTaskList(0);
 		function openDetail(id){
-			window.location.href="<%=basePath%>customTask/details/"+id;
+			window.location.href="<%=basePath%>customTask/details/" + id;
 		}
 	</script>
 </body>

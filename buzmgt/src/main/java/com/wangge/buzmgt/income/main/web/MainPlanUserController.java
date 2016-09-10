@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.income.main.web;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,8 @@ public class MainPlanUserController {
   private static final String SEARCH_OPERTOR = "SC_";
   
   @RequestMapping(value = "/", method = RequestMethod.GET)
-  public Page<PlanUserVo> getUser(HttpServletRequest request, HttpServletResponse response, Pageable pageReq) throws Exception {
+  public Page<PlanUserVo> getUser(HttpServletRequest request, HttpServletResponse response, Pageable pageReq)
+      throws Exception {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     Page<PlanUserVo> page = mainPlanService.getUserpage(pageReq, searchParams);
     return page;
@@ -42,7 +44,7 @@ public class MainPlanUserController {
   
   @RequestMapping(value = "/addUsers/{id}", method = RequestMethod.POST)
   public @ResponseBody Map<String, Object> saveUser(@PathVariable("id") MainIncomePlan plan,
-       @RequestBody List<IncomeMainplanUsers> ulist, HttpServletRequest request, HttpServletResponse response) {
+      @RequestBody List<IncomeMainplanUsers> ulist, HttpServletRequest request, HttpServletResponse response) {
     Map<String, Object> remap = new HashMap<>();
     try {
       remap.putAll(mainPlanService.saveUser(plan, ulist));
@@ -54,13 +56,15 @@ public class MainPlanUserController {
   }
   
   @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-  public ResponseEntity<Map<String, Object>> deletePlanUser(@RequestBody IncomeMainplanUsers user, HttpServletRequest request) {
+  public ResponseEntity<Map<String, Object>> deletePlanUser(@RequestBody Map<String,Object> user, HttpServletRequest request) {
     Map<String, Object> repMap = new HashMap<String, Object>();
     repMap.put("code", "1");
     try {
       mainPlanService.deleteUser(user);
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.OK);
     } catch (Exception e) {
+      e.printStackTrace();
+      LogUtil.info(e.toString());
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
