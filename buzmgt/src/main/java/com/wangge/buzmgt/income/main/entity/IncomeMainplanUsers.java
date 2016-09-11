@@ -19,6 +19,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -72,11 +74,16 @@ public class IncomeMainplanUsers {
    * 
    * @pdOid 7705ac90-3651-447c-b62c-42bbd736b2c0
    */
+  @Temporal(TemporalType.DATE)
   private Date fqtime;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "PLAIN_ID")
   private MainIncomePlan mainplan;
   
+  //操作人id
+  private String  authorId;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date uptime=new Date();
   public Long getId() {
     return id;
   }
@@ -86,6 +93,23 @@ public class IncomeMainplanUsers {
   }
   
   
+  public String getAuthorId() {
+    return authorId;
+  }
+
+  public void setAuthorId(String authorId) {
+    this.authorId = authorId;
+  }
+
+
+  public Date getUptime() {
+    return uptime;
+  }
+
+  public void setUptime(Date uptime) {
+    this.uptime = uptime;
+  }
+
   public String getSalesmanname() {
     return salesmanname;
   }

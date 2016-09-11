@@ -67,7 +67,7 @@
                         priceRange: a + "-" + b,
                         percentage: c,
                         priceRangeStatus: "0",
-                        serialNumber: i + 1,
+                        serialNumber: i + 1
                     });
                 }
                 console.log(priceRangeArray);

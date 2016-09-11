@@ -77,35 +77,35 @@
                             <i class="ico ico-fl"></i>请选择类别
                         </h5>
 
-                        <ul class="nav nav-sidebar menu">
+                        <ul class="nav nav-sidebar menu" id="leftnav">
                             <li class="current">
-                                <a href="##">智能机</a>
+                                <a href="##" data-toggle="tab">智能机</a>
                             </li>
                             <li>
-                                定制机
+                                <a href="##" data-toggle="tab">定制机</a>
                             </li>
                             <li>
-                                功能机
+                                <a href="##" data-toggle="tab">功能机</a>
                             </li>
                             <li>
-                                平板
+                                <a href="##" data-toggle="tab">平板</a>
                             </li>
                             <li>
-                                智能生活
+                                <a href="##" data-toggle="tab">智能生活</a>
                             </li>
                             <li>
-                                配件
+                                <a href="##" data-toggle="tab">配件</a>
                             </li>
                         </ul>
+                        <script>
+                            $('#leftnav li').click(function () {
+                                $(this).addClass('current');
+                                $(this).siblings('li').removeClass('current');
+                                $('#tab li:eq(1) a').tab('show');
+                            });
+                        </script>
                     </div>
                 </div>
-                <script>
-                    $('a[data-toggle="phone"]').on('shown.bs.tab', function (e) {
-                        e.target // newly activated tab
-                        e.relatedTarget // previous active tab
-                    })
-
-                </script>
                 <!--左侧导航结束-->
                 <div class="tab-content">
                     <!--右侧内容开始-->
