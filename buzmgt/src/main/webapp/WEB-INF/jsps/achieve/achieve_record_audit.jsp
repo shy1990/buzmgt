@@ -60,19 +60,13 @@
 			</td>
       <td>{{formDate createDate}}</td>
       <td>
-				{{#myIf status 'BACK'}}
-				<button class="btn bnt-sm btn-zz" data-toggle="modal" data-target="#del">修改 </button>
-				<button class="btn bnt-sm btn-sc " onclick="delAchieve({{achieveId}})"> 删除 </button>
-				{{/myIf}}
+        <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
+				{{#isAuditor auditor}} 
 				{{#myIf status 'WAIT'}}
-        <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
+        <button class="btn bnt-sm bnt-jc" onclick="auditAchieve({{achieveId}},'OVER')">审核</button>
+        <button class="btn bnt-sm btn-sc" onclick="auditAchieve({{achieveId}},'BACK')">驳回</button>
 				{{/myIf}}
-				{{#myIf status 'OVER'}}
-        <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
-        <a class="btn btn-sm bnt-jc ">进程</a>
-				<button class="btn bnt-sm btn-sc" onclick="delAchieve({{achieveId}})"> 删除 </button>
-				{{/myIf}}
-				
+				{{/isAuditor}}
       </td>
     </tr>
 	{{/each}}
@@ -97,6 +91,7 @@ var	base='<%=basePath%>';
         <i class="ico ico-tcsz"></i>设置记录
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
         <input id="planId" hidden="hidden" value="${planId }">
+        <input id="userId" hidden="hidden" value="${userId }">
     </h4>
 
 
