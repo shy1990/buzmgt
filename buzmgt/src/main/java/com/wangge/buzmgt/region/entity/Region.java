@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-
 @JsonInclude(Include.NON_EMPTY)
 @Entity
 @Table(name = "SYS_REGION")
@@ -17,19 +16,6 @@ import java.util.Collections;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Region implements Serializable {
   private static final long serialVersionUID = 1L;
-
-  public static enum RegionType {
-    COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他");
-    private String name;
-
-    RegionType(String name) {
-      this.name = name;
-    }
-
-    public String getName() {
-      return name;
-    }
-  }
 
   @Id
   @Column(name = "REGION_ID")
@@ -41,8 +27,7 @@ public class Region implements Serializable {
   @Column(table = "SYS_COORDINATES", columnDefinition = "CLOB", name = "content",updatable=true)
   private String coordinates;
 
-  @Enumerated(EnumType.ORDINAL)
-  private RegionType type;
+
 
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
@@ -51,6 +36,11 @@ public class Region implements Serializable {
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
   private Collection<Region> children;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "REGION_TYPE_ID")
+  private  RegionType type;
+
  private String namepath;
   
   private String centerPoint;
@@ -155,4 +145,6 @@ public class Region implements Serializable {
   public void setCenterPoint(String centerPoint) {
     this.centerPoint = centerPoint;
   }
+
+
 }

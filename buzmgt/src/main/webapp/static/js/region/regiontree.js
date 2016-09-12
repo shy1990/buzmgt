@@ -657,3 +657,11 @@ function onloadZTree() {
 $(document).ready(function() {
 	onloadZTree();
 });
+
+/**
+ * 跳到区域类型页面
+ */
+function toRegionType(){
+
+	window.location.href="/region/initRegionType";
+}

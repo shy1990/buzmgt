@@ -1,7 +1,6 @@
 package com.wangge.buzmgt.util;
 
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.vo.RegionTree;
 
 public class RegionUtil {
@@ -73,23 +72,23 @@ public class RegionUtil {
 	* @return RegionType    返回类型 
 	* @throws
 	 */
-	public static RegionType getTYpe(Region region){
-		RegionType type=RegionType.COUNTRY;
-		if(region.getType().ordinal()==0){
-			type=RegionType.PARGANA;
-		}else if(region.getType().ordinal()==1){
-			type=RegionType.PROVINCE;
-		}else if(region.getType().ordinal()==2){
-			type=RegionType.AREA;
-		}else if(region.getType().ordinal()==3){
-			type=RegionType.CITY;
-		}else if(region.getType().ordinal()==4){
-			type=RegionType.COUNTY;
-		}else if(region.getType().ordinal()==5){
-			type=RegionType.TOWN;
-		}else{
-			type=RegionType.OTHER;
-		}
-		return type;
-	}
+//	public static RegionType getTYpe(Region region){
+//		RegionType type=RegionType.COUNTRY;
+//		if(region.getType().ordinal()==0){
+//			type=RegionType.PARGANA;
+//		}else if(region.getType().ordinal()==1){
+//			type=RegionType.PROVINCE;
+//		}else if(region.getType().ordinal()==2){
+//			type=RegionType.AREA;
+//		}else if(region.getType().ordinal()==3){
+//			type=RegionType.CITY;
+//		}else if(region.getType().ordinal()==4){
+//			type=RegionType.COUNTY;
+//		}else if(region.getType().ordinal()==5){
+//			type=RegionType.TOWN;
+//		}else{
+//			type=RegionType.OTHER;
+//		}
+//		return type;
+//	}
 }

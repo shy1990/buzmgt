@@ -3,6 +3,7 @@ package com.wangge.buzmgt.region.web;
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.saojie.entity.SaojieData;
@@ -117,12 +118,10 @@ public class RegionController {
     Collection<Region> collectionRegion = new ArrayList<Region>();
     Region region = regionService.findListRegionbyid(pid);
     Long maxid = getMaxId(pid);
-    Region newRegion = new Region(String.valueOf(maxid + 1), name, RegionUtil.getTYpe(region));
+    Region newRegion = new Region(String.valueOf(maxid + 1), name, region.getType().getChildsType());
     newRegion.setParent(region);
     newRegion.setChildren(collectionRegion);
-    if (!newRegion.getType().getName().equals("其他")) {
       regionService.saveRegion(newRegion);
-    }
     return new ResponseEntity<RegionTree>(RegionUtil.getRegionTree(newRegion), HttpStatus.OK);
   }
 
@@ -160,7 +159,7 @@ public class RegionController {
     
     Region region = regionService.findListRegionbyid(id);
     Long maxid = Long.parseLong(id);
-    Region newRegion = new Region(String.valueOf(maxid), name, RegionUtil.getTYpe(region));
+    Region newRegion = new Region(String.valueOf(maxid), name, region.getType().getChildsType());
     newRegion.setParent(region);
     region.setName(name);
     region.setParent(regionService.findListRegionbyid(pid));
@@ -246,7 +245,7 @@ public class RegionController {
     }
     Region region = regionService.findListRegionbyid(parentid);
     Long maxid = getMaxId(parentid);
-    Region entity = new Region(String.valueOf(maxid + 1), name, RegionUtil.getTYpe(region));
+    Region entity = new Region(String.valueOf(maxid + 1), name, region.getType().getChildsType());
     entity.setCoordinates(pointbuf.toString());
     entity.setParent(regionService.findListRegionbyid(parentid));
     entity.setCenterPoint(centerPoint);
@@ -568,4 +567,10 @@ public class RegionController {
   public ResponseEntity<?> getChildByParent(@PathVariable String parentId) {
     return new ResponseEntity<List<RegionTree>>(regionService.getRegionByPid(parentId), HttpStatus.OK);
   }
+  @RequestMapping("/initRegionType")
+  public String initRegionType() {
+    List<RegionType> listRetionType=regionService.findALlRegionType();
+    return "region/regionType_view";
+  }
+
 }
