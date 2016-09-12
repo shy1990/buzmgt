@@ -11,14 +11,6 @@ import com.wangge.buzmgt.income.ywsalary.entity.BaseSalaryUser;
 
 public interface BaseSalaryService {
   /**
-   * 查询基础薪资记录
-   * 
-   * @param searchParams
-   * @return
-   */
-  public List<Map<String, Object>> findAll(Map<String, Object> searchParams);
-  
-  /**
    * 查询分页基础薪资记录(只查询姓名,区域)
    * 
    * @param searchParams
@@ -60,9 +52,12 @@ public interface BaseSalaryService {
     * @author yangqc 
     * @param baseSalary 旧工资记录
     * @param salary  新工资
+   * @param upDate 
    * @throws Exception 
     * @since JDK 1.8 
     */  
-  public void update(BaseSalary baseSalary, Double salary) throws Exception;
+  public void update(BaseSalary baseSalary, Double salary, String upDate) throws Exception;
+
+  public List<Map<String, Object>> findAll1(Map<String, Object> searchParams, Pageable pageRequest);
   
 }

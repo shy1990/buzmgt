@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
   String path = request.getContextPath();
-String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 					+ path + "/";
 %>
 <!DOCTYPE html>
@@ -48,10 +48,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 									</div>
 								</td>
 								<td>{{month}}</td>
-								<td><a href=""><span class="text-blue">{{basicSalary}}</span></a></td>
+								<td><a href="/baseSalary/show?month={{month}}&&salesmanId={{userId}}"><span class="text-blue">{{basicSalary}}</span></a></td>
 								<td><a href=""><span class="text-blue">{{busiIncome}}</span></a></td>
 								<td><a href=""><span class="text-blue">{{oilIncome}}</span></a></td>
-								<td><a href=""><span class="text-redd">{{punish}}</span></a></td>
+								<td><a href="/customTask/list?month={{month}}&&salesId={{userId}}"><span class="text-redd">{{punish}}</span></a></td>
 								<td><a href=""><span class="text-blue">{{reachIncome}}</span></a></td>
 								<td><a href=""><span class="text-blue">{{overlyingIncome}}</span></a></td>
 								<td><a href=""><span class="text-green text-strong">{{allresult}}</span></a></td>
@@ -74,47 +74,50 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 </script>
 </head>
 <body>
-	<h4 class="page-header ">
-		<i class="ico icon-shouyi"></i>收益 <a href="javascript:history.back();"><i
-			class="ico icon-back fl-right"></i></a>
+	<div class="content main">
+		<h4 class="page-header">
+			<i class="ico icon-shouyi"></i>收益 <a
+				href="javascript:history.back();"><i
+				class="ico icon-back fl-right"></i></a>
 
-	</h4>
+		</h4>
 
-	<div class="row text-time">
+		<div class="row text-time">
 
-		<div class="salesman" style="margin-top: 5px; overflow-x: hidden">
-			<select class="box-sty-s" id="region">
-				<option value="" >-省区-</option>
-				<c:forEach var="region" items="${regions}">
-					<option value="${region.name}">${region.name}</option>
-				</c:forEach>
-			</select> <select class="box-sty-s" id="role">
-				<option value=''>业务角色</option>
-				<option value="262144">服务站经理</option>
-				<option value="294914">扩展经理</option>
-			</select>
-			<div class="search-date">
-				<div class="input-group input-group-sm">
-					<span class="input-group-addon " id="basic-addon1"><i
-						class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-						type="text" class="form-control form_datetime input-sm"
-						placeholder="查询年月" readonly="readonly" />
+			<div class="salesman" style="margin-top: 5px; overflow-x: hidden">
+				<select class="box-sty-s" id="region">
+					<option value="">-省区-</option>
+					<c:forEach var="region" items="${regions}">
+						<option value="${region.name}">${region.name}</option>
+					</c:forEach>
+				</select> <select class="box-sty-s" id="role">
+					<option value=''>业务角色</option>
+					<option value="262144">服务站经理</option>
+					<option value="294914">扩展经理</option>
+				</select>
+				<div class="search-date">
+					<div class="input-group input-group-sm">
+						<span class="input-group-addon " id="basic-addon1"><i
+							class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
+							type="text" class="form-control form_datetime input-sm"
+							placeholder="查询年月" readonly="readonly" />
+					</div>
 				</div>
-			</div>
-			<button class="btn btn-blue btn-sm"
-				style="height: 30px; margin-left: 10px" onclick="goSearch()">筛选</button>
+				<button class="btn btn-blue btn-sm"
+					style="height: 30px; margin-left: 10px" onclick="goSearch()">筛选</button>
 
-			<div class="H-daochu">
-				<div class="salesman">
-					<input class="cs-select  text-gery-hs" id="truename" placeholder="请输入业务员名称" />
-					<button class="btn btn-blue btn-sm" onclick="nameSearch()">检索</button>
-				</div>
-				<div class="link-posit-t pull-right export">
-					<a class="table-export" href="javascript:dochu();">导出excel</a>
+				<div class="H-daochu">
+					<div class="salesman">
+						<input class="cs-select  text-gery-hs" id="truename"
+							placeholder="请输入业务员名称" />
+						<button class="btn btn-blue btn-sm" onclick="nameSearch()">检索</button>
+					</div>
+					<div class="link-posit-t pull-right export">
+						<a class="table-export" href="javascript:dochu();">导出excel</a>
+					</div>
 				</div>
 			</div>
 		</div>
-
 		<div class="clearfix"></div>
 		<div class="tab-content">
 			<!--待审核账单-->
@@ -164,9 +167,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		charset="utf-8"></script>
 	<script type="text/javascript">
 	var	base='<%=basePath%>';
+	$(".form_datetime").datetimepicker({
+        format: "yyyy-mm",
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 3,
+        minView: 3,
+        pickerPosition: "bottom-left",
+        forceParse: 0,
+
+    });
 		$(function() {
-			initDateInput();
-			findPlanUserList(0);
+			//initDateInput();
+			goSearch();
 		});
 	</script>
 

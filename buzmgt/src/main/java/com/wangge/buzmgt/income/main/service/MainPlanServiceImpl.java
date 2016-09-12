@@ -6,10 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +27,15 @@ import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
 import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.income.main.vo.repository.PlanUserVoRepository;
-import com.wangge.buzmgt.income.ywsalary.entity.BaseSalary;
+import com.wangge.buzmgt.income.schedule.entity.Jobtask;
+import com.wangge.buzmgt.income.schedule.repository.JobRepository;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.RoleService;
+import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.EnvironmentUtils;
 
 import net.sf.json.JSONArray;
 
@@ -50,6 +51,8 @@ public class MainPlanServiceImpl implements MainPlanService {
   RoleService roleService;
   @Autowired
   PlanUserVoRepository planUserVorep;
+  @Autowired
+  JobRepository jobRep;
   
   @Override
   public List<Object> findByUser() {
@@ -59,12 +62,6 @@ public class MainPlanServiceImpl implements MainPlanService {
   
   @Override
   public void modifyUser() {
-    // TODO Auto-generated method stub
-    
-  }
-  
-  @Override
-  public void deletePlan() {
     // TODO Auto-generated method stub
     
   }
@@ -144,12 +141,22 @@ public class MainPlanServiceImpl implements MainPlanService {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void save(MainIncomePlan plan) throws Exception {
+    User author = EnvironmentUtils.getUser();
+    String authorId = author.getId();
+    String authorName = author.getUsername();
     try {
+      plan.setAuthorId(authorId);
+      plan.setAuthorName(authorName);
       plan = mainPlanRep.save(plan);
       List<IncomeMainplanUsers> usList = plan.getUsers();
+      String userIds = "";
       for (IncomeMainplanUsers u : usList) {
         u.setMainplan(plan);
+        userIds += u.getSalesmanId() + ",";
+        u.setAuthorId(authorId);
       }
+      LogUtil.info("用户" + author.getUsername() + "---" + author.getId() + "创建了一个主方案--" + plan.getMaintitle()
+          + "并添加如下人员:" + userIds);
     } catch (Exception e) {
       LogUtil.error("保存主计划失败", e);
       throw new RuntimeException("保存主计划失败");
@@ -162,13 +169,22 @@ public class MainPlanServiceImpl implements MainPlanService {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(MainIncomePlan plan) throws Exception {
+    User author = EnvironmentUtils.getUser();
+    String authorId = author.getId();
+    String authorName = author.getUsername();
     try {
+      plan.setAuthorId(authorId);
+      plan.setAuthorName(authorName);
       plan.setState(FlagEnum.DEL);
       plan.setFqtime(new Date());
+      
+      Jobtask task = new Jobtask(1, plan.getId(), new Date());
+      jobRep.save(task);
+      LogUtil.info("用户" + authorName + "---" + authorId + "删除了一个主方案--" + plan.getMaintitle());
     } catch (Exception e) {
-      LogUtil.error("删除方案出错!!", e);
+      LogUtil.error("删除收益主方案出错!!", e);
+      throw new Exception("删除收益主方案出错!!");
     }
-    
   }
   
   @Override
@@ -189,20 +205,35 @@ public class MainPlanServiceImpl implements MainPlanService {
   /**
    * TODO 将事件存入数据库,定时执行 1.删除日期是否要大于今天;
    * 
+   * @throws Exception
+   * 
    */
   @Transactional(rollbackFor = Exception.class)
   @Override
-  public void deleteUser(IncomeMainplanUsers user) {
-    IncomeMainplanUsers standardUser = planUserRep.findOne(user.getId());
-    standardUser.setFqtime(user.getFqtime());
-    // standardUser.set(user.getFqtime());
-    planUserRep.delete(user.getId());
+  public void deleteUser(Map<String, Object> user) throws Exception {
+    User author = EnvironmentUtils.getUser();
+    String authorId = author.getId();
+    String authorName = author.getUsername();
+    Long id = Long.valueOf(user.get("id").toString());
+    try {
+      Date fqtime = DateUtil.string2Date(user.get("fqtime").toString());
+      IncomeMainplanUsers standardUser = planUserRep.findOne(id);
+      standardUser.setFqtime(fqtime);
+      standardUser.setAuthorId(authorId);
+      standardUser.setUptime(new Date());
+      standardUser.setState(FlagEnum.DEL);
+      LogUtil.info("用户" + authorName + "---" + authorId + "删除收益主方案用户,其ID为:" + standardUser.getId());
+    } catch (Exception e) {
+      LogUtil.error("删除用户失败", e);
+      throw new Exception("失败:删除收益主方案" + "用户,其ID为:" + id);
+    }
+    
   }
   
   @Override
   public void assembleBeforeUpdate(Model model) {
     model.addAttribute("regions", regionService.findByTypeOrderById(RegionType.PROVINCE));
-//    model.addAttribute("roles", roleService.findAll());
+    // model.addAttribute("roles", roleService.findAll());
   }
   
   @Override
@@ -225,15 +256,22 @@ public class MainPlanServiceImpl implements MainPlanService {
   @Transactional(rollbackFor = Exception.class)
   public Map<String, Object> saveUser(MainIncomePlan plan, List<IncomeMainplanUsers> ulist) throws Exception {
     Map<String, Object> remap = new HashMap<String, Object>();
+    User author = EnvironmentUtils.getUser();
+    String authorId = author.getId();
+    String authorName = author.getUsername();
     try {
+      String users = "";
       for (IncomeMainplanUsers usr : ulist) {
         usr.setMainplan(plan);
+        usr.setAuthorId(authorId);
+        users += usr.getSalesmanId() + ",";
       }
       planUserRep.save(ulist);
-      
+      LogUtil.info("用户" + authorName + "---" + authorId + "给主方案--" + plan.getMaintitle() + "添加了" + ulist.size() + "个人员:"
+          + users);
     } catch (Exception e) {
-      LogUtil.error("保存收益主计划人员出错", e);
-      throw new Exception("保存收益主计划人员出错");
+      LogUtil.error("保存收益主方案人员出错", e);
+      throw new Exception("保存收益主方案人员出错");
     }
     return remap;
   }

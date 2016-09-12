@@ -38,8 +38,8 @@
 </script>
 
 
-<div class="modal-dialog" role="document" style="width: 980px;">
-	<div class="modal-content modal-blue">
+<div class="modal-dialog" role="document" style="width: 1080px;">
+	<div class="modal-content modal-blue" >
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-label="Close">
@@ -47,7 +47,7 @@
 			</button>
 			<h3 class="modal-title">添加人员</h3>
 		</div>
-		<div class="modal-body">
+		<div class="modal-body"  style="padding-right:15px">
 
 
 

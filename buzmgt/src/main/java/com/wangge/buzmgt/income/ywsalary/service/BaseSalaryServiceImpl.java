@@ -9,18 +9,24 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.common.FlagEnum;
+import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
@@ -31,10 +37,11 @@ import com.wangge.buzmgt.income.ywsalary.repository.BaseSalaryUserRepository;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
-import com.wangge.buzmgt.util.SearchFilter;
+import com.wangge.buzmgt.util.EnvironmentUtils;
 
 @Service
 public class BaseSalaryServiceImpl implements BaseSalaryService {
@@ -54,56 +61,73 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   @Autowired
   SalesManRepository salesmanRep;
   
-  /** 
-    * TODO 每次加载组织机构,无解 
-    *  
-    */ 
+  /**
+   * TODO 每次加载组织机构,无解
+   * 
+   */
   @Override
-  public List<Map<String, Object>> findAll(Map<String, Object> searchParams) {
+  public List<Map<String, Object>> findAll1(Map<String, Object> searchParams, Pageable pageRequest) {
     
     List<BaseSalary> baseSalarys = baseSalaryRepository.findAll((Specification<BaseSalary>) (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<Predicate>();
-      predicates.add(cb.equal(root.get("flag"), FlagEnum.NORMAL));
-//      Join<BaseSalary, SalesMan> userJion = root
-//          .join(root.getModel().getDeclaredSingularAttribute("user", SalesMan.class), JoinType.LEFT);
-//      Join<SalesMan, Region> regionJion = userJion.join("region", JoinType.LEFT);
+      // predicates.add(cb.equal(root.get("flag"), FlagEnum.NORMAL));
+      
+      // Join<BaseSalary, SalesMan> userJion = root
+      // .join(root.getModel().getDeclaredSingularAttribute("user",
+      // SalesMan.class), JoinType.LEFT);
+      // Join<SalesMan, Region> regionJion = userJion.join("region",
+      // JoinType.LEFT);
       return cb.and(predicates.toArray(new Predicate[] {}));
-    });
-    return converIntoVo(baseSalarys);
+    }, pageRequest.getSort());
+    return converIntoVo(baseSalarys, DateUtil.getDayOfCurrentMonth());
     
   }
   
   @Override
   public Map<String, Object> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
     Map<String, Object> pageMap = new HashMap<String, Object>();
+    
     try {
       Page<BaseSalary> baseSalaryPage = null;
-      baseSalaryPage = baseSalaryRepository.findAll((Specification<BaseSalary>) (root, query, cb) -> {
-        List<Predicate> predicates = new ArrayList<Predicate>();
-        predicates.add(cb.equal(root.get("flag"), FlagEnum.NORMAL));
-        Join<BaseSalary, SalesMan> userJion = root
-            .join(root.getModel().getDeclaredSingularAttribute("user", SalesMan.class), JoinType.LEFT);
-        if (null != searchParams.get("trueName")) {
-          predicates.add(cb.like(userJion.get("truename"), "%" + searchParams.get("truename") + "%"));
-        }
-        Object regionId = searchParams.get("regionId");
-        if (null != regionId) {
-          Join<SalesMan, Region> regionJion = userJion.join("region", JoinType.LEFT);
-          Join<Region, Region> parentJion = regionJion.join("parent", JoinType.LEFT);
-          Join<Region, Region> superJion = parentJion.join("parent", JoinType.LEFT);
-          /*
-           * 县,市,省; id为省时的情况
-           */
-          predicates
-              .add(cb.or(cb.or(cb.equal(regionJion.get("id"), regionId), cb.equal(parentJion.get("id"), regionId)),
-                  cb.or(cb.equal(superJion.get("id"), regionId), cb.equal(parentJion.get("id"), regionId))));
-        }
-        return cb.and(predicates.toArray(new Predicate[] {}));
-      }, pageRequest);
-      pageMap.put("content", converIntoVo(baseSalaryPage.getContent()));
+      Object ltDate = searchParams.get("GT_newdate");
+      double monthDays = 0;
+      if (null != ltDate && ltDate.toString().length() > 1) {
+        String month = ltDate.toString();
+        monthDays = DateUtil.getDaysOfMonth2(Integer.valueOf(month.substring(0, 4)),
+            Integer.valueOf(month.substring(5, 7)));
+        Date nextMonth = DateUtil.string2Date(searchParams.get("LT_deldate").toString());
+        String userId = searchParams.get("salesId").toString();
+        baseSalaryPage = baseSalaryRepository.findbyMonthAndUser( nextMonth, FlagEnum.DEL, userId,
+            pageRequest);
+      } else {
+        baseSalaryPage = baseSalaryRepository.findAll((Specification<BaseSalary>) (root, query, cb) -> {
+          List<Predicate> predicates = new ArrayList<Predicate>();
+          // 不区分状态
+          // predicates.add(cb.equal(root.get("flag"), FlagEnum.NORMAL));
+          Join<BaseSalary, SalesMan> userJion = root
+              .join(root.getModel().getDeclaredSingularAttribute("user", SalesMan.class), JoinType.LEFT);
+          if (null != searchParams.get("trueName")) {
+            predicates.add(cb.like(userJion.get("truename"), "%" + searchParams.get("trueName").toString() + "%"));
+          }
+          
+          Object regionName = searchParams.get("regionName");
+          if (null != regionName && regionName.toString().length() > 1) {
+            Join<SalesMan, Region> regionJion = userJion.join("region", JoinType.LEFT);
+            
+            /*
+             * 县,市,省; id为省时的情况
+             */
+            predicates.add(cb.like(regionJion.get("namepath"), "%" + regionName + "%"));
+          }
+          PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
+          return cb.and(predicates.toArray(new Predicate[] {}));
+        }, pageRequest);
+        monthDays = DateUtil.getDayOfCurrentMonth();
+      }
+      pageMap.put("content", converIntoVo(baseSalaryPage.getContent(), monthDays));
       pageMap.put("totalElements", baseSalaryPage.getTotalElements());
     } catch (Exception e) {
-      LogUtil.info(e.getMessage());
+      LogUtil.error("查询薪资列表出错", e);
     }
     return pageMap;
   }
@@ -116,7 +140,7 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
    * @return
    * @since JDK 1.8
    */
-  private List<Map<String, Object>> converIntoVo(List<BaseSalary> content) {
+  private List<Map<String, Object>> converIntoVo(List<BaseSalary> content, double monthDays) {
     List<Map<String, Object>> voList = new ArrayList<Map<String, Object>>();
     if (content == null) {
       return voList;
@@ -129,9 +153,9 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
       voMap.put("region", man.getRegion().getNamepath());
       voMap.put("newdate", base.getNewdate());
       voMap.put("salary", base.getSalary());
-      double monthDays = DateUtil.getDayOfCurrentMonth();
       double daySalary = Double.valueOf(String.format("%.2f", base.getSalary() / monthDays));
-      voMap.put("daySalary", daySalary );
+      voMap.put("daySalary", daySalary);
+      voMap.put("state", base.getFlag().getName());
       voList.add(voMap);
     }
     return voList;
@@ -145,27 +169,25 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   @Override
   @Transactional(rollbackOn = Exception.class)
   public BaseSalary save(BaseSalary baseSalary) throws Exception {
+    User author = EnvironmentUtils.getUser();
     try {
       SalesMan salesman = salesmanRep.findById(baseSalary.getUserId());
       baseSalary.setUser(salesman);
-      Optional<Integer> times = baseSalaryRepository.findMaxTimesByUserId(baseSalary.getUserId());
-      if (times.isPresent()) {
-        baseSalary.setTimes(times.get() + 1);
-      } else {
-        baseSalary.setTimes(1);
-      }
-      
+      baseSalary.setAuthorId(author.getId());
+      baseSalary.setAuthorName(author.getUsername());
       baseSalary = baseSalaryRepository.save(baseSalary);
       calThisMonthWithNewSalaryPlan(baseSalary, salesman);
+      LogUtil.info("用户" + author.getUsername() + "---" + author.getId() + "新建了一个薪资记录:" + baseSalary);
     } catch (Exception e) {
       LogUtil.error("保存薪资新增记录出错", e);
       throw new Exception("保存薪资新增记录出错");
     }
+    
     return baseSalary;
   }
   
   /**
-   * 计算使用本月新工资方案后的基础薪资. <br/>
+   * 计算使用新工资方案后的基础薪资.只关注本月和上月 <br/>
    * 
    * @author yangqc
    * @param baseSalary
@@ -179,34 +201,58 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
     MainIncome main = incomeService.findIncomeMain(baseSalary.getUserId());
     Double salary = baseSalary.getSalary();
     // 开始计算工资
-    Date hireDate = salesman.getRegdate();
+    String nextMonthStr = DateUtil.getPreMonth(new Date(), 1);
     double monthDays = DateUtil.getDayOfCurrentMonth();
     Date thisMonth = DateUtil.sdf.parse(DateUtil.getPreMonth(new Date(), 0));
-    Date nextMonth = DateUtil.sdf.parse(DateUtil.getPreMonth(new Date(), 1));
-    double between = calEnableWorkDays(baseSalary, hireDate, monthDays, thisMonth, nextMonth);
-    between--;
-    double presum = main.getBasicSalary();
-    presum += salary * (between / monthDays);
-    presum = Double.valueOf(String.format("%.2f", presum));
-    main.setBasicSalary(presum);
-    incomeRep.save(main);
+    Date nextMonth = DateUtil.sdf.parse(nextMonthStr);
+    // 生效日期在本月内重新计算本月的工资
+    if (baseSalary.getNewdate().getTime() < nextMonth.getTime()) {
+      double between = calEnableWorkDays(baseSalary, monthDays, thisMonth, nextMonth);
+      double presum = calcuThisMonthPerSalary(salesman);
+      presum += salary * (between / monthDays);
+      presum = Double.valueOf(String.format("%.2f", presum));
+      main.setBasicSalary(presum);
+      main.reSetResult();
+      if (baseSalary.getNewdate().getTime() < thisMonth.getTime()) {
+        String premonthStr = DateUtil.getPreMonth(new Date(), -1);
+        MainIncome premain = incomeService.findIncomeMain(baseSalary.getUserId(), premonthStr);
+        if (premain.getState().ordinal() == 0) {
+          Date preMonth = DateUtil.sdf.parse(premonthStr);
+          double premonthDays = DateUtil.getDaysOfMonth2(Integer.valueOf(premonthStr.substring(0, 4)),
+              Integer.valueOf(premonthStr.substring(5, 7)));
+          double preSum = calcuPreMonthSalary(salesman, premonthDays);
+          
+          double between1 = calEnableWorkDays(baseSalary, premonthDays, preMonth, thisMonth);
+          preSum += salary * (between1 / premonthDays);
+          preSum = Double.valueOf(String.format("%.2f", preSum));
+          premain.setBasicSalary(preSum);
+          premain.reSetResult();
+        }
+        incomeRep.save(premain);
+      }
+      incomeRep.save(main);
+    }
   }
   
   private void delete(BaseSalary baseSalary) throws ParseException {
+    User author = EnvironmentUtils.getUser();
     try {
       SalesMan man = baseSalary.getUser();
       // 先废弃掉工资方案
       baseSalary.setFlag(FlagEnum.DEL);
       baseSalary.setDeldate(new Date());
+      baseSalary.setAuthorId(author.getId());
+      baseSalary.setAuthorName(author.getUsername());
       baseSalaryRepository.save(baseSalary);
       // 计算所有历史方案
-      double sum = calcuThisMonthPreSalary(man);
+      double sum = calcuThisMonthPerSalary(man);
       sum = Double.valueOf(String.format("%.2f", sum));
       // 工资存放
       MainIncome main = incomeService.findIncomeMain(baseSalary.getUserId());
       main.setBasicSalary(sum);
+      main.reSetResult();
       incomeRep.save(main);
-      
+      LogUtil.info("用户" + author.getUsername() + "---" + author.getId() + "废弃了一个薪资记录:" + baseSalary);
     } catch (Exception e) {
       String truename = baseSalary.getUser().getTruename();
       LogUtil.error("删除" + truename + "时出错", e);
@@ -219,34 +265,41 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
    * 
    * @author yangqc
    * @param baseSalary
-   * @param hireDate
    * @param monthDays
    * @param thisMonth
-   * @return
-   * @since JDK 1.8
+   *          计算的某月
+   * @param endDate
+   *          计算的结束时间,一般是下月1号
+   * @return 计算日期的原则:<br/>
+   *         1.是否有结束日期,<br/>
+   *         2.有效日期是否小于本月<br/>
+   *         3.结束日期是否大于下个月;<br/>
+   *         4.注:从月初算统一加1
    */
-  private Double calEnableWorkDays(BaseSalary baseSalary, Date hireDate, double monthDays, Date thisMonth,
-      Date endDate) {
+  private Double calEnableWorkDays(BaseSalary baseSalary, double monthDays, Date thisMonth, Date endDate) {
     Double between1 = 0D;
     Date startDate = baseSalary.getNewdate();
-    // 从月初算统一加1,从入职开始算也加1
-    if (baseSalary.getTimes() == 1) {
-      /**
-       * 1.入职时间小于本月,则计算月初到今日的工资 2.入职时间大于本月,则计算入职时间到今天的.
-       */
-      if (DateUtil.daysBetween(hireDate, thisMonth) >= 0) {
-        between1 = DateUtil.daysBetween(thisMonth, endDate) + 1D;
-      } else {
-        between1 = DateUtil.daysBetween(hireDate, endDate) + 1D;
-      }
-    } else {
-      /*
-       * 1.工资方案如果开始时间小于本月,则从本月初算起, 2.如果开始时间大约本月初,则从开始时间算起
-       */
-      if (DateUtil.daysBetween(startDate, thisMonth) >= 0) {
-        between1 = DateUtil.daysBetween(thisMonth, endDate) + 1D;
+    Date delDate = baseSalary.getDeldate();
+    if (null == delDate) {
+      if (startDate.getTime() <= thisMonth.getTime()) {
+        between1 = monthDays;
       } else {
         between1 = DateUtil.daysBetween(startDate, endDate) + 0D;
+      }
+    } else {
+      // 有效日期小于本月的
+      if (DateUtil.daysBetween(startDate, thisMonth) >= 0) {
+        if (delDate.getTime() <= endDate.getTime()) {
+          between1 = DateUtil.daysBetween(thisMonth, delDate) + 0D;
+        } else {
+          between1 = monthDays;
+        }
+      } else {
+        if (delDate.getTime() >= endDate.getTime()) {
+          between1 = DateUtil.daysBetween(startDate, endDate) + 0D;
+        } else {
+          between1 = DateUtil.daysBetween(startDate, delDate) + 0D;
+        }
       }
     }
     return between1;
@@ -261,19 +314,47 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
    * @throws ParseException
    * @since JDK 1.8
    */
-  private double calcuThisMonthPreSalary(SalesMan man) throws ParseException {
+  private double calcuThisMonthPerSalary(SalesMan man) throws ParseException {
     double monthDays = DateUtil.getDayOfCurrentMonth();
-    Date hireDate = man.getRegdate();
     Date thisMonth = DateUtil.sdf.parse(DateUtil.getPreMonth(new Date(), 0));
     List<BaseSalary> salaryList = baseSalaryRepository.findByFlagAndUser_Id(FlagEnum.DEL, man.getId());
     double sum = 0;
     // 当其在结束时间本月范围内则处理叠加
     if (null != salaryList) {
       for (BaseSalary sal : salaryList) {
-        if (DateUtil.daysBetween(thisMonth, sal.getDeldate()) >= 0) {
+        if (thisMonth.getTime() < sal.getDeldate().getTime()) {
           double salary = sal.getSalary();
-          double days = calEnableWorkDays(sal, hireDate, monthDays, thisMonth, sal.getDeldate());
+          double days = calEnableWorkDays(sal, monthDays, thisMonth, sal.getDeldate());
           sum += salary * (days / monthDays);
+        }
+      }
+    }
+    return sum;
+  }
+  
+  /**
+   * calcuThisMOnthPreSalary:重新计算某人上月方案总的工资. <br/>
+   * 
+   * @author yangqc
+   * @param man
+   * @return
+   * @throws ParseException
+   * @since JDK 1.8
+   */
+  private double calcuPreMonthSalary(SalesMan man, double premonthDays) throws ParseException {
+    String premonthStr = DateUtil.getPreMonth(new Date(), -1);
+    Date preMonth = DateUtil.sdf.parse(premonthStr);
+    Date thisMonth = DateUtil.sdf.parse(DateUtil.getPreMonth(new Date(), 0));
+    List<BaseSalary> salaryList = baseSalaryRepository.findByFlagAndUser_Id(FlagEnum.DEL, man.getId());
+    double sum = 0;
+    // 当其在结束时间本月范围内则处理叠加
+    if (null != salaryList) {
+      for (BaseSalary sal : salaryList) {
+        // 计算生效时间为上个月和本月之间的薪资记录
+        if (sal.getNewdate().getTime() <= thisMonth.getTime() && sal.getNewdate().getTime() > preMonth.getTime()) {
+          double salary = sal.getSalary();
+          double days = calEnableWorkDays(sal, premonthDays, preMonth, sal.getDeldate());
+          sum += salary * (days / premonthDays);
         }
       }
     }
@@ -301,27 +382,37 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
    */
   @Override
   @Transactional(rollbackOn = Exception.class)
-  public void update(BaseSalary baseSalary, Double salary) throws Exception {
+  public void update(BaseSalary baseSalary, Double salary, String upDateStr) throws Exception {
+    User author = EnvironmentUtils.getUser();
+    String authorId = author.getId();
+    String authorName = author.getUsername();
     try {
       if (null == baseSalary) {
         throw new NullPointerException("更新时找不到原工资记录");
       }
-      delete(baseSalary);
+      Date upDate = DateUtil.string2Date(upDateStr);
+      // 删除原来的记录
+      baseSalary.setDeldate(upDate);
+      baseSalary.setFlag(FlagEnum.DEL);
+      baseSalary.setAuthorId(authorId);
+      baseSalary.setAuthorName(authorName);
+      baseSalaryRepository.save(baseSalary);
       // 添加新记录
       SalesMan man = baseSalary.getUser();
-      BaseSalary newSalary = new BaseSalary(baseSalary.getUserId(), man, salary, baseSalary.getTimes() + 1);
+      BaseSalary newSalary = new BaseSalary(baseSalary.getUserId(), man, salary, upDate);
+      newSalary.setAuthorId(authorId);
+      newSalary.setAuthorName(authorName);
       baseSalaryRepository.save(newSalary);
+      // 重新计算工资
       calThisMonthWithNewSalaryPlan(newSalary, man);
+      LogUtil.info("用户" + authorName + "---" + authorId + "已修改一个记录:" + baseSalary + "/n 新工资为:" + salary);
     } catch (ParseException e) {
-      LogUtil.error("更新工资是出错", e);
-      throw e;
+      LogUtil.error("更新工资时出错", e);
+      throw new Exception("更新工资时因时间转化出错");
     } catch (Exception e) {
-      LogUtil.error("更新工资是出错", e);
-      throw e;
+      LogUtil.error("更新工资时出错", e);
+      throw new Exception("更新工资时出错");
     }
-    
   }
   
 }
-
-

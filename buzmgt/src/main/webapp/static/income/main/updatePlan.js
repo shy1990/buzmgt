@@ -1,14 +1,14 @@
 var salesArr = [];
 // 添加业务员flag区分是否为临时用户
 function addUser(salesId, salesName, flag, kid) {
-	var salesman={
+	var salesman = {
 		'salesmanname' : salesName,
 		'salesmanId' : salesId,
 		"id" : kid
 	};
-	var index=salesArr.indexOf(salesman);
-	if ( index> -1) {
-		salesArr[index]=salesman;
+	var index = salesArr.indexOf(salesman);
+	if (index > -1) {
+		salesArr[index] = salesman;
 		return;
 	}
 	salesArr.push(salesman);
@@ -30,10 +30,11 @@ function addUser(salesId, salesName, flag, kid) {
 var globalUserId = "";
 function deletediv(index, flag) {
 	gloIndex = index;
-	if ('' != salesArr[gloIndex-1].id&&undefined != salesArr[gloIndex-1].id) {
-		if(otherPlanFlag){
+	if ('' != salesArr[gloIndex - 1].id
+			&& undefined != salesArr[gloIndex - 1].id) {
+		if (otherPlanFlag) {
 			$('#otherPlan').modal('hide');
-			otherPlanFlag=true;
+			otherPlanFlag = true;
 		}
 		$('#del').modal('show');
 	} else {
@@ -47,10 +48,13 @@ function deleteUser() {
 		alert("必须选择日期!!");
 		return;
 	}
-	salesArr[gloIndex - 1].fqtime = newDate;
-	var user=JSON.stringify(salesArr[gloIndex - 1]);
+	var userData = {
+		"id" : salesArr[gloIndex - 1].id,
+		"fqtime" : newDate
+	}
+	var user = JSON.stringify(userData);
 	$.ajax({
-		url : "mainPlanUsers/deleteUser",
+		url : base + "mainPlanUsers/deleteUser",
 		type : "post",
 		data : user,
 		beforeSend : function(request) {
@@ -58,22 +62,23 @@ function deleteUser() {
 		},
 		dataType : "json",
 		success : function(orderData) {
-			//alert("已删除!!");
+			alert("已删除!!");
 			removeDiv();
-			/*if(otherPlanFlag){
-				$('#del').modal('hide');
+			$('#del').modal('hide');
+			if (otherPlanFlag) {
 				$('#otherPlan').modal('show');
-			}*/
+			}
+			findPlanUserList(0);
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");
 		}
 	});
-	
+
 }
 
 function removeDiv() {
-	salesArr[gloIndex -1] = "";
+	salesArr[gloIndex - 1] = "";
 	$("#saleDiv" + gloIndex).empty();
 	$("#saleDiv" + gloIndex).remove();
 }
@@ -84,7 +89,6 @@ function initUsers() {
 		url : "/mainPlan/getUserList/" + pId,
 		type : "get",
 		dataType : "json",
-
 		success : function(orderData) {
 			var data = orderData.data;
 			for (var i = 0; i < data.length; i++) {
@@ -97,7 +101,21 @@ function initUsers() {
 	});
 }
 
-
+// 初始化时间框
+function initDateInput() {
+	$(".form_datetime").datetimepicker({
+		format : "yyyy-mm-dd",
+		language : 'zh-CN',
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 2,
+		minView : 2,
+		pickerPosition : "bottom-right",
+		forceParse : 0
+	});
+}
 // 打开用户列表
 function openUser() {
 	$('#user').modal('show');
@@ -105,7 +123,8 @@ function openUser() {
 function commitUsers() {
 	var planUsers = [];
 	for (var i = 0; i < salesArr.length; i++) {
-		if ('' != salesArr[i] && ('' == salesArr[i].id||undefined == salesArr[i].id)) {
+		if ('' != salesArr[i]
+				&& ('' == salesArr[i].id || undefined == salesArr[i].id)) {
 			var salesman = {
 				"salesmanId" : salesArr[i].salesmanId,
 				"salesmanname" : salesArr[i].salesmanname

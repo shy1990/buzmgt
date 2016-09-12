@@ -32,8 +32,6 @@ public interface MainPlanService {
   
   void modifyUser();
   
-  void deletePlan();
-  
   /**
    * getAllMachineType:获得所有的机型分类. <br/>
    * 
@@ -112,7 +110,7 @@ public interface MainPlanService {
     */  
   Map<String, Object> saveUser(MainIncomePlan plan, List<IncomeMainplanUsers> ulist) throws Exception;
 
-  void deleteUser(IncomeMainplanUsers user);
+  void deleteUser(Map<String, Object> user) throws Exception;
 
  
 }

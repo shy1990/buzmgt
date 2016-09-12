@@ -25,7 +25,6 @@
 
         .new-table-box >table>tbody>tr:hover{
             border-left: 3px solid #1e92d4 ;
-            font-weight: bold;
         }
 
 

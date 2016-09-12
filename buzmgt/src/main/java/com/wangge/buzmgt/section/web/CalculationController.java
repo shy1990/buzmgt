@@ -51,12 +51,11 @@ public class CalculationController {
                 String impl = DateUtil.date2String(priceRange.getImplementationDate());
                 String endTime = DateUtil.date2String(priceRange.getEndTime());
                 try {
-                    //结束日期不是null,审核通过,并且当前时间比结束时间小
-                    if (priceRange.getEndTime() != null && "3".equals(priceRange.getPriceRangeStatus()) && !DateUtil.compareDate(endTime, time)) {
+                    //结束日期不是null,审核通过,并且当前时间比结束时间小/相等
+                    if (priceRange.getEndTime() != null && "3".equals(priceRange.getPriceRangeStatus()) && DateUtil.compareDate(time, endTime)) {
                         priceRanges1.add(priceRange);//保留个区间
                     }
-
-                    //结束时间不是null,并且当前时间在开始时间之后
+                    //结束时间是null,并且当前时间比开始时间大/相等
                     if (priceRange.getEndTime() == null && "3".equals(priceRange.getPriceRangeStatus()) && DateUtil.compareDate(impl, time)) {
                         priceRanges1.add(priceRange);
                     }

@@ -43,7 +43,9 @@ public class CustomTask {
 	private Set<SalesMan> salesmanSet;
 	// 回执状态,0未读,1已读,
 	private int status;
-
+	
+	private String authorId;
+	private String authorName;
 	public Long getId() {
 		return id;
 	}
@@ -56,7 +58,23 @@ public class CustomTask {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public String getAuthorId() {
+    return authorId;
+  }
+
+  public void setAuthorId(String authorId) {
+    this.authorId = authorId;
+  }
+
+  public String getAuthorName() {
+    return authorName;
+  }
+
+  public void setAuthorName(String authorName) {
+    this.authorName = authorName;
+  }
+
+  public void setStatus(int status) {
 		this.status = status;
 	}
 

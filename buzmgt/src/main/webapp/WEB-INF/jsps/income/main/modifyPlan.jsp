@@ -18,7 +18,7 @@
 <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-switch.min.css"
 	rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link href="static/bootStrapPager/css/page.css" rel="stylesheet">
 
 <link rel="stylesheet" type="text/css" href="/static/income/phone.css">
@@ -131,7 +131,6 @@
 
 				<div class="modal-body">
 					<div class="container-fluid">
-						<form class="form-horizontal">
 							<div class="form-group">
 								<div class="form-group">
 									<p class="col-sm-12 text-red ">你确定要将该业务员从方案中移除吗？</p>
@@ -152,7 +151,7 @@
 								</div>
 								<div class="btn-qx">
 									<button class="btn btn-danger btn-d"
-										onclick="deleteUser()">确定</button>
+										onclick="deleteUser();">确定</button>
 								</div>
 
 								<div class="btn-dd">
@@ -160,7 +159,6 @@
 										class="btn btn-primary btn-d">取消</button>
 								</div>
 							</div>
-						</form>
 					</div>
 				</div>
 			</div>
@@ -199,6 +197,7 @@
 		$(function() {
 			initUsers();
 			findPlanUserList(0);
+			initDateInput();
 			//页面未知原因刷新
 			$('#otherPlan').on('hide.bs.modal', function (e) {  
 				otherPlanFlag=false;

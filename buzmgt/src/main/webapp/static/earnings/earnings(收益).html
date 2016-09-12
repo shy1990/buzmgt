@@ -41,7 +41,7 @@
 
         .new-table-box >table>tbody>tr:hover{
             border-left: 3px solid #1e92d4 ;
-            font-weight: bold;
+            /*font-weight: bold;*/
         }
 
 
@@ -335,21 +335,23 @@
 <script src="../static/bootstrap/js/bootstrap.min.js"></script>
 <script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 <script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
+
     $('body input').val('');
     $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
+        format: "yyyy-mm",
         language: 'zh-CN',
         weekStart: 1,
         todayBtn: 1,
         autoclose: 1,
         todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        pickerPosition: "bottom-right",
-        forceParse: 0
+        startView: 3,
+        minView: 3,
+        pickerPosition: "bottom-left",
+        forceParse: 0,
+
     });
+
     var $_haohe_plan = $('.J_kaohebar').width();
     var $_haohe_planw = $('.J_kaohebar_parents').width();
     $(".J_btn").attr("disabled", 'disabled');

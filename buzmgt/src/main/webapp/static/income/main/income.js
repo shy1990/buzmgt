@@ -1,7 +1,7 @@
 var WsearchData = {
 	"page" : 0,
 	"size" : 20,
-	"order":"id"
+	"order" : "id"
 };
 var itemTotal = 0;
 // 加载页面
@@ -45,11 +45,11 @@ function createTaskTable(data) {
 			+ (month < 10 ? "0" + month : month);
 	Handlebars.registerHelper("canfh", function(state, month, options) {
 		return options.fn(this);
-		/*if (state == '已审核'&& yearMonth == month && days > 9) {
-			return options.fn(this);
-		} else {
-			return options.inverse(this);
-		}*/
+		//正式环境为此逻辑
+		/*
+		 * if (state == '已审核'&& yearMonth == month && days > 9) { return
+		 * options.fn(this); } else { return options.inverse(this); }
+		 */
 	});
 
 	var myTemplate = Handlebars.compile($("#user-table-template").html());
@@ -72,85 +72,52 @@ function oilCostPaging(data) {
 	});
 }
 
-// 查找数组下标
-Array.prototype.indexOf = function(val) {
-	for (var i = 0; i < this.length; i++) {
-		if (this[i].salesmanId == val.salesmanId)
-			return i;
-	}
-	return -1;
-};
-// 自定义删除数组
-Array.prototype.remove = function(val) {
-	var index = this.indexOf(val);
-	if (index > -1) {
-		this.splice(index, 1);
-	}
-};
-function openPlan(planId) {
-	initOtherPlan(planId);
-	otherPlanFlag = true;
-	$('#otherPlan').modal('show');
-	$('#user').modal('hide');
-}
 
-function getSearchData() {
-	WsearchData.SC_LK_namepath = $("#namePath").val();
-	WsearchData.SC_EQ_roleId = $("#roleId").val();
-	WsearchData.SC_EQ_levelName = $("#levelName").val();
-	WsearchData.SC_EQ_starsLevel = $("#starsLevel").val();
-	WsearchData.SC_LK_truename = $("#trueName").val();
-}
 
-// 初始化时间框
-function initDateInput() {
-	$('body input').val('');
-	$(".form_datetime").datetimepicker({
-		format : "yyyy-mm-dd",
-		language : 'zh-CN',
-		weekStart : 1,
-		todayBtn : 1,
-		autoclose : 1,
-		todayHighlight : 1,
-		startView : 2,
-		minView : 2,
-		pickerPosition : "bottom-right",
-		forceParse : 0
-	});
-	var $_haohe_plan = $('.J_kaohebar').width();
-	var $_haohe_planw = $('.J_kaohebar_parents').width();
-	$(".J_btn").attr("disabled", 'disabled');
-	if ($_haohe_planw === $_haohe_plan) {
-		$(".J_btn").removeAttr("disabled");
-	}
-}
 // 发起复核
 function sendFh(id) {
 	var date = new Date();
 	var days = date.getDate();
 	var nyr = date.getDate();
 }
-function goSearch(){
-	WsearchData.SC_EQ_month=getMonth();
-	WsearchData.SC_LK_namepath=$("#region").val();
-	WsearchData.SC_LK_truename="";
-	WsearchData.SC_EQ_roleId=$("#role").val();
+function goSearch() {
+	WsearchData.SC_EQ_month = getMonth();
+	WsearchData.SC_LK_namepath = $("#region").val();
+	WsearchData.SC_LK_truename = "";
+	WsearchData.SC_EQ_roleId = $("#role").val();
 	findPlanUserList();
 }
-function nameSearch(){
-	WsearchData.SC_EQ_month="";
-	WsearchData.SC_LK_namepath="";
-	WsearchData.SC_LK_truename=$("#truename").val();
-	WsearchData.SC_EQ_roleId="";
+function nameSearch() {
+	WsearchData.SC_EQ_month = "";
+	WsearchData.SC_LK_namepath = "";
+	WsearchData.SC_LK_truename = $("#truename").val();
+	WsearchData.SC_EQ_roleId = "";
 	findPlanUserList();
 }
-function getMonth(){
+function getMonth() {
 	var time = $('body input').val();
-	return time.substr(0,7);
+	if (time.length > 1) {
+		return time.substr(0, 7);
+	} else {
+		return getNextMonth(2);
+	}
 }
 /**
  * 导出
  */
-function dochu(){
-	window.location.href = base + "mainIncome/export?SC_EQ_month="+getMonth();
+function dochu() {
+	window.location.href = base + "mainIncome/export?SC_EQ_month=" + getMonth();
+}
+// 得到月份 reduceNum:0是下个月份,1是本月份
+function getNextMonth(reduceNum) {
+	var date = new Date();
+	var month = date.getMonth() - reduceNum;
+	var year = date.getFullYear();
+	if (month < 9) {
+		month = "0" + (month + 2);
+	} else {
+		month = (month + 2);
+	}
+	month = year + "-" + month;
+	return month;
 }

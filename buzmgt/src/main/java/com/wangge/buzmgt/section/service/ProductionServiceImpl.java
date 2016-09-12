@@ -321,10 +321,11 @@ public class ProductionServiceImpl implements ProductionService {
 
                 try {
                     //结束日期不是null,审核通过,并且当前时间比结束时间小
-                    if (priceRange.getEndTime() != null && "3".equals(priceRange.getPriceRangeStatus()) && !DateUtil.compareDate(end, time)) {
+                    if (priceRange.getEndTime() != null && "3".equals(priceRange.getPriceRangeStatus()) && DateUtil.compareDate(time, end)) {
                         priceRanges1.add(priceRange);//保留个区间
                     }
 
+                    logger.info("----");
                     //结束时间是null,并且当前时间在开始时间之后
                     if (priceRange.getEndTime() == null && "3".equals(priceRange.getPriceRangeStatus()) && DateUtil.compareDate(impl, time)) {
                         priceRanges1.add(priceRange);
