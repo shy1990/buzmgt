@@ -16,72 +16,70 @@ import java.util.Collections;
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer" ,"handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Region implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static enum RegionType {
-		COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他");
-		private String name;
+  public static enum RegionType {
+    COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他");
+    private String name;
 
-		RegionType(String name) {
-			this.name = name;
-		}
+    RegionType(String name) {
+      this.name = name;
+    }
 
-		public String getName() {
-			return name;
-		}
-	}
+    public String getName() {
+      return name;
+    }
+  }
 
-	@Id
-	@Column(name = "REGION_ID")
-	private String id;
-	private String name;
-	
-	@Lob
-	@Basic(fetch = FetchType.LAZY)
-	@Column(table = "SYS_COORDINATES", columnDefinition = "CLOB", name = "content",updatable=true)
-	private String coordinates;
+  @Id
+  @Column(name = "REGION_ID")
+  private String id;
+  private String name;
+  
+  @Lob
+  @Basic(fetch = FetchType.LAZY)
+  @Column(table = "SYS_COORDINATES", columnDefinition = "CLOB", name = "content",updatable=true)
+  private String coordinates;
 
-	@Enumerated(EnumType.ORDINAL)
-	private RegionType type;
+  @Enumerated(EnumType.ORDINAL)
+  private RegionType type;
 
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PARENT_ID")
-	private Region parent;
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "PARENT_ID")
+  private Region parent;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-	private Collection<Region> children;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
+  private Collection<Region> children;
  private String namepath;
-	
-	@JoinColumn(name = "CENTER_POINT")
+  
   private String centerPoint;
 
-	@JoinColumn(name = "STARS_LEAVE")
-	private Integer starsLeave;
+  private Integer starsLevel;
 
 
-	public String getId() {
-		return id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public Region() {
-		super();
-	}
+  public Region() {
+    super();
+  }
 
-	/**
-	 * 区域编号
-	 * 
-	 * @param id
-	 * @param name
-	 */
-	public Region(String id, String name, RegionType type) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.type = type;
-	}
+  /**
+   * 区域编号
+   * 
+   * @param id
+   * @param name
+   */
+  public Region(String id, String name, RegionType type) {
+    super();
+    this.id = id;
+    this.name = name;
+    this.type = type;
+  }
 
-	
+  
 
   public String getNamepath() {
     return namepath;
@@ -92,61 +90,63 @@ public class Region implements Serializable {
   }
 
   public RegionType getType() {
-		return type;
-	}
+    return type;
+  }
 
-	public void setType(RegionType type) {
-		this.type = type;
-	}
+  public void setType(RegionType type) {
+    this.type = type;
+  }
 
-	/**
-	 * 区域编号
-	 * 
-	 * @param id
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
+  /**
+   * 区域编号
+   * 
+   * @param id
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public Region getParent() {
-		return parent;
-	}
+  public Region getParent() {
+    return parent;
+  }
 
-	public void setParent(Region parent) {
-		this.parent = parent;
-	}
+  public void setParent(Region parent) {
+    this.parent = parent;
+  }
 
-	public String getCoordinates() {
-		return coordinates;
-	}
+  public String getCoordinates() {
+    return coordinates;
+  }
 
-	public void setCoordinates(String coordinates) {
-		this.coordinates = coordinates;
-	}
+  public void setCoordinates(String coordinates) {
+    this.coordinates = coordinates;
+  }
 
-	public int getStarsLeave() {
-		return starsLeave;
-	}
+  
 
-	public void setStarsLeave(Integer starsLeave) {
-		this.starsLeave = starsLeave;
-	}
+  public Integer getStarsLevel() {
+    return starsLevel;
+  }
 
-	public Collection<Region> getChildren() {
-		return Collections.unmodifiableCollection(children);
-	}
+  public void setStarsLevel(Integer starsLevel) {
+    this.starsLevel = starsLevel;
+  }
 
-	public void setChildren(Collection<Region> children) {
-		this.children = children;
-	}
+  public Collection<Region> getChildren() {
+    return Collections.unmodifiableCollection(children);
+  }
+
+  public void setChildren(Collection<Region> children) {
+    this.children = children;
+  }
 
   public String getCenterPoint() {
     return centerPoint;
@@ -155,9 +155,4 @@ public class Region implements Serializable {
   public void setCenterPoint(String centerPoint) {
     this.centerPoint = centerPoint;
   }
-
-
-
-
-
 }

@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.achieve.server;
+package com.wangge.buzmgt.achieve.service;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +17,7 @@ import com.wangge.buzmgt.achieve.entity.Achieve;
 * @date 2016年8月24日 下午6:01:50
 *
  */
-public interface AchieveServer {
+public interface AchieveService {
   /**
    * 
   * @Title: findAll 
@@ -49,5 +49,14 @@ public interface AchieveServer {
   * @throws
    */
   List<Achieve> findByMachineTypeAndPlanId(String machineType,String planId);
+  /**
+   * 
+  * @Title: save 
+  * @Description: 保存达量提成
+  * @param @param achieve    设定文件 
+  * @return void    返回类型 
+  * @throws
+   */
+  void save(Achieve achieve);
   
 }

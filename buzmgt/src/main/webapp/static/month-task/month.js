@@ -46,9 +46,7 @@ function getTask(flag) {
 		}
 		month = time;
 	}
-
 	findTaskList(page, flag);
-
 }
 
 function findTaskList(cpage, flag) {

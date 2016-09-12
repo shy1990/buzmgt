@@ -152,19 +152,11 @@ button:active {
 }
 
 .box-body {
-<<<<<<< HEAD
-	min-height: 600px;
-	padding: 10px 20px;
-	background: #FFF;
-	border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
-=======
   min-height: 635px;
   padding: 10px 20px;
   background: #FFF;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
->>>>>>> refs/heads/shouyi
 }
 
 @media (max-width:768px) {
@@ -670,7 +662,6 @@ a.table-export:focus {
 .img-box>img{
   width: 100%;
 }
-<<<<<<< HEAD
 .tab-box-border{
 	border: 1px solid #ebebeb;
 	background: #FFF;
@@ -695,8 +686,6 @@ a.table-export:focus {
 	left:35%;
 	z-index: 1001;
 }
-=======
-
 
 /*新图标实现方式*/
 .ico{

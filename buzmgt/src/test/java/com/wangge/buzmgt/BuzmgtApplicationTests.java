@@ -1,3 +1,4 @@
+/*
 package com.wangge.buzmgt;
 
 import java.text.NumberFormat;
@@ -194,12 +195,14 @@ public class BuzmgtApplicationTests {
 
 		for (SalesMan s : user.getContent()) {
 			System.out.println("==========name===" + s.getTruename());
-			/*
+			*/
+/*
 			 * System.out.println("==========org==="+s.getUser().getOrganization
 			 * ().getName());
 			 * System.out.println("==========reg==="+s.getRegion().getName());
 			 * System.out.println("==========status==="+s.getSalesmanStatus());
-			 */ }
+			 *//*
+ }
 
 	}
 
@@ -229,14 +232,17 @@ public class BuzmgtApplicationTests {
 		// Region r = regionRepostory.findOne(id);
 
 		// strArr.sort();//排序
-		/*
+		*/
+/*
 		 * for ( var i in strArr) { if (strArr[i] != tempStr) {
 		 * result.push(strArr[i]); } else { continue; } }
-		 */
+		 *//*
+
 		for (Region region : children) {
 			listRegionTree.add(RegionUtil.getRegionTree(region));
 			if (strArr != null && strArr.length > 0) {
-				/*
+				*/
+/*
 				 * for ( int i = 0;i< strArr.length; i++) {
 				 * if(!strArr[i].equals("0")){ Region r =
 				 * regionRepostory.findOne(strArr[i]);
@@ -246,7 +252,8 @@ public class BuzmgtApplicationTests {
 				 * else { continue; } } if(ptree.contains(region.getId())){ //
 				 * children = region.getChildren(); createTree(listRegionTree,
 				 * region.getChildren(),id); } }
-				 */
+				 *//*
+
 				createTree(listRegionTree, creteChildTree(region, strArr), strArr);
 			}
 
@@ -341,3 +348,4 @@ public class BuzmgtApplicationTests {
 	System.out.println(s);
 	}
 }
+*/

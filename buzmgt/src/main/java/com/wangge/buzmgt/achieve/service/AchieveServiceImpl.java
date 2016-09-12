@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.achieve.server;
+package com.wangge.buzmgt.achieve.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ObjectUtils;
@@ -30,13 +31,17 @@ import com.wangge.buzmgt.achieve.entity.Achieve.AchieveStatusEnum;
 import com.wangge.buzmgt.achieve.repository.AchieveRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 @Service
-public class AchieveServerImpl implements AchieveServer {
+public class AchieveServiceImpl implements AchieveService {
 
   @Autowired
   private AchieveRepository achieveRepository;
+  @Autowired
+  private LogService logService;
   
   public List<Achieve> findAll(Map<String,Object> searchParams){
     return this.findAll(searchParams, new Sort(Direction.DESC, "createDate"));
@@ -72,6 +77,16 @@ public class AchieveServerImpl implements AchieveServer {
     searchParams.put("EQ_machineType", machineType);
     searchParams.put("EQ_planId", planId);
     return this.findAll(searchParams);
+  }
+  @Override
+  @Transactional
+  public void save(Achieve achieve) {
+    try {
+      achieveRepository.save(achieve);
+    } catch (Exception e) {
+      LogUtil.error(e.getMessage(), e);
+      throw e;
+    }
   }
   
   public static Specification<Achieve> achieveSearchFilter(final Collection<SearchFilter> filters,

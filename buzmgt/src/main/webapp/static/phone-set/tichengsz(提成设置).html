@@ -40,43 +40,39 @@
                 <!--左侧导航开始-->
                 <div style="padding-left: 0">
                     <div class=" sidebar left-side" style="padding-top:0;margin-top:5px">
+                        <h5 class="line-h">
+                            <i class="ico ico-fl"></i>请选择类别
+                        </h5>
+
                         <ul class="nav nav-sidebar menu">
-                            <li>
-                                <i class="ico ico-fl"></i>请选择类别
+                            <li class="">
+                                <a data-target="phone" href="">智能机</a>
                             </li>
                             <li>
-
-                                    智能机
-
+                                <a data-toggle="phone" href="">定制机</a>
                             </li>
                             <li>
-
-                                    定制机
-
+                                <a data-toggle="phone" href="">功能机</a>
                             </li>
                             <li>
-
-                                    功能机
-
+                                <a data-toggle="phone" href="">平板</a>
                             </li>
                             <li>
-
-                                    平板
-
+                                <a data-toggle="phone" href="">智能生活</a>
                             </li>
                             <li>
-
-
-                                    智能生活
-
+                                <a data-toggle="phone" href="">配件</a>
                             </li>
-                            <li>
-
-                                    配件
-
                         </ul>
                     </div>
                 </div>
+                <script>
+                    $('a[data-toggle="phone"]').on('shown.bs.tab', function (e) {
+                        e.target // newly activated tab
+                        e.relatedTarget // previous active tab
+                    })
+
+                </script>
                 <!--左侧导航结束-->
                 <div class="tab-content">
                     <!--右侧内容开始-->

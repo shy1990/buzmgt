@@ -56,7 +56,7 @@ public class AreaAttributeController {
    * @return
    */
   @RequestMapping( value = "/save", method = RequestMethod.POST)
-  public @ResponseBody String save(@RequestParam("commission")Double commission, @RequestParam("regionId")Region region, @RequestParam("ruleId")String ruleId,String type) {
+  public @ResponseBody String save(@RequestParam("commission")Float commission, @RequestParam("regionId")Region region, @RequestParam("ruleId")String ruleId,String type) {
     String result = areaAttributeService.save(commission,region,ruleId,type);
     return result;
   }
@@ -68,7 +68,7 @@ public class AreaAttributeController {
    * @return
    */
   @RequestMapping(value="/{id}",method=RequestMethod.PUT)
-  public @ResponseBody String update(@PathVariable("id") Long id, Double commission){
+  public @ResponseBody String update(@PathVariable("id") Long id, Float commission){
     AreaAttribute areaAttribute = areaAttributeService.findById(id);
     areaAttribute.setCommissions(commission);
     areaAttributeService.save(areaAttribute);

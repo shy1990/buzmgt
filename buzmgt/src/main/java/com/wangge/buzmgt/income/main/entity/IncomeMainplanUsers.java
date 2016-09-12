@@ -7,6 +7,8 @@ package com.wangge.buzmgt.income.main.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -41,27 +43,28 @@ public class IncomeMainplanUsers {
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
-  public Long id;
+  private Long id;
   /**
    * 业务员id
    * 
    * @pdOid 507b5d8b-02c9-4fbe-87d7-bb09d4daa8df
    */
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "salesman_ID")
-  public SalesMan salesman;
+  @Column(name="salesman_id")
+  private String salesmanId;
+ 
+  private String salesmanname;
   /**
    * 生成时间
    * 
    * @pdOid f28804c6-d09a-462d-a382-1fa3d687a2e2
    */
-  public Date createtime = new Date();
+  private Date createtime = new Date();
   /**
    * 状态(0正常,1移除)
    * 
    * @pdOid d9096e17-fd13-43ed-a892-1941ba9bc56f
    */
-  @Enumerated(EnumType.STRING)
+  @Enumerated(EnumType.ORDINAL)
   private FlagEnum state = FlagEnum.NORMAL;// 是否删除 normal-正常,del-删除
   
   /**
@@ -69,10 +72,10 @@ public class IncomeMainplanUsers {
    * 
    * @pdOid 7705ac90-3651-447c-b62c-42bbd736b2c0
    */
-  public Date fqtime;
+  private Date fqtime;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "PLAIN_ID")
-  public MainIncomePlan mainplan;
+  private MainIncomePlan mainplan;
   
   public Long getId() {
     return id;
@@ -83,6 +86,14 @@ public class IncomeMainplanUsers {
   }
   
   
+  public String getSalesmanname() {
+    return salesmanname;
+  }
+
+  public void setSalesmanname(String salesmanname) {
+    this.salesmanname = salesmanname;
+  }
+
   public FlagEnum getState() {
     return state;
   }
@@ -114,20 +125,24 @@ public class IncomeMainplanUsers {
   public void setCreatetime(Date createtime) {
     this.createtime = createtime;
   }
+  public String getSalesmanId() {
+    return salesmanId;
+  }
 
-
+  public void setSalesmanId(String salesmanId) {
+    this.salesmanId = salesmanId;
+  }
+  
+ 
   public IncomeMainplanUsers(SalesMan salesman, MainIncomePlan mainplan) {
     super();
-    this.salesman = salesman;
     this.mainplan = mainplan;
   }
 
-  public SalesMan getSalesman() {
-    return salesman;
-  }
-
-  public void setSalesman(SalesMan salesman) {
-    this.salesman = salesman;
+  public IncomeMainplanUsers(String salesmanId, MainIncomePlan mainplan) {
+    super();
+    this.salesmanId = salesmanId;
+    this.mainplan = mainplan;
   }
 
   public IncomeMainplanUsers() {

@@ -50,7 +50,7 @@ public class AreaAttribute implements Serializable{
   @JoinColumn(name = "region_id")
   private Region region;//提成区域
 
-  private Double commissions;//提成金额
+  private Float commissions;//提成金额
 
   private Long ruleId;//方案ID
 
@@ -76,11 +76,11 @@ public class AreaAttribute implements Serializable{
     this.region = region;
   }
 
-  public Double getCommissions() {
+  public Float getCommissions() {
     return commissions;
   }
 
-  public void setCommissions(Double commissions) {
+  public void setCommissions(Float commissions) {
     this.commissions = commissions;
   }
 

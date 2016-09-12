@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>修改价格区间</title>
+
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/income-cash.css">
+    <link rel="stylesheet" href="css/phone.css">
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        .table-bordered{
+            border: none;
+        }
+
+        .ratio-box{
+            display: inline-block;
+            width: 100%;
+            padding: 15px;
+            padding-left: 30px;
+            border:1px solid #EEEEEE;
+
+        }
+    </style>
+</head>
+<body>
+<!---扣罚设置表头-->
+<div class="content main">
+    <h4 class="page-header">
+        <i class="ico ico-form-jage"></i>修改价格区间
+        <a href="javascript:history.back();" ><i class="ico icon-back fl-right"></i></a>
+    </h4>
+
+
+    <!----扣罚设置--->
+    <div class="table-bordered bg-color">
+        <div class="table-responsive " style="overflow-x: hidden">
+            <!--公里系数表头-->
+            <div class=" " style="margin-top: 20px;margin-bottom: 30px">
+                <div>
+                    <span class="ph-sm-orange">&nbsp; 注：</span>
+                    <span class="ph-sm-gery">0≤区间值＜50 &nbsp;&nbsp;</span>
+                    <span class="ph-sm-gery">最多添加</span>
+                    <span class="ph-sm-orange">20个</span>
+                    <span class="ph-sm-gery">区间值</span>
+                </div>
+
+            </div>
+            <!--设置公里系数表-->
+            <div id="acont" class="row">
+                <div class=" ">
+                    <div class="ratio-box" id="in-body">
+                        <div class="ratio-box-dd">
+                            <span class="label  label-blue ">1区间</span>
+                            <input type="text" class="ph-inpt" placeholder="0">
+                            <span class="ph-text-blue">至</span>
+                            <input type="text" class="ph-inpt" placeholder="50">
+                            <span class="ph-primary ">元</span>
+
+                            <span class="text-gery-hs">提成额度：</span>
+                            <input type="text" class="ph-inpt" placeholder="0">
+                            <span class="ph-primary ">元/台</span>
+                            <span class="text-red text-sm">删除</span>
+                        </div>
+
+
+                    </div>
+                    <div class="ratio-box" id="">
+                        <div class="ratio-box-dd">
+                            <span class="label  label-blue ">1区间</span>
+                            <input type="text" class="ph-inpt" placeholder="0">
+                            <span class="ph-text-blue">至</span>
+                            <input type="text" class="ph-inpt" placeholder="50">
+                            <span class="ph-primary ">元</span>
+
+                            <span class="text-gery-hs">提成额度：</span>
+                            <input type="text" class="ph-inpt" placeholder="0">
+                            <span class="ph-primary ">元/台</span>
+                            <span class="text-red text-sm">删除</span>
+                        </div>
+
+
+                    </div>
+                    <div class="ratio-box" id="">
+                        <div class="ratio-box-dd">
+                            <span class="label  label-blue ">1区间</span>
+                            <input type="text" class="ph-inpt" placeholder="0">
+                            <span class="ph-text-blue">至</span>
+                            <input type="text" class="ph-inpt" placeholder="50">
+                            <span class="ph-primary ">元</span>
+
+                            <span class="text-gery-hs">提成额度：</span>
+                            <input type="text" class="ph-inpt" placeholder="0">
+                            <span class="ph-primary ">元/台</span>
+                            <span class="text-red text-sm">删除</span>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+
+
+
+                <!--<div class="col-sm-3 cl-padd">-->
+                    <!--<div class="ratio-box" style=" padding-bottom: 10px;  padding-top: 12px;">-->
+                        <!--<button class="btn  ph-btn-white ph-primary J_addDire " type="button" href="javascript:;">-->
+                            <!--自定义设置区域-->
+                        <!--</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-sm-offset-4 col-sm-4" style="margin-top: 50px;margin-bottom: 35px;">
+                        <button type="submit" class="col-sm-12 btn btn-primary text-strong">生成</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!--扣罚设置--->
+</div><!---扣罚设置表头-->
+
+
+<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-switch.min.js"></script>
+
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../static/js/jquery/scroller/jquery.mCustomScrollbar.concat.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script type="text/javascript">
+    var i = 6;
+
+    $('.J_addDire').click(function () {
+        var dirHtml = '<div class="col-sm-3 cl-padd">' +
+                '<div class="ratio-box">' +
+                '<div class="ratio-box-dd">' +
+                '<span class="label  label-blue">' + (i++) +'区间' + '</span>' +
+                '<input type="text" class="ph-inptt" placeholder="0" >' +
+                '<span class="ph-text-blue">' + '至' + '</span>' +
+                '<input type="text" class="ph-inptt"   placeholder="50">' +
+                '<span class="ph-primary ">' + '元' + '</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+        $(this).parents('.col-sm-3').before(dirHtml);
+    });
+    $('body input').val('');
+
+//    $("#closetabbtn").click(function(e){
+//        $(this).parent().parent().css("display","none"); //隐藏tab头，调用remove方法就是删除了
+//        $("#closetab").css("display","none"); //隐藏tab正文信息，调用remove方法就是删除了
+//        if(activeTab=="closetab"){ //判断当前tab页是否是带关闭按钮的tab页，如果是，则显示上次打开的tab页
+//            $('#contentnavid a[href="#‘+previousTab+‘"]').tab('show'); //显示tab页
+//        }
+//        return false; //一定要return false，阻止事件往上冒泡
+//    });
+
+    $(document).ready(function(){
+        $("button").click(function(){
+            $("in-body").remove();
+        });
+    });
+
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        pickerPosition: "bottom-right",
+        forceParse: 0
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+.bnt-ss{
+    width: 50px;
+    height: 25px;
+    background: #1e92d4;
+    color: #ffffff;
+    line-height: 10px;
+}
+.input-search{
+    padding-right: 5px;
+    width: 230px;
+
+}
+.nav-tabs > li > a {
+    line-height: 50px;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
+    color: #fff;
+    background-color: #1ca4f2;
+    font-weight: bold;
+}
+
+.nav-top {
+    margin-bottom: 25px;
+}
+
+.nav-pills > li > a {
+    border-radius: 70px;
+}
+
+.icon-xj {
+    background: url("../img/xjqj.png") no-repeat center;
+}
+
+.icon-jl {
+    background: url("../img/szjl.png") no-repeat center;
+}
+
+.ph-btn-set > a:hover {
+    font-weight: bold;
+}
+
+.ph-on {
+    color: #EEEEEE;
+    text-align: center;
+    padding: 30px 40px 30px 30px;
+    background: url("../img/kuang-green.png") no-repeat center;
+    font-size: 12px;
+}
+
+.ph-weihes {
+    color: #EEEEEE;
+    text-align: center;
+    padding: 30px 40px 30px 30px;
+    background: url("../img/whss.png") no-repeat center;
+    font-size: 12px;
+}
+
+td.reason{
+    max-width:150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.text-green {
+    color: #0c9969;
+}
+
+
+.bnt-ck {
+    width: 50px;
+    height: 22px;
+    background: #3589b8;
+    color: #ffffff;
+    line-height: 8px;
+    font-size: 12px;
+}
+
+.bnt-jc:hover,
+.bnt-jc:focus {
+    color: #ffffff;
+}
+
+
+.btn-sc {
+    width: 50px;
+    height: 22px;
+    background: #ff5d5d;
+    color: #ffffff;
+    line-height: 8px;
+    font-size: 12px;
+}
+
+.bnt-jc:hover,
+.bnt-jc:focus {
+    color: #ffffff;
+}
+
+
+.bnt-jc {
+    width: 50px;
+    height: 22px;
+    background: #a3be65;
+    color: #ffffff;
+    line-height: 10px;
+}
+
+.bnt-jc:hover,
+.bnt-jc:focus {
+    color: #ffffff;
+}
+
+.btn-zz {
+    width: 50px;
+    height: 22px;
+    background: #f2a838;
+    color: #ffffff;
+    line-height: 10px;
+}
+
+.btn-zz:hover,
+.btn-zz:focus {
+    color: #ffffff;
+}
+
+.qipao {
+    display: inline-block;
+    min-width: 10px;
+    padding: 2px 5px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #ff5244;
+    border-radius: 10px;
+    margin-top: -20px;
+}
+
+
+.btn-d{
+    width: 95px;
+    height: 40px;
+}
+.btn-qx{
+    float: left;
+    margin-left: 130px;
+}
+
+.btn-dd{
+    float: left;
+    margin-left: 10px;
+}
+
+
+.ph-select {
+
+    width: 180px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid #c6c6c6;
+    border-radius: 3px;
+    background: #ffffff;
+    margin-bottom: 20px;
+}
+
+.tc-fangan{
+
+    background:#ffffff;
+    box-shadow: 5px 5px 5px #ededed;
+}
+
+.text-fa-1{
+    font-size: 20px ;
+    color: #0ea874;
+    line-height: 50px;
+}
+
+.text-fa-2{
+    font-size: 20px ;
+    color: #1888c8;
+    line-height: 50px;
+}
+
+.text-fa-3{
+    font-size: 20px ;
+    color: #f58b0e;
+    line-height: 50px;
+}
+
+.text-fa-4{
+    font-size: 20px ;
+    color: #808080;
+    line-height: 50px;
+}
+
+.icon-ren{
+    background: url("../img/renhui.png") no-repeat center;
+}
+
+.icon-ren:hover{
+    background: url("../img/renlan.png") no-repeat center;
+}
+
+
+.icon-dele{
+    background: url("../img/dele.png") no-repeat center;
+}
+
+.icon-dele:hover{
+    background: url("../img/delan.png") no-repeat center;
+}
+.icon-f {
+    display: inline-block;
+    position: relative;
+    z-index: 100;
+    width: 25px;
+    height: 25px;
+    margin-top: 15px;
+}
+
+.icon-fl-right {
+    float: right;
+    margin-left: 35px;
+}
+
+.icon-tj{
+    background: url("../img/jiahui.png") no-repeat center;
+}
+
+.icon-tj:hover{
+    background: url("../img/jialan.png") no-repeat center;
+}
+.fa-tj{
+    margin-left: -200px;
+}
