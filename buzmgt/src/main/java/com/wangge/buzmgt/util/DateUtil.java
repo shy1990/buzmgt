@@ -247,8 +247,8 @@ public class DateUtil {
     
   }
   
- 
   public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");// 定义日期显示格式
+  
   /**
    * 得到前一个月的时间
    * 
@@ -261,7 +261,14 @@ public class DateUtil {
     Calendar calendar = new GregorianCalendar();
     calendar.setTime(date);
     calendar.add(Calendar.MONTH, flag);// 把月份往前移一个月
-    return sdf.format(calendar.getTime()); //
+    return sdf.format(getPreMonthDate(date, flag)); //
+  }
+  
+  public static Date getPreMonthDate(Date date, int flag) {
+    Calendar calendar = new GregorianCalendar();
+    calendar.setTime(date);
+    calendar.add(Calendar.MONTH, flag);// 把月份往前移一个月
+    return calendar.getTime(); //
     
   }
   
@@ -776,23 +783,20 @@ public class DateUtil {
     int month = Integer.valueOf(date.split("-")[1]);
     return getDaysOfMonth2(year, month);
   }
-
+  
   /**
-   * 名称:  compareDate
-   * 功能:  比较两个日期大小
-   * 参数:  @param beginDate
-   * 参数:  @param endDate
-   * 注: 第二个参数大 为true
+   * 名称: compareDate 功能: 比较两个日期大小 参数: @param beginDate 参数: @param endDate 注:
+   * 第二个参数大 为true
    */
   public static boolean compareDate(String beginDate, String endDate) throws ParseException {
-
+    
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
+    
     Date nowBegin = sdf.parse(beginDate);
-
+    
     Date nowEnd = sdf.parse(endDate);
     return nowBegin.getTime() <= nowEnd.getTime();
-
+    
   }
 
   /**
@@ -806,4 +810,5 @@ public class DateUtil {
     String nowTime_10 = dateFormat.format(now_10);
     return nowTime_10;
   }
+
 }

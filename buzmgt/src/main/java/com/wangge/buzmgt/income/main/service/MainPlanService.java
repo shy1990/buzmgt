@@ -112,5 +112,5 @@ public interface MainPlanService {
 
   void deleteUser(Map<String, Object> user) throws Exception;
 
- 
+  void alterUserFlag(Long planUserId);
 }
