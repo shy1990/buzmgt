@@ -6,6 +6,8 @@ $(function() {
 	initSelectBrand();
 	initSelectMachineType();
 	initFunction();
+	creategroupAll();
+	
 });
 function addNumber() {
 	var name = $(this).prev("input").attr("name");
@@ -67,8 +69,10 @@ function addRule() {
 	console.info(rule);
 	createRules(rule);
 	$('#zzrwul').modal('hide');
+	createNumberAdd();
 	
 }
+
 function addMoney(num,value){
 	rule[num]["money"] = Number(value);
 	console.info(rule);
@@ -132,7 +136,55 @@ function initFunction(){
 		pickerPosition : "bottom-right",
 		forceParse : 0
 	});
+	var groupName = "";
+	$('#tjry').on('shown.bs.modal', function (event) {
+		  var button = $(event.relatedTarget) // Button that triggered the modal
+		  groupName = button.data('groupname') // Extract info from data-* attributes
+		  var modal = $(this);
+		  modal.find('#groupName').val(groupName);
+		  //初始化分组
+		  createGroupSonByNameTable(userList);
+		  groupList = new Array();
+		  groupList = groupList.concat(userList);
+		});
+	findAchieve();
 }
+function findAchieve(){
+	var achieveId = $('.J_achieveId').val();
+	$.ajax({
+		url : base + "achieve/getAchieve/" +achieveId,
+		type : "GET",
+		dataType : "JSON",
+		success :function(data){
+			achieve = data.result;
+			console.info(achieve);
+			rule = achieve['rewardPunishRules'];
+			groupNumbers = achieve['groupNumbers'];
+			disposeUserList(groupNumbers);
+			//所有用户的UserId
+		},
+		error : function(data){
+			alert("网络异常，稍后重试！");
+		}
+	})
+}
+
+function disposeUserList(groupNumbers){
+	userList = new Array(); 
+	for(var i=0;i<groupNumbers.length;i++){
+		var groupName = groupNumbers[i]['groupName'];
+		var groupUsers = groupNumbers[i]['groupUsers'];
+		for(var j=0;j<groupUsers.length;j++){
+			userList[j]={
+				"userId" : groupUsers[j]['userId'], 
+				"userName" : groupUsers[j]['userId'],
+				"groupName" : groupName
+			}
+		}
+	}
+	return userList;
+}
+
 /**
  * 验证二阶段数量
  * @returns {Boolean}
@@ -261,9 +313,21 @@ function createNumber(data) {
 	var myTemplate = Handlebars.compile($("#numbers-template").html());
 	$('#numberList').html(myTemplate(data));
 }
+/**
+ * 创建父窗口中的人员分组
+ * @param data
+ */
+function creategroupAll(){
+	var data = disposeGroupNumbers();
+	var myTemplate = Handlebars.compile($("#group-all-template").html());
+	$('#groupAllList').html(myTemplate(data));
+}
+
+
 function toSubmit() {
 //	var jsonStr = $("#achieveForm").serialize();
 	var jsonStr = {
+		"achieveId" : $(".J_achieveId").val(),
 		"planId": $(".J_planId").val(),
 		"machineTypeId" : $(".J_machineType").val(),
 		"brandId" : $(".J_brand").val(),
@@ -277,7 +341,10 @@ function toSubmit() {
         "auditor":  $(".J_auditor").val(),
         "remark":  $(".J_remark").val()
 	};
+	//奖罚规则
 	jsonStr["rewardPunishRules"] = rule;
+	//分组
+	jsonStr["groupNumbers"] = disposePostGroup();
 /*	
 	'rewardPunishRules':[
         {
@@ -340,4 +407,80 @@ function toSubmit() {
 			alert("网络异常，稍后重试！");
 		}
 	});
+}
+//下一步
+function nextGroup(){
+	$(".J_groupUser_show").hide();
+	$("#achieveForm").show();
+	createNumberAdd();
+}
+/**
+ * 每组人数
+ */
+Handlebars.registerHelper('countUser', function(groupUsers) {
+	return groupUsers.length;
+});
+/**
+ * 增强 if-else使用 
+ * 比较长度
+ */
+Handlebars.registerHelper('compareCount', function(groupUsers, long, options) {
+	if(groupUsers.length > long){
+		//满足添加继续执行
+		return options.fn(this);
+	}
+	//不满足条件执行{{else}}部分
+	return options.inverse(this);
+});
+
+//注册索引+1的helper
+var handleHelper = Handlebars.registerHelper("addOne", function(index) {
+	// 返回+1之后的结果
+	return (index + 1) + " ";
+});
+function createNumberAdd(){
+	var pratGroupNum = new Array();
+	pratGroupNum = 
+	{
+		"nums" : [$(".J_numberFirst_").val()	,$(".J_numberSecond_").val() ,$(".J_numberThird_").val()],
+		"groupNumbers" : groupNumbers
+	}
+	var myTemplate = Handlebars.compile($("#number-add-template").html());
+	$('#numberAddList').html(myTemplate(pratGroupNum));
+}
+/**
+ * 处理父窗口中使用的分组信息
+ */
+function disposePostGroup(){
+	var newGroup = new Array();
+	for(var i=0;i<groupNumbers.length;i++){
+		var groupUsers = groupNumbers[i]["groupUsers"];
+		if(groupUsers.length > 0){
+			newGroup.push(groupNumbers[i]);
+		}
+		continue;
+	}
+	return newGroup;
+}
+
+function numberAdd(opt, num){
+	var x = $(opt).siblings('a.J_group').attr('data-index');
+	var y = "";
+	switch (num) {
+	case 0:
+		y = "numberFirstAdd";
+		break;
+	case 1:
+		y = "numberScendAdd";
+		break;
+	case 2:
+		y = "numberFirstAdd";
+		break;
+
+	default:
+		break;
+	}
+	groupNumbers[x][y] = opt.value;
+	console.info(groupNumbers[x][y]);// = opt.value;
+	console.info(groupNumbers[x]);// = opt.value;
 }

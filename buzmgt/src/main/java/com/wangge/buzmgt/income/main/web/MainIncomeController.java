@@ -1,12 +1,11 @@
 package com.wangge.buzmgt.income.main.web;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.wangge.buzmgt.income.main.service.MainIncomeService;
+import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
+import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,14 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
-import com.wangge.buzmgt.common.FlagEnum;
-import com.wangge.buzmgt.income.main.service.MainIncomeService;
-import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
-import com.wangge.buzmgt.log.util.LogUtil;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
-import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.util.DateUtil;
-import com.wangge.buzmgt.util.excel.ExcelExport;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/mainIncome")
@@ -37,7 +33,7 @@ public class MainIncomeController {
   
   @RequestMapping("/index")
   public String goIndex(Model model, HttpServletRequest request, HttpServletResponse response) {
-    model.addAttribute("regions", regionService.findByTypeOrderById(RegionType.PROVINCE));
+    model.addAttribute("regions", regionService.findByTypeOrderById(regionService.findByRegionTypeName("省")));
     return "/income/main/income";
   }
   

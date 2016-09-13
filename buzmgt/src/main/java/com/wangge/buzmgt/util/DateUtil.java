@@ -1,24 +1,16 @@
 package com.wangge.buzmgt.util;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.wangge.buzmgt.exception.MyRuntimeException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 
-import com.wangge.buzmgt.exception.MyRuntimeException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 
@@ -805,6 +797,18 @@ public class DateUtil {
     Date nowEnd = sdf.parse(endDate);
     return nowBegin.getTime() <= nowEnd.getTime();
     
+  }
+
+  /**
+   *获取十分钟之前的时间
+   * @return
+   */
+  public static String  getTimeofTenMinutes(){
+    Date now = new Date();
+    Date now_10 = new Date(now.getTime() - 600000); //10分钟前的时间
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
+    String nowTime_10 = dateFormat.format(now_10);
+    return nowTime_10;
   }
 
   /**
