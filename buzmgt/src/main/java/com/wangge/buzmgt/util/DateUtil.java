@@ -806,4 +806,16 @@ public class DateUtil {
     return nowBegin.getTime() <= nowEnd.getTime();
     
   }
+
+  /**
+   *获取十分钟之前的时间
+   * @return
+   */
+  public static String  getTimeofTenMinutes(){
+    Date now = new Date();
+    Date now_10 = new Date(now.getTime() - 600000); //10分钟前的时间
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
+    String nowTime_10 = dateFormat.format(now_10);
+    return nowTime_10;
+  }
 }

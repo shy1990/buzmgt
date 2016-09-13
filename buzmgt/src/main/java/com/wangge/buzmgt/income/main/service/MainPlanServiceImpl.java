@@ -242,7 +242,7 @@ public class MainPlanServiceImpl implements MainPlanService {
   
   @Override
   public void assembleBeforeUpdate(Model model) {
-    model.addAttribute("regions", regionService.findByTypeOrderById(RegionType.PROVINCE));
+    model.addAttribute("regions", regionService.findByTypeOrderById(regionService.findByRegionTypeName("省")));
     // model.addAttribute("roles", roleService.findAll());
   }
   
