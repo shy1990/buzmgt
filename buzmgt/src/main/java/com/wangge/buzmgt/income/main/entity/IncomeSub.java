@@ -12,7 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /** 
-  * 业务员订单收益子表,存储每个订单的收益 
+  * 业务员订单收益子表,存储每个订单每种方案的收益 
   * date: 2016年9月7日 上午9:57:00 <br/> 
   * 
   * @author yangqc 
@@ -31,8 +31,8 @@ public class IncomeSub {
   //收益
   private double income;
   //订单id,业务员id
-  private String orderno,usrId;
-  //子方案类型,订单状态,记录状态(默认有效)
+  private String orderno,uesrId;
+  //子方案类型,订单状态(已付款,已出库),记录状态(默认有效)
   private Integer planType,orderflag,flag=0;
   //收益计算时间
   @Temporal(TemporalType.DATE)
@@ -61,11 +61,17 @@ public class IncomeSub {
   public void setOrderno(String orderno) {
     this.orderno = orderno;
   }
-  public String getUsrId() {
-    return usrId;
+  public long getId() {
+    return id;
   }
-  public void setUsrId(String usrId) {
-    this.usrId = usrId;
+  public void setId(long id) {
+    this.id = id;
+  }
+  public String getUesrId() {
+    return uesrId;
+  }
+  public void setUesrId(String uesrId) {
+    this.uesrId = uesrId;
   }
   public Integer getPlanType() {
     return planType;

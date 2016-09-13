@@ -51,9 +51,9 @@ public class IncomeMainplanUsers {
    * 
    * @pdOid 507b5d8b-02c9-4fbe-87d7-bb09d4daa8df
    */
-  @Column(name="salesman_id")
+  @Column(name = "salesman_id")
   private String salesmanId;
- 
+  
   private String salesmanname;
   /**
    * 生成时间
@@ -76,14 +76,16 @@ public class IncomeMainplanUsers {
    */
   @Temporal(TemporalType.DATE)
   private Date fqtime;
+  @JoinColumn( name = "PLAIN_ID", insertable = false, updatable = false)
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "PLAIN_ID")
   private MainIncomePlan mainplan;
-  
-  //操作人id
-  private String  authorId;
+  @Column(name = "PLAIN_ID")
+  private Long planId;
+  // 操作人id
+  private String authorId;
   @Temporal(TemporalType.TIMESTAMP)
-  private Date uptime=new Date();
+  private Date uptime = new Date();
+  
   public Long getId() {
     return id;
   }
@@ -92,32 +94,30 @@ public class IncomeMainplanUsers {
     this.id = id;
   }
   
-  
   public String getAuthorId() {
     return authorId;
   }
-
+  
   public void setAuthorId(String authorId) {
     this.authorId = authorId;
   }
-
-
+  
   public Date getUptime() {
     return uptime;
   }
-
+  
   public void setUptime(Date uptime) {
     this.uptime = uptime;
   }
-
+  
   public String getSalesmanname() {
     return salesmanname;
   }
-
+  
   public void setSalesmanname(String salesmanname) {
     this.salesmanname = salesmanname;
   }
-
+  
   public FlagEnum getState() {
     return state;
   }
@@ -126,6 +126,14 @@ public class IncomeMainplanUsers {
     this.state = state;
   }
   
+  public Long getPlanId() {
+    return planId;
+  }
+
+  public void setPlanId(Long planId) {
+    this.planId = planId;
+  }
+
   public java.util.Date getFqtime() {
     return fqtime;
   }
@@ -141,34 +149,34 @@ public class IncomeMainplanUsers {
   public void setMainplan(MainIncomePlan mainplan) {
     this.mainplan = mainplan;
   }
-
+  
   public Date getCreatetime() {
     return createtime;
   }
-
+  
   public void setCreatetime(Date createtime) {
     this.createtime = createtime;
   }
+  
   public String getSalesmanId() {
     return salesmanId;
   }
-
+  
   public void setSalesmanId(String salesmanId) {
     this.salesmanId = salesmanId;
   }
   
- 
   public IncomeMainplanUsers(SalesMan salesman, MainIncomePlan mainplan) {
     super();
     this.mainplan = mainplan;
   }
-
+  
   public IncomeMainplanUsers(String salesmanId, MainIncomePlan mainplan) {
     super();
     this.salesmanId = salesmanId;
     this.mainplan = mainplan;
   }
-
+  
   public IncomeMainplanUsers() {
     super();
   }

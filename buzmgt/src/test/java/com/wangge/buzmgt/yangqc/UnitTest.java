@@ -49,7 +49,7 @@ public class UnitTest {
   }
   @Test
   public void testV(){
-    int s = Integer.valueOf("02");
+    String s = DateUtil.getPreMonth(new Date(), -1);
     System.out.println(s);
   }
 }

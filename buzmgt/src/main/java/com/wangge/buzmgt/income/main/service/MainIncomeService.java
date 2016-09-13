@@ -46,6 +46,7 @@ public interface MainIncomeService {
    */
   void caculateSalesman();
   
+  void calculateOil();
   /**
    * findIncomeMain:判断某月业务员的薪资记录是否存在,若不存在就新建一个返回. <br/>
    * 
@@ -72,6 +73,9 @@ public interface MainIncomeService {
     */  
   Page<MainIncomeVo> getVopage(Pageable pageReq, Map<String, Object> searchParams) throws Exception;
 
+  /** 
+    * 导出用查询 <br/> 
+    */  
   List<MainIncomeVo> findAll(Map<String, Object> searchParams);
   
 }

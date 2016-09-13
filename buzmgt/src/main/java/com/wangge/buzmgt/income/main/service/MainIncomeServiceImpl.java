@@ -94,4 +94,16 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     });
     return rlist;
   }
+
+  /** 
+    * 待讨论:计算油补 <br/> 
+    * 方案两种:1.实时计算,参数(业务员和油补金额)
+    * 2.每天晚上定时计算,计算每天的;
+    * 
+    */ 
+  @Override
+  public void calculateOil() {
+    
+    
+  }
 }

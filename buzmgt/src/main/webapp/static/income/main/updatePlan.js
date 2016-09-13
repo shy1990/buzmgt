@@ -1,10 +1,11 @@
 var salesArr = [];
 // 添加业务员flag区分是否为临时用户
-function addUser(salesId, salesName, flag, kid) {
+function addUser(salesId, salesName, flag, kid, fqsj) {
 	var salesman = {
 		'salesmanname' : salesName,
 		'salesmanId' : salesId,
-		"id" : kid
+		"id" : kid,
+		"fqsj" : fqsj
 	};
 	var index = salesArr.indexOf(salesman);
 	if (index > -1) {
@@ -47,6 +48,13 @@ function deleteUser() {
 	if (newDate == '') {
 		alert("必须选择日期!!");
 		return;
+	}
+	var fqsj= salesArr[gloIndex - 1].fqsj;
+	if(undefined!=fqsj&&null!=fqsj&&fqsj!=""){
+		alert("该用户将于"+fqsj+"计划中,无需重复删除");
+		return;
+	}else{
+		salesArr[gloIndex - 1].fqsj=newDate;
 	}
 	var userData = {
 		"id" : salesArr[gloIndex - 1].id,
@@ -92,7 +100,8 @@ function initUsers() {
 		success : function(orderData) {
 			var data = orderData.data;
 			for (var i = 0; i < data.length; i++) {
-				addUser(data[i].salesId, data[i].name, true, data[i].id);
+				addUser(data[i].salesId, data[i].name, true, data[i].id,
+						data[i].fqtime);
 			}
 		},
 		error : function() {

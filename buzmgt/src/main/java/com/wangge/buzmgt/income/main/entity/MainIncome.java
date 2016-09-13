@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -29,7 +30,8 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
  * @since JDK 1.8
  */
 @Entity
-@NamedStoredProcedureQuery(name = "initMonth", procedureName = "init_Income_EveMonth")
+@NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = "initMonth", procedureName = "init_Income_EveMonth"),
+    @NamedStoredProcedureQuery(name = "initOilCost", procedureName = "oil_daily_calculate_prod") })
 @Table(name = "sys_income_main")
 public class MainIncome {
   /** @pdOid 08793dc7-7b0c-45cf-9e6e-4cb30870c2f9 */
