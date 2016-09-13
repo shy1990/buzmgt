@@ -162,7 +162,23 @@
                                         </td>
                                         <td>${priceRange.implementationDate}</td>
                                         <td><a href="">添加区域设置</a></td>
-                                        <td><span class="ph-on">进行中</span></td>
+
+                                            <td><span class="ph-on">
+                                               <c:if test="${priceRange.priceRangeStatus==0}">
+                                                创建中
+                                               </c:if>
+                                                <c:if test="${priceRange.priceRangeStatus==1}">
+                                                    审核中
+                                                </c:if>
+                                                 <c:if test="${priceRange.priceRangeStatus==2}">
+                                                     驳回
+                                                 </c:if>
+                                                 <c:if test="${priceRange.priceRangeStatus==3}">
+                                                     审核通过
+                                                 </c:if>
+                                            </span></td>
+
+
                                         <td>${priceRange.priceRangeCreateDate}</td>
                                         <td>
                                             <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止

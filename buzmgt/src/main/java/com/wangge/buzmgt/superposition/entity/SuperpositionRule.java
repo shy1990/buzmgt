@@ -27,10 +27,6 @@ public class SuperpositionRule {
 
     private Integer serialNumber;//序列号
 
-//    @OneToMany
-//    @JoinColumn(name = "RULE_ID")
-//    private List<Group> groupList;//人员分组
-
     public Long getRuleId() {
         return ruleId;
     }
@@ -70,14 +66,6 @@ public class SuperpositionRule {
     public void setSerialNumber(Integer serialNumber) {
         this.serialNumber = serialNumber;
     }
-    //    public List<Group> getGroupList() {
-//        return groupList;
-//    }
-//
-//    public void setGroupList(List<Group> groupList) {
-//        this.groupList = groupList;
-//    }
-
 
     @Override
     public String toString() {

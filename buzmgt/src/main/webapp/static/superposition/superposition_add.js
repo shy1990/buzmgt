@@ -381,21 +381,21 @@ function toSubmit() {
     jsonStr.groupList = groupList;//添加组
     var superposition = $.toJSON(jsonStr);
     console.info(jsonStr);
-    // $.ajax({
-    //     url: 'superposition/add',
-    //     type: 'POST',
-    //     contentType: 'application/json;charset=utf-8',
-    //     data: superposition,
-    //     success: function (result) {
-    //         if(result.status == 1){
-    //             alert('添加成功');
-    //             window.location.href = '';
-    //         }
-    //     },
-    //     error: function () {
-    //         alert('系统故障,添加失败');
-    //     }
-    //
-    // });
+    $.ajax({
+        url: 'superposition/add',
+        type: 'POST',
+        contentType: 'application/json;charset=utf-8',
+        data: superposition,
+        success: function (result) {
+            if(result.status == 1){
+                alert('添加成功');
+                window.location.href = '';
+            }
+        },
+        error: function () {
+            alert('系统故障,添加失败');
+        }
+
+    });
 
 }
