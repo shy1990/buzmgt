@@ -87,10 +87,9 @@
             });
 
         });
-        function listAll(superpositionList){
+        function listAll(superpositionList) {
             var myTemplate = Handlebars.compile($("#list-template").html());
             $("#tbody").html(myTemplate(superpositionList));
-
 
 
         }
@@ -100,14 +99,41 @@
         {{#each this}}
         <tr>
             <td>1</td>
-            <td>不知道叫啥</td>
-            <td>{{taskOne}}|{{taskTwo}}|{{taskThree}}</td>
-            <td>{{implDate}}~{{endDate}}</td>
+            <td>
+                <%--{{#with goodsTypeList}}--%>
+                    <%--{{#each this}}--%>
+                        <%--{{#with machineType}}--%>
+                            <%--{{name}}--%>
+                        <%--{{/with}}--%>
+                        <%--{{#with brand}}--%>
+                            <%--{{name}}--%>
+                        <%--{{/with}}--%>
+                        <%--{{/each}}--%>
+                <%--{{/with}}--%>
+                哪个方案
+            </td>
+            <td>
+
+                {{taskOne}}
+                {{#if taskTwo}}
+                |{{taskTwo}}
+                {{/if}}
+                {{#if taskThree}}
+                |{{taskThree}}
+                {{/if}}
+            </td>
+
+            <td>
+                {{#if implDate}}
+                {{implDate}} -- {{endDate}}
+                {{/if}}
+            </td>
+
             <td>{{giveDate}}</td>
             <td><span class="ph-on">进行中</span></td>
             <td>{{endDate}}</td>
             <td>
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">查看
+                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="see()">查看
                 </button>
                 <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">进程
                 </button>
@@ -202,30 +228,6 @@
                             </tr>
                             </thead>
                             <tbody id="tbody">
-
-
-                            <c:forEach items="${list}" var="priceRange">
-                                <tr>
-                                    <input hidden value="${priceRange.priceRangeId}"/>
-                                    <td>${priceRange.serialNumber}</td>
-                                    <td>${priceRange.priceRange}元</td>
-                                    <td class="width-fixed">
-                                        <span class="text-green">${priceRange.percentage}元/台</span>
-                                        <a href="javascript:;" class="btn btn-sm btn-findup" data-toggle="modal"
-                                           onclick="modify('${priceRange.priceRangeId}','${priceRange.priceRange}')">修改</a>
-                                            <%-- data-target="#gaigai" --%>
-                                    </td>
-                                    <td>${priceRange.implementationDate}</td>
-                                    <td><a href="">添加区域设置</a></td>
-                                    <td><span class="ph-on">进行中</span></td>
-                                    <td>${priceRange.priceRangeCreateDate}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
-                                        </button>
-                                    </td>
-                                </tr>
-
-                            </c:forEach>
 
 
                             </tbody>

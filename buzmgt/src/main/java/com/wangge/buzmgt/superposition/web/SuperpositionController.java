@@ -2,8 +2,10 @@ package com.wangge.buzmgt.superposition.web;
 
 import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.plan.server.MachineTypeServer;
+import com.wangge.buzmgt.superposition.entity.GoodsOrder;
 import com.wangge.buzmgt.superposition.entity.Result;
 import com.wangge.buzmgt.superposition.entity.Superposition;
+import com.wangge.buzmgt.superposition.service.GoodsOrderService;
 import com.wangge.buzmgt.superposition.service.SuperpositonService;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
@@ -31,6 +33,9 @@ public class SuperpositionController {
 
     @Autowired
     private MachineTypeServer machineTypeServer;
+
+    @Autowired
+    private GoodsOrderService goodsOrderService;
 
 
     private static final Logger logger = Logger.getLogger(SuperpositionController.class);
@@ -84,6 +89,27 @@ public class SuperpositionController {
         }
     }
 
+
+    /**
+     * 根据id查询手机品牌
+     * @param superposition
+     * @return
+     */
+    @RequestMapping(value = "find/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Superposition findById(@PathVariable("id") Superposition superposition) {
+
+        return superposition;
+    }
+
+
+
+
+
+
+
+
+
     @RequestMapping(value = "delete/{id}")
     @ResponseBody
     public String delete(@PathVariable("id") Long id) {
@@ -104,12 +130,7 @@ public class SuperpositionController {
     }
 
 
-    @RequestMapping(value = "find/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public Superposition findById(@PathVariable("id") Superposition superposition) {
 
-        return superposition;
-    }
 
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET)
@@ -131,9 +152,32 @@ public class SuperpositionController {
 
         return pageReposne;
     }
+//---------------------------   end   -------------------------------------------//
 
 
+
+
+
+//
+//    @RequestMapping(value = "test1", method = RequestMethod.GET)
+//    @ResponseBody
+//    public Page<GoodsOrder> test1(@PageableDefault(page = 0,size = 10,sort = {"payTime"},direction = Sort.Direction.DESC) Pageable pageable) {
+//
+//        return goodsOrderService.findAll(pageable);
+//    }
+
+
+
+    @RequestMapping(value = "find1/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public String find(@PathVariable("id") Superposition superposition) {
+        superpositonService.find1(superposition);
+        return "ssssss";
+    }
 }
 
 
-//---------------------------   end   -------------------------------------------//
+
+
+
+

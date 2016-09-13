@@ -3,9 +3,9 @@ package com.wangge.buzmgt.superposition.service;
 import com.wangge.buzmgt.superposition.entity.Group;
 import com.wangge.buzmgt.superposition.entity.Superposition;
 import com.wangge.buzmgt.superposition.entity.SuperpositionRule;
+import com.wangge.buzmgt.superposition.pojo.SalesmanDetails;
 import com.wangge.buzmgt.superposition.repository.SuperpositionRepository;
 import com.wangge.buzmgt.sys.entity.User;
-import com.wangge.buzmgt.teammember.entity.Manager;
 import com.wangge.buzmgt.teammember.service.ManagerService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -16,11 +16,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.persistence.Transient;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +34,9 @@ public class SuperpositionServiceImpl implements SuperpositonService {
 
     @Resource
     private ManagerService managerService;
+
+    @Autowired
+    private GoodsOrderService goodsOrderService;
 
     /**
      * 添加叠加任务设置
@@ -186,6 +189,40 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         },pageable);
         return page;
     }
+
+    @Override
+    public void find1(Superposition superposition) {
+        Integer taskOne = superposition.getTaskOne();
+        Integer tasktTwo = superposition.getTaskTwo();
+        Integer taskThree = superposition.getTaskThree();
+        String[] userRegions = {"370126","370883","370829","370828","370827","370830"};
+        SalesmanDetails salesmanDetails1 = new SalesmanDetails("123","lidong","370126");
+        SalesmanDetails salesmanDetails2 = new SalesmanDetails("123","lidong","370883");
+        SalesmanDetails salesmanDetails3 = new SalesmanDetails("123","lidong","370829");
+        SalesmanDetails salesmanDetails4 = new SalesmanDetails("123","lidong","370827");
+        List<SalesmanDetails> list = new ArrayList<SalesmanDetails>();
+        list.add(salesmanDetails1);
+        list.add(salesmanDetails2);
+        list.add(salesmanDetails3);
+        list.add(salesmanDetails4);
+
+        list.forEach(salesmanDetails -> {
+            Integer o = goodsOrderService.countNums("2015-02-07","2015-02-24",salesmanDetails.getRegionId());
+            System.out.println("-------:"+o);
+        });
+
+
+
+
+
+
+
+
+
+
+
+    }
+
 
 
 
