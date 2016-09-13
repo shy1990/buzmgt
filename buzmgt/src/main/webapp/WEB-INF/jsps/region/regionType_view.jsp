@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path
@@ -74,25 +75,26 @@
 				<div  class="maintype">
 					<section class='example'>
 						<div class='gridly'>
-							<div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">
-							 <a class='delete' href='#'>&times;</a>
-								<span style="font-size: large;color: #000000" >中国</span>
-							</div>
+							<c:forEach var="type" items="${listRetionType}" varStatus="s">
+							  <div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">
+							     <a class='delete' href='#'>&times;</a>
+								 <span style="font-size: large;color: #000000" >${type.name}</span>
+							  </div>
+							</c:forEach>
+							<%--<div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">--%>
+								<%--<a class='delete' href='#'>&times;</a>--%>
+								<%--<span style="font-size: large;color: #000000" >大区</span>--%>
+							<%--</div>--%>
 
-							<div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">
-								<a class='delete' href='#'>&times;</a>
-								<span style="font-size: large;color: #000000" >大区</span>
-							</div>
+							<%--<div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">--%>
+								<%--<a class='delete' href='#'>&times;</a>--%>
+								<%--<span style="font-size: large;color: #000000" >省</span>--%>
+							<%--</div>--%>
 
-							<div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">
-								<a class='delete' href='#'>&times;</a>
-								<span style="font-size: large;color: #000000" >省</span>
-							</div>
-
-							<div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">
-								<a class='delete' href='#'>&times;</a>
-								<span style="font-size: large;color: #000000" >市</span>
-							</div>
+							<%--<div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">--%>
+								<%--<a class='delete' href='#'>&times;</a>--%>
+								<%--<span style="font-size: large;color: #000000" >市</span>--%>
+							<%--</div>--%>
 
 						</div>
 						<p class='actions'>

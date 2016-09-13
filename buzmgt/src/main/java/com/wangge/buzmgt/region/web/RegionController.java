@@ -568,8 +568,9 @@ public class RegionController {
     return new ResponseEntity<List<RegionTree>>(regionService.getRegionByPid(parentId), HttpStatus.OK);
   }
   @RequestMapping("/initRegionType")
-  public String initRegionType() {
+  public String initRegionType(Model model) {
     List<RegionType> listRetionType=regionService.findALlRegionType();
+    model.addAttribute("listRetionType",listRetionType);
     return "region/regionType_view";
   }
 
