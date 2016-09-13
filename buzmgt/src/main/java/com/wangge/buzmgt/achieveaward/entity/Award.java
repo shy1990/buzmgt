@@ -1,7 +1,6 @@
-package com.wangge.buzmgt.achieve.entity;
+package com.wangge.buzmgt.achieveaward.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -14,18 +13,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.wangge.buzmgt.common.FlagEnum;
-import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.goods.entity.Brand;
 import com.wangge.buzmgt.goods.entity.Goods;
 import com.wangge.buzmgt.plan.entity.GroupNumber;
@@ -34,16 +28,16 @@ import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 
 /**
  * 
- * @ClassName: Achieve
+ * @ClassName: Award
  * @Description: 达量设置
  * @author ChenGuop
  * @date 2016年8月23日 下午6:52:22
  *
  */
 @Entity
-@Table(name = "SYS_ACHIEVE_NUMBER_SET")
+@Table(name = "SYS_ACHIEVE_AWARD_SET")
 //@NamedEntityGraph(
-//    name = "graph.Achieve",
+//    name = "graph.Award",
 //    
 //    attributeNodes={
 //        @NamedAttributeNode(value="machineType"),
@@ -53,14 +47,14 @@ import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 //        @NamedAttributeNode(value="groupNumbers")
 //    }
 //)
-public class Achieve implements Serializable {
+public class Award implements Serializable {
 
   private static final long serialVersionUID = 1L;
   
-  public static enum AchieveStatusEnum{
+  public static enum AwardStatusEnum{
     BACK("驳回"),WAIT("待审核"),OVER("已审核");    
     private String name;
-    AchieveStatusEnum(String name){
+    AwardStatusEnum(String name){
       this.name=name;
     }
     public String getName(){
@@ -71,7 +65,7 @@ public class Achieve implements Serializable {
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
-  private Long achieveId; // 主键
+  private Long awardId; // 主键
   @OneToOne
   @JoinColumn(name = "MACHINE_TYPE", updatable = false, insertable = false)
   private MachineType machineType; // 机型类别
@@ -99,7 +93,7 @@ public class Achieve implements Serializable {
   @Enumerated(EnumType.STRING)
   private FlagEnum flag = FlagEnum.NORMAL; // 是否删除：normal-正常，del-删除
   @Enumerated(EnumType.STRING)
-  private AchieveStatusEnum status = AchieveStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
+  private AwardStatusEnum status = AwardStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
   private String planId;
   
   @OneToMany(cascade=CascadeType.ALL)
@@ -114,12 +108,12 @@ public class Achieve implements Serializable {
       inverseJoinColumns=@JoinColumn(name="GROUPING_ID"))
   private List<GroupNumber> groupNumbers; //人员分组设置
 
-  public Long getAchieveId() {
-    return achieveId;
+  public Long getAwardId() {
+    return awardId;
   }
 
-  public void setAchieveId(Long achieveId) {
-    this.achieveId = achieveId;
+  public void setAwardId(Long awardId) {
+    this.awardId = awardId;
   }
 
   public MachineType getMachineType() {
@@ -250,11 +244,11 @@ public class Achieve implements Serializable {
     this.flag = flag;
   }
 
-  public AchieveStatusEnum getStatus() {
+  public AwardStatusEnum getStatus() {
     return status;
   }
 
-  public void setStatus(AchieveStatusEnum status) {
+  public void setStatus(AwardStatusEnum status) {
     this.status = status;
   }
 
@@ -284,7 +278,7 @@ public class Achieve implements Serializable {
 
   @Override
   public String toString() {
-    return "Achieve [achieveId=" + achieveId + ", machineTypeId=" + machineTypeId +  ", brandId="
+    return "Award [achieveId=" + awardId + ", machineTypeId=" + machineTypeId +  ", brandId="
         + brandId + ", goodId=" + goodId + ", numberFirst=" + numberFirst + ", numberSecond="
         + numberSecond + ", numberThird=" + numberThird + ", startDate=" + startDate + ", endDate=" + endDate
         + ", issuingDate=" + issuingDate + ", auditor=" + auditor + ", remark=" + remark + ", createDate=" + createDate

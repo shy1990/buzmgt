@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.achieve.service;
+package com.wangge.buzmgt.achieveaward.service;
 
 import java.util.List;
 import java.util.Map;
@@ -7,17 +7,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import com.wangge.buzmgt.achieve.entity.Achieve;
+import com.wangge.buzmgt.achieveaward.entity.Award;
 
 /**
  * 
-* @ClassName: AchieveServer
+* @ClassName: AwardServer
 * @Description: 达量收益业务层接口
 * @author ChenGuop
 * @date 2016年8月24日 下午6:01:50
 *
  */
-public interface AchieveService {
+public interface AwardService {
   /**
    * 
   * @Title: findAll 
@@ -25,30 +25,30 @@ public interface AchieveService {
   * @param @param spec
   * @param @param sort
   * @param @return    设定文件 
-  * @return List<Achieve>    返回类型 
+  * @return List<Award>    返回类型 
   * @throws
    */
-  List<Achieve> findAll(Map<String, Object> spec,Sort sort);
+  List<Award> findAll(Map<String, Object> spec,Sort sort);
   /**
    * 
   * @Title: findAll 
   * @Description: 分页条件查询
   * @param @param spec
   * @param @return    设定文件 
-  * @return Page<Achieve>    返回类型 
+  * @return Page<Award>    返回类型 
   * @throws
    */
-  Page<Achieve> findAll(Map<String, Object> searchParams, Pageable pageable);
+  Page<Award> findAll(Map<String, Object> searchParams, Pageable pageable);
   /**
    * 
   * @Title: findByMachineType 
   * @Description: 根据机型和方案查询
   * @param @param machineType
   * @param @return    设定文件 
-  * @return List<Achieve>    返回类型 
+  * @return List<Award>    返回类型 
   * @throws
    */
-  List<Achieve> findByMachineTypeAndPlanId(String machineType,String planId);
+  List<Award> findByMachineTypeAndPlanId(String machineType,String planId);
   /**
    * 
   * @Title: save 
@@ -57,16 +57,16 @@ public interface AchieveService {
   * @return void    返回类型 
   * @throws
    */
-  void save(Achieve achieve);
+  void save(Award achieve);
   /**
    * 
   * @Title: findOne 
-  * @Description: 查询Achieve
+  * @Description: 查询Award
   * @param @param achieveId
   * @param @return    设定文件 
-  * @return Achieve    返回类型 
+  * @return Award    返回类型 
   * @throws
    */
-  Achieve findOne(Long achieveId);
+  Award findOne(Long achieveId);
   
 }
