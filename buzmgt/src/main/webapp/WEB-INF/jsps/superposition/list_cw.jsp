@@ -12,17 +12,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>详情</title>
+    <title>提成设置</title>
 
-    <link href="<%=basePath%>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<%=basePath%>static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>static/css/common.css">
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/phone.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/comminssion.css">
 
-    <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script language="JavaScript" src="../static/js/section/jquery.json.js"></script>
+    <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"
+            charset="utf-8"></script>
 
     <style>
+        /*#ul li{*/
+        /*color: blue;*/
+        /*}*/
+        /*a:hover{*/
+        /*color: red;*/
+        /*}*/
         .new-table-box {
             border-top: none;
             min-height: 600px;
@@ -54,13 +63,92 @@
         .icon-reny {
             background: url("<%=basePath%>static/img/shry.png") no-repeat center;
         }
+
+
     </style>
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                url: 'findAll',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    var superpositionList = data.content;
+                    console.log(superpositionList);
+                    listAll(superpositionList);
+
+                },
+                error: function () {
+
+
+                }
+
+            });
+
+        });
+        function listAll(superpositionList) {
+            var myTemplate = Handlebars.compile($("#list-template").html());
+            $("#tbody").html(myTemplate(superpositionList));
+
+
+        }
+
+    </script>
+    <script id="list-template" type="text/x-handlebars-template">
+        {{#each this}}
+        <tr>
+            <td>1</td>
+            <td>
+                <%--{{#with goodsTypeList}}--%>
+                    <%--{{#each this}}--%>
+                        <%--{{#with machineType}}--%>
+                            <%--{{name}}--%>
+                        <%--{{/with}}--%>
+                        <%--{{#with brand}}--%>
+                            <%--{{name}}--%>
+                        <%--{{/with}}--%>
+                        <%--{{/each}}--%>
+                <%--{{/with}}--%>
+                哪个方案
+            </td>
+            <td>
+
+                {{taskOne}}
+                {{#if taskTwo}}
+                |{{taskTwo}}
+                {{/if}}
+                {{#if taskThree}}
+                |{{taskThree}}
+                {{/if}}
+            </td>
+
+            <td>
+                {{#if implDate}}
+                {{implDate}} -- {{endDate}}
+                {{/if}}
+            </td>
+
+            <td>{{giveDate}}</td>
+            <td><span class="ph-on">进行中</span></td>
+            <td>{{endDate}}</td>
+            <td>
+                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="see()">查看
+                </button>
+                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">进程
+                </button>
+                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
+                </button>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
 </head>
 <body>
 
 <div class="content main">
     <h4 class="page-header">
-        <i class="ico ico-tcsz"></i>详情
+        <i class="ico ico-tcsz"></i>提成设置
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
     </h4>
 
@@ -77,126 +165,76 @@
         <!--col begin-->
         <div class="col-md-12">
             <!--orderbox begin-->
-            <div class="order-box">
-                <!--左侧导航开始-->
-                <%--<div style="padding-left: 0">--%>
-                <%--<div class=" sidebar left-side" style="padding-top:0;margin-top:5px">--%>
-                <%--<h5 class="line-h">--%>
-                <%--<i class="ico ico-fl"></i>请选择类别--%>
-                <%--</h5>--%>
+            <%--<div class="order-box">--%>
+            <%--<!--左侧导航开始-->--%>
+            <%--<div style="padding-left: 0">--%>
+            <%--<div class=" sidebar left-side" style="padding-top:0;margin-top:5px">--%>
+            <%--<h5 class="line-h">--%>
+            <%--<i class="ico ico-fl"></i>请选择类别--%>
+            <%--</h5>--%>
+            <%--&lt;%&ndash;手机类型导航栏&ndash;%&gt;--%>
+            <%--<ul id="ul" class="nav nav-sidebar menu">--%>
+            <%--<c:forEach items="${machineTypes}" var="machineType">--%>
+            <%--<li class="current">--%>
+            <%--<a href="<%=basePath%>section/findNow?type=${machineType.id}"> ${machineType.name}</a>--%>
+            <%--</li>--%>
+            <%--</c:forEach>--%>
+            <%--</ul>--%>
 
-                <%--<ul class="nav nav-sidebar menu">--%>
-                <%--<li class="current">--%>
-                <%--<a href="##">智能机</a>--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                <%--定制机--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                <%--功能机--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                <%--平板--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                <%--智能生活--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                <%--配件--%>
-                <%--</li>--%>
-                <%--</ul>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <script>
-                    $('a[data-toggle="phone"]').on('shown.bs.tab', function (e) {
-                        e.target // newly activated tab
-                        e.relatedTarget // previous active tab
-                    })
+            <%--</div>--%>
+            <%--</div>--%>
+            <%--<script>--%>
+            <%--$('a[data-toggle="phone"]').on('shown.bs.tab', function (e) {--%>
+            <%--e.target // newly activated tab--%>
+            <%--e.relatedTarget // previous active tab--%>
+            <%--})--%>
 
-                </script>
-                <!--左侧导航结束-->
-                <div class="tab-content">
-                    <!--右侧内容开始-->
-                    <!--价格区间-->
-                    <div class="tab-pane fade in active right-body" id="ajgqj">
-                        <!--导航开始-->
+            <%--</script>--%>
+            <!--左侧导航结束-->
+            <div class="tab-content">
+                <!--右侧内容开始-->
+                <!--价格区间-->
+                <div class="tab-pane fade in active right-body" id="ajgqj">
+                    <!--导航开始-->
 
-                        <%--<div class="ph-btn-set">--%>
-                        <%--<a href="addPriceRanges?type=znj" class="btn ph-blue">--%>
-                        <%--<i class="ico ico-tj"></i>新建区间值--%>
-                        <%--</a>--%>
+                    <div class="ph-btn-set">
+                        <a href="addPriceRanges?type=${type}" class="btn ph-blue">
+                            <i class="ico ico-tj"></i>新建区间值
+                        </a>
 
-                        <%--<a href="" class="btn ph-blue">--%>
-                        <%--<i class="ico ico-qj"></i>设置记录--%>
-                        <%--</a>--%>
-                        <%--<div class="clearfix">--%>
-                        <%--<div class="link-posit pull-right" style="margin-top: -25px">--%>
-                        <%--<a class="table-export" href="javascript:void(0);">导出excel</a>--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
-
-
-                        <div class="table-task-list new-table-box table-overflow" style="margin-left: 20px">
-                            <table class="table table-hover new-table">
-                                <thead>
-                                <tr>
-                                    <th>序号</th>
-                                    <th>价格区间</th>
-                                    <th>提成金额</th>
-                                    <th>开始日期</th>
-                                    <th>区域属性</th>
-                                    <th>状态</th>
-                                    <th>设置日期</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${production.priceRanges}" var="priceRange">
-                                    <tr>
-                                        <input hidden value="${priceRange.priceRangeId}"/>
-                                        <td>${priceRange.serialNumber}</td>
-                                        <td>${priceRange.priceRange}元</td>
-                                        <td class="width-fixed">
-                                            <span class="text-green">${priceRange.percentage}元/台</span>
-                                        </td>
-                                        <td>${priceRange.implementationDate}</td>
-                                        <td><a href="">添加区域设置</a></td>
-
-                                            <td><span class="ph-on">
-                                               <c:if test="${priceRange.priceRangeStatus==0}">
-                                                创建中
-                                               </c:if>
-                                                <c:if test="${priceRange.priceRangeStatus==1}">
-                                                    审核中
-                                                </c:if>
-                                                 <c:if test="${priceRange.priceRangeStatus==2}">
-                                                     驳回
-                                                 </c:if>
-                                                 <c:if test="${priceRange.priceRangeStatus==3}">
-                                                     审核通过
-                                                 </c:if>
-                                            </span></td>
-
-
-                                        <td>${priceRange.priceRangeCreateDate}</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                </c:forEach>
-
-
-                                </tbody>
-                            </table>
+                        <a href="" class="btn ph-blue">
+                            <i class="ico ico-qj"></i>设置记录
+                        </a>
+                        <div class="clearfix">
+                            <div class="link-posit pull-right" style="margin-top: -25px">
+                                <a class="table-export" href="javascript:void(0);">导出excel</a>
+                            </div>
                         </div>
-
                     </div>
+
+
+                    <div class="table-task-list new-table-box table-overflow" style="margin-left: 20px">
+                        <table class="table table-hover new-table">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th>指标</th>
+                                <th>方案起止日期</th>
+                                <th>区佣金发放日</th>
+                                <th>状态</th>
+                                <th>设置日期</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody">
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
-
-
             </div>
 
 
@@ -204,6 +242,9 @@
 
 
     </div>
+
+
+</div>
 
 </div>
 <!--修改-->
@@ -233,7 +274,7 @@
                                     <!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
                                     <input name="a" type="text" class="form-control input-h"
                                            aria-describedby="basic-addon1" placeholder="请设置提成金额"
-                                           onblur="if (!(/^[\d]+\.?\d*$/.test(this.value)) ){alert('嘴哥说:请输入数字'); this.value='';this.focus();}">
+                                           onchange="kkk(this.value,this)">
                                     </input>
                                 </div>
                                 <span class="text-gery "
@@ -288,10 +329,10 @@
 </div>
 
 </div>
-<%--<script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js"></script>--%>
-<script src="<%=basePath%>static/bootstrap/js/bootstrap.js"></script>
-<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
-<script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<%--<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>--%>
+<script src="../static/bootstrap/js/bootstrap.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 <script>
     $('#tab li').click(function () {
         $(this).addClass('active');

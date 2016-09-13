@@ -134,14 +134,22 @@
                                             <td class="reason">${production.implDate}</td>
                                             <td><span class=""> ${production.endTime} </span></td>
                                             <td>${production.productionAuditor}</td>
-                                            <c:if test="${production.productStatus=='1'}">
-                                                <td><span class="text-hong text-strong">待审核</span></td>
+
+                                                <td><span class="text-hong text-strong">
+                                                    <c:if test="${production.productStatus=='0'}">
+                                                        创建中
+                                                    </c:if>
+                                                     <c:if test="${production.productStatus=='1'}">
+                                                         审核中
+                                                     </c:if>
+                                                     <c:if test="${production.productStatus=='2'}">
+                                                         驳回
+                                                     </c:if>
+                                                     <c:if test="${production.productStatus=='2'}">
+                                                         审核通过
+                                                     </c:if>
+                                                </span></td>
                                                 <td><span class="ph-on">---</span></td>
-                                            </c:if>
-                                            <c:if test="${production.productStatus=='3'}">
-                                                <td><span class="text-lan text-strong">已审核</span></td>
-                                                <td><span class="ph-on">---</span></td>
-                                            </c:if>
 
                                             <td>2016.08.28-2016.08.29</td>
                                             <td>

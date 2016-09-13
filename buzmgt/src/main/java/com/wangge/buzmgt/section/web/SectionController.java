@@ -1,7 +1,7 @@
 package com.wangge.buzmgt.section.web;
 
 import com.wangge.buzmgt.plan.entity.MachineType;
-import com.wangge.buzmgt.plan.server.MachineTypeServer;
+import com.wangge.buzmgt.plan.service.MachineTypeService;
 import com.wangge.buzmgt.section.entity.PriceRange;
 import com.wangge.buzmgt.section.entity.Production;
 import com.wangge.buzmgt.section.service.PriceRangeService;
@@ -35,7 +35,7 @@ public class SectionController {
     private PriceRangeService priceRangeService;
 
     @Autowired
-    private MachineTypeServer machineTypeServer;
+    private MachineTypeService machineTypeServer;
 //--------------------------------- 财务的操作 -----------------------------------------------------//
 
     /**
