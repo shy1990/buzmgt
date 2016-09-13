@@ -245,3 +245,41 @@ td .bnt-jc:hover, td .bnt-jc:ACTIVE, td .bnt-jc:focus {
     width: auto;
     height: 44px;
 }
+
+.number-blue {
+    padding: 35px 25px;
+    color: #4272e0;
+    text-align: center;
+    font-weight: bold;
+}
+.text-gery{
+	margin-left: 10px;
+}
+.jttcsz{
+    height: auto ;
+    margin-bottom: 30px;
+}
+.jttcsz:AFTER {
+	content: "";
+	display: table;
+	clear: both;
+}
+.ph-inpt{
+	color: #525252;
+}
+.posit-xy{
+	position: relative;
+	top: 20px;	
+}
+
+
+
+
+
+
+
+
+
+
+
+
