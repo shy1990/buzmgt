@@ -134,7 +134,7 @@
 							<div class="form-group">
 								<div class="form-group">
 									<p class="col-sm-12 text-red ">你确定要将该业务员从方案中移除吗？</p>
-									<p class="col-sm-12 text-red ">移除后提成将不再按此方案计算.... ...
+									<p class="col-sm-12 text-red ">移除后移除日期当日及其以后提成将不再按此方案计算</p>
 								</div>
 								<hr>
 

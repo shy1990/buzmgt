@@ -9,7 +9,8 @@ function initOtherPlan(oherPlanid) {
 			$("#otherSubtitle").text(orderData.subTitle);
 			var data = orderData.data;
 			for (var i = 0; i < data.length; i++) {
-				addOtherUser(data[i].salesId, data[i].name, true, data[i].id);
+				addOtherUser(data[i].salesId, data[i].name, true, data[i].id,
+						data[i].fqtime);
 			}
 		},
 		error : function() {
@@ -18,11 +19,12 @@ function initOtherPlan(oherPlanid) {
 	});
 }
 // 添加业务员flag区分是否为临时用户
-function addOtherUser(salesId, salesName, flag, kid) {
+function addOtherUser(salesId, salesName, flag, kid, fqsj) {
 	salesArr.push({
 		'salesmanname' : salesName,
 		'salesmanId' : salesId,
-		"id" : kid
+		"id" : kid,
+		"fqsj" : fqsj
 	});
 	var dirHtml = '<div class="col-sm-2"  style="margin-bottom: 20px;margin-left: -20px"  id="saleDiv'
 			+ salesArr.length

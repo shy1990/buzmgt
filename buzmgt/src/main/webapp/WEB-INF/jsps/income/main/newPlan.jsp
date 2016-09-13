@@ -25,8 +25,6 @@
 	href="/static/income/order_detail.css">
 <link rel="stylesheet" type="text/css"
 	href="/static/income/plan_index.css" />
-<link rel="stylesheet" type="text/css"
-	href="/static/incomeCash/css/income-cash.css">
 
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
@@ -159,7 +157,7 @@
 							<div class="form-group">
 								<div class="form-group">
 									<p class="col-sm-12 text-red ">你确定要将该业务员从方案中移除吗？</p>
-									<p class="col-sm-12 text-red ">移除后提成将不再按此方案计算.... ...
+									<p class="col-sm-12 text-red ">移除后移除日期当日及其以后提成将不再按此方案计算</p>
 								</div>
 								<hr>
 

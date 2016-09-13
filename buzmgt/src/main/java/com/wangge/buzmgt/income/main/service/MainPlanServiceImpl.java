@@ -196,6 +196,7 @@ public class MainPlanServiceImpl implements MainPlanService {
       remap.put("salesId", inc.getSalesmanId());
       remap.put("name", inc.getSalesmanname());
       remap.put("id", inc.getId());
+      remap.put("fqtime", inc.getFqtime());
       rList.add(remap);
     }
     return rList;
@@ -220,8 +221,17 @@ public class MainPlanServiceImpl implements MainPlanService {
       IncomeMainplanUsers standardUser = planUserRep.findOne(id);
       standardUser.setFqtime(fqtime);
       standardUser.setAuthorId(authorId);
-      standardUser.setUptime(new Date());
-      standardUser.setState(FlagEnum.DEL);
+      Date now = new Date();
+      standardUser.setUptime(now);
+      Jobtask task = null;
+      if (fqtime.getTime() <= now.getTime()) {
+        standardUser.setState(FlagEnum.DEL);
+        task = new Jobtask(1, standardUser.getId(), fqtime);
+      } else {
+        task = new Jobtask(2, standardUser.getId(), fqtime);
+      }
+      task.setKeyid(id);
+      jobRep.save(task);
       LogUtil.info("用户" + authorName + "---" + authorId + "删除收益主方案用户,其ID为:" + standardUser.getId());
     } catch (Exception e) {
       LogUtil.error("删除用户失败", e);
@@ -274,5 +284,10 @@ public class MainPlanServiceImpl implements MainPlanService {
       throw new Exception("保存收益主方案人员出错");
     }
     return remap;
+  }
+  
+  @Override
+  public void alterUserFlag(Long planUserId) {
+    planUserRep.updateFlagById(FlagEnum.DEL, planUserId);
   }
 }

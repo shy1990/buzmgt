@@ -25,12 +25,13 @@ public class Jobtask {
   @GeneratedValue(generator = "idgen",strategy=GenerationType.SEQUENCE)
   @Id
   private long id;
-  //flag:0(未执行),1(已执行);type任务类型:1.删除收益主方案
+  //flag:0(未执行),1(已执行);type任务类型:0.删除收益主方案,1.删除收益主方案的一个用户(需重新计算)2.删除一个收益主方案的用户(无需重新计算)
+  //3.
   private Integer flag=0,type;
   //受影响的业务id(多个)
   private String salesmanId;
   //计划ID
-  private Long planId;
+  private Long planId,keyid;
   //执行时间,小于等于今天的任务执行
   @Temporal(TemporalType.DATE)
   private Date exectime;
@@ -42,6 +43,19 @@ public class Jobtask {
   }
   public Integer getFlag() {
     return flag;
+  }
+  
+  public Long getKeyid() {
+    return keyid;
+  }
+  public void setKeyid(Long keyid) {
+    this.keyid = keyid;
+  }
+  public Date getExectime() {
+    return exectime;
+  }
+  public void setExectime(Date exectime) {
+    this.exectime = exectime;
   }
   public void setFlag(Integer flag) {
     this.flag = flag;
@@ -64,12 +78,7 @@ public class Jobtask {
   public void setPlanId(Long planId) {
     this.planId = planId;
   }
-  public Date getexectime() {
-    return exectime;
-  }
-  public void setexectime(Date exectime) {
-    this.exectime = exectime;
-  }
+ 
   public Jobtask(Integer type, String salesmanId, Long planId, Date exectime) {
     super();
     this.type = type;
@@ -77,6 +86,8 @@ public class Jobtask {
     this.planId = planId;
     this.exectime = exectime;
   }
+  
+  
   public Jobtask() {
     super();
   }

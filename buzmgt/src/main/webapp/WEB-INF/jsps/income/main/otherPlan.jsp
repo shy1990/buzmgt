@@ -79,6 +79,7 @@
 </div>
 <script src="/static/income/main/otherPlan.js" type="text/javascript"
 	charset="utf-8"></script>
+<script src='/static/js/dateutil.js'></script>
 <script type="text/javascript">
 	
 </script>
