@@ -172,7 +172,16 @@ public class BrandIncomeController {
     ExcelExport.doExcelExport("正在使用品牌型号方案表.xls", list, gridTitles_1, coloumsKey_1, request, response);
   }
 
-
+  /**
+   * @param planId
+   * @param machineType
+   * @param model
+   * @param @return  设定文件
+   * @return String
+   * @throws
+   * @Title: showAchieveRecord
+   * @Description: 跳转到设置记录
+   */
   @RequestMapping(value = "/record", method = RequestMethod.GET)
   public String showAchieveRecord(@RequestParam String planId, @RequestParam String machineType, Model model) {
     model.addAttribute("planId", planId);
@@ -180,6 +189,15 @@ public class BrandIncomeController {
     return "brandincome/brand_record";
   }
 
+  /**
+   * @param brandId
+   * @param model
+   * @param @return  设定文件
+   * @return String
+   * @throws
+   * @Title: showAchieveRecord
+   * @Description: 跳转到设置记录
+   */
   @RequestMapping(value = "/process", method = RequestMethod.GET)
   public String toProcess(@RequestParam String brandId, Model model) {
     model.addAttribute("brandId", brandId);

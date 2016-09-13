@@ -132,8 +132,8 @@
                                             <form >
                                                 <select name="auditor" multiple="multiple" class="form-control demo3 J_auditor" style="padding: 0px" >
 
-                                                    <option value="B37158204" >胡老大</option>
-                                                    <option value="VT">横额啊</option>
+                                                    <option value="A37028706270" >胡老大</option>
+                                                    <option value="A37028706270">横额啊</option>
                                                     <option value="VA">张二啦</option>
                                                     <option value="VA">王晓晓</option>
                                                     <option value="WV">杭大大</option>

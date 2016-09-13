@@ -42,7 +42,7 @@
             <td><span class="text-blue">{{formDate endDate}}</span></td>
             <td>{{user.nickname}}</td>
             <td>{{whatBrandIncomeStatus status}}</td>
-            <td>{{compareDate startDate endDate}}</td>
+            <td>{{compareDate startDate endDate status}}</td>
             <td>{{formDate createDate}}</td>
             <td>
                 {{whatUnderwayButton startDate endDate status}}
@@ -72,7 +72,7 @@
             <td><span class="text-blue">{{formDate endDate}}</span></td>
             <td>{{user.nickname}}</td>
             <td>{{whatBrandIncomeStatus status}}</td>
-            <td>{{compareDate startDate endDate}}</td>
+            <td>{{compareDate startDate endDate status}}</td>
             <td>{{formDate createDate}}</td>
             <td>
                 {{whatExpiredButton startDate endDate status}}

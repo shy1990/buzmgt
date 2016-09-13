@@ -30,37 +30,6 @@
 	href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-	<%--达量开始--%>
-	<script id="achieve-table-template" type="text/x-handlebars-template">
-		{{#if content}}
-		{{#each content}}
-	   <tr>
-		  <td>{{addOne @index}}</td>
-		  <td>{{brand.name}}</td>
-		  <td>{{good.name}}</td>
-		  <td class="reason">
-					<span class="text-red">{{numberFirst}} | {{numberSecond}} | {{numberThird}}</span>
-				</td>
-		  <td>
-					<span class="text-blue">{{formDate startDate}}-{{formDate endDate}}</span>
-		  </td>
-		  <td><span class="text-blue">{{formDate issuingDate}}</span></td>
-		  <td><span class="ph-on">进行中</span></td>
-		  <td>{{formDate createDate}}</td>
-		  <td>
-			<button class="btn bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看</button>
-			<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程</button>
-			<button class="btn btn-sm btn-sc " data-toggle="modal" data-target="#">删除</button>
-		  </td>
-		</tr>
-		{{/each}}
-		{{else}}
-		<tr>
-			<td colspan="100">没有相关数据</td>
-		</tr>
-		{{/if}}
-	</script>
-	<%--达量结束--%>
 	<%--品牌型号开始--%>
 	<script id="brand-table-template" type="text/x-handlebars-template">
 		{{#if content}}
@@ -81,7 +50,7 @@
 			<td>{{formDate createDate}}</td>
 			<td>
 				<button class="btn bnt-sm bnt-ck" onclick="brandLook('{{id}}');">查看</button>
-				<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="">进程</button>
+				<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="brandProcess();">进程</button>
 				<button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#brandStop" onclick="brandStop('{{id}}');">终止</button>
 			</td>
 		</tr>
@@ -93,6 +62,7 @@
 		{{/if}}
 	</script>
 	<%--品牌型号结束--%>
+	<%--达量开始--%>
 <script id="achieve-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
@@ -122,6 +92,7 @@
 	</tr>
 	{{/if}}
 </script>
+	<%--达量结束--%>
 <script type="text/javascript">
 var	base='<%=basePath%>';
 	var SearchData = {

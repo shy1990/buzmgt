@@ -263,13 +263,13 @@ Handlebars.registerHelper('whatBrandIncomeStatus', function(value) {
 	return new Handlebars.SafeString(html);
 });
 
-Handlebars.registerHelper('compareDate', function(startDate,endDate) {
+Handlebars.registerHelper('compareDate', function(startDate,endDate,status) {
 	var html = "";
 	var nowDate = getTodayDate();
-	if (checkDate(startDate,nowDate) && checkDate(nowDate,endDate)) {
+	if (status === "OVER") {
 		html += '<span class="ph-on">进行中</span>';
 	}
-	if (checkDate(nowDate,startDate)) {
+	if (status === "BACK" || status === "WAIT") {
 		html += '<span class="ph-weihes">未使用</span>';
 	}
 	if (checkDate(endDate,nowDate)) {
