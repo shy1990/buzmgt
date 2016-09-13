@@ -1,22 +1,5 @@
 package com.wangge.buzmgt.income.main.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.criteria.Predicate;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
@@ -30,14 +13,23 @@ import com.wangge.buzmgt.income.main.vo.repository.PlanUserVoRepository;
 import com.wangge.buzmgt.income.schedule.entity.Jobtask;
 import com.wangge.buzmgt.income.schedule.repository.JobRepository;
 import com.wangge.buzmgt.log.util.LogUtil;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.RoleService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.EnvironmentUtils;
-
 import net.sf.json.JSONArray;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+
+import javax.persistence.criteria.Predicate;
+import java.util.*;
 
 @Service
 public class MainPlanServiceImpl implements MainPlanService {
@@ -232,7 +224,7 @@ public class MainPlanServiceImpl implements MainPlanService {
   
   @Override
   public void assembleBeforeUpdate(Model model) {
-    model.addAttribute("regions", regionService.findByTypeOrderById(RegionType.PROVINCE));
+    model.addAttribute("regions", regionService.findByTypeOrderById(regionService.findByRegionTypeName("省")));
     // model.addAttribute("roles", roleService.findAll());
   }
   

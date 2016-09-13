@@ -1,5 +1,4 @@
 var achieveTotal = 0;
-var brandTotal = 0;
 $(function() {
 	initExcelExport();// 初始化导出excel
 	initSearchData();
@@ -36,6 +35,37 @@ function findMachineType(){
 	return machineType;
 }
 
+/**
+ * 跳转添加页面 获取planId和machineType
+ */
+function record(){
+	var planId = $("#planId").val();
+	window.location.href = base + "achieve/record?planId="+planId;
+}
+/**
+ * 删除
+ * @param achieveId
+ */
+function delAchieve(achieveId){
+	if(confirm("确定要删除数据吗？")){
+		$.ajax({
+			url : base + "achieve/"+achieveId,
+			type : "DELETE",
+			dataType : "JSON",
+			success : function(data){
+				if(data.result =="success"){
+					alert(data.message);
+					window.location.reload();
+					return false;
+				}
+				alert(data.message);
+			},
+			error : function(data){
+				alert("网络异常，稍后重试！");
+			}
+		});
+	}
+}
 /**
  * 检索模糊查询
  */
@@ -93,8 +123,10 @@ function initExcelExport() {
 			'click',
 			function() {
 				var $planId = $("#planId").val();
-				SearchData['planId'] = $planId;
+				SearchData['sc_EQ_planId'] = $planId;
 				var param = parseParam(SearchData);
+				delete SearchData['sc_EQ_planId'];
+				window.location.href = base + "achieve/export" +"?" + param;
 				delete SearchData['planId'];
 				var tab = findTab();
 				switch (tab) {

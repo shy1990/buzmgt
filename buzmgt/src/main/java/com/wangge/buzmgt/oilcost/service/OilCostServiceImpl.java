@@ -29,7 +29,6 @@ import com.wangge.buzmgt.oilcost.entity.OilCost;
 import com.wangge.buzmgt.oilcost.entity.OilRecord;
 import com.wangge.buzmgt.oilcost.repository.OilCostRepository;
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.entity.SalesManPart;
@@ -117,7 +116,7 @@ public class OilCostServiceImpl implements OilCostService {
    * type-->count:国家-->all
    * 
    * 
-   * @param regionList
+   * @param
    * @return String 格式 "3701,3702,xxxx,xxx"
    */
   public String disposeRegionId(String regionId){
@@ -127,7 +126,7 @@ public class OilCostServiceImpl implements OilCostService {
     for(int n=0;n<regionList.size();n++){
       Region region= regionList.get(n);
       String regionId1=region.getId();
-      if(RegionType.AREA.equals(region.getType())){
+      if(regionService.findByRegionTypeName("县").equals(region.getType().getName())){
         regionArr+=regionId1.substring(0, 4)+",";
         continue;
       }

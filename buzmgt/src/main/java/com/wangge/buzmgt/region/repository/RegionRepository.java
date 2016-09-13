@@ -2,20 +2,18 @@ package com.wangge.buzmgt.region.repository;
 
 
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
+import com.wangge.buzmgt.region.entity.RegionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface RegionRepository extends JpaRepository<Region, String> {
-	public Region findById(String regionId);
+	 Region findById(String regionId);
 	
-	public Region findByNameLike(String regionName);
+	 Region findByNameLike(String regionName);
 	
-	public List<Region> findByParentId(String id);
-	
-	public List<Region> findByTypeOrderById(RegionType type);
+	 List<Region> findByParentId(String id);
 
-
+	List<Region> findByTypeOrderById(RegionType type);
 	
 }

@@ -1,21 +1,14 @@
 package com.wangge.buzmgt.receipt.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
+import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
+import com.wangge.buzmgt.receipt.entity.RemarkStatusEnum;
+import com.wangge.buzmgt.receipt.repository.OrderReceiptRepository;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
-import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
-import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
-import com.wangge.buzmgt.receipt.entity.RemarkStatusEnum;
-import com.wangge.buzmgt.receipt.repository.OrderReceiptRepository;
-import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
-import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.util.DateUtil;
-import com.wangge.buzmgt.util.SearchFilter;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class OrderReceiptServiceImpl implements OrderReceiptService {
@@ -129,7 +118,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
    * type-->count:国家-->all
    * 
    * 
-   * @param regionList
+   * @param
    * @return String 格式 "3701,3702,xxxx,xxx"
    */
   public String disposeRegionId(String regionId){
@@ -139,7 +128,7 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
     for(int n=0;n<regionList.size();n++){
       Region region= regionList.get(n);
       String regionId1=region.getId();
-      if(RegionType.AREA.equals(region.getType())){
+      if(regionService.findByRegionTypeName("县").equals(region.getType())){
         regionArr+=regionId1.substring(0, 4)+",";
         continue;
       }

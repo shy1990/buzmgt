@@ -1,40 +1,10 @@
 package com.wangge.buzmgt.assess.web;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.servlet.http.HttpServletRequest;
-
-
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.wangge.buzmgt.assess.entity.Assess;
 import com.wangge.buzmgt.assess.entity.Assess.AssessStatus;
 import com.wangge.buzmgt.assess.entity.AssessTime;
 import com.wangge.buzmgt.assess.service.AssessService;
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.saojie.service.SaojieService;
 import com.wangge.buzmgt.sys.entity.User;
@@ -47,6 +17,28 @@ import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.JsonResponse;
 import com.wangge.json.JSONFormat;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
   * ClassName: AssessController <br/> 
@@ -241,10 +233,10 @@ public class AssessController {
     * @author Administrator 
     * @param salesmanId
     * @param assess
-    * @param page
+    * @param
     * @param regionid
-    * @param begin
-    * @param end
+    * @param
+    * @param
     * @param baifen
     * @param active
     * @param orderNum
@@ -405,7 +397,7 @@ public class AssessController {
        */
       @RequestMapping(value = "/assessTimeList", method = RequestMethod.GET)
       public String toAssessTimeList(Model model) {
-        List<Region> regionList = regionService.findByTypeOrderById(RegionType.PARGANA);
+        List<Region> regionList = regionService.findByTypeOrderById(regionService.findByRegionTypeName("大区"));
         model.addAttribute("regionList",regionList);
         return "kaohe/check_time";
       }

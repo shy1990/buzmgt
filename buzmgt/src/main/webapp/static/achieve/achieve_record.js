@@ -1,18 +1,68 @@
 var achieveTotal = 0;
 $(function() {
+	initFunction();
 	initExcelExport();// 初始化导出excel
 	initSearchData();
 	findAchieveList();// 查询列表
-	initFunction();
-	initExcelExport();
 })
 /**
  * 跳转添加页面 获取planId和machineType
  */
-function add(){
+function add() {
 	var planId = $("#planId").val();
 	var machineType = $(".J_MachineType li.active").attr('title');
-	window.location.href = base + "achieve/add?planId="+planId+"&machineType="+machineType  
+	window.location.href = base + "achieve/add?planId=" + planId
+			+ "&machineType=" + machineType
+}
+/**
+ * 删除
+ * @param achieveId
+ */
+function delAchieve(achieveId){
+	if(confirm("确定要删除数据吗？")){
+		$.ajax({
+			url : base + "achieve/"+achieveId,
+			type : "DELETE",
+			dataType : "JSON",
+			success : function(data){
+				if(data.result =="success"){
+					alert(data.message);
+					window.location.reload();
+					return false;
+				}
+				alert(data.message);
+			},
+			error : function(data){
+				alert("网络异常，稍后重试！");
+			}
+		});
+	}
+}
+/**
+ * 审核操作
+ * @param achieveId
+ * @param status
+ */
+function auditAchieve(achieveId,status){
+	if(confirm("确认操作？")){
+		$.ajax({
+			url : base + "achieve/" + achieveId + "?status=" + status,
+			type : "PATCH",
+			dataType : "JSON",
+			success : function(data){
+				if(data.result =="success"){
+					alert(data.message);
+					window.location.reload();
+					return false;
+				}
+				alert(data.message);
+			},
+			error : function(data){
+				alert("网络异常，稍后重试！");
+			}
+		})
+	}
+	return ;
 }
 /**
  * 检索模糊查询
@@ -21,13 +71,13 @@ function goSearch() {
 	var goodName = $('#searchGoodsname').val();
 	if (!isEmpty(goodName)) {
 		$.ajax({
-			url:"/goods/likeBrandName?name="+goodName,
-			type:"GET",
-			dateType:"JSON",
-			success:function(data){
+			url : "/goods/likeBrandName?name=" + goodName,
+			type : "GET",
+			dateType : "JSON",
+			success : function(data) {
 				console.info(data);
-				if(data.length>0){
-					var ids=data.join(',');
+				if (data.length > 0) {
+					var ids = data.join(',');
 					SearchData['sc_IN_brand.id'] = ids;
 					findAchieveList();
 					delete SearchData['sc_IN_brand.id'];
@@ -35,64 +85,120 @@ function goSearch() {
 				}
 				alert("没有此品牌");
 			},
-			error:function(data){
+			error : function(data) {
 				alert("网络异常，稍后重试！");
 			}
 		});
-	}else{
+	} else {
 		alert("请输入品牌名称");
 	}
 }
-function initFunction(){
-	$(".J_MachineType li").on("click",function(){
-		$(this).addClass("active");
-		$(this).siblings("li").removeClass("active");
-		var $machineType=$(".J_MachineType li.active").attr('title');
-		SearchData['sc_EQ_machineType.id'] = $machineType;
+/**
+ * 检索创建日期查询
+ */
+function goSearchByCreateDate() {
+	var startDate = $(".J_startDate").val();
+	var endDate = $(".J_endDate").val();
+	if (!isEmpty(startDate) || !isEmpty(endDate)) {
+		SearchData['sc_GTE_createDate'] = startDate;
+		SearchData['sc_LTE_createDate'] = endDate;
 		findAchieveList();
-	});
+		delete SearchData['sc_GTE_createDate'];
+		delete SearchData['sc_LTE_createDate'];
+
+	} else {
+		alert("请输入日期！");
+	}
 }
 /**
  * 导出excel
  */
 function initExcelExport() {
-	$('.table-export').on(
-			'click',
-			function() {
-				var $planId = $("#planId").val();
-				SearchData['planId'] = $planId;
-				var param = parseParam(SearchData);
-				delete SearchData['planId'];
-				window.location.href = base + "achieve/export" +"?" + param;
-			});
+	$('.table-export').on('click', function() {
+		var $planId = $("#planId").val();
+		SearchData['sc_EQ_planId'] = $planId;
+		var param = parseParam(SearchData);
+		delete SearchData['sc_EQ_planId'];
+		window.location.href = base + "achieve/export" + "?" + param;
+	});
 }
-/**
- * 处理检索条件
- * 
- * @returns {String}
- */
-function conditionProcess() {
-	var SearchData_ = "sc_EQ_createDate="
-			+ (SearchData.sc_GTE_dateTime == null ? ''
-					: SearchData.sc_GTE_dateTime)
-			+ "&sc_EQ_createDate="
-			+ (SearchData.sc_LTE_dateTime == null ? ''
-					: SearchData.sc_LTE_dateTime);
-
-	return SearchData_;
+function initFunction() {
+	$('.J_startDate').datetimepicker({
+		format : "yyyy-mm-dd",
+		language : 'zh-CN',
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 2,
+		minView : 2,
+		pickerPosition : "bottom-right",
+		forceParse : 0
+	}).on('changeDate', function(ev) {
+		$('.form_date_start').removeClass('has-error');
+		$('.form_date_end').removeClass('has-error');
+		var endInputDateStr = $('.J_endDate').val();
+		if (endInputDateStr != "" && endInputDateStr != null) {
+			var endInputDate = stringToDate(endInputDateStr).valueOf();
+			if (ev.date.valueOf() - endInputDate >= 0) {
+				$('.form_date_start').addClass('has-error');
+				alert("请输入正确的日期");
+				return false;
+			}
+		}
+	});
+	$('.J_endDate').datetimepicker({
+		format : "yyyy-mm-dd",
+		language : 'zh-CN',
+		weekStart : 1,
+		todayBtn : 1,
+		autoclose : 1,
+		todayHighlight : 1,
+		startView : 2,
+		minView : 2,
+		pickerPosition : "bottom-right",
+		forceParse : 0
+	}).on('changeDate', function(ev) {
+		$('.form_date_start').removeClass('has-error');
+		$('.form_date_end').removeClass('has-error');
+		var startInputDateStr = $('.J_startDate').val();
+		if (startInputDateStr != "" && startInputDateStr != null) {
+			var startInputDate = stringToDate(startInputDateStr).valueOf();
+			if (ev.date.valueOf() - startInputDate < 0) {
+				$('.form_date_end').addClass('has-error');
+				alert("请输入正确的日期");
+				return false;
+			}
+		}
+	});
+	$("#myTab li").on('click', function() {
+		var title = $(this).attr('title');
+		checkTitle(title);
+		findAchieveList();
+	});
 }
 function initSearchData() {
-	var nowDate = getTodayDate();
-	var $machineType=$(".J_MachineType li.active").attr('title');
-	SearchData['sc_GTE_endDate'] = nowDate;
-	SearchData['sc_LTE_startDate'] = nowDate;
-//	SearchData['sc_EQ_status'] = "OVER";
-	SearchData['sc_EQ_machineType.id'] = $machineType;
+	var title = $("#myTab li.active").attr("title");
+	checkTitle(title);
+}
+function checkTitle(title) {
+
+	if ("going" == title) {
+		console.info(title);
+		delete SearchData['sc_LTE_endDate'];
+		SearchData['sc_GTE_endDate'] = getTodayDate();
+		return false;
+	}
+	delete SearchData['sc_GTE_endDate'];
+	SearchData['sc_LTE_endDate'] = getTodayDate();
+	console.info(title);
+	return false;
 }
 
 function findAchieveList(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
+	console.info(SearchData);
 	var $planId = $("#planId").val();
 	$.ajax({
 		url : "/achieve/" + $planId,
@@ -104,7 +210,6 @@ function findAchieveList(page) {
 			var searchTotal = orderData.totalElements;
 			if (searchTotal != achieveTotal || searchTotal == 0) {
 				achieveTotal = searchTotal;
-
 				initPaging(orderData);
 			}
 		},
@@ -119,14 +224,32 @@ var handleHelper = Handlebars.registerHelper("addOne", function(index) {
 	return index + 1;
 });
 /**
- * 生成油补统计列表
+ * 正在进行中列表
  * 
  * @param data
  */
-
 function createAchieveTable(data) {
+	var title = $("#myTab li.active").attr("title");
+	if ("going" == title) {
+		createGoingAchieveTable(data);
+		return false;
+	}
+	createPastAchieveTable(data);
+	return false;
+}
+
+function createGoingAchieveTable(data) {
 	var myTemplate = Handlebars.compile($("#achieve-table-template").html());
-	$('#achieveList').html(myTemplate(data));
+	$('#goingAchieveList').html(myTemplate(data));
+}
+/**
+ * 已过期的列表
+ * 
+ * @param data
+ */
+function createPastAchieveTable(data) {
+	var myTemplate = Handlebars.compile($("#achieve-table-template").html());
+	$('#pastAchieveList').html(myTemplate(data));
 }
 /**
  * 分页
@@ -151,9 +274,43 @@ Handlebars.registerHelper('formDate', function(value) {
 	return changeDateToString_(new Date(value));
 });
 /**
+ * 自定义if
+ */
+Handlebars.registerHelper('myIf', function(status, value, options) {
+	if (status == value) {
+		return options.fn(this);
+	} else {
+		return options.inverse(this);
+	}
+});
+/**
+ * isAuditor
+ */
+Handlebars.registerHelper('isAuditor', function(value, options) {
+	var auditor = $('#userId').val();
+	if (auditor == value) {
+		return options.fn(this);
+	} else {
+		return options.inverse(this);
+	}
+});
+/**
+ * 增强 if-else使用 比较日期
+ */
+Handlebars.registerHelper('compareDate', function(startDate, endDate, options) {
+	var nowDate = new Date().getTime();
+	console.info(startDate + "," + endDate)
+	if (startDate <= nowDate && endDate >= nowDate) {
+		// 满足添加继续执行
+		return options.fn(this);
+	}
+	// 不满足条件执行{{else}}部分
+	return options.inverse(this);
+});
+/**
  * 待付金额
  */
-Handlebars.registerHelper('disposeStayMoney', function(value) {
+Handlebars.registerHelper('disposeStayMoney', function(status, value, options) {
 	if (value == 0 || value == 0.0 || value == 0.00) {
 		return value;
 	}
@@ -177,42 +334,10 @@ Handlebars
 					}
 					return html;
 				});
-/**
- * 审核没有流水单号的交易记录
- */
-Handlebars.registerHelper('isCheckDebtStatus', function(isCheck, userId,
-		createDate) {
-	var formcreateDate = changeDateToString(new Date(createDate));
-	var html = '<button class="btn btn-sm btn-blue" onClick="checkDebt(\''
-			+ userId + '\',\'' + formcreateDate + '\')">确认</button>'
-	if (isCheck == '已审核') {
-		return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
-	}
-	return html;
-});
-/**
- * 根据流水号查询
- */
-function findBySalesManName() {
-	var salesmanName = $('#salesManName').val();
-	var createDate = $('#searchDate').val();
-	$.ajax({
-		url : base + "/checkCash/salesmanName?salesmanName=" + salesmanName
-				+ "&createDate=" + createDate,
-		type : "GET",
-		dataType : "json",
-		success : function(data) {
-			if (data.status == 'success') {
-				createCheckPendingTable(data);
-				return false;
-			}
-		},
-		error : function() {
-			alert("系统异常，请稍后重试！");
-		}
-	})
-}
 
+/**
+ * 解析json参数为url参数使用&连接
+ */
 var parseParam = function(param, key) {
 	var paramStr = "";
 	if (param instanceof String || param instanceof Number
@@ -226,7 +351,7 @@ var parseParam = function(param, key) {
 		});
 	}
 	return paramStr.substr(1);
-}; 
+};
 /**
  * 判读是否为空
  * 

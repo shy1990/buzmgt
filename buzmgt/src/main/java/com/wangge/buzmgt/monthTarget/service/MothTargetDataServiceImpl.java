@@ -141,70 +141,70 @@ public class MothTargetDataServiceImpl implements MothTargetDataService {
 //    }
 
 
-    public static String regionName(Region region) {
-//        COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他")
-        String name = "";
-
-        switch (region.getType()) {
-            case COUNTRY:
-                name = region.getName();
-                break;
-
-            case PARGANA:
-                name = region.getParent().getName();
-                name += region.getName();
-                break;
-            case PROVINCE:
-                name = region.getParent().getParent().getName();
-                name += region.getParent().getName();
-                name += region.getName();
-                break;
-            case AREA:
-                name = region.getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getName();
-                name += region.getParent().getName();
-                name += region.getName();
-                break;
-            case CITY:
-                name = region.getParent().getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getName();
-                name += region.getParent().getName();
-                name += region.getName();
-                break;
-            case COUNTY:
-                logger.info(region.getType());
-                name = region.getParent().getParent().getParent().getParent().getParent().getName();
-                logger.info(region.getId());
-                name += region.getParent().getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getName();
-                name += region.getParent().getName();
-                name += region.getName();
-                break;
-            case TOWN:
-                name = region.getParent().getParent().getParent().getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getName();
-                name += region.getParent().getName();
-                name += region.getName();
-                break;
-            case OTHER:
-                name = region.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getParent().getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getParent().getName();
-                name += region.getParent().getParent().getName();
-                name += region.getParent().getName();
-                name += region.getName();
-                break;
-        }
-
-
-        return name;
-
-    }
+//    public static String regionName(Region region) {
+////        COUNTRY("国"), PARGANA("大区"), PROVINCE("省"), AREA("区"), CITY("市"), COUNTY("县"), TOWN("镇"), OTHER("其他")
+//        String name = "";
+//
+//        switch (region.getType().getRegionTypeName()) {
+//            case COUNTRY:
+//                name = region.getName();
+//                break;
+//
+//            case PARGANA:
+//                name = region.getParent().getName();
+//                name += region.getName();
+//                break;
+//            case PROVINCE:
+//                name = region.getParent().getParent().getName();
+//                name += region.getParent().getName();
+//                name += region.getName();
+//                break;
+//            case AREA:
+//                name = region.getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getName();
+//                name += region.getParent().getName();
+//                name += region.getName();
+//                break;
+//            case CITY:
+//                name = region.getParent().getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getName();
+//                name += region.getParent().getName();
+//                name += region.getName();
+//                break;
+//            case COUNTY:
+//                logger.info(region.getType());
+//                name = region.getParent().getParent().getParent().getParent().getParent().getName();
+//                logger.info(region.getId());
+//                name += region.getParent().getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getName();
+//                name += region.getParent().getName();
+//                name += region.getName();
+//                break;
+//            case TOWN:
+//                name = region.getParent().getParent().getParent().getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getName();
+//                name += region.getParent().getName();
+//                name += region.getName();
+//                break;
+//            case OTHER:
+//                name = region.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getParent().getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getParent().getName();
+//                name += region.getParent().getParent().getName();
+//                name += region.getParent().getName();
+//                name += region.getName();
+//                break;
+//        }
+//
+//
+//        return name;
+//
+//    }
 }

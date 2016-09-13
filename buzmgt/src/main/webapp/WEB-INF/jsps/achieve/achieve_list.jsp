@@ -93,6 +93,35 @@
 		{{/if}}
 	</script>
 	<%--品牌型号结束--%>
+<script id="achieve-table-template" type="text/x-handlebars-template">
+	{{#if content}}
+	{{#each content}}
+   <tr>
+      <td>{{addOne @index}}</td>
+      <td>{{brand.name}}</td>
+      <td>{{good.name}}</td>
+      <td class="reason">
+				<span class="text-red">{{numberFirst}} | {{numberSecond}} | {{numberThird}}</span>
+			</td>
+      <td>
+				<span class="text-blue">{{formDate startDate}}-{{formDate endDate}}</span>
+      </td>
+      <td><span class="text-blue">{{formDate issuingDate}}</span></td>
+      <td><span class="ph-on">进行中</span></td>
+      <td>{{formDate createDate}}</td>
+      <td>
+        <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
+        <a href="/achieve/course/{{achieveId}}" class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程</a>
+        <button class="btn btn-sm btn-sc " onclick="delAchieve({{achieveId}})">删除</button>
+      </td>
+    </tr>
+	{{/each}}
+	{{else}}
+	<tr>
+		<td colspan="100">没有相关数据</td>
+	</tr>
+	{{/if}}
+</script>
 <script type="text/javascript">
 var	base='<%=basePath%>';
 	var SearchData = {
@@ -198,6 +227,7 @@ var	base='<%=basePath%>';
 								<a href="javascript:add();" class="btn ph-blue"> <i class="ico icon-xj"></i>
 									<span class="text-gery">添加</span>
 								</a> <a href="javascript:void(0);" class="btn ph-blue" style="margin-right: 30px">
+								</a> <a href="JavaScript:record();" class="btn ph-blue" style="margin-right: 30px">
 									<i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
 								</a>
 								<div class="link-posit pull-right">

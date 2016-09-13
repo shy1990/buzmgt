@@ -1,12 +1,12 @@
 package com.wangge.buzmgt.region.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
+import com.wangge.buzmgt.region.entity.RegionType;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -35,7 +35,7 @@ public interface RegionService {
   /**
    * 处理条件参数
    * 区域选择
-   * @param userId
+   * @param
    * @param searchParams
    */
   public void disposeSearchParams(String Column, Map<String, Object> searchParams);
@@ -52,4 +52,9 @@ public interface RegionService {
     * @since JDK 1.8 
     */  
   public List<Map<String, Object>> getAllRegion(int type);
+
+
+	List<RegionType> findALlRegionType();
+
+	RegionType findByRegionTypeName(String name);
 }
