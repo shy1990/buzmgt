@@ -1,7 +1,7 @@
 package com.wangge.buzmgt.superposition.web;
 
 import com.wangge.buzmgt.plan.entity.MachineType;
-import com.wangge.buzmgt.plan.server.MachineTypeServer;
+import com.wangge.buzmgt.plan.service.MachineTypeService;
 import com.wangge.buzmgt.superposition.entity.Superposition;
 import com.wangge.buzmgt.superposition.service.SuperpositonService;
 import org.apache.log4j.Logger;
@@ -24,7 +24,7 @@ public class SuperpositionController {
     private SuperpositonService superpositonService;
 
     @Autowired
-    private MachineTypeServer machineTypeServer;
+    private MachineTypeService machineTypeServer;
 
     private static final Logger logger = Logger.getLogger(SuperpositionController.class);
 

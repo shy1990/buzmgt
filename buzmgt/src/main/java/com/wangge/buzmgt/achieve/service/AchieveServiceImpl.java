@@ -88,7 +88,10 @@ public class AchieveServiceImpl implements AchieveService {
       throw e;
     }
   }
-  
+  @Override
+  public Achieve findOne(Long id){
+    return achieveRepository.findOne(id);
+  }
   public static Specification<Achieve> achieveSearchFilter(final Collection<SearchFilter> filters,
       final Class<Achieve> entityClazz){
     return new Specification<Achieve>() {
