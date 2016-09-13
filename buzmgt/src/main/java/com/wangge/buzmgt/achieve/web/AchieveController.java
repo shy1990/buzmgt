@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
@@ -38,7 +39,9 @@ import com.wangge.buzmgt.log.entity.Log.EventType;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.plan.entity.MachineType;
-import com.wangge.buzmgt.plan.server.MachineTypeServer;
+import com.wangge.buzmgt.plan.service.GroupNumberService;
+import com.wangge.buzmgt.plan.service.MachineTypeService;
+import com.wangge.buzmgt.plan.service.RewardPunishRuleService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 
@@ -58,9 +61,13 @@ public class AchieveController {
   @Autowired
   private AchieveService achieveServer;
   @Autowired
+  private GroupNumberService groupNumberService;
+  @Autowired
+  private RewardPunishRuleService punishRuleService;
+  @Autowired
   private MainPlanService mainPlanService;
   @Autowired
-  private MachineTypeServer machineTypeServer;
+  private MachineTypeService machineTypeServer;
 
   private static final String SEARCH_OPERTOR = "sc_";
 
@@ -335,21 +342,25 @@ public class AchieveController {
 
   /**
    * 
-   * @Title: updAchieve @Description: 修改Achieve @param @param
-   *         achieve @param @return 设定文件 @return String 返回类型 @throws
+   * @Title: updAchieve 
+   * @Description: 修改Achieve
+   *  @param @param 
+   *  achieve @param 
+   *  @return 设定文件 
+   *  @return String 返回类型 
+   *  @throws
    */
   @RequestMapping(value = "", method = RequestMethod.PUT)
   @ResponseBody
   public JSONObject updAchieve(@RequestBody Achieve achieve) {
     JSONObject json = new JSONObject();
-
+    Achieve oldAchieve = achieveServer.findOne(achieve.getAchieveId());
     try {
       achieve.setCreateDate(new Date());
       achieveServer.save(achieve);
-      logService.log(null, achieve.toString(), EventType.UPDATE);
+      logService.log(oldAchieve.toString(), achieve.toString(), EventType.UPDATE);
       json.put("result", "success");
       json.put("message", "操作成功");
-
     } catch (Exception e) {
       LogUtil.info(e.getMessage());
       json.put("result", "failure");

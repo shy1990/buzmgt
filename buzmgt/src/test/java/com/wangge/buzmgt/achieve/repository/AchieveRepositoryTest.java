@@ -83,11 +83,8 @@ public class AchieveRepositoryTest {
   public void find(){
     try {
       
-      Achieve achieve=achieveRepository.findOne(1l);
-      System.out.println(achieve);
-      List<RewardPunishRule> punishRules = achieve.getRewardPunishRules();
-      System.out.println(punishRules);
-      
+      Achieve achieve=achieveRepository.findOne(6L);
+      achieveRepository.delete(achieve);
     } catch (Exception e) {
       e.printStackTrace();
     }

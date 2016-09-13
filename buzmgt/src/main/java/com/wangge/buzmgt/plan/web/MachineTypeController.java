@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wangge.buzmgt.plan.entity.MachineType;
-import com.wangge.buzmgt.plan.server.MachineTypeServer;
+import com.wangge.buzmgt.plan.service.MachineTypeService;
 
 @Controller
 @RequestMapping("/machineType")
 public class MachineTypeController {
 
   @Autowired
-  private MachineTypeServer machineTypeServer;
+  private MachineTypeService machineTypeServer;
   /**
    * 查询所有的种类（机型）
   * @Title: findAll 

@@ -101,8 +101,6 @@ public class Achieve implements Serializable {
   @Enumerated(EnumType.STRING)
   private AchieveStatusEnum status = AchieveStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
   private String planId;
-//  @Transient
-//  private String numberStr;
   
   @OneToMany(cascade=CascadeType.ALL)
   @JoinTable(name="SYS_ACHIEVE_SET_RULE",
@@ -267,21 +265,6 @@ public class Achieve implements Serializable {
   public void setPlanId(String planId) {
     this.planId = planId;
   }
-
-//  public String getNumberStr() {
-//    if(CollectionUtils.isNotEmpty(groupNumbers)){
-//      
-//      for(GroupNumber group:groupNumbers){
-//        numberStr += group.getGroupName()+"|";
-//      }
-//      numberStr = numberStr.substring(0, numberStr.length()-2); 
-//    }
-//    return numberStr;
-//  }
-//
-//  public void setNumberStr(String numberStr) {
-//    this.numberStr = numberStr;
-//  }
 
   public List<RewardPunishRule> getRewardPunishRules() {
     return rewardPunishRules;

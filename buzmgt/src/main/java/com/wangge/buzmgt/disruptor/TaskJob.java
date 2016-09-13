@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
 public class TaskJob {
   @PersistenceContext
   private EntityManager em;
-  @Scheduled(fixedRate=1000*20)
+//  @Scheduled(fixedRate=1000*20)
   public void work(){
     //System.out.println("1秒执行了"+"hahhahahahah");
     EventBridge.executeProducer(em);

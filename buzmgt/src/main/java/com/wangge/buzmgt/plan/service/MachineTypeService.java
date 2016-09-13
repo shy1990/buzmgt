@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.plan.server;
+package com.wangge.buzmgt.plan.service;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import com.wangge.buzmgt.plan.entity.MachineType;
 * @date 2016年8月17日 下午3:57:56
 *
  */
-public interface MachineTypeServer {
+public interface MachineTypeService {
 
   /**
    * 查询所有机型

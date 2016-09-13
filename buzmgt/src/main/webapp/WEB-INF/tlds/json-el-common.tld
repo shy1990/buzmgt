@@ -5,7 +5,7 @@
 
     <tlib-version>1.0</tlib-version>
     <short-name>el</short-name>
-
+		<uri>WEB-INF/tlds</uri>
     <!-- 将对象format成json字符串 -->
     <function>
         <name>toJsonString</name>

@@ -37,7 +37,14 @@
       <td>{{brand.name}}</td>
       <td>{{good.name}}</td>
       <td class="reason">
-				<span class="text-red">{{numberFirst}} | {{numberSecond}} | {{numberThird}}</span>
+				<span class="text-red">{{numberFirst}} 
+			{{#if numberSecond}}
+			| {{numberSecond}} 
+			{{/if}}
+			{{#if numberThird}}
+			| {{numberThird}}
+			{{/if}}
+			</span>
 			</td>
       <td>
 				<span class="text-blue">{{formDate startDate}}-{{formDate endDate}}</span>
