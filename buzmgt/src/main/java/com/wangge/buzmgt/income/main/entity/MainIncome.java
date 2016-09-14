@@ -24,7 +24,8 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**
  * 收入明细表 date: 2016年9月3日 下午4:58:31 <br/>
- * 
+ * 实时计算:收现金和刷pos都是单人;<br/>
+ * 如何避免并发
  * @author yangqc
  * @version
  * @since JDK 1.8

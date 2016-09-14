@@ -31,7 +31,7 @@ public class ApplicationTest {
   
   @Test
   public void testJob() {
-    mainIncomeRep.calculateOilCost();
+    mainIncomeRep.updateAllResult(40, 0, 0, 40, "2016-09","B37170106200");;
     MainIncome mian= mainIncomeRep.findOne(6L);
     System.out.println("------------->累计油补为--"+mian.getOilIncome());
   }

@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 public  class EventBridge {
 
   /**
-   * 生产者方法
+   * 执行多线程方法
    */
   public static void executeProducer(EntityManager em){
 

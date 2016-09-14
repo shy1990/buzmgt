@@ -18,7 +18,7 @@
 <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="static/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 <link href="static/bootStrapPager/css/page.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"
 	href="/static/incomeCash/css/income-cash.css">
@@ -48,12 +48,12 @@
 									</div>
 								</td>
 								<td>{{month}}</td>
-								<td><a href="/baseSalary/show?month={{month}}&&salesmanId={{userId}}"><span class="text-blue">{{basicSalary}}</span></a></td>
-								<td><a href=""><span class="text-blue">{{busiIncome}}</span></a></td>
-								<td><a href=""><span class="text-blue">{{oilIncome}}</span></a></td>
-								<td><a href="/customTask/list?month={{month}}&&salesId={{userId}}"><span class="text-redd">{{punish}}</span></a></td>
-								<td><a href=""><span class="text-blue">{{reachIncome}}</span></a></td>
-								<td><a href=""><span class="text-blue">{{overlyingIncome}}</span></a></td>
+								<td><a href="/baseSalary/show?month={{month}}&&salesmanId={{userId}}"><span class="text-blue-line ">{{basicSalary}}</span></a></td>
+								<td><a href=""><span class="text-blue-line">{{busiIncome}}</span></a></td>
+								<td><a href=""><span class="text-blue-line">{{oilIncome}}</span></a></td>
+								<td><a href="/customTask/list?month={{month}}&&salesId={{userId}}"><span class="text-red-line">{{punish}}</span></a></td>
+								<td><a href=""><span class="text-blue-line">{{reachIncome}}</span></a></td>
+								<td><a href=""><span class="text-blue-line">{{overlyingIncome}}</span></a></td>
 								<td><a href=""><span class="text-green text-strong">{{allresult}}</span></a></td>
 			{{#isfh state}}		
 				<td><span class="yfh">已复核</span></td>						

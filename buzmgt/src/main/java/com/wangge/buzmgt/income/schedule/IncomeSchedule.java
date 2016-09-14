@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.schedule.service.JobService;
 
 /**
@@ -20,6 +21,8 @@ import com.wangge.buzmgt.income.schedule.service.JobService;
 public class IncomeSchedule {
   @Autowired
   JobService jobService;
+  @Autowired
+  MainIncomeService mainIncomeService;
   
   /*
    * 每月1号0点1分开始执行<br/> 初始化每个业务员的工资
@@ -38,6 +41,6 @@ public class IncomeSchedule {
    */
   @Scheduled(cron = " 0 30 0 * * ? ")
   public void initDailyOilCost() {
-    jobService.initDailyOilCost();
+    mainIncomeService.calculateOil();
   }
 }

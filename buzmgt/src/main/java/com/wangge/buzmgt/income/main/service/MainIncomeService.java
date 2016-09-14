@@ -28,15 +28,16 @@ public interface MainIncomeService {
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculateOutedOrder();
+  void caculateOutedOrder(String orderNo,String userId,String payStatus);
   
   /**
    * caculatePayedOrder:计算已支付订单. <br/>
    * 
+   * 该功能可以app-interface里完成,通过订单接口调用;
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculatePayedOrder();
+  void caculatePayedOrder(String orderNo,String userId);
   
   /**
    * caculateUser:计算每个业务员的薪资. <br/>
