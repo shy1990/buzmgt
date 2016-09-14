@@ -2,31 +2,14 @@
  * 达量设置添加 2016/08/30 ChenGuop
  * 
  */
+var $planId ='';
 $(function() {
+	$planId = $('.J_planId').val();
 	initSelectBrand();
 	initSelectMachineType();
 	initFunction();
-	creategroupAll();
 	
 });
-function addNumber() {
-	var name = $(this).prev("input").attr("name");
-	var html = "";
-	var html_ = "";
-	switch (name) {
-	case "numberFirst":
-		html += '<input type="text" name="numberSecond" value="" />台';
-		break;
-
-	case "numberSecond":
-		html += '<input type="text" name="numberThird" value="" />台';
-		break;
-	default:
-
-		break;
-	}
-	$(this).before(html);
-}
 // 动态添加规则
 function addRule() {
 //	$('.J_RULE').html("");
@@ -140,8 +123,10 @@ function initFunction(){
 	$('#tjry').on('shown.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  groupName = button.data('groupname') // Extract info from data-* attributes
+		  var planId = $('.J_planId').val();
 		  var modal = $(this);
 		  modal.find('#groupName').val(groupName);
+//		  modal.find('#planId').val(planId);
 		  //初始化分组
 		  createGroupSonByNameTable(userList);
 		  groupList = new Array();
@@ -177,11 +162,12 @@ function disposeUserList(groupNumbers){
 		for(var j=0;j<groupUsers.length;j++){
 			userList[j]={
 				"userId" : groupUsers[j]['userId'], 
-				"userName" : groupUsers[j]['userId'],
+				"userName" : groupUsers[j]['planUser']['truename'],
 				"groupName" : groupName
 			}
 		}
 	}
+	creategroupAll();
 	return userList;
 }
 
@@ -393,7 +379,7 @@ function toSubmit() {
 	console.info(jsonStr);
 	$.ajax({
 		url : "/achieve",
-		type : "POST",
+		type : "PUT",
 		contentType : 'application/json;charset=utf-8', // 设置请求头信息
 		dataType : "json",
 		data : jsonStr,
@@ -412,7 +398,7 @@ function toSubmit() {
 function nextGroup(){
 	$(".J_groupUser_show").hide();
 	$("#achieveForm").show();
-	createNumberAdd();
+	addRule();
 }
 /**
  * 每组人数

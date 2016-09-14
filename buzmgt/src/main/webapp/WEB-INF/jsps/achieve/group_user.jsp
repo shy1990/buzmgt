@@ -45,7 +45,7 @@
 </head>
 <body>
 	<div class="content tj-body">
-	<input id="planId" hidden="hidden" value="${planId }">
+	<input id="planId" hidden="hidden" value="${empty planId ? achieve.planId : planId}">
 	<input id="groupName" hidden="hidden">
 		<div class="clearfix"></div>
 		<div class="group-search">

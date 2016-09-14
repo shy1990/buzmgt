@@ -58,5 +58,15 @@ public interface AchieveService {
   * @throws
    */
   void save(Achieve achieve);
+  /**
+   * 
+  * @Title: findOne 
+  * @Description: 查询Achieve
+  * @param @param achieveId
+  * @param @return    设定文件 
+  * @return Achieve    返回类型 
+  * @throws
+   */
+  Achieve findOne(Long achieveId);
   
 }

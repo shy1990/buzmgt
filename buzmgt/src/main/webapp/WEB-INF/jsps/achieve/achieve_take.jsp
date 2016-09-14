@@ -139,7 +139,7 @@ var	base='<%=basePath%>';
                 <div class="col-sm-6 ryfz-box">
                     <a href="javascript:;" title="${group.groupName }组（${fn:length(group.groupUsers)}人）" data-container="body" data-toggle="popover" data-placement="right"
                        data-content="
-                       <c:forEach items ='${group.groupUsers }' var='user'> ${user.userId } </c:forEach>">
+                       <c:forEach items ='${group.groupUsers }' var='user'> ${user.planUser.truename } </c:forEach>">
                         <span class="text-big-green">${group.groupName }组（${fn:length(group.groupUsers)}人）</span>
                     </a> &nbsp;
                     <c:if test="${group.numberFirstAdd != '' && group.numberFirstAdd != null}">

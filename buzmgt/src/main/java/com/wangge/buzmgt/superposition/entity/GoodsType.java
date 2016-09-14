@@ -26,7 +26,7 @@ public class GoodsType {
     private MachineType machineType;//机型类别
 
     @Column(name = "MACHINE_TYPE")
-    private String machineTypeId;//机型类别
+    private String machineTypeId;//机型类别ID
 
     @OneToOne
     @JoinColumn(name = "BRAND_ID", updatable = false, insertable = false)

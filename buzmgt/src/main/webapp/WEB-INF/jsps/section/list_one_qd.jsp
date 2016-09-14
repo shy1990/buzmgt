@@ -64,6 +64,7 @@
                 data:{id:id,status:'3'},
                 success:function () {
                     alert('操作成功');
+                    window.location.href = 'toReviewJsp';
                     refresh();
                 },
                 error:function(){

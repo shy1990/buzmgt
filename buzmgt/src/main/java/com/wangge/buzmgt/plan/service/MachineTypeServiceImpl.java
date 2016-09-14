@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.plan.server;
+package com.wangge.buzmgt.plan.service;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.plan.repository.MachineTypeRepository;
 @Service
-public class MachineTypeServerImpl implements MachineTypeServer {
+public class MachineTypeServiceImpl implements MachineTypeService {
 
   @Autowired
   private MachineTypeRepository machineTypeRepository;
