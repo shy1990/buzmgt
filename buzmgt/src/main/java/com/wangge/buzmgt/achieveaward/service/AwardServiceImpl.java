@@ -34,6 +34,14 @@ import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.util.SearchFilter;
+/**
+ * 
+* @ClassName: AwardServiceImpl
+* @Description: 达量奖励收益业务层处理
+* @author ChenGuop
+* @date 2016年9月14日 上午11:17:53
+*
+ */
 @Service
 public class AwardServiceImpl implements AwardService {
 

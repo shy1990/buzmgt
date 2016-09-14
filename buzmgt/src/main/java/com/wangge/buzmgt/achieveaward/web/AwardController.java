@@ -43,12 +43,12 @@ import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 
 /**
- * 
- * @ClassName: AwardController
- * @Description: 达量控制层
- * @author ChenGuop
- * @date 2016年8月25日 下午3:05:16
- *
+ * 达量奖励控制层
+* @ClassName: AwardController
+* @Description: 达量控制层
+* @author ChenGuop
+* @date 2016年9月14日 上午11:18:12
+*
  */
 @Controller
 @RequestMapping("/award")

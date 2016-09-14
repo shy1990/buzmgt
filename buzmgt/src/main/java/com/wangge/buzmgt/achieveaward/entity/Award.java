@@ -28,25 +28,14 @@ import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 
 /**
  * 
- * @ClassName: Award
- * @Description: 达量设置
- * @author ChenGuop
- * @date 2016年8月23日 下午6:52:22
- *
+* @ClassName: Award
+* @Description: 达量奖励设置
+* @author ChenGuop
+* @date 2016年9月14日 上午11:17:21
+*
  */
 @Entity
 @Table(name = "SYS_ACHIEVE_AWARD_SET")
-//@NamedEntityGraph(
-//    name = "graph.Award",
-//    
-//    attributeNodes={
-//        @NamedAttributeNode(value="machineType"),
-//        @NamedAttributeNode(value="brand"),
-//        @NamedAttributeNode(value="good"),
-//        @NamedAttributeNode(value="rewardPunishRules"),
-//        @NamedAttributeNode(value="groupNumbers")
-//    }
-//)
 public class Award implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -66,6 +55,10 @@ public class Award implements Serializable {
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
   private Long awardId; // 主键
+  
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "AWARD_GOOD_ID")
+  private List<AwardGood> awardGoods;
   @OneToOne
   @JoinColumn(name = "MACHINE_TYPE", updatable = false, insertable = false)
   private MachineType machineType; // 机型类别
@@ -97,14 +90,14 @@ public class Award implements Serializable {
   private String planId;
   
   @OneToMany(cascade=CascadeType.ALL)
-  @JoinTable(name="SYS_ACHIEVE_SET_RULE",
-     joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
+  @JoinTable(name="SYS_AWARD_SET_RULE",
+     joinColumns=@JoinColumn(name="SYS_AWARD_ID"),
      inverseJoinColumns=@JoinColumn(name="RULE_ID"))
   private List<RewardPunishRule> rewardPunishRules;//奖罚规则
   
   @OneToMany(cascade=CascadeType.ALL)
-  @JoinTable(name="SYS_ACHIEVE_SET_GROUP",
-      joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
+  @JoinTable(name="SYS_AWARD_SET_GROUP",
+      joinColumns=@JoinColumn(name="SYS_AWARD_ID"),
       inverseJoinColumns=@JoinColumn(name="GROUPING_ID"))
   private List<GroupNumber> groupNumbers; //人员分组设置
 

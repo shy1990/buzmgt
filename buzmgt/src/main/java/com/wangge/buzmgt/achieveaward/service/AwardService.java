@@ -10,11 +10,11 @@ import org.springframework.data.domain.Sort;
 import com.wangge.buzmgt.achieveaward.entity.Award;
 
 /**
- * 
-* @ClassName: AwardServer
-* @Description: 达量收益业务层接口
+ * 达量收益业务层接口
+* @ClassName: AwardService
+* @Description: 达量奖励收益业务层接口
 * @author ChenGuop
-* @date 2016年8月24日 下午6:01:50
+* @date 2016年9月14日 上午11:17:43
 *
  */
 public interface AwardService {

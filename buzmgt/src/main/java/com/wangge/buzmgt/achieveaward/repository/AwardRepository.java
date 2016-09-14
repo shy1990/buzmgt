@@ -13,9 +13,9 @@ import com.wangge.buzmgt.achieveaward.entity.Award;
 /**
  * 
 * @ClassName: AwardRepository
-* @Description: 达量设置的持久化层
+* @Description: 达量奖励设置的持久化层
 * @author ChenGuop
-* @date 2016年8月24日 下午1:48:29
+* @date 2016年9月14日 上午11:17:33
 *
  */
 public interface AwardRepository extends JpaRepository<Award, Long>,
