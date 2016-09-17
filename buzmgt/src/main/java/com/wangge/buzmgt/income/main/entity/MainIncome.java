@@ -182,10 +182,11 @@ public class MainIncome {
     this.month = month;
   }
   
-  public MainIncome(SalesMan salesman, String month) {
+  public MainIncome(SalesMan salesman, String month,double basicSalaray) {
     super();
     this.salesman = salesman;
     this.month = month;
+    this.basicSalary=basicSalaray;
   }
   
   public MainIncome() {

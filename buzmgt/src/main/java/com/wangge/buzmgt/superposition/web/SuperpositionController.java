@@ -1,12 +1,7 @@
 package com.wangge.buzmgt.superposition.web;
 
-import com.wangge.buzmgt.plan.entity.MachineType;
-import com.wangge.buzmgt.plan.server.MachineTypeServer;
-import com.wangge.buzmgt.superposition.entity.GoodsOrder;
-import com.wangge.buzmgt.superposition.entity.Result;
-import com.wangge.buzmgt.superposition.entity.Superposition;
-import com.wangge.buzmgt.superposition.service.GoodsOrderService;
-import com.wangge.buzmgt.superposition.service.SuperpositonService;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +11,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import com.wangge.buzmgt.plan.entity.MachineType;
+import com.wangge.buzmgt.plan.service.MachineTypeService;
+import com.wangge.buzmgt.superposition.entity.Result;
+import com.wangge.buzmgt.superposition.entity.Superposition;
+import com.wangge.buzmgt.superposition.service.GoodsOrderService;
+import com.wangge.buzmgt.superposition.service.SuperpositonService;
 
 /**
  * Created by joe on 16-9-5.
@@ -32,7 +36,7 @@ public class SuperpositionController {
     private SuperpositonService superpositonService;
 
     @Autowired
-    private MachineTypeServer machineTypeServer;
+    private MachineTypeService machineTypeServer;
 
     @Autowired
     private GoodsOrderService goodsOrderService;

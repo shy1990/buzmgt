@@ -3,6 +3,7 @@ package com.wangge.buzmgt.customtask.server;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -90,14 +91,12 @@ public class CustomTaskServeImpl implements CustomTaskServer {
       // 计算扣罚金额,每次有就叠加
       if (customTask.getType() == 2) {
         for (String salesManId : idList) {
+          double punish = customTask.getPunishCount();
           MainIncome main = mainIncomeService.findIncomeMain(salesManId);
-          main.setPunish(main.getPunish() + customTask.getPunishCount());
-          main.reSetResult();
-          incomeRep.save(main);
+          incomeRep.updatebasicSalaryOrPunish(0, punish, punish, main.getId());
         }
         LogUtil
-            .info("用户" + authorName + "---" + authorId + "发起了个扣罚事件," + 
-        customTask.getPunishCount() + "人员为:" + idList);
+            .info("用户" + authorName + "---" + authorId + "发起了个扣罚事件," + customTask.getPunishCount() + "人员为:" + idList);
       }
       
       // 开始推送操作
@@ -136,7 +135,7 @@ public class CustomTaskServeImpl implements CustomTaskServer {
     searchParams.remove("salesId");
     Page<CustomTask> cpage = customRep.findAll((Specification<CustomTask>) (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<Predicate>();
-     
+      
       if (!salesName.isEmpty()) {
         SetJoin<CustomTask, SalesMan> setJion = root.join(root.getModel().getDeclaredSet("salesmanSet", SalesMan.class),
             JoinType.LEFT);

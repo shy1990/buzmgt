@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.income.main.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,8 @@ import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.main.vo.OrderGoods;
 import com.wangge.buzmgt.income.main.vo.repository.MainIncomeVoRepository;
 import com.wangge.buzmgt.income.main.vo.repository.OrderGoodsRepository;
+import com.wangge.buzmgt.income.ywsalary.service.BaseSalaryService;
+import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
 
@@ -46,6 +49,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   OrderGoodsRepository orderGoodsRep;
   @Autowired
   IncomeSubRepository incomeSubRep;
+  @Autowired
+  BaseSalaryService baseSalaryService;
   
   /**
    * 要避免多线程冲突 <br/>
@@ -95,8 +100,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   
   /**
    * 该功能可以app-interface里完成,通过订单接口调用; 收现金和pos调用该接口<br/>
-   * // TODO Auto-generated method stub<br/>或者可以直接算,省事
-   * 1.查出已出库订单的订单号和出库时的计算结果<br/>
+   * // TODO Auto-generated method stub<br/>
+   * 或者可以直接算,省事 1.查出已出库订单的订单号和出库时的计算结果<br/>
    * 2.判断受益方案是否相同(计算一整天或单个订单) <br/>
    * 3.相同就更改记录的日期,状态;<br/>
    * 4.不相同就重新计算结果,并更改记录的日期,状态;<br/>
@@ -123,7 +128,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       }
     } else {
       List<OrderGoods> goodList = orderGoodsRep.findByorderNo(orderNo);
-      //如果其子方案的和以前一样,就不用计算了
+      // 如果其子方案的和以前一样,就不用计算了
       for (OrderGoods goods : goodList) {
         IncomeSub sub = findSubPlan(user.getPlanId(), goods.getGoodId(), userId);
       }
@@ -136,11 +141,19 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     
   }
   
+  /*
+   * 在新建时加上月工资<br/>
+   */
   @Override
   public MainIncome findIncomeMain(String salesmanId, String month) {
     MainIncome main = mainIncomeRep.findBySalesman_IdAndMonth(salesmanId, month);
-    if (null == main) {
-      main = mainIncomeRep.save(new MainIncome(salesmanRep.findById(salesmanId), month));
+    try {
+      if (null == main) {
+        double basicSalary = baseSalaryService.calculateThisMonthBasicSalary(salesmanId);
+        main = mainIncomeRep.save(new MainIncome(salesmanRep.findById(salesmanId), month, basicSalary));
+      }
+    } catch (ParseException e) {
+      LogUtil.error("初始化月工资出错!!", e);
     }
     return main;
   }

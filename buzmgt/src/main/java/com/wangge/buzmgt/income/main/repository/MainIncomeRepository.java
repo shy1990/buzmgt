@@ -23,13 +23,19 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
   
   @Procedure("oil_daily_calculate_prod")
   void calculateOilCost();
-  /*刷新纪录,用于订单计算
-   * */
+  
+  /*
+   * 刷新纪录,用于订单计算
+   */
   @Modifying(clearAutomatically = true)
   @Transactional(rollbackFor = Exception.class)
   @Query("update MainIncome m set m.busiIncome=(m.busiIncome+?1),m.reachIncome=(m.reachIncome+?2)"
-      + ",m.overlyingIncome=(m.overlyingIncome+?3),m.allresult=(m.allresult+?4)"
-      + " where m.month=?5 and m.salesman.id=?6")
-  void updateAllResult(double busiIncome, double reachIncome, double overlyingIncome, double allresult, String month,
-      String userId);
+      + ",m.overlyingIncome=(m.overlyingIncome+?3),m.allresult=(m.allresult+?4)" + " where m.id=?5 ")
+  void updateAllResult(double busiIncome, double reachIncome, double overlyingIncome, double allresult, Long id);
+  
+  @Modifying(clearAutomatically = true)
+  @Transactional(rollbackFor = Exception.class)
+  @Query("update MainIncome m set m.basicSalary=?1,m.punish=(m.punish+?2)"
+      + ",m.allresult=(m.allresult+?3)  where m.id=?4 ")
+  int updatebasicSalaryOrPunish(double basicSalary, double punish, double allresult, Long id);
 }
