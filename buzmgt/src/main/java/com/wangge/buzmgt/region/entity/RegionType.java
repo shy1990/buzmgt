@@ -24,7 +24,7 @@ public class RegionType implements Serializable {
   @JsonIgnore
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "PARENT_ID")
-  private  RegionType childsType;
+  private  RegionType parentsType;
 
   public int getId() {
     return id;
@@ -42,11 +42,11 @@ public class RegionType implements Serializable {
     this.name = name;
   }
 
-  public RegionType getChildsType() {
-    return childsType;
+  public RegionType getParentsType() {
+    return parentsType;
   }
 
-  public void setChildsType(RegionType childsType) {
-    this.childsType = childsType;
+  public void setParentsType(RegionType parentsType) {
+    this.parentsType = parentsType;
   }
 }

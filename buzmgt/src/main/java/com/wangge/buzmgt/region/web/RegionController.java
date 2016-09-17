@@ -118,7 +118,7 @@ public class RegionController {
     Collection<Region> collectionRegion = new ArrayList<Region>();
     Region region = regionService.findListRegionbyid(pid);
     Long maxid = getMaxId(pid);
-    Region newRegion = new Region(String.valueOf(maxid + 1), name, region.getType().getChildsType());
+    Region newRegion = new Region(String.valueOf(maxid + 1), name, region.getType().getParentsType());
     newRegion.setParent(region);
     newRegion.setChildren(collectionRegion);
       regionService.saveRegion(newRegion);
@@ -159,7 +159,7 @@ public class RegionController {
     
     Region region = regionService.findListRegionbyid(id);
     Long maxid = Long.parseLong(id);
-    Region newRegion = new Region(String.valueOf(maxid), name, region.getType().getChildsType());
+    Region newRegion = new Region(String.valueOf(maxid), name, region.getType().getParentsType());
     newRegion.setParent(region);
     region.setName(name);
     region.setParent(regionService.findListRegionbyid(pid));
@@ -245,7 +245,7 @@ public class RegionController {
     }
     Region region = regionService.findListRegionbyid(parentid);
     Long maxid = getMaxId(parentid);
-    Region entity = new Region(String.valueOf(maxid + 1), name, region.getType().getChildsType());
+    Region entity = new Region(String.valueOf(maxid + 1), name, region.getType().getParentsType());
     entity.setCoordinates(pointbuf.toString());
     entity.setParent(regionService.findListRegionbyid(parentid));
     entity.setCenterPoint(centerPoint);
@@ -567,11 +567,35 @@ public class RegionController {
   public ResponseEntity<?> getChildByParent(@PathVariable String parentId) {
     return new ResponseEntity<List<RegionTree>>(regionService.getRegionByPid(parentId), HttpStatus.OK);
   }
+
+  /**
+   * 初始化区域类型
+   * @param model
+   * @return
+   */
   @RequestMapping("/initRegionType")
   public String initRegionType(Model model) {
     List<RegionType> listRetionType=regionService.findALlRegionType();
     model.addAttribute("listRetionType",listRetionType);
     return "region/regionType_view";
+  }
+
+  /**
+   * 保存区域类型
+   * @param req
+   * @return
+   */
+  @RequestMapping(value = "/addRegionType", method = RequestMethod.POST)
+  @ResponseBody
+  public String addRegionType(HttpServletRequest req) {
+    System.out.print(req.getParameter("name"));
+    RegionType regionType=new RegionType();
+    regionType.setName(req.getParameter("name"));
+    int id=regionService.findMaxId();
+    regionType.setParentsType(regionService.findRegionType(id));
+    regionType.setId(id+1);
+    regionService.saveRegionType(regionType);
+    return "suc";
   }
 
 }
