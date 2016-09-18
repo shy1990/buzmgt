@@ -76,25 +76,16 @@
 					<section class='example'>
 						<div class='gridly'>
 							<c:forEach var="type" items="${listRetionType}" varStatus="s">
-							  <div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">
-							     <a class='delete' href='#'>&times;</a>
-								 <span style="font-size: large;color: #000000" >${type.name}</span>
-							  </div>
+							  <%--<div class='brick small' 　id="typeid${s.index+1} "  style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">--%>
+							     <%--<a class='delete' href='#'>&times; </a>--%>
+								 <%--<span style="font-size: large;color: #000000" >中国 </span>--%>
+							  <%--</div>--%>
+
+								<div class='brick small' id="${type.id} " style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">
+									<a class='delete' href='#'>&times;</a>
+									<span style="font-size: large;color: #000000">${type.name}</span>
+								</div>
 							</c:forEach>
-							<%--<div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">--%>
-								<%--<a class='delete' href='#'>&times;</a>--%>
-								<%--<span style="font-size: large;color: #000000" >大区</span>--%>
-							<%--</div>--%>
-
-							<%--<div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">--%>
-								<%--<a class='delete' href='#'>&times;</a>--%>
-								<%--<span style="font-size: large;color: #000000" >省</span>--%>
-							<%--</div>--%>
-
-							<%--<div class='brick small'　id="typeid" style="text-align:center;vertical-align:middle;line-height:135px;border:#000000 dotted 1px;">--%>
-								<%--<a class='delete' href='#'>&times;</a>--%>
-								<%--<span style="font-size: large;color: #000000" >市</span>--%>
-							<%--</div>--%>
 
 						</div>
 						<p class='actions'>

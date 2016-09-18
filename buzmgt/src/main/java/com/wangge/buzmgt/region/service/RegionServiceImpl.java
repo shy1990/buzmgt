@@ -206,7 +206,7 @@ public class RegionServiceImpl implements RegionService {
 
   @Override
   public List<RegionType> findALlRegionType() {
-    Sort s=new Sort(Sort.Direction.ASC, "id");
+    Sort s=new Sort(Sort.Direction.ASC, "parentsType");
     return regionTypeRepository.findAll(s) ;
   }
 
