@@ -18,7 +18,7 @@ function forbi() {
 function getNextMonth() {
 	var month = date.getMonth();
 	var year = date.getFullYear();
-	if (month < 9) {
+	if (Number(month) < 8) {
 		month = "0" + (month + 2);
 	} else {
 		month = (month + 2);
