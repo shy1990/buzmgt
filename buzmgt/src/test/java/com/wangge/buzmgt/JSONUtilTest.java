@@ -38,7 +38,7 @@ public class JSONUtilTest {
     }
     return list;
   }
-  public static void test(String[] args) {
+  public static void main(String[] args) {
 
     int number=(int) (Math.random()*10000);
     String fastMailNo=DateUtil.date2String(new Date(), "yyyyMMddHHmmss")+number;

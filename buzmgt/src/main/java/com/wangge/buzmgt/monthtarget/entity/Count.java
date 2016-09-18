@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.monthTarget.entity;
+package com.wangge.buzmgt.monthtarget.entity;
 
 /**
  * Created by joe on 16-7-2.

@@ -1,6 +1,6 @@
-package com.wangge.buzmgt.monthTarget.service;
+package com.wangge.buzmgt.monthtarget.service;
 
-import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
+import com.wangge.buzmgt.monthtarget.entity.MonthTarget;
 import com.wangge.buzmgt.region.entity.Region;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +27,8 @@ public interface MonthTargetService {
   String publish(MonthTarget monthTarget);
 
   String publishAll();
+
+  MonthTarget findOne(Long id);
 
   public Page<MonthTarget> findByTargetCycleAndManagerId(String truename,String time,Pageable pageable);
 

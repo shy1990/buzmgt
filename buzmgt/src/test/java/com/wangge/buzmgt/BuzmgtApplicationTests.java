@@ -42,6 +42,18 @@ import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.HttpUtil;
 import com.wangge.buzmgt.util.RegionUtil;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.domain.Page;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BuzmgtApplication.class)
@@ -68,7 +80,7 @@ public class BuzmgtApplicationTests {
 	@Resource
 	private VisitRecordService monthTaskService;
 	@Resource
-	MonthOrdersDataRepository monthDataRep;
+	private MonthOrdersDataRepository monthDataRep;
 	@Resource
 	MonthTaskRepository monTaskRep;
 	@Resource

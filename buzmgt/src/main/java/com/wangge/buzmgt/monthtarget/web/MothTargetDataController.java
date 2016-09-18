@@ -1,7 +1,7 @@
-package com.wangge.buzmgt.monthTarget.web;
+package com.wangge.buzmgt.monthtarget.web;
 
-import com.wangge.buzmgt.monthTarget.entity.MothTargetData;
-import com.wangge.buzmgt.monthTarget.service.MothTargetDataService;
+import com.wangge.buzmgt.monthtarget.entity.MothTargetData;
+import com.wangge.buzmgt.monthtarget.service.MothTargetDataService;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 import com.wangge.json.JSONFormat;
 import org.apache.log4j.Logger;
