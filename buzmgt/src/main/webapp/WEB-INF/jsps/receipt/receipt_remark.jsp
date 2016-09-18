@@ -107,6 +107,7 @@ p:after {
       <td class="">{{shopName}}</td>
       <td>{{orderNo}}</td>
       <td>{{orderPrice}}</td>
+      <td>{{../status}}</td>
       <td>
 				{{{isException customSignforException}}}
 				{{customSignforGeopoint}}
@@ -345,6 +346,7 @@ var SearchData = {
 												<th>店铺名称</th>
 												<th>订单号</th>
 												<th>金额</th>
+												<th>状态</th>
 												<th>客户签收坐标</th>
 												<th>收现金时间</th>
 												<th>打款时间</th>
