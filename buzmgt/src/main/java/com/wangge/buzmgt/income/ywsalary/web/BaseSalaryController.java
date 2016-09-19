@@ -132,7 +132,7 @@ public class BaseSalaryController {
       json.put("status", "success");
       json.put("successMsg", "操作成功！");
     } catch (Exception e) {
-      LogUtil.info(e.getMessage());
+      LogUtil.error(e.getMessage(),e);
       json.put("status", "failure");
       json.put("errorMsg", "操作失败！");
       return json;

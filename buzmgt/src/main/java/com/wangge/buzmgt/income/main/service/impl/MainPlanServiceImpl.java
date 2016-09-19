@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.income.main.service;
+package com.wangge.buzmgt.income.main.service.impl;
 
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
@@ -6,6 +6,7 @@ import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
+import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
 import com.wangge.buzmgt.income.main.vo.PlanUserVo;

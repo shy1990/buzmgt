@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.income.main.service;
+package com.wangge.buzmgt.income.main.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.Hedge;
 import com.wangge.buzmgt.income.main.repository.HedgeRepository;
+import com.wangge.buzmgt.income.main.service.HedgeService;
 import com.wangge.buzmgt.income.main.vo.HedgeVo;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.main.vo.repository.HedgeVoRepository;

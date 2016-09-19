@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import com.wangge.buzmgt.income.main.entity.IncomeSub;
 public interface IncomeSubRepository extends JpaRepository<IncomeSub, Long> {
   
   @Transactional
+  @Modifying(clearAutomatically = true)
   @Query(value = "update sys_income_ticheng_sub s set s.flag = 1\n" + " where exists (select 1\n"
       + "          from sys_income_plan_main m\n"
       + "          left join sys_income_mainplan_users u on m.id = u.plain_id\n"
@@ -30,5 +32,10 @@ public interface IncomeSubRepository extends JpaRepository<IncomeSub, Long> {
       + "           and s1.countdate >= ?2 \n" + "           and s1.user_id = ?3 \n"
       + "           and to_char(s1.countdate, 'yyyy-mm') = ?4 \n" + "           and s1.orderflag = 1) s \n"
       + " group by s.PLAN_TYPE ", nativeQuery = true)
-  List<Object> getMainPlainOrdersByUserAndDate(Long mainPlanId, Date date, String userId, String month);
+  List<Object> getMainPlanOrdersByUserAndDate(Long mainPlanId, Date date, String userId, String month);
+  
+  /**
+   * 通过订单id和订单状态查询
+   */
+  List<IncomeSub> findByOrdernoAndOrderflag(String orderNO, int flag);
 }

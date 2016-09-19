@@ -90,14 +90,16 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
     try {
       Page<BaseSalary> baseSalaryPage = null;
       Object ltDate = searchParams.get("GT_newdate");
+      
       double monthDays = 0;
       if (null != ltDate && ltDate.toString().length() > 1) {
         String month = ltDate.toString();
         monthDays = DateUtil.getDaysOfMonth2(Integer.valueOf(month.substring(0, 4)),
             Integer.valueOf(month.substring(5, 7)));
         Date nextMonth = DateUtil.string2Date(searchParams.get("LT_deldate").toString());
+        Date thisMonth = DateUtil.getPreMonthDate(nextMonth, -1);
         String userId = searchParams.get("salesId").toString();
-        baseSalaryPage = baseSalaryRepository.findbyMonthAndUser( nextMonth, FlagEnum.DEL, userId,
+        baseSalaryPage = baseSalaryRepository.findbyMonthAndUser(nextMonth, FlagEnum.DEL, userId, thisMonth,
             pageRequest);
       } else {
         baseSalaryPage = baseSalaryRepository.findAll((Specification<BaseSalary>) (root, query, cb) -> {
@@ -199,38 +201,27 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   private void calThisMonthWithNewSalaryPlan(BaseSalary baseSalary, SalesMan salesman)
       throws ParseException, NumberFormatException {
     MainIncome main = incomeService.findIncomeMain(baseSalary.getUserId());
-    Double salary = baseSalary.getSalary();
     // 开始计算工资
     String nextMonthStr = DateUtil.getPreMonth(new Date(), 1);
-    double monthDays = DateUtil.getDayOfCurrentMonth();
     Date thisMonth = DateUtil.sdf.parse(DateUtil.getPreMonth(new Date(), 0));
     Date nextMonth = DateUtil.sdf.parse(nextMonthStr);
     // 生效日期在本月内重新计算本月的工资
     if (baseSalary.getNewdate().getTime() < nextMonth.getTime()) {
-      double between = calEnableWorkDays(baseSalary, monthDays, thisMonth, nextMonth);
-      double presum = calcuThisMonthPerSalary(salesman);
-      presum += salary * (between / monthDays);
+      double presum = calcuThisMonthPerSalary(salesman.getId());
       presum = Double.valueOf(String.format("%.2f", presum));
-      main.setBasicSalary(presum);
-      main.reSetResult();
+      
       if (baseSalary.getNewdate().getTime() < thisMonth.getTime()) {
         String premonthStr = DateUtil.getPreMonth(new Date(), -1);
         MainIncome premain = incomeService.findIncomeMain(baseSalary.getUserId(), premonthStr);
         if (premain.getState().ordinal() == 0) {
-          Date preMonth = DateUtil.sdf.parse(premonthStr);
           double premonthDays = DateUtil.getDaysOfMonth2(Integer.valueOf(premonthStr.substring(0, 4)),
               Integer.valueOf(premonthStr.substring(5, 7)));
           double preSum = calcuPreMonthSalary(salesman, premonthDays);
-          
-          double between1 = calEnableWorkDays(baseSalary, premonthDays, preMonth, thisMonth);
-          preSum += salary * (between1 / premonthDays);
           preSum = Double.valueOf(String.format("%.2f", preSum));
-          premain.setBasicSalary(preSum);
-          premain.reSetResult();
+          incomeRep.updatebasicSalaryOrPunish(preSum, 0, preSum - premain.getBasicSalary(), main.getId());
         }
-        incomeRep.save(premain);
       }
-      incomeRep.save(main);
+      incomeRep.updatebasicSalaryOrPunish(presum, 0, presum - main.getBasicSalary(), main.getId());
     }
   }
   
@@ -245,7 +236,7 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
       baseSalary.setAuthorName(author.getUsername());
       baseSalaryRepository.save(baseSalary);
       // 计算所有历史方案
-      double sum = calcuThisMonthPerSalary(man);
+      double sum = calcuThisMonthPerSalary(man.getId());
       sum = Double.valueOf(String.format("%.2f", sum));
       // 工资存放
       MainIncome main = incomeService.findIncomeMain(baseSalary.getUserId());
@@ -306,7 +297,7 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   }
   
   /**
-   * calcuThisMOnthPreSalary:计算某人本月已废弃的方案总的工资. <br/>
+   * calcuThisMOnthPreSalary:计算某人本月基础工资方案的工资. <br/>
    * 
    * @author yangqc
    * @param man
@@ -314,19 +305,20 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
    * @throws ParseException
    * @since JDK 1.8
    */
-  private double calcuThisMonthPerSalary(SalesMan man) throws ParseException {
+  private double calcuThisMonthPerSalary(String userId) throws ParseException {
     double monthDays = DateUtil.getDayOfCurrentMonth();
     Date thisMonth = DateUtil.sdf.parse(DateUtil.getPreMonth(new Date(), 0));
-    List<BaseSalary> salaryList = baseSalaryRepository.findByFlagAndUser_Id(FlagEnum.DEL, man.getId());
+    Date nextMonth = DateUtil.sdf.parse(DateUtil.getPreMonth(new Date(), 1));
+    
+    List<BaseSalary> salaryList = baseSalaryRepository.findByFlagAndUser_Id(nextMonth, FlagEnum.DEL, userId, thisMonth);
     double sum = 0;
     // 当其在结束时间本月范围内则处理叠加
     if (null != salaryList) {
       for (BaseSalary sal : salaryList) {
-        if (thisMonth.getTime() < sal.getDeldate().getTime()) {
-          double salary = sal.getSalary();
-          double days = calEnableWorkDays(sal, monthDays, thisMonth, sal.getDeldate());
-          sum += salary * (days / monthDays);
-        }
+        double salary = sal.getSalary();
+        Date endDate = sal.getDeldate() == null ? nextMonth : sal.getDeldate();
+        double days = calEnableWorkDays(sal, monthDays, thisMonth, endDate);
+        sum += salary * (days / monthDays);
       }
     }
     return sum;
@@ -345,17 +337,17 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
     String premonthStr = DateUtil.getPreMonth(new Date(), -1);
     Date preMonth = DateUtil.sdf.parse(premonthStr);
     Date thisMonth = DateUtil.sdf.parse(DateUtil.getPreMonth(new Date(), 0));
-    List<BaseSalary> salaryList = baseSalaryRepository.findByFlagAndUser_Id(FlagEnum.DEL, man.getId());
+    List<BaseSalary> salaryList = baseSalaryRepository.findByFlagAndUser_Id(thisMonth, FlagEnum.DEL, man.getId(),
+        preMonth);
     double sum = 0;
     // 当其在结束时间本月范围内则处理叠加
     if (null != salaryList) {
       for (BaseSalary sal : salaryList) {
         // 计算生效时间为上个月和本月之间的薪资记录
-        if (sal.getNewdate().getTime() <= thisMonth.getTime() && sal.getNewdate().getTime() > preMonth.getTime()) {
-          double salary = sal.getSalary();
-          double days = calEnableWorkDays(sal, premonthDays, preMonth, sal.getDeldate());
-          sum += salary * (days / premonthDays);
-        }
+        double salary = sal.getSalary();
+        Date endDate = sal.getDeldate() == null ? thisMonth : sal.getDeldate();
+        double days = calEnableWorkDays(sal, premonthDays, preMonth, endDate);
+        sum += salary * (days / premonthDays);
       }
     }
     return sum;
@@ -415,4 +407,39 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
     }
   }
   
+  @Override
+  public Double calculateThisMonthBasicSalary(String salesId) throws ParseException {
+    
+    return calcuThisMonthPerSalary(salesId);
+  }
+  
+  /**
+   * 计算一些需要重新计算的业务员的基本工资. <br/>
+   * 
+   * @throws Exception
+   */
+  @Override
+  @Transactional(rollbackOn = Exception.class)
+  public void calcuThisMonthSalarys() throws Exception {
+    try {
+      Date thisMonth = DateUtil.sdf.parse(DateUtil.getPreMonth(new Date(), 0));
+      Date nextMonth = DateUtil.sdf.parse(DateUtil.getPreMonth(new Date(), 1));
+      
+      List<Object> salaryList = baseSalaryRepository.findUserIds(nextMonth, thisMonth);
+      for (Object o1 : salaryList) {
+        try {
+          String userId = o1.toString();
+          Double baseSalary = calcuThisMonthPerSalary(userId);
+          MainIncome main = incomeService.findIncomeMain(userId);
+          incomeRep.updatebasicSalaryOrPunish(baseSalary, 0, baseSalary - main.getBasicSalary(), main.getId());
+        } catch (Exception e) {
+          LogUtil.error("月初计算本月工资出错", e);
+          throw new Exception("月初计算本月工资出错");
+        }
+      }
+    } catch (Exception e) {
+      LogUtil.error("月初计算本月工资出错", e);
+      throw new Exception("月初计算本月工资出错");
+    }
+  }
 }
