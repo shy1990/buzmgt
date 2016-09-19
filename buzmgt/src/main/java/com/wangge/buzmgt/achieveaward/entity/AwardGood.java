@@ -4,10 +4,13 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import com.wangge.buzmgt.goods.entity.Brand;
 import com.wangge.buzmgt.goods.entity.Goods;
@@ -27,8 +30,13 @@ public class AwardGood implements Serializable{
 
   private static final long serialVersionUID = 1L;
   
+
   @Id
+  @GenericGenerator(name = "idgen", strategy = "increment")
+  @GeneratedValue(generator = "idgen")
   private Long id;
+  @Column(name = "AWARD_ID")
+  private Long awardId;
   @OneToOne
   @JoinColumn(name = "MACHINE_TYPE", updatable = false, insertable = false)
   private MachineType machineType; // 机型类别
@@ -50,6 +58,12 @@ public class AwardGood implements Serializable{
   }
   public void setId(Long id) {
     this.id = id;
+  }
+  public Long getAwardId() {
+    return awardId;
+  }
+  public void setAwardId(Long awardId) {
+    this.awardId = awardId;
   }
   public MachineType getMachineType() {
     return machineType;

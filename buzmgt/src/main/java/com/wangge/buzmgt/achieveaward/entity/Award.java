@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -57,23 +55,8 @@ public class Award implements Serializable {
   private Long awardId; // 主键
   
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "AWARD_GOOD_ID")
+  @JoinColumn(name = "AWARD_ID")
   private List<AwardGood> awardGoods;
-  @OneToOne
-  @JoinColumn(name = "MACHINE_TYPE", updatable = false, insertable = false)
-  private MachineType machineType; // 机型类别
-  @Column(name = "MACHINE_TYPE")
-  private String machineTypeId; // 机型类别
-  @OneToOne
-  @JoinColumn(name = "BRAND_ID", updatable = false, insertable = false)
-  private Brand brand; // 品牌ID
-  @Column(name = "BRAND_ID")
-  private String brandId; // 品牌ID
-  @OneToOne
-  @JoinColumn(name = "GOOD_ID", updatable = false, insertable = false)
-  private Goods good; // 型号ID
-  @Column(name = "GOOD_ID")
-  private String goodId; // 型号ID
   private Integer numberFirst; // 任务量一
   private Integer numberSecond; // 任务量2
   private Integer numberThird; // 任务量3
@@ -109,52 +92,12 @@ public class Award implements Serializable {
     this.awardId = awardId;
   }
 
-  public MachineType getMachineType() {
-    return machineType;
+  public List<AwardGood> getAwardGoods() {
+    return awardGoods;
   }
 
-  public void setMachineType(MachineType machineType) {
-    this.machineType = machineType;
-  }
-
-  public String getMachineTypeId() {
-    return machineTypeId;
-  }
-
-  public void setMachineTypeId(String machineTypeId) {
-    this.machineTypeId = machineTypeId;
-  }
-
-  public Brand getBrand() {
-    return brand;
-  }
-
-  public void setBrand(Brand brand) {
-    this.brand = brand;
-  }
-
-  public String getBrandId() {
-    return brandId;
-  }
-
-  public void setBrandId(String brandId) {
-    this.brandId = brandId;
-  }
-
-  public Goods getGood() {
-    return good;
-  }
-
-  public void setGood(Goods good) {
-    this.good = good;
-  }
-
-  public String getGoodId() {
-    return goodId;
-  }
-
-  public void setGoodId(String goodId) {
-    this.goodId = goodId;
+  public void setAwardGoods(List<AwardGood> awardGoods) {
+    this.awardGoods = awardGoods;
   }
 
   public Integer getNumberFirst() {
@@ -271,8 +214,7 @@ public class Award implements Serializable {
 
   @Override
   public String toString() {
-    return "Award [achieveId=" + awardId + ", machineTypeId=" + machineTypeId +  ", brandId="
-        + brandId + ", goodId=" + goodId + ", numberFirst=" + numberFirst + ", numberSecond="
+    return "Award [achieveId=" + awardId + ",numberFirst=" + numberFirst + ", numberSecond="
         + numberSecond + ", numberThird=" + numberThird + ", startDate=" + startDate + ", endDate=" + endDate
         + ", issuingDate=" + issuingDate + ", auditor=" + auditor + ", remark=" + remark + ", createDate=" + createDate
         + ", flag=" + flag + ", status=" + status + ", planId=" + planId + "]";

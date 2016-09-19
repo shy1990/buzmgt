@@ -45,7 +45,7 @@ import com.wangge.buzmgt.util.excel.ExcelExport;
 /**
  * 达量奖励控制层
 * @ClassName: AwardController
-* @Description: 达量控制层
+* @Description: 达量奖励控制层
 * @author ChenGuop
 * @date 2016年9月14日 上午11:18:12
 *
@@ -66,22 +66,28 @@ public class AwardController {
 
   /**
    * 
-   * @Title: showAwardList @Description: 展示达量列表 @param @return 设定文件 @return
-   * String 返回类型 @throws
+   * @Title: showAwardList 
+   * @Description: 展示达量奖励列表 
+   * @param @return 设定文件 
+   * @return String 返回类型
+   * @throws
    */
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public String showAwardList(String planId, Model model) {
     model.addAttribute("planId", planId);
-    model.addAttribute("machineTypes", mainPlanService.getAllMachineType());
     return "award/award_list";
   }
 
   /**
    * 
-   * @Title: findByMachineTypeAndPlanId @Description:
-   * 根据方案Id查询对应的达量分页,参数格式：sc_EQ_xxxx=yyyy; @param @param request @param @param
-   * planId @param @param pageable @param @return 设定文件 @return Page<Award>
-   * 返回类型 @throws
+   * @Title: findByMachineTypeAndPlanId 
+   * @Description: 根据方案Id查询对应的达量分页,参数格式：sc_EQ_xxxx=yyyy; 
+   * @param @param request 
+   * @param @param planId 
+   * @param @param pageable 
+   * @param @return 设定文件 
+   * @return Page<Award> 返回类型 
+   * @throws
    */
   @RequestMapping(value = "/{planId}", method = RequestMethod.GET)
   @ResponseBody
@@ -95,8 +101,13 @@ public class AwardController {
 
   /**
    * 
-   * @Title: showAddAward @Description: 达量添加 @param @param
-   * planId @param @param model @param @return 设定文件 @return String 返回类型 @throws
+   * @Title: showAddAward 
+   * @Description: 达量奖励添加
+   * @param @param planId 
+   * @param @param model 
+   * @param @return 设定文件
+   * @return String 返回类型 
+   * @throws
    */
   @RequestMapping(value = "/add", method = RequestMethod.GET)
   public String showAddAward(@RequestParam String planId, Model model) {
@@ -109,8 +120,12 @@ public class AwardController {
 
   /**
    * 
-   * @Title: addAward @Description: 添加数据 @param @param award @param @return
-   * 设定文件 @return JSONObject 返回类型 @throws
+   * @Title: addAward 
+   * @Description: 添加数据 
+   * @param @param award 
+   * @param @return 设定文件 
+   * @return JSONObject 返回类型
+   * @throws
    */
   @RequestMapping(value = "", method = RequestMethod.POST)
   @ResponseBody
@@ -135,9 +150,13 @@ public class AwardController {
 
   /**
    * 
-   * @Title: exportWaterOrderCash @Description:导出达量列表 @param @param
-   * request @param @param response @param @param pageRequest 设定文件 @return void
-   * 返回类型 @throws
+   * @Title: exportWaterOrderCash 
+   * @Description:导出达量列表 
+   * @param @param request 
+   * @param @param response 
+   * @param @param pageRequest 设定文件
+   * @return void 返回类型 
+   * @throws
    */
   @RequestMapping("/export")
   public void exportWaterOrderCash(HttpServletRequest request, HttpServletResponse response,
@@ -148,13 +167,18 @@ public class AwardController {
         "设置日期" };
     String[] coloumsKey_1 = { "brand.name", "good.name", "numberFirst", "numberSecond", "numberThird", "auditor",
         "status.name", "startDate", "endDate", "issuingDate", "createDate" };
-    ExcelExport.doExcelExport("正在使用达量导出.xls", list, gridTitles_1, coloumsKey_1, request, response);
+    ExcelExport.doExcelExport("正在使用达量奖励导出.xls", list, gridTitles_1, coloumsKey_1, request, response);
   }
 
   /**
    * 
-   * @Title: showAwardRecord @Description: 设置记录页面跳转 @param @param
-   * planId @param @param model @param @return 设定文件 @return String 返回类型 @throws
+   * @Title: showAwardRecord 
+   * @Description: 设置记录页面跳转 
+   * @param @param planId 
+   * @param @param model 
+   * @param @return 设定文件 
+   * @return String 返回类型 
+   * @throws
    */
   @RequestMapping(value = "/record", method = RequestMethod.GET)
   public String showAwardRecord(@RequestParam String planId, Model model) {
@@ -164,8 +188,13 @@ public class AwardController {
 
   /**
    * 
-   * @Title: showAwardRecord @Description: 跳转设置记录审核页面 @param @param
-   * planId @param @param model @param @return 设定文件 @return String 返回类型 @throws
+   * @Title: showAwardRecord 
+   * @Description: 跳转设置记录审核页面 
+   * @param @param planId 
+   * @param @param model 
+   * @param @return 设定文件 
+   * @return String 返回类型 
+   * @throws
    */
   @RequestMapping(value = "/recordForAudit", method = RequestMethod.GET)
   public String showAwardRecordForaudit(@RequestParam String planId, Model model) {
@@ -177,8 +206,12 @@ public class AwardController {
 
   /**
    * 
-   * @Title: getAward @Description: 查询单个Award： @param @param
-   * award @param @return 设定文件 @return JSONObject 返回类型 @throws
+   * @Title: getAward 
+   * @Description: 查询单个Award： 
+   * @param @param award 
+   * @param @return 设定文件
+   * @return JSONObject 返回类型 
+   * @throws
    */
   @RequestMapping(value = "getAward/{awardId}", method = RequestMethod.GET)
   @ResponseBody
@@ -205,8 +238,12 @@ public class AwardController {
 
   /**
    * 
-   * @Title: delete @Description: 删除：更改flag状态DEL @param @param
-   * award @param @return 设定文件 @return JSONObject 返回类型 @throws
+   * @Title: delete 
+   * @Description: 删除：更改flag状态DEL 
+   * @param @param award 
+   * @param @return 设定文件 
+   * @return JSONObject 返回类型 
+   * @throws
    */
   @RequestMapping(value = "/{awardId}", method = RequestMethod.DELETE)
   @ResponseBody
@@ -234,8 +271,12 @@ public class AwardController {
 
   /**
    * 
-   * @Title: delete @Description: 审核：更改status状态 @param @param
-   * award @param @return 设定文件 @return JSONObject 返回类型 @throws
+   * @Title: delete 
+   * @Description: 审核：更改status状态 
+   * @param @param award 
+   * @param @return 设定文件
+   * @return JSONObject 返回类型 
+   * @throws
    */
   @RequestMapping(value = "/{awardId}", method = RequestMethod.PATCH)
   @ResponseBody
@@ -264,8 +305,13 @@ public class AwardController {
 
   /**
    * 
-   * @Title: showUpdate @Description: 修改页面跳转 @param @param award @param @param
-   * model @param @return 设定文件 @return String 返回类型 @throws
+   * @Title: showUpdate 
+   * @Description: 修改页面跳转 
+   * @param @param award 
+   * @param @param model 
+   * @param @return 设定文件 
+   * @return String 返回类型 
+   * @throws
    */
   @RequestMapping(value = "/upd")
   public String showUpdate(@RequestParam(name = "awardId") Award award, Model model) {
@@ -277,8 +323,13 @@ public class AwardController {
 
   /**
    * 
-   * @Title: showtake @Description: 查看页面跳转 @param @param award @param @param
-   * model @param @return 设定文件 @return String 返回类型 @throws
+   * @Title: showtake 
+   * @Description: 查看页面跳转 
+   * @param @param award 
+   * @param @param model 
+   * @param @return 设定文件 
+   * @return String 返回类型
+   * @throws
    */
   @RequestMapping(value = "/list/{awardId}")
   public String showtake(@PathVariable(value = "awardId") Award award, Model model) {
@@ -288,8 +339,12 @@ public class AwardController {
 
   /**
    * 
-   * @Title: updAward @Description: 修改Award @param @param
-   * award @param @return 设定文件 @return String 返回类型 @throws
+   * @Title: updAward 
+   * @Description: 修改Award 
+   * @param @param award 
+   * @param @return 设定文件 
+   * @return String 返回类型 
+   * @throws
    */
   @RequestMapping(value = "", method = RequestMethod.PUT)
   @ResponseBody
@@ -313,8 +368,13 @@ public class AwardController {
 
   /**
    * 
-   * @Title: showDetial @Description: 查看 @param @param award @param @param
-   *         model @param @return 设定文件 @return String 返回类型 @throws
+   * @Title: showDetial 
+   * @Description: 查看 
+   * @param @param award 
+   * @param @param model 
+   * @param @return 设定文件 
+   * @return String 返回类型 
+   * @throws
    */
   @RequestMapping(value = "/local")
   public String showLocal(@RequestParam(name = "planId") String planId, Model model) {
@@ -323,9 +383,13 @@ public class AwardController {
 
   /**
    * 
-   * @Title: getPlanUsers @Description: 查询方案的所有用户 @param @param
-   * planId @param @param pageRequest @param @return 设定文件 @return
-   * Page<PlanUserVo> 返回类型 @throws
+   * @Title: getPlanUsers 
+   * @Description: 查询方案的所有用户 
+   * @param @param planId 
+   * @param @param pageRequest
+   * @param @return 设定文件 
+   * @return Page<PlanUserVo> 返回类型 
+   * @throws
    */
   @RequestMapping(value = "/planUsers")
   @ResponseBody

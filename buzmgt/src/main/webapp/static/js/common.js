@@ -28,3 +28,26 @@ function childRefresh(evt) {
 		}
 	}
 }
+var parseParam = function(param, key) {
+	var paramStr = "";
+	if (param instanceof String || param instanceof Number
+			|| param instanceof Boolean) {
+		paramStr += "&" + key + "=" + encodeURIComponent(param);
+	} else {
+		$.each(param, function(i) {
+			var k = key == null ? i : key
+					+ (param instanceof Array ? "[" + i + "]" : "." + i);
+			paramStr += '&' + parseParam(this, k);
+		});
+	}
+	return paramStr.substr(1);
+};
+/**
+ * 判读是否为空
+ * 
+ * @param value
+ * @returns 为空返回true 不为空返回false
+ */
+function isEmpty(value) {
+	return value == undefined || value == "" || value == null;
+}

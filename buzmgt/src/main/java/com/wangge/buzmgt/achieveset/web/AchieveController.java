@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
@@ -39,9 +38,7 @@ import com.wangge.buzmgt.log.entity.Log.EventType;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.plan.entity.MachineType;
-import com.wangge.buzmgt.plan.service.GroupNumberService;
 import com.wangge.buzmgt.plan.service.MachineTypeService;
-import com.wangge.buzmgt.plan.service.RewardPunishRuleService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 
@@ -60,10 +57,6 @@ public class AchieveController {
   private LogService logService;
   @Autowired
   private AchieveService achieveServer;
-  @Autowired
-  private GroupNumberService groupNumberService;
-  @Autowired
-  private RewardPunishRuleService punishRuleService;
   @Autowired
   private MainPlanService mainPlanService;
   @Autowired

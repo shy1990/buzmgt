@@ -106,7 +106,7 @@ public class AchieveServiceImpl implements AchieveService {
 
       private final static String TYPE_FlAG_TYPE = "com.wangge.buzmgt.common.FlagEnum";
       
-      private final static String TYPE_ACHIEVE_STATUS = "com.wangge.buzmgt.achieve.entity.Achieve$AchieveStatusEnum";
+      private final static String TYPE_ACHIEVE_STATUS = "com.wangge.buzmgt.achieveset.entity.Achieve$AchieveStatusEnum";
       
       private final static String TYPE_DATE = "java.util.Date";
       

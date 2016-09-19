@@ -24,18 +24,17 @@
 <link rel="stylesheet" type="text/css"
 	href="static/phone-set/css/comminssion.css">
 <link rel="stylesheet" type="text/css"
-	href="static/achieve/achieve.css">
+	href="static/award/award.css">
 <link rel="stylesheet" type="text/css"
 	href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script id="achieve-table-template" type="text/x-handlebars-template">
+<script id="award-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
    <tr>
       <td>{{addOne @index}}</td>
-      <td>{{brand.name}}</td>
-      <td>{{good.name}}</td>
+      <td>{{#each awardGoods}}{{good.name}}+{{/each}}</td>
       <td class="reason">
 				<span class="text-red">{{numberFirst}} 
 			{{#if numberSecond}}
@@ -53,9 +52,9 @@
       <td><span class="ph-on">进行中</span></td>
       <td>{{formDate createDate}}</td>
       <td>
-        <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
-        <a href="/achieve/course/{{achieveId}}" class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程</a>
-        <button class="btn btn-sm btn-sc " onclick="delAchieve({{achieveId}})">删除</button>
+        <a href="/award/list/{{awardId}}" class="btn bnt-sm bnt-ck">查看</a>
+        <a href="/award/course/{{awardId}}" class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程</a>
+        <button class="btn btn-sm btn-sc " onclick="delAchieve({{awardId}})">删除</button>
       </td>
     </tr>
 	{{/each}}
@@ -76,42 +75,41 @@ var	base='<%=basePath%>';
 <body>
 
 	<div class="content main">
-		<jsp:include page="income_set_menu.jsp"></jsp:include>
-
+		<jsp:include page="../achieve/income_set_menu.jsp"></jsp:include>
 		<div class="row">
 			<!--col begin-->
 			<div class="col-md-12">
 				<!--orderbox begin-->
 				<div class="order-box">
 					<!--左侧导航开始-->
-					<div style="padding-left: 0">
-						<div class=" sidebar left-side"
-							style="padding-top: 0; margin-top: 5px">
-							<ul class="nav nav-sidebar menu J_MachineType">
-								<li><i class="ico ico-fl"></i>请选择类别</li>
-								<c:forEach items="${machineTypes}" var="type" varStatus="status">
-								  <c:choose>
-								  	<c:when test="${status.index eq 0 }">
-											<li class="active" title="${type.code }">${type.name }</li>
-								  	</c:when>
-								  	<c:otherwise>
-											<li title="${type.code }">${type.name }</li>
-								  	</c:otherwise>
-								  </c:choose>
-								</c:forEach>
-							</ul>
-						</div>
-					</div>
+<!-- 					<div style="padding-left: 0"> -->
+<!-- 						<div class=" sidebar left-side" -->
+<!-- 							style="padding-top: 0; margin-top: 5px"> -->
+<!-- 							<ul class="nav nav-sidebar menu J_MachineType"> -->
+<!-- 								<li><i class="ico ico-fl"></i>请选择类别</li> -->
+<%-- 								<c:forEach items="${machineTypes}" var="type" varStatus="status"> --%>
+<%-- 								  <c:choose> --%>
+<%-- 								  	<c:when test="${status.index eq 0 }"> --%>
+<%-- 											<li class="active" title="${type.code }">${type.name }</li> --%>
+<%-- 								  	</c:when> --%>
+<%-- 								  	<c:otherwise> --%>
+<%-- 											<li title="${type.code }">${type.name }</li> --%>
+<%-- 								  	</c:otherwise> --%>
+<%-- 								  </c:choose> --%>
+<%-- 								</c:forEach> --%>
+<!-- 							</ul> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
 					<!--左侧导航结束-->
 					<div class="tab-content">
 						<!--右侧内容开始-->
 						<!--品牌型号-->
 
-						<!--达量设置-->
-						<div class="tab-pane fade in active right-body" id="dlsz">
+						<!--达量奖励设置-->
+						<div class="tab-pane fade in active right-body" id="dljl">
 							<div class="ph-btn-set">
 								<a href="javascript:add();" class="btn ph-blue"> <i class="ico icon-xj"></i>
-									<span class="text-gery">添加</span>
+									<span class="text-gery">新建奖励</span>
 								</a> <a href="JavaScript:record();" class="btn ph-blue" style="margin-right: 30px">
 									<i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
 								</a>
@@ -129,9 +127,8 @@ var	base='<%=basePath%>';
 									<thead>
 										<tr>
 											<th>序号</th>
-											<th>品牌</th>
-											<th>型号</th>
-											<th>达量规则</th>
+											<th>名称</th>
+											<th>指标</th>
 											<th>方案起止日期</th>
 											<th>佣金发放</th>
 											<th>状态</th>
@@ -139,7 +136,7 @@ var	base='<%=basePath%>';
 											<th>操作</th>
 										</tr>
 									</thead>
-									<tbody id="achieveList">
+									<tbody id="awardList">
 									</tbody>
 								</table>
 							</div>
@@ -175,7 +172,7 @@ var	base='<%=basePath%>';
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script type="text/javascript"
-		src="static/achieve/achieve_list.js" charset="utf-8"></script>
+		src="static/award/award_list.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(".J_MachineType li").on("click",function(){
 			$(this).addClass("active");

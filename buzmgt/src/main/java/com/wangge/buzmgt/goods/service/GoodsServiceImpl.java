@@ -38,4 +38,9 @@ public class GoodsServiceImpl implements GoodsService {
     return goodsRepository.findByNameLike(name);
   }
 
+  @Override
+  public List<Goods> findByMachineTypeAndBrandId(String machineType, String brandId) {
+    return goodsRepository.findByMachineTypeAndBrandId(machineType, brandId);
+  }
+
 }

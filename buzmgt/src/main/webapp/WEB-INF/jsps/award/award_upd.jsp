@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
+<%-- <%@ taglib prefix="el" uri="WEB-INF/tlds" %> --%>
 <%
   String path = request.getContextPath();
 			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -144,12 +147,13 @@ var	base='<%=basePath%>';
 	var rule = new Array();//全局变量
 	var groupNumbers = new Array();
 	var userList = new Array();//所有用户的UserId
+	var achieve = new Array();
 </script>
 <body>
 
 	<div class="content main">
 		<h4 class="page-header ">
-			<i class="ico ico-ph-tj"></i>创建
+			<i class="ico ico-ph-tj"></i>修改
 			<!--区域选择按钮-->
 			<a href="javascript:history.back();"><i
 				class="ico icon-back fl-right"></i></a>
@@ -189,15 +193,18 @@ var	base='<%=basePath%>';
                             aria-hidden="true">&times;</span></button>
                     <h3 class="modal-title">添加人员</h3>
                 </div>
-						<jsp:include page="group_user.jsp"></jsp:include>
+<%--             <%@include file="group_user.jsp" %> --%>
+						<jsp:include page="group_user.jsp" ></jsp:include>
             </div>
         </div>
 
     </div>
 
 		<form id="achieveForm" onsubmit="return false;" hidden="hidden">
+			<input type="hidden" class="J_achieveId" name="achieveId"
+				value="${achieve.achieveId }">
 			<input type="hidden" class="J_planId" name="planId"
-				value="${planId }">
+				value="${achieve.planId }">
 			<div class="row ">
 				<!--选择-->
 				<ul class="mmr-l">
@@ -206,12 +213,19 @@ var	base='<%=basePath%>';
 							<option value="">类别</option>
 							<c:forEach var="machineType" items="${machineTypes }"
 								varStatus="status">
-								<option value="${machineType.id }">${machineType.name }</option>
+								<c:choose>
+									<c:when test="${machineType.id == achieve.machineType.id  }">
+									<option value="${machineType.id }" selected="selected">${machineType.name }</option>
+									</c:when>
+									<c:otherwise>
+										<option value="${machineType.id }">${machineType.name }</option>
+									</c:otherwise>									
+								</c:choose>
 							</c:forEach>
 					</select> <select id="brandList" class="visit-times J_brand">
-							<option>品牌</option>
+							<option selected="selected" value="${achieve.brand.id }">${achieve.brand.name }</option>
 					</select> <select id="goodList" class="visit-times J_goods">
-							<option>型号</option>
+							<option selected="selected" value="${achieve.good.id }">${achieve.good.name }</option>
 					</select> <!--                 <button class="btn  bnt-sm ph-btn-add" id="btnadd"><span class="text-strong">+</span></button> -->
 					</li>
 				</ul>
@@ -223,18 +237,37 @@ var	base='<%=basePath%>';
 					<div class="rwzsql J_number_box">
 						<span class="text-gery text-strong  ">周期任务量：</span>
 						<!-- 周期任务量 -->
-						<span id="numberList" class="J_number"> </span> <i
-							class="new-icon ph-jiaj" data-toggle="modal"
-							data-target="#zzrwul"></i> <input type="hidden"
-							class="J_numberFirst_" name="numberFirst" value="" /> <input
-							type="hidden" class="J_numberSecond_" name="numberSecond"
-							value="" /> <input type="hidden" class="J_numberThird_"
-							name="numberThird" value="" />
+						<span id="numberList" class="J_number"> 
+							<span class=" number-blue">${achieve.numberFirst }</span>
+              <span class=" number-blue">${achieve.numberSecond }</span>
+              <span class=" number-blue">${achieve.numberThird }</span>
+						</span> 
+						<i class="new-icon ph-jiaj" data-toggle="modal" data-target="#zzrwul"></i>
+							<input type="hidden" class="J_numberFirst_" name="numberFirst" value="" /> 
+							<input type="hidden" class="J_numberSecond_" name="numberSecond" value="" /> 
+							<input type="hidden" class="J_numberThird_" name="numberThird" value="" />
 					</div>
 
 					<div class="jfgz">
 						<span class="text-gery text-strong  ">奖罚规则：</span>
-						<div id="ruleList" class="jfbox J_RULE"></div>
+						<div id="ruleList" class="jfbox J_RULE">
+							<c:forEach items="${achieve.rewardPunishRules }" var="rule" varStatus="status">
+                    <div class="col-sm-4 jfbox-box">
+                    	<c:if test="${rule.min != '' && rule.min != null }">
+                        <span class="text-nub">${rule.min } </span>
+                        <span class="text-publ">台 ≤ </span>
+                    	</c:if>
+                        <span class="text-publ">实际销量 </span>
+                    	<c:if test="${rule.max != ''&& rule.max != null  }">
+                        <span class="text-publ">＜ </span>
+                        <span class="text-nub"> ${rule.max }</span>
+                        <span class="text-publ">台</span>
+                    	</c:if>
+                      <span class="text-gery text-size-12">提成：</span>
+                      <input type="text" class="ph-inpt" value="${rule.money }" disabled="disabled"> <span class="text-publ">元/台</span>
+                   </div>
+                </c:forEach>
+						</div>
 					</div>
 				</div>
 
@@ -243,12 +276,7 @@ var	base='<%=basePath%>';
 					<i class="ico icon-ry"></i><span class="text-head text-strong">人员分组设置</span>
 					<hr>
 
-					<div class="jfbox" id="numberAddList">
-						<!-- <div class="col-sm-6 ryfz-box box-add tianjz">
-							<i class="ico ico-ph-tj "></i> <a href=""> <span
-								class="text-gery">添加组</span></a>
-						</div> -->
-					</div>
+					<div class="jfbox" id="numberAddList"> </div>
 				</div>
 
 				<!--补充说明-->
@@ -259,8 +287,7 @@ var	base='<%=basePath%>';
 						<dl class="dl-horizontal">
 							<dt>补充说明：</dt>
 							<dd>
-								<textarea rows="10" cols="150" class="fl-left J_remark"></textarea>
-
+								<textarea rows="10" cols="150" class="fl-left J_remark">${achieve.remark }</textarea>
 							</dd>
 						</dl>
 
@@ -270,14 +297,14 @@ var	base='<%=basePath%>';
 							<dt>方案起止时间：</dt>
 							<dd>
 								<div class="ph-search-date fl-left form_date_start">
-									<input name="startDate" type="text"
+									<input name="startDate" type="text" value='<fmt:formatDate value="${achieve.startDate}" pattern="yyyy-MM-dd"/>'
 										class="form-control form_datetime input-sm J_startDate"
 										placeholder="开始日期" readonly="readonly"
 										style="background: #ffffff; margin-right: 20px">
 								</div>
 
 								<div class="ph-search-date fl-left form_date_end">
-									<input name="endDate" type="text"
+									<input name="endDate" type="text" value='<fmt:formatDate value="${achieve.endDate}" pattern="yyyy-MM-dd"/>'
 										class="form-control form_datetime input-sm J_endDate"
 										placeholder="结束日期" readonly="readonly"
 										style="background: #ffffff; margin-right: 20px">
@@ -293,7 +320,7 @@ var	base='<%=basePath%>';
 							<dt>提成发放日期：</dt>
 							<dd>
 								<div class="ph-search-date fl-left">
-									<input name="issuingDate" type="text"
+									<input name="issuingDate" type="text" value='<fmt:formatDate value="${achieve.issuingDate}" pattern="yyyy-MM-dd"/>'
 										class="form-control form_datetime input-sm J_issuingDate"
 										placeholder="选择日期" readonly="readonly"
 										style="background: #ffffff; margin-right: 20px"> <span
@@ -314,8 +341,9 @@ var	base='<%=basePath%>';
 										class="icon-s icon-man"></i></span>
 									<!--<input type="text" class="form-control" placeholder="请选择指派审核人员" aria-describedby="basic-addon1">-->
 									<div class="inpt-search">
-										<select name="" class="form-control demo3 J_auditor">
-
+										<select name="basic[]" class="form-control demo3 J_auditor">
+				
+											<option value="${achieve.auditor }" selected="selected">${achieve.auditor }</option>
 											<option value="UT">胡老大</option>
 											<option value="VT">横额啊</option>
 											<option value="VA">张二啦</option>
@@ -378,6 +406,7 @@ var	base='<%=basePath%>';
 												class="ph-icon   ph-renwu"></i></span>
 											<!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
 											<input type="text" class="form-control input-h J_numberFirst"
+												value="${achieve.numberFirst }"
 												aria-describedby="basic-addon1" placeholder="请输入阶段一任务量"
 												onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
 												onafterpaste="this.value=this.value.replace(/[^\d]/g,'')">
@@ -394,6 +423,7 @@ var	base='<%=basePath%>';
 										<div class="input-group are-line">
 											<span class="input-group-addon "><i
 												class=" ph-icon ph-renwu"></i></span> <input type="text"
+												value="${achieve.numberSecond }"
 												class="form-control input-h J_numberSecond"
 												onblur="chkScendValue();" aria-describedby="basic-addon1"
 												placeholder="请输入阶段二任务量"
@@ -413,6 +443,7 @@ var	base='<%=basePath%>';
 										<div class="input-group are-line">
 											<span class="input-group-addon "><i
 												class=" ph-icon ph-renwu"></i></span> <input type="text"
+												value="${achieve.numberThird }"
 												class="form-control input-h J_numberThird"
 												onblur="chkThirdValue();" aria-describedby="basic-addon1"
 												placeholder="请输入阶段三任务量"
@@ -454,7 +485,7 @@ var	base='<%=basePath%>';
 			charset="utf-8"></script>
 		<script type="text/javascript"
 			src="static/bootStrapPager/js/extendPagination.js"></script>
-		<script type="text/javascript" src="static/achieve/achieve_add.js"
+		<script type="text/javascript" src="static/achieve/achieve_upd.js"
 			charset="utf-8"></script>
 		<script type="text/javascript">
 			// 	$('.J_auditor').multiselect({

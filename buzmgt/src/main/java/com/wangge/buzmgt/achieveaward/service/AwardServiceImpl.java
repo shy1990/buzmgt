@@ -46,9 +46,7 @@ import com.wangge.buzmgt.util.SearchFilter;
 public class AwardServiceImpl implements AwardService {
 
   @Autowired
-  private AwardRepository achieveRepository;
-  @Autowired
-  private LogService logService;
+  private AwardRepository awardRepository;
   
   public List<Award> findAll(Map<String,Object> searchParams){
     return this.findAll(searchParams, new Sort(Direction.DESC, "createDate"));
@@ -60,7 +58,7 @@ public class AwardServiceImpl implements AwardService {
     //过滤删除
     searchParams.put("EQ_flag", "NORMAL");
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<Award> spec = achieveSearchFilter(filters.values(), Award.class);
+    Specification<Award> spec = awardSearchFilter(filters.values(), Award.class);
     return spec;
   }
   @Override
@@ -69,13 +67,13 @@ public class AwardServiceImpl implements AwardService {
       sort =  new Sort(Direction.DESC, "createDate");
     }
     Specification<Award> spec = dispose(searchParams);
-    return achieveRepository.findAll(spec, sort);
+    return awardRepository.findAll(spec, sort);
   }
 
   @Override
   public Page<Award> findAll(Map<String, Object> searchParams, Pageable pageable) {
     Specification<Award> spec = dispose(searchParams);
-    return achieveRepository.findAll(spec, pageable);
+    return awardRepository.findAll(spec, pageable);
   }
 
   @Override
@@ -87,9 +85,9 @@ public class AwardServiceImpl implements AwardService {
   }
   @Override
   @Transactional
-  public void save(Award achieve) {
+  public void save(Award award) {
     try {
-      achieveRepository.save(achieve);
+      awardRepository.save(award);
     } catch (Exception e) {
       LogUtil.error(e.getMessage(), e);
       throw e;
@@ -97,9 +95,9 @@ public class AwardServiceImpl implements AwardService {
   }
   @Override
   public Award findOne(Long id){
-    return achieveRepository.findOne(id);
+    return awardRepository.findOne(id);
   }
-  public static Specification<Award> achieveSearchFilter(final Collection<SearchFilter> filters,
+  public static Specification<Award> awardSearchFilter(final Collection<SearchFilter> filters,
       final Class<Award> entityClazz){
     return new Specification<Award>() {
 
@@ -113,7 +111,7 @@ public class AwardServiceImpl implements AwardService {
 
       private final static String TYPE_FlAG_TYPE = "com.wangge.buzmgt.common.FlagEnum";
       
-      private final static String TYPE_ACHIEVE_STATUS = "com.wangge.buzmgt.achieve.entity.Award$AwardStatusEnum";
+      private final static String TYPE_ACHIEVE_STATUS = "com.wangge.buzmgt.achieveaward.entity.Award$AwardStatusEnum";
       
       private final static String TYPE_DATE = "java.util.Date";
       

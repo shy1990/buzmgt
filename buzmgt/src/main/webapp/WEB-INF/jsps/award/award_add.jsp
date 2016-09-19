@@ -25,7 +25,7 @@
 	href="static/multiselect/css/jquery.multiselect.css">
 <link rel="stylesheet" href="static/earnings/css/phone.css">
 <link rel="stylesheet" href="static/earnings/css/comminssion.css">
-<link rel="stylesheet" type="text/css" href="static/achieve/achieve.css">
+<link rel="stylesheet" type="text/css" href="static/award/award.css">
 <link rel="stylesheet" type="text/css"
 	href="static/bootStrapPager/css/page.css" />
 <style type="text/css">
@@ -143,6 +143,7 @@ body {
 var	base='<%=basePath%>';
 	var rule = new Array();//全局变量
 	var groupNumbers = new Array();
+	var awardGoods = new Array(); //awardGoods
 	var userList = new Array();//所有用户的UserId
 </script>
 <body>
@@ -189,13 +190,14 @@ var	base='<%=basePath%>';
                             aria-hidden="true">&times;</span></button>
                     <h3 class="modal-title">添加人员</h3>
                 </div>
+<%--             <%@include file="group_user.jsp" %> --%>
 						<jsp:include page="group_user.jsp"></jsp:include>
             </div>
         </div>
 
     </div>
 
-		<form id="achieveForm" onsubmit="return false;" hidden="hidden">
+		<form id="awardForm" onsubmit="return false;" hidden="hidden">
 			<input type="hidden" class="J_planId" name="planId"
 				value="${planId }">
 			<div class="row ">
@@ -244,6 +246,52 @@ var	base='<%=basePath%>';
 					<hr>
 
 					<div class="jfbox" id="numberAddList">
+						<div class="col-sm-8 ryfz-box">
+							<a href=""><span class="text-big-A">A组（<span class="A_user_num">5</span>人）</span></a> &nbsp; 
+							<span class="text-gery text-size-12">一阶段达量：</span> <span
+								class="text-nub">500</span> +<input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp; <span
+								class="text-gery text-size-12">二阶段达量：</span> <span
+								class="text-nub">1000+</span> <input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12">台</span> &nbsp; &nbsp;<span
+								class="text-gery text-size-12">三阶段达量：</span> <span
+								class="text-nub">1000+</span> <input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12">台</span>
+						</div>
+						<div class="col-sm-8 ryfz-box" style="">
+							<a href=""><span class="text-big-B">B组（3人）</span></a> &nbsp; <span
+								class="text-gery text-size-12">一阶段达量：</span> <span
+								class="text-nub">500+</span> <input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp; <span
+								class="text-gery text-size-12">二阶段达量：</span> <span
+								class="text-nub">1000+</span> <input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12">台</span>
+						</div>
+
+						<div class="col-sm-8 ryfz-box">
+							<a href=""><span class="text-big-C">C组（7人）</span></a> &nbsp; <span
+								class="text-gery text-size-12">一阶段达量：</span> <span
+								class="text-nub J_oneNum">500</span> +<input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp; <span
+								class="text-gery text-size-12">二阶段达量：</span> <span
+								class="text-nub J_twoNum">1000</span> +<input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12">台</span>&nbsp; &nbsp; <span
+								class="text-gery text-size-12">三阶段达量：</span> <span
+								class="text-nub J_twoNum">1000</span> +<input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12">台</span>
+						</div>
+						<div class="col-sm-8 ryfz-box">
+							<a href=""><span class="text-big-D">D组（7人）</span></a> &nbsp; <span
+								class="text-gery text-size-12">一阶段达量：</span> <span
+								class="text-nub J_oneNum">500</span> +<input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp; <span
+								class="text-gery text-size-12">二阶段达量：</span> <span
+								class="text-nub J_twoNum">1000</span> +<input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12">台</span>&nbsp; &nbsp; <span
+								class="text-gery text-size-12">三阶段达量：</span> <span
+								class="text-nub J_twoNum">1000</span> +<input type="text" class="ph-inpt">
+							<span class="text-gery text-size-12">台</span>
+						</div>
 						<!-- <div class="col-sm-6 ryfz-box box-add tianjz">
 							<i class="ico ico-ph-tj "></i> <a href=""> <span
 								class="text-gery">添加组</span></a>
@@ -263,6 +311,7 @@ var	base='<%=basePath%>';
 
 							</dd>
 						</dl>
+
 
 					</li>
 					<li style="margin-top: 30px">
@@ -314,7 +363,7 @@ var	base='<%=basePath%>';
 										class="icon-s icon-man"></i></span>
 									<!--<input type="text" class="form-control" placeholder="请选择指派审核人员" aria-describedby="basic-addon1">-->
 									<div class="inpt-search">
-										<select name="" class="form-control demo3 J_auditor">
+										<select name="basic[]" class="form-control demo3 J_auditor">
 
 											<option value="UT">胡老大</option>
 											<option value="VT">横额啊</option>
@@ -454,7 +503,7 @@ var	base='<%=basePath%>';
 			charset="utf-8"></script>
 		<script type="text/javascript"
 			src="static/bootStrapPager/js/extendPagination.js"></script>
-		<script type="text/javascript" src="static/achieve/achieve_add.js"
+		<script type="text/javascript" src="static/award/award_add.js"
 			charset="utf-8"></script>
 		<script type="text/javascript">
 			// 	$('.J_auditor').multiselect({
