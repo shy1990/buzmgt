@@ -1,8 +1,8 @@
 package com.wangge.buzmgt.superposition.web;
 
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.plan.entity.MachineType;
-import com.wangge.buzmgt.plan.server.MachineTypeServer;
-import com.wangge.buzmgt.superposition.entity.GoodsOrder;
+import com.wangge.buzmgt.plan.service.MachineTypeService;
 import com.wangge.buzmgt.superposition.entity.Result;
 import com.wangge.buzmgt.superposition.entity.Superposition;
 import com.wangge.buzmgt.superposition.service.GoodsOrderService;
@@ -17,8 +17,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by joe on 16-9-5.
@@ -32,10 +35,12 @@ public class SuperpositionController {
     private SuperpositonService superpositonService;
 
     @Autowired
-    private MachineTypeServer machineTypeServer;
+    private MachineTypeService machineTypeServer;
 
     @Autowired
     private GoodsOrderService goodsOrderService;
+
+    private static final String SEARCH_OPERTOR="sc_";
 
 
     private static final Logger logger = Logger.getLogger(SuperpositionController.class);
@@ -52,6 +57,25 @@ public class SuperpositionController {
 
         return "superposition/test_list";
     }
+
+    @RequestMapping(value = "planUsers",method = RequestMethod.GET)
+    @ResponseBody
+    public Page<PlanUserVo> findMainPlanUsers(@PageableDefault(
+                                                    page = 0,
+                                                    size = 20,
+                                                    sort = {"userId"},
+                                                    direction = Sort.Direction.DESC) Pageable pageable,
+                                                    HttpServletRequest request) throws Exception {
+
+        Map<String,Object> searchParams = WebUtils.getParametersStartingWith(request,SEARCH_OPERTOR);
+
+        return superpositonService.findMainPlanUsers(pageable,searchParams);
+    }
+
+
+
+
+
 
 
     /**
@@ -91,24 +115,16 @@ public class SuperpositionController {
 
 
     /**
-     * 根据id查询手机品牌
+     * 根据id查询
      * @param superposition
      * @return
      */
-    @RequestMapping(value = "find/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public Superposition findById(@PathVariable("id") Superposition superposition) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String findById(@PathVariable("id") Superposition superposition,Model model) {
 
-        return superposition;
+        model.addAttribute("superposition",superposition);
+        return "superposition/show_one";
     }
-
-
-
-
-
-
-
-
 
     @RequestMapping(value = "delete/{id}")
     @ResponseBody
@@ -117,38 +133,49 @@ public class SuperpositionController {
         return "";
     }
 
+
+//
+//    /**
+//     * 判断使用人员
+//     *
+//     * @return
+//     */
+//    @RequestMapping(value = "find", method = RequestMethod.GET)
+//    @ResponseBody
+//    public Superposition checkMember() {
+//        Superposition superposition = superpositonService.checkMember("4556644");
+//        return superposition;
+//    }
+
+
     /**
-     * 判断使用人员
-     *
+     * 跳转到财务显示全部的页面
+     * @param model
      * @return
      */
-    @RequestMapping(value = "find", method = RequestMethod.GET)
-    @ResponseBody
-    public Superposition checkMember() {
-        Superposition superposition = superpositonService.checkMember("4556644");
-        return superposition;
-    }
-
-
-
-
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET)
     public String findAll(Model model) {
-        model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
+//        model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
 
-        return "superposition/list_cw";
+//        return "superposition/list_cw";
+        return "superposition/set_list_cw";
     }
 
-
+    /**
+     * 所有方案
+     * @param pageable
+     * @param type
+     * @return
+     */
     @RequestMapping(value = "findAll", method = RequestMethod.POST)
     @ResponseBody
     public Page<Superposition> findAll(@PageableDefault(page = 0,
             size = 10,
             sort = {"createDate"},
-            direction = Sort.Direction.DESC) Pageable pageable, String type) {
+            direction = Sort.Direction.DESC) Pageable pageable, String type,String sign) {
 
-        Page<Superposition> pageReposne = superpositonService.findAll(pageable);
+        Page<Superposition> pageReposne = superpositonService.findAll(pageable,type,sign);
 
         return pageReposne;
     }

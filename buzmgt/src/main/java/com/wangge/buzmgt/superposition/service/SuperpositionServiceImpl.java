@@ -1,5 +1,7 @@
 package com.wangge.buzmgt.superposition.service;
 
+import com.wangge.buzmgt.income.main.service.MainPlanService;
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.superposition.entity.Group;
 import com.wangge.buzmgt.superposition.entity.Superposition;
 import com.wangge.buzmgt.superposition.entity.SuperpositionRule;
@@ -7,6 +9,7 @@ import com.wangge.buzmgt.superposition.pojo.SalesmanDetails;
 import com.wangge.buzmgt.superposition.repository.SuperpositionRepository;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.util.DateUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by joe on 16-9-7.
@@ -37,6 +42,9 @@ public class SuperpositionServiceImpl implements SuperpositonService {
 
     @Autowired
     private GoodsOrderService goodsOrderService;
+
+    @Autowired
+    private MainPlanService mainPlanService;
 
     /**
      * 添加叠加任务设置
@@ -54,6 +62,66 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     }
 
     /**
+     *根据id查询
+     * @param id
+     * @return
+     */
+    @Override
+    public Superposition findById(Long id) {
+        Superposition superposition = repository.findOne(id);
+        return superposition;
+    }
+
+    /**
+     * 查询全部的
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Superposition> findAll(Pageable pageable,String type,String sign) {
+        String statTime = "";//开始时间
+        String endTime = "";//结束时间
+
+        Page<Superposition> page = repository.findAll(new Specification() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+                List<Predicate> list = new ArrayList<Predicate>();
+                if("pass".equals(sign)){// 查询正在使用/审核通过/被驳回/正在审核
+                    Predicate p1 = cb.equal(root.get("checkStatus").as(String.class),"2");
+                    Predicate p2 = cb.equal(root.get("checkStatus").as(String.class),"1");
+                    Predicate p3 = cb.lessThanOrEqualTo(root.get("implDate").as(Date.class),new Date());
+                    Predicate p4 = cb.greaterThanOrEqualTo(root.get("endDate").as(Date.class),new Date());
+                    Predicate p = cb.or(p1,p2,cb.and(p3,p4));
+                    return  p;
+                }
+
+                if("expired".equals(sign)){//查询已经过期的
+                    if(statTime != null && !"".equals(statTime) && endTime != null && !"".equals(endTime)){
+                        list.add(cb.greaterThanOrEqualTo(root.get("implDate").as(Date.class), DateUtil.string2Date(statTime,"yyyy-MM-dd")));
+                        list.add(cb.lessThanOrEqualTo(root.get("implDate").as(Date.class),DateUtil.string2Date(endTime,"yyyy-MM-dd")));
+                    }
+                    list.add(cb.lessThanOrEqualTo(root.get("endDate").as(Date.class),new Date()));//大于结束日期
+                    list.add(cb.equal(root.get("checkStatus").as(String.class),"3"));//通过审核的
+                    return cb.and(list.toArray(new Predicate[list.size()]));
+                }
+//                if("over".equals(sign)){ // 被驳回
+//                    list.add(cb.equal(root.get("checkStatus").as(String.class),"2"));//被驳回
+//                    return cb.and(list.toArray(new Predicate[list.size()]));
+//                }
+
+                return null;
+            }
+        },pageable);
+        List<Superposition> superpositions = page.getContent();
+
+
+
+
+        return page;
+    }
+
+
+    /**
      * 根据id删除
      *
      * @param id
@@ -62,6 +130,17 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     public void delete(Long id) {
         repository.delete(id);
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
     /**
@@ -161,40 +240,13 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         return null;
     }
 
-    /**
-     *根据id查询
-     * @param id
-     * @return
-     */
-    @Override
-    public Superposition findById(Long id) {
-        Superposition superposition = repository.findOne(id);
-        return superposition;
-    }
-
-    /**
-     * 查询全部的
-     * @param pageable
-     * @return
-     */
-    @Override
-    public Page<Superposition> findAll(Pageable pageable) {
-
-        Page<Superposition> page = repository.findAll(new Specification() {
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
-
-                return null;
-            }
-        },pageable);
-        return page;
-    }
 
     @Override
     public void find1(Superposition superposition) {
         Integer taskOne = superposition.getTaskOne();
         Integer tasktTwo = superposition.getTaskTwo();
         Integer taskThree = superposition.getTaskThree();
+        //模拟用户组的数据
         String[] userRegions = {"370126","370883","370829","370828","370827","370830"};
         SalesmanDetails salesmanDetails1 = new SalesmanDetails("123","lidong","370126");
         SalesmanDetails salesmanDetails2 = new SalesmanDetails("123","lidong","370883");
@@ -207,24 +259,24 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         list.add(salesmanDetails4);
 
         list.forEach(salesmanDetails -> {
+            //计算出每一个的提货量
             Integer o = goodsOrderService.countNums("2015-02-07","2015-02-24",salesmanDetails.getRegionId());
             System.out.println("-------:"+o);
         });
 
 
 
-
-
-
-
-
-
-
-
     }
 
-
-
+    /**
+     * 查询方案人员
+     * @param pageReq
+     * @param searchParams
+     */
+    @Override
+    public Page<PlanUserVo> findMainPlanUsers(Pageable pageReq, Map<String, Object> searchParams) throws Exception {
+        return mainPlanService.getUserpage(pageReq,searchParams);
+    }
 
 
     /**

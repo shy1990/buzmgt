@@ -45,4 +45,13 @@ public class Member {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 }

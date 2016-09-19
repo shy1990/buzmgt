@@ -53,10 +53,17 @@ public class Production {
     @JoinColumn(name = "PRODUCTION_ID")
     private List<PriceRange> priceRanges;
 
-//    @ManyToOne
 //    关联方案的id
-//    private String planId;
+    @Column(name = "plan_id")
+    private String planId;
 
+    public String getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
 
     public String getStatus() {
         return status;
@@ -131,7 +138,10 @@ public class Production {
                 ", createTime=" + createTime +
                 ", implDate=" + implDate +
                 ", endTime=" + endTime +
+                ", productionAuditor='" + productionAuditor + '\'' +
+                ", status='" + status + '\'' +
                 ", priceRanges=" + priceRanges +
+                ", planId='" + planId + '\'' +
                 '}';
     }
 }

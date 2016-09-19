@@ -222,7 +222,7 @@ public class SectionController {
      */
 
     @RequestMapping(value = "findNow", method = RequestMethod.GET)
-    public String findNowToJSP(String type, Model model) {
+    public String findNowToJSP(String type,Model model) {
         Map<String, Object> map = productionService.findNowCW(type);
         List<PriceRange> pc = (List) map.get("list");
         List<MachineType> machineTypes = machineTypeServer.findAll();//手机类型

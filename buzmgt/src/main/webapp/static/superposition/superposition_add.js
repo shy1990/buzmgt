@@ -389,7 +389,7 @@ function toSubmit() {
         success: function (result) {
             if(result.status == 1){
                 alert('添加成功');
-                window.location.href = '';
+                window.location.href = 'superposition/findAll';
             }
         },
         error: function () {
