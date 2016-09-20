@@ -65,4 +65,5 @@ public interface RegionService {
 
 	void saveRegionType(RegionType regionType);
 
+	void deleteRegionType(RegionType regionType);
 }

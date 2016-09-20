@@ -118,7 +118,7 @@ public class RegionController {
     Collection<Region> collectionRegion = new ArrayList<Region>();
     Region region = regionService.findListRegionbyid(pid);
     Long maxid = getMaxId(pid);
-    Region newRegion = new Region(String.valueOf(maxid + 1), name, region.getType().getParentsType());
+    Region newRegion = new Region(String.valueOf(maxid + 1), name, region.getType());
     newRegion.setParent(region);
     newRegion.setChildren(collectionRegion);
       regionService.saveRegion(newRegion);
@@ -159,7 +159,7 @@ public class RegionController {
     
     Region region = regionService.findListRegionbyid(id);
     Long maxid = Long.parseLong(id);
-    Region newRegion = new Region(String.valueOf(maxid), name, region.getType().getParentsType());
+    Region newRegion = new Region(String.valueOf(maxid), name, region.getType());
     newRegion.setParent(region);
     region.setName(name);
     region.setParent(regionService.findListRegionbyid(pid));
@@ -245,7 +245,7 @@ public class RegionController {
     }
     Region region = regionService.findListRegionbyid(parentid);
     Long maxid = getMaxId(parentid);
-    Region entity = new Region(String.valueOf(maxid + 1), name, region.getType().getParentsType());
+    Region entity = new Region(String.valueOf(maxid + 1), name, region.getType());
     entity.setCoordinates(pointbuf.toString());
     entity.setParent(regionService.findListRegionbyid(parentid));
     entity.setCenterPoint(centerPoint);
@@ -592,9 +592,53 @@ public class RegionController {
     RegionType regionType=new RegionType();
     regionType.setName(req.getParameter("name"));
     int id=regionService.findMaxId();
-    regionType.setParentsType(regionService.findRegionType(id));
+    regionType.setParentId(id);
     regionType.setId(id+1);
     regionService.saveRegionType(regionType);
+    return "suc";
+  }
+
+  /**
+   * 拖拽区域类型
+   * @param ownid
+   * @param preid
+   * @param afterid
+   */
+  @RequestMapping(value = "/updateRegionTypeParentId", method = RequestMethod.POST)
+  public void updateRegionTypeParentId(int ownid, int preid,int afterid) {
+    System.out.print("ownid"+ownid+","+"preid"+preid+",afterid"+afterid);
+    //regionService.saveRegion(region);
+
+    RegionType ownRegionType=regionService.findRegionType(ownid);
+    RegionType preRegionType=regionService.findRegionType(preid);
+    RegionType afterRegionType=regionService.findRegionType(afterid);
+    int i=0;
+    if(null !=preRegionType){
+      ownRegionType.setParentId(preRegionType.getParentId()+1);
+    }else{
+      i++;
+      ownRegionType.setParentId(afterRegionType.getParentId()-1);
+    }
+    regionService.saveRegionType(ownRegionType);
+    if(null !=afterRegionType&&0==i){
+      afterRegionType.setParentId(ownid);
+      regionService.saveRegionType(afterRegionType);
+    }
+  }
+
+  @RequestMapping(value = "/deleteRegionType", method = RequestMethod.POST)
+  @ResponseBody
+  public String deleteRegionType(HttpServletRequest req) {
+    int id =Integer.parseInt(req.getParameter("id"));
+    RegionType ownRegionType=regionService.findRegionType(id);
+    RegionType preRegionType=regionService.findRegionType(ownRegionType.getParentId()-1);
+    RegionType afterRegionType=regionService.findRegionType(ownRegionType.getParentId()+1);
+
+    if(null !=afterRegionType){
+      afterRegionType.setParentId(ownRegionType.getParentId());
+      regionService.saveRegionType(afterRegionType);
+    }
+    regionService.deleteRegionType(ownRegionType);
     return "suc";
   }
 

@@ -12,7 +12,6 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.util.RegionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -206,8 +205,8 @@ public class RegionServiceImpl implements RegionService {
 
   @Override
   public List<RegionType> findALlRegionType() {
-    Sort s=new Sort(Sort.Direction.ASC, "parentsType");
-    return regionTypeRepository.findAll(s) ;
+   // Sort s=new Sort(Sort.Direction.ASC, "parentsType");
+    return regionTypeRepository.findAllRegion() ;
   }
 
   @Override
@@ -228,6 +227,11 @@ public class RegionServiceImpl implements RegionService {
   @Override
   public void saveRegionType(RegionType regionType) {
      regionTypeRepository.save(regionType);
+  }
+
+  @Override
+  public void deleteRegionType(RegionType regionType) {
+    regionTypeRepository.delete(regionType);
   }
 
 
