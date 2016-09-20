@@ -147,6 +147,12 @@ function initFunction(){
 		  groupList = new Array();
 		  groupList = groupList.concat(userList);
 		})
+		
+	$('.J_btnadd').on("click",function(){
+		var html = $(".J_chose_goods li:first")[0].outerHTML;
+		console.info(html);
+		$('.J_chose_goods').append(html);
+	});	
 }
 /**
  * 验证二阶段数量

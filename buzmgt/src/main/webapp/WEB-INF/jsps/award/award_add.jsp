@@ -202,21 +202,25 @@ var	base='<%=basePath%>';
 				value="${planId }">
 			<div class="row ">
 				<!--选择-->
-				<ul class="mmr-l">
-					<li><span class="text-gery text-strong">请选择：</span> <select
-						class="visit-times J_machineType">
-							<option value="">类别</option>
-							<c:forEach var="machineType" items="${machineTypes }"
-								varStatus="status">
-								<option value="${machineType.id }">${machineType.name }</option>
-							</c:forEach>
-					</select> <select id="brandList" class="visit-times J_brand">
-							<option>品牌</option>
-					</select> <select id="goodList" class="visit-times J_goods">
-							<option>型号</option>
-					</select> <!--                 <button class="btn  bnt-sm ph-btn-add" id="btnadd"><span class="text-strong">+</span></button> -->
-					</li>
-				</ul>
+				<div class="mmr-l">
+					<span style="float: left;" class="text-gery text-strong">请选择：</span> 
+					<ul class="J_chose_goods pull-left">
+						<li>
+						<select class="visit-times J_machineType">
+								<option value="">类别</option>
+								<c:forEach var="machineType" items="${machineTypes }"
+									varStatus="status">
+									<option value="${machineType.id }">${machineType.name }</option>
+								</c:forEach>
+						</select> <select id="brandList" class="visit-times J_brand">
+								<option>品牌</option>
+						</select> <select id="goodList" class="visit-times J_goods">
+								<option>型号</option>
+						</select> 
+						</li>
+					</ul>
+					<button class="btn  bnt-sm ph-btn-add J_btnadd pull-left"><span class="text-strong">+</span></button>
+				</div>
 				<!--阶梯提成设置-->
 				<div class="jttcsz">
 					<i class="ico icon-jtsz"></i><span class="text-head text-strong">阶梯提成设置</span>

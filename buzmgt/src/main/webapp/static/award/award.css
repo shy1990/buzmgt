@@ -282,8 +282,17 @@ td .bnt-jc:hover, td .bnt-jc:ACTIVE, td .bnt-jc:focus {
 	border-top: 0;
 }
 
-
-
+.mmr-l:after{
+  content: "";
+  display: table;
+  clear: both;
+}
+.goods-choice{
+  float: left;
+}
+.mmr-l li{
+	margin-bottom: 10px;
+}
 
 
 
