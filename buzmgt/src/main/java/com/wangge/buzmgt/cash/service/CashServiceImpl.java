@@ -156,7 +156,8 @@ public class CashServiceImpl implements CashService {
   
   @Override
   public List<String> findByStatusGroupByUserId(){
-    return cashRepository.findByStatusGroupByUserId();
+    String searchDate = DateUtil.date2String(new Date());
+    return cashRepository.findByStatusGroupByUserId(searchDate);
   }
 
   /**
