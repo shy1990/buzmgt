@@ -61,9 +61,10 @@ public class CashController {
   }
 
   @RequestMapping("/send")
-  public void send(){
+  @ResponseBody
+  public void send(String searchDate){
     logger.info("-----------------开启定时结算");
-    List<String> userIds=cashService.findByStatusGroupByUserId();
+    List<String> userIds=cashService.findByStatusGroupByUserIdForSceduled(searchDate);
     userIds.forEach(userId->{
       logger.info("userId:"+userId);
       boolean msg=cashService.createWaterOrderByCash(userId);

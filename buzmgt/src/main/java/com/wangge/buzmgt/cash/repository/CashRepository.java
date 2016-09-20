@@ -26,4 +26,15 @@ JpaSpecificationExecutor<Cash>{
    */
   @Query("SELECT C.userId FROM Cash C WHERE C.status='0' AND C.createDate>=TO_DATE(?1, 'YYYY-MM-DD') GROUP BY C.userId ")
   List<String> findByStatusGroupByUserId(String searchDate);
+  /**
+   * 
+   * @Title: findByStatusGroupByUserId 
+   * @Description: 查询为过期未结算的用户id
+   * @param @param status
+   * @param @return    设定文件 
+   * @return List<String>    返回类型 
+   * @throws
+   */
+  @Query("SELECT C.userId FROM Cash C WHERE C.status='0' AND C.createDate <= TO_DATE(?1, 'YYYY-MM-DD') GROUP BY C.userId ")
+  List<String> findByStatusGroupByUserIdSceduled(String searchDate);
 }

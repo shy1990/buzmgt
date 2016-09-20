@@ -159,6 +159,16 @@ public class CashServiceImpl implements CashService {
     String searchDate = DateUtil.date2String(new Date());
     return cashRepository.findByStatusGroupByUserId(searchDate);
   }
+  /**
+   * 过期未结算用户ID
+   */
+  @Override
+  public List<String> findByStatusGroupByUserIdForSceduled(String searchDate){
+    if(null == searchDate){
+      searchDate = DateUtil.date2String(new Date());
+    }
+    return cashRepository.findByStatusGroupByUserIdSceduled(searchDate);
+  }
 
   /**
    * 购物车结算
@@ -178,8 +188,8 @@ public class CashServiceImpl implements CashService {
    */
   @Override
   @Transactional(readOnly=false)
-  public boolean createWaterOrderByCash(String userId){
-    boolean msg=false;
+  public synchronized boolean createWaterOrderByCash(String userId){
+    boolean msg = false;
     logger.info("cashToWaterOrder----->userId:"+userId);
     try {
       

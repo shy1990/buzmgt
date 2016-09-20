@@ -246,22 +246,24 @@ function isEmpty(value) {
  * @param createDate
  */
 function checkPending(userId,createDate){
-	$.ajax({
-		url:base+"/checkCash/"+userId+"?createDate="+createDate,
-		type:"POST",
-		dataType:"json",
-		success:function(data){
-			if("success"===data.status){
-				alert(data.successMsg);
-				findCheckCashList();
-				return ;
+	if(confirm("确定要审核？")){
+		$.ajax({
+			url:base+"/checkCash/"+userId+"?createDate="+createDate,
+			type:"POST",
+			dataType:"json",
+			success:function(data){
+				if("success"===data.status){
+					alert(data.successMsg);
+					findCheckCashList();
+					return ;
+				}
+				alert(data.errorMsg);
+			},
+			error:function(data){
+				alert("");
 			}
-			alert(data.errorMsg);
-		},
-		error:function(data){
-			alert("");
-		}
-	})
+		})
+	}
 }
 /**
  * 确认审核木有流水单号的记录
@@ -269,22 +271,24 @@ function checkPending(userId,createDate){
  * @param createDate
  */
 function checkDebt(userId,createDate){
-	$.ajax({
-		url:base+"checkCash/debtCheck/"+userId+"?createDate="+createDate,
-		type:"POST",
-		dataType:"json",
-		success:function(data){
-			if("success"===data.status){
-				alert(data.successMsg);
-				findCheckDebtList();
-				return ;
+	if(confirm("确定都要审核？")){
+		$.ajax({
+			url:base+"checkCash/debtCheck/"+userId+"?createDate="+createDate,
+			type:"POST",
+			dataType:"json",
+			success:function(data){
+				if("success"===data.status){
+					alert(data.successMsg);
+					findCheckDebtList();
+					return ;
+				}
+				alert(data.errorMsg);
+			},
+			error:function(data){
+				alert("系统异常，稍后重试！");
 			}
-			alert(data.errorMsg);
-		},
-		error:function(data){
-			alert("系统异常，稍后重试！");
-		}
-	})
+		})
+	}
 }
 /**
  * 查询未匹配银行打款交易记录

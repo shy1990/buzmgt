@@ -80,5 +80,14 @@ public interface CashService {
   * @throws
    */
   public List<String> findByStatusGroupByUserId();
+  /**
+   * 
+   * @Title: findByStatusGroupByUserId 
+   * @Description: 查询为过期未结算的收现金订单userId 
+   * @param @return    设定文件 
+   * @return List<String>    返回类型 
+   * @throws
+   */
+  public List<String> findByStatusGroupByUserIdForSceduled(String searchDate);
   
 }
