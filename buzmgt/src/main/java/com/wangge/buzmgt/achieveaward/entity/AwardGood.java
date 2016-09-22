@@ -101,5 +101,9 @@ public class AwardGood implements Serializable{
   public void setGoodId(String goodId) {
     this.goodId = goodId;
   }
+  @Override
+  public String toString() {
+    return machineType.getName() + " " +brand.getName() + " " + good.getName();
+  }
   
 }

@@ -30,6 +30,7 @@ import org.springframework.web.util.WebUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.achieveaward.entity.Award;
 import com.wangge.buzmgt.achieveaward.entity.Award.AwardStatusEnum;
+import com.wangge.buzmgt.achieveaward.entity.AwardGood;
 import com.wangge.buzmgt.achieveaward.service.AwardService;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
@@ -163,9 +164,9 @@ public class AwardController {
       @PageableDefault(page = 0, size = 10, sort = { "createDate" }, direction = Direction.DESC) Pageable pageRequest) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
     List<Award> list = awardServer.findAll(searchParams, pageRequest.getSort());
-    String[] gridTitles_1 = { "品牌", "型号", "一阶段达量", "二阶段达量", "三阶段达量", "审核人", "审核状态", "方案开始日期", "方案结束日期", "佣金发放日期",
+    String[] gridTitles_1 = { "型号", "一阶段达量", "二阶段达量", "三阶段达量", "审核人", "审核状态", "方案开始日期", "方案结束日期", "佣金发放日期",
         "设置日期" };
-    String[] coloumsKey_1 = { "brand.name", "good.name", "numberFirst", "numberSecond", "numberThird", "auditor",
+    String[] coloumsKey_1 = { "awardGoods.good.name", "numberFirst", "numberSecond", "numberThird", "auditor",
         "status.name", "startDate", "endDate", "issuingDate", "createDate" };
     ExcelExport.doExcelExport("正在使用达量奖励导出.xls", list, gridTitles_1, coloumsKey_1, request, response);
   }
@@ -318,6 +319,7 @@ public class AwardController {
     List<MachineType> machineTypes = machineTypeServer.findAll();
     model.addAttribute("machineTypes", machineTypes);
     model.addAttribute("award", award);
+    model.addAttribute("planId", award.getPlanId());
     return "award/award_upd";
   }
 
@@ -364,21 +366,6 @@ public class AwardController {
       return json;
     }
     return json;
-  }
-
-  /**
-   * 
-   * @Title: showDetial 
-   * @Description: 查看 
-   * @param @param award 
-   * @param @param model 
-   * @param @return 设定文件 
-   * @return String 返回类型 
-   * @throws
-   */
-  @RequestMapping(value = "/local")
-  public String showLocal(@RequestParam(name = "planId") String planId, Model model) {
-    return "award/award_detial";
   }
 
   /**

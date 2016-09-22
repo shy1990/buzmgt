@@ -54,7 +54,7 @@ public class Award implements Serializable {
   @GeneratedValue(generator = "idgen")
   private Long awardId; // 主键
   
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) 
   @JoinColumn(name = "AWARD_ID")
   private List<AwardGood> awardGoods;
   private Integer numberFirst; // 任务量一
@@ -71,14 +71,14 @@ public class Award implements Serializable {
   @Enumerated(EnumType.STRING)
   private AwardStatusEnum status = AwardStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
   private String planId;
-  
-  @OneToMany(cascade=CascadeType.ALL)
+  //orphanRemoval=true配置表明删除无关联的数据。级联更新子结果集时此配置最关键
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
   @JoinTable(name="SYS_AWARD_SET_RULE",
      joinColumns=@JoinColumn(name="SYS_AWARD_ID"),
      inverseJoinColumns=@JoinColumn(name="RULE_ID"))
   private List<RewardPunishRule> rewardPunishRules;//奖罚规则
   
-  @OneToMany(cascade=CascadeType.ALL)
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
   @JoinTable(name="SYS_AWARD_SET_GROUP",
       joinColumns=@JoinColumn(name="SYS_AWARD_ID"),
       inverseJoinColumns=@JoinColumn(name="GROUPING_ID"))

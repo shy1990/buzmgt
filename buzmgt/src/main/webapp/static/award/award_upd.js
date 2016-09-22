@@ -5,7 +5,6 @@
 var $planId ='';
 $(function() {
 	$planId = $('.J_planId').val();
-	initSelectBrand();
 	initSelectMachineType();
 	initFunction();
 	
@@ -132,19 +131,25 @@ function initFunction(){
 		  groupList = new Array();
 		  groupList = groupList.concat(userList);
 		});
+	$('.J_btnadd').on("click",function(){
+		var html = $(".J_chose_goods li:first")[0].outerHTML;
+		$('.J_chose_goods').append(html);
+		initSelectMachineType();
+		$(".J_chose_goods .J_remove:gt(0)").show();
+	});	
 	findAchieve();
 }
 function findAchieve(){
-	var achieveId = $('.J_achieveId').val();
+	var awardId = $('.J_awardId').val();
 	$.ajax({
-		url : base + "achieve/getAchieve/" +achieveId,
+		url : base + "award/getAward/" +awardId,
 		type : "GET",
 		dataType : "JSON",
 		success :function(data){
-			achieve = data.result;
-			console.info(achieve);
-			rule = achieve['rewardPunishRules'];
-			groupNumbers = achieve['groupNumbers'];
+			award = data.result;
+			console.info(award);
+			rule = award['rewardPunishRules'];
+			groupNumbers = award['groupNumbers'];
 			disposeUserList(groupNumbers);
 			//所有用户的UserId
 		},
@@ -170,7 +175,13 @@ function disposeUserList(groupNumbers){
 	creategroupAll();
 	return userList;
 }
-
+/**
+ * 移出的goods型号
+ * @param object
+ */
+function removeChoseGoods(object){
+	$(object).parents('li').remove();
+}
 /**
  * 验证二阶段数量
  * @returns {Boolean}
@@ -217,22 +228,24 @@ function chkThirdValue(){
 function initSelectMachineType() {
 	$(".J_machineType").change(function(){
 		var machineType=$(this).val();
+		var option = $(this).parents('li');
 		if(machineType == ""){
-			createBrandType("");
-			createGoods("");
+			createBrandType("", option);
+			createGoods("", option);
 			return false;
 		}
-		findBrandType(machineType);
+		findBrandType(machineType, option);
+		initSelectBrand();
 	});
 }
 //查询品牌
-function findBrandType(machineType){
+function findBrandType(machineType, option){
 	$.ajax({
 		url:"/goods/getBrand?code="+machineType,
 		type : 'GET',
 		dateType : 'JSON',
 		success : function(data) {
-			createBrandType(data);
+			createBrandType(data, option);
 		},
 		error : function(data) {
 			alert("网络异常，稍后重试！");
@@ -244,9 +257,9 @@ function findBrandType(machineType){
  * 创建品牌
  * @param data
  */
-function createBrandType(data) {
+function createBrandType(data,option) {
 	var myTemplate = Handlebars.compile($("#brands-template").html());
-	$('#brandList').html(myTemplate(data));
+	$(option).find('.J_brand').html(myTemplate(data));
 }
 /**
  * 初始化选择品牌
@@ -255,24 +268,25 @@ function createBrandType(data) {
 function initSelectBrand() {
 	$(".J_brand").change(function(){
 	    var brandId=$(".J_brand").val();
+	    var option = $(this).parents('li');
 	    if(brandId == ""){
-	    	createGoods("");
+	    	createGoods("", option);
 	    	return false;
 	    }
-	    findGoods(brandId);
+	    findGoods(brandId, option);
 	});
 }
 /**
  * 查询商品
  * @param brandId
  */
-function findGoods(brandId){
+function findGoods(brandId, option){
 	$.ajax({
 		url : base + 'goods/' + brandId,
 		type : 'GET',
 		dateType : 'JSON',
 		success : function(data) {
-			createGoods(data);
+			createGoods(data, option);
 		},
 		error : function(data) {
 			alert("网络异常，稍后重试！");
@@ -283,9 +297,9 @@ function findGoods(brandId){
  * createGoods
  * @param data
  */
-function createGoods(data) {
+function createGoods(data, option) {
 	var myTemplate = Handlebars.compile($("#goods-template").html());
-	$('#goodList').html(myTemplate(data));
+	$(option).find('.J_goods').html(myTemplate(data));
 }
 /**
  * createRules()
@@ -309,15 +323,42 @@ function creategroupAll(){
 	$('#groupAllList').html(myTemplate(data));
 }
 
-
+/**
+ * 处理多个型号
+ */
+function disAwardGoods(){
+	var awardGoods = new Array();
+	var machineTypeIds = new Array();
+	var brandIds = new Array();
+	var goodIds = new Array();
+	$('.J_machineType').each(function(index){
+		var item = $(this).val(); 
+		machineTypeIds[index] = item ;
+	})
+	$('.J_brand').each(function(index){
+		var item = $(this).val(); 
+		brandIds[index] = item ;
+	})
+	$('.J_goods').each(function(index){
+		var item = $(this).val(); 
+		goodIds[index] = item ;
+	})
+	for(var i=0;i<machineTypeIds.length;i++){
+		awardGoods[i] = 
+		{
+			"machineTypeId" : machineTypeIds[i],
+			"brandId" : brandIds[i],
+			"goodId" : goodIds[i]
+		}
+	}
+	console.info(awardGoods);
+	return awardGoods;
+}
 function toSubmit() {
-//	var jsonStr = $("#achieveForm").serialize();
+//	var jsonStr = $("#awardForm").serialize();
 	var jsonStr = {
-		"achieveId" : $(".J_achieveId").val(),
+		"awardId" : $(".J_awardId").val(),
 		"planId": $(".J_planId").val(),
-		"machineTypeId" : $(".J_machineType").val(),
-		"brandId" : $(".J_brand").val(),
-		"goodId" : $(".J_goods").val(),
 		"numberFirst": $(".J_numberFirst_").val(),
         "numberSecond": $(".J_numberSecond_").val(),
         "numberThird": $(".J_numberThird_").val(),
@@ -327,6 +368,8 @@ function toSubmit() {
         "auditor":  $(".J_auditor").val(),
         "remark":  $(".J_remark").val()
 	};
+	
+	jsonStr["awardGoods"] = disAwardGoods();
 	//奖罚规则
 	jsonStr["rewardPunishRules"] = rule;
 	//分组
@@ -373,31 +416,104 @@ function toSubmit() {
         }
       ] 
 */
-	
+	if(checkForm(jsonStr)){
 //============需要转换成字符串的json格式传递参数==============================	
-	jsonStr = JSON.stringify(jsonStr);
-	console.info(jsonStr);
-	$.ajax({
-		url : "/achieve",
-		type : "PUT",
-		contentType : 'application/json;charset=utf-8', // 设置请求头信息
-		dataType : "json",
-		data : jsonStr,
-		success : function(data) {
-			alert(data.message);
-			if(data.result == "success"){
-				window.location.href = base + "achieve/list?planId="+$(".J_planId").val();
+		jsonStr = JSON.stringify(jsonStr);
+		console.info(jsonStr);
+		$.ajax({
+			url : "/award",
+			type : "PUT",
+			contentType : 'application/json;charset=utf-8', // 设置请求头信息
+			dataType : "json",
+			data : jsonStr,
+			success : function(data) {
+				alert(data.message);
+				if(data.result == "success"){
+					window.location.href = base + "award/list?planId="+$(".J_planId").val();
+				}
+			},
+			error : function(res) {
+				alert("网络异常，稍后重试！");
 			}
-		},
-		error : function(res) {
-			alert("网络异常，稍后重试！");
+		});
+
+	}
+}
+function checkForm(searchDate){
+	console.info(searchDate);
+	var flag = true;
+
+	$.each(searchDate,function(name,value){
+		switch (name) {
+		case 'awardGoods':
+			if(value.length>0){
+				$.each(value,function(i){
+					if(isEmpty(value[i]['goodId'])){
+						flag = false;
+						alert("请选择型号！");
+						return flag;
+					}
+				})
+			}
+			break;
+		case 'rewardPunishRules':
+			if(value.length>0){
+				$.each(value,function(i){
+					if(value[i]['money']<=0){
+						flag = false;
+						alert("提成金额不能为空！");
+						return flag;
+					}
+				})
+			}
+			break;
+		case 'groupNumbers':
+			if(value.length>0){
+				$.each(value,function(i){
+					if(isEmpty(value[i]['numberFirstAdd'])){
+						flag = false;
+						alert("请填写分组阶段达量增量！");
+						return flag;
+					}
+				})
+			}
+			break;
+		case 'numberFirst':
+			if(isEmpty(value)){
+				alert("请添加任务量！");
+				flag = false;
+				return flag;
+			}
+			break;
+		case 'startDate':
+		case 'endDate':
+		case 'issuingDate':
+			if(isEmpty(value)){
+				alert("请选择日期！");
+				flag = false;
+				return flag;
+
+			}
+			break;
+		case 'auditor':
+			if(isEmpty(value)){
+				alert("请选择审核人员！");
+				flag = false;
+				return flag;
+
+			}
+			break;
+
+		default:
+			break;
 		}
 	});
+	return flag;
 }
 //下一步
 function nextGroup(){
 	$(".J_groupUser_show").hide();
-	$("#achieveForm").show();
+	$("#awardForm").show();
 	addRule();
 }
 /**

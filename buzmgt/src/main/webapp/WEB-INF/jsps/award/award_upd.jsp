@@ -28,7 +28,7 @@
 	href="static/multiselect/css/jquery.multiselect.css">
 <link rel="stylesheet" href="static/earnings/css/phone.css">
 <link rel="stylesheet" href="static/earnings/css/comminssion.css">
-<link rel="stylesheet" type="text/css" href="static/achieve/achieve.css">
+<link rel="stylesheet" type="text/css" href="static/award/award.css">
 <link rel="stylesheet" type="text/css"
 	href="static/bootStrapPager/css/page.css" />
 <style type="text/css">
@@ -147,7 +147,7 @@ var	base='<%=basePath%>';
 	var rule = new Array();//全局变量
 	var groupNumbers = new Array();
 	var userList = new Array();//所有用户的UserId
-	var achieve = new Array();
+	var award = new Array();
 </script>
 <body>
 
@@ -200,35 +200,42 @@ var	base='<%=basePath%>';
 
     </div>
 
-		<form id="achieveForm" onsubmit="return false;" hidden="hidden">
-			<input type="hidden" class="J_achieveId" name="achieveId"
-				value="${achieve.achieveId }">
+		<form id="awardForm" onsubmit="return false;" hidden="hidden">
+			<input type="hidden" class="J_awardId" name="awardId"
+				value="${award.awardId }">
 			<input type="hidden" class="J_planId" name="planId"
-				value="${achieve.planId }">
+				value="${award.planId }">
 			<div class="row ">
 				<!--选择-->
-				<ul class="mmr-l">
-					<li><span class="text-gery text-strong">请选择：</span> <select
-						class="visit-times J_machineType">
-							<option value="">类别</option>
-							<c:forEach var="machineType" items="${machineTypes }"
-								varStatus="status">
-								<c:choose>
-									<c:when test="${machineType.id == achieve.machineType.id  }">
-									<option value="${machineType.id }" selected="selected">${machineType.name }</option>
-									</c:when>
-									<c:otherwise>
-										<option value="${machineType.id }">${machineType.name }</option>
-									</c:otherwise>									
-								</c:choose>
-							</c:forEach>
-					</select> <select id="brandList" class="visit-times J_brand">
-							<option selected="selected" value="${achieve.brand.id }">${achieve.brand.name }</option>
-					</select> <select id="goodList" class="visit-times J_goods">
-							<option selected="selected" value="${achieve.good.id }">${achieve.good.name }</option>
-					</select> <!--                 <button class="btn  bnt-sm ph-btn-add" id="btnadd"><span class="text-strong">+</span></button> -->
-					</li>
-				</ul>
+				<div class="mmr-l">
+					<span style="float: left;" class="text-gery text-strong">请选择：</span> 
+					<ul class="J_chose_goods pull-left">
+					 <c:forEach items="${award.awardGoods }" var="awardGood" varStatus="status">
+						<li>
+						<select class="visit-times J_machineType">
+								<option value="">类别</option>
+								<c:forEach var="machineType" items="${machineTypes }"
+									varStatus="status">
+									<c:choose>
+										<c:when test="${machineType.id == awardGood.machineType.id  }">
+										<option value="${machineType.id }" selected="selected">${machineType.name }</option>
+										</c:when>
+										<c:otherwise>
+											<option value="${machineType.id }">${machineType.name }</option>
+										</c:otherwise>									
+									</c:choose>
+								</c:forEach>
+						</select> <select id="brandList" class="visit-times J_brand">
+								<option selected="selected" value="${awardGood.brand.id }">${awardGood.brand.name }</option>
+						</select> <select id="goodList" class="visit-times J_goods">
+								<option selected="selected" value="${awardGood.good.id }">${awardGood.good.name }</option>
+						</select> <!--                 <button class="btn  bnt-sm ph-btn-add" id="btnadd"><span class="text-strong">+</span></button> -->
+						<a class="J_remove" href="javascript:;" onclick="removeChoseGoods(this)" style="display: none;"><span class="glyphicon glyphicon-remove"></span></a>
+						</li>
+					 </c:forEach>
+					</ul>
+					<button class="btn  bnt-sm ph-btn-add J_btnadd pull-left"><span class="text-strong">+</span></button>
+				</div>
 				<!--阶梯提成设置-->
 				<div class="jttcsz">
 					<i class="ico icon-jtsz"></i><span class="text-head text-strong">阶梯提成设置</span>
@@ -238,9 +245,9 @@ var	base='<%=basePath%>';
 						<span class="text-gery text-strong  ">周期任务量：</span>
 						<!-- 周期任务量 -->
 						<span id="numberList" class="J_number"> 
-							<span class=" number-blue">${achieve.numberFirst }</span>
-              <span class=" number-blue">${achieve.numberSecond }</span>
-              <span class=" number-blue">${achieve.numberThird }</span>
+							<span class=" number-blue">${award.numberFirst }</span>
+              <span class=" number-blue">${award.numberSecond }</span>
+              <span class=" number-blue">${award.numberThird }</span>
 						</span> 
 						<i class="new-icon ph-jiaj" data-toggle="modal" data-target="#zzrwul"></i>
 							<input type="hidden" class="J_numberFirst_" name="numberFirst" value="" /> 
@@ -251,7 +258,7 @@ var	base='<%=basePath%>';
 					<div class="jfgz">
 						<span class="text-gery text-strong  ">奖罚规则：</span>
 						<div id="ruleList" class="jfbox J_RULE">
-							<c:forEach items="${achieve.rewardPunishRules }" var="rule" varStatus="status">
+							<c:forEach items="${award.rewardPunishRules }" var="rule" varStatus="status">
                     <div class="col-sm-4 jfbox-box">
                     	<c:if test="${rule.min != '' && rule.min != null }">
                         <span class="text-nub">${rule.min } </span>
@@ -287,7 +294,7 @@ var	base='<%=basePath%>';
 						<dl class="dl-horizontal">
 							<dt>补充说明：</dt>
 							<dd>
-								<textarea rows="10" cols="150" class="fl-left J_remark">${achieve.remark }</textarea>
+								<textarea rows="10" cols="150" class="fl-left J_remark">${award.remark }</textarea>
 							</dd>
 						</dl>
 
@@ -297,14 +304,14 @@ var	base='<%=basePath%>';
 							<dt>方案起止时间：</dt>
 							<dd>
 								<div class="ph-search-date fl-left form_date_start">
-									<input name="startDate" type="text" value='<fmt:formatDate value="${achieve.startDate}" pattern="yyyy-MM-dd"/>'
+									<input name="startDate" type="text" value='<fmt:formatDate value="${award.startDate}" pattern="yyyy-MM-dd"/>'
 										class="form-control form_datetime input-sm J_startDate"
 										placeholder="开始日期" readonly="readonly"
 										style="background: #ffffff; margin-right: 20px">
 								</div>
 
 								<div class="ph-search-date fl-left form_date_end">
-									<input name="endDate" type="text" value='<fmt:formatDate value="${achieve.endDate}" pattern="yyyy-MM-dd"/>'
+									<input name="endDate" type="text" value='<fmt:formatDate value="${award.endDate}" pattern="yyyy-MM-dd"/>'
 										class="form-control form_datetime input-sm J_endDate"
 										placeholder="结束日期" readonly="readonly"
 										style="background: #ffffff; margin-right: 20px">
@@ -320,7 +327,7 @@ var	base='<%=basePath%>';
 							<dt>提成发放日期：</dt>
 							<dd>
 								<div class="ph-search-date fl-left">
-									<input name="issuingDate" type="text" value='<fmt:formatDate value="${achieve.issuingDate}" pattern="yyyy-MM-dd"/>'
+									<input name="issuingDate" type="text" value='<fmt:formatDate value="${award.issuingDate}" pattern="yyyy-MM-dd"/>'
 										class="form-control form_datetime input-sm J_issuingDate"
 										placeholder="选择日期" readonly="readonly"
 										style="background: #ffffff; margin-right: 20px"> <span
@@ -343,7 +350,7 @@ var	base='<%=basePath%>';
 									<div class="inpt-search">
 										<select name="basic[]" class="form-control demo3 J_auditor">
 				
-											<option value="${achieve.auditor }" selected="selected">${achieve.auditor }</option>
+											<option value="${award.auditor }" selected="selected">${award.auditor }</option>
 											<option value="UT">胡老大</option>
 											<option value="VT">横额啊</option>
 											<option value="VA">张二啦</option>
@@ -406,7 +413,7 @@ var	base='<%=basePath%>';
 												class="ph-icon   ph-renwu"></i></span>
 											<!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
 											<input type="text" class="form-control input-h J_numberFirst"
-												value="${achieve.numberFirst }"
+												value="${award.numberFirst }"
 												aria-describedby="basic-addon1" placeholder="请输入阶段一任务量"
 												onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
 												onafterpaste="this.value=this.value.replace(/[^\d]/g,'')">
@@ -423,7 +430,7 @@ var	base='<%=basePath%>';
 										<div class="input-group are-line">
 											<span class="input-group-addon "><i
 												class=" ph-icon ph-renwu"></i></span> <input type="text"
-												value="${achieve.numberSecond }"
+												value="${award.numberSecond }"
 												class="form-control input-h J_numberSecond"
 												onblur="chkScendValue();" aria-describedby="basic-addon1"
 												placeholder="请输入阶段二任务量"
@@ -443,7 +450,7 @@ var	base='<%=basePath%>';
 										<div class="input-group are-line">
 											<span class="input-group-addon "><i
 												class=" ph-icon ph-renwu"></i></span> <input type="text"
-												value="${achieve.numberThird }"
+												value="${award.numberThird }"
 												class="form-control input-h J_numberThird"
 												onblur="chkThirdValue();" aria-describedby="basic-addon1"
 												placeholder="请输入阶段三任务量"
@@ -485,7 +492,7 @@ var	base='<%=basePath%>';
 			charset="utf-8"></script>
 		<script type="text/javascript"
 			src="static/bootStrapPager/js/extendPagination.js"></script>
-		<script type="text/javascript" src="static/achieve/achieve_upd.js"
+		<script type="text/javascript" src="static/award/award_upd.js"
 			charset="utf-8"></script>
 		<script type="text/javascript">
 			// 	$('.J_auditor').multiselect({

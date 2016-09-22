@@ -3,7 +3,6 @@
  * 
  */
 $(function() {
-	initSelectBrand();
 	initSelectMachineType();
 	initFunction();
 	creategroupAll();
@@ -33,6 +32,10 @@ function addRule() {
 	rule =new Array();
 	var html = '';
 	var first = $('.J_numberFirst').val();
+	if(isEmpty(first)){
+		alert("请添加阶段一任务量！");
+		return false;
+	}
 	var second = $('.J_numberSecond').val();
 	var third = $('.J_numberThird').val();
 	var number = first + "," + second + "," + third;
@@ -150,9 +153,13 @@ function initFunction(){
 		
 	$('.J_btnadd').on("click",function(){
 		var html = $(".J_chose_goods li:first")[0].outerHTML;
-		console.info(html);
 		$('.J_chose_goods').append(html);
+		initSelectMachineType();
+		$(".J_chose_goods .J_remove:gt(0)").show();
 	});	
+}
+function removeChoseGoods(object){
+	$(object).parents('li').remove();
 }
 /**
  * 验证二阶段数量
@@ -199,37 +206,38 @@ function chkThirdValue(){
 //初始化选择类别（机型）
 function initSelectMachineType() {
 	$(".J_machineType").change(function(){
-		var machineType=$(this).val();
+		var machineType = $(this).val();
+		var option = $(this).parents('li');
 		if(machineType == ""){
-			createBrandType("");
-			createGoods("");
+			createBrandType("",option);
+			createGoods("",option);
 			return false;
 		}
-		findBrandType(machineType);
+		findBrandType(machineType, option);
+		initSelectBrand();
 	});
 }
 //查询品牌
-function findBrandType(machineType){
+function findBrandType(machineType, option){
 	$.ajax({
 		url:"/goods/getBrand?code="+machineType,
 		type : 'GET',
 		dateType : 'JSON',
 		success : function(data) {
-			createBrandType(data);
+			createBrandType(data, option);
 		},
 		error : function(data) {
 			alert("网络异常，稍后重试！");
 		}
-			
 	})
 }
 /**
  * 创建品牌
  * @param data
  */
-function createBrandType(data) {
+function createBrandType(data,option) {
 	var myTemplate = Handlebars.compile($("#brands-template").html());
-	$('#brandList').html(myTemplate(data));
+	$(option).find('.J_brand').html(myTemplate(data));
 }
 /**
  * 初始化选择品牌
@@ -237,25 +245,27 @@ function createBrandType(data) {
  */
 function initSelectBrand() {
 	$(".J_brand").change(function(){
-	    var brandId=$(".J_brand").val();
+	    var brandId=$(this).val();
+	    var option = $(this).parents('li');
 	    if(brandId == ""){
-	    	createGoods("");
+	    	createGoods("", option);
 	    	return false;
 	    }
-	    findGoods(brandId);
+	    findGoods(brandId, option);
 	});
 }
 /**
  * 查询商品
  * @param brandId
  */
-function findGoods(brandId){
+function findGoods(brandId, option){
+	var machineType = $(option).find('.J_machineType').val();
 	$.ajax({
-		url : base + 'goods/' + brandId,
+		url : base + 'goods/' + machineType + '/' + brandId,
 		type : 'GET',
 		dateType : 'JSON',
 		success : function(data) {
-			createGoods(data);
+			createGoods(data, option);
 		},
 		error : function(data) {
 			alert("网络异常，稍后重试！");
@@ -266,9 +276,9 @@ function findGoods(brandId){
  * createGoods
  * @param data
  */
-function createGoods(data) {
+function createGoods(data, option) {
 	var myTemplate = Handlebars.compile($("#goods-template").html());
-	$('#goodList').html(myTemplate(data));
+	$(option).find('.J_goods').html(myTemplate(data));
 }
 /**
  * createRules()
@@ -291,34 +301,104 @@ function creategroupAll(){
 	var myTemplate = Handlebars.compile($("#group-all-template").html());
 	$('#groupAllList').html(myTemplate(data));
 }
+function checkForm(searchDate){
+	console.info(searchDate);
+	var flag = true;
 
+	$.each(searchDate,function(name,value){
+		switch (name) {
+		case 'awardGoods':
+			if(value.length>0){
+				$.each(value,function(i){
+					if(isEmpty(value[i]['goodId'])){
+						flag = false;
+						alert("请选择型号！");
+						return flag;
+					}
+				})
+			}
+			break;
+		case 'rewardPunishRules':
+			if(value.length>0){
+				$.each(value,function(i){
+					if(value[i]['money']<=0){
+						flag = false;
+						alert("提成金额不能为空！");
+						return flag;
+					}
+				})
+			}
+			break;
+		case 'groupNumbers':
+			if(value.length>0){
+				$.each(value,function(i){
+					if(isEmpty(value[i]['numberFirstAdd'])){
+						flag = false;
+						alert("请填写分组阶段达量增量！");
+						return flag;
+					}
+				})
+			}
+			break;
+		case 'numberFirst':
+			if(isEmpty(value)){
+				alert("请添加任务量！");
+				flag = false;
+				return flag;
+			}
+			break;
+		case 'startDate':
+		case 'endDate':
+		case 'issuingDate':
+			if(isEmpty(value)){
+				alert("请选择日期！");
+				flag = false;
+				return flag;
+
+			}
+			break;
+		case 'auditor':
+			if(isEmpty(value)){
+				alert("请选择审核人员！");
+				flag = false;
+				return flag;
+
+			}
+			break;
+
+		default:
+			break;
+		}
+	});
+	return flag;
+}
 
 function toSubmit() {
 //	var jsonStr = $("#achieveForm").serialize();
-	var jsonStr = {
-		"planId": $(".J_planId").val(),
-		"numberFirst": $(".J_numberFirst_").val(),
-        "numberSecond": $(".J_numberSecond_").val(),
-        "numberThird": $(".J_numberThird_").val(),
-        "startDate": $(".J_startDate").val(),
-        "endDate": $(".J_endDate").val(),
-        "issuingDate": $(".J_issuingDate").val(),
-        "auditor":  $(".J_auditor").val(),
-        "remark":  $(".J_remark").val()
-	};
-	
-	//奖罚规则
-//	jsonStr["awardGoods"] = 
-//	[{
+		var jsonStr = {
+				"planId": $(".J_planId").val(),
+				"numberFirst": $(".J_numberFirst_").val(),
+				"numberSecond": $(".J_numberSecond_").val(),
+				"numberThird": $(".J_numberThird_").val(),
+				"startDate": $(".J_startDate").val(),
+				"endDate": $(".J_endDate").val(),
+				"issuingDate": $(".J_issuingDate").val(),
+				"auditor":  $(".J_auditor").val(),
+				"remark":  $(".J_remark").val()
+		};
+		
+		//奖罚规则
+	jsonStr["awardGoods"] = disAwardGoods();
+//	'awardGoods' = [{
 //			"machineTypeId" : $(".J_machineType").val(),
 //			"brandId" : $(".J_brand").val(),
 //			"goodId" : $(".J_goods").val(),
 //	},{}];
-	//奖罚规则
-	jsonStr["rewardPunishRules"] = rule;
-	//分组
-	jsonStr["groupNumbers"] = disposePostGroup();
-/*	
+		//奖罚规则
+		jsonStr["rewardPunishRules"] = rule;
+		//分组
+		jsonStr["groupNumbers"] = disposePostGroup();
+		/*	
 	'rewardPunishRules':[
         {
           "min": null,
@@ -359,27 +439,29 @@ function toSubmit() {
           ]
         }
       ] 
-*/
-	
+		 */
+		
+	if(checkForm(jsonStr)){
 //============需要转换成字符串的json格式传递参数==============================	
-	jsonStr = JSON.stringify(jsonStr);
-	console.info(jsonStr);
-	$.ajax({
-		url : "/award",
-		type : "POST",
-		contentType : 'application/json;charset=utf-8', // 设置请求头信息
-		dataType : "json",
-		data : jsonStr,
-		success : function(data) {
-			alert(data.message);
-			if(data.result == "success"){
-				window.location.href = base + "award/list?planId="+$(".J_planId").val();
+		jsonStr = JSON.stringify(jsonStr);
+		console.info(jsonStr);
+		$.ajax({
+			url : "/award",
+			type : "POST",
+			contentType : 'application/json;charset=utf-8', // 设置请求头信息
+			dataType : "json",
+			data : jsonStr,
+			success : function(data) {
+				alert(data.message);
+				if(data.result == "success"){
+					window.location.href = base + "award/list?planId="+$(".J_planId").val();
+				}
+			},
+			error : function(res) {
+				alert("网络异常，稍后重试！");
 			}
-		},
-		error : function(res) {
-			alert("网络异常，稍后重试！");
-		}
-	});
+		});
+	}
 }
 //下一步
 function nextGroup(){
@@ -436,6 +518,37 @@ function disposePostGroup(){
 	return newGroup;
 }
 
+/**
+ * 处理多个型号
+ */
+function disAwardGoods(){
+	var awardGoods = new Array();
+	var machineTypeIds = new Array();
+	var brandIds = new Array();
+	var goodIds = new Array();
+	$('.J_machineType').each(function(index){
+		var item = $(this).val(); 
+		machineTypeIds[index] = item ;
+	})
+	$('.J_brand').each(function(index){
+		var item = $(this).val(); 
+		brandIds[index] = item ;
+	})
+	$('.J_goods').each(function(index){
+		var item = $(this).val(); 
+		goodIds[index] = item ;
+	})
+	for(var i=0;i<machineTypeIds.length;i++){
+		awardGoods[i] = 
+		{
+			"machineTypeId" : machineTypeIds[i],
+			"brandId" : brandIds[i],
+			"goodId" : goodIds[i]
+		}
+	}
+	console.info(awardGoods);
+	return awardGoods;
+}
 function numberAdd(opt, num){
 	var x = $(opt).siblings('a.J_group').attr('data-index');
 	var y = "";
@@ -454,6 +567,5 @@ function numberAdd(opt, num){
 		break;
 	}
 	groupNumbers[x][y] = opt.value;
-	console.info(groupNumbers[x][y]);// = opt.value;
 	console.info(groupNumbers[x]);// = opt.value;
 }

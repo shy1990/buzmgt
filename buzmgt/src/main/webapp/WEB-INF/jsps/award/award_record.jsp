@@ -23,16 +23,16 @@
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
 <link rel="stylesheet" href="static/earnings/css/phone.css">
 <link rel="stylesheet" href="static/earnings/css/comminssion.css">
-<link rel="stylesheet" type="text/css" href="static/achieve/achieve.css">
+<link rel="stylesheet" type="text/css" href="static/award/award.css">
 <link rel="stylesheet" type="text/css" href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script id="achieve-table-template" type="text/x-handlebars-template">
+<script id="award-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
    <tr>
       <td>{{addOne @index}}</td>
-      <td>{{good.name}}</td>
+      <td>{{#each awardGoods}}{{good.name}}+{{/each}} </td>
       <td class="reason">
 				<span class="text-red">{{numberFirst}} 
 			{{#if numberSecond}}
@@ -68,16 +68,16 @@
       <td>{{formDate createDate}}</td>
       <td>
 				{{#myIf status 'BACK'}}
-				<a href="/achieve/upd?achieveId={{achieveId}}" class="btn bnt-sm btn-zz" >修改 </a>
-				<button class="btn bnt-sm btn-sc " onclick="delAchieve({{achieveId}})"> 删除 </button>
+				<a href="/award/upd?awardId={{awardId}}" class="btn bnt-sm btn-zz" >修改 </a>
+				<button class="btn bnt-sm btn-sc " onclick="delAchieve({{awardId}})"> 删除 </button>
 				{{/myIf}}
 				{{#myIf status 'WAIT'}}
-        <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
+        <a href="/award/list/{{awardId}}" class="btn bnt-sm bnt-ck">查看</a>
 				{{/myIf}}
 				{{#myIf status 'OVER'}}
-        <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
+        <a href="/award/list/{{awardId}}" class="btn bnt-sm bnt-ck">查看</a>
         <a class="btn btn-sm bnt-jc ">进程</a>
-				<button class="btn bnt-sm btn-sc" onclick="delAchieve({{achieveId}})"> 删除 </button>
+				<button class="btn bnt-sm btn-sc" onclick="delAchieve({{awardId}})"> 删除 </button>
 				{{/myIf}}
 				
       </td>
@@ -233,7 +233,7 @@ var	base='<%=basePath%>';
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script type="text/javascript"
-<!-- 		src="static/achieve/achieve_record.js" charset="utf-8"></script> -->
+		src="static/award/award_record.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(".J_MachineType li").on("click",function(){
 			$(this).addClass("active");

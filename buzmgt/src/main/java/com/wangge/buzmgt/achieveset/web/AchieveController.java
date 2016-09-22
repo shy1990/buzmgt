@@ -314,6 +314,7 @@ public class AchieveController {
     List<MachineType> machineTypes = machineTypeServer.findAll();
     model.addAttribute("machineTypes", machineTypes);
     model.addAttribute("achieve", achieve);
+    model.addAttribute("planId", achieve.getPlanId());
     return "achieve/achieve_upd";
   }
 

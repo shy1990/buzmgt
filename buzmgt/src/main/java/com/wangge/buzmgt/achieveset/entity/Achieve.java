@@ -102,13 +102,13 @@ public class Achieve implements Serializable {
   private AchieveStatusEnum status = AchieveStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
   private String planId;
   
-  @OneToMany(cascade=CascadeType.ALL)
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
   @JoinTable(name="SYS_ACHIEVE_SET_RULE",
      joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
      inverseJoinColumns=@JoinColumn(name="RULE_ID"))
   private List<RewardPunishRule> rewardPunishRules;//奖罚规则
   
-  @OneToMany(cascade=CascadeType.ALL)
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
   @JoinTable(name="SYS_ACHIEVE_SET_GROUP",
       joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
       inverseJoinColumns=@JoinColumn(name="GROUPING_ID"))

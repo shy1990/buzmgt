@@ -1,4 +1,4 @@
-var achieveTotal = 0;
+var awardTotal = 0;
 $(function() {
 	initFunction();
 	initExcelExport();// 初始化导出excel
@@ -6,22 +6,13 @@ $(function() {
 	findAchieveList();// 查询列表
 })
 /**
- * 跳转添加页面 获取planId和machineType
- */
-function add() {
-	var planId = $("#planId").val();
-	var machineType = $(".J_MachineType li.active").attr('title');
-	window.location.href = base + "achieve/add?planId=" + planId
-			+ "&machineType=" + machineType
-}
-/**
  * 删除
- * @param achieveId
+ * @param awardId
  */
-function delAchieve(achieveId){
+function delAchieve(awardId){
 	if(confirm("确定要删除数据吗？")){
 		$.ajax({
-			url : base + "achieve/"+achieveId,
+			url : base + "award/"+awardId,
 			type : "DELETE",
 			dataType : "JSON",
 			success : function(data){
@@ -40,13 +31,13 @@ function delAchieve(achieveId){
 }
 /**
  * 审核操作
- * @param achieveId
+ * @param awardId
  * @param status
  */
-function auditAchieve(achieveId,status){
+function auditAchieve(awardId,status){
 	if(confirm("确认操作？")){
 		$.ajax({
-			url : base + "achieve/" + achieveId + "?status=" + status,
+			url : base + "award/" + awardId + "?status=" + status,
 			type : "PATCH",
 			dataType : "JSON",
 			success : function(data){
@@ -119,7 +110,7 @@ function initExcelExport() {
 		SearchData['sc_EQ_planId'] = $planId;
 		var param = parseParam(SearchData);
 		delete SearchData['sc_EQ_planId'];
-		window.location.href = base + "achieve/export" + "?" + param;
+		window.location.href = base + "award/export" + "?" + param;
 	});
 }
 function initFunction() {
@@ -201,15 +192,15 @@ function findAchieveList(page) {
 	console.info(SearchData);
 	var $planId = $("#planId").val();
 	$.ajax({
-		url : "/achieve/" + $planId,
+		url : "/award/" + $planId,
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
 		success : function(orderData) {
 			createAchieveTable(orderData);
 			var searchTotal = orderData.totalElements;
-			if (searchTotal != achieveTotal || searchTotal == 0) {
-				achieveTotal = searchTotal;
+			if (searchTotal != awardTotal || searchTotal == 0) {
+				awardTotal = searchTotal;
 				initPaging(orderData);
 			}
 		},
@@ -239,7 +230,7 @@ function createAchieveTable(data) {
 }
 
 function createGoingAchieveTable(data) {
-	var myTemplate = Handlebars.compile($("#achieve-table-template").html());
+	var myTemplate = Handlebars.compile($("#award-table-template").html());
 	$('#goingAchieveList').html(myTemplate(data));
 }
 /**
@@ -248,7 +239,7 @@ function createGoingAchieveTable(data) {
  * @param data
  */
 function createPastAchieveTable(data) {
-	var myTemplate = Handlebars.compile($("#achieve-table-template").html());
+	var myTemplate = Handlebars.compile($("#award-table-template").html());
 	$('#pastAchieveList').html(myTemplate(data));
 }
 /**
