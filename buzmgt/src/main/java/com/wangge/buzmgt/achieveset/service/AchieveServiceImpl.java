@@ -26,6 +26,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.wangge.buzmgt.achieveaward.entity.Award;
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.entity.Achieve.AchieveStatusEnum;
 import com.wangge.buzmgt.achieveset.repository.AchieveRepository;
@@ -91,6 +92,23 @@ public class AchieveServiceImpl implements AchieveService {
   @Override
   public Achieve findOne(Long id){
     return achieveRepository.findOne(id);
+  }
+  
+  @Override
+  public List<Map<String, Object>> findRuleByGoods(List<String> goodIds, Long mainPlanId, String userId) {
+    List<Map<String, Object>> list = new ArrayList<>();
+    Map<String,Object> searchParams = new HashMap<>();
+    searchParams.put("IN_goodId", goodIds);
+    searchParams.put("EQ_planId", mainPlanId);
+    List<Achieve> achieves = findAll(searchParams);
+    achieves.forEach(achieve->{
+      Map<String, Object> e = new HashMap<>();
+      e.put("goodId", achieve.getGoodId());
+      e.put("rule", achieve);
+      list.add(e);
+    });
+    
+    return list;
   }
   public static Specification<Achieve> achieveSearchFilter(final Collection<SearchFilter> filters,
       final Class<Achieve> entityClazz){
