@@ -23,6 +23,7 @@ public class Goods implements Serializable{
   private String  name  ; //  商品名称
   private String  brandId  ; //  品牌ID，关联SJ_TB_BRAND
   private String  catId  ; //  商品的类别ID，关联SJ_TB_CAT
+  private String  machineType  ; //机型
   
   public String getId() {
     return id;
@@ -48,9 +49,15 @@ public class Goods implements Serializable{
   public void setCatId(String catId) {
     this.catId = catId;
   }
+  public String getMachineType() {
+    return machineType;
+  }
+  public void setMachineType(String machineType) {
+    this.machineType = machineType;
+  }
   @Override
   public String toString() {
-    return "Goods [id=" + id + ", name=" + name + ", brandId=" + brandId + ", catId=" + catId + "]";
+    return "Goods [id=" + id + ", name=" + name + ", brandId=" + brandId + ", machineType=" + machineType + ", catId=" + catId + "]";
   }
   
 }

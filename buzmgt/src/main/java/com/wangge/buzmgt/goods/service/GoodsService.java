@@ -53,5 +53,15 @@ public interface GoodsService {
   * @throws
    */
   List<String> findByNameLike(String name);
+  /**
+   * 
+   * @Title: findByMachineTypeAndBrandId 
+   * @Description: 根据分类查询品牌 
+   * @param @param name
+   * @param @return    设定文件 
+   * @return List<String>    返回类型 
+   * @throws
+   */
+  List<Goods> findByMachineTypeAndBrandId(String machineType, String brandId);
   
 }

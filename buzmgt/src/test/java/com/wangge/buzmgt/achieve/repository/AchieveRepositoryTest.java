@@ -12,8 +12,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.wangge.buzmgt.BuzmgtApplication;
-import com.wangge.buzmgt.achieve.entity.Achieve;
-import com.wangge.buzmgt.achieve.entity.Achieve.AchieveStatusEnum;
+import com.wangge.buzmgt.achieveset.entity.Achieve;
+import com.wangge.buzmgt.achieveset.entity.Achieve.AchieveStatusEnum;
+import com.wangge.buzmgt.achieveset.repository.AchieveRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.plan.entity.MachineType;

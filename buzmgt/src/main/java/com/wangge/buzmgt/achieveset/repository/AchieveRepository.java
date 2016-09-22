@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.achieve.repository;
+package com.wangge.buzmgt.achieveset.repository;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import com.wangge.buzmgt.achieve.entity.Achieve;
+import com.wangge.buzmgt.achieveset.entity.Achieve;
 /**
  * 
 * @ClassName: AchieveRepository
