@@ -1,11 +1,12 @@
 package com.wangge.buzmgt.disruptor;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
 import com.wangge.buzmgt.util.DateUtil;
-
-import javax.persistence.EntityManager;
-import java.util.List;
 
 /**
  * 生产者 Created by jiabin on 16-9-6.

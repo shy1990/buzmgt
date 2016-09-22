@@ -433,3 +433,17 @@ td.reason{
             margin-top: 20px;
             margin-left: 180px;
         }
+.modal-blue .modal-header {
+            position: relative;
+            height: 50px;
+            background: #3C9FD8;
+            color: #FFF;
+            padding: 10px;
+        }
+
+.modal-blue .modal-title {
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            line-height: 30px;
+        }

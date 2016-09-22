@@ -113,7 +113,7 @@ function getNextMonth(reduceNum) {
 	var date = new Date();
 	var month = date.getMonth() - reduceNum;
 	var year = date.getFullYear();
-	if (month < 9) {
+	if (month < 8) {
 		month = "0" + (month + 2);
 	} else {
 		month = (month + 2);

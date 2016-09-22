@@ -19,8 +19,9 @@ public class PlanUserVo {
   @Id
   private String userId;
   private String truename, rolename, levelName, namepath, plantitle;
-  private Integer roleId, starsLevel, planId, rindex;
+  private Integer roleId, starsLevel, rindex;
   private Date regdate;
+  private Long planId;
   
   public String getUserId() {
     return userId;
@@ -94,11 +95,11 @@ public class PlanUserVo {
     this.starsLevel = starsLevel;
   }
   
-  public Integer getPlanId() {
+  public Long getPlanId() {
     return planId;
   }
   
-  public void setPlanId(Integer planId) {
+  public void setPlanId(Long planId) {
     this.planId = planId;
   }
   
