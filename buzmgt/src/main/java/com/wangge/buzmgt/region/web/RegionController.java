@@ -176,7 +176,9 @@ public class RegionController {
   @RequestMapping(value = "/dragRegion", method = RequestMethod.POST)
   public void dragRegion(String id, String pid) {
     Region region = regionService.findListRegionbyid(id);
-    region.setParent(regionService.findListRegionbyid(pid));
+    Region parentRegion=regionService.findListRegionbyid(pid);
+    region.setParent(parentRegion);
+    region.setType(regionService.findRegionType(parentRegion.getType().getParentId()+1));
     regionService.saveRegion(region);
   }
   
