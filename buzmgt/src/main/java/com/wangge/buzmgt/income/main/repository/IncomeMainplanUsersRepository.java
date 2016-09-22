@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.income.main.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,4 +26,7 @@ public interface IncomeMainplanUsersRepository
   
   @Query("select u.planId from IncomeMainplanUsers u where u.salesmanId=?1 and u.state=?2")
   Optional<IncomeMainplanUsers> findFirst(String userId, FlagEnum states);
+  
+  @Query("select max(u.fqtime)  from IncomeMainplanUsers u where u.salesmanId=?1")
+  Optional<Date> findMaxFqtimeBySalesmanId(String salesmanId);
 }

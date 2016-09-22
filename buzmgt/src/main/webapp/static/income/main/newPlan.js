@@ -96,7 +96,8 @@ function getPlan() {
 		if ('' != salesArr[i] && ('' == salesArr[i].id||undefined == salesArr[i].id)) {
 			salesSet.push({
 				"salesmanId" : salesArr[i].salesmanId,
-				"salesmanname" : salesArr[i].salesmanname
+				"salesmanname" : salesArr[i].salesmanname,
+				"createtime":salesArr[i].createtime
 			});
 		}
 	}

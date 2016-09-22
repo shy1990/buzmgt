@@ -28,8 +28,10 @@ import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.main.vo.OrderGoods;
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.income.main.vo.repository.MainIncomeVoRepository;
 import com.wangge.buzmgt.income.main.vo.repository.OrderGoodsRepository;
+import com.wangge.buzmgt.income.main.vo.repository.PlanUserVoRepository;
 import com.wangge.buzmgt.income.ywsalary.service.BaseSalaryService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
@@ -45,6 +47,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   MainIncomeVoRepository voRep;
   @Autowired
   IncomeMainplanUsersRepository mainPlanUserRep;
+  @Autowired
+  PlanUserVoRepository PlanUserVoRep;
   @Autowired
   OrderGoodsRepository orderGoodsRep;
   @Autowired
@@ -64,14 +68,14 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   @Override
   public void caculateOutedOrder(String orderNo, String userId, String payStatus) {
     
-    Optional<IncomeMainplanUsers> userOpt = mainPlanUserRep.findFirst(userId, FlagEnum.NORMAL);
-    if (!userOpt.isPresent()) {
+    PlanUserVo userVo = PlanUserVoRep.findOne(userId);
+    Long planId = userVo.getPlanId();
+    if (null == planId) {
       return;
     }
-    IncomeMainplanUsers user = userOpt.get();
     List<OrderGoods> goodList = orderGoodsRep.findByorderNo(orderNo);
     for (OrderGoods goods : goodList) {
-      IncomeSub sub = findSubPlan(user.getPlanId(), goods.getGoodId(), userId);
+      IncomeSub sub = findSubPlan(planId, goods.getGoodId(), userId);
     }
   }
   
