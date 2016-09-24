@@ -62,16 +62,21 @@ public class CashController {
 
   @RequestMapping("/send")
   @ResponseBody
-  public void send(String searchDate){
-    logger.info("-----------------开启定时结算");
-    List<String> userIds=cashService.findByStatusGroupByUserIdForSceduled(searchDate);
-    userIds.forEach(userId->{
-      logger.info("userId:"+userId);
-      boolean msg=cashService.createWaterOrderByCash(userId);
-      logger.info("返回结果:"+msg);
-    });
-    logger.info("-----------------结束定时结算");
-    
+  public boolean send(String searchDate){
+    boolean msg = false;
+    try {
+      logger.info("-----------------开启定时结算");
+      List<String> userIds=cashService.findByStatusGroupByUserIdForSceduled(searchDate);
+      userIds.forEach(userId->{
+        logger.info("userId:"+userId);
+        boolean msg_ = cashService.createWaterOrderByCash(userId);
+        logger.info("返回结果:" + msg_);
+      });
+      logger.info("-----------------结束定时结算");
+      return true;
+    } catch (Exception e) {
+      return msg;
+    }
   }
   
   

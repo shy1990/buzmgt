@@ -225,6 +225,7 @@ public class CashServiceImpl implements CashService {
         woc.setCreateDate(new Date());
         woc.setCashMoney(totalPrice);
         woc.setIsPunish(0);
+        woc.setOrderDetails(detailList);//保存流水单详情
         woc.setPayStatus(WaterPayStatusEnum.UnPay);
 
         //查询是否已经处理扣罚
@@ -245,8 +246,8 @@ public class CashServiceImpl implements CashService {
         
         //保存流水单
         orderCashService.save(woc);
-        //保存流水单详情列表
-        detialService.save(detailList);
+//        //保存流水单详情列表
+//        detialService.save(detailList);
         //修改现金列表状态
         cashRepository.save(cashlist);
         msg=true;
