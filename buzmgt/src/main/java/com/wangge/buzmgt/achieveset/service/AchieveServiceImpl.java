@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,15 +27,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.wangge.buzmgt.achieveaward.entity.Award;
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.entity.Achieve.AchieveStatusEnum;
 import com.wangge.buzmgt.achieveset.repository.AchieveRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
-import com.wangge.buzmgt.log.entity.Log.EventType;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 @Service
 public class AchieveServiceImpl implements AchieveService {
@@ -100,6 +100,11 @@ public class AchieveServiceImpl implements AchieveService {
     Map<String,Object> searchParams = new HashMap<>();
     searchParams.put("IN_goodId", goodIds);
     searchParams.put("EQ_planId", mainPlanId);
+    String now = DateUtil.date2String(new Date());
+    searchParams.put("GTE_endDate", now);
+    searchParams.put("LTE_startDate", now);
+    searchParams.put("EQ_status", "OVER");
+    
     List<Achieve> achieves = findAll(searchParams);
     achieves.forEach(achieve->{
       Map<String, Object> e = new HashMap<>();

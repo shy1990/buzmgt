@@ -18,11 +18,14 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Sort;
 
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
@@ -102,7 +105,7 @@ public class Achieve implements Serializable {
   private AchieveStatusEnum status = AchieveStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
   private String planId;
   
-  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true )
   @JoinTable(name="SYS_ACHIEVE_SET_RULE",
      joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
      inverseJoinColumns=@JoinColumn(name="RULE_ID"))

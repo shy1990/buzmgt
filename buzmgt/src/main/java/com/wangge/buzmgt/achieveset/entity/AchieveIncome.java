@@ -34,6 +34,7 @@ public class AchieveIncome implements Serializable{
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
   private Long  id  ;// 主键
+  @Column(name = "USER_ID")
   private String  userId ;// 业务员Id
   @OneToOne
   @JoinColumn(name = "USER_ID", insertable = false, updatable = false)
@@ -50,7 +51,7 @@ public class AchieveIncome implements Serializable{
   private Float money ;// 金额
   private String  status  ;// 状态
   private Date  createDate ;// 创建日期
-  private FlagEnum  flag  ;// 是否删除：normal-正常，del-删除
+  private FlagEnum  flag = FlagEnum.NORMAL ;// 是否删除：normal-正常，del-删除
   public Long getId() {
     return id;
   }
