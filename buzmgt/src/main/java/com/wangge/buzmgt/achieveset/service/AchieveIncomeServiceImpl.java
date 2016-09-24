@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
@@ -24,6 +25,7 @@ import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 * @date 2016年9月23日 下午3:34:53
 *
  */
+@Service
 public class AchieveIncomeServiceImpl implements AchieveIncomeService {
   
   @Autowired
@@ -102,18 +104,27 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
   private Float disposeAchieveIncome(Achieve ac, String userId, Integer num) {
     //获取当前商品当前规则的销量；
     Integer nowNumber = Integer.valueOf(countByAchieveIdAndUserId(ac.getAchieveId(), userId).toString()) ;
+    System.out.println(nowNumber);
+    //计算后的收益
+    Float money = 0f;
     Integer firstAdd = 0;
     Integer secondAdd = 0;
     Integer thirdAdd = 0;
     //查询特殊分组人员增量
     for(GroupNumber group : ac.getGroupNumbers()){
+      boolean flag = false;
       for(GroupUser user : group.getGroupUsers()){
         //存在这个组的userId
         if(user.getUserId()!=null && user.getUserId().equals(userId)){
           firstAdd = group.getNumberFirstAdd();
           secondAdd = group.getNumberSecondAdd();
           thirdAdd = group.getNumberThirdAdd();
+          flag = true;
+          break;
         }
+      }
+      if(flag){
+        break;
       }
     }
     List<RewardPunishRule> rules = ac.getRewardPunishRules();
@@ -146,12 +157,12 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
       if((min==null && max>=nowNumber)||
           (nowNumber>rule.getMin()&&nowNumber<=rule.getMax())||
           (max==null && min < nowNumber)){
-        rule.getMoney();
+        money = rule.getMoney();
         break;
       }
     }
-    
-    return null;
+    money = money * num;
+    return money;
   }
 
 }
