@@ -21,7 +21,7 @@ public class PlanUserVo {
   private String truename, rolename, levelName, namepath, plantitle;
   private Integer roleId, starsLevel, rindex;
   private Date regdate;
-  private Long planId;
+  private Long planId,regionId;
   
   public String getUserId() {
     return userId;
@@ -35,6 +35,14 @@ public class PlanUserVo {
     this.rindex = rindex;
   }
   
+  public Long getRegionId() {
+    return regionId;
+  }
+
+  public void setRegionId(Long regionId) {
+    this.regionId = regionId;
+  }
+
   public void setUserId(String userId) {
     this.userId = userId;
   }
