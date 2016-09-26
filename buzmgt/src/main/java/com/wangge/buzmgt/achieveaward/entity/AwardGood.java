@@ -47,6 +47,7 @@ public class AwardGood implements Serializable{
   private Brand brand; // 品牌ID
   @Column(name = "BRAND_ID")
   private String brandId; // 品牌ID
+  
   @OneToOne
   @JoinColumn(name = "GOOD_ID", updatable = false, insertable = false)
   private Goods good; // 型号ID

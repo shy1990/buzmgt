@@ -31,7 +31,6 @@ import com.wangge.buzmgt.achieveaward.entity.Award.AwardStatusEnum;
 import com.wangge.buzmgt.achieveaward.repository.AwardRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
-import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 /**
@@ -97,6 +96,7 @@ public class AwardServiceImpl implements AwardService {
   public Award findOne(Long id){
     return awardRepository.findOne(id);
   }
+
   public static Specification<Award> awardSearchFilter(final Collection<SearchFilter> filters,
       final Class<Award> entityClazz){
     return new Specification<Award>() {

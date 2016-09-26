@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +32,9 @@ import com.wangge.buzmgt.achieveset.entity.Achieve.AchieveStatusEnum;
 import com.wangge.buzmgt.achieveset.repository.AchieveRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
-import com.wangge.buzmgt.log.entity.Log.EventType;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 @Service
 public class AchieveServiceImpl implements AchieveService {
@@ -91,6 +92,28 @@ public class AchieveServiceImpl implements AchieveService {
   @Override
   public Achieve findOne(Long id){
     return achieveRepository.findOne(id);
+  }
+  
+  @Override
+  public List<Map<String, Object>> findRuleByGoods(List<String> goodIds, Long mainPlanId, String userId) {
+    List<Map<String, Object>> list = new ArrayList<>();
+    Map<String,Object> searchParams = new HashMap<>();
+    searchParams.put("IN_goodId", goodIds);
+    searchParams.put("EQ_planId", mainPlanId);
+    String now = DateUtil.date2String(new Date());
+    searchParams.put("GTE_endDate", now);
+    searchParams.put("LTE_startDate", now);
+    searchParams.put("EQ_status", "OVER");
+    
+    List<Achieve> achieves = findAll(searchParams);
+    achieves.forEach(achieve->{
+      Map<String, Object> e = new HashMap<>();
+      e.put("goodId", achieve.getGoodId());
+      e.put("rule", achieve);
+      list.add(e);
+    });
+    
+    return list;
   }
   public static Specification<Achieve> achieveSearchFilter(final Collection<SearchFilter> filters,
       final Class<Achieve> entityClazz){

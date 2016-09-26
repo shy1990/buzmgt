@@ -53,7 +53,7 @@ public class GroupNumber implements Serializable{
   }
 
   public Integer getNumberFirstAdd() {
-    return numberFirstAdd;
+    return numberFirstAdd==null ? 0 : numberFirstAdd;
   }
 
   public void setNumberFirstAdd(Integer numberFirstAdd) {
@@ -61,7 +61,7 @@ public class GroupNumber implements Serializable{
   }
 
   public Integer getNumberSecondAdd() {
-    return numberSecondAdd;
+    return numberSecondAdd == null ? 0 : numberSecondAdd;
   }
 
   public void setNumberSecondAdd(Integer numberSecondAdd) {
@@ -69,7 +69,7 @@ public class GroupNumber implements Serializable{
   }
 
   public Integer getNumberThirdAdd() {
-    return numberThirdAdd;
+    return numberThirdAdd == null ? 0 : numberThirdAdd;
   }
 
   public void setNumberThirdAdd(Integer numberThirdAdd) {

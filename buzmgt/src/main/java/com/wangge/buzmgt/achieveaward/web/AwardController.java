@@ -134,6 +134,7 @@ public class AwardController {
     JSONObject json = new JSONObject();
 
     try {
+      //
       award.setCreateDate(new Date());
       awardServer.save(award);
       logService.log(null, award.toString(), EventType.SAVE);

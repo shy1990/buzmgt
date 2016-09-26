@@ -68,5 +68,18 @@ public interface AchieveService {
   * @throws
    */
   Achieve findOne(Long achieveId);
+
+  /**
+   * 
+  * @Title: findRuleByGoods 
+  * @Description: 通过商品id查询其对应的规则
+  * @param @param goodIds
+  * @param @param mainPlanId
+  * @param @param userId
+  * @param @return    设定文件 
+  * @return List<Map<String,Object>>    返回类型 
+  * @throws
+   */
+  List<Map<String,Object>> findRuleByGoods(List<String> goodIds,Long mainPlanId,String userId);
   
 }
