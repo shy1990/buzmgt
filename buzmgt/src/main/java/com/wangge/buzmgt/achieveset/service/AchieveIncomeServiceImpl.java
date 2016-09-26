@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.achieveset.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
   @Override
   public boolean createAchieveIncomeBy(List<Map<String, Object>> maps, String orderNo, String userId) {
     try {
+      List<AchieveIncome> achieveIncomes = new ArrayList<>();
       maps.forEach(map->{
        String goodId = (String) map.get("goodId");
        Achieve ac = (Achieve) map.get("rule");
@@ -76,6 +78,8 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
        achieveIncome.setGoodId(goodId);
        achieveIncome.setMoney(money);
        achieveIncome.setCreateDate(new Date());
+       
+       achieveIncomes.add(achieveIncome);
       });
       
     } catch (Exception e) {
