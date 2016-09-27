@@ -3,17 +3,7 @@ package com.wangge.buzmgt.plan.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -40,7 +30,7 @@ public class GroupNumber implements Serializable{
   @Enumerated(EnumType.STRING)
   private FlagEnum flag = FlagEnum.NORMAL;//是否删除：normal-正常，del-删除
   
-  @OneToMany(cascade=CascadeType.ALL)
+  @OneToMany(cascade=CascadeType.ALL,  fetch = FetchType.EAGER)
   @JoinColumn(name="GROUP_ID")
   private List<GroupUser> groupUsers;
 

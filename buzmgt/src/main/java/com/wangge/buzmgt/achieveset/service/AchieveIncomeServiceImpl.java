@@ -40,8 +40,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
   @Override
   public Long countByAchieveIdAndUserId(Long achieveId, String userId) {
-    // TODO Auto-generated method stub
-    return null;
+    return air.countByAchieveIdAndUserId(achieveId, userId);
   }
 
   @Override
@@ -78,15 +77,15 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
        achieveIncome.setGoodId(goodId);
        achieveIncome.setMoney(money);
        achieveIncome.setCreateDate(new Date());
-       
-       achieveIncomes.add(achieveIncome);
+	      System.out.println("----------Sanji.com--------achieveIncome值=" + achieveIncome + ",当前类=AchieveIncomeServiceImpl.createAchieveIncomeBy()");
+	      achieveIncomes.add(achieveIncome);
       });
-      
+	    return true;
     } catch (Exception e) {
-      LogUtil.info(e.getMessage());
-      return false;
+	    LogUtil.info(e.getMessage());
+	    e.printStackTrace();
+	    return false;
     }
-    return false;
   }
 
   /**
@@ -106,9 +105,9 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
   * @throws
    */
   private Float disposeAchieveIncome(Achieve ac, String userId, Integer num) {
-    //获取当前商品当前规则的销量；
-    Integer nowNumber = Integer.valueOf(countByAchieveIdAndUserId(ac.getAchieveId(), userId).toString()) ;
-    System.out.println(nowNumber);
+	  //获取当前商品当前规则的销量；
+	  Integer nowNumber = Integer.valueOf(countByAchieveIdAndUserId(ac.getAchieveId(), userId).toString()) ;
+	  System.out.println(nowNumber);
     //计算后的收益
     Float money = 0f;
     Integer firstAdd = 0;

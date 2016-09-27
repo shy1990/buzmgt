@@ -5,23 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.OrderColumn;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.GenericGenerator;
@@ -105,13 +89,13 @@ public class Achieve implements Serializable {
   private AchieveStatusEnum status = AchieveStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
   private String planId;
   
-  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true )
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   @JoinTable(name="SYS_ACHIEVE_SET_RULE",
      joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
      inverseJoinColumns=@JoinColumn(name="RULE_ID"))
   private List<RewardPunishRule> rewardPunishRules;//奖罚规则
   
-  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   @JoinTable(name="SYS_ACHIEVE_SET_GROUP",
       joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
       inverseJoinColumns=@JoinColumn(name="GROUPING_ID"))

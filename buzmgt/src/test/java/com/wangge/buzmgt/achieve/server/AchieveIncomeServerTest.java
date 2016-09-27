@@ -28,14 +28,17 @@ public class AchieveIncomeServerTest {
   private AchieveService achieveService;
   @Test
   public void test(){
-    Achieve achieve = achieveService.findOne(2L); 
-    List<Map<String, Object>> maps = new ArrayList<>();
+    Achieve achieve = achieveService.findOne(2L);
+	  achieve.getGroupNumbers();
+	  achieve.getRewardPunishRules();
+	  System.out.println(achieve);
+	  List<Map<String, Object>> maps = new ArrayList<>();
     Map<String, Object> map = new HashMap<>();
     map.put("goodId", "88bd9dc743cd4bafad198153024469d3");
     map.put("rule", achieve);
     map.put("num", 2);
     maps.add(map);
-    String orderNo = "201608261755031";
+	  String orderNo = "201608261755031";
     String UserId = "A371121210";
     boolean msg = achieveIncomeService.createAchieveIncomeBy(maps, orderNo, UserId);
     System.out.println(msg);
