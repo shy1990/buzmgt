@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 
-public interface WaterOrderDetailRepository extends JpaRepository<WaterOrderDetail, String>,
+public interface WaterOrderDetailRepository extends JpaRepository<WaterOrderDetail, Integer>,
 JpaSpecificationExecutor<WaterOrderDetail>{
 
   public List<WaterOrderDetail> findBySerialNo(String SerialNo);
   
-  public WaterOrderDetail findByCashId(String cashId);
+  public WaterOrderDetail findByCashId(Long cashId);
   
 }

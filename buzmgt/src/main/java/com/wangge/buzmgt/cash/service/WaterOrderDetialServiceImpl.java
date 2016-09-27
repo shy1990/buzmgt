@@ -32,7 +32,7 @@ public class WaterOrderDetialServiceImpl implements WaterOrderDetialService {
   private WaterOrderDetailRepository waterOrderDetailRepository;
 
   @Override
-  public WaterOrderDetail findByOrderNo(String cashId) {
+  public WaterOrderDetail findByOrderId(Long cashId) {
     return waterOrderDetailRepository.findByCashId(cashId);
   }
   

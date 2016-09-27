@@ -286,7 +286,7 @@ public class OrderSignforServiceImpl implements OrderSignforService {
     List<OrderSignfor> cashList=findAll(searchParams);
     //TODO 查询收现金打款时间
     cashList.forEach(cash->{
-     WaterOrderDetail detail= detialService.findByOrderNo(cash.getId().toString());
+     WaterOrderDetail detail= detialService.findByOrderId(cash.getId());
      if(detail!=null){
        WaterOrderCash waterOrder=waterOrderCashService.findBySerialNo(detail.getSerialNo());
        cash.setPayDate(waterOrder.getPayDate());

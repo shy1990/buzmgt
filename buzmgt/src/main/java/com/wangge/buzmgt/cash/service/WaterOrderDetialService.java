@@ -14,7 +14,7 @@ import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 
 public interface WaterOrderDetialService {
   
-  public WaterOrderDetail findByOrderNo(String orderNo);
+  public WaterOrderDetail findByOrderId(Long orderId);
   
   public void save(WaterOrderDetail waterOrderDetail);
   
