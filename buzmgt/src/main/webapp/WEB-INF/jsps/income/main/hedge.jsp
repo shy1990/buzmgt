@@ -36,8 +36,8 @@
 							<td>{{goodsName}}</td>
 							<td>{{sku}}</td>
 							<td>{{uniquenumber}}</td>
+							<td>{{sum}}</td>
 							<td>{{namepath}}</td>
-							<td>{{shdate}}</td>
 					</tr>
 	{{/each}}
 {{/if}}

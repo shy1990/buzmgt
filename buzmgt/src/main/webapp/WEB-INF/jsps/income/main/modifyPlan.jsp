@@ -134,7 +134,7 @@
 							<div class="form-group">
 								<div class="form-group">
 									<p class="col-sm-12 text-red ">你确定要将该业务员从方案中移除吗？</p>
-									<p class="col-sm-12 text-red ">移除后提成将不再按此方案计算.... ...
+									<p class="col-sm-12 text-red ">移除后移除日期当日及其以后提成将不再按此方案计算</p>
 								</div>
 								<hr>
 
@@ -143,7 +143,7 @@
 									<div class="input-group are-line">
 										<span class="input-group-addon "><i
 											class=" ph-icon icon-riz"></i></span> <input type="text"
-											class="form-control form_datetime " id="newDate"
+											class="form-control form_datetime " id="delDate"
 											placeholder="年-月-日" readonly="readonly"
 											style="background: #ffffff; width: 265px;">
 									</div>

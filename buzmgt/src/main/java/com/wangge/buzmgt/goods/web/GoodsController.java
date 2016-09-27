@@ -87,5 +87,19 @@ public class GoodsController {
   public List<Goods> findGoodsByBrandId(@PathVariable(value="brandId") String brandId){
     return goodsService.findByBrandId(brandId);
   }
+  /**
+   * 
+   * @Title: findGoodsByBrandId 
+   * @Description: 根据品牌查询型号；
+   * @param @param brandId
+   * @param @return    设定文件 
+   * @return List<Goods>    返回类型 
+   * @throws
+   */
+  @RequestMapping("/{machineType}/{brandId}")
+  @ResponseBody
+  public List<Goods> findGoodsByMachineTypeAndBrandId(@PathVariable(value="machineType") String machineType,@PathVariable(value="brandId") String brandId){
+    return goodsService.findByMachineTypeAndBrandId(machineType, brandId);
+  }
   
 }

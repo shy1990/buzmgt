@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -23,13 +24,15 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**
  * 收入明细表 date: 2016年9月3日 下午4:58:31 <br/>
- * 
+ * 实时计算:收现金和刷pos都是单人;<br/>
+ * 如何避免并发
  * @author yangqc
  * @version
  * @since JDK 1.8
  */
 @Entity
-@NamedStoredProcedureQuery(name = "initMonth", procedureName = "init_Income_EveMonth")
+@NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = "initMonth", procedureName = "init_Income_EveMonth"),
+    @NamedStoredProcedureQuery(name = "initOilCost", procedureName = "oil_daily_calculate_prod") })
 @Table(name = "sys_income_main")
 public class MainIncome {
   /** @pdOid 08793dc7-7b0c-45cf-9e6e-4cb30870c2f9 */
@@ -179,10 +182,11 @@ public class MainIncome {
     this.month = month;
   }
   
-  public MainIncome(SalesMan salesman, String month) {
+  public MainIncome(SalesMan salesman, String month,double basicSalaray) {
     super();
     this.salesman = salesman;
     this.month = month;
+    this.basicSalary=basicSalaray;
   }
   
   public MainIncome() {

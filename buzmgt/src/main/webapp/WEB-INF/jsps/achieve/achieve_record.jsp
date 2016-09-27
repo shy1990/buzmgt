@@ -34,7 +34,14 @@
       <td>{{addOne @index}}</td>
       <td>{{good.name}}</td>
       <td class="reason">
-				<span class="text-red">{{numberFirst}} | {{numberSecond}} | {{numberThird}}</span>
+				<span class="text-red">{{numberFirst}} 
+			{{#if numberSecond}}
+			| {{numberSecond}} 
+			{{/if}}
+			{{#if numberThird}}
+			| {{numberThird}}
+			{{/if}}
+			</span>
 			</td>
       <td>
 				<span class="text-blue">{{formDate startDate}}-{{formDate endDate}}</span>
@@ -61,7 +68,7 @@
       <td>{{formDate createDate}}</td>
       <td>
 				{{#myIf status 'BACK'}}
-				<button class="btn bnt-sm btn-zz" data-toggle="modal" data-target="#del">修改 </button>
+				<a href="/achieve/upd?achieveId={{achieveId}}" class="btn bnt-sm btn-zz" >修改 </a>
 				<button class="btn bnt-sm btn-sc " onclick="delAchieve({{achieveId}})"> 删除 </button>
 				{{/myIf}}
 				{{#myIf status 'WAIT'}}

@@ -1,10 +1,12 @@
 var salesArr = [];
 // 添加业务员flag区分是否为临时用户
-function addUser(salesId, salesName, flag, kid) {
+function addUser(salesId, salesName, flag, kid, fqsj, addTime) {
 	var salesman = {
 		'salesmanname' : salesName,
 		'salesmanId' : salesId,
-		"id" : kid
+		"id" : kid,
+		"fqsj" : fqsj,
+		"createtime" : addTime
 	};
 	var index = salesArr.indexOf(salesman);
 	if (index > -1) {
@@ -43,10 +45,17 @@ function deletediv(index, flag) {
 }
 // 删除人员
 function deleteUser() {
-	var newDate = $("#newDate").val();
+	var newDate = $("#delDate").val();
 	if (newDate == '') {
 		alert("必须选择日期!!");
 		return;
+	}
+	var fqsj = salesArr[gloIndex - 1].fqsj;
+	if (undefined != fqsj && null != fqsj && fqsj != "") {
+		alert("该用户将于" + fqsj + "计划中,无需重复删除");
+		return;
+	} else {
+		salesArr[gloIndex - 1].fqsj = newDate;
 	}
 	var userData = {
 		"id" : salesArr[gloIndex - 1].id,
@@ -92,7 +101,8 @@ function initUsers() {
 		success : function(orderData) {
 			var data = orderData.data;
 			for (var i = 0; i < data.length; i++) {
-				addUser(data[i].salesId, data[i].name, true, data[i].id);
+				addUser(data[i].salesId, data[i].name, true, data[i].id,
+						data[i].fqtime);
 			}
 		},
 		error : function() {
@@ -101,6 +111,7 @@ function initUsers() {
 	});
 }
 
+// 初始化时间框
 // 初始化时间框
 function initDateInput() {
 	$(".form_datetime").datetimepicker({
@@ -127,7 +138,8 @@ function commitUsers() {
 				&& ('' == salesArr[i].id || undefined == salesArr[i].id)) {
 			var salesman = {
 				"salesmanId" : salesArr[i].salesmanId,
-				"salesmanname" : salesArr[i].salesmanname
+				"salesmanname" : salesArr[i].salesmanname,
+				"createtime" : salesArr[i].createtime
 			}
 			planUsers.push(salesman);
 		}
@@ -141,9 +153,14 @@ function commitUsers() {
 		},
 		dataType : "json",
 		success : function(orderData) {
-			alert("新增" + planUsers.length + "个用户");
-			initUsers();
-			findPlanUserList();
+			if (orderData.msg.length > 2) {
+				alert(msg);
+				window.location.reload();
+			} else {
+				alert("新增" + planUsers.length + "个用户");
+				initUsers();
+				findPlanUserList();
+			}
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");

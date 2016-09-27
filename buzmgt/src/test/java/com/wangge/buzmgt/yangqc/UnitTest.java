@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.junit.Test;
 
 import com.wangge.buzmgt.util.DateUtil;
@@ -40,16 +41,17 @@ public class UnitTest {
     alist.sort((a1, a2) -> a1 - a2);
     System.out.println(alist);
   }
+  
   @Test
   public void testSplit() {
     String vals = "20160330203608601-->cfe44c3f3d014330bd4df086a9cf5a9c"
         + "-->MIUI/小米 红米Note 4G-->1-->2016-10-18-->135634585522-->";
-    String [] properties=vals.split("-->");
+    String[] properties = vals.split("-->");
     System.out.println(properties.length);
   }
+  
   @Test
-  public void testV(){
-    int s = Integer.valueOf("02");
-    System.out.println(s);
+  public void testV() {
+   System.out.println(ObjectUtils.max("2016-09-16","2016-08-16"));
   }
 }

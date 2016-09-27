@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.wangge.buzmgt.common.FlagEnum;
@@ -30,7 +31,8 @@ public interface MainIncomePlanRepository
     * @param machineCode
     * @return 
     * @since JDK 1.8 
-    */  
+    */ 
+  @Modifying
   @Query(value="select  c.BRAND_ID brandId,c.MACHINE_TYPE machineType,c.name from sys_sj_brand_code c where c.MACHINE_TYPE = ?1",nativeQuery=true)
   List<Object> findCodeByMachineType(String machineCode);
   /** 
@@ -38,7 +40,8 @@ public interface MainIncomePlanRepository
     * @author yangqc 
     * @return 
     * @since JDK 1.8 
-    */  
+    */
+  @Modifying
   @Query(value="select  c.BRAND_ID brandId,c.MACHINE_TYPE machineType,c.name from sys_sj_brand_code c ",nativeQuery=true)
   List<Object> findAllBrandCode();
   

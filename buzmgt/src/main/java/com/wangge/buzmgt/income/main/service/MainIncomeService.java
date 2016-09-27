@@ -28,15 +28,16 @@ public interface MainIncomeService {
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculateOutedOrder();
+  void caculateOutedOrder(String orderNo,String userId,String payStatus);
   
   /**
    * caculatePayedOrder:计算已支付订单. <br/>
    * 
+   * 该功能可以app-interface里完成,通过订单接口调用;
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculatePayedOrder();
+  void caculatePayedOrder(String orderNo,String userId);
   
   /**
    * caculateUser:计算每个业务员的薪资. <br/>
@@ -46,6 +47,7 @@ public interface MainIncomeService {
    */
   void caculateSalesman();
   
+  void calculateOil();
   /**
    * findIncomeMain:判断某月业务员的薪资记录是否存在,若不存在就新建一个返回. <br/>
    * 
@@ -72,6 +74,9 @@ public interface MainIncomeService {
     */  
   Page<MainIncomeVo> getVopage(Pageable pageReq, Map<String, Object> searchParams) throws Exception;
 
+  /** 
+    * 导出用查询 <br/> 
+    */  
   List<MainIncomeVo> findAll(Map<String, Object> searchParams);
   
 }

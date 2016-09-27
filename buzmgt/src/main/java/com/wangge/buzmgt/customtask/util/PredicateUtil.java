@@ -15,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
 public class PredicateUtil {
   
   private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
-  
+  private final static String YEAR_MONTH_DAY="yyyy-MM-dd";
   private final static String TIME_MIN = " 00:00:00 000";
   
   private final static String TIME_MAX = " 23:59:59 999";
@@ -52,7 +52,7 @@ public class PredicateUtil {
         switch (filter) {
           case "EQ":
             if (javaTypeName.equals(TYPE_DATE)) {
-              predicates.add(cb.equal(root.get(key), new SimpleDateFormat(DATE_FORMAT).parse(value.toString())));
+              predicates.add(cb.equal(root.get(key), new SimpleDateFormat(YEAR_MONTH_DAY).parse(value.toString())));
               
             } else {
               predicates.add(cb.equal(root.get(key), value));

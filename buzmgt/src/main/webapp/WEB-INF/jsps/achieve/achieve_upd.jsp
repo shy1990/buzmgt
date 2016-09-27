@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
-<%@ taglib prefix="el" uri="mobai.com/el-common" %>
+<%-- <%@ taglib prefix="el" uri="WEB-INF/tlds" %> --%>
 <%
   String path = request.getContextPath();
 			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -148,7 +148,6 @@ var	base='<%=basePath%>';
 	var groupNumbers = new Array();
 	var userList = new Array();//所有用户的UserId
 	var achieve = new Array();
-// 	var achieve = '${el:toJsonString(achieve)}';
 </script>
 <body>
 
@@ -195,14 +194,14 @@ var	base='<%=basePath%>';
                     <h3 class="modal-title">添加人员</h3>
                 </div>
 <%--             <%@include file="group_user.jsp" %> --%>
-						<jsp:include page="group_user.jsp"></jsp:include>
+						<jsp:include page="group_user.jsp" ></jsp:include>
             </div>
         </div>
 
     </div>
 
 		<form id="achieveForm" onsubmit="return false;" hidden="hidden">
-			<input type="hidden" class="J_achieveId" name="planId"
+			<input type="hidden" class="J_achieveId" name="achieveId"
 				value="${achieve.achieveId }">
 			<input type="hidden" class="J_planId" name="planId"
 				value="${achieve.planId }">
@@ -214,15 +213,19 @@ var	base='<%=basePath%>';
 							<option value="">类别</option>
 							<c:forEach var="machineType" items="${machineTypes }"
 								varStatus="status">
-								<c:if test="${machineType.id ==achieve.machineType.name  }">
-								<option value="${machineType.id }" selected="selected">${machineType.name }</option>
-								</c:if>
-								<option value="${machineType.id }">${machineType.name }</option>
+								<c:choose>
+									<c:when test="${machineType.id == achieve.machineType.id  }">
+									<option value="${machineType.id }" selected="selected">${machineType.name }</option>
+									</c:when>
+									<c:otherwise>
+										<option value="${machineType.id }">${machineType.name }</option>
+									</c:otherwise>									
+								</c:choose>
 							</c:forEach>
 					</select> <select id="brandList" class="visit-times J_brand">
-							<option selected="selected">${achieve.brand.name }</option>
+							<option selected="selected" value="${achieve.brand.id }">${achieve.brand.name }</option>
 					</select> <select id="goodList" class="visit-times J_goods">
-							<option selected="selected">${achieve.good.name }</option>
+							<option selected="selected" value="${achieve.good.id }">${achieve.good.name }</option>
 					</select> <!--                 <button class="btn  bnt-sm ph-btn-add" id="btnadd"><span class="text-strong">+</span></button> -->
 					</li>
 				</ul>
@@ -273,33 +276,7 @@ var	base='<%=basePath%>';
 					<i class="ico icon-ry"></i><span class="text-head text-strong">人员分组设置</span>
 					<hr>
 
-					<div class="jfbox" id="numberAddList">
-						<c:forEach items="${achieve.groupNumbers }" var="group" varStatus="status">
-                <div class="col-sm-6 ryfz-box">
-                    <a href="javascript:;" title="${group.groupName }组（${fn:length(group.groupUsers)}人）" data-container="body" data-toggle="popover" data-placement="right"
-                       data-content="
-                       <c:forEach items ='${group.groupUsers }' var='user'> ${user.userId } </c:forEach>">
-                        <span class="text-big-green">${group.groupName }组（${fn:length(group.groupUsers)}人）</span>
-                    </a> &nbsp;
-                    <c:if test="${group.numberFirstAdd != '' && group.numberFirstAdd != null}">
-		                  <span class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">${achieve.numberFirst } +</span>
-	                    <input type="text" class="ph-inpt" disabled="disabled" value="${group.numberFirstAdd }"/> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
-                    </c:if>
-                    <c:if test="${group.numberSecondAdd != '' && group.numberSecondAdd != null}">
-		                  <span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">${achieve.numberSecond } +</span>
-	                    <input type="text" class="ph-inpt" disabled="disabled" value="${group.numberSecondAdd }"/> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
-                    </c:if>
-                    <c:if test="${group.numberThirdAdd != '' && group.numberThirdAdd != null}">
-		                  <span class="text-gery text-size-12">三阶段达量：</span> <span class="text-nub">${achieve.numberThird } +</span>
-	                    <input type="text" class="ph-inpt" disabled="disabled" value="${group.numberThirdAdd }"/> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
-                    </c:if>
-                </div>
-            	</c:forEach>
-						<!-- <div class="col-sm-6 ryfz-box box-add tianjz">
-							<i class="ico ico-ph-tj "></i> <a href=""> <span
-								class="text-gery">添加组</span></a>
-						</div> -->
-					</div>
+					<div class="jfbox" id="numberAddList"> </div>
 				</div>
 
 				<!--补充说明-->
@@ -429,6 +406,7 @@ var	base='<%=basePath%>';
 												class="ph-icon   ph-renwu"></i></span>
 											<!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
 											<input type="text" class="form-control input-h J_numberFirst"
+												value="${achieve.numberFirst }"
 												aria-describedby="basic-addon1" placeholder="请输入阶段一任务量"
 												onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
 												onafterpaste="this.value=this.value.replace(/[^\d]/g,'')">
@@ -445,6 +423,7 @@ var	base='<%=basePath%>';
 										<div class="input-group are-line">
 											<span class="input-group-addon "><i
 												class=" ph-icon ph-renwu"></i></span> <input type="text"
+												value="${achieve.numberSecond }"
 												class="form-control input-h J_numberSecond"
 												onblur="chkScendValue();" aria-describedby="basic-addon1"
 												placeholder="请输入阶段二任务量"
@@ -464,6 +443,7 @@ var	base='<%=basePath%>';
 										<div class="input-group are-line">
 											<span class="input-group-addon "><i
 												class=" ph-icon ph-renwu"></i></span> <input type="text"
+												value="${achieve.numberThird }"
 												class="form-control input-h J_numberThird"
 												onblur="chkThirdValue();" aria-describedby="basic-addon1"
 												placeholder="请输入阶段三任务量"
