@@ -138,7 +138,11 @@ public class RegionController {
     return new ResponseEntity<Integer>(region.getStarsLevel(), HttpStatus.OK);
   }
 
-
+  /**
+   * 更改星级
+   * @param id
+   * @param statsLevae
+   */
   @RequestMapping(value = "/updateStarsLeave", method = RequestMethod.POST)
   public void updateStarsLeave(String id,int statsLevae) {
     Region region = regionService.findListRegionbyid(id);
@@ -316,8 +320,6 @@ public class RegionController {
     } else {
       Subject subject = SecurityUtils.getSubject();
       User user = (User) subject.getPrincipal();
-      // com.wangge.buzmgt.teammember.entity.Manager manager =
-      // managerService.getById(user.getId());
       Manager manager1 = managerService.getById(user.getId());
       regionId = String.valueOf(manager1.getRegion().getId());
     }
