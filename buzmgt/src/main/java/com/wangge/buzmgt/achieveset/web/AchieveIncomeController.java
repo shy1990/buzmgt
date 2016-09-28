@@ -33,7 +33,7 @@ public class AchieveIncomeController {
 	public JsonResponse<List<Map<String, Object>>> test(@RequestParam String goodId, @RequestParam Long planId, @RequestParam String userId, @RequestParam String orderNo) {
 		JsonResponse<List<Map<String, Object>>> jsonResponse = new JsonResponse<>();
 		List<String> goodIds = Arrays.asList(goodId.split(","));
-		List<Map<String, Object>> achieveRule = achieveService.findRuleByGoods(goodIds, planId, userId, null);
+		List<Map<String, Object>> achieveRule = achieveService.findRuleByGoods(goodIds, planId, userId);
 		if (achieveRule.size() <= 0) {
 			jsonResponse.setErrorMsg("没有此商品的规则！");
 			return jsonResponse;

@@ -55,7 +55,7 @@ public class AchieveIncome implements Serializable{
   private Integer num ;// 数量
   private Float money ;// 金额
 	@Enumerated(EnumType.ORDINAL)
-	private PayStatusEnum status;//	订单状态（STOCK-已出库，PAY-已支付）TODO
+	private PayStatusEnum status;//	订单状态（STOCK-已出库，PAY-已支付）
 	private Date  createDate ;// 创建日期
   private FlagEnum  flag = FlagEnum.NORMAL ;// 是否删除：normal-正常，del-删除
   public Long getId() {
