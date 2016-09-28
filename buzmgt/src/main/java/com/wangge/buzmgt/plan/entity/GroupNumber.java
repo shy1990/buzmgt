@@ -30,7 +30,7 @@ public class GroupNumber implements Serializable{
   @Enumerated(EnumType.STRING)
   private FlagEnum flag = FlagEnum.NORMAL;//是否删除：normal-正常，del-删除
   
-  @OneToMany(cascade=CascadeType.ALL,  fetch = FetchType.EAGER)
+  @OneToMany(cascade=CascadeType.ALL)
   @JoinColumn(name="GROUP_ID")
   private List<GroupUser> groupUsers;
 

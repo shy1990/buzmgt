@@ -196,9 +196,10 @@ function initSelectMachineType() {
 		var machineType=$(this).val();
 		if(machineType == ""){
 			createBrandType("");
-			createGoods("");
+            createGoods("");
 			return false;
 		}
+        createGoods("");
 		findBrandType(machineType);
 	});
 }
@@ -244,8 +245,9 @@ function initSelectBrand() {
  * @param brandId
  */
 function findGoods(brandId){
+    var machineType = $('.J_machineType').val();
 	$.ajax({
-		url : base + 'goods/' + brandId,
+        url : base + 'goods/' + machineType + '/' + brandId,
 		type : 'GET',
 		dateType : 'JSON',
 		success : function(data) {
@@ -433,10 +435,10 @@ function numberAdd(opt, num){
 		y = "numberFirstAdd";
 		break;
 	case 1:
-		y = "numberScendAdd";
+		y = "numberSecondAdd";
 		break;
 	case 2:
-		y = "numberFirstAdd";
+		y = "numberThirdAdd";
 		break;
 
 	default:
