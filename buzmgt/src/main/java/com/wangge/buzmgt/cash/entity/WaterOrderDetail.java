@@ -1,21 +1,9 @@
 package com.wangge.buzmgt.cash.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.GenericGenerator;
 
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import javax.persistence.*;
+import java.io.Serializable;
 
 
 
@@ -34,7 +22,7 @@ public class WaterOrderDetail implements Serializable  {
   private static final long serialVersionUID = 1L;
   
   @Id
-  @GenericGenerator(name = "idgen", strategy = "increment")
+  @GenericGenerator(name = "idgen", strategy = "native")
   @GeneratedValue(generator = "idgen")
   private Integer id;
   @Column(name="SERIAL_NO")
