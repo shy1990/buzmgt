@@ -3,13 +3,7 @@ package com.wangge.buzmgt.achieveset.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -25,11 +19,22 @@ import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 *
  */
 @Entity
-@Table(name = "SYS_ACHIEVE_AWARD_INCOME" )
+@Table(name = "SYS_ACHIEVE_SET_INCOME" )
 public class AchieveIncome implements Serializable{
 
   private static final long serialVersionUID = 1L;
-  
+
+	public enum PayStatusEnum{
+		STOCK("已出库"),PAY("已支付");
+		private String name;
+		PayStatusEnum(String name) {
+			this.name = name;
+		}
+		public String getName() {
+			return name;
+		}
+	}
+
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
@@ -49,8 +54,9 @@ public class AchieveIncome implements Serializable{
   private String  orderNo  ;// 订单号
   private Integer num ;// 数量
   private Float money ;// 金额
-  private String  status  ;// 状态
-  private Date  createDate ;// 创建日期
+	@Enumerated(EnumType.ORDINAL)
+	private PayStatusEnum status;//	订单状态（STOCK-已出库，PAY-已支付）TODO
+	private Date  createDate ;// 创建日期
   private FlagEnum  flag = FlagEnum.NORMAL ;// 是否删除：normal-正常，del-删除
   public Long getId() {
     return id;
@@ -106,10 +112,10 @@ public class AchieveIncome implements Serializable{
   public void setMoney(Float money) {
     this.money = money;
   }
-  public String getStatus() {
+  public PayStatusEnum getStatus() {
     return status;
   }
-  public void setStatus(String status) {
+  public void setStatus(PayStatusEnum status) {
     this.status = status;
   }
   public Date getCreateDate() {

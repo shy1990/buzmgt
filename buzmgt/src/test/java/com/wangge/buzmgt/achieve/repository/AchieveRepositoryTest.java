@@ -88,8 +88,9 @@ public class AchieveRepositoryTest {
   public void find(){
     try {
       
-      Achieve achieve=achieveRepository.findOne(6L);
-      achieveRepository.delete(achieve);
+      Achieve achieve=achieveRepository.findOne(4L);
+//      achieveRepository.delete(achieve);
+	    System.out.println(achieve);
     } catch (Exception e) {
       e.printStackTrace();
     }

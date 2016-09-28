@@ -28,9 +28,7 @@ public class AchieveIncomeServerTest {
   private AchieveService achieveService;
   @Test
   public void test(){
-    Achieve achieve = achieveService.findOne(2L);
-	  achieve.getGroupNumbers();
-	  achieve.getRewardPunishRules();
+    Achieve achieve = achieveService.findOne(4L);
 	  System.out.println(achieve);
 	  List<Map<String, Object>> maps = new ArrayList<>();
     Map<String, Object> map = new HashMap<>();
@@ -43,4 +41,5 @@ public class AchieveIncomeServerTest {
     boolean msg = achieveIncomeService.createAchieveIncomeBy(maps, orderNo, UserId);
     System.out.println(msg);
   }
+
 }

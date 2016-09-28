@@ -3,6 +3,7 @@ package com.wangge.buzmgt.achieveset.service;
 import java.util.List;
 import java.util.Map;
 
+import com.wangge.buzmgt.achieveset.entity.Achieve;
 import org.springframework.data.domain.Sort;
 
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
@@ -69,19 +70,25 @@ public interface AchieveIncomeService {
   * @throws
    */
   AchieveIncome save(AchieveIncome achieveIncomes);
-  
+
+	/**
+	 * 已付款的调用的产生达量收益
+	 * @param maps
+	 * @param orderNo
+	 * @param UserId
+	 * @return
+	 */
+	boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus);
+
   /**
-   * 
-  * @Title: createAchieveIncomeBy 
-  * @Description: 
-  * @param @param List<Map<String,Object>> achieves
-  * map={"goodId":"", "rule": achieve, "num": int}
-  * 
+   *
+  * @Title: createAchieveIncomeBy
+  * @Description: 已出库请款下调用的实时
   * @param @param orderNo
   * @param @param UserId
-  * @param @return    设定文件 
-  * @return boolean    返回类型 
+  * @param @return    设定文件
+  * @return boolean    返回类型
   * @throws
    */
-  boolean createAchieveIncomeBy(List<Map<String,Object>> maps, String orderNo, String UserId);
+  boolean createAchieveIncomeByStock (Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus);
 }
