@@ -6,49 +6,40 @@ import com.wangge.buzmgt.goods.entity.Goods;
 import com.wangge.buzmgt.plan.entity.GroupNumber;
 import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.plan.entity.RewardPunishRule;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
- *
+ * @author ChenGuop
  * @ClassName: Achieve
  * @Description: 达量设置
- * @author ChenGuop
  * @date 2016年8月23日 下午6:52:22
- *
  */
 @Entity
 @Table(name = "SYS_ACHIEVE_NUMBER_SET")
-//@NamedEntityGraph(
-//    name = "graph.Achieve",
-//
-//    attributeNodes={
-//        @NamedAttributeNode(value="machineType"),
-//        @NamedAttributeNode(value="brand"),
-//        @NamedAttributeNode(value="good"),
-//        @NamedAttributeNode(value="rewardPunishRules"),
-//        @NamedAttributeNode(value="groupNumbers")
-//    }
-//)
+@NamedEntityGraph(
+				name = "graph.Achieve.groupNumbers",
+				attributeNodes = @NamedAttributeNode(value = "groupNumbers", subgraph = "graph.Achieve.groupNumbers.groupUsers"),
+				subgraphs = @NamedSubgraph(name = "graph.Achieve.groupNumbers.groupUsers", attributeNodes = @NamedAttributeNode("groupUsers"))
+)
 public class Achieve implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static enum AchieveStatusEnum{
-		BACK("驳回"),WAIT("待审核"),OVER("已审核");
+	public static enum AchieveStatusEnum {
+		BACK("驳回"), WAIT("待审核"), OVER("已审核");
 		private String name;
-		AchieveStatusEnum(String name){
-			this.name=name;
+
+		AchieveStatusEnum(String name) {
+			this.name = name;
 		}
-		public String getName(){
+
+		public String getName() {
 			return this.name;
 		}
 	}
@@ -88,17 +79,17 @@ public class Achieve implements Serializable {
 	private String planId;
 
 	@OrderBy(value = "id ASC ")
-	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name="SYS_ACHIEVE_SET_RULE",
-					joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
-					inverseJoinColumns=@JoinColumn(name="RULE_ID"))
-	private List<RewardPunishRule> rewardPunishRules;//奖罚规则
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinTable(name = "SYS_ACHIEVE_SET_RULE",
+					joinColumns = @JoinColumn(name = "SYS_ACHIEVE_ID"),
+					inverseJoinColumns = @JoinColumn(name = "RULE_ID"))
+	private Set<RewardPunishRule> rewardPunishRules;//奖罚规则
 
-	@OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name="SYS_ACHIEVE_SET_GROUP",
-					joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
-					inverseJoinColumns=@JoinColumn(name="GROUPING_ID"))
-	private List<GroupNumber> groupNumbers; //人员分组设置
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinTable(name = "SYS_ACHIEVE_SET_GROUP",
+					joinColumns = @JoinColumn(name = "SYS_ACHIEVE_ID"),
+					inverseJoinColumns = @JoinColumn(name = "GROUPING_ID"))
+	private Set<GroupNumber> groupNumbers; //人员分组设置
 
 	public Long getAchieveId() {
 		return achieveId;
@@ -252,25 +243,25 @@ public class Achieve implements Serializable {
 		this.planId = planId;
 	}
 
-	public List<RewardPunishRule> getRewardPunishRules() {
+	public Set<RewardPunishRule> getRewardPunishRules() {
 		return rewardPunishRules;
 	}
 
-	public void setRewardPunishRules(List<RewardPunishRule> rewardPunishRules) {
+	public void setRewardPunishRules(Set<RewardPunishRule> rewardPunishRules) {
 		this.rewardPunishRules = rewardPunishRules;
 	}
 
-	public List<GroupNumber> getGroupNumbers() {
+	public Set<GroupNumber> getGroupNumbers() {
 		return groupNumbers;
 	}
 
-	public void setGroupNumbers(List<GroupNumber> groupNumbers) {
+	public void setGroupNumbers(Set<GroupNumber> groupNumbers) {
 		this.groupNumbers = groupNumbers;
 	}
 
 	@Override
 	public String toString() {
-		return "Achieve [achieveId=" + achieveId + ", machineTypeId=" + machineTypeId +  ", brandId="
+		return "Achieve [achieveId=" + achieveId + ", machineTypeId=" + machineTypeId + ", brandId="
 						+ brandId + ", goodId=" + goodId + ", numberFirst=" + numberFirst + ", numberSecond="
 						+ numberSecond + ", numberThird=" + numberThird + ", startDate=" + startDate + ", endDate=" + endDate
 						+ ", issuingDate=" + issuingDate + ", auditor=" + auditor + ", remark=" + remark + ", createDate=" + createDate

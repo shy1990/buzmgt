@@ -24,9 +24,8 @@ public class AchieveServerTest {
   @Test
   public void test(){
     List<String> goodIds = new ArrayList<>();
-    goodIds.add("436c68ee8d884ab5a92a7ccda5f13405");
-    goodIds.add("88bd9dc743cd4bafad198153024469d3");
-    List<Map<String, Object>> hehe = achieveService.findRuleByGoods(goodIds, 12L, "123123412");
+    goodIds.add("9b53d1f1ec4c42c7ae31a65944239f19");
+    List<Map<String, Object>> hehe = achieveService.findRuleByGoods(goodIds, 20L, "201609291428564");
     System.out.println(hehe);
   }
 }

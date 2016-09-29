@@ -57,7 +57,10 @@ public class AchieveIncome implements Serializable{
 	@Enumerated(EnumType.ORDINAL)
 	private PayStatusEnum status;//	订单状态（STOCK-已出库，PAY-已支付）
 	private Date  createDate ;// 创建日期
+	@Enumerated(EnumType.STRING)
   private FlagEnum  flag = FlagEnum.NORMAL ;// 是否删除：normal-正常，del-删除
+	private Long planId;//主方案ID
+
   public Long getId() {
     return id;
   }
@@ -130,7 +133,14 @@ public class AchieveIncome implements Serializable{
   public void setFlag(FlagEnum flag) {
     this.flag = flag;
   }
-  @Override
+	public void setPlanId(Long planId) {
+		this.planId = planId;
+	}
+	public Long getPlanId() {
+		return planId;
+	}
+
+	@Override
   public String toString() {
     return "AchieveIncome [id=" + id + ", userId=" + userId + ", planUser=" + planUser + ", achieveId=" + achieveId
         + ", achieve=" + achieve + ", goodId=" + goodId + ", orderNo=" + orderNo + ", num=" + num + ", money=" + money

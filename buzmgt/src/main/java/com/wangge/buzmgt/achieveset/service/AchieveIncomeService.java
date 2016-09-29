@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.wangge.buzmgt.achieveset.entity.Achieve;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
@@ -51,7 +53,17 @@ public interface AchieveIncomeService {
   * @throws
    */
   List<AchieveIncome> findAll(Map<String, Object> spec, Sort sort);
-  
+
+	/**
+	 * @Title: findAll
+	 * @Description: 条件查询列表
+	 * @param @param spec
+	 * @param @param sort
+	 * @param @return    设定文件
+	 * @return List<AchieveIncome>    返回类型
+	 */
+  Page<AchieveIncome> findAll(Map<String, Object> spec, Pageable pageable);
+
   /**
    * 
   * @Title: save 
@@ -78,7 +90,7 @@ public interface AchieveIncomeService {
 	 * @param UserId
 	 * @return
 	 */
-	boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus);
+	boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId);
 
   /**
    *
@@ -90,5 +102,5 @@ public interface AchieveIncomeService {
   * @return boolean    返回类型
   * @throws
    */
-  boolean createAchieveIncomeByStock (Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus);
+  boolean createAchieveIncomeByStock (Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId);
 }
