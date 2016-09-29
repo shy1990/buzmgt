@@ -3,6 +3,7 @@ package com.wangge.buzmgt.teammember.service;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import org.springframework.data.domain.Page;
 
@@ -36,4 +37,10 @@ public interface SalesManService {
     Set<SalesMan> findForTargetByReginId(String regionId);
 
     SalesMan findByRegionAndisPrimaryAccount(Region region);
+
+    String addSalesmanLevel(String smallSales,String stuSalesMin,String stuSalesMax,String bigStuSales);
+
+    SalesMan save(SalesMan salesMan);
+
+    List<SalesmanLevel> findAll();
 }

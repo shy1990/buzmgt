@@ -80,4 +80,9 @@ public class PriceRangeServiceImpl implements PriceRangeService {
         priceRangeRepository.save(priceRange);
 
     }
+
+    @Override
+    public PriceRange findById(Long id) {
+        return priceRangeRepository.findOne(id);
+    }
 }

@@ -13,4 +13,6 @@ public interface PriceRangeService {
 
     //审核小区间
     public void reviewPriceRange(PriceRange priceRange, String status);
+
+    PriceRange findById(Long id);
 }

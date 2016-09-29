@@ -1,19 +1,41 @@
 var achieveTotal = 0;
+var brandTotal = 0;
 $(function() {
 	initExcelExport();// 初始化导出excel
 	initSearchData();
 	findAchieveList();// 查询列表
 	initFunction();
 	initExcelExport();
+	findBrandIncomeList();
 })
 /**
  * 跳转添加页面 获取planId和machineType
  */
 function add(){
 	var planId = $("#planId").val();
-	var machineType = $(".J_MachineType li.active").attr('title');
+	var machineType = findMachineType();
 	window.location.href = base + "achieve/add?planId="+planId+"&machineType="+machineType  
 }
+
+/**
+ * 跳转品牌型号添加页面 获取planId和machineType
+ */
+function add_brand(){
+	var planId = $("#planId").val();
+	var machineType = findMachineType();
+	window.location.href = base + "brandIncome/add?planId="+planId+"&machineType="+machineType;
+}
+
+function findTab(){
+	var tab = $('#myTab li.active').attr('data-title');
+	return tab;
+}
+
+function findMachineType(){
+	var machineType = $(".J_MachineType li.active").attr('title');
+	return machineType;
+}
+
 /**
  * 跳转添加页面 获取planId和machineType
  */
@@ -49,7 +71,8 @@ function delAchieve(achieveId){
  * 检索模糊查询
  */
 function goSearch() {
-	var goodName = $('#searchGoodsname').val();
+	var tab = findTab();
+	var goodName = $('.input-search').val();
 	if (!isEmpty(goodName)) {
 		$.ajax({
 			url:"/goods/likeBrandName?name="+goodName,
@@ -60,7 +83,16 @@ function goSearch() {
 				if(data.length>0){
 					var ids=data.join(',');
 					SearchData['sc_IN_brand.id'] = ids;
-					findAchieveList();
+					switch (tab) {
+						case 'achieve':
+							findAchieveList();
+							break;
+						case 'brandIncome':
+							findBrandIncomeList();
+							break;
+						default:
+							break;
+					}
 					delete SearchData['sc_IN_brand.id'];
 					return false;
 				}
@@ -78,9 +110,10 @@ function initFunction(){
 	$(".J_MachineType li").on("click",function(){
 		$(this).addClass("active");
 		$(this).siblings("li").removeClass("active");
-		var $machineType=$(".J_MachineType li.active").attr('title');
+		var $machineType=findMachineType();
 		SearchData['sc_EQ_machineType.id'] = $machineType;
 		findAchieveList();
+		findBrandIncomeList();
 	});
 }
 /**
@@ -94,7 +127,17 @@ function initExcelExport() {
 				SearchData['sc_EQ_planId'] = $planId;
 				var param = parseParam(SearchData);
 				delete SearchData['sc_EQ_planId'];
-				window.location.href = base + "achieve/export" +"?" + param;
+				var tab = findTab();
+				switch (tab) {
+					case 'achieve':
+						window.location.href = base + "achieve/export" +"?" + param;
+						break;
+					case 'brandIncome':
+						window.location.href = base + "brandIncome/export" +"?" + param;
+						break;
+					default:
+						break;
+				}
 			});
 }
 /**
@@ -145,13 +188,14 @@ function findAchieveList(page) {
 		}
 	})
 }
+
 // 注册索引+1的helper
 var handleHelper = Handlebars.registerHelper("addOne", function(index) {
 	// 返回+1之后的结果
 	return index + 1;
 });
 /**
- * 生成油补统计列表
+ * 生成达量统计列表
  * 
  * @param data
  */
@@ -160,8 +204,9 @@ function createAchieveTable(data) {
 	var myTemplate = Handlebars.compile($("#achieve-table-template").html());
 	$('#achieveList').html(myTemplate(data));
 }
+
 /**
- * 分页
+ * 达量分页
  * 
  * @param data
  */
@@ -176,6 +221,120 @@ function initPaging(data) {
 		}
 	});
 }
+
+/**
+ * 查询进行中的品牌型号列表
+ * @param page
+ */
+function findBrandIncomeList(page) {
+	page = page == null || page == '' ? 0 : page;
+	SearchData['page'] = page;
+	var $planId = $("#planId").val();
+	$.ajax({
+		url : "/brandIncome/" + $planId,
+		type : "GET",
+		data : SearchData,
+		dataType : "json",
+		success : function(brandIncomeData) {
+			createBrandIncomeTable(brandIncomeData);
+			var searchTotal = brandIncomeData.totalElements;
+			if (searchTotal != brandTotal || searchTotal == 0) {
+				brandTotal = searchTotal;
+
+				initBrandPaging(brandIncomeData);
+			}
+		},
+		error : function() {
+			alert("系统异常，请稍后重试！");
+		}
+	})
+}
+
+/**
+ * 生成品牌型号统计列表
+ *
+ * @param data
+ */
+function createBrandIncomeTable(data) {
+	var myTemplate = Handlebars.compile($("#brand-table-template").html());
+	$('#brandIncomeList').html(myTemplate(data));
+}
+
+/**
+ * 品牌型号分页
+ *
+ * @param data
+ */
+function initBrandPaging(data) {
+	var totalCount = data.totalElements, limit = data.size;
+	$('#initBrandPager').extendPagination({
+		totalCount : totalCount,
+		showCount : 5,
+		limit : limit,
+		callback : function(curr, limit, totalCount) {
+			findBrandIncomeList(curr - 1);
+		}
+	});
+}
+
+/**
+ * 品牌型号方案查看
+ * @param brandId
+ */
+function brandLook(brandIncomeId) {
+	window.location.href = base + "brandIncome/show/" + brandIncomeId;
+}
+
+/**
+ * 品牌型号终止弹窗
+ * @param brandIncomeId
+ */
+function brandStop(brandIncomeId) {
+	$('#brandStop').modal({
+		keyboard: false
+	})
+	$("#brandId").val(brandIncomeId);
+}
+
+/**
+ * 品牌型号终止
+ */
+function stop() {
+	var $brandIncomeId = $("#brandId").val();
+	$.ajax({
+		url : "/brandIncome/stop/" + $brandIncomeId,
+		type : "put",
+		dataType : "json",
+		success : function(data) {
+			$('#brandStop').modal('hide');
+			if (data.status == "success"){
+				alert(data.successMsg);
+			}else {
+				alert(data.errorMsg);
+			}
+		},
+		error : function() {
+			alert("系统异常，请稍后重试！");
+		}
+	})
+}
+
+/**
+ * 品牌型号设置记录
+ */
+function setRecord() {
+	var planId = $("#planId").val();
+	var machineType=findMachineType();
+	window.location.href = base + "brandIncome/record?planId="+planId+"&machineType="+machineType;
+}
+
+/**
+ * 品牌型号查看进程
+ */
+function brandProcess(brandId) {
+	window.location.href = base + "/brandIncome/process/"+brandId;
+}
+
 Handlebars.registerHelper('formDate', function(value) {
 	if (value == null || value == "") {
 		return "----";

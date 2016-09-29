@@ -35,7 +35,7 @@
 					<img src="static/img/fan{{getImg @index}}.png" alt="">
 				</div>
 				<div class="col-sm-7">
-					<span class="text-fa-1">{{maintitle}}</span>
+					<a href="/achieve/list?planId=1"><span class="text-fa-1">{{maintitle}}</span></a>
 				</div>
 				<div class="col-sm-2 icon-fl-right">
 					<a  href="/mainPlan/update/{{id}}" ><i
