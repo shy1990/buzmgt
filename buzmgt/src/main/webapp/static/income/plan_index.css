@@ -292,6 +292,7 @@ td.reason{
 
 .text-lv{
     color: #02ae88;
+    text-decoration:underline
 }
 .text-zi{
     color: #ee038d;
@@ -431,4 +432,18 @@ td.reason{
             float: left;
             margin-top: 20px;
             margin-left: 180px;
+        }
+.modal-blue .modal-header {
+            position: relative;
+            height: 50px;
+            background: #3C9FD8;
+            color: #FFF;
+            padding: 10px;
+        }
+
+.modal-blue .modal-title {
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            line-height: 30px;
         }

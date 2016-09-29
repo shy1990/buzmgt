@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.achieve.service;
+package com.wangge.buzmgt.achieveaward.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,53 +26,57 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.wangge.buzmgt.achieve.entity.Achieve;
-import com.wangge.buzmgt.achieve.entity.Achieve.AchieveStatusEnum;
-import com.wangge.buzmgt.achieve.repository.AchieveRepository;
+import com.wangge.buzmgt.achieveaward.entity.Award;
+import com.wangge.buzmgt.achieveaward.entity.Award.AwardStatusEnum;
+import com.wangge.buzmgt.achieveaward.repository.AwardRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
-import com.wangge.buzmgt.log.entity.Log.EventType;
-import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.util.SearchFilter;
+/**
+ * 
+* @ClassName: AwardServiceImpl
+* @Description: 达量奖励收益业务层处理
+* @author ChenGuop
+* @date 2016年9月14日 上午11:17:53
+*
+ */
 @Service
-public class AchieveServiceImpl implements AchieveService {
+public class AwardServiceImpl implements AwardService {
 
   @Autowired
-  private AchieveRepository achieveRepository;
-  @Autowired
-  private LogService logService;
+  private AwardRepository awardRepository;
   
-  public List<Achieve> findAll(Map<String,Object> searchParams){
+  public List<Award> findAll(Map<String,Object> searchParams){
     return this.findAll(searchParams, new Sort(Direction.DESC, "createDate"));
   }
   /**
    * 处理条件参数
    */
-  public Specification<Achieve> dispose(Map<String, Object> searchParams){
+  public Specification<Award> dispose(Map<String, Object> searchParams){
     //过滤删除
     searchParams.put("EQ_flag", "NORMAL");
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<Achieve> spec = achieveSearchFilter(filters.values(), Achieve.class);
+    Specification<Award> spec = awardSearchFilter(filters.values(), Award.class);
     return spec;
   }
   @Override
-  public List<Achieve> findAll(Map<String, Object> searchParams, Sort sort) {
+  public List<Award> findAll(Map<String, Object> searchParams, Sort sort) {
     if(ObjectUtils.equals(sort, null)){
       sort =  new Sort(Direction.DESC, "createDate");
     }
-    Specification<Achieve> spec = dispose(searchParams);
-    return achieveRepository.findAll(spec, sort);
+    Specification<Award> spec = dispose(searchParams);
+    return awardRepository.findAll(spec, sort);
   }
 
   @Override
-  public Page<Achieve> findAll(Map<String, Object> searchParams, Pageable pageable) {
-    Specification<Achieve> spec = dispose(searchParams);
-    return achieveRepository.findAll(spec, pageable);
+  public Page<Award> findAll(Map<String, Object> searchParams, Pageable pageable) {
+    Specification<Award> spec = dispose(searchParams);
+    return awardRepository.findAll(spec, pageable);
   }
 
   @Override
-  public List<Achieve> findByMachineTypeAndPlanId(String machineType,String planId) {
+  public List<Award> findByMachineTypeAndPlanId(String machineType,String planId) {
     Map<String, Object> searchParams = new HashMap<>();
     searchParams.put("EQ_machineType", machineType);
     searchParams.put("EQ_planId", planId);
@@ -80,21 +84,22 @@ public class AchieveServiceImpl implements AchieveService {
   }
   @Override
   @Transactional
-  public void save(Achieve achieve) {
+  public void save(Award award) {
     try {
-      achieveRepository.save(achieve);
+      awardRepository.save(award);
     } catch (Exception e) {
       LogUtil.error(e.getMessage(), e);
       throw e;
     }
   }
   @Override
-  public Achieve findOne(Long id){
-    return achieveRepository.findOne(id);
+  public Award findOne(Long id){
+    return awardRepository.findOne(id);
   }
-  public static Specification<Achieve> achieveSearchFilter(final Collection<SearchFilter> filters,
-      final Class<Achieve> entityClazz){
-    return new Specification<Achieve>() {
+
+  public static Specification<Award> awardSearchFilter(final Collection<SearchFilter> filters,
+      final Class<Award> entityClazz){
+    return new Specification<Award>() {
 
       private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
 
@@ -106,13 +111,13 @@ public class AchieveServiceImpl implements AchieveService {
 
       private final static String TYPE_FlAG_TYPE = "com.wangge.buzmgt.common.FlagEnum";
       
-      private final static String TYPE_ACHIEVE_STATUS = "com.wangge.buzmgt.achieve.entity.Achieve$AchieveStatusEnum";
+      private final static String TYPE_ACHIEVE_STATUS = "com.wangge.buzmgt.achieveaward.entity.Award$AwardStatusEnum";
       
       private final static String TYPE_DATE = "java.util.Date";
       
       @SuppressWarnings({"unchecked","rawtypes"})
       @Override
-      public Predicate toPredicate(Root<Achieve> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+      public Predicate toPredicate(Root<Award> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         if(CollectionUtils.isNotEmpty(filters)){
           List<Predicate> predicates = new ArrayList<>();
           for(SearchFilter filter : filters){
@@ -169,7 +174,7 @@ public class AchieveServiceImpl implements AchieveService {
                  */
                 try {
                   String status = filter.value.toString();
-                  AchieveStatusEnum flagEnum = AchieveStatusEnum.valueOf(status);
+                  AwardStatusEnum flagEnum = AwardStatusEnum.valueOf(status);
                   filter.value = flagEnum;
                 } catch (Exception e) {
                   LogUtil.error(e.getMessage(), e);

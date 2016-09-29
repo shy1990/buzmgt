@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.achieve.repository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,8 +13,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.wangge.buzmgt.BuzmgtApplication;
-import com.wangge.buzmgt.achieve.entity.Achieve;
-import com.wangge.buzmgt.achieve.entity.Achieve.AchieveStatusEnum;
+import com.wangge.buzmgt.achieveset.entity.Achieve;
+import com.wangge.buzmgt.achieveset.entity.Achieve.AchieveStatusEnum;
+import com.wangge.buzmgt.achieveset.repository.AchieveIncomeRepository;
+import com.wangge.buzmgt.achieveset.repository.AchieveRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.plan.entity.MachineType;
@@ -26,6 +29,8 @@ import com.wangge.buzmgt.plan.repository.MachineTypeRepository;
 public class AchieveRepositoryTest {
   @Autowired
   private AchieveRepository achieveRepository;
+  @Autowired
+  private AchieveIncomeRepository achieveIncomeRepository;
   @Autowired
   private MachineTypeRepository machineTypeRepository;
 
@@ -83,13 +88,16 @@ public class AchieveRepositoryTest {
   public void find(){
     try {
       
-      Achieve achieve=achieveRepository.findOne(6L);
-      achieveRepository.delete(achieve);
+      Achieve achieve=achieveRepository.findOne(4L);
+//      achieveRepository.delete(achieve);
+	    System.out.println(achieve);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
-  public void delete(){
-    
+  @Test
+  public void test1(){
+    BigDecimal money=achieveIncomeRepository.sumByAchieveId(1L);
+    System.out.println(money);
   }
 }

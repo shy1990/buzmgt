@@ -28,10 +28,6 @@ public interface MainPlanService {
   
   Map<String, Object> findAll(String regionId, Pageable pageReq);
   
-  List<Object> findByUser();
-  
-  void modifyUser();
-  
   /**
    * getAllMachineType:获得所有的机型分类. <br/>
    * 
@@ -50,13 +46,16 @@ public interface MainPlanService {
    */
   JSONArray getAllBrandType();
   
-  /** 
-   * getAllBrandType:根据机型查询品牌. <br/> 
+  /**
+   * getAllBrandType:根据机型查询品牌. <br/>
+   * 
    * @author ChenGoup
-   * @return 
-   * @since JDK 1.8 
-   */  
-  List<BrandType> findCodeByMachineType(String machineType);  /**
+   * @return
+   * @since JDK 1.8
+   */
+  List<BrandType> findCodeByMachineType(String machineType);
+  
+  /**
    * save:保存方案. <br/>
    * 
    * @author yangqc
@@ -95,22 +94,23 @@ public interface MainPlanService {
    * @param pageReq
    * @param searchParams
    * @return
-   * @throws Exception 
+   * @throws Exception
    * @since JDK 1.8
    */
   Page<PlanUserVo> getUserpage(Pageable pageReq, Map<String, Object> searchParams) throws Exception;
-
-  /** 
-    * 保存主计划的用户 <br/> 
-    * @author yangqc 
-    * @param plan
-    * @param ulist 
-   * @throws Exception 
-    * @since JDK 1.8 
-    */  
+  
+  /**
+   * 保存主计划的用户 <br/>
+   * 
+   * @author yangqc
+   * @param plan
+   * @param ulist
+   * @throws Exception
+   * @since JDK 1.8
+   */
   Map<String, Object> saveUser(MainIncomePlan plan, List<IncomeMainplanUsers> ulist) throws Exception;
-
+  
   void deleteUser(Map<String, Object> user) throws Exception;
-
+  
   void alterUserFlag(Long planUserId);
 }

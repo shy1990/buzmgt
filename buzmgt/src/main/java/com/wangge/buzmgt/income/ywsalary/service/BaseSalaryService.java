@@ -48,6 +48,10 @@ public interface BaseSalaryService {
   void deleteSalaryByUser(String userId) throws ParseException;
 
   /** 
+    * 计算某个业务员本月的工资. <br/> 
+    */  
+  Double calculateThisMonthBasicSalary(String salesId) throws ParseException;
+  /** 
     * update:薪资记录更新处理处理. <br/> 
     * @author yangqc 
     * @param baseSalary 旧工资记录
@@ -59,5 +63,7 @@ public interface BaseSalaryService {
   public void update(BaseSalary baseSalary, Double salary, String upDate) throws Exception;
 
   public List<Map<String, Object>> findAll1(Map<String, Object> searchParams, Pageable pageRequest);
+
+  void calcuThisMonthSalarys() throws  Exception;
   
 }

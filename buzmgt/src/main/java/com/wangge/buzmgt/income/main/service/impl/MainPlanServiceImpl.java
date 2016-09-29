@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.income.main.service;
+package com.wangge.buzmgt.income.main.service.impl;
 
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
@@ -6,6 +6,7 @@ import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
+import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
 import com.wangge.buzmgt.income.main.vo.PlanUserVo;
@@ -31,6 +32,13 @@ import org.springframework.ui.Model;
 import javax.persistence.criteria.Predicate;
 import java.util.*;
 
+/**
+ * 人员的删除和添加都从当日算起,有个插入时间; 计算执行时间--插入时间之间的东西 ClassName: MainPlanServiceImpl <br/>
+ * 
+ * @author yangqc
+ * @version
+ * @since JDK 1.8
+ */
 @Service
 public class MainPlanServiceImpl implements MainPlanService {
   @Autowired
@@ -45,18 +53,6 @@ public class MainPlanServiceImpl implements MainPlanService {
   PlanUserVoRepository planUserVorep;
   @Autowired
   JobRepository jobRep;
-  
-  @Override
-  public List<Object> findByUser() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
-  @Override
-  public void modifyUser() {
-    // TODO Auto-generated method stub
-    
-  }
   
   @Override
   public Map<String, Object> findAll(String regionId, Pageable pageReq) {
@@ -136,17 +132,28 @@ public class MainPlanServiceImpl implements MainPlanService {
     User author = EnvironmentUtils.getUser();
     String authorId = author.getId();
     String authorName = author.getUsername();
+    Map<String, Object> remap = new HashMap<>();
     try {
       plan.setAuthorId(authorId);
       plan.setAuthorName(authorName);
       plan = mainPlanRep.save(plan);
       List<IncomeMainplanUsers> usList = plan.getUsers();
+      filterCheckedFailedUser(usList, remap);
       String userIds = "";
+      Date now = new Date();
+      List<Jobtask> jobList = new ArrayList<>();
       for (IncomeMainplanUsers u : usList) {
         u.setMainplan(plan);
+        if (now.getTime() >= u.getCreatetime().getTime()) {
+          // TODO 计算之前的订单
+          Jobtask jobtask = new Jobtask(12, u.getSalesmanId(), plan.getId(), u.getCreatetime());
+          jobList.add(jobtask);
+        }
         userIds += u.getSalesmanId() + ",";
         u.setAuthorId(authorId);
       }
+      if (jobList.size() > 1)
+        jobRep.save(jobList);
       LogUtil.info("用户" + author.getUsername() + "---" + author.getId() + "创建了一个主方案--" + plan.getMaintitle()
           + "并添加如下人员:" + userIds);
     } catch (Exception e) {
@@ -156,7 +163,8 @@ public class MainPlanServiceImpl implements MainPlanService {
   }
   
   /**
-   * 1.删除主方案从本天生效 TODO 2.重新计算当天收益
+   * 1.删除主方案从本天生效<br/>
+   * TODO 2.重新计算当天收益
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -170,7 +178,7 @@ public class MainPlanServiceImpl implements MainPlanService {
       plan.setState(FlagEnum.DEL);
       plan.setFqtime(new Date());
       
-      Jobtask task = new Jobtask(1, plan.getId(), new Date());
+      Jobtask task = new Jobtask(0, plan.getId(), new Date());
       jobRep.save(task);
       LogUtil.info("用户" + authorName + "---" + authorId + "删除了一个主方案--" + plan.getMaintitle());
     } catch (Exception e) {
@@ -218,9 +226,9 @@ public class MainPlanServiceImpl implements MainPlanService {
       Jobtask task = null;
       if (fqtime.getTime() <= now.getTime()) {
         standardUser.setState(FlagEnum.DEL);
-        task = new Jobtask(1, standardUser.getId(), fqtime);
+        task = new Jobtask(10, standardUser.getId(), fqtime);
       } else {
-        task = new Jobtask(2, standardUser.getId(), fqtime);
+        task = new Jobtask(11, standardUser.getId(), fqtime);
       }
       task.setKeyid(id);
       jobRep.save(task);
@@ -263,12 +271,25 @@ public class MainPlanServiceImpl implements MainPlanService {
     String authorName = author.getUsername();
     try {
       String users = "";
+      filterCheckedFailedUser(ulist, remap);
+      Date now = new Date();
+      List<Jobtask> jobList = new ArrayList<>();
       for (IncomeMainplanUsers usr : ulist) {
         usr.setMainplan(plan);
         usr.setAuthorId(authorId);
+        usr.setPlanId(plan.getId());
+        // 计算以前的订单
+        if (now.getTime() >= usr.getCreatetime().getTime()) {
+          // TODO 计算之前的订单
+          Jobtask jobtask = new Jobtask(12, usr.getSalesmanId(), plan.getId(), usr.getCreatetime());
+          jobList.add(jobtask);
+        }
         users += usr.getSalesmanId() + ",";
       }
       planUserRep.save(ulist);
+      if (jobList.size() > 1)
+        jobRep.save(jobList);
+      
       LogUtil.info("用户" + authorName + "---" + authorId + "给主方案--" + plan.getMaintitle() + "添加了" + ulist.size() + "个人员:"
           + users);
     } catch (Exception e) {
@@ -277,6 +298,47 @@ public class MainPlanServiceImpl implements MainPlanService {
     }
     return remap;
   }
+  
+  /**
+   * filterCheckedFailedUser:剔除新建时间上无法通过校验的用户. <br/>
+   * 
+   * @author yangqc
+   * @param ulist
+   * @param remap
+   * @since JDK 1.8
+   */
+  private void filterCheckedFailedUser(List<IncomeMainplanUsers> ulist, Map<String, Object> remap) {
+    String names = "";
+    List<IncomeMainplanUsers> cancleList = new ArrayList<>();
+    // 将创建日期小于上个删除日期的业务员剔除
+    for (IncomeMainplanUsers usr : ulist) {
+      Optional<Date> fqtimeOp = planUserRep.findMaxFqtimeBySalesmanId(usr.getSalesmanId());
+      fqtimeOp.ifPresent(fqtime -> {
+        if (usr.getCreatetime().getTime() < fqtime.getTime()) {
+          cancleList.add(usr);
+        }
+      });
+    }
+    for (IncomeMainplanUsers usr : cancleList) {
+      names += usr.getSalesmanname() + ",";
+    }
+    ulist.removeAll(cancleList);
+    if (names.length() > 2)
+      names = names.substring(0, names.length() - 1);
+    if (cancleList.size() > 0) {
+      String msg = "新增" + ulist.size() + "个用户,然" + names + "等" + cancleList.size() + "个业务员的新增时间与最新的删除时间冲突,请重新添加!!";
+      remap.put("msg", msg);
+    }
+  }
+  
+  /**
+   * getCheckFailedUserList:. <br/>
+   * 
+   * @author yangqc
+   * @param ulist
+   * @return
+   * @since JDK 1.8
+   */
   
   @Override
   public void alterUserFlag(Long planUserId) {

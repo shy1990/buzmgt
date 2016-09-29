@@ -47,10 +47,6 @@ public class JobService {
     mainIncomeRep.initMonthSalary();
   }
   
-  @Transactional(rollbackFor = Exception.class)
-  public void initDailyOilCost() {
-    mainIncomeRep.calculateOilCost();
-  }
   
   public void doTask() {
     List<Jobtask> jobList = jobRep.defaltfindAll(new Date());
@@ -118,7 +114,7 @@ public class JobService {
       throws NumberFormatException {
     MainIncome main = mainIncomeRep.findBySalesman_IdAndMonth(userId, thisMonth);
     if (main.getState() != FlagEnum.DEL) {
-      List<Object> subPlanList = incomeSubRep.getMainPlainOrdersByUserAndDate(planId, execTime, userId, thisMonth);
+      List<Object> subPlanList = incomeSubRep.getMainPlanOrdersByUserAndDate(planId, execTime, userId, thisMonth);
       int busisum = 0;
       int reachIncome = 0;
       for (Object o : subPlanList) {

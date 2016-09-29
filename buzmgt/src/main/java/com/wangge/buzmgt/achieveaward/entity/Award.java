@@ -1,12 +1,10 @@
-package com.wangge.buzmgt.achieve.entity;
+package com.wangge.buzmgt.achieveaward.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,18 +12,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.wangge.buzmgt.common.FlagEnum;
-import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.goods.entity.Brand;
 import com.wangge.buzmgt.goods.entity.Goods;
 import com.wangge.buzmgt.plan.entity.GroupNumber;
@@ -34,33 +26,22 @@ import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 
 /**
  * 
- * @ClassName: Achieve
- * @Description: 达量设置
- * @author ChenGuop
- * @date 2016年8月23日 下午6:52:22
- *
+* @ClassName: Award
+* @Description: 达量奖励设置
+* @author ChenGuop
+* @date 2016年9月14日 上午11:17:21
+*
  */
 @Entity
-@Table(name = "SYS_ACHIEVE_NUMBER_SET")
-//@NamedEntityGraph(
-//    name = "graph.Achieve",
-//    
-//    attributeNodes={
-//        @NamedAttributeNode(value="machineType"),
-//        @NamedAttributeNode(value="brand"),
-//        @NamedAttributeNode(value="good"),
-//        @NamedAttributeNode(value="rewardPunishRules"),
-//        @NamedAttributeNode(value="groupNumbers")
-//    }
-//)
-public class Achieve implements Serializable {
+@Table(name = "SYS_ACHIEVE_AWARD_SET")
+public class Award implements Serializable {
 
   private static final long serialVersionUID = 1L;
   
-  public static enum AchieveStatusEnum{
+  public static enum AwardStatusEnum{
     BACK("驳回"),WAIT("待审核"),OVER("已审核");    
     private String name;
-    AchieveStatusEnum(String name){
+    AwardStatusEnum(String name){
       this.name=name;
     }
     public String getName(){
@@ -71,22 +52,11 @@ public class Achieve implements Serializable {
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
-  private Long achieveId; // 主键
-  @OneToOne
-  @JoinColumn(name = "MACHINE_TYPE", updatable = false, insertable = false)
-  private MachineType machineType; // 机型类别
-  @Column(name = "MACHINE_TYPE")
-  private String machineTypeId; // 机型类别
-  @OneToOne
-  @JoinColumn(name = "BRAND_ID", updatable = false, insertable = false)
-  private Brand brand; // 品牌ID
-  @Column(name = "BRAND_ID")
-  private String brandId; // 品牌ID
-  @OneToOne
-  @JoinColumn(name = "GOOD_ID", updatable = false, insertable = false)
-  private Goods good; // 型号ID
-  @Column(name = "GOOD_ID")
-  private String goodId; // 型号ID
+  private Long awardId; // 主键
+  
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) 
+  @JoinColumn(name = "AWARD_ID")
+  private List<AwardGood> awardGoods;
   private Integer numberFirst; // 任务量一
   private Integer numberSecond; // 任务量2
   private Integer numberThird; // 任务量3
@@ -99,75 +69,35 @@ public class Achieve implements Serializable {
   @Enumerated(EnumType.STRING)
   private FlagEnum flag = FlagEnum.NORMAL; // 是否删除：normal-正常，del-删除
   @Enumerated(EnumType.STRING)
-  private AchieveStatusEnum status = AchieveStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
+  private AwardStatusEnum status = AwardStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
   private String planId;
-  
-  @OneToMany(cascade=CascadeType.ALL)
-  @JoinTable(name="SYS_ACHIEVE_SET_RULE",
-     joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
+  //orphanRemoval=true配置表明删除无关联的数据。级联更新子结果集时此配置最关键
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
+  @JoinTable(name="SYS_AWARD_SET_RULE",
+     joinColumns=@JoinColumn(name="SYS_AWARD_ID"),
      inverseJoinColumns=@JoinColumn(name="RULE_ID"))
   private List<RewardPunishRule> rewardPunishRules;//奖罚规则
   
-  @OneToMany(cascade=CascadeType.ALL)
-  @JoinTable(name="SYS_ACHIEVE_SET_GROUP",
-      joinColumns=@JoinColumn(name="SYS_ACHIEVE_ID"),
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval = true)
+  @JoinTable(name="SYS_AWARD_SET_GROUP",
+      joinColumns=@JoinColumn(name="SYS_AWARD_ID"),
       inverseJoinColumns=@JoinColumn(name="GROUPING_ID"))
   private List<GroupNumber> groupNumbers; //人员分组设置
 
-  public Long getAchieveId() {
-    return achieveId;
+  public Long getAwardId() {
+    return awardId;
   }
 
-  public void setAchieveId(Long achieveId) {
-    this.achieveId = achieveId;
+  public void setAwardId(Long awardId) {
+    this.awardId = awardId;
   }
 
-  public MachineType getMachineType() {
-    return machineType;
+  public List<AwardGood> getAwardGoods() {
+    return awardGoods;
   }
 
-  public void setMachineType(MachineType machineType) {
-    this.machineType = machineType;
-  }
-
-  public String getMachineTypeId() {
-    return machineTypeId;
-  }
-
-  public void setMachineTypeId(String machineTypeId) {
-    this.machineTypeId = machineTypeId;
-  }
-
-  public Brand getBrand() {
-    return brand;
-  }
-
-  public void setBrand(Brand brand) {
-    this.brand = brand;
-  }
-
-  public String getBrandId() {
-    return brandId;
-  }
-
-  public void setBrandId(String brandId) {
-    this.brandId = brandId;
-  }
-
-  public Goods getGood() {
-    return good;
-  }
-
-  public void setGood(Goods good) {
-    this.good = good;
-  }
-
-  public String getGoodId() {
-    return goodId;
-  }
-
-  public void setGoodId(String goodId) {
-    this.goodId = goodId;
+  public void setAwardGoods(List<AwardGood> awardGoods) {
+    this.awardGoods = awardGoods;
   }
 
   public Integer getNumberFirst() {
@@ -250,11 +180,11 @@ public class Achieve implements Serializable {
     this.flag = flag;
   }
 
-  public AchieveStatusEnum getStatus() {
+  public AwardStatusEnum getStatus() {
     return status;
   }
 
-  public void setStatus(AchieveStatusEnum status) {
+  public void setStatus(AwardStatusEnum status) {
     this.status = status;
   }
 
@@ -284,8 +214,7 @@ public class Achieve implements Serializable {
 
   @Override
   public String toString() {
-    return "Achieve [achieveId=" + achieveId + ", machineTypeId=" + machineTypeId +  ", brandId="
-        + brandId + ", goodId=" + goodId + ", numberFirst=" + numberFirst + ", numberSecond="
+    return "Award [achieveId=" + awardId + ",numberFirst=" + numberFirst + ", numberSecond="
         + numberSecond + ", numberThird=" + numberThird + ", startDate=" + startDate + ", endDate=" + endDate
         + ", issuingDate=" + issuingDate + ", auditor=" + auditor + ", remark=" + remark + ", createDate=" + createDate
         + ", flag=" + flag + ", status=" + status + ", planId=" + planId + "]";

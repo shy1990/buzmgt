@@ -1,8 +1,9 @@
-package com.wangge.buzmgt.income.main.service;
+package com.wangge.buzmgt.income.main.service.impl;
 
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.Hedge;
 import com.wangge.buzmgt.income.main.repository.HedgeRepository;
+import com.wangge.buzmgt.income.main.service.HedgeService;
 import com.wangge.buzmgt.income.main.vo.HedgeVo;
 import com.wangge.buzmgt.income.main.vo.repository.HedgeVoRepository;
 import com.wangge.buzmgt.log.util.LogUtil;

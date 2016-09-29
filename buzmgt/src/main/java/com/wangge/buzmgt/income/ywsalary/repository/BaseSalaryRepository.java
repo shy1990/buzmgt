@@ -19,22 +19,41 @@ public interface BaseSalaryRepository extends JpaRepository<BaseSalary, Long>, J
   @EntityGraph("user")
   Page<BaseSalary> findAll(Specification<BaseSalary> spec, Pageable page);
   
+  // findByFlagAndUser_Id:查找历史记录. <br/>
+  List<BaseSalary> findByFlagAndUser_Id(FlagEnum flag, String id);
+  
   /**
-   * findByFlagAndUser_Id:查找历史记录. <br/>
+   * 查找delDate上个月的有效工资记录 <br/>
    * 
-   * @author yangqc
+   * @param delDate
+   *          有效月份的下个月
+   * @param flag
    * @param id
    * @return
    * @since JDK 1.8
    */
-  List<BaseSalary> findByFlagAndUser_Id(FlagEnum flag, String id);
+  @Query("select s from BaseSalary s where ((s.deldate is null and s.newdate<?1)or "
+      + "(s.flag=?2 and s.deldate<?1 and s.deldate>?4)) and  s.userId=?3")
+  List<BaseSalary> findByFlagAndUser_Id(Date delDate, FlagEnum flag, String id, Date startDate);
   
-  /*
-   * select * from sys_income_basicsalay s where ((s.deldate is null and
-   * s.newdate>=to_date('2016-08','yyyy-mm')) or (s.flag=1 and
-   * s.deldate<to_date('2016-09','yyyy-mm'))) and s.user_id='A37152604120'
+  @Query(value = "select  s1.user_id   from (select s.*        from sys_income_basicsalay s\n"
+      + "         where (s.deldate is null and          s.newdate < ?1)\n"
+      + "            or (s.flag = 1 and s.deldate < ?1 and \n"
+      + "               s.deldate > ?2 )) s1 group by s1.user_id\n"
+      + "having count(s1.id) > 1", nativeQuery = true)
+  List<Object> findUserIds(Date delDate,  Date startDate);
+  
+  /**
+   * 查找delDate上个月的有效工资记录 <br/>
+   * 
+   * @param delDate
+   *          有效月份的下个月
+   * @param flag
+   * @param id
+   * @return
+   * @since JDK 1.8
    */
   @Query("select s from BaseSalary s where ((s.deldate is null and s.newdate<?1)or "
-      + "(s.flag=?2 and s.deldate<?1)) and  s.userId=?3")
-  Page<BaseSalary>  findbyMonthAndUser(Date delDate,FlagEnum flag,String userId, Pageable page);
+      + "(s.flag=?2 and s.deldate<?1 and s.deldate>?4)) and  s.userId=?3")
+  Page<BaseSalary> findbyMonthAndUser(Date delDate, FlagEnum flag, String userId, Date startDate, Pageable page);
 }

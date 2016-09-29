@@ -24,8 +24,7 @@
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="/static/income/phone.css" />
-<link rel="stylesheet" type="text/css"
-	href="/static/income/commess.css" />
+<link rel="stylesheet" type="text/css" href="/static/income/commess.css" />
 
 <script id="task-table-template" type="text/x-handlebars-template">
 {{#if content}}
@@ -86,8 +85,7 @@
 		</p>
 
 
-		<div class="row" id="planList">
-		</div>
+		<div class="row" id="planList"></div>
 		<div id="abnormalCoordPager"></div>
 	</div>
 
@@ -105,23 +103,19 @@
 
 				<div class="modal-body">
 					<div class="container-fluid">
-						<form class="form-horizontal">
-							<div class="form-group">
-								<p class="col-sm-12  ">当前还有使用人员，你确定要删除方案吗？？？</p>
-								<p class="col-sm-12">删除后该方案将不复存在，所有提成规则及使用人员将使用到删除日期的0点为止！！</p>
-							</div>
+						<div class="form-group">
+							<p class="col-sm-12  ">当前还有使用人员，你确定要删除方案吗？？？</p>
+							<p class="col-sm-12">删除后该方案将不复存在，所有提成规则及使用人员将使用到删除日期的0点为止！！</p>
+						</div>
 
 
-							<div class="btn-qx">
-								<button class="btn btn-danger btn-d" onclick="deletePlan()">删除</button>
-							</div>
+						<div class="btn-qx">
+							<button class="btn btn-danger btn-d" onclick="deletePlan()">删除</button>
+						</div>
 
-							<div class="btn-dd">
-								<button data-dismiss="modal"
-									class="btn btn-primary btn-d">取消</button>
-							</div>
-
-						</form>
+						<div class="btn-dd">
+							<button data-dismiss="modal" class="btn btn-primary btn-d">取消</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -152,7 +146,6 @@
 				gloPlanId = button.data('pid'); // Extract info from data-* attributes
 			});
 		});
-		
 	</script>
 
 </body>
