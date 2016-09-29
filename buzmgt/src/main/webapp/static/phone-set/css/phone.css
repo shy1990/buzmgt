@@ -33,6 +33,15 @@
     background: url("../img/qbqb.png") no-repeat center;
 }
 
+.line-h{
+    height: 40px;
+    padding-left: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    color:#4c4c4c ;
+    line-height: 35px;
+}
+
 .fl-right {
     float: right;
     margin-top: 25px;
@@ -53,16 +62,18 @@
 }
 
 
-.sidebar li{
+.sidebar li>a{
     color: #4c4c4c;
     font-size: 14px;
     font-weight: bold;
     line-height: 40px;
 }
 
-.sidebar > .sidebar li:active, .sidebar li:hover {
+.sidebar > .sidebar li>a:active, .sidebar li>a:hover {
     color: #2b86ba;
     border-left: 3px solid #44a6dd;
+    background: #ffffff;
+    font-weight: bold;
 }
 
 .ico-fl {
@@ -84,6 +95,7 @@ ul {
     cursor: pointer;
     background: #ebebeb;
     border: 1px solid #e5e5e5;
+    font-weight: bold;
 }
 
 .main-sidebar, .left-side {

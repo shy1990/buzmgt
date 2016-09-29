@@ -1,0 +1,69 @@
+ .text-blue-line{
+	text-decoration:underline;
+	 color: #3894C7;
+}
+.text-red-line{
+    color: #ff3f3f;
+    font-size: 12px;
+    text-decoration:underline;
+}
+ .icon-back {
+            width: 26px;
+            height: 26px;
+            background: url("../img/arrow.png") no-repeat center;
+        }
+
+.icon-back:hover {
+            width: 26px;
+            background: url("../img/Arrow 2 .png") no-repeat center;
+        }
+
+        .fl-right {
+            float: right;
+            margin-top: 25px;
+            margin-right: 25px;
+        }
+
+
+        .new-table-box {
+            border-top:3px solid #1e92d4 ;
+            min-height: 600px;
+            background: #FFF;
+
+        }
+
+        .new-table-box >table>tbody>tr:hover{
+            border-left: 3px solid #1e92d4 ;
+        }
+
+
+        .text-green{
+            color: #0c9969;
+        }
+
+        .yfh{
+            color: #EEEEEE;
+            text-align: center;
+
+            padding:15px;
+            font-size: 12px;
+            background:url("../img/kuang-green.png ") no-repeat center ;
+        }
+        .wfh{
+            color: #EEEEEE;
+            text-align: center;
+
+            padding:15px;
+            font-size: 12px;
+            background: url("../img/wfh.png") no-repeat center;
+        }
+
+
+        .btn-bluee{
+
+            height: 22px;
+            line-height: 10px;
+            margin-left: 0px;
+            font-size: 12px;
+            padding-left: 8px;
+        }

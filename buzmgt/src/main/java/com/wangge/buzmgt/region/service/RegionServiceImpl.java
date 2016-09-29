@@ -1,25 +1,24 @@
 package com.wangge.buzmgt.region.service;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.transaction.Transactional;
-
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.RegionType;
+import com.wangge.buzmgt.region.repository.RegionRepository;
+import com.wangge.buzmgt.region.repository.RegionTypeRepository;
+import com.wangge.buzmgt.region.vo.RegionTree;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.util.RegionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wangge.buzmgt.log.entity.Log.EventType;
-import com.wangge.buzmgt.log.service.LogService;
-import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
-import com.wangge.buzmgt.region.repository.RegionRepository;
-import com.wangge.buzmgt.region.vo.RegionTree;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
-import com.wangge.buzmgt.util.RegionUtil;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class RegionServiceImpl implements RegionService {
@@ -27,7 +26,12 @@ public class RegionServiceImpl implements RegionService {
 	private RegionRepository regionRepository;
 	@Autowired
 	private LogService logService;
-	
+
+  @Autowired
+  private RegionTypeRepository regionTypeRepository;
+
+//  @Autowired
+//  private RegionTypeRepository regionTypeRepository;
 	@Override
 	public List<RegionTree> findTreeRegion(String id) {
     List<RegionTree> listRegionTree = new ArrayList<RegionTree>();
@@ -159,7 +163,7 @@ public class RegionServiceImpl implements RegionService {
    * type-->count:国家-->all
    * 
    * 
-   * @param regionList
+   * @param
    * @return String 格式 "3701,3702,xxxx,xxx"
    */
   public String disposeRegionId(String regionId){
@@ -169,7 +173,7 @@ public class RegionServiceImpl implements RegionService {
     for(int n=0;n<regionList.size();n++){
       Region region= regionList.get(n);
       String regionId1=region.getId();
-      if(RegionType.AREA.equals(region.getType())){
+      if("6".equals(region.getType().getName())){
         regionArr+=regionId1.substring(0, 4)+",";
         continue;
       }
@@ -181,11 +185,13 @@ public class RegionServiceImpl implements RegionService {
 
   @Override
   public List<Region> findByTypeOrderById(RegionType type) {
+
     return regionRepository.findByTypeOrderById(type);
   }
   @Override
   public List<Map<String, Object>> getAllRegion(int type) {
-    RegionType regionType= RegionType.values()[type];
+   // RegionType regionType= RegionType.values()[type];
+    RegionType regionType=regionTypeRepository.findOne(type);
     List<Region> relist=regionRepository.findByTypeOrderById(regionType);
     List<Map<String, Object>> voList=new ArrayList<Map<String, Object>>();
     for(Region r:relist){
@@ -196,5 +202,15 @@ public class RegionServiceImpl implements RegionService {
     }
     return voList;
   }
- 
+
+  @Override
+  public List<RegionType> findALlRegionType() {
+    return regionTypeRepository.findAll();
+  }
+
+  @Override
+  public RegionType findByRegionTypeName(String name) {
+    return regionTypeRepository.findByName(name);
+  }
+
 }

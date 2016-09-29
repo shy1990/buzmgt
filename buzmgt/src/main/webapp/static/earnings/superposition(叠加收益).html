@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>叠加收益</title>
+    <!-- Bootstrap -->
+    <link href="../static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/kaohe/kaohe-det.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/yw-team-member/team-member.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/yw-team-member/ywmember.css"/>
+    <link rel="stylesheet" type="text/css" href="css/income-cash.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/task/task.css">
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <style>
+        .icon-back {
+            width: 26px;
+            height: 26px;
+            background: url("img/arrow.png") no-repeat center;
+        }
+
+        .icon-back:hover {
+            width: 26px;
+            background: url("img/Arrow 2 .png") no-repeat center;
+        }
+
+        .fl-right {
+            float: right;
+            margin-top: 25px;
+            margin-right: 25px;
+        }
+        .new-table-box {
+            border-top:3px solid #1e92d4 ;
+            min-height: 600px;
+            background: #FFF;
+
+        }
+
+        .new-table-box >table>tbody>tr:hover{
+            border-left: 3px solid #1e92d4 ;
+
+        }
+
+        .btn-bluee{
+
+            height: 22px;
+            line-height: 10px;
+            margin-left: 0px;
+            font-size: 12px;
+            padding-left: 8px;
+        }
+
+        .btn-bluee:hover{
+            color: #ffffff;
+        }
+
+        .text-ygq{
+            color: #EEEEEE;
+            text-align: center;
+            padding: 20px 30px 20px 20px ;
+            background: url("img/kuang-red.png") no-repeat center;
+        }
+
+        .text-jxz{
+            color: #EEEEEE;
+            text-align: center;
+            padding: 20px 30px 20px 20px ;
+            background: url("img/yfh.png") no-repeat center;
+        }
+        .text-green{
+            color: #2d9b76;
+        }
+    </style>
+</head>
+
+<body>
+<div class="content main">
+    <h4 class="page-header ">
+        <i class="ico icon-person"></i>叠加收益
+        <a href="javascript:history.back();" ><i class="ico icon-back fl-right"></i></a>
+
+    </h4>
+    <div class="row">
+        <div class="col-md-9">
+            <!--box-->
+            <div class="abnormal-body box border ">
+                <!--title-->
+                <select class="box-sty-s">
+                    <option>省-市-县</option>
+                    <option>上海市</option>
+                    <option>北京市</option>
+                </select>
+                <div class="search-date">
+                    <div class="input-group input-group-sm"  style="width: 140px";>
+                        <span class="input-group-addon "><i class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+                        <input type="text" class="form-control form_datetime input-sm" placeholder="佣金发布日期" readonly="readonly" style="background: #ffffff">
+                    </div>
+                </div>
+
+                <select class="box-sty-s">
+                    <option>省-全部-县</option>
+                    <option>上海市</option>
+                    <option>北京市</option>
+                </select>
+
+                <!--考核开始时间-->
+                <button class="btn btn-blue btn-sm" style="height: 30px;margin-left: 10px"
+                        onclick="goSearch('${salesman.id}','${assess.id}');">
+                    筛选
+                </button>
+
+
+                <div class="d-daochu" style="margin-top: 20px">
+
+                    <div class="link-posit-t pull-right export">
+                        <a class="table-export" href="javascript:void(0);">导出excel</a>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="table-task-list new-table-box table-overflow">
+                    <table class="table table-hover new-table">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>标题</th>
+                            <th>有效周期</th>
+                            <th>状态</th>
+                            <th>收益发放日期</th>
+                            <th>周期内销量</th>
+                            <th>退货重建</th>
+                            <th>实际销量</th>
+                            <th>提成/奖励</th>
+                            <th>财务核算</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td >01</td>
+                            <td>小米手机啊小米手</td>
+                            <td>2016.06.20-2016.07-21</td>
+                            <td>
+                                <span class="text-ygq">已过期</span>
+                            </td>
+                            <td>2016年9月</td>
+                            <td>200台</td>
+                            <td><span class="text-redd">20台</span></td>
+                            <td><span class="text-blue">180台</span></td>
+                            <td><span class="text-green text-strong">1800.00元</span></td>
+                            <td><span class="text-gray">未核算</span></td>
+                            <td>  <button class=" btn btn-blue btn-bluee"  >查看明细</button></td>
+
+                        </tr>
+
+
+
+                        <tr>
+                            <td >01</td>
+                            <td>小米手机啊小米手</td>
+                            <td>2016.06.20-2016.07-21</td>
+                            <td>
+                                <span class="text-jxz">进行中</span>
+                            </td>
+                            <td>2016年9月</td>
+                            <td>200台</td>
+                            <td><span class="text-redd">20台</span></td>
+                            <td><span class="text-blue">180台</span></td>
+                            <td><span class="text-green text-strong">1800.00元</span></td>
+                            <td><span class="text-blue">已核算</span></td>
+                            <td>  <button class=" btn btn-blue btn-bluee"  >查看明细</button></td>
+
+                        </tr>
+
+
+                        <tr>
+                            <td >01</td>
+                            <td>小米手机啊小米手</td>
+                            <td>2016.06.20-2016.07-21</td>
+                            <td>
+                                <span class="text-ygq">已过期</span>
+                            </td>
+                            <td>2016年9月</td>
+                            <td>200台</td>
+                            <td><span class="text-redd">20台</span></td>
+                            <td><span class="text-blue">180台</span></td>
+                            <td><span class="text-green text-strong">1800.00元</span></td>
+                            <td><span class="text-blue">已核算</span></td>
+                            <td>  <button class=" btn btn-blue btn-bluee"  >查看明细</button></td>
+
+                        </tr>
+
+                        <tr>
+                            <td >01</td>
+                            <td>小米手机啊小米手</td>
+                            <td>2016.06.20-2016.07-21</td>
+                            <td>
+                                <span class="text-ygq">已过期</span>
+                            </td>
+                            <td>2016年9月</td>
+                            <td>200台</td>
+                            <td><span class="text-redd">20台</span></td>
+                            <td><span class="text-blue">180台</span></td>
+                            <td><span class="text-green text-strong">1800.00元</span></td>
+                            <td><span class="text-blue">已核算</span></td>
+                            <td>  <button class=" btn btn-blue btn-bluee"  >查看明细</button></td>
+
+                        </tr>
+
+                        <tr>
+                            <td >01</td>
+                            <td>小米手机啊小米手</td>
+                            <td>2016.06.20-2016.07-21</td>
+                            <td>
+                                <span class="text-ygq">已过期</span>
+                            </td>
+                            <td>2016年9月</td>
+                            <td>200台</td>
+                            <td><span class="text-redd">20台</span></td>
+                            <td><span class="text-blue">180台</span></td>
+                            <td><span class="text-green text-strong">1800.00元</span></td>
+                            <td><span class="text-blue">已核算</span></td>
+                            <td>  <button class=" btn btn-blue btn-bluee"  >查看明细</button></td>
+
+                        </tr>
+
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--title-->
+                <!--box-body-->
+                <div class="box-body-new">
+
+                </div>
+                <!--box-body-->
+            </div>
+            <!--box-->
+        </div>
+        <!--col-md-9-->
+        <div class="col-md-3">
+            <!--box-->
+            <!--不同阶段颜色不同1：pink 2：yellow 3:violet 4:-->
+            <div class="ywmamber-msg box border pink">
+                <!--title-->
+                <div class="box-title">
+                    <i class="icon icon-time"></i>考核中
+                </div>
+                <!--box-body-->
+                <div class="box-body">
+                    <!--ywmamber-body-->
+                    <div class="ywmamber-body">
+                        <img width="80" src="../static/img/background/user-head.png" alt="..." class="img-circle">
+                        <div class="msg-text">
+                            <h4>易小星</h4>
+                            <p>ID: A236743252</p>
+                            <p>电话: 12547346455</p>
+                        </div>
+                    </div>
+                    <!--/ywmamber-body-->
+                    <div class="stage">
+                        <span class="kaohe-stage onekaohe-stage">第一阶段:60% </span>
+                    </div>
+                    <div class="progress progress-sm">
+                        <div style="width: 60%;" class="progress-bar bar-kaohe"></div>
+                    </div>
+                    <div class="operation">
+                        <a href="saojie_upd.html" class="">考核设置</a>
+                        <a href="kaohe_det.html" class="pull-right">查看</a>
+                    </div>
+                    <div class="yw-text">
+                        入职时间:<span> 2015.09.21</span>
+                        <br/> 负责区域:
+                        <span>山东省滨州市邹平县</span>
+                    </div>
+                    <!--拜访任务-->
+                    <div class="visit">
+                        <button class="col-xs-12 btn btn-visit" href="javascript:;"><i class="ico icon-add"></i>拜访任务
+                        </button>
+                    </div>
+                    <!--拜访任务-->
+                    <!--操作-->
+                    <div class="operation">
+                        <a href="javascript:;" class="">账户设置</a>
+                        <a href="javascript:;">冻结账户</a>
+                    </div>
+                    <!--操作-->
+                </div>
+                <!--box-body-->
+            </div>
+            <!--box-->
+            <!--业务外部链接-->
+            <div class="yw-link">
+                <a class="link-oper" href="javascript:;"><i class="icon icon-user"></i>个人资料</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-income"></i>收益</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-task"></i>任务</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-log"></i>日志</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-footprint"></i>足迹</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-signin"></i>签收记录</a>
+                <a class="link-oper" href="javascript:;"><i class="icon icon-saojie"></i>扫街记录</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--row-->
+<!-- Bootstrap core JavaScript================================================== -->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $('body input').val('');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        pickerPosition: "bottom-right",
+        forceParse: 0
+    });
+    var $_haohe_plan = $('.J_kaohebar').width();
+    var $_haohe_planw = $('.J_kaohebar_parents').width();
+    $(".J_btn").attr("disabled", 'disabled');
+    if ($_haohe_planw === $_haohe_plan) {
+        $(".J_btn").removeAttr("disabled");
+    }
+</script>
+</body>
+
+</html>

@@ -1,10 +1,15 @@
 package com.wangge.buzmgt.income.main.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
+import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 
 /**
  * ClassName: MainIncomeService <br/>
@@ -23,15 +28,16 @@ public interface MainIncomeService {
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculateOutedOrder();
+  void caculateOutedOrder(String orderNo,String userId,String payStatus);
   
   /**
    * caculatePayedOrder:计算已支付订单. <br/>
    * 
+   * 该功能可以app-interface里完成,通过订单接口调用;
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculatePayedOrder();
+  void caculatePayedOrder(String orderNo,String userId);
   
   /**
    * caculateUser:计算每个业务员的薪资. <br/>
@@ -41,36 +47,36 @@ public interface MainIncomeService {
    */
   void caculateSalesman();
   
+  void calculateOil();
+  /**
+   * findIncomeMain:判断某月业务员的薪资记录是否存在,若不存在就新建一个返回. <br/>
+   * 
+   * @author yangqc
+   * @param salesmanId
+   * @param month
+   * @return
+   * @since JDK 1.8
+   */
+  MainIncome findIncomeMain(String salesmanId, String month);
+  
+  /**
+   * findIncomeMain:判断本月业务员的薪资记录是否存在,若不存在就新建一个返回. <br/>
+   * 
+   * @author yangqc
+   * @param salesmanId
+   * @return
+   * @since JDK 1.8
+   */
+  MainIncome findIncomeMain(String salesmanId);
+  
   /** 
-    * findIncomeMain:判断某月业务员的薪资记录是否存在,若不存在就新建一个返回. <br/> 
-    * @author yangqc 
-    * @param salesmanId
-    * @param month
-    * @return 
-    * @since JDK 1.8 
+   * 查询视图页面
     */  
-  MainIncome findIncomeMain(String salesmanId,String month);
+  Page<MainIncomeVo> getVopage(Pageable pageReq, Map<String, Object> searchParams) throws Exception;
 
   /** 
-    * findIncomeMain:判断本月业务员的薪资记录是否存在,若不存在就新建一个返回. <br/> 
-    * @author yangqc 
-    * @param salesmanId
-    * @return 
-    * @since JDK 1.8 
+    * 导出用查询 <br/> 
     */  
-  MainIncome findIncomeMain(String salesmanId);
-  /** 
-    * getAllMachineType:获得所有的机型分类. <br/> 
-    * @author yangqc 
-    * @return 
-    * @since JDK 1.8 
-    */  
-  List<MachineType> getAllMachineType();
-  /** 
-    * getAllBrandType:获得所有的品牌. <br/> 
-    * @author yangqc 
-    * @return 
-    * @since JDK 1.8 
-    */  
-  List<BrandType> getAllBrandType();
+  List<MainIncomeVo> findAll(Map<String, Object> searchParams);
+  
 }

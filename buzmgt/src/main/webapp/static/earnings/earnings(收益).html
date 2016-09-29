@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>收益</title>
+
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/income-cash.css">
+
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+
+        .icon-back {
+            width: 26px;
+            height: 26px;
+            background: url("img/arrow.png") no-repeat center;
+        }
+
+        .icon-back:hover {
+            width: 26px;
+            background: url("img/Arrow 2 .png") no-repeat center;
+        }
+
+        .fl-right {
+            float: right;
+            margin-top: 25px;
+            margin-right: 25px;
+        }
+
+
+        .new-table-box {
+            border-top:3px solid #1e92d4 ;
+            min-height: 600px;
+            background: #FFF;
+
+        }
+
+        .new-table-box >table>tbody>tr:hover{
+            border-left: 3px solid #1e92d4 ;
+            /*font-weight: bold;*/
+        }
+
+
+        .text-green{
+            color: #0c9969;
+        }
+
+        .yfh{
+            color: #EEEEEE;
+            text-align: center;
+
+            padding:15px;
+            font-size: 12px;
+            background:url("img/kuang-green.png ") no-repeat center ;
+        }
+        .wfh{
+            color: #EEEEEE;
+            text-align: center;
+
+            padding:15px;
+            font-size: 12px;
+            background: url("img/wfh.png") no-repeat center;
+        }
+
+
+        .btn-bluee{
+
+            height: 22px;
+            line-height: 10px;
+            margin-left: 0px;
+            font-size: 12px;
+            padding-left: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="content main">
+    <h4 class="page-header ">
+        <i class="ico icon-shouyi"></i>收益
+        <!--区域选择按钮-->
+        <a href="javascript:history.back();" ><i class="ico icon-back fl-right"></i></a>
+
+    </h4>
+
+    <div class="row text-time">
+
+        <div class="salesman" style="margin-top: 5px; overflow-x: hidden">
+            <select class="box-sty-s">
+                <option>山东省-德州市-武城县</option>
+                <option>上海市</option>
+                <option>北京市</option>
+            </select>
+            <select class="box-sty-s">
+                <option>业务类别</option>
+                <option>上海市</option>
+                <option>北京市</option>
+            </select>
+            <div class="search-date">
+                <div class="input-group input-group-sm">
+                        <span class="input-group-addon "><i
+                                class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
+                    <input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"
+                           readonly="readonly">
+                </div>
+            </div>
+            <!--考核开始时间-->
+            <button class="btn btn-blue btn-sm" style="height: 30px;margin-left: 10px"
+                    onclick="goSearch('${salesman.id}','${assess.id}');">
+                筛选
+            </button>
+
+            <div class="H-daochu">
+                <div class="salesman">
+                    <input class="cs-select  text-gery-hs" placeholder="请输入业务员名称">
+                    <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
+                        检索
+                    </button>
+                </div>
+                <div class="link-posit-t pull-right export">
+                    <a class="table-export" href="javascript:void(0);">导出excel</a>
+                </div>
+            </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <div class="tab-content">
+        <!--待审核账单-->
+        <div class="tab-pane fade in active" >
+            <!--table-box-->
+            <div class="table-task-list new-table-box table-overflow"  >
+                <table class="table table-hover new-table">
+                    <thead>
+                    <tr>
+                        <th>业务员</th>
+                        <th>月份</th>
+                        <th>保底佣金</th>
+                        <th>业务佣金</th>
+                        <th>油补佣金</th>
+                        <th>扣罚金额</th>
+                        <th>达量收益</th>
+                        <th>叠加收益</th>
+                        <th>合计</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="th-with">
+                            <div class="row">
+                                <div class="col-sm-1 pic-jl">
+                                    <div class="bs-example bs-example-images " data-example-id="image-shapes">
+                                        <img data-holder-rendered="true" src="../static/img/task/mao.png"
+                                             style="width: 50px; height: 50px;" data-src="holder.js/40x40"
+                                             class="img-circle" alt="40x40">
+                                    </div>
+                                </div>
+                                <div class="col-sm-11 text-jl">
+                                    <span class="text-strong">易小星</span>（区域经理）<br>
+                                   山东省滨州市邹县
+                                </div>
+                            </div>
+                        </td>
+                        <td>2016.08</td>
+                        <td><a href=""><span class="text-blue">3000.00</span></a></td>
+                        <td><a href=""><span class="text-blue">1000.00</span></a></td>
+                        <td><a href=""><span class="text-blue">300.00</span></a></td>
+                        <td><a href=""><span class="text-redd">200.00</span></a></td>
+                        <td><a href=""><span class="text-blue">1500.00</span></a></td>
+                        <td><a href=""><span class="text-blue">500.00</span></a></td>
+                        <td><a href=""><span class="text-green text-strong">6100.00</span></a></td>
+                        <td><span class="yfh">已复核</span></td>
+                        <td></td>
+
+                    </tr>
+
+                    <tr>
+                        <td class="th-with">
+                            <div class="row">
+                                <div class="col-sm-1 pic-jl">
+                                    <div class="bs-example bs-example-images " data-example-id="image-shapes">
+                                        <img data-holder-rendered="true" src="../static/img/task/mao.png"
+                                             style="width: 50px; height: 50px;" data-src="holder.js/40x40"
+                                             class="img-circle" alt="40x40">
+                                    </div>
+                                </div>
+                                <div class="col-sm-11 text-jl">
+                                    <span class="text-strong">易小星</span>（区域经理）<br>
+                                    山东省滨州市邹县
+                                </div>
+                            </div>
+                        </td>
+                        <td>2016.08</td>
+                        <td><a href=""><span class="text-blue">3000.00</span></a></td>
+                        <td><a href=""><span class="text-blue">1000.00</span></a></td>
+                        <td><a href=""><span class="text-blue">300.00</span></a></td>
+                        <td><a href=""><span class="text-redd">200.00</span></a></td>
+                        <td><a href=""><span class="text-blue">1500.00</span></a></td>
+                        <td><a href=""><span class="text-blue">500.00</span></a></td>
+                        <td><a href=""><span class="text-green text-strong">6100.00</span></a></td>
+                        <td><span class="wfh">未复核</span></td>
+                        <td>  <button class=" btn btn-blue btn-bluee"  >审核确定</button></td>
+
+                    </tr>
+
+                    <tr>
+                        <td class="th-with">
+                            <div class="row">
+                                <div class="col-sm-1 pic-jl">
+                                    <div class="bs-example bs-example-images " data-example-id="image-shapes">
+                                        <img data-holder-rendered="true" src="../static/img/task/mao.png"
+                                             style="width: 50px; height: 50px;" data-src="holder.js/40x40"
+                                             class="img-circle" alt="40x40">
+                                    </div>
+                                </div>
+                                <div class="col-sm-11 text-jl">
+                                    <span class="text-strong">易小星</span>（区域经理）<br>
+                                    山东省滨州市邹县
+                                </div>
+                            </div>
+                        </td>
+                        <td>2016.08</td>
+                        <td><a href=""><span class="text-blue">3000.00</span></a></td>
+                        <td><a href=""><span class="text-blue">1000.00</span></a></td>
+                        <td><a href=""><span class="text-blue">300.00</span></a></td>
+                        <td><a href=""><span class="text-redd">200.00</span></a></td>
+                        <td><a href=""><span class="text-blue">1500.00</span></a></td>
+                        <td><a href=""><span class="text-blue">500.00</span></a></td>
+                        <td><a href=""><span class="text-green text-strong">6100.00</span></a></td>
+                        <td><span class="wfh">未复核</span></td>
+                        <td>  <button class=" btn btn-blue btn-bluee"  >审核确定</button></td>
+
+                    </tr>
+
+                    <tr>
+                        <td class="th-with">
+                            <div class="row">
+                                <div class="col-sm-1 pic-jl">
+                                    <div class="bs-example bs-example-images " data-example-id="image-shapes">
+                                        <img data-holder-rendered="true" src="../static/img/task/mao.png"
+                                             style="width: 50px; height: 50px;" data-src="holder.js/40x40"
+                                             class="img-circle" alt="40x40">
+                                    </div>
+                                </div>
+                                <div class="col-sm-11 text-jl">
+                                    <span class="text-strong">易小星</span>（区域经理）<br>
+                                    山东省滨州市邹县
+                                </div>
+                            </div>
+                        </td>
+                        <td>2016.08</td>
+                        <td><a href=""><span class="text-blue">3000.00</span></a></td>
+                        <td><a href=""><span class="text-blue">1000.00</span></a></td>
+                        <td><a href=""><span class="text-blue">300.00</span></a></td>
+                        <td><a href=""><span class="text-redd">200.00</span></a></td>
+                        <td><a href=""><span class="text-blue">1500.00</span></a></td>
+                        <td><a href=""><span class="text-blue">500.00</span></a></td>
+                        <td><a href=""><span class="text-green text-strong">6100.00</span></a></td>
+                        <td><span class="wfh">未复核</span></td>
+                        <td>  <button class=" btn btn-blue btn-bluee"  >审核确定</button></td>
+
+                    </tr>
+
+                    <tr>
+                        <td class="th-with">
+                            <div class="row">
+                                <div class="col-sm-1 pic-jl">
+                                    <div class="bs-example bs-example-images " data-example-id="image-shapes">
+                                        <img data-holder-rendered="true" src="../static/img/task/mao.png"
+                                             style="width: 50px; height: 50px;" data-src="holder.js/40x40"
+                                             class="img-circle" alt="40x40">
+                                    </div>
+                                </div>
+                                <div class="col-sm-11 text-jl">
+                                    <span class="text-strong">易小星</span>（区域经理）<br>
+                                    山东省滨州市邹县
+                                </div>
+                            </div>
+                        </td>
+                        <td>2016.08</td>
+                        <td><a href=""><span class="text-blue">3000.00</span></a></td>
+                        <td><a href=""><span class="text-blue">1000.00</span></a></td>
+                        <td><a href=""><span class="text-blue">300.00</span></a></td>
+                        <td><a href=""><span class="text-redd">200.00</span></a></td>
+                        <td><a href=""><span class="text-blue">1500.00</span></a></td>
+                        <td><a href=""><span class="text-blue">500.00</span></a></td>
+                        <td><a href=""><span class="text-green text-strong">6100.00</span></a></td>
+                        <td><span class="wfh">未复核</span></td>
+                        <td>  <button class=" btn btn-blue btn-bluee"  >审核确定</button></td>
+
+                    </tr>
+
+
+
+
+                    </tbody>
+                </table>
+            </div>
+            <!--table-box-->
+        </div>
+        <!--待审核账单-->
+    </div>
+    <div class="wait-page-index">
+        <ul class="pagination">
+            <li>
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--table-box-->
+    <!--油补记录-->
+</div>
+</div>
+
+<![endif]-->
+<script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript">
+
+    $('body input').val('');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm",
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 3,
+        minView: 3,
+        pickerPosition: "bottom-left",
+        forceParse: 0,
+
+    });
+
+    var $_haohe_plan = $('.J_kaohebar').width();
+    var $_haohe_planw = $('.J_kaohebar_parents').width();
+    $(".J_btn").attr("disabled", 'disabled');
+    if ($_haohe_planw === $_haohe_plan) {
+        $(".J_btn").removeAttr("disabled");
+    }
+</script>
+</body>
+</html>
+
+

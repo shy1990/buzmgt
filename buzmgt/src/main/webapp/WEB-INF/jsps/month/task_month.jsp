@@ -20,7 +20,7 @@
 <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="static/css/common.css" />
-<link rel="stylesheet" type="text/css" href="static/kaohe/kaohe-det.css" />
+<link rel="stylesheet" type="text/css" href="/static/kaohe/kaohe-det.css" />
 <link rel="stylesheet" type="text/css"
 	href="static/yw-team-member/ywmember.css" />
 	<link href="static/bootStrapPager/css/page.css" rel="stylesheet">

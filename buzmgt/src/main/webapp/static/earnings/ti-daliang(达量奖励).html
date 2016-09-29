@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>提成设置</title>
+
+    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
+    <link rel="stylesheet" href="../phone-set/css/phone.css">
+    <link rel="stylesheet" href="../phone-set/css/comminssion.css">
+
+    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <style>
+        .new-table-box {
+            border-top: none;
+            min-height: 600px;
+            background: #FFF;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content main">
+    <h4 class="page-header">
+        <i class="ico ico-tcsz"></i>提成设置
+        <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
+    </h4>
+
+    <ul class="nav nav-pills  nav-top" id="myTab">
+        <li ><a data-toggle="tab" href="#ajgqj">按价格区间</a></li>
+        <li><a data-toggle="tab" href="#ppxhao">品牌型号<span class="qipao">2</span></a></li>
+        <li><a data-toggle="tab" href="#dlsz">达量设置</a></li>
+        <li><a data-toggle="tab" href="#djsz">叠加设置</a></li>
+        <li class="active"><a data-toggle="tab" href="#dljl">达量奖励</a></li>
+    </ul>
+
+
+    <div class="row">
+        <!--col begin-->
+        <div class="col-md-12">
+            <!--orderbox begin-->
+            <div class="order-box">
+
+                <div class="">
+                    <!--右侧内容开始-->
+                    <!--价格区间-->
+
+                    <!--叠加设置-->
+                    <div class="tab-pane fade  in active  " id="djsz">
+                        <!--导航开始-->
+
+                        <div class="ph-btn-set">
+                            <a href="" class="btn ph-blue">
+                                <i class="ico icon-xj"></i> <span class="text-gery">新建奖励</span>
+                            </a>
+                            <a href="" class="btn ph-blue" style="margin-right: 30px">
+                                <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
+                            </a>
+
+                            <div class="link-posit pull-right">
+                                <input class="input-search" type="text" placeholder="模糊查询请输入品牌型号">
+                                <button class="btn  btn-sm bnt-ss ">搜索</button>
+                                <a class="table-export" href="javascript:void(0);">导出excel</a>
+                            </div>
+
+
+                        </div>
+
+                        <div class=" new-table-box table-overflow" >
+                            <table class="table table-hover new-table">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>名称</th>
+                                    <th>指标</th>
+                                    <th>方案起止日期</th>
+                                    <th>佣金发放</th>
+                                    <th>状态</th>
+                                    <th>设置日期</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>01</td>
+                                    <td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
+                                    <td><span class="text-red">200台/300台/400台</span></td>
+                                    <td>2016.07.16-2016.08.28</td>
+                                    <td><span class="text-blue">2016.08.22</span></td>
+                                    <td><span class="ph-on">进行中</span></td>
+                                    <td>2016.08.28</td>
+                                    <td>
+                                        <button class="btn  bnt-sm bnt-ck"  data-toggle="modal" data-target="#">查看</button>
+                                        <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程
+                                        </button>
+                                        <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
+                                        </button>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>01</td>
+                                    <td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
+                                    <td><span class="text-red">200台/300台/400台</span></td>
+                                    <td>2016.07.16-2016.08.28</td>
+                                    <td><span class="text-blue">2016.08.22</span></td>
+                                    <td><span class="ph-on">进行中</span></td>
+                                    <td>2016.08.28</td>
+                                    <td>
+                                        <button class="btn  bnt-sm bnt-ck"  data-toggle="modal" data-target="#">查看</button>
+                                        <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程
+                                        </button>
+                                        <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>01</td>
+                                    <td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
+                                    <td><span class="text-red">200台/300台/400台</span></td>
+                                    <td>2016.07.16-2016.08.28</td>
+                                    <td><span class="text-blue">2016.08.22</span></td>
+                                    <td><span class="ph-weihes">未核算</span></td>
+                                    <td>2016.08.28</td>
+                                    <td>
+                                        <button class="btn  bnt-sm bnt-ck"  data-toggle="modal" data-target="#">查看</button>
+                                        <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程
+                                        </button>
+                                        <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>01</td>
+                                    <td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
+                                    <td><span class="text-red">200台/300台/400台</span></td>
+                                    <td>2016.07.16-2016.08.28</td>
+                                    <td><span class="text-blue">2016.08.22</span></td>
+                                    <td><span class="ph-on">进行中</span></td>
+                                    <td>2016.08.28</td>
+                                    <td>
+                                        <button class="btn  bnt-sm bnt-ck"  data-toggle="modal" data-target="#">查看</button>
+                                        <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程
+                                        </button>
+                                        <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>01</td>
+                                    <td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
+                                    <td><span class="text-red">200台/300台/400台</span></td>
+                                    <td>2016.07.16-2016.08.28</td>
+                                    <td><span class="text-blue">2016.08.22</span></td>
+                                    <td><span class="ph-on">进行中</span></td>
+                                    <td>2016.08.28</td>
+                                    <td>
+                                        <button class="btn  bnt-sm bnt-ck"  data-toggle="modal" data-target="#">查看</button>
+                                        <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程
+                                        </button>
+                                        <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
+                                        </button>
+                                    </td>
+                                </tr>
+
+
+
+
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+
+
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+<script src="../static/js/jquery/jquery-1.11.3.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap.js"></script>
+<script>
+    $('#tab li').click(function () {
+        $(this).addClass('active');
+        $(this).siblings('li').removeClass('active');
+        $('#tab li:eq(1) a').tab('show');
+    });
+</script>
+</body>
+</html>

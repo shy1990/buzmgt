@@ -47,9 +47,8 @@
                <span class="text-fa-1">方案一</span>
             </div>
             <div class="col-sm-2 icon-fl-right">
-                <a href="person(适用人员).html"><i class="icon-f icon-ren"
-                              data-container="body" data-toggle="popover" data-placement="top"
-                              data-content="添加人员"></i></a>
+                <a href="" data-target="#tjry" data-toggle="modal" ><i class="icon-f icon-ren"
+                                               data-toggle="tooltip" data-placement="top" title="添加人员"></i></a>
                 <i class="icon-f icon-dele" data-toggle="modal"  data-target="#del"></i>
             </div>
 
@@ -62,11 +61,9 @@
                 <span class="text-fa-2">方案二</span>
             </div>
             <div class="col-sm-2 icon-fl-right">
-                <a href="person(适用人员).html"><i class="icon-f icon-ren"
-                                               data-container="body" data-toggle="popover" data-placement="top"
-                                               data-content="添加人员"></i></a>
-                <i class="icon-f icon-dele"  data-container="body" data-toggle="popover" data-placement="right"
-                   data-content="删除方案"></i>
+                <a href="" data-target="#tjry" data-toggle="modal" ><i class="icon-f icon-ren"
+                                                                       data-toggle="tooltip" data-placement="top" title="添加人员"></i></a>
+                <i class="icon-f icon-dele" data-toggle="modal"  data-target="#del"></i>
             </div>
 
 
@@ -83,10 +80,9 @@
                 <span class="text-fa-3">方案三</span>
             </div>
             <div class="col-sm-2 icon-fl-right">
-                <a href="person(适用人员).html"><i class="icon-f icon-ren"
-                                               data-container="body" data-toggle="popover" data-placement="top"
-                                               data-content="添加人员"></i></a>
-                <i class="icon-f icon-dele"   ></i>
+                <a href="" data-target="#tjry" data-toggle="modal" ><i class="icon-f icon-ren"
+                                                                       data-toggle="tooltip" data-placement="top" title="添加人员"></i></a>
+                <i class="icon-f icon-dele" data-toggle="modal"  data-target="#del"></i>
             </div>
 
         </div>
@@ -98,7 +94,7 @@
                 <span class="text-fa-4">添加方案</span>
             </div>
             <div class="col-sm-2 fa-tj ">
-                <a href="person(适用人员).html"><i class="icon-f icon-tj "></i></a>
+                <a data-target="#tjry" data-toggle="modal"><i class="icon-f icon-tj "></i></a>
               
             </div>
 
@@ -139,6 +135,262 @@
         </div>
     </div>
 </div>
+
+
+<!--添加人员-->
+<div id="tjry" class="modal fade" role="dialog">
+    <div class="modal-dialog " role="document" style="width: 980px; ">
+        <div class="modal-content modal-blue">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">添加人员</h3>
+            </div>
+
+            <!DOCTYPE html>
+            <html>
+            <body>
+            <div class="content main">
+                <div class="clearfix"></div>
+                <div class="group-search">
+                    <select class="ph-select">
+                        <option>山东省-德州市-武城县</option>
+                        <option>山东省-德州市-武城县</option>
+                        <option>山东省-德州市-武城县</option>
+                    </select>
+
+                    <select class="ph-select">
+                        <option>全部角色</option>
+                        <option>山东省-德州市-武城县</option>
+                        <option>山东省-德州市-武城县</option>
+                    </select>
+
+                    <select class="ph-select">
+                        <option>业务等级</option>
+                        <option>山东省-德州市-武城县</option>
+                        <option>山东省-德州市-武城县</option>
+                    </select>
+
+                    <select  class="ph-select" >
+                        <option>区域星级</option>
+                        <option>山东省-德州市-武城县</option>
+                        <option>山东省-德州市-武城县</option>
+                    </select>
+
+                    <button class="btn btn-blue btn-sm" style="margin-left: 10px">
+                        检索
+                    </button>
+
+                    <input type="text" class="col-sm-12 big-seach" placeholder="请搜索业务人员姓名">
+                </div>
+
+                <div class="tab-content ">
+                    <!--table-box-->
+
+                    <div class=" new-table-box table-overflow ">
+                        <table class="table table-hover new-table">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>姓名</th>
+                                <th>业务ID</th>
+                                <th>角色</th>
+                                <th>负责区域</th>
+                                <th>业务等级</th>
+                                <th>入职时间</th>
+                                <th>当前所属方案</th>
+                                <th>操作</th>
+                            </tr>
+                            <tr>
+
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>01</td>
+                                <td>李易峰</td>
+                                <td>A1158584584854151</td>
+                                <td>服务站经理</td>
+                                <td>
+                                    <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                                    山东省济南市天桥区
+                                </td>
+                                <td> <span class="text-zi text-strong">大学生</span></td>
+                                <td>2016.08.19</td>
+                                <td><span class="text-gery">无</span></td>
+                                <td>
+                                    <label for="input-2"></label>
+                                    <input id="input-2" type="checkbox" checked>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>02</td>
+                                <td>李易峰</td>
+                                <td>A1158584584854151</td>
+                                <td>服务站经理</td>
+                                <td>
+                                    <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x icon-hui"></i>
+                                    山东省济南市天桥区
+                                </td>
+                                <td> <span class="text-hong text-strong">中学生</span></td>
+                                <td>2016.08.19</td>
+                                <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                                <td><i class="icon icon-un" title="已有所属方案，不可勾选" ></i></td>
+                            </tr>
+
+                            <tr>
+                                <td>03</td>
+                                <td>李易峰</td>
+                                <td>A1158584584854151</td>
+                                <td>服务站经理</td>
+                                <td>
+                                    <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                                    山东省济南市天桥区
+                                </td>
+                                <td> <span class="text-lan text-strong">小学生</span></td>
+                                <td>2016.08.19</td>
+                                <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                                <td><i class="icon icon-un" title="已有所属方案，不可勾选" ></i></td>
+                            </tr>
+
+                            <tr>
+                                <td>04</td>
+                                <td>李易峰</td>
+                                <td>A1158584584854151</td>
+                                <td>服务站经理</td>
+                                <td>
+                                    <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                                    山东省济南市天桥区
+                                </td>
+                                <td> <span class="text-lan text-strong">小学生</span></td>
+                                <td>2016.08.19</td>
+                                <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                                <td><i class="icon icon-un" title="已有所属方案，不可勾选" ></i></td>
+                            </tr>
+
+                            <tr>
+                                <td>05</td>
+                                <td>李易峰</td>
+                                <td>A1158584584854151</td>
+                                <td>服务站经理</td>
+                                <td>
+                                    <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                                    山东省济南市天桥区
+                                </td>
+                                <td> <span class="text-lan text-strong">小学生</span></td>
+                                <td>2016.08.19</td>
+                                <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                                <td><i class="icon icon-un" title="已有所属方案，不可勾选" ></i></td>
+                            </tr>
+
+                            <tr>
+                                <td>06</td>
+                                <td>李易峰</td>
+                                <td>A1158584584854151</td>
+                                <td>服务站经理</td>
+                                <td>
+                                    <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                                    山东省济南市天桥区
+                                </td>
+                                <td> <span class="text-lan text-strong">小学生</span></td>
+                                <td>2016.08.19</td>
+                                <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                                <td><i class="icon icon-un" title="已有所属方案，不可勾选" ></i></td>
+                            </tr>
+
+
+                            <tr>
+                                <td>07</td>
+                                <td>李易峰</td>
+                                <td>A1158584584854151</td>
+                                <td>服务站经理</td>
+                                <td>
+                                    <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                                    山东省济南市天桥区
+                                </td>
+                                <td> <span class="text-lan text-strong">小学生</span></td>
+                                <td>2016.08.19</td>
+                                <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                                <td><i class="icon icon-un" title="已有所属方案，不可勾选" ></i></td>
+                            </tr>
+
+                            <tr>
+                                <td>08</td>
+                                <td>李易峰</td>
+                                <td>A1158584584854151</td>
+                                <td>服务站经理</td>
+                                <td>
+                                    <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                                    山东省济南市天桥区
+                                </td>
+                                <td> <span class="text-lan text-strong">小学生</span></td>
+                                <td>2016.08.19</td>
+                                <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                                <td><i class="icon icon-un" title="已有所属方案，不可勾选" ></i></td>
+                            </tr>
+
+                            <tr>
+                                <td>09</td>
+                                <td>李易峰</td>
+                                <td>A1158584584854151</td>
+                                <td>服务站经理</td>
+                                <td>
+                                    <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                                    山东省济南市天桥区
+                                </td>
+                                <td> <span class="text-lan text-strong">小学生</span></td>
+                                <td>2016.08.19</td>
+                                <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                                <td><i class="icon icon-un" title="已有所属方案，不可勾选" ></i></td>
+                            </tr>
+
+
+                            <tr>
+                                <td>10</td>
+                                <td>李易峰</td>
+                                <td>A1158584584854151</td>
+                                <td>服务站经理</td>
+                                <td>
+                                    <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                                    山东省济南市天桥区
+                                </td>
+                                <td> <span class="text-lan text-strong">小学生</span></td>
+                                <td>2016.08.19</td>
+                                <td><a href=""><span class="text-lv text-strong">代理商C方案</span></a> </td>
+                                <td><i class="icon icon-un" title="已有所属方案，不可勾选" ></i></td>
+                            </tr>
+
+
+
+
+
+                            </tbody>
+                        </table>
+
+
+
+                        <button class="btn btn-blue col-sm-3" style="margin-left: 40%">确定</button>
+                    </div>
+                    <!--table-box-->
+
+                    <!--待审核账单-->
+                </div>
+
+                <!--油补记录-->
+            </div>
+
+            <![endif]-->
+
+            </body>
+            </html>
+
+
+
+        </div>
+    </div>
+</div>
+
+
 <script src="../static/bootstrap/js/bootstrap.min.js"></script>
 <script>
     $(function () {

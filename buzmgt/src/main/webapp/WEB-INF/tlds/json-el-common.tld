@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"      
+    "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">  
+<taglib>
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>el</short-name>
+		<uri>WEB-INF/tlds</uri>
+    <!-- 将对象format成json字符串 -->
+    <function>
+        <name>toJsonString</name>
+
+        <function-class>com.wangge.buzmgt.util.JsonElUtil</function-class>
+        <function-signature>String toJsonString(java.lang.Object)</function-signature>
+
+        <description>将对象format成json字符串</description>
+        <example>${el:toJsonString(value)}</example>
+    </function>
+</taglib>

@@ -37,7 +37,14 @@
       <td>{{brand.name}}</td>
       <td>{{good.name}}</td>
       <td class="reason">
-				约定时间内达量{{numberFirst}} | {{numberSecond}} | {{numberThird}}
+				<span class="text-red">{{numberFirst}} 
+			{{#if numberSecond}}
+			| {{numberSecond}} 
+			{{/if}}
+			{{#if numberThird}}
+			| {{numberThird}}
+			{{/if}}
+			</span>
 			</td>
       <td>
 				<span class="text-blue">{{formDate startDate}}-{{formDate endDate}}</span>
@@ -46,9 +53,9 @@
       <td><span class="ph-on">进行中</span></td>
       <td>{{formDate createDate}}</td>
       <td>
-        <button class="btn bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看</button>
-        <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程</button>
-        <button class="btn btn-sm btn-sc " data-toggle="modal" data-target="#">删除</button>
+        <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
+        <a href="/achieve/course/{{achieveId}}" class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程</a>
+        <button class="btn btn-sm btn-sc " onclick="delAchieve({{achieveId}})">删除</button>
       </td>
     </tr>
 	{{/each}}
@@ -69,20 +76,7 @@ var	base='<%=basePath%>';
 <body>
 
 	<div class="content main">
-		<h4 class="page-header">
-			<i class="ico ico-tcsz"></i>提成设置 <a href="javascript:history.back();"><i
-				class="ico icon-back fl-right"></i></a>
-				<input id="planId" hidden="hidden" value="${planId }">
-		</h4>
-
-		<ul class="nav nav-pills  nav-top" id="myTab">
-			<li><a data-toggle="tab" href="#ajgqj">按价格区间</a></li>
-			<li><a data-toggle="tab" href="#ppxhao">品牌型号<span
-					class="qipao">2</span></a></li>
-			<li class="active"><a data-toggle="tab" href="#dlsz">达量设置</a></li>
-			<li><a data-toggle="tab" href="#djsz">叠加设置</a></li>
-			<li><a data-toggle="tab" href="#dljl">达量奖励</a></li>
-		</ul>
+		<jsp:include page="income_set_menu.jsp"></jsp:include>
 
 		<div class="row">
 			<!--col begin-->
@@ -116,9 +110,9 @@ var	base='<%=basePath%>';
 						<!--达量设置-->
 						<div class="tab-pane fade in active right-body" id="dlsz">
 							<div class="ph-btn-set">
-								<a href="" class="btn ph-blue"> <i class="ico icon-xj"></i>
+								<a href="javascript:add();" class="btn ph-blue"> <i class="ico icon-xj"></i>
 									<span class="text-gery">添加</span>
-								</a> <a href="" class="btn ph-blue" style="margin-right: 30px">
+								</a> <a href="JavaScript:record();" class="btn ph-blue" style="margin-right: 30px">
 									<i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
 								</a>
 								<div class="link-posit pull-right">
@@ -146,103 +140,6 @@ var	base='<%=basePath%>';
 										</tr>
 									</thead>
 									<tbody id="achieveList">
-										
-										<tr>
-											<td>01</td>
-											<td>小米/xiaomi</td>
-											<td>小米手机MAX</td>
-											<td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
-											<td><a href="">2016.08.22-2016.08.29</a></td>
-											<td><span class="text-blue">2016.08.28</span></td>
-											<td><span class="ph-on">进行中</span></td>
-											<td>2016.08.28</td>
-											<td>
-												<button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-													data-target="#">查看</button>
-												<button class="btn btn-sm bnt-jc " data-toggle="modal"
-													data-target="#">进程</button>
-												<button class="btn btn-sm btn-sc " data-toggle="modal"
-													data-target="#">删除</button>
-											</td>
-										</tr>
-
-
-										<tr>
-											<td>01</td>
-											<td>小米/xiaomi</td>
-											<td>小米手机MAX</td>
-											<td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
-											<td><a href="">2016.08-22-2016.08.29</a></td>
-											<td><span class="text-blue">2016.08.28</span></td>
-											<td><span class="ph-weihes">未核算</span></td>
-											<td>2016.08.28</td>
-											<td>
-												<button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-													data-target="#">查看</button>
-												<button class="btn btn-sm bnt-jc " data-toggle="modal"
-													data-target="#">进程</button>
-												<button class="btn btn-sm btn-sc " data-toggle="modal"
-													data-target="#">删除</button>
-											</td>
-										</tr>
-
-										<tr>
-											<td>01</td>
-											<td>小米/xiaomi</td>
-											<td>小米手机MAX</td>
-											<td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
-											<td><a href="">2016.08-22-2016.08.29</a></td>
-											<td><span class="text-blue">2016.08.28</span></td>
-											<td><span class="ph-on">进行中</span></td>
-											<td>2016.08.28</td>
-											<td>
-												<button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-													data-target="#">查看</button>
-												<button class="btn btn-sm bnt-jc " data-toggle="modal"
-													data-target="#">进程</button>
-												<button class="btn btn-sm btn-sc " data-toggle="modal"
-													data-target="#">删除</button>
-											</td>
-										</tr>
-
-										<tr>
-											<td>01</td>
-											<td>小米/xiaomi</td>
-											<td>小米手机MAX</td>
-											<td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
-											<td><a href="">2016.08-22-2016.08.29</a></td>
-											<td><span class="text-blue">2016.08.28</span></td>
-											<td><span class="ph-on">进行中</span></td>
-											<td>2016.08.28</td>
-											<td>
-												<button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-													data-target="#">查看</button>
-												<button class="btn btn-sm bnt-jc " data-toggle="modal"
-													data-target="#">进程</button>
-												<button class="btn btn-sm btn-sc " data-toggle="modal"
-													data-target="#">删除</button>
-											</td>
-										</tr>
-
-										<tr>
-											<td>01</td>
-											<td>小米/xiaomi</td>
-											<td>小米手机MAX</td>
-											<td class="reason">你说要500台我给你600台你不开心你说要500台我给你600台你不开心</td>
-											<td><a href="">2016.08-22-2016.08.29</a></td>
-											<td><span class="text-blue">2016.08.28</span></td>
-											<td><span class="ph-on">进行中</span></td>
-											<td>2016.08.28</td>
-											<td>
-												<button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-													data-target="#">查看</button>
-												<button class="btn btn-sm bnt-jc " data-toggle="modal"
-													data-target="#">进程</button>
-												<button class="btn btn-sm btn-sc " data-toggle="modal"
-													data-target="#">删除</button>
-											</td>
-										</tr>
-
 									</tbody>
 								</table>
 							</div>
@@ -278,7 +175,7 @@ var	base='<%=basePath%>';
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script type="text/javascript"
-		src="static/achieve/acieve_list.js" charset="utf-8"></script>
+		src="static/achieve/achieve_list.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(".J_MachineType li").on("click",function(){
 			$(this).addClass("active");

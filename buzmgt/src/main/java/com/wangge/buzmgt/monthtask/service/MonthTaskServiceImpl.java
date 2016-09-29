@@ -1,19 +1,19 @@
 package com.wangge.buzmgt.monthtask.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.wangge.buzmgt.assess.entity.Assess;
+import com.wangge.buzmgt.assess.entity.RegistData;
+import com.wangge.buzmgt.assess.service.AssessService;
+import com.wangge.buzmgt.monthtask.entity.*;
+import com.wangge.buzmgt.monthtask.repository.*;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.RegionType;
+import com.wangge.buzmgt.region.repository.RegionRepository;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.service.ManagerService;
+import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.MapedExcelExport;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,29 +23,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 
-import com.wangge.buzmgt.assess.entity.Assess;
-import com.wangge.buzmgt.assess.entity.RegistData;
-import com.wangge.buzmgt.assess.service.AssessService;
-import com.wangge.buzmgt.monthtask.entity.MonthOdersData;
-import com.wangge.buzmgt.monthtask.entity.MonthTask;
-import com.wangge.buzmgt.monthtask.entity.MonthTaskExecution;
-import com.wangge.buzmgt.monthtask.entity.MonthTaskPunish;
-import com.wangge.buzmgt.monthtask.entity.MonthTaskSub;
-import com.wangge.buzmgt.monthtask.entity.MonthshopBasData;
-import com.wangge.buzmgt.monthtask.repository.MonthOrdersDataRepository;
-import com.wangge.buzmgt.monthtask.repository.MonthTaskExecutionRepository;
-import com.wangge.buzmgt.monthtask.repository.MonthTaskPunishRepository;
-import com.wangge.buzmgt.monthtask.repository.MonthTaskRepository;
-import com.wangge.buzmgt.monthtask.repository.MonthTaskSubRepository;
-import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.region.entity.Region.RegionType;
-import com.wangge.buzmgt.region.repository.RegionRepository;
-import com.wangge.buzmgt.sys.entity.User;
-import com.wangge.buzmgt.teammember.entity.Manager;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
-import com.wangge.buzmgt.teammember.service.ManagerService;
-import com.wangge.buzmgt.util.DateUtil;
-import com.wangge.buzmgt.util.MapedExcelExport;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.Map.Entry;
 
 @Service
 
@@ -216,7 +201,7 @@ public class MonthTaskServiceImpl implements MonthTaskService {
   private String getDefaultRegionId() {
     Region region = getRegion(null);
     RegionType type = region.getType();
-    int rgionType = type.ordinal();
+    int rgionType = type.getId();
     String regionId = region.getId();
     switch (rgionType) {
       case 0:

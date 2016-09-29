@@ -3,6 +3,7 @@ package com.wangge.buzmgt.customtask.server;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,10 +32,13 @@ import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
+import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.monthtask.entity.AppServer;
+import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.EnvironmentUtils;
 import com.wangge.buzmgt.util.HttpUtil;
 
 @Service
@@ -69,8 +73,12 @@ public class CustomTaskServeImpl implements CustomTaskServer {
   @Override
   @Transactional(rollbackForClassName = "Exception")
   public void save(CustomTask customTask) throws Exception {
+    User author = EnvironmentUtils.getUser();
+    String authorId = author.getId();
+    String authorName = author.getUsername();
     try {
-      
+      customTask.setAuthorId(authorId);
+      customTask.setAuthorName(authorName);
       Collection<SalesMan> oldSet = customTask.getSalesmanSet();
       List<String> idList = new ArrayList<String>();
       for (SalesMan old : oldSet) {
@@ -83,11 +91,12 @@ public class CustomTaskServeImpl implements CustomTaskServer {
       // 计算扣罚金额,每次有就叠加
       if (customTask.getType() == 2) {
         for (String salesManId : idList) {
+          double punish = customTask.getPunishCount();
           MainIncome main = mainIncomeService.findIncomeMain(salesManId);
-          main.setPunish(main.getPunish() + customTask.getPunishCount());
-          incomeRep.save(main);
+          incomeRep.updatebasicSalaryOrPunish(0, punish, punish, main.getId());
         }
-        
+        LogUtil
+            .info("用户" + authorName + "---" + authorId + "发起了个扣罚事件," + customTask.getPunishCount() + "人员为:" + idList);
       }
       
       // 开始推送操作
@@ -122,12 +131,20 @@ public class CustomTaskServeImpl implements CustomTaskServer {
   public Map<String, Object> findAll(Pageable page, Map<String, Object> searchParams) {
     String salesName = searchParams.get("salesName") == null ? "" : searchParams.get("salesName").toString();
     searchParams.remove("salesName");
+    String salesId = searchParams.get("salesId") == null ? "" : searchParams.get("salesId").toString();
+    searchParams.remove("salesId");
     Page<CustomTask> cpage = customRep.findAll((Specification<CustomTask>) (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<Predicate>();
+      
       if (!salesName.isEmpty()) {
-        SetJoin<CustomTask, SalesMan> setJion = root
-            .join(root.getModel().getDeclaredSet("salesmanSet", SalesMan.class), JoinType.LEFT);
+        SetJoin<CustomTask, SalesMan> setJion = root.join(root.getModel().getDeclaredSet("salesmanSet", SalesMan.class),
+            JoinType.LEFT);
         predicates.add(cb.like(setJion.get("truename"), "%" + salesName + "%"));
+      }
+      if (!salesId.isEmpty()) {
+        SetJoin<CustomTask, SalesMan> setJion = root.join(root.getModel().getDeclaredSet("salesmanSet", SalesMan.class),
+            JoinType.LEFT);
+        predicates.add(cb.equal(setJion.get("id"), salesId));
       }
       PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
       

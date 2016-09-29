@@ -41,6 +41,7 @@
 	<div id="j_page_main" class="content main">
 		<h4 class="page-header-region">
 			<i class="icon region-setting-icon"></i>区域划分
+			<a class="btn btn-blue " data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" onclick="toRegionType();">区域类型</a>
 		</h4>
 		<div class="row">
 			<div class="col-md-12">

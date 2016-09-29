@@ -150,29 +150,37 @@ public class ExcelExport {
         }
       } else {
         String[] names = StringUtils.split(key, ".");
-
-        // 获得组合类的get方法
-        methodName = "get" + names[0].substring(0, 1).toUpperCase() + names[0].substring(1);
-        // 获得组合类的值
-        value = genericSelfClass.getMethod(methodName).invoke(t);
-
-        // 获得组合类的instance
-        Class<?> combinationClass = Class.forName(value.getClass().getName());
-
-        // 获得组合类中相应字段的get方法
-        methodName = "get" + names[1].substring(0, 1).toUpperCase() + names[1].substring(1);
-        // 获得组合类中相应字段的值
-        value = combinationClass.getMethod(methodName).invoke(value);
-
-        if(names.length>2){
+        
+        Class<?> fieldClass = genericSelfClass.getDeclaredField(names[0]).getType();
+        //获取list需要重新tostring()方法
+        if("java.util.List".equals(fieldClass.getName())){
+       // 获得组合类的get方法
+          methodName = "get" + names[0].substring(0, 1).toUpperCase() + names[0].substring(1);
+          Object list = genericSelfClass.getMethod(methodName).invoke(t);
+          value = list.toString();
+        }else{
+          // 获得组合类的get方法
+          methodName = "get" + names[0].substring(0, 1).toUpperCase() + names[0].substring(1);
+          // 获得组合类的值
+          value = genericSelfClass.getMethod(methodName).invoke(t);
+          
           // 获得组合类的instance
-          Class<?> combinationClass_ = Class.forName(value.getClass().getName());
-
+          Class<?> combinationClass = Class.forName(value.getClass().getName());
+          
           // 获得组合类中相应字段的get方法
-          methodName = "get" + names[2].substring(0, 1).toUpperCase() + names[2].substring(1);
+          methodName = "get" + names[1].substring(0, 1).toUpperCase() + names[1].substring(1);
           // 获得组合类中相应字段的值
-          value = combinationClass_.getMethod(methodName).invoke(value);
-
+          value = combinationClass.getMethod(methodName).invoke(value);
+          
+          if(names.length>2){
+            // 获得组合类的instance
+            Class<?> combinationClass_ = Class.forName(value.getClass().getName());
+            
+            // 获得组合类中相应字段的get方法
+            methodName = "get" + names[2].substring(0, 1).toUpperCase() + names[2].substring(1);
+            // 获得组合类中相应字段的值
+            value = combinationClass_.getMethod(methodName).invoke(value);
+          }
         }
       }
 
