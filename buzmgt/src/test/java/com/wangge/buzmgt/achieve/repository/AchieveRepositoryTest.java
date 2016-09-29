@@ -1,9 +1,7 @@
 package com.wangge.buzmgt.achieve.repository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +38,7 @@ public class AchieveRepositoryTest {
       
       Achieve achieve = new Achieve();
       //组装规则
-      List<RewardPunishRule> rprs=new ArrayList<>();
+      Set<RewardPunishRule> rprs=new HashSet<>();
       for(int i=0;i<3;i++){
         RewardPunishRule rewardPunishRules = new RewardPunishRule();
         rewardPunishRules.setFlag(FlagEnum.NORMAL);
