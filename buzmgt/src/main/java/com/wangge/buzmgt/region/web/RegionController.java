@@ -505,6 +505,7 @@ public class RegionController {
     }
     
     saojiedata.setRegion(region);
+    saojiedata.setSalesman(salesman);
     saojieDateService.saveSaojieData(saojiedata);
     if (null != saojiedata.getRegistData()) {
       RegistData registdata = assessService.findRegistData(saojiedata.getRegistData().getId());
