@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -141,6 +142,9 @@
                                     <span class="text-pronce text-bg">${areaAttr.region.namepath}  <span class="text-red text-bg">${areaAttr.commissions}</span>元/台</span>
                                 </c:forEach>
                             </c:if>
+                            <c:if test="${empty areaAttributes}">
+                                <span class="text-pronce text-bg">暂无</span>
+                            </c:if>
                             </dd>
                         </dl>
                     </li>
@@ -149,7 +153,7 @@
                         <dl class="dl-horizontal">
                             <dt>方案起止日期：</dt>
                             <dd>
-                                <span class="text-pronce text-blue ">  ${brandIncome.startDate} - ${brandIncome.endDate}</span>
+                                <span class="text-pronce text-blue ">  <fmt:formatDate value="${brandIncome.startDate}" pattern="yyyy-MM-dd"/> 至 <fmt:formatDate value="${brandIncome.endDate}" pattern="yyyy-MM-dd"/></span>
                             </dd>
 
                         </dl>
@@ -158,7 +162,12 @@
                         <dl class="dl-horizontal">
                             <dt>指派审核人员：</dt>
                             <dd>
-                                <span class="text-pronce  "> ${brandIncome.user.nickname}</span>
+                                <c:if test="${!empty brandIncome.user.nickname}">
+                                    <span class="text-pronce  "> ${brandIncome.user.nickname}</span>
+                                </c:if>
+                                <c:if test="${empty brandIncome.user.nickname}">
+                                    <span class="text-pronce  "> 暂无</span>
+                                </c:if>
                             </dd>
 
                         </dl>

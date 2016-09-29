@@ -131,7 +131,6 @@
 
     <ul class="nav nav-pills  nav-top" id="myTab">
         <li class="active" data-title="underway"><a data-toggle="tab" href="#newon"> &nbsp;当前进行 &nbsp;  </a></li>
-        <li data-title="expired"><a data-toggle="tab" href="#yguoq">  &nbsp; 已过期 &nbsp; </a></li>
     </ul>
 
 
@@ -167,8 +166,6 @@
                         <%--当前进行分页--%>
                         <div id="brandUnderwayPager"></div>
                     </div>
-
-
                     <!--已过期-->
 
                     <div class="tab-pane fade  " id="yguoq">
@@ -203,8 +200,7 @@
                 </div>
 
             </div>
-
-
+            </div>
         </div>
 
     </div>
@@ -255,7 +251,7 @@
 <script src="static/js/dateutil.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="static/js/handlebars-v4.0.2.js" charset="utf-8"></script>
 <script type="text/javascript" src="static/bootStrapPager/js/extendPagination.js"></script>
-<script type="text/javascript" src="static/brandincome/js/brand_record.js" charset="utf-8"></script>
+<script type="text/javascript" src="static/brandincome/js/brand_record_audit.js" charset="utf-8"></script>
 <script type="text/javascript">
 
 

@@ -1,25 +1,31 @@
 package com.wangge.buzmgt.income.main.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.criteria.Predicate;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.Hedge;
 import com.wangge.buzmgt.income.main.repository.HedgeRepository;
 import com.wangge.buzmgt.income.main.vo.HedgeVo;
-import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.main.vo.repository.HedgeVoRepository;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.util.DateUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class HedgeServiceImpl implements HedgeService {
@@ -56,5 +62,60 @@ public class HedgeServiceImpl implements HedgeService {
     }, pageReq);
     return page;
   }
-  
+
+  @Override
+  public int countByGoodId(String goodId) {
+    return hedgeRep.countByGoodId(goodId);
+  }
+
+  @Override
+  public Page<HedgeVo> findAll(HttpServletRequest request, Region region, Pageable pageable) {
+    Sort s = new Sort(Sort.Direction.DESC, "shdate");
+    pageable = new PageRequest(pageable.getPageNumber(),pageable.getPageSize(),s);
+    Page<HedgeVo> page = hedgeVOrep.findAll((root, query, cb) -> {
+      List<Predicate> predicates = getPredicate(root,cb,request,region);
+      return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+    }, pageable);
+    return page;
+  }
+
+  @Override
+  public List<HedgeVo> findAll(HttpServletRequest request, Region region) {
+    Sort s=new Sort(Sort.Direction.DESC, "shdate");
+    List<HedgeVo> list = hedgeVOrep.findAll((root, query, cb) -> {
+      List<Predicate> predicates = getPredicate(root,cb,request,region);
+      return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+    }, s);
+    return list;
+  }
+
+  /**
+   * 获取Predicate条件
+   * @param root
+   * @param cb
+   * @param request
+   * @param region
+   * @return
+   */
+  public List<Predicate> getPredicate(Root<HedgeVo> root, CriteriaBuilder cb,HttpServletRequest request, Region region){
+    Date startDate = DateUtil.string2Date(request.getParameter("startDate"));
+    Date endDate = DateUtil.string2Date(request.getParameter("endDate"));
+    List<Predicate> predicates = new ArrayList<Predicate>();
+    Predicate predicate = cb.between(root.get("shdate").as(Date.class), startDate,endDate);
+    Predicate predicate1;
+    if ("镇".equals(region.getType().getName())){
+      predicate1 = cb.equal(root.get("shopRegionId").as(String.class), region.getId());
+    }else {
+      predicate1 = cb.equal(root.get("regionId").as(String.class), region.getId());
+    }
+    predicates.add(cb.and(predicate, predicate1));
+    String terms = request.getParameter("terms");
+    if (StringUtils.isNotBlank(terms)){
+      Predicate predicate2 = cb.equal(root.get("orderno").as(String.class),terms);
+      Predicate predicate3 = cb.like(root.get("shopName").as(String.class),"%" + terms + "%");
+      predicates.add(cb.or(predicate2, predicate3));
+    }
+    return predicates;
+  }
+
 }

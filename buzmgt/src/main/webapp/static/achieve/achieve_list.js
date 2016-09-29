@@ -1,4 +1,5 @@
 var achieveTotal = 0;
+var brandTotal = 0;
 $(function() {
 	initExcelExport();// 初始化导出excel
 	initSearchData();
@@ -126,8 +127,6 @@ function initExcelExport() {
 				SearchData['sc_EQ_planId'] = $planId;
 				var param = parseParam(SearchData);
 				delete SearchData['sc_EQ_planId'];
-				window.location.href = base + "achieve/export" +"?" + param;
-				delete SearchData['planId'];
 				var tab = findTab();
 				switch (tab) {
 					case 'achieve':
@@ -291,7 +290,7 @@ function brandLook(brandIncomeId) {
  * @param brandIncomeId
  */
 function brandStop(brandIncomeId) {
-	$('#addTask').modal({
+	$('#brandStop').modal({
 		keyboard: false
 	})
 	$("#brandId").val(brandIncomeId);
@@ -327,6 +326,13 @@ function setRecord() {
 	var planId = $("#planId").val();
 	var machineType=findMachineType();
 	window.location.href = base + "brandIncome/record?planId="+planId+"&machineType="+machineType;
+}
+
+/**
+ * 品牌型号查看进程
+ */
+function brandProcess(brandId) {
+	window.location.href = base + "/brandIncome/process/"+brandId;
 }
 
 Handlebars.registerHelper('formDate', function(value) {

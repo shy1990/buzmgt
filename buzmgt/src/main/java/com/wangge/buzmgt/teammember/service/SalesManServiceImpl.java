@@ -221,4 +221,9 @@ public  class SalesManServiceImpl implements SalesManService {
         }
 
     }
+
+    @Override
+    public List<SalesmanLevel> findAll() {
+        return salesmanLevelRepository.findAll();
+    }
 }

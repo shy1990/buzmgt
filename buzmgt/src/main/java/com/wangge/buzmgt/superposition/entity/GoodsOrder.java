@@ -47,6 +47,12 @@ public class GoodsOrder {
 
     private String businessRegionId;//商家名字
 
+    private String orderNum;//订单号
+
+    private Integer starsLevel;//区域星级
+
+    private String namepath;//所属区域
+
     public String getBusinessRegionId() {
         return businessRegionId;
     }
@@ -167,6 +173,30 @@ public class GoodsOrder {
         this.payTime = payTime;
     }
 
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public Integer getStarsLevel() {
+        return starsLevel;
+    }
+
+    public void setStarsLevel(Integer starsLevel) {
+        this.starsLevel = starsLevel;
+    }
+
+    public String getNamepath() {
+        return namepath;
+    }
+
+    public void setNamepath(String namepath) {
+        this.namepath = namepath;
+    }
+
     @Override
     public String toString() {
         return "GoodsOrder{" +
@@ -185,6 +215,9 @@ public class GoodsOrder {
                 ", payTime=" + payTime +
                 ", shopName='" + shopName + '\'' +
                 ", businessRegionId='" + businessRegionId + '\'' +
+                ", orderNum='" + orderNum + '\'' +
+                ", starsLevel=" + starsLevel +
+                ", namepath='" + namepath + '\'' +
                 '}';
     }
 }

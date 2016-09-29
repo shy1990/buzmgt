@@ -50,7 +50,7 @@
 			<td>{{formDate createDate}}</td>
 			<td>
 				<button class="btn bnt-sm bnt-ck" onclick="brandLook('{{id}}');">查看</button>
-				<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="brandProcess();">进程</button>
+				<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="brandProcess('{{id}}');">进程</button>
 				<button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#brandStop" onclick="brandStop('{{id}}');">终止</button>
 			</td>
 		</tr>
@@ -122,7 +122,7 @@ var	base='<%=basePath%>';
 			<li data-title="brandIncome"><a data-toggle="tab" href="#ppxhao">品牌型号<span
 					class="qipao">2</span></a></li>
 			<li class="active" data-title="achieve"><a data-toggle="tab" href="#dlsz">达量设置</a></li>
-			<li><a data-toggle="tab" href="#djsz">叠加设置</a></li>
+			<li data-title="diejia"><a data-toggle="tab" href="#djsz">叠加设置</a></li>
 			<li><a data-toggle="tab" href="#dljl">达量奖励</a></li>
 		</ul>
 
@@ -341,8 +341,8 @@ var	base='<%=basePath%>';
 						<div class="container-fluid">
 							<form class="form-horizontal">
 								<div class="form-group">
-									<p class="col-sm-12  ">该品牌方案当前正在使用，你确定要删除方案吗？</p>
-									<p class="col-sm-12">删除后该方案将不复存在，所有提成规则及使用人员将使用到删除日期为止！</p>
+									<p class="col-sm-12  ">该品牌方案当前正在使用，你确定要终止方案吗？</p>
+									<p class="col-sm-12">终止后该方案将不复存在，所有提成规则及使用人员将使用到终止日期为止！</p>
 								</div>
 
 

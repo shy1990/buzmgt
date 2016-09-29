@@ -27,7 +27,7 @@ public class HedgeVo {
   @Id
   private Long id;
   // 订单号,sku号,唯一码  s.user_id, s.truename,r.namepath
-  private String orderno, sku, uniquenumber,userId,namepath,truename;
+  private String orderno, sku, uniquenumber,userId,namepath,truename,shopName,regionId,shopRegionId;
   // 型号名称
   private String goodsName;
   // 到货日期
@@ -137,5 +137,28 @@ public class HedgeVo {
   public void setRowind(Long rowind) {
     this.rowind = rowind;
   }
-  
+
+  public String getShopName() {
+    return shopName;
+  }
+
+  public void setShopName(String shopName) {
+    this.shopName = shopName;
+  }
+
+  public String getRegionId() {
+    return regionId;
+  }
+
+  public void setRegionId(String regionId) {
+    this.regionId = regionId;
+  }
+
+  public String getShopRegionId() {
+    return shopRegionId;
+  }
+
+  public void setShopRegionId(String shopRegionId) {
+    this.shopRegionId = shopRegionId;
+  }
 }

@@ -5,6 +5,7 @@ import com.wangge.buzmgt.log.repository.LogRepository;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.util.EnvironmentUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -26,7 +27,7 @@ public class LogServiceImpl implements LogService {
 
         Log log = new Log();
 
-        log.setEventUsername(EnvironmentUtils.getUser().getUsername());
+        log.setEventUsername(ObjectUtils.isEmpty(EnvironmentUtils.getUser()) ? "" : EnvironmentUtils.getUser().getUsername());
 
         log.setEventDate(new Date());
 
