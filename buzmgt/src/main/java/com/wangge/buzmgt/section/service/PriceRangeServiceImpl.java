@@ -79,4 +79,10 @@ public class PriceRangeServiceImpl implements PriceRangeService {
         priceRange.setEndTime(endTime);
         return priceRangeRepository.save(priceRange);
     }
+
+    @Override
+    public PriceRange findById(Long id) {
+        return priceRangeRepository.findOne(id);
+    }
+
 }

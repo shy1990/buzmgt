@@ -15,4 +15,8 @@ public interface PriceRangeService {
     public void reviewPriceRange(PriceRange priceRange, String status);
 
     public PriceRange stopPriceRange(PriceRange priceRange);
+
+    PriceRange findById(Long id);
+
+
 }

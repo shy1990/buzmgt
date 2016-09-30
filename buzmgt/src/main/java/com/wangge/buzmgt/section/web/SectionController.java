@@ -309,32 +309,32 @@ public class SectionController {
         return pageResponse;
     }
 
-    /**
-     * 测试计算
-     *
-     * @return
-     */
-    @RequestMapping(value = "compute", method = RequestMethod.GET)
-    @ResponseBody
-    public String compute() {
-
-        String orderNo = "123454";
-        String payTime = "2016-09-28";
-        Double price = 1005.0;
-        String userId = "A123456";
-        String goodsId = "sdfjsdfsjfskdfjdsf";
-        String type = "lj";
-        String planId = "1";
-        Integer num = 3;
-        if(payTime == null || "".equals(payTime)){
-            String msg = productionService.compute(orderNo,price,userId,goodsId,type,planId,num);
-            return msg;
-        }
-        System.out.println("-----------------------------------------------");
-        String msg = productionService.compute(orderNo,payTime,price,userId,goodsId,type,planId,num);
-
-        return msg;
-    }
+//    /**
+//     * 测试计算
+//     *
+//     * @return
+//     */
+//    @RequestMapping(value = "compute", method = RequestMethod.GET)
+//    @ResponseBody
+//    public String compute() {
+//
+//        String orderNo = "123454";
+//        String payTime = "2016-09-28";
+//        Double price = 1005.0;
+//        String userId = "A123456";
+//        String goodsId = "sdfjsdfsjfskdfjdsf";
+//        String type = "lj";
+//        String planId = "1";
+//        Integer num = 3;
+//        if(payTime == null || "".equals(payTime)){
+//            String msg = productionService.compute(orderNo,price,userId,goodsId,type,planId,num);
+//            return msg;
+//        }
+//        System.out.println("-----------------------------------------------");
+//        String msg = productionService.compute(orderNo,payTime,price,userId,goodsId,type,planId,num);
+//
+//        return msg;
+//    }
 
     /*
      * 获取用户的方法

@@ -48,7 +48,7 @@ public class ProductionServiceImpl implements ProductionService {
     /**
      *  已支付计算
      * @param orderNo:订单号
-     * @param payTime:支付时间("yyyy-MM-dd")
+     * @param payTime1:支付时间("yyyy-MM-dd")
      * @param price:产品价格
      * @param userId:业务员id
      * @param goodsId:产品id
@@ -58,8 +58,9 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public String compute(String orderNo, String payTime, Double price, String userId, String goodsId, String type, String planId,Integer num) {
+    public String compute(String orderNo, Date payTime1, Double price, String userId, String goodsId, String type, String planId,Integer num) {
         //1.需要的参数: 1.订单号 2.订单单品支付时间 3.商品的价格 4.用户id 5.区域id 6.产品类型 7.方案id(下面是模拟数据)
+        String payTime = DateUtil.date2String(payTime1,"yyyy-MM-dd");
         try {
             //2.查询当前产品使用的价格区间
             Production p = findNow(type, payTime, planId);//订单日期正在使用的

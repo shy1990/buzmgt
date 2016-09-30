@@ -5,6 +5,7 @@ import com.wangge.buzmgt.section.entity.Production;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,7 @@ public interface ProductionService {
      * @param num:单品数量
      * @return
      */
-    public String compute(String orderNo,String payTime,
+    public String compute(String orderNo,Date payTime,
       Double price, String userId,String goodsId,String type,String planId,Integer num);
 
     /**
