@@ -96,11 +96,6 @@
         <div class="area-choose">
 
         </div>
-        <!--/区域选择按钮-->
-        <a href="#" class="btn btn-blue"
-           data-toggle="modal" data-target="#zdyqy">
-            <i class="ico icon-add"></i>添加
-        </a>
     </h4>
 
     <h4 class="text-hd">属性设置：</h4>
@@ -128,10 +123,6 @@
                         <span class="text-black jll"> ${areaAttr.region.namepath } </span>
                         <a class="text-redd jll" href="" data-toggle="modal" data-target=""> ${areaAttr.commissions } <span></span></a>
                         <span class="text-gray">元</span>
-                        <a class="text-blue-s jll" href="" data-toggle="modal"
-                           data-target="" onclick="modify_attrSet(${areaAttr.id })">修改</a>
-                        <a class="text-blue-s jll" href="" data-toggle="modal"
-                           data-targ t="" onclick="deleteAttrSet(${areaAttr.id })">删除</a>
                     </div>
                 </div>
             </div>
@@ -141,113 +132,6 @@
 
     </div><!--扣罚设置--->
 </div><!---扣罚设置表头-->
-
-<!-- / alert 修改--->
-<div id="changed" class="modal fade" role="dialog">
-    <div class="modal-dialog " role="document">
-        <div class="modal-content modal-blue">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title">设置区域提成</h3>
-            </div>
-
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">修改提成金额：</label>
-                            <div class="col-sm-7">
-                                <div class="input-group are-line">
-                                    <span class="input-group-addon "><i class="ph-icon   icon-je"></i></span>
-                                    <!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
-                                    <input name="a" id="input_modify" type="text" class="form-control input-h"
-                                           aria-describedby="basic-addon1" placeholder="请修改提成金额">
-                                    </input>
-                                </div>
-                                <span class="text-gery " style="float: right;margin-right: -45px;margin-top: -25px">元/台</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-offset-4 col-sm-4 ">
-                                <a herf="javascript:return 0;" id="sure_update"
-                                   class="Zdy_add  col-sm-12 btn btn-primary">确定 </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- / alert 修改--->
-
-
-<!---alert自定义添加---->
-<div id="zdyqy" class="modal fade" role="dialog">
-    <div class="modal-dialog " role="document">
-        <div class="modal-content modal-blue">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title">设置区域提成</h3>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <form id="addForm" class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">选择区域：</label>
-                            <div class="col-sm-7">
-                                <div class="input-group are-line">
-												<span class="input-group-addon"><i
-                                                        class="icon icon-qy"></i></span>
-                                    <select id="region" class="form-control input-h" name="regionId">
-                                        <input id="n" type="hidden" value="${regionId}"/>
-                                    </select>
-                                    <div id="regionMenuContent" class="menuContent">
-
-                                        <ul id="regionTree" class="ztree"></ul>
-                                    </div>
-                                    <c:if test="${!empty brandIncome}">
-                                        <input type="hidden" id="ruleId" name="ruleId" value="${brandIncome.id}">
-                                    </c:if>
-                                    <c:if test="${!empty priceRange}">
-                                        <input type="hidden" id="ruleId" name="ruleId" value="${priceRange.priceRangeId}">
-                                    </c:if>
-                                    <!-- /btn-group -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">设置提成金额：</label>
-                            <div class="col-sm-7">
-                                <div class="input-group are-line">
-                                    <span class="input-group-addon "><i class="ph-icon   icon-je"></i></span>
-                                    <!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
-                                    <input name="commission" type="text" class="form-control input-h"
-                                           aria-describedby="basic-addon1" placeholder="请设置提成金额">
-                                    </input>
-                                </div>
-                                <span class="text-gery " style="float: right;margin-right: -45px;margin-top: -25px">元/台</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-offset-4 col-sm-4 ">
-                                <a herf="javascript:return 0;" onclick="add();"
-                                   class="Zdy_add  col-sm-12 btn btn-primary">确定
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!---alert自定义---->
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="<%=basePath%>static/bootstrap/js/bootstrap.min.js"></script>
