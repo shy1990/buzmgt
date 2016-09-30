@@ -14,4 +14,6 @@ public interface AreaAttributeRepository extends JpaRepository<AreaAttribute, Lo
   AreaAttribute findByRegionAndRuleIdAndType(Region region, Long ruleId, PlanType type);
 
   List<AreaAttribute> findByRuleIdAndTypeAndDisabled(Long id,PlanType type,int disabled);
+
+  public AreaAttribute findByRegionIdAndRuleId(String regionId,Long ruleId);
 }

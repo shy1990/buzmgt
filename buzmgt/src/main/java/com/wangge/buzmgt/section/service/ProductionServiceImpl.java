@@ -1,5 +1,7 @@
 package com.wangge.buzmgt.section.service;
 
+import com.wangge.buzmgt.areaattribute.entity.AreaAttribute;
+import com.wangge.buzmgt.areaattribute.service.AreaAttributeService;
 import com.wangge.buzmgt.log.entity.Log;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.section.entity.PriceRange;
@@ -44,6 +46,9 @@ public class ProductionServiceImpl implements ProductionService {
     @Autowired
     private LogService logService;
 
+    @Autowired
+    private AreaAttributeService attributeService;
+
 
     /**
      *  已支付计算
@@ -58,7 +63,7 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public String compute(String orderNo, Date payTime1, Double price, String userId, String goodsId, String type, Long planId,Integer num) {
+    public String compute(String orderNo, Date payTime1, Double price, String userId, String goodsId, String type, Long planId,Integer num,String regionId) {
         //1.需要的参数: 1.订单号 2.订单单品支付时间 3.商品的价格 4.用户id 5.区域id 6.产品类型 7.方案id(下面是模拟数据)
         String payTime = DateUtil.date2String(payTime1,"yyyy-MM-dd");
         try {
@@ -102,11 +107,15 @@ public class ProductionServiceImpl implements ProductionService {
 
                     String[] prices = priceRange.getPriceRange().split("-");
                     if (Double.parseDouble(prices[0]) <= price && price < Double.parseDouble(prices[1])) {
-                        //TODO 保存在表中,记录提成金额
+                        AreaAttribute areaAttribute = attributeService.findByRegionIdAndRuleId(regionId,priceRange.getPriceRangeId());
                         SectionRecord sectionRecord = new SectionRecord();
+                        if(ObjectUtils.notEqual(areaAttribute,null)){
+                            sectionRecord.setPercentage(priceRange.getPercentage()+areaAttribute.getCommissions());
+                        }else {
+                            sectionRecord.setPercentage(priceRange.getPercentage());
+                        }
                         sectionRecord.setOrderNo(orderNo);//订单详情/订单
                         sectionRecord.setPayTime(DateUtil.string2Date(payTime));
-                        sectionRecord.setPercentage(priceRange.getPercentage());
                         sectionRecord.setPlanId(planId);
                         sectionRecord.setPriceRangeId(priceRange.getPriceRangeId());
                         sectionRecord.setSalesmanId(userId);
@@ -116,18 +125,17 @@ public class ProductionServiceImpl implements ProductionService {
                         sectionRecord.setOrderflag(1);//已付款
                         SectionRecord sectionRecord1 = sectionRecordService.save(sectionRecord);
                         logService.log(null, "区间方案单品已付款计算: "+sectionRecord1, Log.EventType.SAVE);
-                        logger.info(sectionRecord1);
+                        logger.info("-----------------------------"+sectionRecord1);
+                        return ;
                     }
                 });
-            } else {
-                return "没有符合价格区间的小区间方案";
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             logger.info("异常:计算失败");
         }
-        return "计算完毕,已保存";
+        return "";
     }
 
     /**
@@ -142,7 +150,7 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public String compute(String orderNo, Double price, String userId, String goodsId, String type, Long planId,Integer num) {
+    public String compute(String orderNo, Double price, String userId, String goodsId, String type, Long planId,Integer num,String regionId) {
 //1.需要的参数: 1.订单id 2.订单单品支付时间 3.商品的价格 4.用户id 5.区域id 6.产品类型 7.方案id(下面是模拟数据)
         String payTime = DateUtil.date2String(new Date(),"yyyy-MM-dd");
         try {
@@ -185,10 +193,15 @@ public class ProductionServiceImpl implements ProductionService {
                 priceRanges1.forEach(priceRange -> {
                     String[] prices = priceRange.getPriceRange().split("-");
                     if (Double.parseDouble(prices[0]) <= price && price < Double.parseDouble(prices[1])) {
+                        AreaAttribute areaAttribute = attributeService.findByRegionIdAndRuleId(regionId,priceRange.getPriceRangeId());
                         SectionRecord sectionRecord = new SectionRecord();
+                        if(ObjectUtils.notEqual(areaAttribute,null)){
+                            sectionRecord.setPercentage(priceRange.getPercentage()+areaAttribute.getCommissions());
+                        }else {
+                            sectionRecord.setPercentage(priceRange.getPercentage());
+                        }
                         sectionRecord.setOrderNo(orderNo);//订单详情/订单
                         sectionRecord.setPayTime(DateUtil.string2Date(payTime));
-                        sectionRecord.setPercentage(priceRange.getPercentage());
                         sectionRecord.setPlanId(planId);
                         sectionRecord.setPriceRangeId(priceRange.getPriceRangeId());
                         sectionRecord.setSalesmanId(userId);
@@ -198,18 +211,16 @@ public class ProductionServiceImpl implements ProductionService {
                         sectionRecord.setOrderflag(0);//出库计算
                         SectionRecord sectionRecord1 = sectionRecordService.save(sectionRecord);
                         logService.log(null, "区间方案单品出库计算: "+sectionRecord1, Log.EventType.SAVE);
-                        logger.info(sectionRecord1);
+                        logger.info("-----------------------:"+sectionRecord1);
+                        return;
                     }
                 });
-            } else {
-                return "没有符合价格区间的小区间方案";
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             logger.info("异常:计算失败");
         }
-        return "计算完毕,已保存";
+        return "";
     }
 
     /**
