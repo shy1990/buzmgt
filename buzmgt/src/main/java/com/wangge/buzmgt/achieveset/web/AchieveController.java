@@ -333,6 +333,21 @@ public class AchieveController {
     model.addAttribute("achieve", achieve);
     return "achieve/achieve_take";
   }
+  /**
+   *
+  * @Title: showtake
+  * @Description: 查看页面跳转
+  * @param @param achieve
+  * @param @param model
+  * @param @return    设定文件
+  * @return String    返回类型
+  * @throws
+   */
+  @RequestMapping(value = "/course/{achieveId}")
+  public String showCourse(@PathVariable(value = "achieveId") Achieve achieve, Model model) {
+    model.addAttribute("achieve", achieve);
+    return "achieve/achieve_take";
+  }
 
   /**
    * 

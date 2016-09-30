@@ -90,7 +90,7 @@ public interface AchieveIncomeService {
 	 * @param UserId
 	 * @return
 	 */
-	boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId);
+	boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price);
 
   /**
    *
@@ -102,5 +102,5 @@ public interface AchieveIncomeService {
   * @return boolean    返回类型
   * @throws
    */
-  boolean createAchieveIncomeByStock (Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId);
+  boolean createAchieveIncomeByStock (Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price);
 }

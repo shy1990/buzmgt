@@ -60,6 +60,7 @@ public class AchieveIncome implements Serializable{
 	@Enumerated(EnumType.STRING)
   private FlagEnum  flag = FlagEnum.NORMAL ;// 是否删除：normal-正常，del-删除
 	private Long planId;//主方案ID
+	private Float price;//商品价格
 
   public Long getId() {
     return id;
@@ -138,6 +139,12 @@ public class AchieveIncome implements Serializable{
 	}
 	public Long getPlanId() {
 		return planId;
+	}
+	public Float getPrice() {
+		return price;
+	}
+	public void setPrice(Float price) {
+		this.price = price;
 	}
 
 	@Override

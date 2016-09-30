@@ -90,7 +90,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	 * @throws
 	boolean createAchieveIncomeBy(Achieve achieve, String orderNo, String UserId, int num, String goodId,int payStatus);
 	 */
-	public boolean createAchieveIncome(Achieve achieve, String orderNo, String userId, int num, String goodId, int payStatus,Long planId) {
+	public boolean createAchieveIncome(Achieve achieve, String orderNo, String userId, int num, String goodId, int payStatus,Long planId, Float price) {
 		try {
 			AchieveIncome.PayStatusEnum statusEnum =AchieveIncome.PayStatusEnum.STOCK;
 			if(payStatus==1){
@@ -107,6 +107,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			achieveIncome.setMoney(money);
 			achieveIncome.setStatus(statusEnum);
 			achieveIncome.setPlanId(planId);
+			achieveIncome.setPrice(price);
 			achieveIncome.setCreateDate(new Date());
 			//保存
 			air.save(achieveIncome);
@@ -119,13 +120,13 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	}
 
 	@Override
-	public boolean createAchieveIncomeByStock(Achieve achieve, String orderNo, String userId, int num, String goodId, int payStatus, Long planId) {
-		return createAchieveIncome(achieve, orderNo, userId, num, goodId, payStatus, planId);
+	public boolean createAchieveIncomeByStock(Achieve achieve, String orderNo, String userId, int num, String goodId, int payStatus, Long planId, Float price) {
+		return createAchieveIncome(achieve, orderNo, userId, num, goodId, payStatus, planId, price);
 	}
 
 	@Override
-	public boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String userId, int num, String goodId, int payStatus, Long planId) {
-		return createAchieveIncome(achieve, orderNo, userId, num, goodId, payStatus, planId);
+	public boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String userId, int num, String goodId, int payStatus, Long planId, Float price) {
+		return createAchieveIncome(achieve, orderNo, userId, num, goodId, payStatus, planId, price);
 	}
 
 	/**
