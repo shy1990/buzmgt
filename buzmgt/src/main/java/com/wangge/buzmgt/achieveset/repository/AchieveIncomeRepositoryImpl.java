@@ -15,14 +15,14 @@ public class AchieveIncomeRepositoryImpl implements CustomRepository {
   private EntityManager em;
 
   @Override
-  public BigDecimal sumByAchieveId(Long achieveId) {
+  public BigDecimal sumMoneyByAchieveId(Long achieveId) {
     String sql = "SELECT SUM(aai.MONEY) as MONEY FROM SYS_ACHIEVE_AWARD_INCOME aai where aai.ACHIEVE_ID = "+ achieveId ;
     Query query = em.createNativeQuery(sql);
     return (BigDecimal) query.getSingleResult();
   }
 
   @Override
-  public BigDecimal sumByAchieveIdAndUserId(Long achieveId, String userId) {
+  public BigDecimal sumMoneyByAchieveIdAndUserId(Long achieveId, String userId) {
     String sql = "SELECT SUM(aai.MONEY) MONEY FROM SYS_ACHIEVE_AWARD_INCOME aai where aai.ACHIEVE_ID = "+ achieveId +" and "
         + "aai.USER_ID = '"+userId+"' ";
     Query query = em.createNativeQuery(sql);

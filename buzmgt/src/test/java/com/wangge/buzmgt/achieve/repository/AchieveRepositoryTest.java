@@ -85,7 +85,6 @@ public class AchieveRepositoryTest {
   @Test
   public void find(){
     try {
-      
       Achieve achieve=achieveRepository.findOne(4L);
 //      achieveRepository.delete(achieve);
 	    System.out.println(achieve);
@@ -95,7 +94,13 @@ public class AchieveRepositoryTest {
   }
   @Test
   public void test1(){
-    BigDecimal money=achieveIncomeRepository.sumByAchieveId(1L);
+    BigDecimal money=achieveIncomeRepository.sumMoneyByAchieveId(1L);
     System.out.println(money);
   }
+  @Test
+  public void test2(){
+    Long count = achieveIncomeRepository.countByAchieveIdAndUserId(7L, "A3703021250");
+    System.out.println(count);
+  }
+
 }
