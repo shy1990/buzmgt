@@ -21,11 +21,11 @@ public class BrandIncomeSub {
   @Column(name = "ID")
   private long id;
   //子方案id
-  private long subplanId;
+  private long subplanId,mainplanId;
   //收益
   private double income;
   //订单id,业务员id,主方案id
-  private String orderno,userId,mainplanId;
+  private String orderno,userId;
   //订单状态(1已付款,0已出库),记录状态(默认有效)
   private Integer orderflag,used=0;
   //收益计算时间
@@ -72,11 +72,11 @@ public class BrandIncomeSub {
     this.userId = userId;
   }
 
-  public String getMainplanId() {
+  public long getMainplanId() {
     return mainplanId;
   }
 
-  public void setMainplanId(String mainplanId) {
+  public void setMainplanId(long mainplanId) {
     this.mainplanId = mainplanId;
   }
 

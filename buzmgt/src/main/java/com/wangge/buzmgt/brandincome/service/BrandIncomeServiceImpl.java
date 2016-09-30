@@ -7,16 +7,14 @@ import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
 import com.wangge.buzmgt.brandincome.repository.BrandIncomeRepository;
 import com.wangge.buzmgt.brandincome.repository.BrandIncomeSubRepository;
 import com.wangge.buzmgt.common.FlagEnum;
-import com.wangge.buzmgt.goods.entity.Brand;
 import com.wangge.buzmgt.log.entity.Log;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.SQLQuery;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -355,20 +353,22 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
   }
 
   @Override
-  public List<Map<String,Object>> findRuleByGoods(List<String> goodIds, String mainPlanId, String userId,Date payDate) {
+  public List<Map<String,Object>> findRuleByGoods(List<String> goodIds, Long mainPlanId, String userId,Date payDate) {
     List<Map<String,Object>> list = new ArrayList<>();
     Map<String,Object> map = new HashedMap();
     BrandIncome brandIncome = null;
     if (CollectionUtils.isNotEmpty(goodIds)) {
       for (String g : goodIds){
         brandIncome = brandIncomeRepository.findByGoodIdAndPlanId(g, mainPlanId);
-        Long payTime = payDate.getTime();//付款日期
-        Long startDate = brandIncome.getStartDate().getTime();//规则开始日期
-        Long endDate = brandIncome.getStartDate().getTime();//规则结束日期
-        if (payTime >= startDate && payTime <= endDate){
-          map.put("goodId",brandIncome.getGoodId());
-          map.put("rule",brandIncome);
-          list.add(map);
+        if (ObjectUtils.notEqual(brandIncome,null)){
+          Long payTime = payDate.getTime();//付款日期
+          Long startDate = brandIncome.getStartDate().getTime();//规则开始日期
+          Long endDate = brandIncome.getStartDate().getTime();//规则结束日期
+          if (payTime >= startDate && payTime <= endDate){
+            map.put("goodId",brandIncome.getGoodId());
+            map.put("rule",brandIncome);
+            list.add(map);
+          }
         }
       }
     }
