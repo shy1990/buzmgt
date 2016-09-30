@@ -26,6 +26,9 @@ public class PriceRange {
 
     private Double percentage;//提成
 
+    @Column(name = "PRODUCTION_ID")
+    private Long productionId;//叠加方案id
+
     @JsonSerialize(using = CustomDateSerializer.class)
     @Temporal(TemporalType.DATE)
     private Date priceRangeCreateDate;//提成设置日期（小区间设置日期）,首次设置是产品设置传过来
@@ -136,6 +139,14 @@ public class PriceRange {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Long getProductionId() {
+        return productionId;
+    }
+
+    public void setProductionId(Long productionId) {
+        this.productionId = productionId;
     }
 
     @Override

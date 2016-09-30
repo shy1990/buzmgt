@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/phone.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/section/comminssion.css">
-
+    <link rel="stylesheet" type="text/css" href="/static/bootStrapPager/css/page.css"/>
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"
             charset="utf-8"></script>
@@ -40,6 +40,9 @@
     <script type="text/javascript">
         function see(id) {
             window.location.href = id;
+        }
+        function seeProgress(planId,id) {
+            window.location.href = 'progress?planId='+planId+'&id='+id;
         }
 
     </script>
@@ -79,9 +82,9 @@
 
             <td>{{giveDate}}</td>
             <td>
-                <%--{{#if checkStatus}}--%>
-                <span class="ph-on">审核中</span>
-                <%--{{/if}}--%>
+                {{#if checkStatus}}
+                {{state}}
+                {{/if}}
             </td>
             <td>{{endDate}}</td>
             <td>
@@ -132,15 +135,15 @@
 
             <td>{{giveDate}}</td>
             <td>
-                <%--{{#if checkStatus}}--%>
-                <span class="ph-on">审核中</span>
-                <%--{{/if}}--%>
+                {{#if checkStatus}}
+                    {{state}}
+                {{/if}}
             </td>
             <td>{{endDate}}</td>
             <td>
                 <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="see({{id}})">查看
                 </button>
-                <%--<button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">进程--%>
+                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="seeProgress('{{planId}}','{{id}}')">进程
                 <%--</button>--%>
                 <%--<button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止--%>
                 <%--</button>--%>
@@ -149,44 +152,7 @@
         {{/each}}
 
     </script>
-    <script type="text/javascript">
-        $(function () {
-            //正在使用
-            $.ajax({
-                url: 'findAll?sign=pass',
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    var listArray = data.content;
-                    var listTemplate = Handlebars.compile($("#list-template").html());
-                    $("#list_now").html(listTemplate(listArray));
-                },
-                error: function () {
-                }
-            });
-            //过期数据
-            $.ajax({
-                url: 'findAll?sign=expired',
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    var listArray = data.content;
-                    var listTemplate = Handlebars.compile($("#list-template1").html());
-                    $("#list_expired").html(listTemplate(listArray));
-                },
-                error: function () {
-                }
-            });
 
-
-        });
-
-
-
-
-    </script>
 </head>
 <body>
 
@@ -254,7 +220,8 @@
                                 </tbody>
                             </table>
                         </div>
-
+                        <%--分页--%>
+                        <div id="callBackPager"></div>
                     </div>
 
 
@@ -278,10 +245,11 @@
                                 </tr>
                                 </thead>
                                 <tbody id="list_expired">
-
                                 </tbody>
                             </table>
                         </div>
+                        <%--分页--%>
+                        <div id="callBackPager1"></div>
 
                     </div>
 
@@ -320,6 +288,129 @@
         pickerPosition: "bottom-right",
         forceParse: 0
     });
+</script>
+<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
+<script type="text/javascript">
+    var total = 0;
+    var totalCount = 0;
+    var limit = 0;
+    var total1 = 0;
+    var totalCount1 = 0;
+    var limit1 = 0;
+    var searchData1 = {
+        "size": "20",
+        "page": "0"
+    }
+    var searchData = {
+        "size": "20",
+        "page": "0"
+    }
+
+    function listNow(searchData) {
+        //正在使用
+        $.ajax({
+            url: 'findAll?sign=pass&planId=${planId}',
+            type: 'POST',
+            dataType: 'json',
+            data: searchData,
+            success: function (data) {
+//                    var content = data.content;
+//                    totalCount = data.totalElements;
+//                    limit = data.size;
+//                    handelerbars_register(content);//向模版填充数据
+//                    if (totalCount != total || totalCount == 0) {
+//                        total = totalCount;
+//                        initPaging();
+//                    }
+
+                console.log(data);
+                var listArray = data.content;
+                totalCount = data.totalElements;
+                limit = data.size;
+                var listTemplate = Handlebars.compile($("#list-template").html());
+                $("#list_now").html(listTemplate(listArray));
+                if (totalCount != total || totalCount == 0) {
+                    total = totalCount;
+                    initPaging();
+                }
+            },
+            error: function () {
+            }
+        });
+
+    }
+    //分页
+    function initPaging() {
+        $('#callBackPager').extendPagination({
+            totalCount: totalCount,//总条数
+            showCount: 5,//下面小图标显示的个数
+            limit: limit,//每页显示的条数
+            callback: function (curr, limit, totalCount) {
+                searchData['page'] = curr - 1;
+                searchData['size'] = limit;
+                listNow(searchData);
+            }
+        });
+    }
+
+
+    function listExpired(searchData1) {
+        //过期数据
+        $.ajax({
+            url: 'findAll?sign=expired&planId=${planId}',
+            type: 'POST',
+            dataType: 'json',
+            data: searchData1,
+            success: function (data) {
+                console.log(data);
+                var listArray = data.content;
+                limit = data.size;
+                var listTemplate = Handlebars.compile($("#list-template1").html());
+                $("#list_expired").html(listTemplate(listArray));
+                Handlebars.registerHelper('state',function(){
+                    if(data.status == 1){
+                        return '审核中';
+                    }else if(data.status == 2){
+                        return '驳回';
+                    }else{
+                        return '审核通过';
+                    }
+
+                });
+//                //注册一个比较大小的Helper,判断v1是否大于v2
+//                Handlebars.registerHelper("state", function (v1, v2, options) {
+//                    if (v1 = v2) {
+//                        //满足添加继续执行
+//                        return options.fn(this);
+//                    }
+//                });
+                if (totalCount1 != total1 || totalCount1 == 0) {
+                    total1 = totalCount1;
+                    initPaging1();
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+
+    //分页
+    function initPaging1() {
+        $('#callBackPager1').extendPagination({
+            totalCount: totalCount1,//总条数
+            showCount: 5,//下面小图标显示的个数
+            limit: limit1,//每页显示的条数
+            callback: function (curr, limit1, totalCount1) {
+                searchData['page'] = curr - 1;
+                searchData['size'] = limit1;
+                listExpired(searchData1);
+            }
+        });
+    }
+
+    listExpired(searchData1);
+    listNow(searchData);
 </script>
 </body>
 </html>

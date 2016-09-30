@@ -31,19 +31,6 @@ public class PriceRangeServiceImpl implements PriceRangeService {
      */
     @Override
     public void modifyPriceRange(Long productionId, String auditorId, Double percentage, String implDate, PriceRange priceRange) {
-
-        //第一种方式使用
-//        PriceRange savePriceRange = new PriceRange();
-//        priceRange.setOldId(priceRange.getPriceRangeId());
-//        priceRange.setPriceRangeStatus("2");//审核中
-//        priceRange.setPriceRangeCreateDate(new Date());
-//        priceRange.setPercentage(percentage);
-//        priceRange.setPriceRangeAuditor(auditorId);
-//        priceRange.setImplementationDate(DateUtil.string2Date(implDate));
-//        priceRange.setPriceRangeId(null);
-//        savePriceRange = priceRange;
-//        priceRangeRepository.save(savePriceRange);
-
         PriceRange savePriceRange = new PriceRange();
         savePriceRange.setImplementationDate(DateUtil.string2Date(implDate));//实施日期
         savePriceRange.setPriceRangeAuditor(auditorId);//指定审核人
@@ -79,5 +66,17 @@ public class PriceRangeServiceImpl implements PriceRangeService {
         priceRange.setPriceRangeStatus(status);//设置状态
         priceRangeRepository.save(priceRange);
 
+    }
+
+    /**
+     * 终止区间:修改结束日期
+     * @param priceRange
+     * @return
+     */
+    @Override
+    public PriceRange stopPriceRange(PriceRange priceRange) {
+        Date endTime = DateUtil.moveDate(new Date(), -1);//结束时间减去一天
+        priceRange.setEndTime(endTime);
+        return priceRangeRepository.save(priceRange);
     }
 }

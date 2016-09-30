@@ -24,10 +24,10 @@
 
     <style>
         /*#ul li{*/
-            /*color: blue;*/
+        /*color: blue;*/
         /*}*/
         /*a:hover{*/
-            /*color: red;*/
+        /*color: red;*/
         /*}*/
         .new-table-box {
             border-top: none;
@@ -63,61 +63,7 @@
 
 
     </style>
-    <script type="text/javascript">
-        /**
-         * 修改单个小区间
-         * @param id
-         * @param priceRange
-         */
-        function modify(id, priceRange) {
-            console.log(id + '  ' + priceRange);
 
-            $('#gaigai').modal('show').on('shown.bs.modal', function () {
-                $("#priceRange").text(priceRange);
-                $("#sure_save").click(function () {
-                    var valueData = $("#addd").serializeArray();
-                    console.log(valueData);
-                    var percentage = valueData[0]['value'];
-                    var implDate = valueData[1]['value'];
-                    var auditorId = valueData[2]['value'];
-                    var productionId = ${productionId};
-                    console.log(percentage+" "+implDate+"  "+auditorId);
-                    $.ajax({
-                        url:'modifyPriceRange/'+id,
-                        type:'post',
-                        data:{percentage:percentage,implDate:implDate,auditorId:auditorId,productionId:productionId},
-                        success:function(data){
-                            alert("修改成功,正在审核");
-                            refresh();
-                        },
-                        error:function(){
-
-                        }
-                    });
-
-                });
-            })
-
-            /**
-             * 当弹框消失的时候刷新页面
-             */
-            $('#gaigai').on('hidden.bs.modal', function () {
-                refresh();
-            })
-            function refresh() {
-                window.location.reload();//刷新当前页面.
-            }
-
-        }
-
-        function kkk(v, a) {
-            if (!(/^[\d]+\.?\d*$/.test(v))) {
-                alert("请输入数字");
-                $(a).val('');
-
-            }
-        }
-    </script>
 </head>
 <body>
 
@@ -127,13 +73,13 @@
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
     </h4>
 
-    <%--<ul class="nav nav-pills  nav-top" id="myTab">--%>
-    <%--<li class="active"><a data-toggle="tab" href="#ajgqj">按价格区间</a></li>--%>
-    <%--<li><a data-toggle="tab" href="#ppxhao">品牌型号<span class="qipao">2</span></a></li>--%>
-    <%--<li><a data-toggle="tab" href="#dlsz">达量设置</a></li>--%>
-    <%--<li><a data-toggle="tab" href="#djsz">叠加设置</a></li>--%>
-    <%--<li><a href="ti-daliang(达量奖励).html">达量奖励</a></li>--%>
-    <%--</ul>--%>
+    <ul class="nav nav-pills  nav-top" id="myTab">
+        <li class="active"><a data-toggle="tab" href="#ajgqj">按价格区间</a></li>
+        <li><a data-toggle="tab" href="#ppxhao">品牌型号<span class="qipao">2</span></a></li>
+        <li><a data-toggle="tab" href="#dlsz">达量设置</a></li>
+        <li><a data-toggle="tab" href="#djsz">叠加设置</a></li>
+        <li><a href="ti-daliang(达量奖励).html">达量奖励</a></li>
+    </ul>
 
 
     <div class="row">
@@ -150,8 +96,16 @@
                         <%--手机类型导航栏--%>
                         <ul id="ul" class="nav nav-sidebar menu">
                             <c:forEach items="${machineTypes}" var="machineType">
-                                <li class="current">
-                                    <a href="<%=basePath%>section/findNow?type=${machineType.id}"> ${machineType.name}</a>
+                                <c:choose>
+                                    <c:when test="${machineId == machineType.id}">
+                                     <li style="background: #3895ff">
+                                     </c:when>
+                                    <c:otherwise>
+                                        <li class="current">
+                                    </c:otherwise>
+                                </c:choose>
+
+                                <a href="<%=basePath%>section/findNow?type=${machineType.id}&planId=${planId}"> ${machineType.name}</a>
                                 </li>
                             </c:forEach>
                         </ul>
@@ -159,10 +113,10 @@
                     </div>
                 </div>
                 <%--<script>--%>
-                    <%--$('a[data-toggle="phone"]').on('shown.bs.tab', function (e) {--%>
-                        <%--e.target // newly activated tab--%>
-                        <%--e.relatedTarget // previous active tab--%>
-                    <%--})--%>
+                <%--$('a[data-toggle="phone"]').on('shown.bs.tab', function (e) {--%>
+                <%--e.target // newly activated tab--%>
+                <%--e.relatedTarget // previous active tab--%>
+                <%--})--%>
 
                 <%--</script>--%>
                 <!--左侧导航结束-->
@@ -173,11 +127,11 @@
                         <!--导航开始-->
 
                         <div class="ph-btn-set">
-                            <a href="addPriceRanges?type=${type}" class="btn ph-blue">
+                            <a href="addPriceRanges?type=${type}&planId=${planId}" class="btn ph-blue">
                                 <i class="ico ico-tj"></i>新建区间值
                             </a>
 
-                            <a href="" class="btn ph-blue">
+                            <a href="toNotExpiredJsp?type=${type}&planId=${planId}" class="btn ph-blue">
                                 <i class="ico ico-qj"></i>设置记录
                             </a>
                             <div class="clearfix">
@@ -196,6 +150,7 @@
                                     <th>价格区间</th>
                                     <th>提成金额</th>
                                     <th>开始日期</th>
+                                    <th>结束日期</th>
                                     <th>区域属性</th>
                                     <th>状态</th>
                                     <th>设置日期</th>
@@ -205,7 +160,6 @@
                                 <tbody>
                                 <c:forEach items="${list}" var="priceRange">
                                     <tr>
-                                        <input hidden value="${priceRange.priceRangeId}"/>
                                         <td>${priceRange.serialNumber}</td>
                                         <td>${priceRange.priceRange}元</td>
                                         <td class="width-fixed">
@@ -215,11 +169,13 @@
                                                 <%-- data-target="#gaigai" --%>
                                         </td>
                                         <td>${priceRange.implementationDate}</td>
+
+                                        <td> <c:if test="${priceRange.endTime == null}"><span style="color: #6a0505">未设置结束日期</span></c:if>${priceRange.endTime}</td>
                                         <td><a href="">添加区域设置</a></td>
                                         <td><span class="ph-on">进行中</span></td>
                                         <td>${priceRange.priceRangeCreateDate}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
+                                            <button class="btn btn-sm btn-zz " data-toggle="" data-target="" onclick="del('${priceRange.priceRangeId}')">终止
                                             </button>
                                         </td>
                                     </tr>
@@ -243,6 +199,38 @@
 
     </div>
 
+</div>
+<%--终止弹出框--%>
+<!---alert删除--->
+<div id="del" class="modal fade" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content modal-blue">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">是否终止</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <%--<form class="form-horizontal">--%>
+                        <div class="form-group">
+                            注意:此操作是终止到前一天晚上0点,即结束时间为前一天
+                        </div>
+
+                        <div class="btn-qx">
+                            <a type="submit" class="btn btn-danger btn-d" id="sure_del">确认</a>
+                        </div>
+
+                        <div class="btn-dd">
+                            <a type="submit" data-dismiss="modal" class="btn btn-primary btn-d">取消</a>
+                        </div>
+
+                    <%--</form>--%>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!--修改-->
 <div id="gaigai" class="modal fade" role="dialog">
@@ -270,7 +258,8 @@
                                     <span class="input-group-addon "><i class="ph-icon   icon-je"></i></span>
                                     <!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
                                     <input name="a" type="text" class="form-control input-h"
-                                           aria-describedby="basic-addon1" placeholder="请设置提成金额"  onchange="kkk(this.value,this)">
+                                           aria-describedby="basic-addon1" placeholder="请设置提成金额"
+                                           onchange="kkk(this.value,this)">
                                     </input>
                                 </div>
                                 <span class="text-gery "
@@ -348,6 +337,92 @@
         pickerPosition: "bottom-right",
         forceParse: 0
     });
+</script>
+<script type="text/javascript">
+
+
+
+    /**
+     * 修改单个小区间
+     * @param id
+     * @param priceRange
+     */
+    function modify(id, priceRange) {
+        console.log(id + '  ' + priceRange);
+
+        $('#gaigai').modal('show').on('shown.bs.modal', function () {
+            $("#priceRange").text(priceRange);
+            $("#sure_save").click(function () {
+                var valueData = $("#addd").serializeArray();
+                console.log(valueData);
+                var percentage = valueData[0]['value'];
+                var implDate = valueData[1]['value'];
+                var auditorId = valueData[2]['value'];
+                var productionId = '${productionId}';
+                console.log(percentage + " " + implDate + "  " + auditorId);
+                $.ajax({
+                    url: 'modifyPriceRange/' + id,
+                    type: 'post',
+                    data: {
+                        percentage: percentage,
+                        implDate: implDate,
+                        auditorId: auditorId,
+                        productionId: productionId
+                    },
+                    success: function (data) {
+                        alert("修改成功,正在审核");
+                        refresh();
+                    },
+                    error: function () {
+
+                    }
+                });
+
+            });
+        })
+
+        /**
+         * 当弹框消失的时候刷新页面
+         */
+        $('#gaigai').on('hidden.bs.modal', function () {
+            refresh();
+        })
+        function refresh() {
+            window.location.reload();//刷新当前页面.
+        }
+
+    }
+
+    function kkk(v, a) {
+        if (!(/^[\d]+\.?\d*$/.test(v))) {
+            alert("请输入数字");
+            $(a).val('');
+
+        }
+    }
+    /**
+     * 终止小区间
+     */
+    function del(id){
+        $('#del').modal('show').on('show.bs.modal',function(){
+
+        })
+        $('#sure_del').on('click',function(){
+            console.log(id);
+            $.ajax({
+                url:'modify/'+id,
+                type:'GET',
+                success:function(data){
+                    console.log(data);
+                    alert('终止成功');
+                    window.location.reload();//刷新当前页面.
+                },
+                error:function(){
+
+                }
+            });
+        });
+    }
 </script>
 </body>
 </html>

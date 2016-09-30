@@ -10,4 +10,5 @@ public interface PriceRangeRepository extends JpaRepository<PriceRange,Long>{
 
     //根据id查询
     public PriceRange findByPriceRangeId(Long id);
+
 }

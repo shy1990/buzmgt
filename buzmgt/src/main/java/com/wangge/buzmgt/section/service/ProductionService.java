@@ -14,32 +14,59 @@ import java.util.Map;
 public interface ProductionService {
 
 
-    public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, String status);
+    public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, String planId);
 
-    public Production findByEndTimeIsNullAndProductStatus(String productStatus, String type);
-
-    public void review(Long id, String status);//改变状态(渠道审核:通过/驳回)
+    public Production review(Long id, String status);//改变状态(渠道审核:通过/驳回)
 
     //渠道审核
     public void toReview(Long id, String status, String auditorId);
 
-    public Production findNow(String type);
-
     public Production findById(Long id);//根据id查找
 
-    public List<Production> findNotExpired(String type);//查询未过期的(使用中,审核中,被驳回)
+    public List<Production> findNotExpired(String planId,String type);//查询未过期的(使用中,审核中,被驳回)
 
-    public Page<Production> findExpired(String type, String status, Integer page, Integer size);
+    public List<Production> findNotExpiredQd(String planId,String type);//查询未过期的(使用中,审核中,被驳回)
 
-    public Page<Production> findAll(String type, Pageable pageable);
+    public Page<Production> findAll(String planId,String type, Pageable pageable);
 
-    public Map<String,Object> findNowCW(String type);
+    public Map<String,Object> findNowCW(String type,String planId);
 
     public Production save(Production production);
 
-    public List<PriceRange> findReview(String type);//查询正在审核中的小区间
+    public List<PriceRange> findReview(String planId,String type);//查询正在审核中的小区间
 
-    public Production findNow(String type, String time);//用于接口调用
+    public Production findNow(String type, String time,String planId);//查询下订单日期使用的方案
+
+    /**
+     * @Description: 已支付计算
+     * @param orderNo:订单号
+     * @param payTime:支付时间("yyyy-MM-dd")
+     * @param price:产品价格
+     * @param userId:业务员id
+     * @param goodsId:产品id
+     * @param type:产品类型
+     * @param planId:方案id
+     * @param num:单品数量
+     * @return
+     */
+    public String compute(String orderNo,String payTime,
+      Double price, String userId,String goodsId,String type,String planId,Integer num);
+
+    /**
+     * @Description: 价格区间出库计算
+     * @param orderNo:订单id/单品详情id
+     * @param price:产品价格
+     * @param userId:业务员id
+     * @param goodsId:产品id
+     * @param type:产品类型
+     * @param planId:方案id
+     * @param num:单品数量
+     * @return
+     */
+    public String compute(String orderNo,Double price,
+        String userId,String goodsId,String type,String planId,Integer num);
 
 
+
+    public Production delete(Production production);
 }

@@ -57,32 +57,31 @@
     </style>
     <script type="text/javascript">
         /* 审核通过 */
-        function oYes(id){
+        function oYes(id) {
             $.ajax({
-                url:'<%=basePath%>section/review',
-                type:'POST',
-                data:{id:id,status:'3'},
-                success:function () {
+                url: '<%=basePath%>section/review',
+                type: 'POST',
+                data: {id: id, status: '3'},
+                success: function (data) {
                     alert('操作成功');
-                    window.location.href = 'toReviewJsp';
-                    refresh();
+                    window.location.href = '<%=basePath%>section/toReviewJsp?type=' + data.type + '&planId=' + data.planId;
                 },
-                error:function(){
+                error: function () {
                     alert('操作失败');
                 }
             })
         }
         /* 被驳回 */
-        function oNo(id){
+        function oNo(id) {
             $.ajax({
-                url:'<%=basePath%>section/review',
-                type:'POST',
-                data:{id:id,status:'2'},
-                success:function () {
+                url: '<%=basePath%>section/review',
+                type: 'POST',
+                data: {id: id, status: '2'},
+                success: function (data) {
                     alert('操作成功');
-                    refresh();
+                    window.location.href = '<%=basePath%>section/toReviewJsp?type=' + data.type + '&planId=' + data.planId;
                 },
-                error:function(){
+                error: function () {
                     alert('操作失败');
                 }
             })
@@ -100,50 +99,12 @@
         <i class="ico ico-tcsz"></i>详情
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
     </h4>
-
-    <%--<ul class="nav nav-pills  nav-top" id="myTab">--%>
-    <%--<li class="active"><a data-toggle="tab" href="#ajgqj">按价格区间</a></li>--%>
-    <%--<li><a data-toggle="tab" href="#ppxhao">品牌型号<span class="qipao">2</span></a></li>--%>
-    <%--<li><a data-toggle="tab" href="#dlsz">达量设置</a></li>--%>
-    <%--<li><a data-toggle="tab" href="#djsz">叠加设置</a></li>--%>
-    <%--<li><a href="ti-daliang(达量奖励).html">达量奖励</a></li>--%>
-    <%--</ul>--%>
-
-
     <div class="row">
         <!--col begin-->
         <div class="col-md-12">
             <!--orderbox begin-->
             <div class="order-box">
-                <!--左侧导航开始-->
-                <%--<div style="padding-left: 0">--%>
-                <%--<div class=" sidebar left-side" style="padding-top:0;margin-top:5px">--%>
-                <%--<h5 class="line-h">--%>
-                <%--<i class="ico ico-fl"></i>请选择类别--%>
-                <%--</h5>--%>
 
-                <%--<ul class="nav nav-sidebar menu">--%>
-                <%--<li class="current">--%>
-                <%--<a href="##">智能机</a>--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                <%--定制机--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                <%--功能机--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                <%--平板--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                <%--智能生活--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                <%--配件--%>
-                <%--</li>--%>
-                <%--</ul>--%>
-                <%--</div>--%>
-                <%--</div>--%>
                 <script>
                     $('a[data-toggle="phone"]').on('shown.bs.tab', function (e) {
                         e.target // newly activated tab
@@ -155,25 +116,8 @@
                 <div class="tab-content">
                     <!--右侧内容开始-->
                     <!--价格区间-->
-                    <div class="tab-pane fade in active right-body" id="ajgqj">
+                    <div id="ajgqj">
                         <!--导航开始-->
-
-                        <%--<div class="ph-btn-set">--%>
-                        <%--<a href="addPriceRanges?type=znj" class="btn ph-blue">--%>
-                        <%--<i class="ico ico-tj"></i>新建区间值--%>
-                        <%--</a>--%>
-
-                        <%--<a href="" class="btn ph-blue">--%>
-                        <%--<i class="ico ico-qj"></i>设置记录--%>
-                        <%--</a>--%>
-                        <%--<div class="clearfix">--%>
-                        <%--<div class="link-posit pull-right" style="margin-top: -25px">--%>
-                        <%--<a class="table-export" href="javascript:void(0);">导出excel</a>--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
-
-
                         <div class="table-task-list new-table-box table-overflow" style="margin-left: 20px">
                             <table class="table table-hover new-table">
                                 <thead>
@@ -185,7 +129,7 @@
                                     <th>区域属性</th>
                                     <th>状态</th>
                                     <th>设置日期</th>
-                                    <th>操作</th>
+                                    <%--<th>操作</th>--%>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -201,10 +145,10 @@
                                         <td><a href="">添加区域设置</a></td>
                                         <td><span class="ph-on">进行中</span></td>
                                         <td>${priceRange.priceRangeCreateDate}</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
-                                            </button>
-                                        </td>
+                                            <%--<td>--%>
+                                            <%--<button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止--%>
+                                            <%--</button>--%>
+                                            <%--</td>--%>
                                     </tr>
 
                                 </c:forEach>
@@ -212,10 +156,13 @@
 
                                 </tbody>
                             </table>
-                            <button class="btn btn-sm btn-zz " onclick="oYes('${production.productionId}')">通过
-                            </button>
-                            <button class="btn btn-sm btn-zz " onclick="oNo('${production.productionId}')">驳回
-                            </button>
+                            <%--<c:if test="${userId == production.productionAuditor}">--%>
+                                <button class="btn btn-sm btn-zz " onclick="oYes('${production.productionId}')">通过
+                                </button>
+                                <button class="btn btn-sm btn-zz " onclick="oNo('${production.productionId}')">驳回
+                                </button>
+                            <%--</c:if>--%>
+
                         </div>
 
                     </div>

@@ -25,13 +25,23 @@ public class Superposition {
 
     @OneToMany(cascade={CascadeType.ALL})
     @JoinColumn(name = "SU_ID")
-    private List<GoodsType> goodsTypeList;
+    private List<GoodsType> goodsTypeList;//叠加的产品
 
     private Integer taskOne;//任务量一
 
     private Integer taskTwo;///任务量二
 
     private Integer taskThree;//任务量三
+
+    private Integer singleOne;//一单达量一
+
+    private Integer singleTwo;//一单达量二
+
+    private Integer singleThree;//一单达量三
+
+    @OneToMany(cascade={CascadeType.ALL})
+    @JoinColumn(name = "SU_ID")
+    List<SingleRule> singleRules;//达量设置规则
 
     private String production;//商品类别
 
@@ -41,7 +51,7 @@ public class Superposition {
 
     @JsonSerialize(using = CustomDateSerializer.class)
     @Temporal(TemporalType.DATE)
-    private Date createDate;//创建日期
+    private Date createDate = new Date();//创建日期
 
     @JsonSerialize(using = CustomDateSerializer.class)
     @Temporal(TemporalType.DATE)
@@ -195,6 +205,38 @@ public class Superposition {
         this.goodsTypeList = goodsTypeList;
     }
 
+    public Integer getSingleOne() {
+        return singleOne;
+    }
+
+    public void setSingleOne(Integer singleOne) {
+        this.singleOne = singleOne;
+    }
+
+    public Integer getSingleTwo() {
+        return singleTwo;
+    }
+
+    public void setSingleTwo(Integer singleTwo) {
+        this.singleTwo = singleTwo;
+    }
+
+    public Integer getSingleThree() {
+        return singleThree;
+    }
+
+    public void setSingleThree(Integer singleThree) {
+        this.singleThree = singleThree;
+    }
+
+    public List<SingleRule> getSingleRules() {
+        return singleRules;
+    }
+
+    public void setSingleRules(List<SingleRule> singleRules) {
+        this.singleRules = singleRules;
+    }
+
     @Override
     public String toString() {
         return "Superposition{" +
@@ -203,6 +245,10 @@ public class Superposition {
                 ", taskOne=" + taskOne +
                 ", taskTwo=" + taskTwo +
                 ", taskThree=" + taskThree +
+                ", singleOne=" + singleOne +
+                ", singleTwo=" + singleTwo +
+                ", singleThree=" + singleThree +
+                ", singleRules=" + singleRules +
                 ", production='" + production + '\'' +
                 ", remark='" + remark + '\'' +
                 ", auditor='" + auditor + '\'' +

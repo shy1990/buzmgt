@@ -89,18 +89,17 @@
             $("#sure").click(function () {
                 var id = '${production.productionId}'.trim();
                 var type = '${production.productionType}';
-                console.log(id)
                 var auditor = "345345345345";
-                var status = '1';
+                var planId = '${planId}';
                 $.ajax({
                     url:'<%=basePath%>section/toReview',
                     type:'GET',
-                    data:{id:id,auditor:auditor,status:status},
+                    data:{id:id,auditor:auditor,status:'1',planId:planId},
                     success:function(data){
-                        window.location.href='<%=basePath%>section/toNotExpiredJsp?type='+type;
+                        window.location.href='<%=basePath%>section/toNotExpiredJsp?type='+type+'&planId='+data;
                     },
                     error:function () {
-                      alert("系统故障:嘴哥给吃了");
+                      alert("系统故障,请稍后重试");
                     }
                 })
             });

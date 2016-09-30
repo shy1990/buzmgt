@@ -23,11 +23,11 @@ public class Production {
 
     private String productionType;//类型:znj:智能机,hyj:合约机
 
-    private String productStatus;//状态:0-创建中,1-审核中,2-驳回,3-审核通过,4-废弃(删除);
+    private String productStatus = "0" ;//状态:0-创建中,1-审核中,2-驳回,3-审核通过,4-废弃(删除);
 
     @JsonSerialize(using = CustomDateSerializer.class)
     @Temporal(TemporalType.DATE)
-    private Date createTime;//创建日期
+    private Date createTime = new Date();//创建日期
 
     @JsonSerialize(using = CustomDateSerializer.class)
     @Temporal(TemporalType.DATE)

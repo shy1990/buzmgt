@@ -5,8 +5,10 @@ import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.plan.service.MachineTypeService;
 import com.wangge.buzmgt.superposition.entity.Result;
 import com.wangge.buzmgt.superposition.entity.Superposition;
+import com.wangge.buzmgt.superposition.pojo.SuperpositionProgress;
 import com.wangge.buzmgt.superposition.service.GoodsOrderService;
 import com.wangge.buzmgt.superposition.service.SuperpositonService;
+import com.wangge.buzmgt.util.DateUtil;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,7 @@ public class SuperpositionController {
     @Autowired
     private GoodsOrderService goodsOrderService;
 
-    private static final String SEARCH_OPERTOR="sc_";
+    private static final String SEARCH_OPERTOR = "sc_";
 
 
     private static final Logger logger = Logger.getLogger(SuperpositionController.class);
@@ -48,35 +50,29 @@ public class SuperpositionController {
 //---------------------------   财务操作   ------------ -------------------------------//
 
     /**
-     * 跳转到添加组页面
+     * 跳转到叠加任务首页
+     *
+     * @param planId
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "superposition", method = RequestMethod.GET)
+    public String toSuperposition(String planId, Model model) {
+        model.addAttribute("planId", planId);
+        return "superposition/superposition";
+    }
+
+    /**
+     * 跳转到添加人员分组的页面
      *
      * @return
      */
-    @RequestMapping(value = "ceshi", method = RequestMethod.GET)
-    public String toGroupJSP() {
-
-        return "superposition/test_list";
+    @RequestMapping(value = "addGroup", method = RequestMethod.GET)
+    public String toGroupJSP(String planId, Model model) {
+        model.addAttribute("planId", planId);
+//        return "superposition/test_list";
+        return "superposition/add_group_1";
     }
-
-    @RequestMapping(value = "planUsers",method = RequestMethod.GET)
-    @ResponseBody
-    public Page<PlanUserVo> findMainPlanUsers(@PageableDefault(
-                                                    page = 0,
-                                                    size = 20,
-                                                    sort = {"userId"},
-                                                    direction = Sort.Direction.DESC) Pageable pageable,
-                                                    HttpServletRequest request) throws Exception {
-
-        Map<String,Object> searchParams = WebUtils.getParametersStartingWith(request,SEARCH_OPERTOR);
-
-        return superpositonService.findMainPlanUsers(pageable,searchParams);
-    }
-
-
-
-
-
-
 
     /**
      * 跳转到添加页面
@@ -84,9 +80,10 @@ public class SuperpositionController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String toSuperJSP(Model model) {
+    public String toSuperJSP(String planId, Model model) {
         List<MachineType> machineTypes = machineTypeServer.findAll();
         model.addAttribute("machineTypes", machineTypes);
+        model.addAttribute("planId", planId);
         return "superposition/superposition_add";
     }
 
@@ -99,6 +96,8 @@ public class SuperpositionController {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @ResponseBody
     public Result add(@RequestBody Superposition superposition) {
+        System.out.println(superposition);
+
         JSONObject jsonObject = new JSONObject();
         Result result = new Result();
         try {
@@ -116,13 +115,14 @@ public class SuperpositionController {
 
     /**
      * 根据id查询
+     *
      * @param superposition
      * @return
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String findById(@PathVariable("id") Superposition superposition,Model model) {
+    public String findById(@PathVariable("id") Superposition superposition, Model model) {
 
-        model.addAttribute("superposition",superposition);
+        model.addAttribute("superposition", superposition);
         return "superposition/show_one";
     }
 
@@ -150,20 +150,23 @@ public class SuperpositionController {
 
     /**
      * 跳转到财务显示全部的页面
+     *
      * @param model
      * @return
      */
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET)
-    public String findAll(Model model) {
+    public String findAll(Model model, String planId) {
 //        model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
 
 //        return "superposition/list_cw";
+        model.addAttribute("planId", planId);
         return "superposition/set_list_cw";
     }
 
     /**
      * 所有方案
+     *
      * @param pageable
      * @param type
      * @return
@@ -173,33 +176,130 @@ public class SuperpositionController {
     public Page<Superposition> findAll(@PageableDefault(page = 0,
             size = 10,
             sort = {"createDate"},
-            direction = Sort.Direction.DESC) Pageable pageable, String type,String sign) {
+            direction = Sort.Direction.DESC) Pageable pageable, String type, String sign, String planId) {
 
-        Page<Superposition> pageReposne = superpositonService.findAll(pageable,type,sign);
+        Page<Superposition> pageReposne = superpositonService.findAll(pageable, type, sign, planId);
 
         return pageReposne;
     }
+
+    /**
+     * 跳转叠加主页面
+     *
+     * @return
+     *//*
+    @RequestMapping(value = "proceeding/{id}", method = RequestMethod.GET)
+    public String toProceeding(@PathVariable("id") Superposition superposition) {
+
+        return "superposition/proceeding";
+    }*/
+
+
+    /**
+     * 查询方案中人员
+     *
+     * @param pageable
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "planUsers", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<PlanUserVo> findMainPlanUsers(@PageableDefault(
+            page = 0,
+            size = 20,
+            sort = {"regdate"},
+            direction = Sort.Direction.DESC) Pageable pageable,
+                                              HttpServletRequest request) throws Exception {
+
+        Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+
+        return superpositonService.findMainPlanUsers(pageable, searchParams);
+    }
 //---------------------------   end   -------------------------------------------//
 
+//--------------------------- 渠道操作 --------------------------------------------//
 
 
+    /**
+     * 渠道显示页面
+     *
+     * @param model
+     * @return
+     */
+
+    @RequestMapping(value = "findChannel", method = RequestMethod.GET)
+    public String findAllChannel(Model model) {
+//        model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
+
+//        return "superposition/list_cw";
+        return "superposition/set_list_cw";
+    }
 
 
-//
-//    @RequestMapping(value = "test1", method = RequestMethod.GET)
-//    @ResponseBody
-//    public Page<GoodsOrder> test1(@PageableDefault(page = 0,size = 10,sort = {"payTime"},direction = Sort.Direction.DESC) Pageable pageable) {
-//
-//        return goodsOrderService.findAll(pageable);
-//    }
-
-
-
-    @RequestMapping(value = "find1/{id}", method = RequestMethod.GET)
+    /**
+     * 计算
+     *
+     * @param superposition
+     * @return
+     */
+    @RequestMapping(value = "compute/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public String find(@PathVariable("id") Superposition superposition) {
-        superpositonService.find1(superposition);
-        return "ssssss";
+    public String compute(@PathVariable("id") Superposition superposition) {
+        superpositonService.compute(superposition);
+        return null;
+    }
+
+
+    /**
+     * 进程
+     * @param planId
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "progress", method = RequestMethod.GET)
+    public String findProgress(String planId,String id,Model model) {
+        model.addAttribute("planId",planId);
+        model.addAttribute("id",id);
+        return "superposition/proceeding";
+    }
+
+    @RequestMapping(value = "progress/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<SuperpositionProgress> findProgress(
+            @PathVariable("id") Superposition superposition,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "20") Integer size,
+            String name) {
+        logger.info(superposition);
+        Page<SuperpositionProgress> progressPage = superpositonService.findAll(superposition.getPlanId(), superposition.getId(), DateUtil.date2String(superposition.getImplDate(), "yyyy-MM-dd"), DateUtil.date2String(superposition.getEndDate(), "yyyy-MM-dd"), name, page, size);
+        return progressPage;
+    }
+
+    /**
+     * 详情
+     * @param planId
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "detail", method = RequestMethod.GET)
+    public String findDetail(String planId,String id,String userId,Model model) {
+        model.addAttribute("planId",planId);
+        model.addAttribute("id",id);
+        model.addAttribute("userId",userId);
+        return "superposition/detail";
+    }
+
+    @RequestMapping(value = "detail/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<SuperpositionProgress> findDetail(
+            @PathVariable("id") Superposition superposition,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "20") Integer size,
+            String name,String userId) {
+        logger.info(superposition);
+        Page<SuperpositionProgress> progressPage = superpositonService.searchDetail(superposition.getPlanId(), superposition.getId(),userId,DateUtil.date2String(superposition.getImplDate(), "yyyy-MM-dd"), DateUtil.date2String(superposition.getEndDate(), "yyyy-MM-dd"), name, page, size);
+        return progressPage;
     }
 }
 

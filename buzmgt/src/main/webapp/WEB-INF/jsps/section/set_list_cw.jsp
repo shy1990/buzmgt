@@ -19,8 +19,10 @@
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/phone.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/section/comminssion.css">
-
+    <link rel="stylesheet" type="text/css" href="/static/bootStrapPager/css/page.css"/>
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/handlebars-v4.0.2.js"></script>
+
 
     <style>
         .new-table-box {
@@ -37,53 +39,66 @@
 
 
     </style>
-    <script type="text/javascript">
-        function see(id) {
-            window.location.href = '<%=basePath%>section/findOne/'+id;
-        }
 
+    <script id="table-template" type="text/x-handlebars-template">
+        {{#each this}}
+        <tr>
+            <td><span class="ph-new">新建</span> {{implDate}} 开始 提成方案区间</td>
+            <td class="reason">{{implDate}}</td>
+            <td><span class=""> {{endTime}}</span></td>
+            <td>{{productionAuditor}}</td>
+            <td><span class="text-lan text-strong">已审核</span></td>
+            <td><span class="ph-weihes">已过期</span></td>
+            <td>
+                <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#"
+                        onclick="see('{{productionId}}')">
+                    查看
+                </button>
+            </td>
+        </tr>
+        {{/each}}
     </script>
 </head>
 <body>
 
 <div class="content main">
     <h4 class="page-header">
-        <i class="ico ico-tcsz"></i>渠道审核
+        <i class="ico ico-tcsz"></i>财务列表展示
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
     </h4>
 
 
-    <span class="text-gery text-strong ">按日期筛选：</span>
+    <%--<span class="text-gery text-strong ">按日期筛选：</span>--%>
 
-    <div class="search-date">
-        <div class="input-group input-group-sm">
-                        <span class="input-group-addon "><i
-                                class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-            <input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"
-                   readonly="readonly" style="background: #ffffff">
-        </div>
+    <%--<div class="search-date">--%>
+    <%--<div class="input-group input-group-sm">--%>
+    <%--<span class="input-group-addon "><i--%>
+    <%--class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>--%>
+    <%--<input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"--%>
+    <%--readonly="readonly" style="background: #ffffff">--%>
+    <%--</div>--%>
 
-    </div>
-    -
-    <div class="search-date">
-        <div class="input-group input-group-sm">
-                        <span class="input-group-addon "><i
-                                class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-            <input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"
-                   readonly="readonly  " style="background: #ffffff;">
-        </div>
+    <%--</div>--%>
+    <%-----%>
+    <%--<div class="search-date">--%>
+    <%--<div class="input-group input-group-sm">--%>
+    <%--<span class="input-group-addon "><i--%>
+    <%--class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>--%>
+    <%--<input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"--%>
+    <%--readonly="readonly  " style="background: #ffffff;">--%>
+    <%--</div>--%>
 
-    </div>
+    <%--</div>--%>
 
     <hr class="hr-solid-sm" style="margin-top: 25px">
 
-    <ul class="nav nav-pills  nav-top" id="myTab">
-        <li class="active"><a data-toggle="tab" href="#newon"> &nbsp;当前进行 &nbsp;  </a></li>
-        <li><a data-toggle="tab" href="#yguoq">  &nbsp; 已过期 &nbsp; </a></li>
-        <li><a data-toggle="tab" href="#new_review">  &nbsp; 新建审核 &nbsp; </a></li>
-        <li><a data-toggle="tab" href="#modify_review">  &nbsp; 修改审核 &nbsp; </a></li>
+    <%--<ul class="nav nav-pills  nav-top" id="myTab">--%>
+    <%--<li class="active"><a data-toggle="tab" href="#newon"> &nbsp;当前进行 &nbsp;  </a></li>--%>
+    <%--<li><a data-toggle="tab" href="#yguoq">  &nbsp; 已过期 &nbsp; </a></li>--%>
+    <%--<li><a data-toggle="tab" href="#new_review">  &nbsp; 新建审核 &nbsp; </a></li>--%>
+    <%--<li><a data-toggle="tab" href="#modify_review">  &nbsp; 修改审核 &nbsp; </a></li>--%>
 
-    </ul>
+    <%--</ul>--%>
 
 
     <div class="row">
@@ -100,8 +115,15 @@
                         <%--手机类型导航栏--%>
                         <ul id="ul" class="nav nav-sidebar menu">
                             <c:forEach items="${machineTypes}" var="machineType">
-                                <li class="current">
-                                    <a href="<%=basePath%>section/toNotExpiredJsp?type=${machineType.id}"> ${machineType.name}</a>
+                                <c:choose>
+                                    <c:when test="${machineId == machineType.id}">
+                                        <li style="background: #3895ff">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li class="current">
+                                    </c:otherwise>
+                                </c:choose>
+                                <a href="<%=basePath%>section/toNotExpiredJsp?type=${machineType.id}&planId=${planId}"> ${machineType.name}</a>
                                 </li>
                             </c:forEach>
                         </ul>
@@ -109,6 +131,13 @@
                 </div>
 
                 <div class="tab-content" style="margin-left: 200px;">
+                    <ul class="nav nav-pills  nav-top" id="myTab">
+                        <li class="active"><a data-toggle="tab" href="#newon"> &nbsp;当前进行 &nbsp;  </a></li>
+                        <li><a data-toggle="tab" href="#yguoq">  &nbsp; 已过期 &nbsp; </a></li>
+                        <li><a data-toggle="tab" href="#new_review">  &nbsp; 新建审核 &nbsp; </a></li>
+                        <li><a data-toggle="tab" href="#modify_review">  &nbsp; 修改审核 &nbsp; </a></li>
+
+                    </ul>
                     <!--当前进行-->
                     <div class="tab-pane fade  in active  " id="newon">
                         <!--导航开始-->
@@ -135,28 +164,47 @@
                                             <td><span class=""> ${production.endTime} </span></td>
                                             <td>${production.productionAuditor}</td>
 
-                                                <td><span class="text-hong text-strong">
+                                            <td><span class="text-hong text-strong">
                                                     <c:if test="${production.productStatus=='0'}">
                                                         创建中
                                                     </c:if>
                                                      <c:if test="${production.productStatus=='1'}">
-                                                         审核中
+                                                         <span class="text-hong text-strong">待审核</span>
                                                      </c:if>
                                                      <c:if test="${production.productStatus=='2'}">
-                                                         驳回
+                                                         <span class="text-zi text-strong">被驳回</span>
                                                      </c:if>
-                                                     <c:if test="${production.productStatus=='2'}">
-                                                         审核通过
+                                                     <c:if test="${production.productStatus=='3'}">
+                                                         <span class="text-lan text-strong">已审核</span>
                                                      </c:if>
                                                 </span></td>
-                                                <td><span class="ph-on">---</span></td>
 
-                                            <td>2016.08.28-2016.08.29</td>
+                                            <td>
+                                                <c:if test="${production.productStatus=='3'}">
+                                                    <c:choose>
+                                                        <c:when test="${production.endTime != null}">
+                                                            <span class="ph-on">使用中</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="ph-weihes">未使用</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:if>
+                                            </td>
+
+                                            <td>${production.createTime}</td>
                                             <td>
                                                 <button class="btn  bnt-sm bnt-ck"
                                                         onclick="see('${production.productionId}')">
                                                     查看
                                                 </button>
+                                                <c:if test="${production.productStatus=='2'}">
+                                                    <button class="btn  bnt-sm bnt-ck" data-toggle="modal"
+                                                            data-target="#"
+                                                            onclick="delete1('${production.productionId}')">
+                                                        删除
+                                                    </button>
+                                                </c:if>
                                             </td>
                                         </tr>
 
@@ -184,32 +232,34 @@
                                     <th>审核人</th>
                                     <th>审核状态</th>
                                     <th>使用状态</th>
-                                    <th>修改日期</th>
+                                    <%--<th>修改日期</th>--%>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <c:if test="${listExpired.size() >=1}">
-                                    <c:forEach items="${listExpired}" var="production">
-                                        <tr>
-                                            <td><span class="ph-new">新建</span> ${production.implDate} 开始 提成方案区间</td>
-                                            <td class="reason">${production.implDate}</td>
-                                            <td><span class=""> ${production.endTime}</span></td>
-                                            <td>${production.productionAuditor}</td>
-                                            <td><span class="text-lan text-strong">已审核</span></td>
-                                            <td><span class="ph-weihes">已过期</span></td>
-                                            <td>2016.08.28-2016.08.29</td>
-                                            <td>
-                                                <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">
-                                                    查看
-                                                </button>
-                                            </td>
-                                        </tr>
+                                <tbody id="list_expired">
+                                <%--<c:if test="${listExpired.size() >=1}">--%>
+                                <%--<c:forEach items="${listExpired}" var="production">--%>
+                                <%--<tr>--%>
+                                <%--<td><span class="ph-new">新建</span> ${production.implDate} 开始 提成方案区间</td>--%>
+                                <%--<td class="reason">${production.implDate}</td>--%>
+                                <%--<td><span class=""> ${production.endTime}</span></td>--%>
+                                <%--<td>${production.productionAuditor}</td>--%>
+                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
+                                <%--<td><span class="ph-weihes">已过期</span></td>--%>
+                                <%--<td>2016.08.28-2016.08.29</td>--%>
+                                <%--<td>--%>
+                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">--%>
+                                <%--查看--%>
+                                <%--</button>--%>
+                                <%--</td>--%>
+                                <%--</tr>--%>
 
-                                    </c:forEach>
-                                </c:if>
+                                <%--</c:forEach>--%>
+                                <%--</c:if>--%>
                                 </tbody>
                             </table>
+                            <%--分页--%>
+                            <div id="callBackPager"></div>
                         </div>
 
                     </div>
@@ -246,14 +296,12 @@
                                                 <td>2016.08.28-2016.08.29</td>
                                                 <td>
                                                     <button class="btn  bnt-sm bnt-ck" data-toggle="modal"
-                                                            data-target="#">
+                                                            data-target="#" onclick="see('${production.productionId}')">
                                                         查看
                                                     </button>
                                                 </td>
                                             </tr>
                                         </c:if>
-
-
                                     </c:forEach>
                                 </c:if>
                                 </tbody>
@@ -288,7 +336,12 @@
                                             <td class="reason">${priceRange.implementationDate}</td>
                                             <td><span class=""> ${priceRange.percentage} 元</span></td>
                                             <td>${priceRange.priceRangeAuditor}</td>
-                                            <td><span class="text-lan text-strong">审核中</span></td>
+                                            <c:if test="${priceRange.priceRangeStatus == 1}">
+                                                <td><span class="text-lan text-strong">审核中</span></td>
+                                            </c:if>
+                                            <c:if test="${priceRange.priceRangeStatus == 2}">
+                                                <td><span class="text-lan text-strong">驳回</span></td>
+                                            </c:if>
                                             <td><span class="ph-weihes">----</span></td>
                                             <td>${priceRange.priceRangeCreateDate}</td>
                                             <td>
@@ -321,7 +374,6 @@
 <script src="../static/bootstrap/js/bootstrap.js"></script>
 <script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 <script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<%--<script src="../static/yw-team-member/team-member.js" type="text/javascript" charset="utf-8"></script>--%>
 <script>
     $('#tab li').click(function () {
         $(this).addClass('active');
@@ -340,6 +392,94 @@
         minView: 2,
         pickerPosition: "bottom-right",
         forceParse: 0
+    });
+</script>
+<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
+<script type="text/javascript">
+    var total = 0;
+    var totalCount = 0;
+    var limit = 0;
+    var searchData = {
+        "size": "20",
+        "page": "0"
+    }
+    /**
+     * 查看详情
+     */
+    function see(id) {
+        window.location.href = '<%=basePath%>section/findOne/' + id;
+    }
+
+    function delete1(id) {
+        $.ajax({
+            url: 'delete/' + id,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.result == 'success') {
+                    alert(data.msg);
+                    refresh();
+                } else {
+                    alert(data.msg);
+                    refresh();
+                }
+            }
+        });
+    }
+
+
+    /*页面刷新*/
+    function refresh() {
+        window.location.reload();//刷新当前页面.
+    }
+    /**
+     * 展示已经过期的
+     */
+    function listExpired(searchData) {
+        console.log(${planId});
+        searchData.planId = '${planId}';
+        searchData.type = '${machineId}';
+        $.ajax({
+            url: 'findOver',
+            type: 'POST',
+            data: searchData,
+            success: function (data) {
+                var content = data.content;
+                totalCount = data.totalElements;
+                limit = data.size;
+                handelerbars_register(content);//向模版填充数据
+                if (totalCount != total || totalCount == 0) {
+                    total = totalCount;
+                    initPaging();
+                }
+            },
+            error: function () {
+                alert('系统故障');
+            }
+
+        });
+
+    }
+    //分页
+    function initPaging() {
+        $('#callBackPager').extendPagination({
+            totalCount: totalCount,//总条数
+            showCount: 5,//下面小图标显示的个数
+            limit: limit,//每页显示的条数
+            callback: function (curr, limit, totalCount) {
+                searchData['page'] = curr - 1;
+                searchData['size'] = limit;
+                listExpired(searchData);
+            }
+        });
+    }
+    //handelerbars填充数据
+    function handelerbars_register(content) {
+        var driver_template = Handlebars.compile($("#table-template").html());//注册
+        $("#list_expired").html(driver_template(content));
+    }
+    $(function () {
+        listExpired(searchData);
     });
 </script>
 </body>

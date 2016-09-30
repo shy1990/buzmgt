@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/common.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/phone.css">
     <link rel="stylesheet" href="<%=basePath%>static/css/section/comminssion.css">
-
+    <script type="text/javascript" src="../static/js/handlebars-v4.0.2.js"></script>
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 
     <style>
@@ -38,41 +38,6 @@
 
     </style>
     <script type="text/javascript">
-        function see(id) {
-            window.location.href = '<%=basePath%>section/findToOne/' + id;
-        }
-
-        function oYes(id) {
-            $.ajax({
-                url: '<%=basePath%>section/reviewPrice/' + id,
-                type: 'post',
-                data: {status: '3'},
-                success: function () {
-                    alert("审核成功");
-                    refresh();
-                }
-            })
-
-
-        }
-
-        function oNo(id) {
-            $.ajax({
-                url: '<%=basePath%>section/reviewPrice/' + id,
-                type: 'post',
-                data: {status: '2'},
-                success: function () {
-                    alert("以驳回");
-                    refresh();
-                }
-            })
-        }
-
-        /*页面刷新*/
-        function refresh() {
-            window.location.reload();//刷新当前页面.
-        }
-
 
     </script>
 </head>
@@ -109,14 +74,6 @@
 
     <hr class="hr-solid-sm" style="margin-top: 25px">
 
-    <ul class="nav nav-pills  nav-top" id="myTab">
-        <li class="active"><a data-toggle="tab" href="#newon"> &nbsp;当前进行 &nbsp;  </a></li>
-        <li><a data-toggle="tab" href="#yguoq">  &nbsp; 已过期 &nbsp; </a></li>
-        <li><a data-toggle="tab" href="#new_review">  &nbsp; 新建审核 &nbsp; </a></li>
-        <li><a data-toggle="tab" href="#modify_review">  &nbsp; 修改审核 &nbsp; </a></li>
-
-    </ul>
-
 
     <div class="row">
         <div class="col-md-12">
@@ -128,32 +85,19 @@
                         <h5 class="line-h">
                             <i class="ico ico-fl"></i>请选择类别
                         </h5>
-
-                        <%--<ul class="nav nav-sidebar menu" id="leftnav">--%>
-                        <%--<li class="current">--%>
-                        <%--<a href="##" data-toggle="tab">智能机</a>--%>
-                        <%--</li>--%>
-                        <%--<li>--%>
-                        <%--<a href="##" data-toggle="tab">定制机</a>--%>
-                        <%--</li>--%>
-                        <%--<li>--%>
-                        <%--<a href="##" data-toggle="tab">功能机</a>--%>
-                        <%--</li>--%>
-                        <%--<li>--%>
-                        <%--<a href="##" data-toggle="tab">平板</a>--%>
-                        <%--</li>--%>
-                        <%--<li>--%>
-                        <%--<a href="##" data-toggle="tab">智能生活</a>--%>
-                        <%--</li>--%>
-                        <%--<li>--%>
-                        <%--<a href="##" data-toggle="tab">配件</a>--%>
-                        <%--</li>--%>
-                        <%--</ul>--%>
                         <%--手机类型导航栏--%>
                         <ul id="ul" class="nav nav-sidebar menu">
                             <c:forEach items="${machineTypes}" var="machineType">
-                                <li class="current">
-                                    <a href="<%=basePath%>section/toReviewJsp?type=${machineType.id}"> ${machineType.name}</a>
+                                <c:choose>
+                                    <c:when test="${machineId == machineType.id}">
+                                        <li style="background: #3895ff">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li class="current">
+                                    </c:otherwise>
+                                </c:choose>
+
+                                <a href="<%=basePath%>section/toReviewJsp?type=${machineType.id}&planId=${planId}"> ${machineType.name}</a>
                                 </li>
                             </c:forEach>
                         </ul>
@@ -168,6 +112,13 @@
                 </div>
 
                 <div class="tab-content" style="margin-left: 200px;">
+                    <ul class="nav nav-pills  nav-top" id="myTab">
+                        <li class="active"><a data-toggle="tab" href="#newon"> &nbsp;当前进行 &nbsp;  </a></li>
+                        <li><a data-toggle="tab" href="#yguoq">  &nbsp; 已过期 &nbsp; </a></li>
+                        <li><a data-toggle="tab" href="#new_review">  &nbsp; 新建审核 &nbsp; </a></li>
+                        <li><a data-toggle="tab" href="#modify_review">  &nbsp; 修改审核 &nbsp; </a></li>
+
+                    </ul>
                     <!--当前进行-->
                     <div class="tab-pane fade  in active  " id="newon">
                         <!--导航开始-->
@@ -181,7 +132,6 @@
                                     <th>审核人</th>
                                     <th>审核状态</th>
                                     <th>使用状态</th>
-                                    <th>修改日期</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -195,16 +145,28 @@
                                             <td>${production.productionAuditor}</td>
                                             <c:if test="${production.productStatus=='1'}">
                                                 <td><span class="text-hong text-strong">待审核</span></td>
-                                                <td><span class="ph-on">---</span></td>
                                             </c:if>
                                             <c:if test="${production.productStatus=='3'}">
                                                 <td><span class="text-lan text-strong">已审核</span></td>
-                                                <td><span class="ph-on">---</span></td>
                                             </c:if>
-
-                                            <td>2016.08.28-2016.08.29</td>
+                                            <c:if test="${production.productStatus=='2'}">
+                                                <td><span class="text-lan text-strong">驳回</span></td>
+                                            </c:if>
                                             <td>
-                                                <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">
+                                                <c:if test="${production.productStatus=='3'}">
+                                                    <c:choose>
+                                                        <c:when test="${production.endTime != null}">
+                                                            <span class="ph-on">使用中</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="ph-weihes">未使用</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:if>
+                                            </td>
+                                            <td>
+                                                <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#"
+                                                        onclick="listOne('${production.productionId}')">
                                                     查看
                                                 </button>
                                             </td>
@@ -234,117 +196,17 @@
                                     <th>审核人</th>
                                     <th>审核状态</th>
                                     <th>使用状态</th>
-                                    <th>修改日期</th>
+                                    <%--<th>修改日期</th>--%>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-new">新建</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
-                                <%--<td><span class="ph-weihes">已过期</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
-                                <%--</button>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
-                                <%--</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
-                                <%--<td><span class="ph-weihes">已过期</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
-                                <%--</button>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
-                                <%--</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
-                                <%--<td><span class="ph-weihes">未使用</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程</button>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看</button>--%>
-
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
-                                <%--<td><span class="ph-weihes">已过期</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
-                                <%--</button>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
-                                <%--</button>--%>
-                                <%--</td>--%>
-                                <%--</tr>--%>
-
-
-                                <%--<tr>--%>
-                                <%--<td><span class="ph-xinjian">修改</span> 渠道201608手机全品牌提成方案50~100区间</td>--%>
-                                <%--<td class="reason">2016.08.01</td>--%>
-                                <%--<td><span class=""> -- -- -- </span></td>--%>
-                                <%--<td>刘强</td>--%>
-                                <%--<td><span class="text-lan text-strong">已审核</span></td>--%>
-                                <%--<td><span class="ph-weihes">已过期</span></td>--%>
-                                <%--<td>2016.08.28-2016.08.29</td>--%>
-                                <%--<td>--%>
-                                <%--<button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程--%>
-                                <%--</button>--%>
-                                <%--<button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">查看--%>
-                                <%--</button>--%>
-
-                                <%--</td>--%>
-                                <%--</tr>--%>
-                                <c:if test="${listExpired.size() >=1}">
-                                    <c:forEach items="${listExpired}" var="production">
-                                        <tr>
-                                            <td><span class="ph-new">新建</span> ${production.implDate} 开始 提成方案区间</td>
-                                            <td class="reason">${production.implDate}</td>
-                                            <td><span class=""> ${production.endTime}</span></td>
-                                            <td>${production.productionAuditor}</td>
-                                            <td><span class="text-lan text-strong">已审核</span></td>
-                                            <td><span class="ph-weihes">已过期</span></td>
-                                            <td>2016.08.28-2016.08.29</td>
-                                            <td>
-                                                <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#">
-                                                    查看
-                                                </button>
-                                            </td>
-                                        </tr>
-
-                                    </c:forEach>
-                                </c:if>
+                                <tbody id="list_expired">
 
                                 </tbody>
                             </table>
                         </div>
-
+                        <%--分页--%>
+                        <div id="callBackPager"></div>
                     </div>
                     <!--新建审核-->
 
@@ -361,7 +223,7 @@
                                     <th>审核人</th>
                                     <th>审核状态</th>
                                     <th>使用状态</th>
-                                    <th>修改日期</th>
+                                    <%--<th>修改日期</th>--%>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -378,10 +240,10 @@
                                                 <td>${production.productionAuditor}</td>
                                                 <td><span class="text-hong text-strong">待审核</span></td>
                                                 <td><span class="ph-on">---</span></td>
-                                                <td>2016.08.28-2016.08.29</td>
+                                                <%--<td>2016.08.28-2016.08.29</td>--%>
                                                 <td>
                                                     <button class="btn  bnt-sm bnt-ck"
-                                                            onclick="see('${production.productionId}')">
+                                                            onclick="see1('${production.productionId}')">
                                                         查看
                                                     </button>
                                                 </td>
@@ -482,6 +344,130 @@
         minView: 2,
         pickerPosition: "bottom-right",
         forceParse: 0
+    });
+</script>
+<script id="table-template" type="text/x-handlebars-template">
+    {{#each this}}
+    <tr>
+        <td><span class="ph-new">新建</span> {{implDate}} 开始 提成方案区间</td>
+        <td class="reason">{{implDate}}</td>
+        <td><span class=""> {{endTime}}</span></td>
+        <td>{{productionAuditor}}</td>
+        <td><span class="text-lan text-strong">已审核</span></td>
+        <td><span class="ph-weihes">已过期</span></td>
+        <td>
+            <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see('{{productionId}}')">
+                查看
+            </button>
+        </td>
+    </tr>
+    {{/each}}
+</script>
+<script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
+<script type="text/javascript">
+    var total =0;
+    var totalCount = 0;
+    var limit = 0;
+    var searchData = {
+        "size": "20",
+        "page": "0"
+    }
+
+    function see(id) {
+        window.location.href = '<%=basePath%>section/findOne/' + id;
+    }
+    function see1(id) {
+        window.location.href = '<%=basePath%>section/findToOne/' + id;
+    }
+
+    function oYes(id) {
+        $.ajax({
+            url: '<%=basePath%>section/reviewPrice/' + id,
+            type: 'post',
+            data: {status: '3'},
+            success: function () {
+                alert("审核成功");
+                refresh();
+            }
+        })
+
+
+    }
+
+    function oNo(id) {
+        $.ajax({
+            url: '<%=basePath%>section/reviewPrice/' + id,
+            type: 'post',
+            data: {status: '2'},
+            success: function () {
+                alert("已驳回");
+                refresh();
+            }
+        })
+    }
+
+    /*页面刷新*/
+    function refresh() {
+        window.location.reload();//刷新当前页面.
+    }
+
+    function listOne(id) {
+        window.location.href = '<%=basePath%>section/findOne/' + id;
+    }
+
+
+
+
+
+
+    /**
+     * 展示已经过期的
+     */
+    function listExpired(searchData){
+        console.log(${planId});
+        searchData.planId = '${planId}';
+        searchData.type = '${machineId}';
+        $.ajax({
+            url:'findOver',
+            type:'POST',
+            data:searchData,
+            success:function(data){
+                var content = data.content;
+                totalCount = data.totalElements;
+                limit = data.size;
+                handelerbars_register(content);//向模版填充数据
+                if (totalCount != total || totalCount == 0) {
+                    total = totalCount;
+                    initPaging();
+                }
+            },
+            error:function(){
+                alert('系统故障');
+            }
+
+        });
+
+    }
+    //分页
+    function initPaging() {
+        $('#callBackPager').extendPagination({
+            totalCount: totalCount,//总条数
+            showCount: 5,//下面小图标显示的个数
+            limit: limit,//每页显示的条数
+            callback: function (curr, limit, totalCount) {
+                searchData['page'] = curr - 1;
+                searchData['size'] = limit;
+                listExpired(searchData);
+            }
+        });
+    }
+    //handelerbars填充数据
+    function handelerbars_register(content) {
+        var driver_template = Handlebars.compile($("#table-template").html());//注册
+        $("#list_expired").html(driver_template(content));
+    }
+    $(function(){
+        listExpired(searchData);
     });
 </script>
 </body>

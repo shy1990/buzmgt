@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="C" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -78,8 +77,8 @@
         </p>
         <p class="tp-marg"><span class="text-gery text-strong text-fs">叠加产品：</span>
             <c:forEach items="${superposition.goodsTypeList}" var="GoodsType">
-              <span class="text-heis">${GoodsType.machineType.name}${GoodsType.good.name}</span></p>
-            </c:forEach>
+            <span class="text-heis">${GoodsType.machineType.name}${GoodsType.good.name}</span></p>
+        </c:forEach>
 
         <!--阶梯提成设置-->
         <div class="jttcsz">
@@ -92,19 +91,12 @@
                 <span class=" hden-rwl">${superposition.taskThree}</span>
 
 
-                <%--${superposition.ruleList[0]}--%>
             </div>
 
             <div class="jfgz">
                 <span class="text-gery text-strong  ">奖罚规则：</span>
 
                 <div class="jfbox">
-                    <%--<div class="col-sm-4 jfbox-box">--%>
-                    <%--<span class="text-publ"> 实际销量 ＜</span> <span class="text-nub">${superposition.taskOne} </span><span--%>
-                    <%--class="text-publ">台</span> &nbsp;&nbsp; <span--%>
-                    <%--class="text-gery text-size-12">提成：</span><input--%>
-                    <%--type="text" class="ph-inpt" placeholder="5.00" value="${superposition.ruleList[0].percentage}"> <span class="text-publ">元/台</span>--%>
-                    <%--</div>--%>
                     <c:choose>
                         <c:when test="${superposition.taskThree != null}">
                             <div class="col-sm-4 jfbox-box">
@@ -218,31 +210,140 @@
                 <c:forEach items="${superposition.groupList}" var="group">
                     <div class="col-sm-6 ryfz-box">
 
-                        <a href="##" title="<span style='color:#bebebe;font-weight:bolder'>${group.name} (${group.members.size()}人）</span>"
+                        <a href="##"
+                           title="<span style='color:#bebebe;font-weight:bolder'>${group.name} (${group.members.size()}人）</span>"
                            data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right"
                            data-html="true"
                            data-content="
                                    <c:forEach items="${group.members}" var="member">
-                                   <span style='color:#cdb6a8;font-weight:bolder;'>${member.name}</span>
+                                   <span style='color:#cdb6a8;font-weight:bolder;'>${member.salesmanName}</span>
                                    </c:forEach>
                         ">
                             <span class="text-big-green">${group.name}</span></a> &nbsp;
                         <span class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">${group.oneAdd}</span>
-                        <%--<input type="text" class="ph-inpt"> --%>
+                            <%--<input type="text" class="ph-inpt"> --%>
                         <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;
                         <c:if test="${group.twoAdd != null}">
-                            <span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">${group.twoAdd}</span>
+                            <span class="text-gery text-size-12">二阶段达量：</span> <span
+                                class="text-nub">${group.twoAdd}</span>
                             <%--<input type="text" class="ph-inpt"> --%>
                             <span class="text-gery text-size-12">台</span>&nbsp; &nbsp;
                         </c:if>
                         <c:if test="${group.threeAdd != null}">
-                            <span class="text-gery text-size-12">三阶段达量：</span> <span class="text-nub">${group.threeAdd}</span>
+                            <span class="text-gery text-size-12">三阶段达量：</span> <span
+                                class="text-nub">${group.threeAdd}</span>
                             <%--<input type="text" class="ph-inpt"> --%>
                             <span class="text-gery text-size-12">台</span>
                         </c:if>
 
                     </div>
                 </c:forEach>
+            </div>
+        </div>
+        <%-- 一单达量 --%>
+        <div class="jttcsz">
+            <i class="ico icon-jtsz"></i><span class="text-head text-strong">一单达量展示</span>
+            <hr>
+            <div class="rwzsql">
+                <span class="text-gery text-strong  ">一单达量：</span>
+                <span class=" hden-rwl"> ${superposition.singleOne}</span>
+                <span class=" hden-rwl">${superposition.singleTwo}</span>
+                <span class=" hden-rwl">${superposition.singleThree}</span>
+            </div>
+            <div class="jfgz">
+                <span class="text-gery text-strong  ">奖罚规则：</span>
+
+                <div class="jfbox">
+                    <c:choose>
+                        <c:when test="${superposition.singleThree != null}">
+                            <div class="col-sm-4 jfbox-box">
+                                <span class="text-publ"> 实际销量 ＜</span> <span
+                                    class="text-nub">${superposition.singleOne}</span><span
+                                    class="text-publ">台</span> &nbsp;&nbsp; <span
+                                    class="text-gery text-size-12">奖励：</span><input
+                                    type="text" class="ph-inpt" placeholder="5.00"
+                                    value="${superposition.singleRules[0].reward}"> <span class="text-publ">元</span>
+                            </div>
+
+                            <div class="col-sm-4 jfbox-box">
+                                <span class="text-nub">${superposition.singleOne} </span><span
+                                    class="text-publ">台 ≤实际销量＜ </span><span
+                                    class="text-nub"> ${superposition.singleTwo}</span><span class="text-publ">台</span>
+                                &nbsp;&nbsp;
+                                <span class="text-gery text-size-12">提成：</span><input type="text" class="ph-inpt"
+                                                                                      placeholder="5.00"
+                                                                                      value="${superposition.singleRules[1].reward}">
+                                <span
+                                        class="text-publ">元/台</span>
+                            </div>
+
+                            <div class="col-sm-4 jfbox-box">
+                                <span class="text-nub">${superposition.singleTwo} </span><span class="text-publ">台 ≤ 实际销量 ＜ </span><span
+                                    class="text-nub"> ${superposition.singleThree}</span> <span
+                                    class="text-publ">元</span> &nbsp;&nbsp;
+                                <span class="text-gery text-size-12">奖励：</span><input type="text" class="ph-inpt"
+                                                                                      placeholder="5.00"
+                                                                                      value="${superposition.singleRules[2].reward}">
+                                <span
+                                        class="text-publ">元</span>
+                            </div>
+
+                            <div class="col-sm-4 jfbox-box">
+                                <span class="text-nub">${superposition.singleThree} </span><span class="text-publ">台 ≤ 实际销量</span>
+                                &nbsp;&nbsp; <span
+                                    class="text-gery text-size-12"> 奖励：</span><input
+                                    type="text" class="ph-inpt" placeholder="5.00"
+                                    value="${superposition.singleRules[3].reward}"> <span class="text-publ">元/台</span>
+                            </div>
+
+                        </c:when>
+                        <c:when test="${superposition.taskTwo != null}">
+
+                            <div class="col-sm-4 jfbox-box">
+                                <span class="text-publ"> 实际销量 ＜</span> <span
+                                    class="text-nub">${superposition.singleOne}</span><span
+                                    class="text-publ">台</span> &nbsp;&nbsp; <span
+                                    class="text-gery text-size-12">奖励：</span><input
+                                    type="text" class="ph-inpt" placeholder="5.00"
+                                    value="${superposition.singleRules[0].reward}"> <span class="text-publ">元</span>
+                            </div>
+
+                            <div class="col-sm-4 jfbox-box">
+                                <span class="text-nub">${superposition.singleOne} </span><span
+                                    class="text-publ">台 ≤实际销量＜ </span><span
+                                    class="text-nub"> ${superposition.singleTwo}</span><span class="text-publ">台</span>
+                                &nbsp;&nbsp;
+                                <span class="text-gery text-size-12">提成：</span><input type="text" class="ph-inpt"
+                                                                                      placeholder="5.00"
+                                                                                      value="${superposition.singleRules[1].reward}">
+                                <span
+                                        class="text-publ">元/台</span>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="col-sm-4 jfbox-box">
+                                <span class="text-publ"> 实际销量 ＜</span> <span
+                                    class="text-nub">${superposition.singleOne}</span><span
+                                    class="text-publ">台</span> &nbsp;&nbsp; <span
+                                    class="text-gery text-size-12">奖励：</span><input
+                                    type="text" class="ph-inpt" placeholder="5.00"
+                                    value="${superposition.singleRules[0].reward}"> <span class="text-publ">元/台</span>
+                            </div>
+
+                            <div class="col-sm-4 jfbox-box">
+                                <span class="text-nub">${superposition.singleOne} </span><span
+                                    class="text-publ">台 ≤实际销量 </span>
+                                &nbsp;&nbsp;
+                                <span class="text-gery text-size-12">提成：</span><input type="text" class="ph-inpt"
+                                                                                      placeholder="5.00"
+                                                                                      value="${superposition.singleRules[1].reward}">
+                                <span
+                                        class="text-publ">元</span>
+                            </div>
+                        </c:otherwise>
+
+                    </c:choose>
+                </div>
             </div>
         </div>
 
@@ -267,7 +368,8 @@
                 <dl class="dl-horizontal">
                     <dt>方案起止时间：</dt>
                     <dd>
-                        <div><span class="text-gery tex"> ${superposition.implDate} 至  ${superposition.endDate}</span></div>
+                        <div><span class="text-gery tex"> ${superposition.implDate} 至 ${superposition.endDate}</span>
+                        </div>
 
                     </dd>
                 </dl>
