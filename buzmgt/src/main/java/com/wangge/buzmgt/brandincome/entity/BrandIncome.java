@@ -78,7 +78,7 @@ public class BrandIncome implements Serializable{
 
   private Float commissions;//提成金额
 
-  private String planId;//方案ID
+  private Long planId;//方案ID
 
   private Date createDate;//创建时间
 
@@ -187,11 +187,11 @@ public class BrandIncome implements Serializable{
     this.commissions = commissions;
   }
 
-  public String getPlanId() {
+  public Long getPlanId() {
     return planId;
   }
 
-  public void setPlanId(String planId) {
+  public void setPlanId(Long planId) {
     this.planId = planId;
   }
 

@@ -408,29 +408,23 @@ public class BrandIncomeController {
 
   /**
    * @param brandIncome
-   * @param bi
    * @param @return     设定文件
    * @return JsonResponse
    * @throws
-   * @Title: updateBrandIncome
-   * @Description: 修改品牌型号规则
+   * @Title: auditBrandIncome
+   * @Description: 审核通过该品牌型号规则
    */
-  @RequestMapping(value = "/update/{brandId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/audit/{brandId}", method = RequestMethod.PUT)
   @ResponseBody
-  public JsonResponse updateBrandIncome(@PathVariable(value = "brandId") BrandIncome brandIncome, @RequestBody BrandIncome bi) {
+  public JsonResponse auditBrandIncome(@PathVariable(value = "brandId") BrandIncome brandIncome) {
     JsonResponse json = new JsonResponse();
     try {
       BrandIncome income = brandIncome;
-      brandIncome.setCommissions(bi.getCommissions());
-      brandIncome.setStartDate(bi.getStartDate());
-      brandIncome.setEndDate(bi.getEndDate());
-      brandIncome.setAuditor(bi.getAuditor());
-      brandIncome.setCreateDate(new Date());
-      brandIncome.setStatus(BrandIncomeStatus.WAIT);
+      brandIncome.setStatus(BrandIncomeStatus.OVER);
       brandIncome = brandIncomeService.save(brandIncome);
       logService.log(income, brandIncome, Log.EventType.UPDATE);
       json.setStatus(JsonResponse.Status.SUCCESS);
-      json.setSuccessMsg("修改成功!");
+      json.setSuccessMsg("审核成功!");
     } catch (Exception e) {
       LogUtil.info(e.getMessage());
       json.setStatus(JsonResponse.Status.ERROR);
@@ -440,4 +434,31 @@ public class BrandIncomeController {
     return json;
   }
 
+  /**
+   * @param brandIncome
+   * @param @return     设定文件
+   * @return JsonResponse
+   * @throws
+   * @Title: rejectBrandIncome
+   * @Description: 驳回该品牌型号规则
+   */
+  @RequestMapping(value = "/reject/{brandId}", method = RequestMethod.PUT)
+  @ResponseBody
+  public JsonResponse rejectBrandIncome(@PathVariable(value = "brandId") BrandIncome brandIncome) {
+    JsonResponse json = new JsonResponse();
+    try {
+      BrandIncome income = brandIncome;
+      brandIncome.setStatus(BrandIncomeStatus.BACK);
+      brandIncome = brandIncomeService.save(brandIncome);
+      logService.log(income, brandIncome, Log.EventType.UPDATE);
+      json.setStatus(JsonResponse.Status.SUCCESS);
+      json.setSuccessMsg("已驳回!");
+    } catch (Exception e) {
+      LogUtil.info(e.getMessage());
+      json.setStatus(JsonResponse.Status.ERROR);
+      json.setErrorMsg("系统错误,请稍候重试!");
+      return json;
+    }
+    return json;
+  }
 }

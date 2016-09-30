@@ -31,5 +31,5 @@ public interface BrandIncomeRepository extends JpaRepository<BrandIncome, Long>,
                   "   and g.goods_id = ?1", nativeQuery = true)
   int findCycleSales(String goodId);
 
-  BrandIncome findByGoodIdAndPlanId(String goodId,String planId);
+  BrandIncome findByGoodIdAndPlanId(String goodId,Long planId);
 }

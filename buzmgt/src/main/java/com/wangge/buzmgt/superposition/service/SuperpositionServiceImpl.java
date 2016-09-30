@@ -73,7 +73,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
      * @return
      */
     @Override
-    public Page<SuperpositionProgress> searchDetail(String planId, Long superId, String userId, String startDate, String endDate, String name, Integer page, Integer size) {
+    public Page<SuperpositionProgress> searchDetail(Long planId, Long superId, String userId, String startDate, String endDate, String name, Integer page, Integer size) {
         String sql = " select \n" +
                 "    usr.PLAN_ID,\n" +
                 "    oder.SHOP_NAME,\n" +
@@ -174,7 +174,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
      * @return
      */
     @Override
-    public Page<SuperpositionProgress> findAll(String planId, Long superId, String startDate, String endDate, String name, Integer page, Integer size) {
+    public Page<SuperpositionProgress> findAll(Long planId, Long superId, String startDate, String endDate, String name, Integer page, Integer size) {
         logger.info(startDate + "  : " + endDate);
         String sql = "\n" +
                 "select \n" +
@@ -337,7 +337,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
      * @return
      */
     @Override
-    public Page<Superposition> findAll(Pageable pageable, String type, String sign, String planId) {
+    public Page<Superposition> findAll(Pageable pageable, String type, String sign, Long planId) {
         String statTime = "";//开始时间
         String endTime = "";//结束时间
 
@@ -350,7 +350,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                     Predicate p2 = cb.equal(root.get("checkStatus").as(String.class), "1");
                     Predicate p3 = cb.lessThanOrEqualTo(root.get("implDate").as(Date.class), new Date());
                     Predicate p4 = cb.greaterThanOrEqualTo(root.get("endDate").as(Date.class), new Date());
-                    Predicate p5 = cb.greaterThanOrEqualTo(root.get("planId").as(String.class), planId);
+                    Predicate p5 = cb.greaterThanOrEqualTo(root.get("planId").as(Long.class), planId);
                     Predicate p6 = cb.or(p1, p2, cb.and(p3, p4));
                     Predicate p = cb.and(p6, p5);
                     return p;
@@ -363,7 +363,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                     }
                     list.add(cb.lessThanOrEqualTo(root.get("endDate").as(Date.class), new Date()));//大于结束日期
                     list.add(cb.equal(root.get("checkStatus").as(String.class), "3"));//通过审核的
-                    list.add(cb.equal(root.get("planId").as(String.class), planId));//通过审核的
+                    list.add(cb.equal(root.get("planId").as(Long.class), planId));//通过审核的
                     return cb.and(list.toArray(new Predicate[list.size()]));
                 }
 //                if("over".equals(sign)){ // 被驳回

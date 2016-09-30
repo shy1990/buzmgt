@@ -181,14 +181,7 @@
 
                                             <td>
                                                 <c:if test="${production.productStatus=='3'}">
-                                                    <c:choose>
-                                                        <c:when test="${production.endTime != null}">
                                                             <span class="ph-on">使用中</span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="ph-weihes">未使用</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
                                                 </c:if>
                                             </td>
 

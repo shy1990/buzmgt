@@ -61,7 +61,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   AchieveService achieveService;
   @Autowired
   AchieveIncomeService achieveIncomeService;
-  
+
   /**
    * 要避免多线程冲突 <br/>
    * 手机要展示当天的订单预计收益详情和当天的订单预计收益总和统计<br/>
@@ -91,35 +91,35 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     }
     // 查找计算达量
     List<Map<String, Object>> subList = achieveService.findRuleByGoods(goodIdList, planId, userId);
-    
+
     for (Map<String, Object> ruleMap : subList) {
       String subgoodId = ruleMap.get("goodId").toString();
       OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
       goodIdList.remove(subgoodId);
-      achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
-          subgoodId, 0, regionId);
+//      achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
+//          subgoodId, 0, regionId);
     }
     // 查找计算品牌
     subList = achieveService.findRuleByGoods(goodIdList, planId, userId);
-    
+
     for (Map<String, Object> ruleMap : subList) {
       String subgoodId = ruleMap.get("goodId").toString();
       OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
       goodIdList.remove(subgoodId);
       goodList.remove(subgood);
-      achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
-          subgoodId, Integer.valueOf(payStatus), regionId);
+//      achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
+//          subgoodId, Integer.valueOf(payStatus), regionId);
     }
     // 查找计算价格区间
-    
+
     if (payStatus.equals("1")) {
       caculatePayedOrder(orderNo, userId, planId, payDate, goodList,regionId);
     }
   }
-  
+
   /**
    * 根据goodId查找订单里 的商品详情. <br/>
-   * 
+   *
    * @author yangqc
    * @param subgoodId
    * @param goodList
@@ -140,11 +140,11 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     goodList.remove(i);
     return good;
   }
-  
+
   /**
    * findSubPlan:找到三个并行子方案中正确的一个. <br/>
    * 编写一个CalculatePlan的接口,然后这三个方案实现它<br/>
-   * 
+   *
    * @return
    * @since JDK 1.8
    */
@@ -163,24 +163,24 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     // }
     return new IncomeSub(0, 4);
   }
-  
+
   public void caculatePayedOrder(String orderNo, String userId, Long planId, Date payDate, List<OrderGoods> goodList,Long regionId) {
     List<String> goodIdList = new ArrayList<>();
     for (OrderGoods good : goodList) {
       goodIdList.add(good.getGoodId());
     }
     // 查找计算达量
-    
+
     List<Map<String, Object>> subList = achieveService.findRuleByGoods(goodIdList, planId, userId, payDate);
     for (Map<String, Object> ruleMap : subList) {
       String subgoodId = ruleMap.get("goodId").toString();
       OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
       goodList.remove(subgood);
-      achieveIncomeService.createAchieveIncomeByPay((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
-          subgoodId, 1, planId);
+//      achieveIncomeService.createAchieveIncomeByPay((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
+//          subgoodId, 1, planId);
     }
   }
-  
+
   /**
    * 该功能可以app-interface里完成,通过订单接口调用; 收现金和pos调用该接口<br/>
    * // TODO <br/>
@@ -192,7 +192,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    */
   @Override
   public void caculatePayedOrder(String orderNo, String userId) {
-    
+
     Optional<IncomeMainplanUsers> userOpt = mainPlanUserRep.findFirst(userId, FlagEnum.NORMAL);
     if (!userOpt.isPresent()) {
       return;
@@ -209,23 +209,23 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     }
     // 查找计算达量
     List<Map<String, Object>> subList = achieveService.findRuleByGoods(goodIdList, planId, userId, new Date());
-    
+
     for (Map<String, Object> ruleMap : subList) {
       String subgoodId = ruleMap.get("goodId").toString();
       OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
       goodIdList.remove(subgoodId);
-      achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
-          subgoodId, 1, planId);
+//      achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
+//          subgoodId, 1, planId);
     }
-    
+
   }
-  
+
   @Override
   public void caculateSalesman() {
     // TODO Auto-generated method stub
-    
+
   }
-  
+
   /*
    * 在新建时加上月工资<br/>
    */
@@ -242,14 +242,14 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     }
     return main;
   }
-  
+
   @Override
   @Transactional(rollbackForClassName = "Exception")
   public MainIncome findIncomeMain(String salesmanId) {
     String month = DateUtil.getPreMonth(new Date(), 0);
     return findIncomeMain(salesmanId, month);
   }
-  
+
   @Override
   public Page<MainIncomeVo> getVopage(Pageable pageReq, Map<String, Object> searchParams) throws Exception {
     Page<MainIncomeVo> voPage = voRep.findAll((Specification<MainIncomeVo>) (root, query, cb) -> {
@@ -259,7 +259,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     }, pageReq);
     return voPage;
   }
-  
+
   @Override
   public List<MainIncomeVo> findAll(Map<String, Object> searchParams) {
     List<MainIncomeVo> rlist = voRep.findAll((Specification<MainIncomeVo>) (root, query, cb) -> {
@@ -269,22 +269,22 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     });
     return rlist;
   }
-  
+
   /**
    * 待讨论:计算油补 <br/>
    * 方案两种:1.实时计算,参数(业务员和油补金额) 2.每天晚上定时计算,计算每天的;
-   * 
+   *
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void calculateOil() {
     mainIncomeRep.calculateOilCost();
   }
-  
+
   @Override
   public List<Map<String, Object>> findRuleByGoods(List<String> goodIds, Long mainPlanId, String userId) {
     // TODO Auto-generated method stub
     return null;
   }
-  
+
 }
