@@ -54,7 +54,7 @@ public class AchieveIncomeController {
 		}
 		try {
 			achieveRule.forEach(ruleMap -> {
-				achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, 2, (String) ruleMap.get("goodId"), 0, planId);
+//				achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, 2, (String) ruleMap.get("goodId"), 0, planId);
 			});
 		} catch (Exception e) {
 			jsonResponse.setErrorCode("500");

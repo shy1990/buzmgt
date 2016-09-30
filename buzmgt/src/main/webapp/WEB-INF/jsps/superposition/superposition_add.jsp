@@ -163,6 +163,9 @@
                     </select>
                 </li>
                 <button class="btn  bnt-sm ph-btn-add" onclick="addGood()"><span class="text-strong">添加</span></button>
+                <button class="btn  bnt-sm ph-btn-add" onclick=""><span class="text-strong">
+                 已添加商品
+                </span></button>
             </ul>
 
             <!--阶梯提成设置-->

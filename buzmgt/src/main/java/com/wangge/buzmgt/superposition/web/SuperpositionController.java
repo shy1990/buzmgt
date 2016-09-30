@@ -176,7 +176,7 @@ public class SuperpositionController {
     public Page<Superposition> findAll(@PageableDefault(page = 0,
             size = 10,
             sort = {"createDate"},
-            direction = Sort.Direction.DESC) Pageable pageable, String type, String sign, String planId) {
+            direction = Sort.Direction.DESC) Pageable pageable, String type, String sign, Long planId) {
 
         Page<Superposition> pageReposne = superpositonService.findAll(pageable, type, sign, planId);
 
