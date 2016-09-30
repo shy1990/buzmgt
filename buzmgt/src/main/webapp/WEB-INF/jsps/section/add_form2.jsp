@@ -106,6 +106,12 @@
 
         });
 
+        function addRegion(id){
+            window.location.href = '<%=basePath%>areaAttr/setting?ruleId='+id+'&type=PRICERANGE';
+
+        }
+
+
     </script>
 </head>
 <body>
@@ -177,7 +183,7 @@
                                         </td>
                                         <td>${priceRange.implementationDate}</td>
                                         <td>${priceRange.endTime}</td>
-                                        <td><a href="">添加区域设置</a></td>
+                                        <td><a href="javascript:void(0) " onclick="addRegion('${priceRange.priceRangeId}')">添加区域设置</a></td>
                                         <td>${priceRange.priceRangeCreateDate}</td>
                                     </tr>
                                 </c:forEach>

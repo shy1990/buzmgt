@@ -55,13 +55,13 @@ public class Production {
 
 //    关联方案的id
     @Column(name = "plan_id")
-    private String planId;
+    private Long planId;
 
-    public String getPlanId() {
+    public Long getPlanId() {
         return planId;
     }
 
-    public void setPlanId(String planId) {
+    public void setPlanId(Long planId) {
         this.planId = planId;
     }
 

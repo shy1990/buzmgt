@@ -58,7 +58,7 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public String compute(String orderNo, Date payTime1, Double price, String userId, String goodsId, String type, String planId,Integer num) {
+    public String compute(String orderNo, Date payTime1, Double price, String userId, String goodsId, String type, Long planId,Integer num) {
         //1.需要的参数: 1.订单号 2.订单单品支付时间 3.商品的价格 4.用户id 5.区域id 6.产品类型 7.方案id(下面是模拟数据)
         String payTime = DateUtil.date2String(payTime1,"yyyy-MM-dd");
         try {
@@ -142,7 +142,7 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public String compute(String orderNo, Double price, String userId, String goodsId, String type, String planId,Integer num) {
+    public String compute(String orderNo, Double price, String userId, String goodsId, String type, Long planId,Integer num) {
 //1.需要的参数: 1.订单id 2.订单单品支付时间 3.商品的价格 4.用户id 5.区域id 6.产品类型 7.方案id(下面是模拟数据)
         String payTime = DateUtil.date2String(new Date(),"yyyy-MM-dd");
         try {
@@ -239,7 +239,7 @@ public class ProductionServiceImpl implements ProductionService {
      * @return:返回这个刚设置区间方案
      */
     @Override
-    public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, String planId) {
+    public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, Long planId) {
         //设置区间
         Date createTime = new Date();//初始化时间
         Date implDate = DateUtil.string2Date(implementationDate, "yyyy-MM-dd");
@@ -291,14 +291,14 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public List<Production> findNotExpired(String planId, String type) {
+    public List<Production> findNotExpired(Long planId, String type) {
         String today = DateUtil.date2String(new Date());
         List<Production> ps = productionRepository.findStatus(planId, type, today);
         return ps;
     }
 
     @Override
-    public List<Production> findNotExpiredQd(String planId, String type) {
+    public List<Production> findNotExpiredQd(Long planId, String type) {
         String today = DateUtil.date2String(new Date());
         List<Production> ps = productionRepository.findStatus2Qd(planId, type, today);
         return ps;
@@ -313,7 +313,7 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public Page<Production> findAll(String planId, String type, Pageable pageable) {
+    public Page<Production> findAll(Long planId, String type, Pageable pageable) {
         String date = DateUtil.currentDateToString();
         Date today = DateUtil.string2Date(date, "yyyy-MM-dd");
         Page<Production> page = productionRepository.findAll(new Specification() {
@@ -324,7 +324,7 @@ public class ProductionServiceImpl implements ProductionService {
                 Predicate predicate2 = cb.isNotNull(root.get("endTime").as(Date.class));
                 Predicate predicate3 = cb.equal(root.get("productStatus").as(String.class), "3");
                 Predicate predicate4 = cb.equal(root.get("status").as(String.class), "0");
-                Predicate predicate5 = cb.equal(root.get("planId").as(String.class), planId);
+                Predicate predicate5 = cb.equal(root.get("planId").as(Long.class), planId);
 
                 Predicate p = cb.and(predicate2, predicate, predicate1, predicate3, predicate4, predicate5);
                 return p;
@@ -379,7 +379,7 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public Production findNow(String type, String time, String planId) {
+    public Production findNow(String type, String time, Long planId) {
         Production p = productionRepository.findNow(time, time, time, type, planId);
         return p;
     }
@@ -391,7 +391,7 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public Map<String, Object> findNowCW(String type, String planId) {
+    public Map<String, Object> findNowCW(String type, Long planId) {
 
         String time = DateUtil.date2String(new Date());//获取当前的时间
 
@@ -444,7 +444,7 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public List<PriceRange> findReview(String planId, String type) {
+    public List<PriceRange> findReview(Long planId, String type) {
         String time = DateUtil.date2String(new Date());//获取当前的时间
         Production p = productionRepository.findNow(time, time, time, type, planId);//查询当前正在是用的
         List<PriceRange> priceRanges = null;

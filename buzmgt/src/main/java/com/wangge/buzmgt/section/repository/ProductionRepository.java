@@ -21,7 +21,7 @@ public interface ProductionRepository extends JpaRepository<Production,Long> {
             " and production_type = ?" +
             " and product_status = '3' " +
             " and status = 0 ")
-    public Production findUseForEndTimeIsNull(String planId,String productionType);
+    public Production findUseForEndTimeIsNull(Long planId,String productionType);
 
     public Production findByProductionId(Long id);//根据id查询
 
@@ -36,7 +36,7 @@ public interface ProductionRepository extends JpaRepository<Production,Long> {
             " and  production_type = ? " +
             " and plan_id = ? " +
             " and status = 0 ")
-    public Production findNow(String time1, String time2, String time3, String type,String planId);
+    public Production findNow(String time1, String time2, String time3, String type,Long planId);
 
     /**
      * 查询当期进行的(审核通过-未来要使用的,正在审核的,被驳回的)
@@ -50,7 +50,7 @@ public interface ProductionRepository extends JpaRepository<Production,Long> {
             " and (p.product_status in ('0','1','2') or(p.product_status = '3' " +
             " and (p.END_TIME is null or p.END_TIME >=to_date(?,'yyyy-mm-dd')))) " +
             " order by p.create_time desc" )
-    public List<Production> findStatus(String planId,String type, String today);
+    public List<Production> findStatus(Long planId,String type, String today);
     /**
      * 查询当期进行的(审核通过-未来要使用的,正在审核的,被驳回的)
      * @param type
@@ -63,7 +63,7 @@ public interface ProductionRepository extends JpaRepository<Production,Long> {
             " and (p.product_status in ('1','2') or(p.product_status = '3' " +
             " and (p.END_TIME is null or p.END_TIME >=to_date(?,'yyyy-mm-dd')))) " +
             " order by p.create_time desc" )
-    public List<Production> findStatus2Qd(String planId,String type, String today);
+    public List<Production> findStatus2Qd(Long planId,String type, String today);
 
 
 

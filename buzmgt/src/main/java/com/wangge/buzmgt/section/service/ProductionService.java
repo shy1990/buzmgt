@@ -15,7 +15,7 @@ import java.util.Map;
 public interface ProductionService {
 
 
-    public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, String planId);
+    public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, Long planId);
 
     public Production review(Long id, String status);//改变状态(渠道审核:通过/驳回)
 
@@ -24,19 +24,19 @@ public interface ProductionService {
 
     public Production findById(Long id);//根据id查找
 
-    public List<Production> findNotExpired(String planId,String type);//查询未过期的(使用中,审核中,被驳回)
+    public List<Production> findNotExpired(Long planId,String type);//查询未过期的(使用中,审核中,被驳回)
 
-    public List<Production> findNotExpiredQd(String planId,String type);//查询未过期的(使用中,审核中,被驳回)
+    public List<Production> findNotExpiredQd(Long planId,String type);//查询未过期的(使用中,审核中,被驳回)
 
-    public Page<Production> findAll(String planId,String type, Pageable pageable);
+    public Page<Production> findAll(Long planId,String type, Pageable pageable);
 
-    public Map<String,Object> findNowCW(String type,String planId);
+    public Map<String,Object> findNowCW(String type,Long planId);
 
     public Production save(Production production);
 
-    public List<PriceRange> findReview(String planId,String type);//查询正在审核中的小区间
+    public List<PriceRange> findReview(Long planId,String type);//查询正在审核中的小区间
 
-    public Production findNow(String type, String time,String planId);//查询下订单日期使用的方案
+    public Production findNow(String type, String time,Long planId);//查询下订单日期使用的方案
 
     /**
      * @Description: 已支付计算
@@ -51,7 +51,7 @@ public interface ProductionService {
      * @return
      */
     public String compute(String orderNo,Date payTime,
-      Double price, String userId,String goodsId,String type,String planId,Integer num);
+      Double price, String userId,String goodsId,String type,Long planId,Integer num);
 
     /**
      * @Description: 价格区间出库计算
@@ -65,7 +65,7 @@ public interface ProductionService {
      * @return
      */
     public String compute(String orderNo,Double price,
-        String userId,String goodsId,String type,String planId,Integer num);
+        String userId,String goodsId,String type,Long planId,Integer num);
 
 
 

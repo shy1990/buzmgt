@@ -213,7 +213,7 @@
                                         <input type="hidden" id="ruleId" name="ruleId" value="${brandIncome.id}">
                                     </c:if>
                                     <c:if test="${!empty priceRange}">
-                                        <input type="hidden" id="ruleId" name="ruleId" value="${priceRange.id}">
+                                        <input type="hidden" id="ruleId" name="ruleId" value="${priceRange.priceRangeId}">
                                     </c:if>
                                     <!-- /btn-group -->
                                 </div>

@@ -32,7 +32,7 @@ public class SectionRecord {
 
     private Double percentage;//提成
 
-    private String planId;//方案id
+    private Long planId;//方案id
 
     private Long sectionId;//叠加方案id
 
@@ -102,11 +102,11 @@ public class SectionRecord {
         this.percentage = percentage;
     }
 
-    public String getPlanId() {
+    public Long getPlanId() {
         return planId;
     }
 
-    public void setPlanId(String planId) {
+    public void setPlanId(Long planId) {
         this.planId = planId;
     }
 

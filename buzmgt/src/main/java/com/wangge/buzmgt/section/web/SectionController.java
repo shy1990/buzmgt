@@ -8,6 +8,7 @@ import com.wangge.buzmgt.section.entity.Production;
 import com.wangge.buzmgt.section.service.PriceRangeService;
 import com.wangge.buzmgt.section.service.ProductionService;
 import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.util.DateUtil;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +57,7 @@ public class SectionController {
      */
 
     @RequestMapping(value = "findNow", method = RequestMethod.GET)
-    public String findNowToJSP(String type, String planId, Model model) {
+    public String findNowToJSP(String type, Long planId, Model model) {
         Map<String, Object> map = productionService.findNowCW(type, planId);
         List<PriceRange> pc = (List) map.get("list");
         List<MachineType> machineTypes = machineTypeServer.findAll();//手机类型
@@ -91,7 +93,7 @@ public class SectionController {
      */
     @RequestMapping(value = "addPriceRanges", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> addPriceRanges(String implementationDate, @RequestBody List<PriceRange> priceRanges, String productionType, String planId) {
+    public Map<String, Object> addPriceRanges(String implementationDate, @RequestBody List<PriceRange> priceRanges, String productionType, Long planId) {
 
         Production production = productionService.addProduction(priceRanges, productionType, implementationDate, planId);
 
@@ -140,7 +142,7 @@ public class SectionController {
      */
     @RequestMapping(value = "toNotExpiredJsp", method = RequestMethod.GET)
     public String findNotExpiredJsp(String type,
-                                    String planId,
+                                    Long planId,
                                     Model model,
                                     @RequestParam(value = "page", defaultValue = "0") Integer page,
                                     @RequestParam(value = "size", defaultValue = "20") Integer size
@@ -219,7 +221,7 @@ public class SectionController {
     @RequestMapping(value = "toReviewJsp", method = RequestMethod.GET)
     public String toReviewJsp(String type,
                               Model model,
-                              String planId,
+                              Long planId,
                               @RequestParam(value = "page", defaultValue = "0") Integer page,
                               @RequestParam(value = "size", defaultValue = "20") Integer size) {
         Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.ASC, "productionId"));
@@ -303,38 +305,38 @@ public class SectionController {
                     size = 20,
                     sort = {"productionId"},
                     direction = Sort.Direction.DESC) Pageable pageable,
-            String planId,
+            Long planId,
             String type) {
         Page<Production> pageResponse = productionService.findAll(planId, type, pageable);
         return pageResponse;
     }
 
-//    /**
-//     * 测试计算
-//     *
-//     * @return
-//     */
-//    @RequestMapping(value = "compute", method = RequestMethod.GET)
-//    @ResponseBody
-//    public String compute() {
-//
-//        String orderNo = "123454";
-//        String payTime = "2016-09-28";
-//        Double price = 1005.0;
-//        String userId = "A123456";
-//        String goodsId = "sdfjsdfsjfskdfjdsf";
-//        String type = "lj";
-//        String planId = "1";
-//        Integer num = 3;
-//        if(payTime == null || "".equals(payTime)){
-//            String msg = productionService.compute(orderNo,price,userId,goodsId,type,planId,num);
-//            return msg;
-//        }
-//        System.out.println("-----------------------------------------------");
-//        String msg = productionService.compute(orderNo,payTime,price,userId,goodsId,type,planId,num);
-//
-//        return msg;
-//    }
+    /**
+     * 测试计算
+     *
+     * @return
+     */
+    @RequestMapping(value = "compute", method = RequestMethod.GET)
+    @ResponseBody
+    public String compute() {
+
+        String orderNo = "123454";
+        Date payTime = DateUtil.string2Date( "2016-09-28");
+        Double price = 1005.0;
+        String userId = "A123456";
+        String goodsId = "sdfjsdfsjfskdfjdsf";
+        String type = "lj";
+        Long planId = Long.parseLong("1");
+        Integer num = 3;
+        if(payTime == null || "".equals(payTime)){
+            String msg = productionService.compute(orderNo,price,userId,goodsId,type,planId,num);
+            return msg;
+        }
+        System.out.println("-----------------------------------------------");
+        String msg = productionService.compute(orderNo,payTime,price,userId,goodsId,type,planId,num);
+
+        return msg;
+    }
 
     /*
      * 获取用户的方法
