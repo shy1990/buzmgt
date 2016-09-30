@@ -2,6 +2,7 @@
 package com.wangge.buzmgt.yangqc;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -49,5 +50,8 @@ public class ApplicationTest {
   public void testFqsj() {
     Optional<Date> date = planUserRep.findMaxFqtimeBySalesmanId("C370113210");
     date.ifPresent(fqtime -> System.out.println(fqtime));
+  }
+  @Test
+  public void testQt(){
   }
 }

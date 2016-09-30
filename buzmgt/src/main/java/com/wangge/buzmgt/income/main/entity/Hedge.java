@@ -28,17 +28,18 @@ public class Hedge {
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
   private Long id;
-  // 订单号,sku号,唯一码
-  private String orderno, sku, uniquenumber;
+  // 订单号,sku号,唯一码,规则id
+  private String orderno, sku, uniquenumber,ruleid;
   // 商品名称
   private String goodsName;
   // 到货日期
   private Date shdate;
   // 品牌数量
   private Integer sum;
-  // 是否计算
-  private Integer flag = 0;
-  
+  // 是否计算,规则类型
+  private Integer flag = 0,ruletype;
+  //冲减金额,默认为0
+  private Double backcount=0D;
   public String getOrderno() {
     return orderno;
   }
@@ -95,6 +96,30 @@ public class Hedge {
     this.id = id;
   }
   
+  public String getRuleid() {
+    return ruleid;
+  }
+
+  public void setRuleid(String ruleid) {
+    this.ruleid = ruleid;
+  }
+
+  public Integer getRuletype() {
+    return ruletype;
+  }
+
+  public void setRuletype(Integer ruletype) {
+    this.ruletype = ruletype;
+  }
+
+  public Double getBackcount() {
+    return backcount;
+  }
+
+  public void setBackcount(Double backcount) {
+    this.backcount = backcount;
+  }
+
   public Hedge(String orderno, String sku, String goodsName, Integer sum, Date shdate, String uniquenumber) {
     super();
     this.orderno = orderno;

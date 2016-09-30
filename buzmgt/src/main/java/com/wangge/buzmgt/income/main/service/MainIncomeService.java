@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.income.main.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -7,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.wangge.buzmgt.income.main.entity.MainIncome;
-import com.wangge.buzmgt.income.main.vo.BrandType;
-import com.wangge.buzmgt.income.main.vo.MachineType;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 
 /**
@@ -28,10 +27,10 @@ public interface MainIncomeService {
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculateOutedOrder(String orderNo,String userId,String payStatus);
+  void caculateOutedOrder(String orderNo,String userId,String payStatus,Date paytime);
   
   /**
-   * caculatePayedOrder:计算已支付订单. <br/>
+   * caculatePayedOrder:计算线下支付订单. <br/>
    * 
    * 该功能可以app-interface里完成,通过订单接口调用;
    * @author yangqc
@@ -79,4 +78,16 @@ public interface MainIncomeService {
     */  
   List<MainIncomeVo> findAll(Map<String, Object> searchParams);
   
+  /** 
+    * findRuleByGood:(这里用一句话描述这个方法的作用). <br/> 
+    * 通过商品id查询其对应的规则
+    * 
+    * @author yangqc 
+    * @param goodId
+    * @param mainPlanId
+    * @param userId
+    * @return    Map结构如下:"goodId":"xxx"(商品id);"rules":List<RuleEntity>;(规则集合)
+    * @since JDK 1.8 
+    */  
+  List<Map<String,Object>> findRuleByGoods(List<String> goodIds,Long mainPlanId,String userId);
 }
