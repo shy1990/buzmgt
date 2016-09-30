@@ -240,27 +240,27 @@ function goSearch() {
 }
 
 /**
- * 品牌型号删除弹窗
+ * 品牌型号审核弹窗
  * @param brandIncomeId
  */
-function brandDel(brandIncomeId) {
-    $('#brandDel').modal({
+function brandAudit(brandIncomeId) {
+    $('#brandAudit').modal({
         keyboard: false
     })
     $("#brandId").val(brandIncomeId);
 }
 
 /**
- * 品牌型号删除
+ * 品牌型号审核
  */
-function del() {
+function pass() {
     var $brandIncomeId = $("#brandId").val();
     $.ajax({
-        url: "/brandIncome/" + $brandIncomeId,
-        type: "delete",
+        url: "/brandIncome/audit/" + $brandIncomeId,
+        type: "put",
         dataType: "json",
         success: function (data) {
-            $('#brandDel').modal('hide');
+            $('#brandAudit').modal('hide');
             if (data.status == "success") {
                 alert(data.successMsg);
                 window.location.reload();
@@ -275,15 +275,6 @@ function del() {
 }
 
 /**
- * 品牌型号修改
- */
-function brandAlter(brandId) {
-    var machineType = $("#machineType").val();
-    var planId = $("#planId").val();
-    window.location.href = base + "brandIncome/toUpdate/" + brandId + "?planId=" + planId + "&machineType=" + machineType;
-}
-
-/**
  * 品牌型号方案查看
  * @param brandId
  */
@@ -292,28 +283,30 @@ function brandLook(brandIncomeId) {
 }
 
 /**
- * 品牌型号终止弹窗
+ * 品牌型号驳回弹窗
  * @param brandIncomeId
  */
-function brandStop(brandIncomeId) {
-    $('#brandStop').modal({
+function brandReject(brandIncomeId) {
+    $('#brandReject').modal({
         keyboard: false
     })
     $("#brandId").val(brandIncomeId);
 }
 
 /**
- * 品牌型号终止
+ * 品牌型号驳回
  */
-function stop(brandIncomeId) {
+function reject() {
+    var $brandIncomeId = $("#brandId").val();
     $.ajax({
-        url : "/brandIncome/stop/" + brandIncomeId,
+        url : "/brandIncome/reject/" + $brandIncomeId,
         type : "put",
         dataType : "json",
         success : function(data) {
-            $('#brandStop').modal('hide');
+            $('#brandReject').modal('hide');
             if (data.status == "success"){
                 alert(data.successMsg);
+                window.location.reload();
             }else {
                 alert(data.errorMsg);
             }
@@ -322,13 +315,6 @@ function stop(brandIncomeId) {
             alert("系统异常，请稍后重试！");
         }
     })
-}
-
-/**
- * 品牌型号查看进程
- */
-function brandProcess(brandId) {
-    window.location.href = base + "/brandIncome/process/"+brandId;
 }
 
 /**
@@ -379,27 +365,13 @@ Handlebars.registerHelper('compareDate', function (startDate, endDate, status) {
 /**
  * 正在进行操作helper
  */
-Handlebars.registerHelper('whatUnderwayButton', function (startDate, endDate, status,id) {
+Handlebars.registerHelper('whatUnderwayButton', function (status,id) {
     var html = "";
-    var nowDate = getTodayDate();
-    startDate = changeDateToString(new Date(startDate));
-    endDate = changeDateToString(new Date(endDate));
     id = Handlebars.Utils.escapeExpression(id);
-    if (checkDate(startDate, nowDate) && checkDate(nowDate, endDate) && status === "OVER") {//已审核，进行中
-        html += "<button class='btn btn-sm bnt-jc spc' data-toggle='modal' data-target='#' onclick='brandProcess('+ id +');'>进程</button>";
-        html += "<button class='btn bnt-sm bnt-ck spc' data-toggle='modal' data-target='#' onclick='brandLook('+ id +');'>查看</button>";
-        html += "<button class='btn  bnt-sm bnt-zza spc' data-toggle='modal' data-target='#' onclick='brandStop('+ id +');'>终止</button>";
-    }
+    html += '<button class="btn bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="brandLook('+ id +');">查看</button>';
     if (status === "WAIT") {//待审核，未使用
-        html += '<button class="btn bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="brandLook('+ id +');">查看</button>';
-    }
-    if (status === "BACK") {//被驳回，未使用
-        html += '<button class="btn bnt-sm btn-zz spc" data-toggle="modal" onclick="brandAlter('+ id +')">修改</button>';
-        html += '<button class="btn bnt-sm btn-sc " data-toggle="modal" onclick="brandDel('+ id +')"> 删除</button>';
-    }
-    if (compareDate(startDate, nowDate) && status === "OVER") {//已审核，未使用
-        html += '<button class="btn btn-sm bnt-jc spc" data-toggle="modal" data-target="#" onclick="brandProcess('+ id +');">进程</button>';
-        html += '<button class="btn bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="brandLook('+ id +');">查看</button>';
+        html += '<button class="btn bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="brandAudit('+ id +');">审核</button>';
+        html += '<button class="btn bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="brandReject('+ id +');">驳回</button>';
     }
     return new Handlebars.SafeString(html);
 });
@@ -412,7 +384,6 @@ Handlebars.registerHelper('whatExpiredButton', function (startDate, endDate, sta
     var nowDate = getTodayDate();
     id = Handlebars.Utils.escapeExpression(id);
     if (checkDate(endDate, nowDate) && status === "OVER") {//已过期
-        html += '<button class="btn btn-sm bnt-jc spc" data-toggle="modal" data-target="#" onclick="brandProcess('+ id +');">进程</button>';
         html += '<button class="btn bnt-sm bnt-ck spc" data-toggle="modal" data-target="#" onclick="brandLook('+ id +');">查看</button>';
     }
     return new Handlebars.SafeString(html);

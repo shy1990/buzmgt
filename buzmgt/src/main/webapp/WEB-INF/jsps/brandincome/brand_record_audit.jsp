@@ -45,7 +45,7 @@
             <td>{{compareDate startDate endDate status}}</td>
             <td>{{formDate createDate}}</td>
             <td>
-                {{whatUnderwayButton startDate endDate status id}}
+                {{whatUnderwayButton status id}}
             </td>
         </tr>
         {{/each}}
@@ -205,40 +205,73 @@
 
     </div>
 
-    <!--品牌型号删除提示-->
-    <div id="brandDel" class="modal fade" role="dialog">
-        <div class="modal-dialog " role="document">
-            <div class="modal-content modal-blue">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h3 class="modal-title">提示</h3>
-                </div>
+<!--品牌型号审核提示-->
+<input id="brandId" hidden="hidden" value="">
+<div id="brandAudit" class="modal fade" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content modal-blue">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">提示</h3>
+            </div>
 
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <form class="form-horizontal">
-                            <div class="form-group">
-                                <p class="col-sm-12  ">你确定要删除方案吗？删除后该方案将不复存在！</p>
-                            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <p class="col-sm-12  ">您确定要审核通过该方案吗？通过后将按照该方案执行!</p>
+                        </div>
 
 
-                            <div class="btn-qx">
-                                <input id="brandId" hidden="hidden" value="">
-                                <button type="button" class="btn btn-danger btn-d" onclick="del();">删除</button>
-                            </div>
+                        <div class="btn-qx">
+                            <button type="button" class="btn btn-danger btn-d" onclick="pass();">审核通过</button>
+                        </div>
 
-                            <div class="btn-dd">
-                                <button type="button" data-dismiss="modal" class="btn btn-primary btn-d">取消</button>
-                            </div>
+                        <div class="btn-dd">
+                            <button type="button" data-dismiss="modal" class="btn btn-primary btn-d">取消</button>
+                        </div>
 
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <!--品牌型号删除提示-->
+</div>
+<!--品牌型号审核提示-->
+<!--品牌型号驳回提示-->
+<div id="brandReject" class="modal fade" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content modal-blue">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">提示</h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <p class="col-sm-12  ">该品牌方案当前正等待审核，您确定要驳回该方案吗？</p>
+                        </div>
+
+
+                        <div class="btn-qx">
+                            <button type="button" class="btn btn-danger btn-d" onclick="reject();">驳回</button>
+                        </div>
+
+                        <div class="btn-dd">
+                            <button type="button" data-dismiss="modal" class="btn btn-primary btn-d">取消</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--品牌型号驳回提示-->
 </div>
 <!--[if lt IE 9]>
 <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
