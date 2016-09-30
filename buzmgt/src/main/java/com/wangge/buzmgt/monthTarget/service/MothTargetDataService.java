@@ -1,6 +1,6 @@
-package com.wangge.buzmgt.monthTarget.service;
+package com.wangge.buzmgt.monthtarget.service;
 
-import com.wangge.buzmgt.monthTarget.entity.MothTargetData;
+import com.wangge.buzmgt.monthtarget.entity.MothTargetData;
 import org.springframework.data.domain.Page;
 
 /**

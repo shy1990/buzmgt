@@ -143,7 +143,7 @@
 									<div class="input-group are-line">
 										<span class="input-group-addon "><i
 											class=" ph-icon icon-riz"></i></span> <input type="text"
-											class="form-control form_datetime " id="newDate"
+											class="form-control form_datetime " id="delDate"
 											placeholder="年-月-日" readonly="readonly"
 											style="background: #ffffff; width: 265px;">
 									</div>

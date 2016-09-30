@@ -1,0 +1,58 @@
+.ph-select {
+
+    width: 160px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid #c6c6c6;
+    border-radius: 3px;
+    background: #ffffff;
+    color: #a7a7a7;
+}
+
+.new-li {
+    padding-top: 28px;
+    border-bottom: 0px dashed #dedede;
+}
+
+
+.dl-horizontal dt {
+    float: left;
+    width: 160px;
+    overflow: hidden;
+    clear: left;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 8px;
+}
+
+
+.icon-tjry{
+    background: url("../../img/tjry.png") no-repeat center;
+}
+
+li {
+    padding-top: 0;
+    border-bottom:none;
+}
+.text-line{
+    text-decoration:  underline;
+    line-height: 30px;
+}
+
+.sj-ms-btn-ok{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-align: center;
+    background-color: #eee;
+    padding-top: 5px;
+    border-bottom-width: 0px;
+    padding-bottom: 5px;
+}
+.sj-ms-btn-ok>button{
+    padding-right: 15px;
+    padding-left: 15px;
+    background-color: #fff;
+    border: 1px solid #aaaaaa;
+    color: #555555;
+}

@@ -3,17 +3,7 @@ package com.wangge.buzmgt.plan.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -53,7 +43,7 @@ public class GroupNumber implements Serializable{
   }
 
   public Integer getNumberFirstAdd() {
-    return numberFirstAdd;
+    return numberFirstAdd==null ? 0 : numberFirstAdd;
   }
 
   public void setNumberFirstAdd(Integer numberFirstAdd) {
@@ -61,7 +51,7 @@ public class GroupNumber implements Serializable{
   }
 
   public Integer getNumberSecondAdd() {
-    return numberSecondAdd;
+    return numberSecondAdd == null ? 0 : numberSecondAdd;
   }
 
   public void setNumberSecondAdd(Integer numberSecondAdd) {
@@ -69,7 +59,7 @@ public class GroupNumber implements Serializable{
   }
 
   public Integer getNumberThirdAdd() {
-    return numberThirdAdd;
+    return numberThirdAdd == null ? 0 : numberThirdAdd;
   }
 
   public void setNumberThirdAdd(Integer numberThirdAdd) {

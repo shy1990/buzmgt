@@ -76,6 +76,8 @@ public class SalesMan implements Serializable {
 	@Column(name="ASSESS_STAGE_SUM")
 	private Integer assessStageSum;
 
+	private String levelName;
+
 	public SalesMan() {
 		super();
 	}
@@ -192,14 +194,22 @@ public class SalesMan implements Serializable {
     this.assessStageSum = assessStageSum;
   }
 
-  @Override
+	public String getLevelName() {
+		return levelName;
+	}
+
+	public void setLevelName(String levelName) {
+		this.levelName = levelName;
+	}
+
+	@Override
   public String toString() {
     return "SalesMan [id=" + id + ", simId=" + simId + ", status=" + status
         + ", truename=" + truename + ", jobNum=" + jobNum + ", assessStage="
         + assessStage + ", towns=" + towns + ", mobile=" + mobile
         + ", regdate=" + regdate + ", isOldSalesman=" + isOldSalesman
         + ", isPrimaryAccount=" + isPrimaryAccount + ", assessStageSum="
-        + assessStageSum + "]";
+        + assessStageSum + ", levelName=\" + levelName + \"]";
   }
 
 }

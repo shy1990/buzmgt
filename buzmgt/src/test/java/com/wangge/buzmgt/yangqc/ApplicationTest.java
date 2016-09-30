@@ -1,7 +1,8 @@
 
 package com.wangge.buzmgt.yangqc;
 
-import java.text.ParseException;
+import java.util.Date;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.wangge.buzmgt.BuzmgtApplication;
+import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
 import com.wangge.buzmgt.income.schedule.IncomeSchedule;
 import com.wangge.buzmgt.income.schedule.repository.JobRepository;
@@ -25,6 +27,8 @@ public class ApplicationTest {
   JobRepository jobRep;
   @Autowired
   IncomeSchedule incomeSchedule;
+  @Autowired
+  IncomeMainplanUsersRepository planUserRep;
   
   @Test
   public void testPro() {
@@ -39,5 +43,11 @@ public class ApplicationTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+  
+  @Test
+  public void testFqsj() {
+    Optional<Date> date = planUserRep.findMaxFqtimeBySalesmanId("C370113210");
+    date.ifPresent(fqtime -> System.out.println(fqtime));
   }
 }

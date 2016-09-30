@@ -39,15 +39,20 @@
 
 
 <div class="modal-dialog" role="document" style="width: 1080px;">
-	<div class="modal-content modal-blue" >
+	<div class="modal-content modal-blue">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<h3 class="modal-title">添加人员</h3>
+			<input type="text" id="addTime"
+				class="form-control form_datetime input-sm" placeholder="人员添加日期"
+				readonly="readonly"
+				style="background: #ffffff; width: 150px; margin-left: 100px; margin-top: -30px" />
+
 		</div>
-		<div class="modal-body"  style="padding-right:15px">
+		<div class="modal-body" style="padding-right: 15px">
 
 
 
@@ -59,20 +64,17 @@
 						<c:forEach var="region" items="${regions}">
 							<option value="${region.id}">${region.name}</option>
 						</c:forEach>
-					</select> 
-					<select class="ph-select" id="roleId">
+					</select> <select class="ph-select" id="roleId">
 						<option value=''>业务角色</option>
 						<option value="262144">服务站经理</option>
 						<option value="294914">扩展经理</option>
-					</select> 
-					<select class="ph-select" id="levelName">
+					</select> <select class="ph-select" id="levelName">
 						<option value=''>业务等级</option>
 						<option value='大学生'>大学生</option>
 						<option value='中学生'>中学生</option>
 						<option value='小学生'>小学生</option>
 
-					</select> 
-					<select class="ph-select" id='starsLevel'>
+					</select> <select class="ph-select" id='starsLevel'>
 						<option value=''>区域星级</option>
 						<option value='1'>一星</option>
 						<option value='2'>二星</option>
@@ -141,15 +143,16 @@
 	}
 	//全部添加
 	function pushAll() {
+		var addTime = $("#addTime").val();
+		if ("" == addTime || null == addTime || undefined == addTime) {
+			alert("请设置标题上的人员添加日期!!");
+			return;
+		}
 		for (var i = 0; i < salesAddArr.length; i++) {
 			addUser(salesAddArr[i].salesmanId, salesAddArr[i].salesmanname,
-					false);
+					false,null,null, addTime);
 		}
 		$('#user').modal('hide');
-		/*salesAddArr = [];
-		$('input:checkbox:checked').each(function(i) {
-			$(this).prop('checked', false);
-		});*/
 	}
 </script>
 

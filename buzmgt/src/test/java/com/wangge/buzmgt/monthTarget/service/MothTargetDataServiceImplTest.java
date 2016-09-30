@@ -1,7 +1,7 @@
 //package com.wangge.buzmgt.monthTarget.service;
 //
 //import com.wangge.buzmgt.BuzmgtApplication;
-//import com.wangge.buzmgt.monthTarget.entity.MothTargetData;
+//import com.wangge.buzmgt.monthtarget.entity.MothTargetData;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
 //import org.springframework.beans.factory.annotation.Autowired;

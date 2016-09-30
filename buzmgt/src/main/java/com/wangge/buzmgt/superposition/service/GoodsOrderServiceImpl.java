@@ -1,10 +1,15 @@
 package com.wangge.buzmgt.superposition.service;
 
+import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.superposition.entity.GoodsOrder;
 import com.wangge.buzmgt.superposition.repository.GoodsOrderRepository;
+import com.wangge.buzmgt.util.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +17,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by joe on 16-9-12.
@@ -41,5 +50,55 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
         Integer o = goodsOrderRepository.countNums(startTime,endTime,regionId);
 
         return o;
+    }
+
+    @Override
+    public Page<GoodsOrder> findAll(HttpServletRequest request, Region region, Pageable pageable) {
+        Sort s = new Sort(Sort.Direction.DESC, "payTime");
+        pageable = new PageRequest(pageable.getPageNumber(),pageable.getPageSize(),s);
+        Page<GoodsOrder> page = goodsOrderRepository.findAll((root, query, cb) -> {
+            List<Predicate> predicates = getPredicate(root,cb,request,region);
+            return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+        }, pageable);
+        return page;
+    }
+
+    @Override
+    public List<GoodsOrder> findAll(HttpServletRequest request, Region region) {
+        Sort s = new Sort(Sort.Direction.DESC, "payTime");
+        List<GoodsOrder> list = goodsOrderRepository.findAll((root, query, cb) -> {
+            List<Predicate> predicates = getPredicate(root,cb,request,region);
+            return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+        }, s);
+        return list;
+    }
+
+    /**
+     * 获取Predicate条件
+     * @param root
+     * @param cb
+     * @param request
+     * @param region
+     * @return
+     */
+    public List<Predicate> getPredicate(Root<GoodsOrder> root, CriteriaBuilder cb,HttpServletRequest request, Region region){
+        Date startDate = DateUtil.string2Date(request.getParameter("startDate"));
+        Date endDate = DateUtil.string2Date(request.getParameter("endDate"));
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        Predicate predicate = cb.between(root.get("payTime").as(Date.class), startDate,endDate);
+        Predicate predicate1;
+        if ("镇".equals(region.getType().getName())){
+            predicate1 = cb.equal(root.get("businessRegionId").as(String.class), region.getId());
+        }else {
+            predicate1 = cb.equal(root.get("regionId").as(String.class), region.getId());
+        }
+        predicates.add(cb.and(predicate, predicate1));
+        String terms = request.getParameter("terms");
+        if (StringUtils.isNotBlank(terms)){
+            Predicate predicate2 = cb.equal(root.get("orderNum").as(String.class),terms);
+            Predicate predicate3 = cb.like(root.get("shopName").as(String.class),"%" + terms + "%");
+            predicates.add(cb.or(predicate2, predicate3));
+        }
+        return predicates;
     }
 }

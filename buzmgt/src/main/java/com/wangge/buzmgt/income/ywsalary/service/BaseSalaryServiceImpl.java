@@ -252,7 +252,7 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   }
   
   /**
-   * calEnableWorkDays:计算有效的本月方案使用时间. <br/>
+   * calEnableWorkDays:计算有效的本月工资方案使用时间. <br/>
    * 
    * @author yangqc
    * @param baseSalary
@@ -263,9 +263,8 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
    *          计算的结束时间,一般是下月1号
    * @return 计算日期的原则:<br/>
    *         1.是否有结束日期,<br/>
-   *         2.有效日期是否小于本月<br/>
+   *         2.起效日期是否小于本月<br/>
    *         3.结束日期是否大于下个月;<br/>
-   *         4.注:从月初算统一加1
    */
   private Double calEnableWorkDays(BaseSalary baseSalary, double monthDays, Date thisMonth, Date endDate) {
     Double between1 = 0D;
@@ -278,7 +277,7 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
         between1 = DateUtil.daysBetween(startDate, endDate) + 0D;
       }
     } else {
-      // 有效日期小于本月的
+      // 起效日期小于本月的
       if (DateUtil.daysBetween(startDate, thisMonth) >= 0) {
         if (delDate.getTime() <= endDate.getTime()) {
           between1 = DateUtil.daysBetween(thisMonth, delDate) + 0D;

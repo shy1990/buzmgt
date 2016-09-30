@@ -36,6 +36,10 @@
     background: url("../img/szjl.png") no-repeat center;
 }
 
+.spc {
+    margin-right: 3px;
+}
+
 .ph-btn-set > a:hover {
     font-weight: bold;
 }

@@ -6,8 +6,11 @@ import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.saojie.repository.SaojieRepository;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import com.wangge.buzmgt.teammember.entity.SalesmanStatus;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
+import com.wangge.buzmgt.teammember.repository.SalesmanLevelRepository;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +37,8 @@ public  class SalesManServiceImpl implements SalesManService {
     private SaojieRepository SaojieRepository;
     @Resource
     private LogService logService;
+    @Resource
+    private SalesmanLevelRepository salesmanLevelRepository;
 
     @PersistenceContext
     private EntityManager em;
@@ -50,13 +55,18 @@ public  class SalesManServiceImpl implements SalesManService {
         logService.log(null, salesman, EventType.UPDATE);
     }
 
+    @Override
+    public SalesMan save(SalesMan salesMan) {
+        return salesManRepository.save(salesMan);
+    }
+
     /*
-    * <p>Title: findByReginId</p>
-    * <p>Description:根据id查询区域 </p>
-    * @param regionId
-    * @return
-    * @see com.wangge.buzmgt.salesman.service.salesManService#findByReginId(java.lang.String)
-     */
+        * <p>Title: findByReginId</p>
+        * <p>Description:根据id查询区域 </p>
+        * @param regionId
+        * @return
+        * @see com.wangge.buzmgt.salesman.service.salesManService#findByReginId(java.lang.String)
+         */
     @Override
     @Transactional
     public List<User> findByReginId(String regionId) {
@@ -184,5 +194,36 @@ public  class SalesManServiceImpl implements SalesManService {
         }else{
             return null;
         }
+    }
+
+    @Override
+    public String addSalesmanLevel(String smallSales,String stuSalesMin,String stuSalesMax,String bigStuSales) {
+        List<SalesmanLevel> salesmanLevel = salesmanLevelRepository.findAll();
+        if (CollectionUtils.isEmpty(salesmanLevel)){
+            for (int i = 0;i < 3;i++){
+                SalesmanLevel sl = new SalesmanLevel();
+                if (i == 0){
+                    sl.setLevelName("小学生");
+                    sl.setSalesRange(smallSales);
+                }else if (i == 1){
+                    sl.setLevelName("中学生");
+                    sl.setSalesRange(stuSalesMin + "-" +stuSalesMax);
+                }else if (i == 2){
+                    sl.setLevelName("大学生");
+                    sl.setSalesRange(bigStuSales);
+                }
+                salesmanLevelRepository.save(sl);
+                logService.log(null,sl,EventType.SAVE);
+            }
+            return "ok";
+        }else {
+            return "exist";
+        }
+
+    }
+
+    @Override
+    public List<SalesmanLevel> findAll() {
+        return salesmanLevelRepository.findAll();
     }
 }
