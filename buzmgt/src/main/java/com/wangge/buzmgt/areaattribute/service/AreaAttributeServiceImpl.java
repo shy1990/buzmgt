@@ -62,4 +62,10 @@ public class AreaAttributeServiceImpl implements AreaAttributeService {
   public List<AreaAttribute> findByRuleIdAndTypeAndDisabled(Long id, PlanType type) {
     return areaAttributeRepository.findByRuleIdAndTypeAndDisabled(id,type,0);
   }
+
+  @Override
+  public AreaAttribute findByRegionIdAndRuleId(String regionId, Long ruleId) {
+    AreaAttribute areaAttribute = areaAttributeRepository.findByRegionIdAndRuleId(regionId,ruleId);
+    return areaAttribute;
+  }
 }
