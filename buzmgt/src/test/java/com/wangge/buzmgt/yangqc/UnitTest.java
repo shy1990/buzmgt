@@ -52,6 +52,15 @@ public class UnitTest {
   
   @Test
   public void testV() {
-   System.out.println(ObjectUtils.max("2016-09-16","2016-08-16"));
+    System.out.println(ObjectUtils.max("2016-09-16", "2016-08-16"));
+  }
+  
+  @Test
+  public void testd() {
+    List<Integer> alist = new ArrayList<Integer>(Arrays.asList(1, 7, 8, 4, 2, 4));
+    for (Integer i : alist) {
+      alist.remove(i);
+    }
+    
   }
 }

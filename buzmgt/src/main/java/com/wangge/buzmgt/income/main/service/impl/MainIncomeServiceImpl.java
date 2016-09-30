@@ -17,6 +17,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wangge.buzmgt.achieveset.entity.Achieve;
+import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
+import com.wangge.buzmgt.achieveset.service.AchieveService;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
@@ -28,7 +31,6 @@ import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.main.vo.OrderGoods;
-import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.income.main.vo.repository.MainIncomeVoRepository;
 import com.wangge.buzmgt.income.main.vo.repository.OrderGoodsRepository;
 import com.wangge.buzmgt.income.main.vo.repository.PlanUserVoRepository;
@@ -55,6 +57,10 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   IncomeSubRepository incomeSubRep;
   @Autowired
   BaseSalaryService baseSalaryService;
+  @Autowired
+  AchieveService achieveService;
+  @Autowired
+  AchieveIncomeService achieveIncomeService;
   
   /**
    * 要避免多线程冲突 <br/>
@@ -66,17 +72,73 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    * 5.调用叠加处理逻辑<br/>
    */
   @Override
-  public void caculateOutedOrder(String orderNo, String userId, String payStatus) {
-    
-    PlanUserVo userVo = PlanUserVoRep.findOne(userId);
-    Long planId = userVo.getPlanId();
+  public void caculateOutedOrder(String orderNo, String memberId, String payStatus, Date payDate) {
+    Object userO = mainPlanUserRep.findsaleByMemberId(memberId);
+    if (null == userO) {
+      return;
+    }
+    Object[] uers = (Object[]) userO;
+    Long planId = Long.valueOf(uers[0].toString());
+    String userId = uers[1].toString();
+    Long regionId = Long.valueOf(uers[2].toString());
     if (null == planId) {
       return;
     }
     List<OrderGoods> goodList = orderGoodsRep.findByorderNo(orderNo);
-    for (OrderGoods goods : goodList) {
-      IncomeSub sub = findSubPlan(planId, goods.getGoodId(), userId);
+    List<String> goodIdList = new ArrayList<>();
+    for (OrderGoods good : goodList) {
+      goodIdList.add(good.getGoodId());
     }
+    // 查找计算达量
+    List<Map<String, Object>> subList = achieveService.findRuleByGoods(goodIdList, planId, userId);
+    
+    for (Map<String, Object> ruleMap : subList) {
+      String subgoodId = ruleMap.get("goodId").toString();
+      OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
+      goodIdList.remove(subgoodId);
+      achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
+          subgoodId, 0, regionId);
+    }
+    // 查找计算品牌
+    subList = achieveService.findRuleByGoods(goodIdList, planId, userId);
+    
+    for (Map<String, Object> ruleMap : subList) {
+      String subgoodId = ruleMap.get("goodId").toString();
+      OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
+      goodIdList.remove(subgoodId);
+      goodList.remove(subgood);
+      achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
+          subgoodId, Integer.valueOf(payStatus), regionId);
+    }
+    // 查找计算价格区间
+    
+    if (payStatus.equals("1")) {
+      caculatePayedOrder(orderNo, userId, planId, payDate, goodList,regionId);
+    }
+  }
+  
+  /**
+   * 根据goodId查找订单里 的商品详情. <br/>
+   * 
+   * @author yangqc
+   * @param subgoodId
+   * @param goodList
+   * @return
+   * @since JDK 1.8
+   */
+  private OrderGoods pollGoodFromList(String subgoodId, List<OrderGoods> goodList) {
+    OrderGoods good = null;
+    //subgoodId一定在list中
+    int i=0;
+    for (OrderGoods good1 : goodList) {
+      if (good1.getGoodId().equals(subgoodId)) {
+        good = good1;
+        break;
+      }
+      i++;
+    }
+    goodList.remove(i);
+    return good;
   }
   
   /**
@@ -102,9 +164,26 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     return new IncomeSub(0, 4);
   }
   
+  public void caculatePayedOrder(String orderNo, String userId, Long planId, Date payDate, List<OrderGoods> goodList,Long regionId) {
+    List<String> goodIdList = new ArrayList<>();
+    for (OrderGoods good : goodList) {
+      goodIdList.add(good.getGoodId());
+    }
+    // 查找计算达量
+    
+    List<Map<String, Object>> subList = achieveService.findRuleByGoods(goodIdList, planId, userId, payDate);
+    for (Map<String, Object> ruleMap : subList) {
+      String subgoodId = ruleMap.get("goodId").toString();
+      OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
+      goodList.remove(subgood);
+      achieveIncomeService.createAchieveIncomeByPay((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
+          subgoodId, 1, planId);
+    }
+  }
+  
   /**
    * 该功能可以app-interface里完成,通过订单接口调用; 收现金和pos调用该接口<br/>
-   * // TODO Auto-generated method stub<br/>
+   * // TODO <br/>
    * 或者可以直接算,省事 1.查出已出库订单的订单号和出库时的计算结果<br/>
    * 2.判断受益方案是否相同(计算一整天或单个订单) <br/>
    * 3.相同就更改记录的日期,状态;<br/>
@@ -113,30 +192,32 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    */
   @Override
   public void caculatePayedOrder(String orderNo, String userId) {
+    
     Optional<IncomeMainplanUsers> userOpt = mainPlanUserRep.findFirst(userId, FlagEnum.NORMAL);
     if (!userOpt.isPresent()) {
       return;
     }
     IncomeMainplanUsers user = userOpt.get();
-    List<IncomeSub> subList = incomeSubRep.findByOrdernoAndOrderflag(orderNo, 0);
-    List<IncomeSub> payedList = new ArrayList<>();
-    String todayStr = DateUtil.date2String(new Date());
-    
-    if (subList.size() > 0 && DateUtil.date2String(subList.get(0).getCountDate()).equals(todayStr)) {
-      for (IncomeSub incomeSub : subList) {
-        
-        IncomeSub newsub = ObjectUtils.clone(incomeSub);
-        newsub.setId(null);
-        newsub.setOrderflag(1);
-        payedList.add(newsub);
-      }
-    } else {
-      List<OrderGoods> goodList = orderGoodsRep.findByorderNo(orderNo);
-      // 如果其子方案的和以前一样,就不用计算了
-      for (OrderGoods goods : goodList) {
-        IncomeSub sub = findSubPlan(user.getPlanId(), goods.getGoodId(), userId);
-      }
+    Long planId = user.getPlanId();
+    if (null == planId) {
+      return;
     }
+    List<OrderGoods> goodList = orderGoodsRep.findByorderNo(orderNo);
+    List<String> goodIdList = new ArrayList<>();
+    for (OrderGoods good : goodList) {
+      goodIdList.add(good.getGoodId());
+    }
+    // 查找计算达量
+    List<Map<String, Object>> subList = achieveService.findRuleByGoods(goodIdList, planId, userId, new Date());
+    
+    for (Map<String, Object> ruleMap : subList) {
+      String subgoodId = ruleMap.get("goodId").toString();
+      OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
+      goodIdList.remove(subgoodId);
+      achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
+          subgoodId, 1, planId);
+    }
+    
   }
   
   @Override
@@ -198,6 +279,12 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   @Transactional(rollbackFor = Exception.class)
   public void calculateOil() {
     mainIncomeRep.calculateOilCost();
+  }
+  
+  @Override
+  public List<Map<String, Object>> findRuleByGoods(List<String> goodIds, Long mainPlanId, String userId) {
+    // TODO Auto-generated method stub
+    return null;
   }
   
 }
