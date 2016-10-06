@@ -10,6 +10,9 @@ import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.log.entity.Log;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.entity.RegionType;
+import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
@@ -45,6 +48,8 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
   private BrandIncomeSubRepository brandIncomeSubRepository;
   @Resource
   private LogService logService;
+  @Resource
+  private RegionService regionService;
 
   @Override
   public BrandIncome findById(Long id) {
@@ -376,9 +381,10 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
   }
 
   @Override
-  public Boolean realTimeBrandIncomePay(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId, Date payDate) {
+  public Boolean realTimeBrandIncomePay(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId, Date payDate,String regionId) {
     try {
       //根据传入参数计算品牌型号收益(已付款)
+      Region region = regionService.findListRegionbyid(regionId);
       Double income = (brandIncome.getCommissions()).doubleValue() * num;
       BrandIncomeSub brandIncomeSub = new BrandIncomeSub();
       brandIncomeSub.setMainplanId(brandIncome.getPlanId());
