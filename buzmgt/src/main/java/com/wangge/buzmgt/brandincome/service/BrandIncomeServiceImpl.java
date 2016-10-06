@@ -355,7 +355,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
   @Override
   public List<Map<String,Object>> findRuleByGoods(List<String> goodIds, Long mainPlanId, String userId,Date payDate) {
     List<Map<String,Object>> list = new ArrayList<>();
-    Map<String,Object> map = new HashedMap();
+    Map<String,Object> map = new HashMap<>();
     BrandIncome brandIncome = null;
     if (CollectionUtils.isNotEmpty(goodIds)) {
       for (String g : goodIds){
@@ -363,7 +363,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
         if (ObjectUtils.notEqual(brandIncome,null)){
           Long payTime = payDate.getTime();//付款日期
           Long startDate = brandIncome.getStartDate().getTime();//规则开始日期
-          Long endDate = brandIncome.getStartDate().getTime();//规则结束日期
+          Long endDate = brandIncome.getEndDate().getTime();//规则结束日期
           if (payTime >= startDate && payTime <= endDate){
             map.put("goodId",brandIncome.getGoodId());
             map.put("rule",brandIncome);
