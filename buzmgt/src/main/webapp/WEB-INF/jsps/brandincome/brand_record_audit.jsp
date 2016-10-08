@@ -45,7 +45,7 @@
             <td>{{compareDate startDate endDate status}}</td>
             <td>{{formDate createDate}}</td>
             <td>
-                {{whatUnderwayButton status id}}
+                {{whatUnderwayButton status id auditor}}
             </td>
         </tr>
         {{/each}}
@@ -100,7 +100,7 @@
         <i class="ico ico-tcsz"></i>设置记录
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
         <input id="planId" hidden="hidden" value="${planId }">
-        <input id="machineType" hidden="hidden" value="${machineType }">
+        <input id="userId" hidden="hidden" value="${userId }">
     </h4>
 
 
@@ -131,6 +131,7 @@
 
     <ul class="nav nav-pills  nav-top" id="myTab">
         <li class="active" data-title="underway"><a data-toggle="tab" href="#newon"> &nbsp;当前进行 &nbsp;  </a></li>
+        <li data-title="expired"><a data-toggle="tab" href="#yguoq">  &nbsp; 已过期 &nbsp; </a></li>
     </ul>
 
 

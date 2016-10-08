@@ -152,7 +152,9 @@ var	base='<%=basePath%>';
 								<a href="javascript:setRecord();" class="btn ph-blue" style="margin-right: 30px">
 									<i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
 								</a>
-
+								<a href="javascript:toAudit();" class="btn ph-blue" style="margin-right: 30px">
+									<i class="ico icon-jl"></i> <span class="text-gery">审核</span>
+								</a>
 								<div class="link-posit pull-right">
 									<input class="input-search" type="text" placeholder="模糊查询请输入品牌型号">
 									<button onclick="goSearch();" class="btn  btn-sm bnt-ss ">搜索</button>
@@ -372,7 +374,10 @@ var	base='<%=basePath%>';
 			$(this).addClass("active");
 			$(this).siblings("li").removeClass("active");
 		});
-		
+		function toAudit() {
+			var planId = $("#planId").val();
+			window.location.href = base + "brandIncome/toAudit?planId=" + planId;
+		}
 	</script>
 </body>
 

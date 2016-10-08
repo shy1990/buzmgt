@@ -22,7 +22,7 @@ public class AreaAttributeServiceImpl implements AreaAttributeService {
   private AreaAttributeRepository areaAttributeRepository;
 
   @Override
-  public String save(Float commission, Region region, String ruleId,String type) {
+  public String save(double commission, Region region, String ruleId,String type) {
     Long ruleid = Long.valueOf(ruleId);
     AreaAttribute brandAttr = areaAttributeRepository.findByRegionAndRuleIdAndType(region,ruleid,PlanType.BRANDMODEL);
     AreaAttribute rangeAttr = areaAttributeRepository.findByRegionAndRuleIdAndType(region,ruleid,PlanType.PRICERANGE);

@@ -1,5 +1,7 @@
 package com.wangge.buzmgt.brandincome.service;
 
+import com.wangge.buzmgt.areaattribute.entity.AreaAttribute;
+import com.wangge.buzmgt.areaattribute.service.AreaAttributeService;
 import com.wangge.buzmgt.brandincome.entity.BrandIncome;
 import com.wangge.buzmgt.brandincome.entity.BrandIncome.BrandIncomeStatus;
 import com.wangge.buzmgt.brandincome.entity.BrandIncomeSub;
@@ -7,6 +9,7 @@ import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
 import com.wangge.buzmgt.brandincome.repository.BrandIncomeRepository;
 import com.wangge.buzmgt.brandincome.repository.BrandIncomeSubRepository;
 import com.wangge.buzmgt.common.FlagEnum;
+import com.wangge.buzmgt.goods.entity.Brand;
 import com.wangge.buzmgt.log.entity.Log;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
@@ -50,6 +53,8 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
   private LogService logService;
   @Resource
   private RegionService regionService;
+  @Resource
+  private AreaAttributeService areaAttributeService;
 
   @Override
   public BrandIncome findById(Long id) {
@@ -384,8 +389,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
   public Boolean realTimeBrandIncomePay(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId, Date payDate,String regionId) {
     try {
       //根据传入参数计算品牌型号收益(已付款)
-      Region region = regionService.findListRegionbyid(regionId);
-      Double income = (brandIncome.getCommissions()).doubleValue() * num;
+      Double income = incomeCal(regionId,brandIncome,num);
       BrandIncomeSub brandIncomeSub = new BrandIncomeSub();
       brandIncomeSub.setMainplanId(brandIncome.getPlanId());
       brandIncomeSub.setSubplanId(brandIncome.getId());
@@ -404,10 +408,10 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
   }
 
   @Override
-  public Boolean realTimeBrandIncomeOut(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId) {
+  public Boolean realTimeBrandIncomeOut(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId,String regionId) {
     try {
       //根据传入参数计算品牌型号收益(已出库)
-      Double income = (brandIncome.getCommissions()).doubleValue() * num;
+      Double income = incomeCal(regionId,brandIncome,num);
       BrandIncomeSub brandIncomeSub = new BrandIncomeSub();
       brandIncomeSub.setMainplanId(brandIncome.getPlanId());
       brandIncomeSub.setSubplanId(brandIncome.getId());
@@ -423,5 +427,30 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
       LogUtil.info(e.getMessage());
       return false;
     }
+  }
+
+  public Double incomeCal(String regionId, BrandIncome brandIncome,int num){
+    Double income = 0.0;
+    AreaAttribute areaAttribute = getAreaAttribute(regionId,brandIncome.getId());
+    if (ObjectUtils.notEqual(areaAttribute,null)){
+      income = areaAttribute.getCommissions() * num;
+    }
+    Region region = regionService.findListRegionbyid(regionId);
+    areaAttribute = getAreaAttribute(region.getParent().getId(),brandIncome.getId());
+    if (ObjectUtils.notEqual(areaAttribute,null)){
+      income = areaAttribute.getCommissions() * num;
+    }
+    region = regionService.findListRegionbyid(region.getParent().getId());
+    areaAttribute = getAreaAttribute(region.getParent().getId(),brandIncome.getId());
+    if (ObjectUtils.notEqual(areaAttribute,null)){
+      income = areaAttribute.getCommissions() * num;
+    }else {
+      income = (brandIncome.getCommissions()).doubleValue() * num;
+    }
+    return income;
+  }
+
+  public AreaAttribute getAreaAttribute(String regionId,Long ruleId){
+    return areaAttributeService.findByRegionIdAndRuleId(regionId,ruleId);
   }
 }

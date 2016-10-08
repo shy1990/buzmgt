@@ -344,4 +344,9 @@ public class MainPlanServiceImpl implements MainPlanService {
   public void alterUserFlag(Long planUserId) {
     planUserRep.updateFlagById(FlagEnum.DEL, planUserId);
   }
+
+  @Override
+  public MainIncomePlan findById(Long id) {
+    return mainPlanRep.findOne(id);
+  }
 }
