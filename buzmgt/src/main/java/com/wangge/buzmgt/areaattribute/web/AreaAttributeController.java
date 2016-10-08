@@ -46,6 +46,7 @@ public class AreaAttributeController {
       areaAttributes = areaAttributeService.findByRuleIdAndTypeAndDisabled(Long.valueOf(ruleId),PlanType.PRICERANGE);
       model.addAttribute("priceRange",priceRange);
     }
+    model.addAttribute("planType",type);
     model.addAttribute("areaAttributes",areaAttributes);
     return "areaattribute/area_attr_set";
   }
@@ -85,5 +86,26 @@ public class AreaAttributeController {
     AreaAttribute areaAttribute = areaAttributeService.findById(id);
     areaAttributeService.delete(areaAttribute);
     return "删除成功!";
+  }
+
+  /**
+   * 跳转到提成区域属性查看
+   *
+   * @return
+   */
+  @RequestMapping( value = "/show", method = RequestMethod.GET)
+  public String show(String ruleId, String type, Model model) {
+    List<AreaAttribute> areaAttributes = null;
+    if (PlanType.BRANDMODEL.name().equals(type)) {
+      BrandIncome brandIncome = brandIncomeService.findById(Long.valueOf(ruleId));
+      areaAttributes = areaAttributeService.findByRuleIdAndTypeAndDisabled(Long.valueOf(ruleId),PlanType.BRANDMODEL);
+      model.addAttribute("brandIncome", brandIncome);
+    }else if (PlanType.PRICERANGE.name().equals(type)){
+      PriceRange priceRange = priceRangeService.findById(Long.valueOf(ruleId));
+      areaAttributes = areaAttributeService.findByRuleIdAndTypeAndDisabled(Long.valueOf(ruleId),PlanType.PRICERANGE);
+      model.addAttribute("priceRange",priceRange);
+    }
+    model.addAttribute("areaAttributes",areaAttributes);
+    return "areaattribute/area_attr_show";
   }
 }

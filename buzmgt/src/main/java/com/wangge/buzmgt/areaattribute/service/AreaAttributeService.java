@@ -20,4 +20,6 @@ public interface AreaAttributeService {
   void delete(AreaAttribute areaAttribute);
 
   List<AreaAttribute> findByRuleIdAndTypeAndDisabled(Long id, PlanType type);
+
+  public AreaAttribute findByRegionIdAndRuleId(String regionId,Long ruleId);//用于价格区间计算
 }

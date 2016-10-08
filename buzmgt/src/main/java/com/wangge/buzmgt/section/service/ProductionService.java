@@ -51,7 +51,7 @@ public interface ProductionService {
      * @return
      */
     public String compute(String orderNo,Date payTime,
-      Double price, String userId,String goodsId,String type,Long planId,Integer num);
+      Double price, String userId,String goodsId,String type,Long planId,Integer num,String regionId);
 
     /**
      * @Description: 价格区间出库计算
@@ -65,7 +65,7 @@ public interface ProductionService {
      * @return
      */
     public String compute(String orderNo,Double price,
-        String userId,String goodsId,String type,Long planId,Integer num);
+        String userId,String goodsId,String type,Long planId,Integer num,String regionId);
 
 
 

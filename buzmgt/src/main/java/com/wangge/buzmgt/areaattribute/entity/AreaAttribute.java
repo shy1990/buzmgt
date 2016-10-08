@@ -47,8 +47,11 @@ public class AreaAttribute implements Serializable{
   private Long id; //主键id
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "region_id")
+  @JoinColumn(name = "REGION_ID",updatable = false, insertable = false)
   private Region region;//提成区域
+
+  @Column(name = "REGION_ID")
+  private String regionId;//提成区域字段
 
   private Float commissions;//提成金额
 
@@ -107,4 +110,25 @@ public class AreaAttribute implements Serializable{
   public void setDisabled(int disabled) {
     this.disabled = disabled;
   }
+
+    public String getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    @Override
+    public String toString() {
+        return "AreaAttribute{" +
+                "id=" + id +
+                ", region=" + region +
+                ", regionId='" + regionId + '\'' +
+                ", commissions=" + commissions +
+                ", ruleId=" + ruleId +
+                ", type=" + type +
+                ", disabled=" + disabled +
+                '}';
+    }
 }

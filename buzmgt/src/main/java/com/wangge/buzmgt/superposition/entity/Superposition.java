@@ -75,7 +75,7 @@ public class Superposition {
 
     private String checkStatus = "1";//审核状态:0-创建中,1-审核中,2-驳回,3-审核通过,4-废弃(删除);
 
-    private String planId;//方案id
+    private Long planId;//方案id
 
     public String getCheckStatus() {
         return checkStatus;
@@ -85,11 +85,11 @@ public class Superposition {
         this.checkStatus = checkStatus;
     }
 
-    public String getPlanId() {
+    public Long getPlanId() {
         return planId;
     }
 
-    public void setPlanId(String planId) {
+    public void setPlanId(Long planId) {
         this.planId = planId;
     }
 

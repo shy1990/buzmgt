@@ -328,12 +328,12 @@ public class SectionController {
         String type = "lj";
         Long planId = Long.parseLong("1");
         Integer num = 3;
+        String regionId = "37021108";
         if(payTime == null || "".equals(payTime)){
-            String msg = productionService.compute(orderNo,price,userId,goodsId,type,planId,num);
+            String msg = productionService.compute(orderNo,price,userId,goodsId,type,planId,num,regionId);//出库计算
             return msg;
         }
-        System.out.println("-----------------------------------------------");
-        String msg = productionService.compute(orderNo,payTime,price,userId,goodsId,type,planId,num);
+        String msg = productionService.compute(orderNo,payTime,price,userId,goodsId,type,planId,num,regionId);//付款计算
 
         return msg;
     }

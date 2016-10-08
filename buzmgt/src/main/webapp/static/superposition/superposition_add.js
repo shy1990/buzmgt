@@ -384,6 +384,7 @@ function createNumberOne(data) {
  * @type {Array}
  */
 var goodsTypeList = new Array();
+var showGoodsTypeList = new Array();
 var a = 0;
 function addGood() {
     if($(".J_machineType").val() == '' || $(".J_machineType").val() == undefined || $(".J_machineType").val() == null){
@@ -410,6 +411,12 @@ function addGood() {
 }
 
 function Refresh() {
+    showGoodsTypeList.push({
+        "machineTypeId": $(".J_machineType").text().trim(),
+        "brandId": $(".J_brand").text().trim(),
+        "goodId": $(".J_goods").text().trim()
+    });
+    console.log(showGoodsTypeList);
         $(".J_machineType").val('');
         createBrandType("");
         createGoods("");
