@@ -343,10 +343,14 @@ public class AchieveController {
   * @return String    返回类型
   * @throws
    */
-  @RequestMapping(value = "/course/{achieveId}")
+  @RequestMapping(value = "/course/{achieveId}",method = RequestMethod.GET)
   public String showCourse(@PathVariable(value = "achieveId") Achieve achieve, Model model) {
     model.addAttribute("achieve", achieve);
-    return "achieve/achieve_take";
+	  //查询周期销量
+    model.addAttribute("totalNumber", 100);
+	  //查询退货量
+	  model.addAttribute("retreatAmount", 10);
+    return "achieve/achieve_course";
   }
 
   /**

@@ -1,9 +1,11 @@
 package com.wangge.buzmgt.achieveset.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.wangge.buzmgt.achieveset.entity.Achieve;
+import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -85,22 +87,31 @@ public interface AchieveIncomeService {
 
 	/**
 	 * 已付款的调用的产生达量收益
-	 * @param maps
+	 * @param achieve
 	 * @param orderNo
 	 * @param UserId
+	 * @param num
+	 * @param goodId
+	 * @param payStatus
+	 * @param planId
+	 * @param price
+	 * @param payDate
 	 * @return
 	 */
-	boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price);
+	boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price, Date payDate);
 
-  /**
-   *
-  * @Title: createAchieveIncomeBy
-  * @Description: 已出库请款下调用的实时
-  * @param @param orderNo
-  * @param @param UserId
-  * @param @return    设定文件
-  * @return boolean    返回类型
-  * @throws
-   */
-  boolean createAchieveIncomeByStock (Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price);
+	/**
+	 * 已出库请款下调用的实时
+	 * @param achieve
+	 * @param orderNo
+	 * @param UserId
+	 * @param num
+	 * @param goodId
+	 * @param payStatus
+	 * @param planId
+	 * @param price
+	 * @param payDate
+	 * @return
+	 */
+  boolean createAchieveIncomeByStock (Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price, Date payDate);
 }

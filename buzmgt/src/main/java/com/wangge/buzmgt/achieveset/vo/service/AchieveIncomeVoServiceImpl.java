@@ -1,16 +1,11 @@
-package com.wangge.buzmgt.achieveset.service;
+package com.wangge.buzmgt.achieveset.vo.service;
 
-import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
-import com.wangge.buzmgt.achieveset.repository.AchieveIncomeRepository;
 import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
 import com.wangge.buzmgt.achieveset.vo.repository.AchieveIncomeVoRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.log.util.LogUtil;
-import com.wangge.buzmgt.plan.entity.GroupNumber;
-import com.wangge.buzmgt.plan.entity.GroupUser;
-import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +19,10 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author ChenGuop
@@ -33,190 +31,38 @@ import java.util.*;
  * @date 2016年9月23日 下午3:34:53
  */
 @Service
-public class AchieveIncomeServiceImpl implements AchieveIncomeService {
+public class AchieveIncomeVoServiceImpl implements AchieveIncomeVoService {
 
-	@Autowired
-	private AchieveIncomeRepository air;
 	@Autowired
 	private AchieveIncomeVoRepository achieveIncomeVoRepository;
 
-	@Override
-	public Long countByAchieveId(Long achieveId) {
-		return air.countByAchieveId(achieveId);
-	}
 
 	@Override
-	public Long countByAchieveIdAndUserId(Long achieveId, String userId) {
-		Long count = air.countByAchieveIdAndUserId(achieveId, userId);
-		return null == count ? 0 : count;
-	}
-
-	@Override
-	public List<AchieveIncome> findAll(Map<String, Object> searchParams, Sort sort) {
-		Specification<AchieveIncome> spec = dispose(searchParams);
-		return air.findAll(spec, sort);
+	public List<AchieveIncomeVo> findAll(Map<String, Object> searchParams, Sort sort) {
+		Specification<AchieveIncomeVo> spec = dispose(searchParams);
+		return achieveIncomeVoRepository.findAll(spec, sort);
 	}
 
 	/**
 	 * 处理条件参数
 	 */
-	public Specification<AchieveIncome> dispose(Map<String, Object> searchParams) {
+	public Specification<AchieveIncomeVo> dispose(Map<String, Object> searchParams) {
 		// 过滤删除
 		searchParams.put("EQ_flag", "NORMAL");
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-		Specification<AchieveIncome> spec = achieveIncomeSpecification(filters.values(), AchieveIncome.class);
+		Specification<AchieveIncomeVo> spec = achieveIncomeSpecification(filters.values(), AchieveIncomeVo.class);
 		return spec;
 	}
 
 	@Override
-	public Page<AchieveIncome> findAll(Map<String, Object> searchParams, Pageable pageable) {
-		Specification<AchieveIncome> spec = dispose(searchParams);
-		return air.findAll(spec, pageable);
+	public Page<AchieveIncomeVo> findAll(Map<String, Object> searchParams, Pageable pageable) {
+		Specification<AchieveIncomeVo> spec = dispose(searchParams);
+		return achieveIncomeVoRepository.findAll(spec, pageable);
 	}
 
-	@Override
-	public List<AchieveIncome> save(List<AchieveIncome> achieveIncomes) {
-		return air.save(achieveIncomes);
-	}
-
-	@Override
-	public AchieveIncome save(AchieveIncome ai) {
-		return air.save(ai);
-	}
-
-	/**
-	 * @param @param UserId
-	 * @param @param payStatus 0-已出库；1-已支付 @param
-	 * @return boolean 返回类型
-	 * @Title: createAchieveIncomeBy
-	 * @Description: 单个数据处理
-	 */
-	public boolean createAchieveIncome(Achieve achieve, String orderNo, String userId, int num, String goodId,
-	                                   int payStatus, Long planId, Float price, Date payDate) {
-		try {
-			AchieveIncome.PayStatusEnum statusEnum = AchieveIncome.PayStatusEnum.STOCK;
-			if (payStatus == 1) {
-				statusEnum = AchieveIncome.PayStatusEnum.PAY;
-			}
-			Float money = disposeAchieveIncome(achieve, userId, num);
-			AchieveIncome achieveIncome = new AchieveIncome();
-			achieveIncome.setAchieveId(achieve.getAchieveId());
-			achieveIncome.setUserId(userId);
-			achieveIncome.setOrderNo(orderNo);
-			achieveIncome.setFlag(FlagEnum.NORMAL);
-			achieveIncome.setNum(num);
-			achieveIncome.setGoodId(goodId);
-			achieveIncome.setMoney(money);
-			achieveIncome.setStatus(statusEnum);
-			achieveIncome.setPlanId(planId);
-			achieveIncome.setPrice(price);
-			achieveIncome.setCreateDate(payDate);
-			// 保存
-			air.save(achieveIncome);
-
-		} catch (Exception e) {
-			LogUtil.error("xx", e);
-			LogUtil.info(e.getMessage());
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public boolean createAchieveIncomeByStock(Achieve achieve, String orderNo, String userId, int num, String goodId,
-	                                          int payStatus, Long planId, Float price, Date payDate) {
-		return createAchieveIncome(achieve, orderNo, userId, num, goodId, payStatus, planId, price, payDate);
-	}
-
-	@Override
-	public boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String userId, int num, String goodId,
-	                                        int payStatus, Long planId, Float price, Date payDate) {
-		return createAchieveIncome(achieve, orderNo, userId, num, goodId, payStatus, planId, price, payDate);
-	}
-
-	/**
-	 * @param @param  ac
-	 * @param @param  userId
-	 * @param @param  num
-	 * @param @return 设定文件
-	 * @return Float 返回类型
-	 * @throws @Title: disposeAchieveIncome
-	 * @Description: 根据规则计算收益 1.查询此商品当前的销量， 2.根据销量匹配出提成金额 -- 查询是否有特殊分组，若有分组则在规则中
-	 * 增加对应阶段区间量值; 3.根据数量计算提成金额
-	 */
-	private Float disposeAchieveIncome(Achieve ac, String userId, Integer num) {
-		// 获取当前商品当前规则的销量；
-		Integer nowNumber = Integer.valueOf(countByAchieveIdAndUserId(ac.getAchieveId(), userId).toString());
-		// 计算后的收益
-		Float money = 0f;
-		Integer firstAdd = 0;
-		Integer secondAdd = 0;
-		Integer thirdAdd = 0;
-		// 查询特殊分组人员增量
-		for (GroupNumber group : ac.getGroupNumbers()) {
-			boolean flag = false;
-			for (GroupUser user : group.getGroupUsers()) {
-				// 存在这个组的userId
-				if (user.getUserId() != null && user.getUserId().equals(userId)) {
-					firstAdd = group.getNumberFirstAdd();
-					secondAdd = group.getNumberSecondAdd();
-					thirdAdd = group.getNumberThirdAdd();
-					flag = true;
-					break;
-				}
-			}
-			if (flag) {
-				break;
-			}
-		}
-		List<RewardPunishRule> rules = new ArrayList<>(ac.getRewardPunishRules());
-		Integer minAdd = null;
-		Integer maxAdd = null;
-		// rules已经排好序，阶段由低到高；
-		for (int i = 0; i < rules.size(); i++) {
-			switch (i) {
-				case 0:
-					minAdd = 0;
-					maxAdd = firstAdd;
-					break;
-				case 1:
-					minAdd = firstAdd;
-					maxAdd = secondAdd;
-					break;
-				case 2:
-					minAdd = secondAdd;
-					maxAdd = thirdAdd;
-					break;
-
-				default:
-					minAdd = thirdAdd;
-					maxAdd = 0;
-					break;
-			}
-			RewardPunishRule rule = rules.get(i);
-			Integer min = null;
-			if (rule.getMin() != null) {
-				min = rule.getMin() + minAdd;
-			}
-			Integer max = null;
-			if (rule.getMax() != null) {
-				max = rule.getMax() + maxAdd;
-			}
-			if ((min == null && max >= nowNumber) || (nowNumber > rule.getMin() && nowNumber <= rule.getMax())
-							|| (max == null && min < nowNumber)) {
-				money = rule.getMoney();
-				break;
-			}
-		}
-		money = money * num;
-		return money;
-	}
-
-
-
-	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,
-	                                                                      final Class<AchieveIncome> entityClazz) {
-		return new Specification<AchieveIncome>() {
+	public static Specification<AchieveIncomeVo> achieveIncomeSpecification(final Collection<SearchFilter> filters,
+	                                                                      final Class<AchieveIncomeVo> entityClazz) {
+		return new Specification<AchieveIncomeVo>() {
 
 			private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
 
@@ -234,7 +80,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 			@SuppressWarnings({"unchecked", "rawtypes"})
 			@Override
-			public Predicate toPredicate(Root<AchieveIncome> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<AchieveIncomeVo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				if (CollectionUtils.isNotEmpty(filters)) {
 					List<Predicate> predicates = new ArrayList<>();
 					for (SearchFilter filter : filters) {
@@ -409,4 +255,5 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			}
 		};
 	}
+
 }

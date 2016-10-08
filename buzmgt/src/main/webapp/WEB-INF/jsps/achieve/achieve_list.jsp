@@ -88,7 +88,7 @@
       <td>{{formDate createDate}}</td>
       <td>
         <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
-        <a href="/achieve/course/{{achieveId}}" class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程</a>
+        <a href="/achieve/course/{{achieveId}}" class="btn btn-sm bnt-jc">进程</a>
         <button class="btn btn-sm btn-sc " onclick="delAchieve({{achieveId}})">删除</button>
       </td>
     </tr>
