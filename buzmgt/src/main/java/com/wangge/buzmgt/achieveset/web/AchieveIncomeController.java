@@ -41,7 +41,6 @@ public class AchieveIncomeController {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
 		return achieveIncomeService.findAll(searchParams, pageable);
 	}
-
 	@RequestMapping("/test")
 	@ResponseBody
 	public JsonResponse<List<Map<String, Object>>> test(@RequestParam String goodId, @RequestParam Long planId, @RequestParam String userId, @RequestParam String orderNo) {
@@ -54,7 +53,7 @@ public class AchieveIncomeController {
 		}
 		try {
 			achieveRule.forEach(ruleMap -> {
-				achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, 2, (String) ruleMap.get("goodId"), 0, planId);
+				achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, 2, (String) ruleMap.get("goodId"), 0, planId, 100f);
 			});
 		} catch (Exception e) {
 			jsonResponse.setErrorCode("500");
