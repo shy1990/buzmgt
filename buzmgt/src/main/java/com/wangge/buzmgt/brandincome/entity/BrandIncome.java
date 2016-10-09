@@ -6,6 +6,7 @@ import com.wangge.buzmgt.goods.entity.Goods;
 import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.sys.entity.User;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -66,8 +67,12 @@ public class BrandIncome implements Serializable{
   @Column(name = "GOOD_ID")
   private String goodId; // 型号ID
 
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @Temporal(TemporalType.TIMESTAMP)
   private Date startDate; // 开始日期
 
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @Temporal(TemporalType.TIMESTAMP)
   private Date endDate; // 结束日期
 
   @ManyToOne

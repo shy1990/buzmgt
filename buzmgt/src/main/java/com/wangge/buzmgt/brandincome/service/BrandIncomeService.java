@@ -127,7 +127,7 @@ public interface BrandIncomeService {
    * @return Boolean    返回类型
    * @throws
    */
-  Boolean realTimeBrandIncomePay(BrandIncome brandIncome,int num,String orderNo,String goodId, String userId,Date payDate);
+  Boolean realTimeBrandIncomePay(BrandIncome brandIncome,int num,String orderNo,String goodId, String userId,Date payDate,String regionId);
 
   /**
    *
@@ -142,5 +142,5 @@ public interface BrandIncomeService {
    * @return Boolean    返回类型
    * @throws
    */
-  Boolean realTimeBrandIncomeOut(BrandIncome brandIncome,int num,String orderNo,String goodId, String userId);
+  Boolean realTimeBrandIncomeOut(BrandIncome brandIncome,int num,String orderNo,String goodId, String userId,String regionId);
 }

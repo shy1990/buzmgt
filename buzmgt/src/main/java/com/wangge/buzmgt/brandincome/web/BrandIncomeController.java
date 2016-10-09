@@ -9,6 +9,7 @@ import com.wangge.buzmgt.brandincome.entity.BrandIncomeSub;
 import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
 import com.wangge.buzmgt.brandincome.service.BrandIncomeService;
 import com.wangge.buzmgt.common.FlagEnum;
+import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
 import com.wangge.buzmgt.income.main.service.HedgeService;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.main.vo.BrandType;
@@ -21,12 +22,15 @@ import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.superposition.service.GoodsOrderService;
+import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.JsonResponse;
 import com.wangge.buzmgt.util.excel.ExcelExport;
 import com.wangge.json.JSONFormat;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -76,6 +80,10 @@ public class BrandIncomeController {
 
   private static final String SEARCH_OPERTOR = "sc_";
 
+  private final static String TIME_MIN = " 00:00:00";
+
+  private final static String TIME_MAX = " 23:59:59";
+
   /**
    * @Title: addBrandIncome @Description: 品牌型号收益添加
    * planId @param model @param @return 设定文件 @return String 返回类型 @throws
@@ -84,6 +92,9 @@ public class BrandIncomeController {
   public String addBrandIncome(@RequestParam String planId, @RequestParam String machineType, Model model) {
 
     List<BrandType> brandTypes = mainPlanService.findCodeByMachineType(machineType);
+    MainIncomePlan mainIncomePlan = mainPlanService.findById(Long.valueOf(planId));
+    model.addAttribute("createTime",mainIncomePlan.getCreatetime());
+    model.addAttribute("fqTime",mainIncomePlan.getFqtime());
     model.addAttribute("planId", planId);
     model.addAttribute("brandTypes", brandTypes);
     model.addAttribute("machineType", machineType);
@@ -99,6 +110,10 @@ public class BrandIncomeController {
   public JsonResponse saveBrandIncome(@RequestBody BrandIncome brandIncome) {
     JsonResponse json = new JsonResponse();
     try {
+      String startDate = DateUtil.date2String(brandIncome.getStartDate());
+      String endDate = DateUtil.date2String(brandIncome.getEndDate());
+      brandIncome.setStartDate(DateUtil.string2Date(startDate + TIME_MIN));
+      brandIncome.setEndDate(DateUtil.string2Date(endDate + TIME_MAX));
       brandIncome.setCreateDate(new Date());
       brandIncome = brandIncomeService.save(brandIncome);
       logService.log(null, brandIncome, Log.EventType.SAVE);
@@ -167,6 +182,14 @@ public class BrandIncomeController {
     try {
       brandIncome.setEndDate(new Date());
       BrandIncome brandIn = brandIncomeService.save(brandIncome);
+      //同时设置区域属性不可用
+      List<AreaAttribute> areaAttributes = areaAttributeService.findByRuleIdAndTypeAndDisabled(brandIn.getId(),PlanType.BRANDMODEL);
+      if (CollectionUtils.isNotEmpty(areaAttributes)){
+        areaAttributes.forEach(areaAttribute -> {
+          areaAttribute.setDisabled(1);
+          areaAttributeService.save(areaAttribute);
+        });
+      }
       logService.log(brandIncome, brandIn, Log.EventType.UPDATE);
       json.setStatus(JsonResponse.Status.SUCCESS);
       json.setSuccessMsg("操作成功!");
@@ -375,6 +398,14 @@ public class BrandIncomeController {
     try {
       brandIncome.setFlag(FlagEnum.DEL);
       BrandIncome brandNew = brandIncomeService.save(brandIncome);
+      //同时设置区域属性不可用
+      List<AreaAttribute> areaAttributes = areaAttributeService.findByRuleIdAndTypeAndDisabled(brandNew.getId(),PlanType.BRANDMODEL);
+      if (CollectionUtils.isNotEmpty(areaAttributes)){
+        areaAttributes.forEach(areaAttribute -> {
+          areaAttribute.setDisabled(1);
+          areaAttributeService.save(areaAttribute);
+        });
+      }
       logService.log(brandIncome, brandNew, Log.EventType.DELETE);
       json.setStatus(JsonResponse.Status.SUCCESS);
       json.setSuccessMsg("删除成功!");
@@ -404,6 +435,24 @@ public class BrandIncomeController {
     model.addAttribute("planId", planId);
     model.addAttribute("machineType", machineType);
     return "brandincome/brand_alter";
+  }
+
+  /**
+   *
+   * @Title: toAudit
+   * @Description: 跳转设置记录审核页面
+   * @param @param planId
+   * @param @param model
+   * @param @return    设定文件
+   * @return String    返回类型
+   * @throws
+   */
+  @RequestMapping(value = "/toAudit", method = RequestMethod.GET)
+  public String toAudit(@RequestParam String planId, Model model) {
+    String userId = ((User) SecurityUtils.getSubject().getPrincipal()).getId();
+    model.addAttribute("planId", planId);
+    model.addAttribute("userId", userId);
+    return "brandincome/brand_record_audit";
   }
 
   /**
