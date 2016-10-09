@@ -75,6 +75,7 @@ p:after {
         <td class="">{{shopName}}</td>
         <td> {{orderno}}</td>
         <td>{{#with order}}{{orderPrice}}{{/with}}</td>
+        <td>{{#with order}}{{actualPayNum}}{{/with}}</td>
         <td>{{remark}}</td>
         <td>{{formDate createTime}}</td>
         <td>
@@ -107,6 +108,7 @@ p:after {
       <td class="">{{shopName}}</td>
       <td>{{orderNo}}</td>
       <td>{{orderPrice}}</td>
+      <td>{{actualPayNum}}</td>
       <td>{{../status}}</td>
       <td>
 				{{{isException customSignforException}}}
@@ -143,6 +145,7 @@ p:after {
 		<td class="">{{shopName}}</td>
 		<td>{{orderNo}}</td>
 		<td>{{orderPrice}}</td>
+		<td>{{actualPayNum}}</td>
 		<td>{{formDate createTime}}</td>
 		<td>{{formDate fastmailTime}}</td>
 		<td>{{formDate yewuSignforTime}}</td>
@@ -318,7 +321,8 @@ var SearchData = {
 												<th>业务名称</th>
 												<th>店铺名称</th>
 												<th>订单号</th>
-												<th>金额</th>
+												<th>订单金额</th>
+												<th>实际金额</th>
 												<th>理由</th>
 												<th>报备时间</th>
 												<th>客户签收时间</th>
@@ -345,7 +349,8 @@ var SearchData = {
 												<th>业务名称</th>
 												<th>店铺名称</th>
 												<th>订单号</th>
-												<th>金额</th>
+												<th>订单金额</th>
+                                                <th>实际金额</th>
 												<th>状态</th>
 												<th>客户签收坐标</th>
 												<th>收现金时间</th>
