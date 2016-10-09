@@ -194,16 +194,11 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 					break;
 			}
 			RewardPunishRule rule = rules.get(i);
-			Integer min = null;
-			if (rule.getMin() != null) {
-				min = rule.getMin() + minAdd;
-			}
-			Integer max = null;
-			if (rule.getMax() != null) {
-				max = rule.getMax() + maxAdd;
-			}
-			if ((min == null && max >= nowNumber) || (nowNumber > rule.getMin() && nowNumber <= rule.getMax())
-							|| (max == null && min < nowNumber)) {
+			Integer min = 0;
+			Integer max = 0;//设置最大值
+			min = rule.getMin() + minAdd;
+			max = rule.getMax() + maxAdd;
+			if (nowNumber > min && nowNumber <= max) {
 				money = rule.getMoney();
 				break;
 			}
