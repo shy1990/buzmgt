@@ -113,6 +113,7 @@ public class JobService {
     }
     int between = DateUtil.daysBetween(startTime, endDay);
     
+    //计算查找每天的结算订单
     for (int i = 0; i <= between; i++) {
       Date startDate = DateUtil.moveDate(startTime, i);
       Date endDate = DateUtil.moveDate(startDate, 1);
@@ -185,7 +186,11 @@ public class JobService {
     Date delDate = jobtask.getExectime();
     Date today = new Date();
     // TODO 根据日期(某天),主方案删除品牌型号,叠加,达量的收益
-    mainIncomeService.deleteSubIncomeByPlanId(planId, delDate);
+    try {
+      mainIncomeService.deleteSubIncomeByPlanId(planId, delDate);
+    } catch (Exception e) {
+     LogUtil.error("删除主方案"+planId+"下的订单收益失败");
+    }
   }
   
   /**
