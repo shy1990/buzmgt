@@ -50,9 +50,6 @@ public interface WaterOrderCashService {
   public void save(List<WaterOrderCash> waterOrders);
 
   public void save(WaterOrderCash waterOrders);
-  
-  public void ExportSetExcel(List<WaterOrderCash> waterOrders, HttpServletRequest request,
-      HttpServletResponse response);
 
   public long countByPayStatusAndCreateDate(WaterPayStatusEnum overpay, String createDate);
   

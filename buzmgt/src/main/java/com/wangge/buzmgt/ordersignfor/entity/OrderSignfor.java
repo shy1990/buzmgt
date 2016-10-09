@@ -141,7 +141,8 @@ public class OrderSignfor implements Serializable {
   private Integer partsCount;
   private Date fastmailTime;
   private String customUnSignRemark;
-  
+  private Float actualPayNum;//实际支付金额
+
   
   
   public List<OrderItem> getItems() {
@@ -332,5 +333,10 @@ public class OrderSignfor implements Serializable {
     this.partsCount = partsCount;
   }
 
-  
+	public Float getActualPayNum() {
+		return actualPayNum == null ? orderPrice : actualPayNum;
+	}
+	public void setActualPayNum(Float actualPayNum) {
+		this.actualPayNum = actualPayNum;
+	}
 }

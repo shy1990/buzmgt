@@ -39,6 +39,7 @@
 				配件<span class="text-sblue">&nbsp;{{whatPartsCount partsCount}}&nbsp;</span>件
       </td>
       <td><span class="text-sblue">{{orderPrice}}</span></td>
+      <td><span class="text-sblue">{{actualPayNum}}</span></td>
       <td>
 			{{{whatOrderPayType orderPayType}}}
 			</td>
@@ -136,7 +137,8 @@ var	base='<%=basePath%>';
 												<th>业务名称</th>
 												<th>商家名称</th>
 												<th>商品数量</th>
-												<th>交易额</th>
+												<th>订单金额</th>
+												<th>实际金额</th>
 												<th>收款状况</th>
 												<th>订单状态</th>
 											</tr>

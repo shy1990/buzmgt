@@ -74,6 +74,7 @@ public class WaterOrderCashController {
         objMap.put("serialNo", serialNo);
         objMap.put("orderNo", order.getOrderNo());
         objMap.put("orderPrice", order.getOrderPrice());
+        objMap.put("actualPayNum", order.getActualPayNum());
         objMap.put("cashMoney", waterOrder.getCashMoney());
         objMap.put("status", waterOrder.getPayStatus());
         objMap.put("createDate", waterOrder.getCreateDate());
@@ -129,8 +130,8 @@ public class WaterOrderCashController {
       }
       start = end;
     }
-    String[] gridTitles_ = { "流水单号", "订单编号", "需付金额", "总金额", "状态", "日期" };
-    String[] coloumsKey_ = { "serialNo", "orderNo", "orderPrice", "cashMoney", "status", "createDate" };
+	  String[] gridTitles_ = { "流水单号", "订单编号", "订单金额", "订单实际金额", "总金额",  "状态", "日期" };
+	  String[] coloumsKey_ = { "serialNo", "orderNo", "orderPrice", "actualPayNum", "cashMoney", "status", "createDate" };
     MapedExcelExport.doExcelExport("流水单号.xls", alList, gridTitles_, coloumsKey_, request, response, marginList);
   }
 
