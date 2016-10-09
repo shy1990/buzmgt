@@ -36,320 +36,235 @@ import com.wangge.buzmgt.util.excel.MapedExcelExport;
 @Service
 public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
-  @Autowired
-  private WaterOrderCashRepository waterOrderCashRepository;
+	@Autowired
+	private WaterOrderCashRepository waterOrderCashRepository;
 
+	@Override
+	public List<WaterOrderCash> findAll() {
+		return waterOrderCashRepository.findAll();
+	}
 
-  @Override
-  public List<WaterOrderCash> findAll() {
-    return waterOrderCashRepository.findAll();
-  }
+	@Override
+	public List<WaterOrderCash> findAll(Map<String, Object> searchParams) {
+		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+		Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
+		List<WaterOrderCash> waterOrderList = waterOrderCashRepository.findAll(spec);
+		return waterOrderList;
+	}
 
-  @Override
-  public List<WaterOrderCash> findAll(Map<String, Object> searchParams) {
-    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
-    List<WaterOrderCash> waterOrderList = waterOrderCashRepository.findAll(spec);
-    return waterOrderList;
-  }
-  
-  public long count(Map<String, Object> searchParams){
-    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
-    return waterOrderCashRepository.count(spec);
-  }
+	public long count(Map<String, Object> searchParams) {
+		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+		Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
+		return waterOrderCashRepository.count(spec);
+	}
 
-  @Override
-  public long countByPayStatusAndCreateDate(WaterPayStatusEnum overpay, String createDate) {
-    Map<String,Object> searchParams = new HashMap<>();
-    searchParams.put("EQ_createDate", createDate);
-    searchParams.put("EQ_payStatus", WaterPayStatusEnum.OverPay);
-    return this.count(searchParams);
-  }
-  @Override
-  public Page<WaterOrderCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
-    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
-    Page<WaterOrderCash> waterOrderPage = waterOrderCashRepository.findAll(spec, pageRequest);
+	@Override
+	public long countByPayStatusAndCreateDate(WaterPayStatusEnum overpay, String createDate) {
+		Map<String, Object> searchParams = new HashMap<>();
+		searchParams.put("EQ_createDate", createDate);
+		searchParams.put("EQ_payStatus", WaterPayStatusEnum.OverPay);
+		return this.count(searchParams);
+	}
 
-    return waterOrderPage;
-  }
+	@Override
+	public Page<WaterOrderCash> findAll(Map<String, Object> searchParams, Pageable pageRequest) {
+		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+		Specification<WaterOrderCash> spec = WaterOrderCashSearchFilter(filters.values(), WaterOrderCash.class);
+		Page<WaterOrderCash> waterOrderPage = waterOrderCashRepository.findAll(spec, pageRequest);
 
-  @Override
-  public WaterOrderCash findBySerialNo(String serialNo) {
-    return waterOrderCashRepository.findBySerialNo(serialNo);
-  }
+		return waterOrderPage;
+	}
 
-  @Override
-  @Transactional
-  public void save(List<WaterOrderCash> waterOrders) {
+	@Override
+	public WaterOrderCash findBySerialNo(String serialNo) {
+		return waterOrderCashRepository.findBySerialNo(serialNo);
+	}
 
-    waterOrderCashRepository.save(waterOrders);
-  }
-  
-  @Override
-  @Transactional
-  public void save(WaterOrderCash waterOrder) {
-    
-    waterOrderCashRepository.save(waterOrder);
-  }
-  
-  @Override
-  public List<WaterOrderCash> findByUserIdAndCreateDateForPunish(String createDate,Integer isPunish,String userId){
-  //查询是否已经处理扣罚
-    Map<String, Object> spec=new HashMap<>();
-    spec.put("EQ_createDate", createDate);
-    spec.put("EQ_isPunish", isPunish);
-    spec.put("EQ_userId", userId);
-    return this.findAll(spec);
-  }
-  
+	@Override
+	@Transactional
+	public void save(List<WaterOrderCash> waterOrders) {
 
-  private static Specification<WaterOrderCash> WaterOrderCashSearchFilter(final Collection<SearchFilter> filters,
-      final Class<WaterOrderCash> entityClazz) {
+		waterOrderCashRepository.save(waterOrders);
+	}
 
-    return new Specification<WaterOrderCash>() {
+	@Override
+	@Transactional
+	public void save(WaterOrderCash waterOrder) {
 
-      private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
+		waterOrderCashRepository.save(waterOrder);
+	}
 
-      private final static String TIME_MIN = " 00:00:00 000";
+	@Override
+	public List<WaterOrderCash> findByUserIdAndCreateDateForPunish(String createDate, Integer isPunish, String userId) {
+		//查询是否已经处理扣罚
+		Map<String, Object> spec = new HashMap<>();
+		spec.put("EQ_createDate", createDate);
+		spec.put("EQ_isPunish", isPunish);
+		spec.put("EQ_userId", userId);
+		return this.findAll(spec);
+	}
 
-      private final static String TIME_MAX = " 23:59:59 999";
+	private static Specification<WaterOrderCash> WaterOrderCashSearchFilter(final Collection<SearchFilter> filters,
+	                                                                        final Class<WaterOrderCash> entityClazz) {
 
-      private final static String TYPE_WATERPAYSTATUS_TYPE = "com.wangge.buzmgt.cash.entity.WaterOrderCash$WaterPayStatusEnum";
+		return new Specification<WaterOrderCash>() {
 
-      private final static String TYPE_DATE = "java.util.Date";
+			private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
 
-      @SuppressWarnings({ "rawtypes", "unchecked" })
-      @Override
-      public Predicate toPredicate(Root<WaterOrderCash> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-        if (CollectionUtils.isNotEmpty(filters)) {
-          List<Predicate> predicates = new ArrayList<Predicate>();
-          for (SearchFilter filter : filters) {
-            // nested path translate, 如Task的名为"user.name"的filedName,
-            // 转换为Task.user.name属性
-            String[] names = StringUtils.split(filter.fieldName, ".");
-            Path expression = root.get(names[0]);
-            for (int i = 1; i < names.length; i++) {
-              expression = expression.get(names[i]);
-            }
+			private final static String TIME_MIN = " 00:00:00 000";
 
-            String javaTypeName = expression.getJavaType().getName();
+			private final static String TIME_MAX = " 23:59:59 999";
 
-            // logic operator
-            switch (filter.operator) {
-            case EQ:
-              // 日期相等,小于等于最大值,大于等于最小值
-              if (javaTypeName.equals(TYPE_DATE)) {
-                try {
-                  predicates.add(cb.greaterThanOrEqualTo(expression,
-                      new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
-                  predicates.add(cb.lessThanOrEqualTo(expression,
-                      new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
-                } catch (ParseException e) {
-                  throw new RuntimeException("日期格式化失败!");
-                }
-              } else if (javaTypeName.equals(TYPE_WATERPAYSTATUS_TYPE)) {
-                String status = filter.value.toString();
-                if (WaterPayStatusEnum.UnPay.toString().equals(status)) {
-                  filter.value = WaterPayStatusEnum.UnPay;
-                }
-                if (WaterPayStatusEnum.OverPay.toString().equals(status)) {
-                  filter.value = WaterPayStatusEnum.OverPay;
-                }
-                predicates.add(cb.equal(expression, filter.value));
-              } else {
-                predicates.add(cb.equal(expression, filter.value));
-              }
+			private final static String TYPE_WATERPAYSTATUS_TYPE = "com.wangge.buzmgt.cash.entity.WaterOrderCash$WaterPayStatusEnum";
 
-              break;
-            case LIKE:
-              predicates.add(cb.like(expression, "%" + filter.value + "%"));
+			private final static String TYPE_DATE = "java.util.Date";
 
-              break;
-            case GT:
-              if (javaTypeName.equals(TYPE_DATE)) {
-                try {
-                  // 大于最大值
-                  predicates.add(cb.greaterThan(expression,
-                      new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
-                } catch (ParseException e) {
-                  throw new RuntimeException("日期格式化失败!");
-                }
-              } else {
-                predicates.add(cb.greaterThan(expression, (Comparable) filter.value));
-              }
+			@SuppressWarnings({"rawtypes", "unchecked"})
+			@Override
+			public Predicate toPredicate(Root<WaterOrderCash> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				if (CollectionUtils.isNotEmpty(filters)) {
+					List<Predicate> predicates = new ArrayList<Predicate>();
+					for (SearchFilter filter : filters) {
+						// nested path translate, 如Task的名为"user.name"的filedName,
+						// 转换为Task.user.name属性
+						String[] names = StringUtils.split(filter.fieldName, ".");
+						Path expression = root.get(names[0]);
+						for (int i = 1; i < names.length; i++) {
+							expression = expression.get(names[i]);
+						}
 
-              break;
-            case LT:
-              if (javaTypeName.equals(TYPE_DATE)) {
-                try {
-                  // 小于最小值
-                  predicates.add(cb.lessThan(expression,
-                      new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
-                } catch (ParseException e) {
-                  throw new RuntimeException("日期格式化失败!");
-                }
-              } else {
-                predicates.add(cb.lessThan(expression, (Comparable) filter.value));
-              }
+						String javaTypeName = expression.getJavaType().getName();
 
-              break;
-            case GTE:
-              if (javaTypeName.equals(TYPE_DATE)) {
-                try {
-                  // 大于等于最小值
-                  predicates.add(cb.greaterThanOrEqualTo(expression,
-                      new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
-                } catch (ParseException e) {
-                  e.printStackTrace();
-                }
-              } else {
-                predicates.add(cb.greaterThanOrEqualTo(expression, (Comparable) filter.value));
-              }
+						// logic operator
+						switch (filter.operator) {
+							case EQ:
+								// 日期相等,小于等于最大值,大于等于最小值
+								if (javaTypeName.equals(TYPE_DATE)) {
+									try {
+										predicates.add(cb.greaterThanOrEqualTo(expression,
+														new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
+										predicates.add(cb.lessThanOrEqualTo(expression,
+														new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
+									} catch (ParseException e) {
+										throw new RuntimeException("日期格式化失败!");
+									}
+								} else if (javaTypeName.equals(TYPE_WATERPAYSTATUS_TYPE)) {
+									String status = filter.value.toString();
+									if (WaterPayStatusEnum.UnPay.toString().equals(status)) {
+										filter.value = WaterPayStatusEnum.UnPay;
+									}
+									if (WaterPayStatusEnum.OverPay.toString().equals(status)) {
+										filter.value = WaterPayStatusEnum.OverPay;
+									}
+									predicates.add(cb.equal(expression, filter.value));
+								} else {
+									predicates.add(cb.equal(expression, filter.value));
+								}
 
-              break;
-            case LTE:
-              if (javaTypeName.equals(TYPE_DATE)) {
-                try {
-                  // 小于等于最大值
-                  predicates.add(cb.lessThanOrEqualTo(expression,
-                      new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
-                } catch (ParseException e) {
-                  throw new RuntimeException("日期格式化失败!");
-                }
-              } else {
-                predicates.add(cb.lessThanOrEqualTo(expression, (Comparable) filter.value));
-              }
+								break;
+							case LIKE:
+								predicates.add(cb.like(expression, "%" + filter.value + "%"));
 
-              break;
-            case NOTEQ:
+								break;
+							case GT:
+								if (javaTypeName.equals(TYPE_DATE)) {
+									try {
+										// 大于最大值
+										predicates.add(cb.greaterThan(expression,
+														new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
+									} catch (ParseException e) {
+										throw new RuntimeException("日期格式化失败!");
+									}
+								} else {
+									predicates.add(cb.greaterThan(expression, (Comparable) filter.value));
+								}
 
-              predicates.add(cb.notEqual(expression, filter.value));
+								break;
+							case LT:
+								if (javaTypeName.equals(TYPE_DATE)) {
+									try {
+										// 小于最小值
+										predicates.add(cb.lessThan(expression,
+														new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
+									} catch (ParseException e) {
+										throw new RuntimeException("日期格式化失败!");
+									}
+								} else {
+									predicates.add(cb.lessThan(expression, (Comparable) filter.value));
+								}
 
-              break;
-            case ISNULL:
+								break;
+							case GTE:
+								if (javaTypeName.equals(TYPE_DATE)) {
+									try {
+										// 大于等于最小值
+										predicates.add(cb.greaterThanOrEqualTo(expression,
+														new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
+									} catch (ParseException e) {
+										e.printStackTrace();
+									}
+								} else {
+									predicates.add(cb.greaterThanOrEqualTo(expression, (Comparable) filter.value));
+								}
 
-              predicates.add(cb.isNull(expression));
-              break;
-            case NOTNULL:
-              predicates.add(cb.isNull(expression));
+								break;
+							case LTE:
+								if (javaTypeName.equals(TYPE_DATE)) {
+									try {
+										// 小于等于最大值
+										predicates.add(cb.lessThanOrEqualTo(expression,
+														new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
+									} catch (ParseException e) {
+										throw new RuntimeException("日期格式化失败!");
+									}
+								} else {
+									predicates.add(cb.lessThanOrEqualTo(expression, (Comparable) filter.value));
+								}
 
-              break;
-            case ORMLK:
-              /**
-               * sc_ORMLK_userId = 370105,3701050,3701051 用于区域选择
-               */
-              String[] parameterValue = ((String) filter.value).split(",");
-              Predicate[] pl = new Predicate[parameterValue.length];
+								break;
+							case NOTEQ:
 
-              for (int n = 0; n < parameterValue.length; n++) {
-                pl[n] = (cb.like(expression, "%" + parameterValue[n] + "%"));
-              }
+								predicates.add(cb.notEqual(expression, filter.value));
 
-              Predicate p_ = cb.or(pl);
-              predicates.add(p_);
-              break;
+								break;
+							case ISNULL:
 
-            default:
-              break;
+								predicates.add(cb.isNull(expression));
+								break;
+							case NOTNULL:
+								predicates.add(cb.isNull(expression));
 
-            }
-          }
+								break;
+							case ORMLK:
+								/**
+								 * sc_ORMLK_userId = 370105,3701050,3701051 用于区域选择
+								 */
+								String[] parameterValue = ((String) filter.value).split(",");
+								Predicate[] pl = new Predicate[parameterValue.length];
 
-          // 将所有条件用 and 联合起来
-          if (!predicates.isEmpty()) {
-            return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-          }
-        }
+								for (int n = 0; n < parameterValue.length; n++) {
+									pl[n] = (cb.like(expression, "%" + parameterValue[n] + "%"));
+								}
 
-        return cb.conjunction();
-      }
-    };
-  }
+								Predicate p_ = cb.or(pl);
+								predicates.add(p_);
+								break;
 
-  
-  @Override
-  public void ExportSetExcel(List<WaterOrderCash> waterOrders, HttpServletRequest request,
-      HttpServletResponse response) {
-    List<Map<String, Object>> alList = new ArrayList<Map<String, Object>>();
-    Map<String, Integer> sumMap = new HashMap<String, Integer>();
-    waterOrders.forEach(waterOrder -> {
-      String serialNo = waterOrder.getSerialNo();
-      List<WaterOrderDetail> detail = new ArrayList<>();
-      detail = waterOrder.getOrderDetails();
-      detail.forEach(item->{
-        Map<String, Object> objMap = new HashMap<>();
-        OrderSignfor order = new OrderSignfor();
-        order=item.getCash().getOrder();
-        objMap.put("serialNo", serialNo);
-        objMap.put("orderNo", order.getOrderNo());
-        objMap.put("orderPrice", order.getOrderPrice());
-        objMap.put("cashMoney", waterOrder.getCashMoney());
-        objMap.put("status", waterOrder.getPayStatus());
-        objMap.put("createDate", waterOrder.getCreateDate());
-        alList.add(objMap);
-        
-        Integer sum = sumMap.get(serialNo);
-        if (null == sum) {
-          sumMap.put(serialNo, 1);
-        } else {
-          sumMap.put(serialNo, sum + 1);
-        }
-        
-      });
-      
-    });
-    List<Map<String, Object>> marginList = new ArrayList<Map<String, Object>>();
-    int start = 0;
-    int end = 0;
-    for (Map.Entry<String, Integer> entry : sumMap.entrySet()) {
-      // 流水单号合并单元格
-      Map<String, Object> obMap = new HashMap<String, Object>();
-      /*
-       * int firstRow, int lastRow, int firstCol, int lastCol)
-       */
-      end = start + entry.getValue();
-      if (entry.getValue() > 1) {
-        obMap.put("firstRow", start + 1);
-        obMap.put("lastRow", end);
-        obMap.put("firstCol", 0);
-        obMap.put("lastCol", 0);
-        // obMap.put("value", entry.getKey());
-        marginList.add(obMap);
-        // 总金额合并
-        Map<String, Object> obMap1 = new HashMap<String, Object>();
-        obMap1.put("firstRow", start + 1);
-        obMap1.put("lastRow", end);
-        obMap1.put("firstCol", 3);
-        obMap1.put("lastCol", 3);
-        // obMap1.put("value", getRate(Integer.parseInt(entry.getKey()),
-        // task));
-        marginList.add(obMap1);
-        
-        Map<String, Object> obMap2 = new HashMap<String, Object>();
-        obMap2.put("firstRow", start + 1);
-        obMap2.put("lastRow", end);
-        obMap2.put("firstCol", 4);
-        obMap2.put("lastCol", 4);
-        // obMap1.put("value", getRate(Integer.parseInt(entry.getKey()),
-        // task));
-        marginList.add(obMap2);
-        
-        Map<String, Object> obMap3 = new HashMap<String, Object>();
-        obMap3.put("firstRow", start + 1);
-        obMap3.put("lastRow", end);
-        obMap3.put("firstCol", 5);
-        obMap3.put("lastCol", 5);
-        // obMap1.put("value", getRate(Integer.parseInt(entry.getKey()),
-        // task));
-        marginList.add(obMap3);
-      }
-      start = end;
-    }
-    String[] gridTitles_ = { "流水单号", "订单编号", "需付金额", "总金额", "状态", "日期" };
-    String[] coloumsKey_ = { "serialNo", "orderNo", "orderPrice", "cashMoney", "status", "createDate" };
-    MapedExcelExport.doExcelExport("流水单号.xls", alList, gridTitles_, coloumsKey_, request, response, marginList);
-  }
+							default:
+								break;
+
+						}
+					}
+
+					// 将所有条件用 and 联合起来
+					if (!predicates.isEmpty()) {
+						return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+					}
+				}
+
+				return cb.conjunction();
+			}
+		};
+	}
 
 }

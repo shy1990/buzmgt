@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.cash.service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -141,16 +142,16 @@ public class CheckCashServiceImpl implements CheckCashService {
 
   // 计算扣罚金额
   private void disposeMonthPunish(List<MonthPunish> monthPunishs, CheckCash cc) {
-    Float debtMoney = 0.0f;
+    BigDecimal debtMoney = new BigDecimal(0);
     for (MonthPunish wp : monthPunishs) {
-      debtMoney += wp.getDebt() + wp.getAmerce();
+      debtMoney = debtMoney.add(new BigDecimal(Float.toString(wp.getDebt()))).add(new BigDecimal(Float.toString(wp.getAmerce()))) ;
     }
-    cc.setDebtMoney(debtMoney);
+    cc.setDebtMoney(debtMoney.floatValue());
   }
 
   // 计算打款总金额
   public void disposeBankTrade(List<BankTrade> bankTrades, CheckCash cc) {
-    Float incomeMoney = 0.0f;
+    BigDecimal incomeMoney = new BigDecimal(0);
     String cardName = "";
     if (bankTrades == null || bankTrades.size() == 0) {
       String userId = cc.getUserId();
@@ -160,12 +161,12 @@ public class CheckCashServiceImpl implements CheckCashService {
     } else {
 
       for (BankTrade woc : bankTrades) {
-        incomeMoney += woc.getMoney();
+        incomeMoney =incomeMoney.add(new BigDecimal(Float.toString(woc.getMoney())));
         cardName = woc.getCardName();
       }
       cc.setCardName(cardName);
     }
-    cc.setIncomeMoney(incomeMoney);
+    cc.setIncomeMoney(incomeMoney.floatValue());
 
   }
 
@@ -208,9 +209,11 @@ public class CheckCashServiceImpl implements CheckCashService {
         return;
       Float stayMoney = cc.getStayMoney();// 待付金额
       Float incomeMoney = cc.getIncomeMoney();// 支付金额
+	    BigDecimal incomeBigDecimal = new BigDecimal(Float.toString(incomeMoney));
       for (WaterOrderCash order : waterOrders) {
         // 总支付金额大于流水单金额
         Float cashMoney = order.getCashMoney();
+	      BigDecimal cashBigDecimal = new BigDecimal(Float.toString(cashMoney));
         if (incomeMoney > cashMoney) {
           order.setPaymentMoney(cashMoney);
         } else {
@@ -219,8 +222,9 @@ public class CheckCashServiceImpl implements CheckCashService {
           else
             order.setPaymentMoney(incomeMoney);
         }
-        incomeMoney -= cashMoney;
-
+//        incomeMoney -= cashMoney;
+	      incomeBigDecimal = incomeBigDecimal.subtract(cashBigDecimal) ;
+	      incomeMoney = incomeBigDecimal.floatValue();
         order.setPayStatus(WaterPayStatusEnum.OverPay);
         order.setPayDate(cc.getCreateDate());
 
@@ -249,7 +253,10 @@ public class CheckCashServiceImpl implements CheckCashService {
         mp.setDebt(stayMoney);
         if (stayMoney > 0) {
           PunishSet punishSet = punishSetService.findByUserId(userId);
-          mp.setAmerce(stayMoney * punishSet.getPunishNumber());// 扣罚
+	        BigDecimal stayBigDecimal = new BigDecimal(Float.toString(stayMoney));
+	        BigDecimal punishBigDecimal = new BigDecimal(Float.toString(punishSet.getPunishNumber()));
+//          mp.setAmerce(stayMoney * punishSet.getPunishNumber());// 扣罚
+	        mp.setAmerce(stayBigDecimal.multiply(punishBigDecimal).floatValue());// 扣罚
         } else {
           mp.setAmerce(0.0f);// 扣罚
         }
@@ -471,7 +478,7 @@ public class CheckCashServiceImpl implements CheckCashService {
 
   /**
    * 查询没有流水单号的交易
-   * 
+   *
    * @param createDate
    *          正常的查询日期
    * @return
@@ -496,7 +503,7 @@ public class CheckCashServiceImpl implements CheckCashService {
 
   /**
    * 查询核对信息， 拼装信息
-   * 
+   *
    * @param spec
    * @return
    */
@@ -532,7 +539,10 @@ public class CheckCashServiceImpl implements CheckCashService {
         if (bankTrades.size() > 0) {
           Float incomeMoney = 0.0f;
           for (BankTrade bankTrade : bankTrades) {
-            incomeMoney += bankTrade.getMoney();
+          	BigDecimal incomeBigDecimal = new BigDecimal(Float.toString(incomeMoney));
+//            incomeMoney += bankTrade.getMoney();
+	          incomeBigDecimal = incomeBigDecimal.add(new BigDecimal(Float.toString(bankTrade.getMoney())));
+	          incomeMoney = incomeBigDecimal.floatValue();
           }
           cash.setIncomeMoney(incomeMoney);
 
@@ -603,7 +613,8 @@ public class CheckCashServiceImpl implements CheckCashService {
       mp.setDebt(stayMoney);
       if (stayMoney > 0) {
         PunishSet punishSet = punishSetService.findByUserId(userId);
-        mp.setAmerce(stayMoney * punishSet.getPunishNumber());// 扣罚
+//        mp.setAmerce(stayMoney * punishSet.getPunishNumber());// 扣罚
+	      mp.setAmerce(new BigDecimal(Float.toString(stayMoney)).multiply(new BigDecimal(Float.toString(punishSet.getPunishNumber()))).floatValue());// 扣罚
       } else {
         mp.setAmerce(0.0f);// 扣罚
       }

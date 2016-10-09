@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.cash.service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -183,7 +184,6 @@ public class CashServiceImpl implements CashService {
    * 7.修改现金订单列表中状态status改为1（已结算）
    * 8.返回状态
    * @param userId
-   * @param cashIds
    * @return
    */
   @Override
@@ -201,13 +201,13 @@ public class CashServiceImpl implements CashService {
       //生成流水单号 
       String serialNo=createSerialNo();
       
-      Float totalPrice = 0.0f;
+      BigDecimal totalPrice = new BigDecimal(0);
       if(CollectionUtils.isNotEmpty(cashlist)){
         for(Cash cash:cashlist){
           //计算流水单号收现金金额
-          OrderSignfor order=cash.getOrder();
-          totalPrice+=order.getOrderPrice();
-          
+	        OrderSignfor order=cash.getOrder();
+	        totalPrice=totalPrice.add(new BigDecimal(Float.toString(order.getOrderPrice())));
+
           //组装流水单号详情数据
           WaterOrderDetail detail=new WaterOrderDetail();
           detail.setCashId(cash.getCashId());
@@ -223,7 +223,7 @@ public class CashServiceImpl implements CashService {
         woc.setSerialNo(serialNo);
         woc.setUserId(userId);
         woc.setCreateDate(new Date());
-        woc.setCashMoney(totalPrice);
+        woc.setCashMoney(totalPrice.floatValue());
         woc.setIsPunish(0);
         woc.setOrderDetails(detailList);//保存流水单详情
         woc.setPayStatus(WaterPayStatusEnum.UnPay);
