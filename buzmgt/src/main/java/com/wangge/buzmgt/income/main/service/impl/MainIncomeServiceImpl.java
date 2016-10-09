@@ -155,7 +155,9 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       }
       i++;
     }
-    goodList.remove(i);
+    if (null != good) {
+      goodList.remove(i);
+    }
     return good;
   }
   
