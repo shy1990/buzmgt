@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.cash.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -92,7 +93,8 @@ public class CheckCash implements Serializable  {
 
 
   public Float getShouldPayMoney() {
-    shouldPayMoney=cashMoney+debtMoney;
+    shouldPayMoney=new BigDecimal(Float.toString(cashMoney)).add(new BigDecimal(Float.toString(debtMoney))).floatValue();
+//	  shouldPayMoney=cashMoney+debtMoney
     return shouldPayMoney;
   }
 
@@ -123,7 +125,8 @@ public class CheckCash implements Serializable  {
 
 
   public Float getStayMoney() {
-    stayMoney = cashMoney+debtMoney-incomeMoney;
+    stayMoney = new BigDecimal(Float.toString(cashMoney)).add(new BigDecimal(Float.toString(debtMoney))).subtract(new BigDecimal(Float.toString(incomeMoney))).floatValue();
+//	  stayMoney = cashMoney+debtMoney-incomeMoney;
     return stayMoney;
   }
 
