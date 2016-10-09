@@ -35,6 +35,13 @@ public class IncomeSchedule {
   public void initMonthIncome() {
     jobService.initMonthIncome();
   }
+  /*
+   * 28号23点1分执行<br/> 初始化下个月的薪资
+   */
+  @Scheduled(cron = " 0 14 23 * * ? ")
+  public void doUserDel() {
+    jobService.doUserDel();
+  }
   
   /**
    * 每月1日2点1分执行. <br/>

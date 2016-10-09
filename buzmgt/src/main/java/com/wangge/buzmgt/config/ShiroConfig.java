@@ -46,6 +46,7 @@ public class ShiroConfig {
 		filterChainDefinitionMapping.put("/login", "authc");
 		filterChainDefinitionMapping.put("/logout", "logout");
 		filterChainDefinitionMapping.put("/static/**", "anon");
+		filterChainDefinitionMapping.put("/mainIncome/**", "anon");
 		filterChainDefinitionMapping.put("/**", "user");
 		shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMapping);
 		shiroFilter.setSecurityManager(securityManager);
