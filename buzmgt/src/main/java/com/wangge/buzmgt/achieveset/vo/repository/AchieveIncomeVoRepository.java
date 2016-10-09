@@ -10,6 +10,4 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  */
 public interface AchieveIncomeVoRepository extends JpaRepository<AchieveIncomeVo, Integer> ,
 				JpaSpecificationExecutor<AchieveIncomeVo>{
-
-
 }

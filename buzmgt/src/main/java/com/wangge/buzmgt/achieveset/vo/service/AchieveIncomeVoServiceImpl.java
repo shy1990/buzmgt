@@ -47,8 +47,6 @@ public class AchieveIncomeVoServiceImpl implements AchieveIncomeVoService {
 	 * 处理条件参数
 	 */
 	public Specification<AchieveIncomeVo> dispose(Map<String, Object> searchParams) {
-		// 过滤删除
-		searchParams.put("EQ_flag", "NORMAL");
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
 		Specification<AchieveIncomeVo> spec = achieveIncomeSpecification(filters.values(), AchieveIncomeVo.class);
 		return spec;

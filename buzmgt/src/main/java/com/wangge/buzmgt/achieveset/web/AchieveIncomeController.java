@@ -5,6 +5,7 @@ import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.achieveset.service.AchieveService;
 import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
+import com.wangge.buzmgt.achieveset.vo.service.AchieveIncomeVoService;
 import com.wangge.buzmgt.util.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,7 +35,8 @@ public class AchieveIncomeController {
 	private AchieveService achieveService;
 	@Autowired
 	private AchieveIncomeService achieveIncomeService;
-	private AchieveIncomeVoService
+	@Autowired
+	private AchieveIncomeVoService achieveIncomeVoService;
 
 	private static final String SEARCH_OPERTOR = "sc_";
 
@@ -44,10 +46,11 @@ public class AchieveIncomeController {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
 		return achieveIncomeService.findAll(searchParams, pageable);
 	}
-	public Page<AchieveIncomeVo> findAllAchieveIncomeVo(@PageableDefault(page = 0, size = 10, sort = {"createDate"}) Pageable pageable, HttpServletRequest request) {
+	@RequestMapping(value = "/total",method = RequestMethod.GET)
+	@ResponseBody
+	public Page<AchieveIncomeVo> findAllAchieveIncomeVo(@PageableDefault(page = 0, size = 10, sort = {"RNID"}) Pageable pageable, HttpServletRequest request) {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-
-		return achieveIncomeService.(searchParams, pageable);
+		return achieveIncomeVoService.findAll(searchParams, pageable);
 	}
 	@RequestMapping("/test")
 	@ResponseBody
