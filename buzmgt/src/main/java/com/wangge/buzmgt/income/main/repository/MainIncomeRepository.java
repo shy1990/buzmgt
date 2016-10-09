@@ -48,7 +48,7 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
   
   @Transactional
   @Modifying(clearAutomatically = true)
-  @Query(value = "delete from  SYS_BRAND_INCOME i where i.plan_id=?1 and i.user_id=?2 and i.status=1 and i.create_date>?3", nativeQuery = true)
+  @Query(value = "delete from SYS_INCOME_TICHENG_BRAND b where b.mainplan_id=? and b.user_id=? and b.orderflag=1 and b.count_date>?", nativeQuery = true)
   public void delBrandIncome(Long planId, String userId, Date startDate);
   
   @Transactional
@@ -63,7 +63,7 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
   
   @Transactional
   @Modifying(clearAutomatically = true)
-  @Query(value = "delete from  SYS_BRAND_INCOME i where i.plan_id=?1  and i.status=1 and i.create_date>?2", nativeQuery = true)
+  @Query(value = "delete from SYS_INCOME_TICHENG_BRAND b where b.mainplan_id=? and b.orderflag=1 and b.count_date>?", nativeQuery = true)
   public void delBrandIncomeByPlanId(Long planId, Date startDate);
   
   @Transactional

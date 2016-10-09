@@ -114,7 +114,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
       goodIdList.remove(subgoodId);
       achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
-          subgoodId, 0, planId, subgood.getPrice());
+          subgoodId, 0, planId, subgood.getPrice(), new Date());
     }
     // 查找计算品牌
     subList = brandIncomeService.findRuleByGoods(goodIdList, planId, userId, new Date());
@@ -124,7 +124,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
       goodIdList.remove(subgoodId);
       brandIncomeService.realTimeBrandIncomeOut((BrandIncome) ruleMap.get("rule"), subgood.getNums(), orderNo,
-          subgoodId, userId);
+          subgoodId, userId, regionId);
     }
     // 查找计算价格区间
     for (OrderGoods good : goodList) {
@@ -147,6 +147,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     OrderGoods good = null;
     // subgoodId一定在list中
     int i = 0;
+    
     for (OrderGoods good1 : goodList) {
       if (good1.getGoodId().equals(subgoodId)) {
         good = good1;
@@ -156,17 +157,6 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     }
     goodList.remove(i);
     return good;
-  }
-  
-  /**
-   * findSubPlan:找到三个并行子方案中正确的一个. <br/>
-   * 编写一个CalculatePlan的接口,然后这三个方案实现它<br/>
-   *
-   * @return
-   * @since JDK 1.8
-   */
-  private IncomeSub findSubPlan(Long planId, String goodId, String userId) {
-    return new IncomeSub(0, 4);
   }
   
   /**
@@ -197,7 +187,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
          * TODO 缺点 1.没有保存计算日期(支付日期)
          */
         achieveIncomeService.createAchieveIncomeByPay((Achieve) ruleMap.get("rule"), subgood.getOrderNo(), userId,
-            subgood.getNums(), subgoodId, 1, planId, subgood.getPrice());
+            subgood.getNums(), subgoodId, 1, planId, subgood.getPrice(), payDate);
       }
       goodIdList.remove(subgoodId);
       
@@ -213,7 +203,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
           break;
         }
         brandIncomeService.realTimeBrandIncomePay((BrandIncome) ruleMap.get("rule"), subgood.getNums(),
-            subgood.getOrderNo(), subgoodId, userId, payDate);
+            subgood.getOrderNo(), subgoodId, userId, payDate, regionId);
       }
       goodIdList.remove(subgoodId);
     }
