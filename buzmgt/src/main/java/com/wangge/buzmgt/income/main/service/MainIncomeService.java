@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
+import com.wangge.buzmgt.income.main.vo.OrderGoods;
 
 /**
  * ClassName: MainIncomeService <br/>
@@ -27,26 +28,23 @@ public interface MainIncomeService {
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculateOutedOrder(String orderNo,String userId,String payStatus,Date paytime);
+  void caculateOutedOrder(String orderNo, String memberId, String payStatus, Date paytime);
   
   /**
    * caculatePayedOrder:计算线下支付订单. <br/>
    * 
    * 该功能可以app-interface里完成,通过订单接口调用;
-   * @author yangqc
-   * @since JDK 1.8
-   */
-  void caculatePayedOrder(String orderNo,String userId);
-  
-  /**
-   * caculateUser:计算每个业务员的薪资. <br/>
    * 
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculateSalesman();
+  void caculatePayedOrder(String orderNo, String userId, String regionId);
   
+  /**
+   * 计算油补
+   */
   void calculateOil();
+  
   /**
    * findIncomeMain:判断某月业务员的薪资记录是否存在,若不存在就新建一个返回. <br/>
    * 
@@ -68,26 +66,32 @@ public interface MainIncomeService {
    */
   MainIncome findIncomeMain(String salesmanId);
   
-  /** 
+  /**
    * 查询视图页面
-    */  
+   */
   Page<MainIncomeVo> getVopage(Pageable pageReq, Map<String, Object> searchParams) throws Exception;
-
-  /** 
-    * 导出用查询 <br/> 
-    */  
+  
+  /**
+   * 导出用查询 <br/>
+   */
   List<MainIncomeVo> findAll(Map<String, Object> searchParams);
   
-  /** 
-    * findRuleByGood:(这里用一句话描述这个方法的作用). <br/> 
-    * 通过商品id查询其对应的规则
-    * 
-    * @author yangqc 
-    * @param goodId
-    * @param mainPlanId
-    * @param userId
-    * @return    Map结构如下:"goodId":"xxx"(商品id);"rules":List<RuleEntity>;(规则集合)
-    * @since JDK 1.8 
-    */  
-  List<Map<String,Object>> findRuleByGoods(List<String> goodIds,Long mainPlanId,String userId);
+  /**
+   * 计算已付款的订单的单品方法 <br/>
+   */
+  void caculatePayedOrder(String userId, Long planId, Date payDate, List<OrderGoods> goodList, String regionId);
+  
+  /**
+   * 删除分支订单收益 <br/>
+   * 
+   * @throws Exception
+   */
+  void deleteSubIncome(Long planId, String userId, Date startDate) throws Exception;
+  
+  /**
+   * 根据方案Id删除分支订单收益 <br/>
+   * 
+   * @throws Exception
+   */
+  void deleteSubIncomeByPlanId(Long planId, Date startDate) throws Exception;
 }

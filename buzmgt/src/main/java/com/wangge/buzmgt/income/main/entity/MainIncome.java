@@ -19,7 +19,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**
@@ -87,7 +86,7 @@ public class MainIncome {
    * 状态(0,未审核,1已审核)
    */
   @Enumerated(EnumType.ORDINAL)
-  private FlagEnum state = FlagEnum.NORMAL;
+  private CheckedEnum state = CheckedEnum.UNCHECKED;
   /**
    * 月份
    * 
@@ -166,14 +165,15 @@ public class MainIncome {
     this.allresult = allresult;
   }
   
-  public FlagEnum getState() {
+  
+  public CheckedEnum getState() {
     return state;
   }
-  
-  public void setState(FlagEnum state) {
+
+  public void setState(CheckedEnum state) {
     this.state = state;
   }
-  
+
   public java.lang.String getMonth() {
     return month;
   }
@@ -202,3 +202,5 @@ public class MainIncome {
     this.setAllresult(result);
   }
 }
+
+ 

@@ -28,7 +28,7 @@ public class Jobtask {
   private long id;
   // flag:0(未执行),1(已执行);
   /**
-   * 0:主方案:0:删除主方案<br/>
+   * 0:主方案:0:删除主方案:不在计算收益;TODO 达量叠加是否计算<br/>
    * 1:主方案用户:10:删除主方案用户(需计算),11:删除一个收益主方案的用户(无需重新计算);12:添加一个主方案用户(需重新计算)<br/>
    */
   private Integer flag = 0, type;
@@ -124,5 +124,7 @@ public class Jobtask {
     this.planId = planId;
     this.exectime = exectime;
   }
+
+ 
   
 }

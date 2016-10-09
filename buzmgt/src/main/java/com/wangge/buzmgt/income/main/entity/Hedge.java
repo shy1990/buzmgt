@@ -33,7 +33,7 @@ public class Hedge {
   // 商品名称
   private String goodsName;
   // 到货日期
-  private Date shdate;
+  private Date shdate,inserttime;
   // 品牌数量
   private Integer sum;
   // 是否计算,规则类型
@@ -140,6 +140,14 @@ public class Hedge {
   
   public void setFlag(Integer flag) {
     this.flag = flag;
+  }
+
+  public Date getInserttime() {
+    return inserttime;
+  }
+
+  public void setInserttime(Date inserttime) {
+    this.inserttime = inserttime;
   }
   
 }

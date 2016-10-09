@@ -1,5 +1,7 @@
 package com.wangge.buzmgt.income.main.repository;
 
+import java.util.Date;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -38,4 +40,34 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
   @Query("update MainIncome m set m.basicSalary=?1,m.punish=(m.punish+?2)"
       + ",m.allresult=(m.allresult+?3)  where m.id=?4 ")
   int updatebasicSalaryOrPunish(double basicSalary, double punish, double allresult, Long id);
+  
+  @Transactional
+  @Modifying(clearAutomatically = true)
+  @Query(value = "delete from  SYS_ACHIEVE_SET_INCOME i where i.plan_id=?1 and i.user_id=?2 and i.STATUS=1 and i.create_date>?3", nativeQuery = true)
+  public void delAchieveIncome(Long planId, String userId, Date startDate);
+  
+  @Transactional
+  @Modifying(clearAutomatically = true)
+  @Query(value = "delete from  SYS_BRAND_INCOME i where i.plan_id=?1 and i.user_id=?2 and i.status=1 and i.create_date>?3", nativeQuery = true)
+  public void delBrandIncome(Long planId, String userId, Date startDate);
+  
+  @Transactional
+  @Modifying(clearAutomatically = true)
+  @Query(value = "delete from SYS_SECTION_RECORD i where i.plan_id=?1 and i.SALESMAN_ID=?2 and i.ORDERFLAG=1 and i.compute_time>?3", nativeQuery = true)
+  public void delPriceIncome(Long planId, String userId, Date startDate);
+  
+  @Transactional
+  @Modifying(clearAutomatically = true)
+  @Query(value = "delete from  SYS_ACHIEVE_SET_INCOME i where i.plan_id=?1 and i.STATUS=1 and i.create_date>?2", nativeQuery = true)
+  public void delAchieveIncomeByPlanId(Long planId, Date startDate);
+  
+  @Transactional
+  @Modifying(clearAutomatically = true)
+  @Query(value = "delete from  SYS_BRAND_INCOME i where i.plan_id=?1  and i.status=1 and i.create_date>?2", nativeQuery = true)
+  public void delBrandIncomeByPlanId(Long planId, Date startDate);
+  
+  @Transactional
+  @Modifying(clearAutomatically = true)
+  @Query(value = "delete from SYS_SECTION_RECORD i where i.plan_id=?1  and i.ORDERFLAG=1 and i.compute_time>?2", nativeQuery = true)
+  public void delPriceIncomeByPlanId(Long planId, Date startDate);
 }

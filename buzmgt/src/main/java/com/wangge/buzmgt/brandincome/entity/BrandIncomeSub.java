@@ -20,11 +20,11 @@ public class BrandIncomeSub {
   @GeneratedValue(generator="idgen")
   @Column(name = "ID")
   private long id;
-  //子方案id
+  //子方案id,主方案id
   private long subplanId,mainplanId;
   //收益
   private double income;
-  //订单id,业务员id,主方案id
+  //订单id,业务员id
   private String orderno,userId;
   //订单状态(1已付款,0已出库),记录状态(默认有效)
   private Integer orderflag,used=0;

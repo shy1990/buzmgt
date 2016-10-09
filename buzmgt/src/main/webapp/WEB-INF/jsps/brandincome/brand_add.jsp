@@ -58,6 +58,9 @@
             <form id="brandForm" onsubmit="return false;">
                 <input type="hidden" class="J_planId" name="planId" value="${planId }">
                 <input type="hidden" class="J_machineType" name="machineType" value="${machineType }">
+                <input type="hidden" class="J_createTime" value="${createTime }">
+                <input type="hidden" class="J_fqTime" value="${fqTime }">
+
             <div class="order-box">
                 <ul>
                     <li class="new-li">
@@ -74,6 +77,7 @@
                                 <select id="goodList" class="ph-select J_goods">
                                     <option>选择型号</option>
                                 </select>
+                                <label class="pull-right col-md-8 control-label msg-error"></label>
                             </dd>
                         </dl>
                     </li>
@@ -84,6 +88,7 @@
                             <dd>
                                 <input type="text" placeholder="请输入提成金额" class="ph-select J_commissions">
                                 <span class="text-strong text-gery">元/台</span>
+                                <label class="pull-right col-md-8 control-label msg-error"></label>
                             </dd>
                         </dl>
                     </li>
@@ -113,11 +118,9 @@
                                     <input name="endDate" type="text" class="form-control form_datetime input-sm J_endDate" placeholder="选择日期"
                                            readonly="readonly" style="background: #ffffff">
                                 </div>
-
+                                <label class="pull-right col-md-8 control-label msg-error"></label>
                             </dd>
                         </dl>
-
-
                     </li>
 
                     <li class="new-li">
@@ -144,7 +147,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </dd>
                         </dl>
                     </li>
@@ -165,7 +167,7 @@
 <script src="<%=basePath%>static/bootstrap/js/bootstrap.js"></script>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 <script src="<%=basePath%>static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="static/js/dateutil.js" type="text/javascript" charset="utf-8"></script>
+<script src="<%=basePath%>static/js/dateutil.js" type="text/javascript" charset="utf-8"></script>
 <script src="<%=basePath%>static/js/H-select.js"></script>
 <script type="text/javascript" src="static/js/handlebars-v4.0.2.js" charset="utf-8"></script>
 <script type="text/javascript" src="static/bootStrapPager/js/extendPagination.js"></script>
