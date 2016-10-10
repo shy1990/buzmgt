@@ -8,7 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.wangge.buzmgt.income.schedule.entity.Jobtask;
 
-public interface JobRepository extends JpaRepository<Jobtask, Long>{
+public interface JobRepository extends JpaRepository<Jobtask, Long> {
   @Query("select t from Jobtask t where t.exectime<?1 and t.flag=0")
   List<Jobtask> defaltfindAll(Date date);
+  
+  @Query("select t from Jobtask t where t.exectime<?1 and t.flag=0 and t.type=11")
+  List<Jobtask> findUserDel(Date date);
 }

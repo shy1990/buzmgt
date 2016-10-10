@@ -67,4 +67,6 @@ public interface HedgeService {
    * @throws
    */
   List<HedgeVo> findAll(HttpServletRequest request, Region region);
+  
+  void calculateHedge();
 }

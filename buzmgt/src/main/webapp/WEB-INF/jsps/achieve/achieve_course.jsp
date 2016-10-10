@@ -1,180 +1,57 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: ChenGuop
+  Date: 2016/10/8
+  Time: 15:34
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+            + path + "/";
+%>
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <base href="<%=basePath%>"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>查看进程</title>
+    <title>提成设置</title>
 
-    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../static/bootstrap/css/bootstrap-switch.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../static/css/common.css">
-
-
-    <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
-    <style>
-
-
-        .text-lv {
-            color: #02ae88;
-        }
-
-        .text-zi {
-            color: #ee038d;
-        }
-
-        .text-hong {
-            color: #7943dc;
-        }
-
-        .text-lan {
-            color: #1aaefb;
-        }
-
-        .text-cao {
-            color: #b2d66c;
-        }
-
-        .icon-x {
-            display: inline-block;
-            position: relative;
-            z-index: 100;
-            width: 14px;
-            height: 13px;
-            margin-top: 3px;
-        }
-
-        .ico-xx {
-            background: url("img/start1.png") no-repeat center;
-        }
-
-        .icon-back {
-            width: 26px;
-            height: 26px;
-            background: url("img/arrow.png") no-repeat center;
-        }
-
-        .icon-back:hover {
-            width: 26px;
-            background: url("img/Arrow 2 .png") no-repeat center;
-        }
-
-        .fl-right {
-            float: right;
-            margin-top: 25px;
-            margin-right: 25px;
-        }
-
-        .ph-select {
-
-            width: 180px;
-            height: 30px;
-            padding: 5px;
-            border: 1px solid #c6c6c6;
-            border-radius: 3px;
-            background: #ffffff;
-            color: #a7a7a7;
-            margin-bottom: 20px;
-        }
-
-        .link-posit-t {
-            display: inline-block;
-            text-align: right;
-            vertical-align: bottom;
-        }
-
-        .new-table-box {
-            border-top: 3px solid #1e92d4;
-            min-height: 600px;
-            background: #FFF;
-        }
-
-        .new-table-box > table > tbody > tr:hover {
-            border-left: 3px solid #1e92d4;
-        }
-
-        .text-gery {
-            color: #999999;
-        }
-
-        .ph-search-date > input {
-            display: inline-block;
-            width: auto;
-            height: 30px;
-        }
-
-        .inform {
-            height: 180px;
-            background: #ffffff;
-            margin-bottom: 25px;
-        }
-
-        .product {
-            width: 390px;
-            padding-top: 25px;
-            padding-left: 25px;
-            margin-left: 25px;
-        }
-
-        .pro-2 {
-            width: 240px;
-            padding: 25px 0px 20px 0px;
-        }
-
-        .text-black {
-            color: #5a5a5a;
-        }
-
-        .info-zq {
-            height: 70px;
-            width: 190px;
-            margin-left: 40px;
-
-            background: #fafafa;
-            padding-left: 0px;
-            box-shadow: 5px 5px 5px #ededed;
-        }
-
-        .fl {
-            float: left;
-        }
-
-        .text-16 {
-            font-size: 16px;
-        }
-
-        .hr-l {
-            border: 0.5px solid #f2f2f2;
-            margin-top: 5px;
-            margin-bottom: 20px;
-        }
-
-        .font-w {
-            line-height: 30px;
-        }
-
-        .text-jv {
-            color: #d95413;
-            font-weight: bolder;
-        }
-
-        .text-gren {
-            color: #accea6;
-            font-weight: bolder;
-        }
-
-        .icon-ck {
-            background: url("img/ck.png") no-repeat center;
-        }
-
-        .text-red {
-            color: #ee3636;
-        }
-
-        .text-huang {
-            color: #fd9c3e;
-        }
-    </style>
+    <!-- Bootstrap -->
+    <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="static/bootstrap/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="static/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/achieve/achieve_course.css">
+    <link rel="stylesheet" type="text/css" href="static/bootStrapPager/css/page.css"/>
+    <script src="static/js/jquery/jquery-1.11.3.min.js"
+            type="text/javascript" charset="utf-8"></script>
+    <script type="text/x-handlebars-template" id="">
+        <tr>
+            <td>{{addOne @index}}</td>
+            <td>李易峰</td>
+            <td>
+                <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
+                山东省济南市天桥区
+            </td>
+            <td><span class="text-zi text-strong">大学生</span></td>
+            <td><span class="text-red">200台 /  300台 / 400台</span></td>
+            <td><span class="text-lv text-strong">A组</span></td>
+            <td>350台</td>
+            <td>2016.08.09 - 2016.08.11</td>
+            <td><span class="text-lv text-strong">进行中</span></td>
+            <td>
+                <button class="btn btn-sm btn-blue">查看明细</button>
+            </td>
+        </tr>
+    </script>
 </head>
 <body>
 <div class="content main">
@@ -188,15 +65,27 @@
         <div class="row">
             <div class="col-sm-4 product">
                 <span class="text-strong text-gery">达量产品：</span>
-                <span class="text-lan text-strong">手机小米小米手机5  平板苹果苹果平板2</span>
+                <span class="text-lan text-strong">${achieve.good.name }</span>
             </div>
             <div class="col-sm-4 pro-2">
                 <span class="text-strong text-gery">达量产品：</span>
-                <span class="text-lv text-strong"> 150台/300台/500台</span>
+                <span class="text-lv text-strong">
+                <c:if test="${achieve.numberFirst != null && achieve.numberFirst != ''}">
+                    ${achieve.numberFirst}台/
+                </c:if>
+                <c:if test="${achieve.numberSecond != null && achieve.numberSecond != ''}">
+                    ${achieve.numberSecond}台/
+                </c:if>
+                <c:if test="${achieve.numberThird != null && achieve.numberThird != ''}">
+                    ${achieve.numberThird}台
+                </c:if>
+                </span>
             </div>
-            <div class="col-sm-4 pro-2">
+            <div class="col-sm-4 product">
                 <span class="text-strong text-gery">起止日期：</span>
-                <span class="text-black text-strong"> 2016.09.02</span>
+                <span class="text-black text-strong"> <fmt:formatDate value="${achieve.startDate}"
+                                                                      pattern="yyyy.MM.dd"/>-
+                    <fmt:formatDate value="${achieve.endDate}" pattern="yyyy.MM.dd"/></span>
             </div>
         </div>
 
@@ -204,19 +93,19 @@
 
         <div class="row">
             <div class="col-sm-4 info-zq">
-                <img src="img/pic1.png" alt="" class="fl" style=" margin-right: 15px;">
+                <img src="/static/earnings/img/pic1.png" alt="" class="fl" style=" margin-right: 15px;">
                 <p class="text-gery text-strong font-w">周期销量</p>
-                <p class="text-lv text-16 text-strong">1000台</p>
+                <p class="text-lv text-16 text-strong">${totalNumber }台</p>
             </div>
             <div class="col-sm-4 info-zq">
-                <img src="img/pic-2.png" alt="" class="fl" style=" margin-right: 15px;">
+                <img src="/static/earnings/img/pic-2.png" alt="" class="fl" style=" margin-right: 15px;">
                 <p class=" text-strong text-gery  font-w ">退货冲减</p>
-                <p class="text-jv text-16">50台</p>
+                <p class="text-jv text-16">${retreatAmount }台</p>
             </div>
             <div class="col-sm-4 info-zq">
-                <img src="img/pic3.png" alt="" class="fl" style=" margin-right: 15px;">
+                <img src="/static/earnings/img/pic3.png" alt="" class="fl" style=" margin-right: 15px;">
                 <p class="text-gery   font-w text-strong">实际销量</p>
-                <p class="text-gren text-16">950台</p>
+                <p class="text-gren text-16">${totalNumber-retreatAmount }台</p>
             </div>
         </div>
 
@@ -229,27 +118,27 @@
     <div class="clearfix"></div>
     <div>
         <select class="ph-select">
-            <option>山东省-德州市-武城县</option>
-            <option>山东省-德州市-武城县</option>
-            <option>山东省-德州市-武城县</option>
-        </select>
-
-        <select class="ph-select">
-            <option>全部角色</option>
-            <option>山东省-德州市-武城县</option>
-            <option>山东省-德州市-武城县</option>
+            <option>区域星级</option>
+            <option>一星</option>
+            <option>二星</option>
+            <option>三星</option>
+            <option>四星</option>
         </select>
 
         <select class="ph-select">
             <option>业务等级</option>
-            <option>山东省-德州市-武城县</option>
-            <option>山东省-德州市-武城县</option>
+            <option>小学生</option>
+            <option>中学生</option>
+            <option>高中生</option>
+            <option>大学生</option>
         </select>
 
         <select class="ph-select">
-            <option>区域星级</option>
-            <option>山东省-德州市-武城县</option>
-            <option>山东省-德州市-武城县</option>
+            <option>所有组</option>
+            <option value="A">A组</option>
+            <option value="B">B组</option>
+            <option value="C">C组</option>
+            <option value="D">D组</option>
         </select>
 
         <button class="btn btn-blue btn-sm" style="margin-left: 10px">
@@ -257,8 +146,8 @@
         </button>
 
         <div class="link-posit-t pull-right export">
-            <input class="ph-select text-gery-hs" placeholder="  请输入业务员名称">
-            <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
+            <input class="ph-select text-gery-hs" placeholder="请输入业务员名称">
+            <button class="btn btn-blue btn-sm" onclick="goSearch('');">
                 检索
             </button>
             <a class="table-export" href="javascript:void(0);">导出excel</a>
@@ -285,24 +174,7 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>01</td>
-                    <td>李易峰</td>
-                    <td>
-                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                        山东省济南市天桥区
-                    </td>
-                    <td><span class="text-zi text-strong">大学生</span></td>
-                    <td><span class="text-red">200台 /  300台 / 400台</span></td>
-                    <td><span class="text-lv text-strong">A组</span></td>
-                    <td>350台</td>
-                    <td>2016.08.09 - 2016.08.11</td>
-                    <td><span class="text-lv text-strong">进行中</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-blue">查看明细</button>
-                    </td>
-                </tr>
+                <tbody id="table">
 
                 <tr>
                     <td>01</td>
@@ -389,11 +261,22 @@
     <!--油补记录-->
 </div>
 
+
+<!--[if lt IE 9]>
+<script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-<script src="../static/bootstrap/js/bootstrap.min.js"></script>
-
-
+<script type="text/javascript" src="static/js/common.js"
+        charset="utf-8"></script>
+<script type="text/javascript"
+        src="static/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="static/js/dateutil.js" type="text/javascript"
+        charset="utf-8"></script>
+<script type="text/javascript" src="static/js/handlebars-v4.0.2.js"
+        charset="utf-8"></script>
+<script type="text/javascript"
+        src="static/bootStrapPager/js/extendPagination.js"></script>
 </body>
 </html>
-
-

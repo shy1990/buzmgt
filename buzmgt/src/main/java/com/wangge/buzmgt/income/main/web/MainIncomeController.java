@@ -52,16 +52,23 @@ public class MainIncomeController {
       String month = searchParams.get("EQ_month") + "";
       month = month.equals("") ? DateUtil.getPreMonth(new Date(), -1) : month;
       searchParams.put("EQ_month", month);
-      String[] gridTitles = { "业务员", "负责区域", "业务角色", "月份", " 基本工资", "业务佣金",
-          "油补佣金", "扣罚金额", "达量收入", "叠加收入", "总收入","是否审核" };
-      String[] coloumsKey = { "truename", "namepath", "rolename", "month", "basicSalary", 
-          "busiIncome", "oilIncome",
-          "punish", "reachIncome", "overlyingIncome", "allresult","state" };
+      String[] gridTitles = { "业务员", "负责区域", "业务角色", "月份", " 基本工资", "业务佣金", "油补佣金", "扣罚金额", "达量收入", "叠加收入", "总收入",
+          "是否审核" };
+      String[] coloumsKey = { "truename", "namepath", "rolename", "month", "basicSalary", "busiIncome", "oilIncome",
+          "punish", "reachIncome", "overlyingIncome", "allresult", "state" };
       List<MainIncomeVo> list = incomeService.findAll(searchParams);
       ExcelExport.doExcelExport(month + "业务员工资表.xls", list, gridTitles, coloumsKey, request, response);
     } catch (Exception e) {
       LogUtil.error("导出工资表出错", e);
       throw new Exception("导出工资表出错");
     }
+  }
+  
+  @RequestMapping("/calcu")
+  public @ResponseBody String test(HttpServletRequest request, HttpServletResponse response, Pageable pageReq)
+      throws Exception {
+    incomeService.caculateOutedOrder("20160620174259875", "c178c6ff92334a379b9c75af8720b4ac", "1",
+        DateUtil.string2Date("2016-09-29 15:30:16"));
+    return "xxx";
   }
 }

@@ -56,8 +56,7 @@ public interface IncomeMainplanUsersRepository
    * @return
    * @since JDK 1.8
    */
-  @Query(value =
-  "SELECT  iu.plain_id,iu.salesman_id,u.region_id   FROM sys_registdata s\n"
+  @Query(value = "SELECT  iu.plain_id,iu.salesman_id,u.region_id   FROM sys_registdata s\n"
       + "        left join sys_region r on r.region_id = s.region_id\n"
       + "        left join sys_salesman u on u.region_id = r.parent_id\n"
       + "        left join sys_user us on u.user_id = us.user_id\n"

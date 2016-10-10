@@ -4,6 +4,8 @@ import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.achieveset.service.AchieveService;
+import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
+import com.wangge.buzmgt.achieveset.vo.service.AchieveIncomeVoService;
 import com.wangge.buzmgt.util.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,7 @@ import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +35,8 @@ public class AchieveIncomeController {
 	private AchieveService achieveService;
 	@Autowired
 	private AchieveIncomeService achieveIncomeService;
+	@Autowired
+	private AchieveIncomeVoService achieveIncomeVoService;
 
 	private static final String SEARCH_OPERTOR = "sc_";
 
@@ -41,7 +46,12 @@ public class AchieveIncomeController {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
 		return achieveIncomeService.findAll(searchParams, pageable);
 	}
-
+	@RequestMapping(value = "/total",method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public Page<AchieveIncomeVo> findAllAchieveIncomeVo(@PageableDefault(page = 0, size = 10, sort = {"RNID"}) Pageable pageable, HttpServletRequest request) {
+		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+		return achieveIncomeVoService.findAll(searchParams, pageable);
+	}
 	@RequestMapping("/test")
 	@ResponseBody
 	public JsonResponse<List<Map<String, Object>>> test(@RequestParam String goodId, @RequestParam Long planId, @RequestParam String userId, @RequestParam String orderNo) {
@@ -54,7 +64,7 @@ public class AchieveIncomeController {
 		}
 		try {
 			achieveRule.forEach(ruleMap -> {
-//				achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, 2, (String) ruleMap.get("goodId"), 0, planId);
+				achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, 2, (String) ruleMap.get("goodId"), 0, planId, 100f, new Date());
 			});
 		} catch (Exception e) {
 			jsonResponse.setErrorCode("500");

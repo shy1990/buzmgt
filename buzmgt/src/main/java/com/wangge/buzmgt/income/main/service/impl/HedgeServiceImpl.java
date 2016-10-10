@@ -63,60 +63,68 @@ public class HedgeServiceImpl implements HedgeService {
     }, pageReq);
     return page;
   }
-
+  
   @Override
   public int countByGoodId(String goodId) {
     return hedgeRep.countByGoodId(goodId);
   }
-
+  
   @Override
   public Page<HedgeVo> findAll(HttpServletRequest request, Region region, Pageable pageable) {
     Sort s = new Sort(Sort.Direction.DESC, "shdate");
-    pageable = new PageRequest(pageable.getPageNumber(),pageable.getPageSize(),s);
+    pageable = new PageRequest(pageable.getPageNumber(), pageable.getPageSize(), s);
     Page<HedgeVo> page = hedgeVOrep.findAll((root, query, cb) -> {
-      List<Predicate> predicates = getPredicate(root,cb,request,region);
+      List<Predicate> predicates = getPredicate(root, cb, request, region);
       return cb.and(predicates.toArray(new Predicate[predicates.size()]));
     }, pageable);
     return page;
   }
-
+  
   @Override
   public List<HedgeVo> findAll(HttpServletRequest request, Region region) {
-    Sort s=new Sort(Sort.Direction.DESC, "shdate");
+    Sort s = new Sort(Sort.Direction.DESC, "shdate");
     List<HedgeVo> list = hedgeVOrep.findAll((root, query, cb) -> {
-      List<Predicate> predicates = getPredicate(root,cb,request,region);
+      List<Predicate> predicates = getPredicate(root, cb, request, region);
       return cb.and(predicates.toArray(new Predicate[predicates.size()]));
     }, s);
     return list;
   }
-
+  
   /**
    * 获取Predicate条件
+   * 
    * @param root
    * @param cb
    * @param request
    * @param region
    * @return
    */
-  public List<Predicate> getPredicate(Root<HedgeVo> root, CriteriaBuilder cb,HttpServletRequest request, Region region){
+  public List<Predicate> getPredicate(Root<HedgeVo> root, CriteriaBuilder cb, HttpServletRequest request,
+      Region region) {
     Date startDate = DateUtil.string2Date(request.getParameter("startDate"));
     Date endDate = DateUtil.string2Date(request.getParameter("endDate"));
     List<Predicate> predicates = new ArrayList<Predicate>();
-    Predicate predicate = cb.between(root.get("shdate").as(Date.class), startDate,endDate);
+    Predicate predicate = cb.between(root.get("shdate").as(Date.class), startDate, endDate);
     Predicate predicate1;
-    if ("镇".equals(region.getType().getName())){
+    if ("镇".equals(region.getType().getName())) {
       predicate1 = cb.equal(root.get("shopRegionId").as(String.class), region.getId());
-    }else {
+    } else {
       predicate1 = cb.equal(root.get("regionId").as(String.class), region.getId());
     }
     predicates.add(cb.and(predicate, predicate1));
     String terms = request.getParameter("terms");
-    if (StringUtils.isNotBlank(terms)){
-      Predicate predicate2 = cb.equal(root.get("orderno").as(String.class),terms);
-      Predicate predicate3 = cb.like(root.get("shopName").as(String.class),"%" + terms + "%");
+    if (StringUtils.isNotBlank(terms)) {
+      Predicate predicate2 = cb.equal(root.get("orderno").as(String.class), terms);
+      Predicate predicate3 = cb.like(root.get("shopName").as(String.class), "%" + terms + "%");
       predicates.add(cb.or(predicate2, predicate3));
     }
     return predicates;
   }
-
+  
+  @Override
+  public void calculateHedge() {
+    hedgeRep.calSectionAndBrandGood();
+    hedgeRep.calShouhouHege();
+  }
+  
 }

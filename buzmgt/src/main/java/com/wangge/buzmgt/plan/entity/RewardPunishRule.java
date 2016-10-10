@@ -45,13 +45,13 @@ public class RewardPunishRule implements Serializable{
     this.id = id;
   }
   public Integer getMin() {
-    return min;
+    return min == null ? 0 : min;
   }
   public void setMin(Integer min) {
     this.min = min;
   }
   public Integer getMax() {
-    return max;
+    return max == null ? 99999 : max;
   }
   public void setMax(Integer max) {
     this.max = max;

@@ -233,7 +233,7 @@ var	base='<%=basePath%>';
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script type="text/javascript"
-<!-- 		src="static/achieve/achieve_record.js" charset="utf-8"></script> -->
+ 		src="static/achieve/achieve_record.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(".J_MachineType li").on("click",function(){
 			$(this).addClass("active");
