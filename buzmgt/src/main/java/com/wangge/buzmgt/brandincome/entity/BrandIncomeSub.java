@@ -16,8 +16,8 @@ import java.util.Date;
 @Table(name="SYS_INCOME_TICHENG_BRAND")
 public class BrandIncomeSub {
   @Id
-  @GenericGenerator(name = "idgen",strategy = "increment")
-  @GeneratedValue(generator="idgen")
+  @SequenceGenerator(name = "idgen", sequenceName = "sys_income_job_seq")
+  @GeneratedValue(generator = "idgen", strategy = GenerationType.SEQUENCE)
   @Column(name = "ID")
   private long id;
   //子方案id,主方案id
