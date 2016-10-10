@@ -25,7 +25,7 @@ public interface IncomeMainplanUsersRepository
   void updateFlagById(FlagEnum flag, Long id);
   
   @Query("select u.planId from IncomeMainplanUsers u where u.salesmanId=?1 and u.state=?2")
-  Optional<IncomeMainplanUsers> findFirst(String userId, FlagEnum states);
+  Optional<Long> findFirst(String userId, FlagEnum states);
   
   @Query("select max(u.fqtime)  from IncomeMainplanUsers u where u.salesmanId=?1")
   Optional<Date> findMaxFqtimeBySalesmanId(String salesmanId);

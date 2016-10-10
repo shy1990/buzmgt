@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -37,7 +39,8 @@ public class Hedge {
   private String orderno, sku, uniquenumber, ruleid;
   // 商品名称
   private String goodsName;
-  // 到货日期
+  // 到货日期,记录生成日期
+  @Temporal(TemporalType.DATE)
   private Date shdate, inserttime;
   // 品牌数量
   private Integer sum;

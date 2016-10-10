@@ -98,7 +98,16 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     }
     // 计算付款订单
     if (payStatus.equals("1")) {
-      caculatePayedOrder(userId, planId, payDate, new ArrayList<>(goodList), regionId);
+      userO = mainPlanUserRep.findsaleByDateAndMemberId(payDate, memberId);
+      if (null != userO) {
+        uers = (Object[]) userO;
+        Long planId1 = Long.valueOf(uers[0].toString());
+        String userId1 = uers[1].toString();
+        String regionId1 = uers[2].toString();
+        if (null != planId) {
+          caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList), regionId1);
+        }
+      }
     }
     // 计算出库订单
     List<String> goodIdList = new ArrayList<>();
@@ -124,7 +133,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       OrderGoods subgood = pollGoodFromList(subgoodId, goodList);
       goodIdList.remove(subgoodId);
       brandIncomeService.realTimeBrandIncomeOut((BrandIncome) ruleMap.get("rule"), subgood.getNums(), orderNo,
-          subgoodId, userId, regionId);
+          subgoodId, userId, regionId, subgood.getPrice());
     }
     // 查找计算价格区间
     for (OrderGoods good : goodList) {
@@ -185,9 +194,6 @@ public class MainIncomeServiceImpl implements MainIncomeService {
         if (null == subgood) {
           break;
         }
-        /*
-         * TODO 缺点 1.没有保存计算日期(支付日期)
-         */
         achieveIncomeService.createAchieveIncomeByPay((Achieve) ruleMap.get("rule"), subgood.getOrderNo(), userId,
             subgood.getNums(), subgoodId, 1, planId, subgood.getPrice(), payDate);
       }
@@ -205,7 +211,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
           break;
         }
         brandIncomeService.realTimeBrandIncomePay((BrandIncome) ruleMap.get("rule"), subgood.getNums(),
-            subgood.getOrderNo(), subgoodId, userId, payDate, regionId);
+            subgood.getOrderNo(), subgoodId, userId, payDate, regionId, subgood.getPrice());
       }
       goodIdList.remove(subgoodId);
     }
@@ -232,18 +238,13 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   @Override
   public void caculatePayedOrder(String orderNo, String userId, String regionId) {
     
-    Optional<IncomeMainplanUsers> userOpt = mainPlanUserRep.findFirst(userId, FlagEnum.NORMAL);
+    Optional<Long> userOpt = mainPlanUserRep.findFirst(userId, FlagEnum.NORMAL);
     if (!userOpt.isPresent()) {
       return;
     }
-    IncomeMainplanUsers user = userOpt.get();
-    Long planId = user.getPlanId();
-    if (null == planId) {
-      return;
-    }
+    Long planId = userOpt.get();
     List<OrderGoods> goodList = orderGoodsRep.findByorderNo(orderNo);
     caculatePayedOrder(userId, planId, new Date(), goodList, regionId);
-    
   }
   
   /*

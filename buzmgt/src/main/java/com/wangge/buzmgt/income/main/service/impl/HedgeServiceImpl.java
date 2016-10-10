@@ -1,14 +1,15 @@
 package com.wangge.buzmgt.income.main.service.impl;
 
-import com.wangge.buzmgt.customtask.util.PredicateUtil;
-import com.wangge.buzmgt.income.main.entity.Hedge;
-import com.wangge.buzmgt.income.main.repository.HedgeRepository;
-import com.wangge.buzmgt.income.main.service.HedgeService;
-import com.wangge.buzmgt.income.main.vo.HedgeVo;
-import com.wangge.buzmgt.income.main.vo.repository.HedgeVoRepository;
-import com.wangge.buzmgt.log.util.LogUtil;
-import com.wangge.buzmgt.region.entity.Region;
-import com.wangge.buzmgt.util.DateUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,16 +18,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import com.wangge.buzmgt.customtask.util.PredicateUtil;
+import com.wangge.buzmgt.income.main.entity.Hedge;
+import com.wangge.buzmgt.income.main.repository.HedgeRepository;
+import com.wangge.buzmgt.income.main.service.HedgeService;
+import com.wangge.buzmgt.income.main.vo.HedgeVo;
+import com.wangge.buzmgt.income.main.vo.repository.HedgeVoRepository;
+import com.wangge.buzmgt.income.schedule.entity.Jobtask;
+import com.wangge.buzmgt.income.schedule.repository.JobRepository;
+import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.util.DateUtil;
 
 @Service
 public class HedgeServiceImpl implements HedgeService {
@@ -34,8 +38,11 @@ public class HedgeServiceImpl implements HedgeService {
   private HedgeRepository hedgeRep;
   @Autowired
   private HedgeVoRepository hedgeVOrep;
+  @Autowired
+  private JobRepository jobRep;
   
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public void saveHedgeFromExcle(Map<Integer, String> excelContent) throws Exception {
     List<Hedge> uList = new ArrayList<>();
     try {
@@ -47,6 +54,8 @@ public class HedgeServiceImpl implements HedgeService {
       });
       if (uList.size() > 0) {
         hedgeRep.save(uList);
+        Jobtask task = new Jobtask(60, 0L, new Date());
+        jobRep.save(task);
       }
     } catch (Exception e) {
       LogUtil.error("导入售后冲减表出错", e);
@@ -125,6 +134,12 @@ public class HedgeServiceImpl implements HedgeService {
   public void calculateHedge() {
     hedgeRep.calSectionAndBrandGood();
     hedgeRep.calShouhouHege();
+  }
+
+  @Override
+  public void calculateAchieveHedge(Date exectime) {
+    // TODO Auto-generated method stub
+    
   }
   
 }
