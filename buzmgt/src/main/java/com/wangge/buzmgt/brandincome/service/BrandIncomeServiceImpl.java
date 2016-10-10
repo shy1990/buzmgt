@@ -386,7 +386,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
   }
 
   @Override
-  public Boolean realTimeBrandIncomePay(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId, Date payDate,String regionId) {
+  public Boolean realTimeBrandIncomePay(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId, Date payDate,String regionId,double unitPrice) {
     try {
       //根据传入参数计算品牌型号收益(已付款)
       Double income = incomeCal(regionId,brandIncome,num);
@@ -398,6 +398,9 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
       brandIncomeSub.setUserId(userId);
       brandIncomeSub.setOrderflag(1);//订单状态:已付款
       brandIncomeSub.setCountDate(payDate);//付款时间
+      brandIncomeSub.setSum(num);
+      brandIncomeSub.setGoodId(goodId);
+      brandIncomeSub.setUnitPrice(unitPrice);
       brandIncomeSub = brandIncomeSubRepository.save(brandIncomeSub);
       logService.log(null,brandIncomeSub, Log.EventType.SAVE);
       return true;
@@ -408,7 +411,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
   }
 
   @Override
-  public Boolean realTimeBrandIncomeOut(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId,String regionId) {
+  public Boolean realTimeBrandIncomeOut(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId,String regionId,double unitPrice) {
     try {
       //根据传入参数计算品牌型号收益(已出库)
       Double income = incomeCal(regionId,brandIncome,num);
@@ -420,6 +423,9 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
       brandIncomeSub.setUserId(userId);
       brandIncomeSub.setOrderflag(0);//订单状态:已出库
       brandIncomeSub.setCountDate(new Date());//出库
+      brandIncomeSub.setSum(num);
+      brandIncomeSub.setGoodId(goodId);
+      brandIncomeSub.setUnitPrice(unitPrice);
       brandIncomeSub = brandIncomeSubRepository.save(brandIncomeSub);
       logService.log(null,brandIncomeSub, Log.EventType.SAVE);
       return true;
