@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.Hedge;
 import com.wangge.buzmgt.income.main.repository.HedgeRepository;
+import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.service.HedgeService;
 import com.wangge.buzmgt.income.main.vo.HedgeVo;
 import com.wangge.buzmgt.income.main.vo.repository.HedgeVoRepository;
@@ -40,7 +41,8 @@ public class HedgeServiceImpl implements HedgeService {
   private HedgeVoRepository hedgeVOrep;
   @Autowired
   private JobRepository jobRep;
-  
+  @Autowired
+  private IncomeMainplanUsersRepository IncomeUserRep;
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void saveHedgeFromExcle(Map<Integer, String> excelContent) throws Exception {
@@ -135,11 +137,23 @@ public class HedgeServiceImpl implements HedgeService {
     hedgeRep.calSectionAndBrandGood();
     hedgeRep.calShouhouHege();
   }
-
+  
   @Override
   public void calculateAchieveHedge(Date exectime) {
-    // TODO Auto-generated method stub
-    
+    List<Object> usergoodList = hedgeRep.findByDate(exectime);
+    usergoodList.parallelStream().forEach(object -> {
+      Object[] Ordergood = (Object[]) object;
+      String goodId = Ordergood[1].toString();
+      int sum = Integer.valueOf(Ordergood[2].toString());
+      Date payTime = DateUtil.string2Date(Ordergood[3].toString());
+      String userId = Ordergood[4].toString();
+      Long hedgeId = Long.valueOf(Ordergood[5].toString());
+      Date acceptTime = (Date) Ordergood[6];
+      //当查出主方案时调用达量和叠加的冲减算法
+      IncomeUserRep.findBysalesmanAndDate(payTime, userId).ifPresent(planId->{
+        
+      });
+    });
   }
   
 }

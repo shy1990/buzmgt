@@ -26,11 +26,6 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedStoredProcedureQuery(name = "calculateGood", procedureName = "income_shouhou_good_cal"),
     @NamedStoredProcedureQuery(name = "calculatehedge", procedureName = "income_shouhou_hedge_cal") })
 public class Hedge {
-  /*
-   * sys_shouhou_hedge(id number(19),orderno VARCHAR2(50),sku
-   * varchar2(500),skuname varchar2(500),shdate date,sum number(3),uniquenumber
-   * varchar2(200));
-   */
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
