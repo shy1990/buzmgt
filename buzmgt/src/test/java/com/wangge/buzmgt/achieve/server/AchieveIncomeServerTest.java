@@ -1,10 +1,8 @@
 package com.wangge.buzmgt.achieve.server;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.wangge.buzmgt.util.DateUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +39,15 @@ public class AchieveIncomeServerTest {
 //    boolean msg = achieveIncomeService.createAchieveIncomeBy(maps, orderNo, UserId);
 //    System.out.println(msg);
 //  }
+	@Test
+	public void test1(){
+//		A370181210	8	fffa35ffde544ddca5a8e29110a6ed52
+		String userId= "A370181210";
+		String goodId= "fffa35ffde544ddca5a8e29110a6ed52";
+		Date payTime = DateUtil.string2Date("2016-10-10");
+		Date acceptTime = DateUtil.string2Date("2016-10-11");
+		boolean flag=achieveIncomeService.createAchieveIncomeAfterSale(userId,goodId,20L,1L,payTime,acceptTime,1);
+		System.out.println(flag);
+	}
 
 }

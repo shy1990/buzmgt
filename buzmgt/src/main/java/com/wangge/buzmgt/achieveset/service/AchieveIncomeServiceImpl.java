@@ -7,6 +7,8 @@ import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
 import com.wangge.buzmgt.achieveset.vo.repository.AchieveIncomeVoRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
+import com.wangge.buzmgt.income.main.entity.HedgeCost;
+import com.wangge.buzmgt.income.main.repository.HedgeCostRepository;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.plan.entity.GroupNumber;
 import com.wangge.buzmgt.plan.entity.GroupUser;
@@ -42,6 +44,9 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	private AchieveIncomeRepository air;
 	@Autowired
 	private AchieveIncomeVoRepository achieveIncomeVoRepository;
+	@Autowired
+	private	HedgeCostRepository hedgeCostRepository;
+
 
 	@Override
 	public Long countByAchieveId(Long achieveId) {
@@ -230,24 +235,32 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	 * @return
 	 */
 	@Override
-	public boolean createAchieveIncomeAfterSale(String userId, String goodId, Long palnId, Date payTime, Date acceptTime, Integer num) {
-		Map<String, Object> searchParams = new HashedMap();
-		searchParams.put("EQ_userId", userId);
-		searchParams.put("EQ_goodId", goodId);
-		searchParams.put("EQ_planId", palnId);
-		searchParams.put("EQ_createDate", DateUtil.date2String(payTime));
-		List<AchieveIncome> achieveIncomes = findAll(searchParams);
-		if(achieveIncomes.size()<1){
+	public boolean createAchieveIncomeAfterSale(String userId, String goodId, Long palnId, Long hedgeId, Date payTime, Date acceptTime, Integer num) {
+		try {
+			Map<String, Object> searchParams = new HashedMap();
+			searchParams.put("EQ_userId", userId);
+			searchParams.put("EQ_goodId", goodId);
+			searchParams.put("EQ_planId", palnId);
+			searchParams.put("EQ_createDate", DateUtil.date2String(payTime));
+			List<AchieveIncome> achieveIncomes = findAll(searchParams);
+			if(achieveIncomes.size()<1){
+				return false;
+			}
+			AchieveIncome achieveIncome = achieveIncomes.get(0);
+			Float money = achieveIncome.getMoney();
+			Integer count = achieveIncome.getNum();
+			Long ruleId = achieveIncome.getAchieveId();
+			//售后冲减的金额
+			Float AfterSaleMoney = new BigDecimal(Float.toString(money)).divide(new BigDecimal(count)).multiply(new BigDecimal(num)).floatValue();
+			HedgeCost hedgeCost = new HedgeCost(hedgeId, ruleId, 2, userId, goodId, payTime,acceptTime,AfterSaleMoney);
+			hedgeCostRepository.save(hedgeCost);
+			//组装售后冲减信息
+		}catch (Exception e){
+			LogUtil.error(e.getMessage(),e);
+			e.printStackTrace();
 			return false;
 		}
-		AchieveIncome achieveIncome = achieveIncomes.get(0);
-		Float money = achieveIncome.getMoney();
-		Integer count = achieveIncome.getNum();
-		//售后冲减的金额
-		Float AfterSaleMoney = new BigDecimal(Float.toString(money)).divide(new BigDecimal(count)).multiply(new BigDecimal(num)).floatValue();
-
-		//组装售后冲减信息
-		return false;
+		return true;
 	}
 
 	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,
