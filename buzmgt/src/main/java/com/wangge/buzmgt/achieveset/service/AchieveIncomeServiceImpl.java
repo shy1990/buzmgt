@@ -11,8 +11,10 @@ import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.plan.entity.GroupNumber;
 import com.wangge.buzmgt.plan.entity.GroupUser;
 import com.wangge.buzmgt.plan.entity.RewardPunishRule;
+import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.*;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -39,6 +42,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	private AchieveIncomeRepository air;
 	@Autowired
 	private AchieveIncomeVoRepository achieveIncomeVoRepository;
+
 	@Override
 	public Long countByAchieveId(Long achieveId) {
 		return air.countByAchieveId(achieveId);
@@ -54,6 +58,11 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	public List<AchieveIncome> findAll(Map<String, Object> searchParams, Sort sort) {
 		Specification<AchieveIncome> spec = dispose(searchParams);
 		return air.findAll(spec, sort);
+	}
+
+	public List<AchieveIncome> findAll(Map<String, Object> searchParams) {
+		Specification<AchieveIncome> spec = dispose(searchParams);
+		return air.findAll(spec);
 	}
 
 	/**
@@ -212,17 +221,32 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	 * 2.是否收益金额已发放
 	 * 3.创建售后收益冲减
 	 *
-	 * @param userId 用户ID
-	 * @param goodId 商品Id
-	 * @param goodId  主方案Id
-	 * @param payTime 支付时间
+	 * @param userId     用户ID
+	 * @param goodId     商品Id
+	 * @param goodId     主方案Id
+	 * @param payTime    支付时间
 	 * @param acceptTime 售后日期
-	 * @param num 单品数量
+	 * @param num        单品数量
 	 * @return
 	 */
 	@Override
 	public boolean createAchieveIncomeAfterSale(String userId, String goodId, Long palnId, Date payTime, Date acceptTime, Integer num) {
-		
+		Map<String, Object> searchParams = new HashedMap();
+		searchParams.put("EQ_userId", userId);
+		searchParams.put("EQ_goodId", goodId);
+		searchParams.put("EQ_planId", palnId);
+		searchParams.put("EQ_createDate", DateUtil.date2String(payTime));
+		List<AchieveIncome> achieveIncomes = findAll(searchParams);
+		if(achieveIncomes.size()<1){
+			return false;
+		}
+		AchieveIncome achieveIncome = achieveIncomes.get(0);
+		Float money = achieveIncome.getMoney();
+		Integer count = achieveIncome.getNum();
+		//售后冲减的金额
+		Float AfterSaleMoney = new BigDecimal(Float.toString(money)).divide(new BigDecimal(count)).multiply(new BigDecimal(num)).floatValue();
+
+		//组装售后冲减信息
 		return false;
 	}
 
