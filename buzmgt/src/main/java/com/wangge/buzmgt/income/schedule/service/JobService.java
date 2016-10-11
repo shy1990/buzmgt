@@ -2,13 +2,12 @@ package com.wangge.buzmgt.income.schedule.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wangge.buzmgt.common.IncomeThreadPool;
 import com.wangge.buzmgt.income.main.entity.CheckedEnum;
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
@@ -96,7 +95,7 @@ public class JobService {
     hedgeService.calculateAchieveHedge(jobtask.getExectime());
   }
 
-  private static ExecutorService exServ = Executors.newFixedThreadPool(100);
+  
   
   /**
    * 计算某个业务员新加入方案时的收益<br/>
@@ -126,7 +125,7 @@ public class JobService {
     for (int i = 0; i <= between; i++) {
       Date startDate = DateUtil.moveDate(startTime, i);
       Date endDate = DateUtil.moveDate(startDate, 1);
-      exServ.execute(new Runnable() {
+      IncomeThreadPool.exServ.execute(new Runnable() {
         @Override
         public void run() {
           List<OrderGoods> goodList = orderGoodsRep.findByorderNoByDateAndSalesman(userId, startDate, endDate);
@@ -134,7 +133,8 @@ public class JobService {
         }
       });
     }
-    exServ.execute(new Runnable() {
+    //计算最后一天的订单
+    IncomeThreadPool.exServ.execute(new Runnable() {
       @Override
       public void run() {
         List<OrderGoods> goodList = orderGoodsRep.findByorderNoByDateAndSalesman(userId, endTime, endDay);
@@ -193,7 +193,7 @@ public class JobService {
   private void deleteIncomeMainPlan(Jobtask jobtask) {
     Long planId = jobtask.getPlanId();
     Date delDate = jobtask.getExectime();
-    Date today = new Date();
+    //Date today = new Date();
     // TODO 根据日期(某天),主方案删除品牌型号,叠加,达量的收益
     try {
       mainIncomeService.deleteSubIncomeByPlanId(planId, delDate);

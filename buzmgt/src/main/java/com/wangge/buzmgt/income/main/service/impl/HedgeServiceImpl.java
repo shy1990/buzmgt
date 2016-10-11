@@ -43,6 +43,7 @@ public class HedgeServiceImpl implements HedgeService {
   private JobRepository jobRep;
   @Autowired
   private IncomeMainplanUsersRepository IncomeUserRep;
+  
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void saveHedgeFromExcle(Map<Integer, String> excelContent) throws Exception {
@@ -141,7 +142,7 @@ public class HedgeServiceImpl implements HedgeService {
   @Override
   public void calculateAchieveHedge(Date exectime) {
     List<Object> usergoodList = hedgeRep.findByDate(exectime);
-    usergoodList.parallelStream().forEach(object -> {
+    usergoodList.stream().forEach(object -> {
       Object[] Ordergood = (Object[]) object;
       String goodId = Ordergood[1].toString();
       int sum = Integer.valueOf(Ordergood[2].toString());
@@ -149,9 +150,8 @@ public class HedgeServiceImpl implements HedgeService {
       String userId = Ordergood[4].toString();
       Long hedgeId = Long.valueOf(Ordergood[5].toString());
       Date acceptTime = (Date) Ordergood[6];
-      //当查出主方案时调用达量和叠加的冲减算法
-      IncomeUserRep.findBysalesmanAndDate(payTime, userId).ifPresent(planId->{
-        
+      // 当查出主方案时调用达量和叠加的冲减算法
+      IncomeUserRep.findBysalesmanAndDate(payTime, userId).ifPresent(planId -> {
       });
     });
   }

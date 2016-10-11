@@ -69,5 +69,17 @@ public class IncomeSchedule {
   public void initDailyOilCost() {
     mainIncomeService.calculateOil();
   }
-  
+  /**
+   * 计算上个月售后收件冲减
+   * */
+  @Scheduled(cron="0 1 23 9 * ? ")
+  public void initShouHedge(){
+    
+  }
+  /**计算总和
+   * 
+   * */
+ public void calIncomePerMonth(){
+   
+ } 
 }

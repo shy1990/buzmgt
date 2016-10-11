@@ -3,9 +3,12 @@ package com.wangge.buzmgt.income.main.entity;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -35,6 +38,9 @@ public class HedgeCost {
   private Date paytime, accepttime;
   // 冲销金额
   private float cost;
+  @JoinColumn(name = "hedgeId", insertable = false, updatable = false)
+  @OneToOne(fetch = FetchType.EAGER)
+  private Hedge hedge;
   
   public Long getId() {
     return id;
@@ -119,6 +125,9 @@ public class HedgeCost {
     this.paytime = paytime;
     this.accepttime = accepttime;
     this.cost = cost;
+  }
+  
+  public HedgeCost() {
   }
   
 }
