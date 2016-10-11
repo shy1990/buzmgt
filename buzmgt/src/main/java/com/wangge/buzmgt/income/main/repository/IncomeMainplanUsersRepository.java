@@ -66,4 +66,12 @@ public interface IncomeMainplanUsersRepository
       + "         and (iu.fqtime is null or  iu.fqtime<?1) and m.state = 0\n"
       + "          and s.member_id =?2 and rownum<2", nativeQuery = true)
   Object findsaleByDateAndMemberId(Date Date, String member_id);
+  
+  @Query(value = "SELECT iu.plain_id  FROM sys_user us\n"
+      + "  left join sys_income_mainplan_users iu on us.user_id = iu.salesman_id\n"
+      + "  left join sys_income_plan_main m on iu.plain_id = m.id\n" + " where us.status = 0\n"
+      + "   and m.createtime < ? 1    and (m.fqtime is null or m.fqtime > ? 1)\n"
+      + "   and (iu.fqtime is null or iu.fqtime < ? 1)   and m.state = 0  and us.user_id = ?2\n"
+      + "   and rownum < 2", nativeQuery = true)
+  Optional<Long> findBysalesmanAndDate( Date payDate,String userId);
 }
