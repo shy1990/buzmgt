@@ -39,7 +39,6 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	private AchieveIncomeRepository air;
 	@Autowired
 	private AchieveIncomeVoRepository achieveIncomeVoRepository;
-
 	@Override
 	public Long countByAchieveId(Long achieveId) {
 		return air.countByAchieveId(achieveId);
@@ -207,7 +206,25 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 		return money;
 	}
 
-
+	/**
+	 * 创建达量收益，售后冲减
+	 * 1.查询是否存在规则；
+	 * 2.是否收益金额已发放
+	 * 3.创建售后收益冲减
+	 *
+	 * @param userId 用户ID
+	 * @param goodId 商品Id
+	 * @param goodId  主方案Id
+	 * @param payTime 支付时间
+	 * @param acceptTime 售后日期
+	 * @param num 单品数量
+	 * @return
+	 */
+	@Override
+	public boolean createAchieveIncomeAfterSale(String userId, String goodId, Long palnId, Date payTime, Date acceptTime, Integer num) {
+		
+		return false;
+	}
 
 	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,
 	                                                                      final Class<AchieveIncome> entityClazz) {
