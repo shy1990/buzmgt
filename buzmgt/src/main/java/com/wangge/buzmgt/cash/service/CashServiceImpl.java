@@ -282,7 +282,7 @@ public class CashServiceImpl implements CashService {
 
       private final static String TYPE_ORDERSIGNFOR_TYPE = "com.wangge.buzmgt.cash.entity.Cash$CashStatusEnum";
 
-      private final static String TYPE_CASH_FLAG_TYPE = "com.wangge.buzmgt.ywsalary.entity.FlagEnum";
+      private final static String TYPE_CASH_FLAG_TYPE = "com.wangge.buzmgt.common.FlagEnum";
 
       private final static String TYPE_DATE = "java.util.Date";
 

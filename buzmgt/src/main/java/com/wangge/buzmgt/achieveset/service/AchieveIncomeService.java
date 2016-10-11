@@ -114,4 +114,16 @@ public interface AchieveIncomeService {
 	 * @return
 	 */
   boolean createAchieveIncomeByStock (Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price, Date payDate);
+
+	/**
+	 * 创建达量收益，售后冲减
+	 * @param userId 用户ID
+	 * @param goodId 商品Id
+	 * @param palnId 主方案Id
+	 * @param payTime 支付时间
+	 * @param acceptTime 售后日期
+	 * @param num 单品数量
+	 * @return true-成功；false-失败
+	 */
+	boolean createAchieveIncomeAfterSale(String userId,String goodId, Long palnId, Date payTime, Date acceptTime, Integer num);
 }

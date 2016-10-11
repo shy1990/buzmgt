@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.achieveset.web;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
