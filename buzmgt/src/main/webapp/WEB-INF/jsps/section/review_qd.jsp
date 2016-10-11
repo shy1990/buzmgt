@@ -154,14 +154,26 @@
                                             </c:if>
                                             <td>
                                                 <c:if test="${production.productStatus=='3'}">
-                                                    <c:choose>
-                                                        <c:when test="${production.endTime != null}">
-                                                            <span class="ph-on">使用中</span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="ph-weihes">未使用</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
+                                                    <c:if test="${production.endTime != null}">
+                                                        <c:choose>
+                                                            <c:when test="${ today <= production.endTime && today >= production.implDate}">
+                                                                <span class="ph-on">使用中</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="ph-on">未使用</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:if>
+                                                    <c:if test="${production.endTime == null}">
+                                                        <c:choose>
+                                                            <c:when test="${today >= production.implDate}">
+                                                                <span class="ph-on">使用中</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="ph-on">未使用</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:if>
                                                 </c:if>
                                             </td>
                                             <td>
@@ -240,7 +252,7 @@
                                                 <td>${production.productionAuditor}</td>
                                                 <td><span class="text-hong text-strong">待审核</span></td>
                                                 <td><span class="ph-on">---</span></td>
-                                                <%--<td>2016.08.28-2016.08.29</td>--%>
+                                                    <%--<td>2016.08.28-2016.08.29</td>--%>
                                                 <td>
                                                     <button class="btn  bnt-sm bnt-ck"
                                                             onclick="see1('${production.productionId}')">
@@ -365,7 +377,7 @@
 </script>
 <script src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
 <script type="text/javascript">
-    var total =0;
+    var total = 0;
     var totalCount = 0;
     var limit = 0;
     var searchData = {
@@ -416,22 +428,18 @@
     }
 
 
-
-
-
-
     /**
      * 展示已经过期的
      */
-    function listExpired(searchData){
+    function listExpired(searchData) {
         console.log(${planId});
         searchData.planId = '${planId}';
         searchData.type = '${machineId}';
         $.ajax({
-            url:'findOver',
-            type:'POST',
-            data:searchData,
-            success:function(data){
+            url: 'findOver',
+            type: 'POST',
+            data: searchData,
+            success: function (data) {
                 var content = data.content;
                 totalCount = data.totalElements;
                 limit = data.size;
@@ -441,7 +449,7 @@
                     initPaging();
                 }
             },
-            error:function(){
+            error: function () {
                 alert('系统故障');
             }
 
@@ -466,7 +474,7 @@
         var driver_template = Handlebars.compile($("#table-template").html());//注册
         $("#list_expired").html(driver_template(content));
     }
-    $(function(){
+    $(function () {
         listExpired(searchData);
     });
 </script>

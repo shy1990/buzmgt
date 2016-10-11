@@ -116,13 +116,22 @@
     </script>
 
 
-
-
     <script id="numbers-template" type="text/x-handlebars-template">
         {{#each this}}
         {{#if this}}
         <span class=" hden-rwl" data-toggle="modal" data-target="#zzrwul">{{this}}台</span>
         {{/if}}
+        {{/each}}
+    </script>
+
+
+    <script id="show-goods-template" type="text/x-handlebars-template">
+       {{#each this}}
+       <tr>
+           <th>{{machineType}}</th>
+           <th>{{brand}}</th>
+           <th>{{good}}</th>
+       </tr>
         {{/each}}
     </script>
 
@@ -163,7 +172,7 @@
                     </select>
                 </li>
                 <button class="btn  bnt-sm ph-btn-add" onclick="addGood()"><span class="text-strong">添加</span></button>
-                <button class="btn  bnt-sm ph-btn-add" onclick=""><span class="text-strong">
+                <button class="btn  bnt-sm ph-btn-add" onclick="showGoods()"><span class="text-strong">
                  已添加商品
                 </span></button>
             </ul>
@@ -269,7 +278,8 @@
                                         <label class="col-sm-4 control-label">达量一：</label>
                                         <div class="col-sm-7">
                                             <div class="input-group are-line">
-                                                <span class="input-group-addon "><i class="ph-icon   ph-renwu"></i></span>
+                                                <span class="input-group-addon "><i
+                                                        class="ph-icon   ph-renwu"></i></span>
                                                 <!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
                                                 <input type="text" class="form-control input-h O_numberFirst"
                                                        aria-describedby="basic-addon1" placeholder="请输入达量"
@@ -286,7 +296,8 @@
                                         <label class="col-sm-4 control-label">达量二：</label>
                                         <div class="col-sm-7">
                                             <div class="input-group are-line">
-                                                <span class="input-group-addon "><i class=" ph-icon ph-renwu"></i></span>
+                                                <span class="input-group-addon "><i
+                                                        class=" ph-icon ph-renwu"></i></span>
                                                 <input type="text" class="form-control input-h O_numberSecond"
                                                        onblur="chkScendValue();"
                                                        aria-describedby="basic-addon1" placeholder="请输入达量"
@@ -304,7 +315,8 @@
                                         <label class="col-sm-4 control-label">达量三：</label>
                                         <div class="col-sm-7">
                                             <div class="input-group are-line">
-                                                <span class="input-group-addon "><i class=" ph-icon ph-renwu"></i></span>
+                                                <span class="input-group-addon "><i
+                                                        class=" ph-icon ph-renwu"></i></span>
                                                 <input type="text" class="form-control input-h O_numberThird"
                                                        onblur="chkThirdValue();"
                                                        aria-describedby="basic-addon1" placeholder="请输入达量"
@@ -509,6 +521,37 @@
             </div>
         </div>
     </div>
+    <!--产品列表-->
+    <div id="show_goods" class="modal fade" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-blue">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">已添加产品列表</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <table >
+                            <thead>
+                                <tr>
+                                    <th>类型</th>
+                                    <th>品牌</th>
+                                    <th>型号</th>
+                                </tr>
+                            </thead>
+                            <tbody id="showGoods">
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--[if lt IE 9]>
     <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>

@@ -101,7 +101,7 @@
                 <input type="text" id="trueName" class="col-sm-12 big-seach"
                        placeholder="请搜索业务人员姓名" style="width:20%">
                 <button class="btn btn-blue btn-sm" style="margin-left: 10px"
-                        onclick="findPlanUserList(0)">检索
+                        onclick="findPlanUserList(0,'${planId}')">检索
                 </button><br>
                 请选择组:
                 <select class="form-control demo3 J_auditor" id="groupName">

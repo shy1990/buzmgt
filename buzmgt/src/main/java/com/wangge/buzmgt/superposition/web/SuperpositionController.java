@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.superposition.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.plan.service.MachineTypeService;
@@ -10,7 +11,6 @@ import com.wangge.buzmgt.superposition.service.GoodsOrderService;
 import com.wangge.buzmgt.superposition.service.SuperpositonService;
 import com.wangge.buzmgt.util.DateUtil;
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +48,6 @@ public class SuperpositionController {
     private static final Logger logger = Logger.getLogger(SuperpositionController.class);
 
 //---------------------------   财务操作   ------------ -------------------------------//
-
     /**
      * 跳转到叠加任务首页
      *
@@ -70,7 +69,6 @@ public class SuperpositionController {
     @RequestMapping(value = "addGroup", method = RequestMethod.GET)
     public String toGroupJSP(String planId, Model model) {
         model.addAttribute("planId", planId);
-//        return "superposition/test_list";
         return "superposition/add_group_1";
     }
 
@@ -97,8 +95,6 @@ public class SuperpositionController {
     @ResponseBody
     public Result add(@RequestBody Superposition superposition) {
         System.out.println(superposition);
-
-        JSONObject jsonObject = new JSONObject();
         Result result = new Result();
         try {
             superpositonService.save(superposition);
@@ -111,7 +107,6 @@ public class SuperpositionController {
             return result;
         }
     }
-
 
     /**
      * 根据id查询
@@ -134,20 +129,6 @@ public class SuperpositionController {
     }
 
 
-//
-//    /**
-//     * 判断使用人员
-//     *
-//     * @return
-//     */
-//    @RequestMapping(value = "find", method = RequestMethod.GET)
-//    @ResponseBody
-//    public Superposition checkMember() {
-//        Superposition superposition = superpositonService.checkMember("4556644");
-//        return superposition;
-//    }
-
-
     /**
      * 跳转到财务显示全部的页面
      *
@@ -157,9 +138,7 @@ public class SuperpositionController {
 
     @RequestMapping(value = "findAll", method = RequestMethod.GET)
     public String findAll(Model model, String planId) {
-//        model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
 
-//        return "superposition/list_cw";
         model.addAttribute("planId", planId);
         return "superposition/set_list_cw";
     }
@@ -216,27 +195,66 @@ public class SuperpositionController {
 
         return superpositonService.findMainPlanUsers(pageable, searchParams);
     }
+
+    /**
+     * 终止/驳回 方案
+     * @param superposition
+     * @return
+     */
+    @RequestMapping(value = "stop/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject stop(@PathVariable("id") Superposition superposition,@RequestParam String checkStatus){
+        JSONObject jsonObject = new JSONObject();
+        try{
+            superpositonService.stop(superposition,checkStatus);
+            jsonObject.put("result","success");
+            jsonObject.put("msg","操作成功");
+            return jsonObject;
+        }catch (Exception e){
+            jsonObject.put("result","error");
+            jsonObject.put("msg","系统异常,操作失败");
+            return jsonObject;
+        }
+    }
 //---------------------------   end   -------------------------------------------//
 
 //--------------------------- 渠道操作 --------------------------------------------//
 
 
     /**
-     * 渠道显示页面
+     * 跳转到财务显示全部的页面
      *
      * @param model
      * @return
      */
 
-    @RequestMapping(value = "findChannel", method = RequestMethod.GET)
-    public String findAllChannel(Model model) {
-//        model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
+    @RequestMapping(value = "listAll", method = RequestMethod.GET)
+    public String findAllQD(Model model, String planId) {
 
-//        return "superposition/list_cw";
-        return "superposition/set_list_cw";
+        model.addAttribute("planId", planId);
+        return "superposition/set_list_qd";
     }
 
+    /**
+     * 所有方案
+     *
+     * @param pageable
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "listAll", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Superposition> findAllQD(@PageableDefault(page = 0,
+            size = 10,
+            sort = {"createDate"},
+            direction = Sort.Direction.DESC) Pageable pageable, String type, String sign, Long planId) {
 
+        Page<Superposition> pageReposne = superpositonService.findAll(pageable, type, sign, planId);
+
+        return pageReposne;
+    }
+
+//--------------------------- end --------------------------------------------//
     /**
      * 计算
      *
@@ -245,9 +263,9 @@ public class SuperpositionController {
      */
     @RequestMapping(value = "compute/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public String compute(@PathVariable("id") Superposition superposition) {
-        superpositonService.compute(superposition);
-        return null;
+    public List<SuperpositionProgress> compute(Long planId,@PathVariable("id") Superposition superposition) {
+
+        return superpositonService.compute(planId,superposition);
     }
 
 
@@ -300,6 +318,14 @@ public class SuperpositionController {
         logger.info(superposition);
         Page<SuperpositionProgress> progressPage = superpositonService.searchDetail(superposition.getPlanId(), superposition.getId(),userId,DateUtil.date2String(superposition.getImplDate(), "yyyy-MM-dd"), DateUtil.date2String(superposition.getEndDate(), "yyyy-MM-dd"), name, page, size);
         return progressPage;
+    }
+
+
+    @RequestMapping(value = "ceshi", method = RequestMethod.GET)
+    @ResponseBody
+    public Superposition ceshi(Long planId) {
+
+        return superpositonService.computeAfterReturnGoods("C370113210","f52ec6414ab14626a02ff9d41881d4f9","2016-10-02",1,planId);
     }
 }
 

@@ -155,6 +155,7 @@ public class SectionController {
         model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
         model.addAttribute("planId", planId);
         model.addAttribute("machineId", type);
+        model.addAttribute("today", getToday());
 //        return "section/set_list";
         return "section/set_list_cw";
     }
@@ -231,6 +232,7 @@ public class SectionController {
         model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
         model.addAttribute("planId", planId);
         model.addAttribute("machineId", type);
+        model.addAttribute("today", getToday());
 //        return "section/review";
 
         return "section/review_qd";
@@ -345,5 +347,11 @@ public class SectionController {
         Subject subject = SecurityUtils.getSubject();
         User user = (User) subject.getPrincipal();
         return user;
+    }
+
+    public static Date getToday(){
+
+        Date today = DateUtil.string2Date(DateUtil.date2String(new Date(),"yyyy-MM-dd"));
+        return today;
     }
 }

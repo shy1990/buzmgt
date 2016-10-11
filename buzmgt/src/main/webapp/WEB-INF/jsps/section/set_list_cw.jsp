@@ -181,7 +181,26 @@
 
                                             <td>
                                                 <c:if test="${production.productStatus=='3'}">
-                                                            <span class="ph-on">使用中</span>
+                                                    <c:if test="${production.endTime != null}">
+                                                        <c:choose>
+                                                            <c:when test="${ today <= production.endTime && today >= production.implDate}">
+                                                                <span class="ph-on">使用中</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="ph-on">未使用</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:if>
+                                                    <c:if test="${production.endTime == null}">
+                                                        <c:choose>
+                                                            <c:when test="${today >= production.implDate}">
+                                                                <span class="ph-on">使用中</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="ph-on">未使用</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:if>
                                                 </c:if>
                                             </td>
 

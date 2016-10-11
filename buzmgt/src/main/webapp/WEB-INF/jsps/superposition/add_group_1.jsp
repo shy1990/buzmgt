@@ -189,28 +189,27 @@
             <div class="order-box">
                 <ul>
                     <li>
-                        <dl class="dl-horizontal ">
-                            <dt><span class="text-strong text-gery" style="font-size: 14px">人员分组：</span></dt>
-                        </dl>
+                        <%--<dl class="dl-horizontal ">--%>
+                            <%--<dt><span class="text-strong text-gery" style="font-size: 14px">人员分组：</span></dt>--%>
+                        <%--</dl>--%>
 
                     </li>
                     <dl class="dl-horizontal">
                         <dt>添加使用人员：</dt>
-
+                        <dt><button onclick="refresh()">重置</button></dt>
                         <dd style="width: 750px; margin-bottom: 20px">
 
                             <div class="col-sm-2">
-                                <a
-                                        class="J_addDire btn btn-default ph-btn-bluee icon-tj col-sm-6"
+                                <a class="J_addDire btn btn-default ph-btn-bluee icon-tj col-sm-6"
                                         onclick="openUser('${planId}');"></a>
+
                             </div>
 
                         </dd>
                     </dl>
+
                     <%--组人员--%>
                     <div class="col-sm-3 cl-padd" id="listGroup">
-
-
                     </div>
                 </ul>
             </div>
@@ -284,6 +283,9 @@
         window.location = "/superposition?planId=${planId}";
     }
 
+    function refresh(){
+        window.location.reload();
+    }
 
 </script>
 </body>
