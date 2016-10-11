@@ -226,9 +226,9 @@ public class MainPlanServiceImpl implements MainPlanService {
       Jobtask task = null;
       if (fqtime.getTime() <= now.getTime()) {
         standardUser.setState(FlagEnum.DEL);
-        task = new Jobtask(10, standardUser.getId(), fqtime);
+        task = new Jobtask(10, standardUser.getSalesmanId(), standardUser.getPlanId(), fqtime);
       } else {
-        task = new Jobtask(11, standardUser.getId(), fqtime);
+        task = new Jobtask(11, standardUser.getSalesmanId(), standardUser.getPlanId(), fqtime);
       }
       task.setKeyid(id);
       jobRep.save(task);
@@ -343,5 +343,10 @@ public class MainPlanServiceImpl implements MainPlanService {
   @Override
   public void alterUserFlag(Long planUserId) {
     planUserRep.updateFlagById(FlagEnum.DEL, planUserId);
+  }
+
+  @Override
+  public MainIncomePlan findById(Long id) {
+    return mainPlanRep.findOne(id);
   }
 }

@@ -19,7 +19,7 @@ import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 *
  */
 @Entity
-@Table(name = "SYS_ACHIEVE_SET_INCOME" )
+@Table(name = "SYS_INCOME_ACHIEVE_SET" )
 public class AchieveIncome implements Serializable{
 
   private static final long serialVersionUID = 1L;
@@ -36,8 +36,8 @@ public class AchieveIncome implements Serializable{
 	}
 
   @Id
-  @GenericGenerator(name = "idgen", strategy = "increment")
-  @GeneratedValue(generator = "idgen")
+  @SequenceGenerator(name = "idgen", sequenceName = "sys_income_job_seq")
+  @GeneratedValue(generator = "idgen", strategy = GenerationType.SEQUENCE)
   private Long  id  ;// 主键
   @Column(name = "USER_ID")
   private String  userId ;// 业务员Id

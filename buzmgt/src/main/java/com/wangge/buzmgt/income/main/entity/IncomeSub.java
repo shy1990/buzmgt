@@ -27,6 +27,7 @@ public class IncomeSub {
   private Long id;
   // 主方案id,子方案id
   private long mainplanId, subplanId;
+  
   // 收益
   private double income;
   // 订单id,业务员id

@@ -19,13 +19,13 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**
  * 收入明细表 date: 2016年9月3日 下午4:58:31 <br/>
  * 实时计算:收现金和刷pos都是单人;<br/>
  * 如何避免并发
+ * 
  * @author yangqc
  * @version
  * @since JDK 1.8
@@ -78,16 +78,17 @@ public class MainIncome {
    * 
    */
   private double overlyingIncome = 0;
+  // 售后冲减
+  private Double hedgecut = 0D;
   /**
    * 总收入
-   * 
    */
   private double allresult = 0;
   /**
    * 状态(0,未审核,1已审核)
    */
   @Enumerated(EnumType.ORDINAL)
-  private FlagEnum state = FlagEnum.NORMAL;
+  private CheckedEnum state = CheckedEnum.UNCHECKED;
   /**
    * 月份
    * 
@@ -162,15 +163,23 @@ public class MainIncome {
     return allresult;
   }
   
+  public Double getHedgecut() {
+    return hedgecut;
+  }
+
+  public void setHedgecut(Double hedgecut) {
+    this.hedgecut = hedgecut;
+  }
+
   public void setAllresult(double allresult) {
     this.allresult = allresult;
   }
   
-  public FlagEnum getState() {
+  public CheckedEnum getState() {
     return state;
   }
   
-  public void setState(FlagEnum state) {
+  public void setState(CheckedEnum state) {
     this.state = state;
   }
   
@@ -182,11 +191,11 @@ public class MainIncome {
     this.month = month;
   }
   
-  public MainIncome(SalesMan salesman, String month,double basicSalaray) {
+  public MainIncome(SalesMan salesman, String month, double basicSalaray) {
     super();
     this.salesman = salesman;
     this.month = month;
-    this.basicSalary=basicSalaray;
+    this.basicSalary = basicSalaray;
   }
   
   public MainIncome() {

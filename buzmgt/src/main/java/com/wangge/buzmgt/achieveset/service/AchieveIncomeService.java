@@ -1,9 +1,11 @@
 package com.wangge.buzmgt.achieveset.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.wangge.buzmgt.achieveset.entity.Achieve;
+import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -85,22 +87,44 @@ public interface AchieveIncomeService {
 
 	/**
 	 * 已付款的调用的产生达量收益
-	 * @param maps
+	 * @param achieve
 	 * @param orderNo
 	 * @param UserId
+	 * @param num
+	 * @param goodId
+	 * @param payStatus
+	 * @param planId
+	 * @param price
+	 * @param payDate
 	 * @return
 	 */
-	boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price);
+	boolean createAchieveIncomeByPay(Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price, Date payDate);
 
-  /**
-   *
-  * @Title: createAchieveIncomeBy
-  * @Description: 已出库请款下调用的实时
-  * @param @param orderNo
-  * @param @param UserId
-  * @param @return    设定文件
-  * @return boolean    返回类型
-  * @throws
-   */
-  boolean createAchieveIncomeByStock (Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price);
+	/**
+	 * 已出库请款下调用的实时
+	 * @param achieve
+	 * @param orderNo
+	 * @param UserId
+	 * @param num
+	 * @param goodId
+	 * @param payStatus
+	 * @param planId
+	 * @param price
+	 * @param payDate
+	 * @return
+	 */
+  boolean createAchieveIncomeByStock (Achieve achieve, String orderNo, String UserId, int num, String goodId, int payStatus, Long planId, Float price, Date payDate);
+
+	/**
+	 * 创建达量收益，售后冲减
+	 * @param userId 用户ID
+	 * @param goodId 商品Id
+	 * @param palnId 主方案Id
+	 * @param hedgeId 售后导入Id
+	 * @param payTime 支付时间
+	 * @param acceptTime 售后日期
+	 * @param num 单品数量
+	 * @return true-成功；false-失败
+	 */
+	boolean createAchieveIncomeAfterSale(String userId,String goodId, Long palnId, Long hedgeId, Date payTime, Date acceptTime, Integer num);
 }

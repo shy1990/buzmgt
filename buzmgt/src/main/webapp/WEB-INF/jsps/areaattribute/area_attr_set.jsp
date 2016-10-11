@@ -124,7 +124,7 @@
             <div class="col-sm-3 cl-padd">
                 <div class="ratio-box">
                     <div class="ratio-box-dd">
-                        <span class="label  label-blue-s">1</span>
+                        <span class="label  label-blue-s">${status.index + 1}</span>
                         <span class="text-black jll"> ${areaAttr.region.namepath } </span>
                         <a class="text-redd jll" href="" data-toggle="modal" data-target=""> ${areaAttr.commissions } <span></span></a>
                         <span class="text-gray">元</span>

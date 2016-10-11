@@ -25,7 +25,7 @@ public interface IncomeMainplanUsersRepository
   void updateFlagById(FlagEnum flag, Long id);
   
   @Query("select u.planId from IncomeMainplanUsers u where u.salesmanId=?1 and u.state=?2")
-  Optional<IncomeMainplanUsers> findFirst(String userId, FlagEnum states);
+  Optional<Long> findFirst(String userId, FlagEnum states);
   
   @Query("select max(u.fqtime)  from IncomeMainplanUsers u where u.salesmanId=?1")
   Optional<Date> findMaxFqtimeBySalesmanId(String salesmanId);
@@ -56,8 +56,7 @@ public interface IncomeMainplanUsersRepository
    * @return
    * @since JDK 1.8
    */
-  @Query(value =
-  "SELECT  iu.plain_id,iu.salesman_id,u.region_id   FROM sys_registdata s\n"
+  @Query(value = "SELECT  iu.plain_id,iu.salesman_id,u.region_id   FROM sys_registdata s\n"
       + "        left join sys_region r on r.region_id = s.region_id\n"
       + "        left join sys_salesman u on u.region_id = r.parent_id\n"
       + "        left join sys_user us on u.user_id = us.user_id\n"
@@ -67,4 +66,12 @@ public interface IncomeMainplanUsersRepository
       + "         and (iu.fqtime is null or  iu.fqtime<?1) and m.state = 0\n"
       + "          and s.member_id =?2 and rownum<2", nativeQuery = true)
   Object findsaleByDateAndMemberId(Date Date, String member_id);
+  
+  @Query(value = "SELECT iu.plain_id  FROM sys_user us\n"
+      + "  left join sys_income_mainplan_users iu on us.user_id = iu.salesman_id\n"
+      + "  left join sys_income_plan_main m on iu.plain_id = m.id\n" + " where us.status = 0\n"
+      + "   and m.createtime < ? 1    and (m.fqtime is null or m.fqtime > ? 1)\n"
+      + "   and (iu.fqtime is null or iu.fqtime < ? 1)   and m.state = 0  and us.user_id = ?2\n"
+      + "   and rownum < 2", nativeQuery = true)
+  Optional<Long> findBysalesmanAndDate( Date payDate,String userId);
 }

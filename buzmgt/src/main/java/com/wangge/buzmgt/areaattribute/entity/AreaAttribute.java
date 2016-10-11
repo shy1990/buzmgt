@@ -53,7 +53,7 @@ public class AreaAttribute implements Serializable{
   @Column(name = "REGION_ID")
   private String regionId;//提成区域字段
 
-  private Float commissions;//提成金额
+  private Double commissions;//提成金额
 
   private Long ruleId;//方案ID
 
@@ -79,11 +79,11 @@ public class AreaAttribute implements Serializable{
     this.region = region;
   }
 
-  public Float getCommissions() {
+  public Double getCommissions() {
     return commissions;
   }
 
-  public void setCommissions(Float commissions) {
+  public void setCommissions(Double commissions) {
     this.commissions = commissions;
   }
 

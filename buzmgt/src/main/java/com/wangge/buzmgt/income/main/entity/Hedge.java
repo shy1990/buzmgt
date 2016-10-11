@@ -5,7 +5,11 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,28 +22,23 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "sys_income_shouhou_hedge")
+@NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(name = "calculateGood", procedureName = "income_shouhou_good_cal"),
+    @NamedStoredProcedureQuery(name = "calculatehedge", procedureName = "income_shouhou_hedge_cal") })
 public class Hedge {
-  /*
-   * sys_shouhou_hedge(id number(19),orderno VARCHAR2(50),sku
-   * varchar2(500),skuname varchar2(500),shdate date,sum number(3),uniquenumber
-   * varchar2(200));
-   */
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
   private Long id;
   // 订单号,sku号,唯一码,规则id
-  private String orderno, sku, uniquenumber,ruleid;
+  private String orderno, sku, uniquenumber;
   // 商品名称
   private String goodsName;
-  // 到货日期
-  private Date shdate;
+  // 到货日期,记录生成日期
+  @Temporal(TemporalType.DATE)
+  private Date shdate, inserttime;
   // 品牌数量
   private Integer sum;
-  // 是否计算,规则类型
-  private Integer flag = 0,ruletype;
-  //冲减金额,默认为0
-  private Double backcount=0D;
   public String getOrderno() {
     return orderno;
   }
@@ -95,31 +94,8 @@ public class Hedge {
   public void setId(Long id) {
     this.id = id;
   }
+
   
-  public String getRuleid() {
-    return ruleid;
-  }
-
-  public void setRuleid(String ruleid) {
-    this.ruleid = ruleid;
-  }
-
-  public Integer getRuletype() {
-    return ruletype;
-  }
-
-  public void setRuletype(Integer ruletype) {
-    this.ruletype = ruletype;
-  }
-
-  public Double getBackcount() {
-    return backcount;
-  }
-
-  public void setBackcount(Double backcount) {
-    this.backcount = backcount;
-  }
-
   public Hedge(String orderno, String sku, String goodsName, Integer sum, Date shdate, String uniquenumber) {
     super();
     this.orderno = orderno;
@@ -134,12 +110,13 @@ public class Hedge {
     super();
   }
   
-  public Integer getFlag() {
-    return flag;
+  
+  public Date getInserttime() {
+    return inserttime;
   }
   
-  public void setFlag(Integer flag) {
-    this.flag = flag;
+  public void setInserttime(Date inserttime) {
+    this.inserttime = inserttime;
   }
   
 }

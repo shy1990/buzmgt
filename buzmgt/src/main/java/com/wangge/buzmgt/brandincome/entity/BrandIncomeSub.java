@@ -16,18 +16,18 @@ import java.util.Date;
 @Table(name="SYS_INCOME_TICHENG_BRAND")
 public class BrandIncomeSub {
   @Id
-  @GenericGenerator(name = "idgen",strategy = "increment")
-  @GeneratedValue(generator="idgen")
+  @SequenceGenerator(name = "idgen", sequenceName = "sys_income_job_seq")
+  @GeneratedValue(generator = "idgen", strategy = GenerationType.SEQUENCE)
   @Column(name = "ID")
   private long id;
-  //子方案id
-  private long subplanId;
-  //收益
-  private double income;
-  //订单id,业务员id,主方案id
-  private String orderno,userId,mainplanId;
-  //订单状态(1已付款,0已出库),记录状态(默认有效)
-  private Integer orderflag,used=0;
+  //子方案id,主方案id
+  private long subplanId,mainplanId;
+  //收益,单价
+  private double income,unitPrice;
+  //订单id,业务员id,商品goodId
+  private String orderno,userId,goodId;
+  //订单状态(1已付款,0已出库),记录状态(默认有效),单品数量
+  private Integer orderflag,used,sum=0;
   //收益计算时间
   @Temporal(TemporalType.DATE)
   private Date countDate;
@@ -72,11 +72,11 @@ public class BrandIncomeSub {
     this.userId = userId;
   }
 
-  public String getMainplanId() {
+  public long getMainplanId() {
     return mainplanId;
   }
 
-  public void setMainplanId(String mainplanId) {
+  public void setMainplanId(long mainplanId) {
     this.mainplanId = mainplanId;
   }
 
@@ -102,5 +102,29 @@ public class BrandIncomeSub {
 
   public void setCountDate(Date countDate) {
     this.countDate = countDate;
+  }
+
+  public double getUnitPrice() {
+    return unitPrice;
+  }
+
+  public void setUnitPrice(double unitPrice) {
+    this.unitPrice = unitPrice;
+  }
+
+  public String getGoodId() {
+    return goodId;
+  }
+
+  public void setGoodId(String goodId) {
+    this.goodId = goodId;
+  }
+
+  public Integer getSum() {
+    return sum;
+  }
+
+  public void setSum(Integer sum) {
+    this.sum = sum;
   }
 }

@@ -2,6 +2,7 @@ package com.wangge.buzmgt.brandincome.service;
 
 import com.wangge.buzmgt.brandincome.entity.BrandIncome;
 import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
+import org.springframework.boot.logging.logback.LogbackLoggingSystem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -110,7 +111,7 @@ public interface BrandIncomeService {
    * @return
    * @since JDK 1.8
    */
-  List<Map<String,Object>> findRuleByGoods(List<String> goodIds, String mainPlanId, String userId,Date payDate);
+  List<Map<String,Object>> findRuleByGoods(List<String> goodIds, Long mainPlanId, String userId, Date payDate);
 
   /**
    *
@@ -126,7 +127,7 @@ public interface BrandIncomeService {
    * @return Boolean    返回类型
    * @throws
    */
-  Boolean realTimeBrandIncomePay(BrandIncome brandIncome,int num,String orderNo,String goodId, String userId,Date payDate);
+  Boolean realTimeBrandIncomePay(BrandIncome brandIncome,int num,String orderNo,String goodId, String userId,Date payDate,String regionId,double unitPrice);
 
   /**
    *
@@ -141,5 +142,5 @@ public interface BrandIncomeService {
    * @return Boolean    返回类型
    * @throws
    */
-  Boolean realTimeBrandIncomeOut(BrandIncome brandIncome,int num,String orderNo,String goodId, String userId);
+  Boolean realTimeBrandIncomeOut(BrandIncome brandIncome,int num,String orderNo,String goodId, String userId,String regionId,double unitPrice);
 }

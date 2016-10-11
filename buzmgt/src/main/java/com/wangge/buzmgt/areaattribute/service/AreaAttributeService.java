@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface AreaAttributeService {
 
-  String save(Float commission, Region region, String ruleId,String type);
+  String save(double commission, Region region, String ruleId,String type);
 
   AreaAttribute save(AreaAttribute areaAttribute);
 
