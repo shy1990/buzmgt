@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -345,12 +347,17 @@ public class AchieveController {
    */
   @RequestMapping(value = "/course/{achieveId}",method = RequestMethod.GET)
   public String showCourse(@PathVariable(value = "achieveId") Achieve achieve, Model model) {
-    model.addAttribute("achieve", achieve);
+  	try {
+		  model.addAttribute("achieveJson", new ObjectMapper().writeValueAsString(achieve));
+	  }catch (Exception e){
+		  e.getMessage();
+	  }
+	  model.addAttribute("achieve", achieve);
 	  //查询周期销量
-    model.addAttribute("totalNumber", 100);
+	  model.addAttribute("totalNumber", 100);
 	  //查询退货量
 	  model.addAttribute("retreatAmount", 10);
-    return "achieve/achieve_course";
+	  return "achieve/achieve_course";
   }
 
   /**

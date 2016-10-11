@@ -9,6 +9,7 @@
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%--<%@ taglib prefix="json" uri="/static/tld"%>--%>
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -33,24 +34,45 @@
     <link rel="stylesheet" type="text/css" href="static/bootStrapPager/css/page.css"/>
     <script src="static/js/jquery/jquery-1.11.3.min.js"
             type="text/javascript" charset="utf-8"></script>
-    <script type="text/x-handlebars-template" id="">
+    <script type="text/x-handlebars-template" id="course-table-template">
+        {{#if content}}
+        {{#each content}}
         <tr>
             <td>{{addOne @index}}</td>
-            <td>李易峰</td>
+            <td>{{userVo.truename}}</td>
             <td>
-                <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                山东省济南市天桥区
+                {{{disposeStar starsLevel}}}
+                {{userVo.namepath}}
             </td>
-            <td><span class="text-zi text-strong">大学生</span></td>
-            <td><span class="text-red">200台 /  300台 / 400台</span></td>
-            <td><span class="text-lv text-strong">A组</span></td>
-            <td>350台</td>
-            <td>2016.08.09 - 2016.08.11</td>
+            <td><span class="text-zi text-strong">{{userVo.levelName}}</span></td>
+            <td>
+                <span class="text-red">{{{disposeNum userId}}}</span>
+            </td>
+            <td>
+                <span class="text-lv text-strong">{{{disposeGroup userId}}}组</span>
+            </td>
+            <td>{{num}}台</td>
+            <td>{{start-end-Date}}</td>
             <td><span class="text-lv text-strong">进行中</span></td>
             <td>
                 <button class="btn btn-sm btn-blue">查看明细</button>
             </td>
         </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td colspan="100">没有相关数据</td>
+        </tr>
+        {{/if}}
+    </script>
+    <script type="text/javascript">
+        var base = '<%=basePath%>';
+        var SearchData = {
+            'page': '0',
+            'size': '20'
+        };
+        var firstNum =${achieve.numberFirst}, secondNum =${achieve.numberSecond}, thirdNum =${achieve.numberThird};
+        var achieveJson=${achieveJson};//达量设置规则（全局变量）
     </script>
 </head>
 <body>
@@ -83,7 +105,7 @@
             </div>
             <div class="col-sm-4 product">
                 <span class="text-strong text-gery">起止日期：</span>
-                <span class="text-black text-strong"> <fmt:formatDate value="${achieve.startDate}"
+                <span class="text-black text-strong" id="srart-end-date"> <fmt:formatDate value="${achieve.startDate}"
                                                                       pattern="yyyy.MM.dd"/>-
                     <fmt:formatDate value="${achieve.endDate}" pattern="yyyy.MM.dd"/></span>
             </div>
@@ -146,8 +168,8 @@
         </button>
 
         <div class="link-posit-t pull-right export">
-            <input class="ph-select text-gery-hs" placeholder="请输入业务员名称">
-            <button class="btn btn-blue btn-sm" onclick="goSearch('');">
+            <input class="ph-select text-gery-hs" placeholder="请输入业务员名称" id="searchSalesMan">
+            <button class="btn btn-blue btn-sm" onclick="goSearch();">
                 检索
             </button>
             <a class="table-export" href="javascript:void(0);">导出excel</a>
@@ -157,7 +179,6 @@
 
     <div class="tab-content ">
         <!--table-box-->
-
         <div class=" new-table-box table-overflow ">
             <table class="table table-hover new-table">
                 <thead>
@@ -174,87 +195,11 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody id="table">
-
-                <tr>
-                    <td>01</td>
-                    <td>李易峰</td>
-                    <td>
-                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                        山东省济南市天桥区
-                    </td>
-                    <td><span class="text-zi text-strong">大学生</span></td>
-                    <td><span class="text-red">200台 /  300台 / 400台</span></td>
-                    <td><span class="text-lv text-strong">A组</span></td>
-                    <td>350台</td>
-                    <td>2016.08.09 - 2016.08.11</td>
-                    <td><span class="text-lv text-strong">进行中</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-blue">查看明细</button>
-                    </td>
-                </tr>
-
-
-                <tr>
-                    <td>01</td>
-                    <td>李易峰</td>
-                    <td>
-                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                        山东省济南市天桥区
-                    </td>
-                    <td><span class="text-hong text-strong">中学生</span></td>
-                    <td><span class="text-red">200台 /  300台 / 400台</span></td>
-                    <td><span class="text-lan text-strong">B组</span></td>
-                    <td>350台</td>
-                    <td>2016.08.09 - 2016.08.11</td>
-                    <td><span class="text-hong text-strong">待审核</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-blue">查看明细</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>01</td>
-                    <td>李易峰</td>
-                    <td>
-                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                        山东省济南市天桥区
-                    </td>
-                    <td><span class="text-lan text-strong">小学生</span></td>
-                    <td><span class="text-red">200台 /  300台 / 400台</span></td>
-                    <td><span class="text-huang text-strong">C组</span></td>
-                    <td>350台</td>
-                    <td>2016.08.09 - 2016.08.11</td>
-                    <td><span class="text-lan text-strong">已核对</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-blue">查看明细</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>01</td>
-                    <td>李易峰</td>
-                    <td>
-                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                        山东省济南市天桥区
-                    </td>
-                    <td><span class="text-lan text-strong">小学生</span></td>
-                    <td><span class="text-red">200台 /  300台 / 400台</span></td>
-                    <td><span class="text-cao text-strong">D组</span></td>
-                    <td>350台</td>
-                    <td>2016.08.09 - 2016.08.11</td>
-                    <td><span class="text-lan text-strong">已核对</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-blue">查看明细</button>
-                    </td>
-                </tr>
-
-
-                </tbody>
+                <tbody id="achieveCourseList"></tbody>
             </table>
         </div>
         <!--table-box-->
-
+        <div id="initPager"></div>
         <!--待审核账单-->
     </div>
 
@@ -278,5 +223,6 @@
         charset="utf-8"></script>
 <script type="text/javascript"
         src="static/bootStrapPager/js/extendPagination.js"></script>
+<script type="text/javascript" src="static/achieve/achieve_course.js"></script>
 </body>
 </html>

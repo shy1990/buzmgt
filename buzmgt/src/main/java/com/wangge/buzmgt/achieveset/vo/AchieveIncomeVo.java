@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.achieveset.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 
@@ -26,7 +27,7 @@ public class AchieveIncomeVo implements Serializable{
 //	private Achieve achieve;
 	@Column(name = "USER_ID")
 	private String userId;
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne
 	@JoinColumn(name = "USER_ID", updatable = false, insertable = false)
 	private PlanUserVo userVo;
 	private Integer num;
