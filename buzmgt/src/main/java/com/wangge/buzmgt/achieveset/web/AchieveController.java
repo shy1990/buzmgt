@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,8 @@ public class AchieveController {
   private LogService logService;
   @Autowired
   private AchieveService achieveServer;
+  @Autowired
+  private AchieveIncomeService achieveIncomeServer;
   @Autowired
   private MainPlanService mainPlanService;
   @Autowired
@@ -352,11 +355,14 @@ public class AchieveController {
 	  }catch (Exception e){
 		  e.getMessage();
 	  }
+	  Long achieveId = achieve.getAchieveId();
 	  model.addAttribute("achieve", achieve);
 	  //查询周期销量
-	  model.addAttribute("totalNumber", 100);
+	  Long totalNumber = achieveIncomeServer.countByAchieveId(achieveId);
+	  model.addAttribute("totalNumber", totalNumber);
 	  //查询退货量
-	  model.addAttribute("retreatAmount", 10);
+		Long retreatAmount = achieveIncomeServer.countAchieveAfterSale(achieveId);
+	  model.addAttribute("retreatAmount", retreatAmount);
 	  return "achieve/achieve_course";
   }
 
