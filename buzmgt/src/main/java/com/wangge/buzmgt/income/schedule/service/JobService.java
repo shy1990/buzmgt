@@ -2,7 +2,6 @@ package com.wangge.buzmgt.income.schedule.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.income.main.entity.CheckedEnum;
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
@@ -18,6 +16,7 @@ import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.repository.IncomeSubRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
+import com.wangge.buzmgt.income.main.service.HedgeService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.main.vo.OrderGoods;
@@ -55,6 +54,8 @@ public class JobService {
   SalesManRepository salesmanRep;
   @Autowired
   MainIncomeService mainIncomeService;
+  @Autowired
+  HedgeService hedgeService;
   
   @Transactional(rollbackFor = Exception.class)
   public void initMonthIncome() {
@@ -76,6 +77,8 @@ public class JobService {
             break;
           case 12:
             calIncomeMainPlanUser(jobtask);
+          case 60:
+            calhedgeAchieve(jobtask);
           default:
             break;
         }
@@ -86,7 +89,13 @@ public class JobService {
     }
     jobRep.save(jobList);
   }
-  
+  /**
+   * 计算达量设置,叠加奖励,达量奖励的收益
+   * */
+  private void calhedgeAchieve(Jobtask jobtask) {
+    hedgeService.calculateAchieveHedge(jobtask.getExectime());
+  }
+
   private static ExecutorService exServ = Executors.newFixedThreadPool(100);
   
   /**

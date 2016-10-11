@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -69,4 +71,10 @@ public interface HedgeService {
   List<HedgeVo> findAll(HttpServletRequest request, Region region);
   
   void calculateHedge();
+
+  /** 
+    * 计算当天导入的达量和叠加冲减信息
+    *  <br/> 
+    */  
+  void calculateAchieveHedge(Date exectime);
 }

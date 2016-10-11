@@ -5,7 +5,6 @@ import com.wangge.buzmgt.areaattribute.entity.AreaAttribute.PlanType;
 import com.wangge.buzmgt.areaattribute.service.AreaAttributeService;
 import com.wangge.buzmgt.brandincome.entity.BrandIncome;
 import com.wangge.buzmgt.brandincome.entity.BrandIncome.BrandIncomeStatus;
-import com.wangge.buzmgt.brandincome.entity.BrandIncomeSub;
 import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
 import com.wangge.buzmgt.brandincome.service.BrandIncomeService;
 import com.wangge.buzmgt.common.FlagEnum;
@@ -43,7 +42,6 @@ import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

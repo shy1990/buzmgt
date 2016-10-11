@@ -36,9 +36,9 @@ public class IncomeSchedule {
     jobService.initMonthIncome();
   }
   /*
-   * 28号23点1分执行<br/> 初始化下个月的薪资
+   * 每天23点14分执行删除任务
    */
-  @Scheduled(cron = " 0 14 23 * * ? ")
+  @Scheduled(cron = " 20 59 23 * * ? ")
   public void doUserDel() {
     jobService.doUserDel();
   }
@@ -69,4 +69,5 @@ public class IncomeSchedule {
   public void initDailyOilCost() {
     mainIncomeService.calculateOil();
   }
+  
 }
