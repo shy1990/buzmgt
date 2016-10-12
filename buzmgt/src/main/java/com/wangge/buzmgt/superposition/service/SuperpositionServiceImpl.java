@@ -79,36 +79,44 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     /**
      * 计算叠加收益
      *
-     * @param planId
+     * @param planId 方案id
      * @return
      */
     @Override
-    public List<SuperpositionProgress> compute(Long planId, Superposition superposition) {
+    public List<SuperpositionProgress> compute(Long planId) {
+        //根据主方案,查处有几个叠加规则
+        List<Superposition> superpositions = repository.findByPlanIdAndCheckStatus(planId,"3");
+//        TODO 判断是否是叠加收益发放月
+        if(CollectionUtils.isNotEmpty(superpositions)){//计算每个叠加规则而的收益
+            superpositions.forEach(superposition -> {
+                List<SuperpositionProgress> progressList1 = findRole(superposition, planId);//获取提货量以及所对应的规则
+                //判断属于哪个区间,去掉不符合的记录
+                if (CollectionUtils.isNotEmpty(progressList1)) {
+                    Iterator<SuperpositionProgress> progressListIterator = progressList1.iterator();
+                    while (progressListIterator.hasNext()) {
+                        SuperpositionProgress su = progressListIterator.next();
+                        if (!(Integer.parseInt(su.getNums()) >= su.getMin() && Integer.parseInt(su.getNums()) < su.getMax())) {
+                            progressListIterator.remove();
+                        }
+                    }
+                    //计算收益
+                    progressList1.forEach(su -> {
+                        SuperpositionRecord superpositionRecord = new SuperpositionRecord();
+                        if(!"0".equals(su.getNums())){
+                            superpositionRecord.setSalesmanId(su.getUserId());
+                            superpositionRecord.setPlanId(planId);
+                            superpositionRecord.setSuperId(superposition.getId());
+                            superpositionRecord.setAmount(((Integer.parseInt(su.getNums())) * (su.getPercentage())));
+                            superpositionRecord.setRecord(Integer.parseInt(su.getNums()));
+                            recordService.save(superpositionRecord);
+                            logService.log(null, "叠加收益计算保存: " + superpositionRecord, Log.EventType.SAVE);
 
-        List<SuperpositionProgress> progressList1 = findRole(superposition, planId);//获取提货量以及所对应的规则
-        //判断属于哪个区间,去掉不符合的记录
-        if (CollectionUtils.isNotEmpty(progressList1)) {
-            Iterator<SuperpositionProgress> progressListIterator = progressList1.iterator();
-            while (progressListIterator.hasNext()) {
-                SuperpositionProgress su = progressListIterator.next();
-                if (!(Integer.parseInt(su.getNums()) >= su.getMin() && Integer.parseInt(su.getNums()) < su.getMax())) {
-                    progressListIterator.remove();
+                        }
+                    });
                 }
-            }
-            //计算收益
-            progressList1.forEach(su -> {
-                SuperpositionRecord superpositionRecord = new SuperpositionRecord();
-                superpositionRecord.setSalesmanId(su.getUserId());
-                superpositionRecord.setPlanId(planId);
-                superpositionRecord.setSuperId(superposition.getId());
-                superpositionRecord.setAmount(((Integer.parseInt(su.getNums())) * (su.getPercentage())));
-                superpositionRecord.setRecord(Integer.parseInt(su.getNums()));
-                recordService.save(superpositionRecord);
-                logService.log(null, "叠加收益计算保存: " + superpositionRecord, Log.EventType.SAVE);
             });
         }
-
-        return progressList1;
+        return null;
     }
 
     /*
@@ -184,6 +192,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
      * @param goodsId 产品id
      * @param payTime 支付时间
      * @param num     数量
+     * @param planId  方案id
      */
     @Override
     public Superposition computeAfterReturnGoods(String userId, String goodsId, String payTime, Integer num, Long planId) {

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * Created by joe on 16-9-7.
  */
@@ -21,5 +23,7 @@ public interface SuperpositionRepository extends JpaRepository<Superposition,Lon
             "and s.plan_id = ? \n" +
             "and s.CHECK_STATUS = '3'")
     public Superposition findUseByTime(String payTime,String payTime1,Long planId);
+
+    public List<Superposition> findByPlanIdAndCheckStatus(Long planId,String status);
 
 }

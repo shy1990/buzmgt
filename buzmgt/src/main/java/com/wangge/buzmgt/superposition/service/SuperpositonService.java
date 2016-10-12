@@ -19,11 +19,10 @@ public interface SuperpositonService {
     /**
      * 叠加收益计算
      * @param planId
-     * @param superposition
      * @return
      */
 
-    public List<SuperpositionProgress> compute(Long planId, Superposition superposition);
+    public List<SuperpositionProgress> compute(Long planId);
 
     /**
      * 用于退货冲减计算
