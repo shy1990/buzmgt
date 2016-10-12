@@ -222,7 +222,7 @@ public class CheckCashServiceImpl implements CheckCashService {
           else
             order.setPaymentMoney(incomeMoney);
         }
-//        incomeMoney -= cashMoney;
+        incomeMoney -= cashMoney;
 	      incomeBigDecimal = incomeBigDecimal.subtract(cashBigDecimal) ;
 	      incomeMoney = incomeBigDecimal.floatValue();
         order.setPayStatus(WaterPayStatusEnum.OverPay);
