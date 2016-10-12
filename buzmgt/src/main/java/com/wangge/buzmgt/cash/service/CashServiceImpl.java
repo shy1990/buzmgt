@@ -196,8 +196,8 @@ public class CashServiceImpl implements CashService {
     try {
       
       //查询代数现金列表现金列表
-      List<Cash> cashlist=cashRepository.findByUserIdAndStatus(userId, CashStatusEnum.UnPay);
-//	    List<Cash> cashlist = findByUserIdAndStatusAndCreateDate(userId,CashStatusEnum.UnPay,createDate);
+//      List<Cash> cashlist=cashRepository.findByUserIdAndStatus(userId, CashStatusEnum.UnPay);
+	    List<Cash> cashlist = findByUserIdAndStatusAndCreateDate(userId,CashStatusEnum.UnPay,createDate);
       //流水单号详情
       List<WaterOrderDetail> detailList=new ArrayList<>();
       
