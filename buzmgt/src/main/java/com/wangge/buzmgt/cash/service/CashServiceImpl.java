@@ -196,8 +196,8 @@ public class CashServiceImpl implements CashService {
     try {
       
       //查询代数现金列表现金列表
-//      List<Cash> cashlist=cashRepository.findByUserIdAndStatus(userId, CashStatusEnum.UnPay);
-	    List<Cash> cashlist = findByUserIdAndStatusAndCreateDate(userId,CashStatusEnum.UnPay,createDate);
+      List<Cash> cashlist=cashRepository.findByUserIdAndStatus(userId, CashStatusEnum.UnPay);
+//	    List<Cash> cashlist = findByUserIdAndStatusAndCreateDate(userId,CashStatusEnum.UnPay,createDate);
       //流水单号详情
       List<WaterOrderDetail> detailList=new ArrayList<>();
       
@@ -270,11 +270,9 @@ public class CashServiceImpl implements CashService {
 	 * @return
 	 */
 	private List<Cash> findByUserIdAndStatusAndCreateDate(String userId, CashStatusEnum unPay, Date createDate) {
-		Map<String,Object> searchParams = new HashedMap();
-		searchParams.put("EQ_userId",userId);
-		searchParams.put("EQ_status",unPay);
-		searchParams.put("EQ_createDate",DateUtil.date2String(createDate));
-		return findAll(searchParams);
+		String startDate = DateUtil.date2String(createDate)+" 00:00:00";
+		String endDate = DateUtil.date2String(createDate)+" 23:59:59";
+		return cashRepository.findByUserIdAndStatusCreateDate(userId,unPay,startDate,endDate);
 	}
 
 	/**
