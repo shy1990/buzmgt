@@ -19,7 +19,7 @@ public class SectionRecord {
     @Column(name = "RECORD_ID")
     private Long id;//标识
 
-    private String orderNo;//订单id(订单详情)
+    private String orderNo;//订单号
 
     private String salesmanId;//业务员id
 
@@ -34,7 +34,7 @@ public class SectionRecord {
 
     private Long planId;//方案id
 
-    private Long sectionId;//叠加方案id
+    private Long sectionId;//区间方案id
 
     private Long priceRangeId;//小区间id
 

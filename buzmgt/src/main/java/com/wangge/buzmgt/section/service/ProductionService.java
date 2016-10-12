@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.section.service;
 
+import com.wangge.buzmgt.income.main.vo.OrderGoods;
 import com.wangge.buzmgt.section.entity.PriceRange;
 import com.wangge.buzmgt.section.entity.Production;
 import org.springframework.data.domain.Page;
@@ -67,6 +68,17 @@ public interface ProductionService {
     public String compute(String orderNo,Double price,
         String userId,String goodsId,String type,Long planId,Integer num,String regionId);
 
+
+    /**
+     * @Description: 价格区间出库计算
+     * @param orderNo:订单id/单品详情id
+     * @param userId:业务员id
+     * @param goodsId:产品id
+     * @param orderGoodsList:单品详情
+     * @param planId:方案id
+     * @return
+     */
+    public String compute(String orderNo, String userId, String goodsId, List<OrderGoods> orderGoodsList, Long planId,String regionId);
 
 
     public Production delete(Production production);

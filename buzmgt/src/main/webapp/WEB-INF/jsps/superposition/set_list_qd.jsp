@@ -328,7 +328,7 @@
     function listNow(searchData) {
         //正在使用
         $.ajax({
-            url: 'findAll?sign=pass&planId=${planId}',
+            url: 'listAll?sign=pass&planId=${planId}',
             type: 'POST',
             dataType: 'json',
             data: searchData,
@@ -387,7 +387,7 @@
     function listExpired(searchData1) {
         //过期数据
         $.ajax({
-            url: 'findAll?sign=expired&planId=${planId}',
+            url: 'listAll?sign=expired&planId=${planId}',
             type: 'POST',
             dataType: 'json',
             data: searchData1,

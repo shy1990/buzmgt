@@ -14,6 +14,26 @@ import java.util.Map;
  */
 public interface SuperpositonService {
 
+    public void stop(Superposition superposition,String checkStatus);//终止方案(逻辑删除)
+
+    /**
+     * 叠加收益计算
+     * @param planId
+     * @param superposition
+     * @return
+     */
+
+    public List<SuperpositionProgress> compute(Long planId, Superposition superposition);
+
+    /**
+     * 用于退货冲减计算
+     * @param userId
+     * @param goodsId
+     * @param payTime
+     * @param num
+     */
+    public Superposition computeAfterReturnGoods(String userId,String goodsId,String payTime,Integer num,Long planId);
+
     public Page<SuperpositionProgress> searchDetail(Long planId,Long superId,String userId,String startDate,String endDate,String name,Integer page,Integer size);
 
     public Page<SuperpositionProgress> findAll(Long planId,Long superId,String startDate,String endDate,String name,Integer page,Integer size);
@@ -22,7 +42,7 @@ public interface SuperpositonService {
 
     public void delete(Long id);
 
-    public Superposition checkMember(String memberId);
+    public Superposition checkMember(Superposition superposition,String memberId);
 
     public Superposition findById(Long id);
 
@@ -31,4 +51,6 @@ public interface SuperpositonService {
     public Page<PlanUserVo> findMainPlanUsers(Pageable pageReq, Map<String, Object> searchParams) throws Exception;
 
     public String compute(Superposition superposition);//计算收益
+
+
 }
