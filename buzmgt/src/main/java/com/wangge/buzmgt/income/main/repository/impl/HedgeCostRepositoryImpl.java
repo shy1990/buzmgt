@@ -28,6 +28,7 @@ public class HedgeCostRepositoryImpl implements CustomRepository {
 						"on sc.HEDGE_ID=sh.ID where sc.RULETYPE = " + ruleType + " and sc.RULE_ID= " + ruleId;
 		Query query = em.createNativeQuery(sql);
 		Object count = query.getSingleResult();
+		count = (count == null ? 0L : count);
 		System.out.println(count);
 		return Long.valueOf(count.toString());
 	}
@@ -36,8 +37,10 @@ public class HedgeCostRepositoryImpl implements CustomRepository {
 	public Long countByRuleIdAndRuleTypeAndUserId(Long ruleId, Integer ruleType, String userId) {
 		String sql = "select sum(sh.SUM) from sys_income_shouhou_cost sc left join sys_income_shouhou_hedge sh " +
 						"on sc.HEDGE_ID=sh.ID where sc.RULETYPE = " + ruleType + " and sc.RULE_ID= " + ruleId +
-						"and sc.USER_Id=" +userId;
+						"and sc.USER_Id=" + userId;
 		Query query = em.createNativeQuery(sql);
-		return (Long) query.getSingleResult();
+		Object count = query.getSingleResult();
+		count = (count == null ? 0L : count);
+		return Long.valueOf(count.toString());
 	}
 }

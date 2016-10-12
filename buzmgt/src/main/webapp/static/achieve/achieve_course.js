@@ -57,6 +57,10 @@ function initExcelExport() {
 }
 function initFunction() {
 }
+/**
+ * 查询列表
+ * @param page
+ */
 function findAchieveCourseList(page) {
     page = page == null || page == '' ? 0 : page;
     SearchData['page'] = page;

@@ -71,7 +71,7 @@
             'page': '0',
             'size': '20'
         };
-        var firstNum =${achieve.numberFirst}, secondNum =${achieve.numberSecond}, thirdNum =${achieve.numberThird};
+        <%--var firstNum =${achieve.numberFirst}, secondNum =${achieve.numberSecond}, thirdNum =${achieve.numberThird==null};--%>
         var achieveJson=${achieveJson};//达量设置规则（全局变量）
     </script>
 </head>

@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -364,6 +365,20 @@ public class AchieveController {
 		Long retreatAmount = achieveIncomeServer.countAchieveAfterSale(achieveId);
 	  model.addAttribute("retreatAmount", retreatAmount);
 	  return "achieve/achieve_course";
+  }
+  //明细
+	@RequestMapping(value = "/detail")
+  public String showAchieveIncomeDetail(@RequestParam(value = "userId") String userId, @RequestParam(value = "achieveId") Achieve achieve,Model model){
+		model.addAttribute("userId",userId);
+		model.addAttribute("achieve",achieve);
+		Long achieveId = achieve.getAchieveId();
+		//查询周期销量
+		Long totalNumber = achieveIncomeServer.countByAchieveId(achieveId);
+		model.addAttribute("totalNumber", totalNumber);
+		//查询退货量
+		Long retreatAmount = achieveIncomeServer.countAchieveAfterSale(achieveId);
+		model.addAttribute("retreatAmount", retreatAmount);
+		return "achieve/achive_income_detail";
   }
 
   /**
