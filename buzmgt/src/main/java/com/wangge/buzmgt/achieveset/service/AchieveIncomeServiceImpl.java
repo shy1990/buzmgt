@@ -207,7 +207,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			Integer max = 0;//设置最大值
 			min = rule.getMin() + minAdd;
 			max = rule.getMax() + maxAdd;
-			if (nowNumber > min && nowNumber <= max) {
+			if ((nowNumber==0||nowNumber > min) && nowNumber <= max) {
 				money = rule.getMoney();
 				break;
 			}
