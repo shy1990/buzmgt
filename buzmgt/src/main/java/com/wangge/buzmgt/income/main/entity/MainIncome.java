@@ -31,8 +31,10 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
  * @since JDK 1.8
  */
 @Entity
-@NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = "initMonth", procedureName = "init_Income_EveMonth"),
-    @NamedStoredProcedureQuery(name = "initOilCost", procedureName = "oil_daily_calculate_prod") })
+@NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(name = "initMonth", procedureName = "init_basicaSalary_eveMonth"),
+    @NamedStoredProcedureQuery(name = "initOilCost", procedureName = "oil_daily_calculate_prod"),
+    @NamedStoredProcedureQuery(name = "basicSalayinitMonth", procedureName = "income_month_busisal") })
 @Table(name = "sys_income_main")
 public class MainIncome {
   /** @pdOid 08793dc7-7b0c-45cf-9e6e-4cb30870c2f9 */
@@ -166,11 +168,11 @@ public class MainIncome {
   public Double getHedgecut() {
     return hedgecut;
   }
-
+  
   public void setHedgecut(Double hedgecut) {
     this.hedgecut = hedgecut;
   }
-
+  
   public void setAllresult(double allresult) {
     this.allresult = allresult;
   }

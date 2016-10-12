@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.wangge.buzmgt.income.main.service.HedgeService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.schedule.service.JobService;
 import com.wangge.buzmgt.income.ywsalary.service.BaseSalaryService;
@@ -27,6 +28,8 @@ public class IncomeSchedule {
   MainIncomeService mainIncomeService;
   @Autowired
   BaseSalaryService basesalaryService;
+  @Autowired
+  HedgeService hedgeService;
   
   /*
    * 28号23点1分执行<br/> 初始化下个月的薪资
@@ -35,6 +38,7 @@ public class IncomeSchedule {
   public void initMonthIncome() {
     jobService.initMonthIncome();
   }
+  
   /*
    * 每天23点14分执行删除任务
    */
@@ -69,17 +73,20 @@ public class IncomeSchedule {
   public void initDailyOilCost() {
     mainIncomeService.calculateOil();
   }
+  
   /**
    * 计算上个月售后收件冲减
-   * */
-  @Scheduled(cron="0 1 23 9 * ? ")
-  public void initShouHedge(){
-    
+   */
+  @Scheduled(cron = "0 1 23 9 * ? ")
+  public void initShouHedge() {
+    hedgeService.calculateHedge();
   }
-  /**计算总和
+  
+  /**
+   * 计算总和
    * 
-   * */
- public void calIncomePerMonth(){
-   
- } 
+   */
+  public void calIncomePerMonth() {
+    mainIncomeService.calIncomePerMonth();
+  }
 }
