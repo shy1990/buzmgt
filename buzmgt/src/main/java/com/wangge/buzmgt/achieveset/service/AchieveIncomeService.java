@@ -127,4 +127,11 @@ public interface AchieveIncomeService {
 	 * @return true-成功；false-失败
 	 */
 	boolean createAchieveIncomeAfterSale(String userId,String goodId, Long palnId, Long hedgeId, Date payTime, Date acceptTime, Integer num);
+
+	/**
+	 * 查询达量售后冲减量
+	 * @param achieveId
+	 * @return
+	 */
+	Long countAchieveAfterSale(Long achieveId);
 }

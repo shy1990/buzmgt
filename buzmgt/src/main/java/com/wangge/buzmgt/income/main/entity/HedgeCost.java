@@ -113,9 +113,17 @@ public class HedgeCost {
   public void setCost(float cost) {
     this.cost = cost;
   }
-  
-  public HedgeCost(Long hedgeId, Long ruleId, Integer ruletype, String userId, String goodsId, Date paytime,
-      Date accepttime, float cost) {
+
+	public Hedge getHedge() {
+		return hedge;
+	}
+
+	public void setHedge(Hedge hedge) {
+		this.hedge = hedge;
+	}
+
+	public HedgeCost(Long hedgeId, Long ruleId, Integer ruletype, String userId, String goodsId, Date paytime,
+	                 Date accepttime, float cost) {
     super();
     this.hedgeId = hedgeId;
     this.ruleId = ruleId;

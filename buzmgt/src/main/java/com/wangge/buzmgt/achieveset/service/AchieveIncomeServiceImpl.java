@@ -3,8 +3,6 @@ package com.wangge.buzmgt.achieveset.service;
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.repository.AchieveIncomeRepository;
-import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
-import com.wangge.buzmgt.achieveset.vo.repository.AchieveIncomeVoRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.income.main.entity.HedgeCost;
@@ -42,8 +40,6 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 	@Autowired
 	private AchieveIncomeRepository air;
-	@Autowired
-	private AchieveIncomeVoRepository achieveIncomeVoRepository;
 	@Autowired
 	private	HedgeCostRepository hedgeCostRepository;
 
@@ -211,7 +207,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			Integer max = 0;//设置最大值
 			min = rule.getMin() + minAdd;
 			max = rule.getMax() + maxAdd;
-			if (nowNumber > min && nowNumber <= max) {
+			if ((nowNumber==0||nowNumber > min) && nowNumber <= max) {
 				money = rule.getMoney();
 				break;
 			}
@@ -263,6 +259,10 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 		return true;
 	}
 
+	@Override
+	public Long countAchieveAfterSale(Long achieveId){
+		return hedgeCostRepository.countByRuleIdAndRuleType(achieveId,2);
+	}
 	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,
 	                                                                      final Class<AchieveIncome> entityClazz) {
 		return new Specification<AchieveIncome>() {
