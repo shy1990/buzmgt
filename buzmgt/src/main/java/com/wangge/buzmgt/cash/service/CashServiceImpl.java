@@ -18,6 +18,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -59,8 +60,7 @@ public class CashServiceImpl implements CashService {
   private MonthPunishService monthPunishService;
   
   private Logger logger=Logger.getLogger(CashServiceImpl.class);
-  
-  
+
   @Override
   public List<Cash> findAll(Map<String, Object> searchParams) {
     regionService.disposeSearchParams("userId",searchParams);
@@ -165,10 +165,12 @@ public class CashServiceImpl implements CashService {
    */
   @Override
   public List<String> findByStatusGroupByUserIdForSceduled(String searchDate){
-    if(null == searchDate){
-      searchDate = DateUtil.date2String(new Date());
-    }
-    return cashRepository.findByStatusGroupByUserIdSceduled(searchDate);
+	  if(null == searchDate){
+		  searchDate = DateUtil.date2String(new Date());
+	  }
+	  //整理格式
+	  searchDate += " 23:59:59";
+	  return cashRepository.findByStatusGroupByUserIdSceduled(searchDate);
   }
 
   /**
@@ -188,13 +190,14 @@ public class CashServiceImpl implements CashService {
    */
   @Override
   @Transactional(readOnly=false)
-  public synchronized boolean createWaterOrderByCash(String userId){
+  public synchronized boolean createWaterOrderByCash(String userId,Date createDate){
     boolean msg = false;
     logger.info("cashToWaterOrder----->userId:"+userId);
     try {
       
       //查询代数现金列表现金列表
-      List<Cash> cashlist=cashRepository.findByUserIdAndStatus(userId, CashStatusEnum.UnPay);
+//      List<Cash> cashlist=cashRepository.findByUserIdAndStatus(userId, CashStatusEnum.UnPay);
+	    List<Cash> cashlist = findByUserIdAndStatusAndCreateDate(userId,CashStatusEnum.UnPay,createDate);
       //流水单号详情
       List<WaterOrderDetail> detailList=new ArrayList<>();
       
@@ -217,12 +220,11 @@ public class CashServiceImpl implements CashService {
           //修改状态
           cash.setStatus(CashStatusEnum.OverCash);
         };
-        
         //组装流水单数据
         WaterOrderCash woc=new WaterOrderCash();
         woc.setSerialNo(serialNo);
         woc.setUserId(userId);
-        woc.setCreateDate(new Date());
+        woc.setCreateDate(createDate);
         woc.setCashMoney(totalPrice.floatValue());
         woc.setIsPunish(0);
         woc.setOrderDetails(detailList);//保存流水单详情
@@ -259,7 +261,23 @@ public class CashServiceImpl implements CashService {
     
     return msg;
   }
-  /**
+
+	/**
+	 * 根据userId，status，createDate 查询
+	 * @param userId
+	 * @param unPay
+	 * @param createDate
+	 * @return
+	 */
+	private List<Cash> findByUserIdAndStatusAndCreateDate(String userId, CashStatusEnum unPay, Date createDate) {
+		Map<String,Object> searchParams = new HashedMap();
+		searchParams.put("EQ_userId",userId);
+		searchParams.put("EQ_status",unPay);
+		searchParams.put("EQ_createDate",DateUtil.date2String(createDate));
+		return findAll(searchParams);
+	}
+
+	/**
    * 流水单号生成策略：时间戳+4位随机码
    * @return serialNo
    */

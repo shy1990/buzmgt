@@ -45,17 +45,18 @@ public class PunishSetServiceImpl implements PunishSetService{
   @Override
   public PunishSet findByUserId(String userId) {
 	  String regionId = salesManService.getRegionIdByUserId(userId);
-	  PunishSet ps = null;
-	  //使用查询是否存在扣罚，若不存在则向上一级查询是有有扣罚；
+	  /*PunishSet ps = null;
 	  do {
 		  ps = findByRegionId(regionId);
 		  //查询父级区域id
 		  String parentRegionId = regionService.getRegionById(regionId).getParent().getId();
 		  regionId = parentRegionId;
-	  }while (ps==null);
-//	  if(ps==null){
-//      ps=findByRegionId("0");
-//    }
+	  }while (ps==null);*/
+	  //使用查询是否存在扣罚，若不存在则向上一级查询是有有扣罚；
+	  PunishSet ps= findByRegionId(regionId);
+	  if(ps==null){
+      ps=findByRegionId("0");
+    }
     return ps;
   }
 
