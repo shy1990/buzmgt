@@ -58,12 +58,14 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 	@Override
 	public Long countByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum status) {
-		return air.countByAchieveIdAndUserIdAndStatus(achieveId,userId,status);
+		Long count = air.countByAchieveIdAndUserIdAndStatus(achieveId,userId,status);
+		return null == count ? 0 : count;
 	}
 
 	@Override
 	public Long countByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {
-		return air.countByAchieveIdAndStatus(achieveId,status);
+		Long count = air.countByAchieveIdAndStatus(achieveId,status);
+		return null == count ? 0 : count;
 	}
 
 	@Override
