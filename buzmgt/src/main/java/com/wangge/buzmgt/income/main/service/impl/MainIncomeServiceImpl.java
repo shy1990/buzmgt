@@ -25,12 +25,11 @@ import com.wangge.buzmgt.brandincome.entity.BrandIncome;
 import com.wangge.buzmgt.brandincome.service.BrandIncomeService;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
-import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
-import com.wangge.buzmgt.income.main.entity.IncomeSub;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.repository.IncomeSubRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
+import com.wangge.buzmgt.income.main.service.IncomeErrorService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.main.vo.OrderGoods;
@@ -69,7 +68,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   BrandIncomeService brandIncomeService;
   @Autowired
   ProductionService productionService;
-  
+  @Autowired
+  IncomeErrorService errorService;
   /**
    * 要避免多线程冲突 <br/>
    * 手机要展示当天的订单预计收益详情和当天的订单预计收益总和统计<br/>
@@ -315,6 +315,16 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     mainIncomeRep.delAchieveIncomeByPlanId(planId, startDate);
     mainIncomeRep.delBrandIncomeByPlanId(planId, startDate);
     mainIncomeRep.delPriceIncomeByPlanId(planId, startDate);
+  }
+  
+  @Override
+  public void calIncomePerMonth() {
+    try {
+      mainIncomeRep.calIncomePerMonth();
+    } catch (Exception e) {
+      LogUtil.info("每月计算基本工资出错!!");
+      errorService.save(50, "每月计算基本工资出错!!问题很严重");
+    }
   }
   
 }

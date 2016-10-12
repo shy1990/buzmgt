@@ -94,4 +94,9 @@ public interface MainIncomeService {
    * @throws Exception
    */
   void deleteSubIncomeByPlanId(Long planId, Date startDate) throws Exception;
+  
+  /**
+   * 每月一算,总结计算
+   */
+  void calIncomePerMonth();
 }

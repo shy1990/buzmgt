@@ -20,11 +20,18 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
    * @author yangqc
    * @since JDK 1.8
    */
-  @Procedure("init_Income_EveMonth")
+  @Procedure("init_basicaSalary_eveMonth")
   void initMonthSalary();
   
   @Procedure("oil_daily_calculate_prod")
   void calculateOilCost();
+  
+  /** 
+    *计算业务佣金和
+    * 
+    */  
+  @Procedure("income_month_Busi_all")
+  void calIncomePerMonth();
   
   /*
    * 刷新纪录,用于订单计算
@@ -43,7 +50,7 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
   
   @Transactional
   @Modifying(clearAutomatically = true)
-  @Query(value = "delete from  SYS_ACHIEVE_SET_INCOME i where i.plan_id=?1 and i.user_id=?2 and i.STATUS=1 and i.create_date>?3", nativeQuery = true)
+  @Query(value = "delete from  SYS_INCOME_ACHIEVE_SET i where i.plan_id=?1 and i.user_id=?2 and i.STATUS=1 and i.create_date>?3", nativeQuery = true)
   public void delAchieveIncome(Long planId, String userId, Date startDate);
   
   @Transactional
@@ -58,7 +65,7 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
   
   @Transactional
   @Modifying(clearAutomatically = true)
-  @Query(value = "delete from  SYS_ACHIEVE_SET_INCOME i where i.plan_id=?1 and i.STATUS=1 and i.create_date>?2", nativeQuery = true)
+  @Query(value = "delete from  SYS_INCOME_ACHIEVE_SET i where i.plan_id=?1 and i.STATUS=1 and i.create_date>?2", nativeQuery = true)
   public void delAchieveIncomeByPlanId(Long planId, Date startDate);
   
   @Transactional
