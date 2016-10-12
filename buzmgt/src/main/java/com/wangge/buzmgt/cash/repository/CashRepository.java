@@ -35,6 +35,6 @@ JpaSpecificationExecutor<Cash>{
    * @return List<String>    返回类型 
    * @throws
    */
-  @Query("SELECT C.userId FROM Cash C WHERE C.status='0' AND C.createDate <= TO_DATE(?1, 'YYYY-MM-DD') GROUP BY C.userId ")
+  @Query("SELECT C.userId FROM Cash C WHERE C.status='0' AND C.createDate <= TO_DATE(?1, 'YYYY-MM-DD hh24:mi:ss') GROUP BY C.userId ")
   List<String> findByStatusGroupByUserIdSceduled(String searchDate);
 }

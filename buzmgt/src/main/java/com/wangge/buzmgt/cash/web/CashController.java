@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.wangge.buzmgt.util.DateUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
@@ -15,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
@@ -62,14 +64,14 @@ public class CashController {
 
   @RequestMapping("/send")
   @ResponseBody
-  public boolean send(String searchDate){
+  public boolean send(@RequestParam String searchDate){
     boolean msg = false;
     try {
       logger.info("-----------------开启定时结算");
       List<String> userIds=cashService.findByStatusGroupByUserIdForSceduled(searchDate);
       userIds.forEach(userId->{
         logger.info("userId:"+userId);
-        boolean msg_ = cashService.createWaterOrderByCash(userId);
+        boolean msg_ = cashService.createWaterOrderByCash(userId, DateUtil.string2Date(searchDate));
         logger.info("返回结果:" + msg_);
       });
       logger.info("-----------------结束定时结算");

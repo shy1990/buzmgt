@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.cash.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +46,6 @@ public interface CashService {
   /**
    * 处理状态
    * @param searchParams
-   * @param pageRequest
    * @return
    */
   public List<Cash> findAllByParams(Map<String, Object> searchParams);
@@ -63,13 +63,13 @@ public interface CashService {
    * 7.修改现金订单列表中状态status改为1（已结算）
    * 8.返回状态
   * @Title: createWaterOrderByCash 
-  * @Description: 购物车结算 
-  * @param @param userId
-  * @param @return    设定文件 
-  * @return boolean    返回类型 
+  * @Description: 购物车结算
+   * @param @param type SEND 手动结算
+   * @param @param userId
+  * @return boolean    返回类型
   * @throws
    */
-  public boolean createWaterOrderByCash(String userId);
+  public boolean createWaterOrderByCash(String userId,Date createDate);
   
   /**
    * 

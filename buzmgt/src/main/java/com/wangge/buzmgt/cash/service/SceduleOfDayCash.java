@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.cash.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -27,7 +28,7 @@ public class SceduleOfDayCash {
 	  List<String> userIds=cashService.findByStatusGroupByUserId();
 	  userIds.forEach(userId->{
 	    logger.info("userId:"+userId);
-	    boolean msg=cashService.createWaterOrderByCash(userId);
+	    boolean msg=cashService.createWaterOrderByCash(userId,new Date());
 	    logger.info("返回结果:"+msg);
 	  });
 	  logger.info("-----------------结束定时结算");
