@@ -88,14 +88,13 @@ public class JobService {
     }
     jobRep.save(jobList);
   }
+  
   /**
    * 计算达量设置,叠加奖励,达量奖励的收益
-   * */
+   */
   private void calhedgeAchieve(Jobtask jobtask) {
     hedgeService.calculateAchieveHedge(jobtask.getExectime());
   }
-
-  
   
   /**
    * 计算某个业务员新加入方案时的收益<br/>
@@ -121,7 +120,7 @@ public class JobService {
     }
     int between = DateUtil.daysBetween(startTime, endDay);
     
-    //计算查找每天的结算订单
+    // 计算查找每天的结算订单
     for (int i = 0; i <= between; i++) {
       Date startDate = DateUtil.moveDate(startTime, i);
       Date endDate = DateUtil.moveDate(startDate, 1);
@@ -133,7 +132,7 @@ public class JobService {
         }
       });
     }
-    //计算最后一天的订单
+    // 计算最后一天的订单
     IncomeThreadPool.exServ.execute(new Runnable() {
       @Override
       public void run() {
@@ -193,12 +192,12 @@ public class JobService {
   private void deleteIncomeMainPlan(Jobtask jobtask) {
     Long planId = jobtask.getPlanId();
     Date delDate = jobtask.getExectime();
-    //Date today = new Date();
+    // Date today = new Date();
     // TODO 根据日期(某天),主方案删除品牌型号,叠加,达量的收益
     try {
       mainIncomeService.deleteSubIncomeByPlanId(planId, delDate);
     } catch (Exception e) {
-     LogUtil.error("删除主方案"+planId+"下的订单收益失败");
+      LogUtil.error("删除主方案" + planId + "下的订单收益失败");
     }
   }
   
@@ -214,5 +213,24 @@ public class JobService {
       job.setFlag(1);
     }
     LogUtil.info("定时任务:用户删除完成!!");
+  }
+  
+  /**
+   * saveJobTask:保存定时任务. <br/>
+   * 
+   * @author yangqc
+   * @param type
+   *          类型2开头:叠加;20 叠加计算; 3开头:达量设置;30 达量计算;
+   * @param planId
+   *          主方案id
+   * @param keyid
+   *          规则id
+   * @param exectime
+   *          执行时间:发放收益的下个月某天计算;叠加2号,达量3号
+   * @since JDK 1.8
+   */
+  public void saveJobTask(Integer type, Long planId, Long keyid, Date exectime) {
+    Jobtask task = new Jobtask(type, planId, keyid, exectime);
+    jobRep.save(task);
   }
 }

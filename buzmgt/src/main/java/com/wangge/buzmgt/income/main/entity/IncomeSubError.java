@@ -25,10 +25,13 @@ public class IncomeSubError {
   private Long id;
   // 订单id;业务员id;错误信息;商品ID
   private String orderno, userId, errorInfo, goodId;
-  // 错误类型:0 达量设置 1 品牌型号 2 价格区间 3.达量奖励 4叠加奖励
+  /**
+   * 错误类型:0 达量设置 1 品牌型号 2 价格区间 3.达量奖励 4叠加奖励,<br/>
+   * 5:50计算总工资,51计算油补;
+   */
   private Integer type;
   
-  private Date newdate;
+  private Date newdate = new Date();
   
   public Long getId() {
     return id;
@@ -92,6 +95,12 @@ public class IncomeSubError {
     this.userId = userId;
     this.errorInfo = errorInfo;
     this.goodId = goodId;
+    this.type = type;
+  }
+  
+  public IncomeSubError(String errorInfo, Integer type) {
+    super();
+    this.errorInfo = errorInfo;
     this.type = type;
   }
   
