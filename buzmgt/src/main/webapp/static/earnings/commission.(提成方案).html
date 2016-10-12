@@ -14,6 +14,22 @@
 
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
 
+    <style>
+        .modal-blue .modal-header {
+            position: relative;
+            height: 50px;
+            background: #3C9FD8;
+            color: #FFF;
+            padding: 10px;
+        }
+
+        .modal-blue .modal-title {
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            line-height: 30px;
+        }
+    </style>
 </head>
 <body>
 
@@ -142,6 +158,11 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
                 <h3 class="modal-title">添加人员</h3>
+
+                <input type="text" class="form-control form_datetime input-sm" placeholder="人员添加日期"
+                       readonly="readonly"
+                       style="background: #ffffff; width: 150px;margin-left: 100px;margin-top: -30px">
+
             </div>
 
             <!DOCTYPE html>
@@ -157,7 +178,7 @@
                     </select>
 
                     <select class="ph-select">
-                        <option>全部角色</option>
+                        <option>全部角色</option>愤怒
                         <option>山东省-德州市-武城县</option>
                         <option>山东省-德州市-武城县</option>
                     </select>
@@ -358,9 +379,6 @@
                             </tr>
 
 
-
-
-
                             </tbody>
                         </table>
 
@@ -370,10 +388,9 @@
                     </div>
                     <!--table-box-->
 
-                    <!--待审核账单-->
                 </div>
 
-                <!--油补记录-->
+
             </div>
 
             <![endif]-->
@@ -389,9 +406,25 @@
 
 
 <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 <script>
     $(function () {
         $("[data-toggle='popover']").popover();
+    });
+
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 3,
+        minView: 3,
+        pickerPosition: "bottom-left",
+        forceParse: 0,
+
     });
 </script>
 </body>

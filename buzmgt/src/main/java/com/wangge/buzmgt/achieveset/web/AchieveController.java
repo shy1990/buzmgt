@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
@@ -359,7 +360,7 @@ public class AchieveController {
 	  Long achieveId = achieve.getAchieveId();
 	  model.addAttribute("achieve", achieve);
 	  //查询周期销量
-	  Long totalNumber = achieveIncomeServer.countByAchieveId(achieveId);
+	  Long totalNumber = achieveIncomeServer.countByAchieveIdAndStatus(achieveId, AchieveIncome.PayStatusEnum.STOCK);
 	  model.addAttribute("totalNumber", totalNumber);
 	  //查询退货量
 		Long retreatAmount = achieveIncomeServer.countAchieveAfterSale(achieveId);
@@ -373,12 +374,12 @@ public class AchieveController {
 		model.addAttribute("achieve",achieve);
 		Long achieveId = achieve.getAchieveId();
 		//查询周期销量
-		Long totalNumber = achieveIncomeServer.countByAchieveId(achieveId);
+		Long totalNumber = achieveIncomeServer.countByAchieveIdAndUserIdAndStatus(achieveId, userId, AchieveIncome.PayStatusEnum.PAY);
 		model.addAttribute("totalNumber", totalNumber);
 		//查询退货量
 		Long retreatAmount = achieveIncomeServer.countAchieveAfterSale(achieveId);
 		model.addAttribute("retreatAmount", retreatAmount);
-		return "achieve/achive_income_detail";
+		return "achieve/achieve_income_detail";
   }
 
   /**
