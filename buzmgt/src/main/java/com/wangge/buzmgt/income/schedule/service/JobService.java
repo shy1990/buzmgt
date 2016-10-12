@@ -76,8 +76,16 @@ public class JobService {
             break;
           case 12:
             calIncomeMainPlanUser(jobtask);
+            break;
+          case 20:
+            //计算达量
+            break;
+          case 30:
+            //计算叠加
+            break;
           case 60:
             calhedgeAchieve(jobtask);
+            break;
           default:
             break;
         }
