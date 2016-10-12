@@ -228,7 +228,7 @@ function initFunction() {
         }
     });
     $('.J_issuingDate').datetimepicker({
-        format: "yyyy-mm-10",
+        format: "yyyy-mm-02",
         language: 'zh-CN',
         weekStart: 1,
         todayBtn: 1,

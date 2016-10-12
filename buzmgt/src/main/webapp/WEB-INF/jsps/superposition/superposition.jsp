@@ -658,7 +658,7 @@
                                         </td>
                                         <td>{{endDate}}</td>
                                         <td>
-                                            <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see({{id}})">查看
+                                            <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
                                             </button>
                                             <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程
                                             </button>

@@ -39,7 +39,7 @@
     </style>
     <script type="text/javascript">
         function see(id) {
-            window.location.href = id;
+            window.location.href = 'find/'+id;
         }
         function seeProgress(planId, id) {
             window.location.href = 'progress?planId=' + planId + '&id=' + id;
