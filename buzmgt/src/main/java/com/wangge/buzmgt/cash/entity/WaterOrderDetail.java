@@ -29,7 +29,7 @@ public class WaterOrderDetail implements Serializable  {
   @Column(name = "cash_id")
   private Long cashId; //订单id
   
-  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+  @OneToOne(fetch=FetchType.LAZY)
   @JoinColumn(name = "cash_id",insertable=false,updatable=false)
   private Cash cash; //订单号
   

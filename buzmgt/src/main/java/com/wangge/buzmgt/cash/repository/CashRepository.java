@@ -14,7 +14,10 @@ public interface CashRepository extends JpaRepository<Cash, Long>,
 JpaSpecificationExecutor<Cash>{
 
   List<Cash> findByUserIdAndStatus(String userId,CashStatusEnum status);
-  
+	@Query("SELECT c FROM Cash c WHERE c.userId=?1 and c.status= ?2 and c.createDate>=TO_DATE(?3,'YYYY-MM-DD hh24:mi:ss') " +
+					"and c.createDate<= TO_DATE(?4,'YYYY-MM-DD hh24:mi:ss')")
+  List<Cash> findByUserIdAndStatusCreateDate(String userId,CashStatusEnum status,String startDate, String endDate);
+
   /**
    * 
   * @Title: findByStatusGroupByUserId 
