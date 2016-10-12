@@ -68,7 +68,7 @@ function addRule() {
         if (i == (leng - 1)) {
             max = 10000;
         }
-        rule[i] = {'num': i, 'min': min, 'max': max, 'serialNumber': i};
+        rule[i] = {'num': i, 'min': min, 'max': max, 'serialNumber': i+1};
     }
     createRules(rule);
     createGroup(leng, first, second, third);
@@ -410,19 +410,31 @@ function addGood() {
 
 }
 
+
+
 function Refresh() {
     showGoodsTypeList.push({
-        "machineTypeId": $(".J_machineType").text().trim(),
-        "brandId": $(".J_brand").text().trim(),
-        "goodId": $(".J_goods").text().trim()
+        "machineType": $(".J_machineType").find("option:selected").text().trim(),
+        "brand": $(".J_brand").find("option:selected").text().trim(),
+        "good": $(".J_goods").find("option:selected").text().trim()
     });
     console.log(showGoodsTypeList);
         $(".J_machineType").val('');
         createBrandType("");
         createGoods("");
 }
+/**
+ * 展示已经添加的产品
+ */
+function showGoods(){
+    var myTemplate = Handlebars.compile($("#show-goods-template").html());
+    $('#showGoods').html(myTemplate(showGoodsTypeList));
+    $('#show_goods').modal('show').on('shown.bs.modal', function () {
+
+    });
 
 
+}
 
 
 function toSubmit() {

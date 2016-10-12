@@ -28,6 +28,34 @@ public class SuperpositionProgress {
     private String nums;//提货数量
     private String orderNum;//订单好号
     private String goodsName;//商品名字
+    private Integer min;//小值
+    private Integer max;//大值
+    private Float percentage;//提成
+    private String sign;//标记(用于设置组提成规则)
+
+    public Integer getMin() {
+        return min;
+    }
+
+    public void setMin(Integer min) {
+        this.min = min;
+    }
+
+    public Integer getMax() {
+        return max;
+    }
+
+    public void setMax(Integer max) {
+        this.max = max;
+    }
+
+    public Float getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(Float percentage) {
+        this.percentage = percentage;
+    }
 
     public String getGoodsName() {
         return goodsName;
@@ -197,6 +225,14 @@ public class SuperpositionProgress {
         this.name = name;
     }
 
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
     @Override
     public String toString() {
         return "SuperpositionProgress{" +
@@ -208,7 +244,7 @@ public class SuperpositionProgress {
                 ", shopName='" + shopName + '\'' +
                 ", payTime='" + payTime + '\'' +
                 ", shopAddress='" + shopAddress + '\'' +
-                ", superId='" + superId + '\'' +
+                ", superId=" + superId +
                 ", taskOne='" + taskOne + '\'' +
                 ", taskTwo='" + taskTwo + '\'' +
                 ", taskThree='" + taskThree + '\'' +
@@ -219,8 +255,12 @@ public class SuperpositionProgress {
                 ", threeAdd='" + threeAdd + '\'' +
                 ", name='" + name + '\'' +
                 ", nums='" + nums + '\'' +
-                ", orderNum='" + orderNum + '\''+
+                ", orderNum='" + orderNum + '\'' +
                 ", goodsName='" + goodsName + '\'' +
+                ", min=" + min +
+                ", max=" + max +
+                ", percentage=" + percentage +
+                ", sign='" + sign + '\'' +
                 '}';
     }
 }

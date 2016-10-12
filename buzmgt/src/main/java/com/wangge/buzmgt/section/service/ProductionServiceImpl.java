@@ -2,6 +2,7 @@ package com.wangge.buzmgt.section.service;
 
 import com.wangge.buzmgt.areaattribute.entity.AreaAttribute;
 import com.wangge.buzmgt.areaattribute.service.AreaAttributeService;
+import com.wangge.buzmgt.income.main.vo.OrderGoods;
 import com.wangge.buzmgt.log.entity.Log;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.section.entity.PriceRange;
@@ -125,7 +126,7 @@ public class ProductionServiceImpl implements ProductionService {
                         sectionRecord.setOrderflag(1);//已付款
                         SectionRecord sectionRecord1 = sectionRecordService.save(sectionRecord);
                         logService.log(null, "区间方案单品已付款计算: "+sectionRecord1, Log.EventType.SAVE);
-                        logger.info("-----------------------------"+sectionRecord1);
+                        logger.info(sectionRecord1);
                         return ;
                     }
                 });
@@ -200,7 +201,7 @@ public class ProductionServiceImpl implements ProductionService {
                         }else {
                             sectionRecord.setPercentage(priceRange.getPercentage());
                         }
-                        sectionRecord.setOrderNo(orderNo);//订单详情/订单
+                        sectionRecord.setOrderNo(orderNo);//订单号
                         sectionRecord.setPayTime(DateUtil.string2Date(payTime));
                         sectionRecord.setPlanId(planId);
                         sectionRecord.setPriceRangeId(priceRange.getPriceRangeId());
@@ -211,8 +212,7 @@ public class ProductionServiceImpl implements ProductionService {
                         sectionRecord.setOrderflag(0);//出库计算
                         SectionRecord sectionRecord1 = sectionRecordService.save(sectionRecord);
                         logService.log(null, "区间方案单品出库计算: "+sectionRecord1, Log.EventType.SAVE);
-                        logger.info("-----------------------:"+sectionRecord1);
-                        return;
+                        logger.info(sectionRecord1);
                     }
                 });
             }
@@ -221,6 +221,22 @@ public class ProductionServiceImpl implements ProductionService {
             logger.info("异常:计算失败");
         }
         return "";
+    }
+
+    /**
+     * 出库计算(修改接口,传过订单详情集合.注意:优化的时候去做)
+     * @param orderNo:订单id/单品详情id
+     * @param userId:业务员id
+     * @param goodsId:产品id
+     * @param orderGoodsList:单品详情
+     * @param planId:方案id
+     * @param regionId
+     * @return
+     */
+    @Override
+    public String compute(String orderNo, String userId, String goodsId, List<OrderGoods> orderGoodsList, Long planId, String regionId) {
+
+        return null;
     }
 
     /**

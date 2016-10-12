@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface ProductionRepository extends JpaRepository<Production,Long> {
 
+
+
     //查询没有结束时间的(审核通过的)
     @Query(nativeQuery = true,value = " select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID from sys_production  " +
             " where end_time is null  " +
@@ -37,6 +39,21 @@ public interface ProductionRepository extends JpaRepository<Production,Long> {
             " and plan_id = ? " +
             " and status = 0 ")
     public Production findNow(String time1, String time2, String time3, String type,Long planId);
+
+
+
+    //查询当前正在使用的
+    @Query(nativeQuery = true, value = "select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID " +
+            " from sys_production \n" +
+            " where \n" +
+            "   (((to_date(?,'yyyy-MM-dd')>=IMPL_DATE and to_date(?,'yyyy-MM-dd')<=end_time)) \n" +
+            " or \n" +
+            "   ((to_date(?,'yyyy-MM-dd')>=IMPL_DATE and (end_time is null)) )) " +
+            " and product_status = '3' " +
+            " and  production_type in ? " +
+            " and plan_id = ? " +
+            " and status = 0 ")
+    public Production findNow(String time1, String time2, String time3, List<String> types,Long planId);
 
     /**
      * 查询当期进行的(审核通过-未来要使用的,正在审核的,被驳回的)
