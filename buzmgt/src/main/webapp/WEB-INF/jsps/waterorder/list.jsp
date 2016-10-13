@@ -32,6 +32,7 @@
 	{{#each content}}
 		<tr>
       <td>{{serialNo}}</td>
+      <td>{{userId}}</td>
       <td class="bg-style">
 				{{#each orderDetails}}
 				{{#with cash}}{{#with order}}
@@ -43,6 +44,13 @@
         {{#each orderDetails}}
 				{{#with cash}}{{#with order}}
         <p>{{orderPrice}}</p>
+				{{/with}}{{/with}}
+				{{/each}}
+      </td>
+      <td class="bg-style">
+        {{#each orderDetails}}
+				{{#with cash}}{{#with order}}
+        <p>{{actualPayNum}}</p>
 				{{/with}}{{/with}}
 				{{/each}}
       </td>
@@ -112,9 +120,11 @@ var	base='<%=basePath%>';
 					<thead>
 						<tr>
 							<th>流水单号</th>
+							<th>用户Id</th>
 							<th>订单编号</th>
-							<th>需付金额</th>
-							<th>总金额</th>
+							<th>订单金额</th>
+                            <th>实际金额</th>
+                            <th>总金额</th>
 							<th>状态</th>
 							<th>日期</th>
 						</tr>
