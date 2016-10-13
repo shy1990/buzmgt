@@ -1,15 +1,16 @@
 package com.wangge.buzmgt.achieveaward.repository;
 
-import java.util.List;
-
+import com.wangge.buzmgt.achieveaward.entity.Award;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
-import com.wangge.buzmgt.achieveaward.entity.Award;
+import java.util.List;
+
 /**
  * 
 * @ClassName: AwardRepository
@@ -26,5 +27,14 @@ JpaSpecificationExecutor<Award>{
   @Override
 //  @EntityGraph("graph.Award")
   Page<Award> findAll(Specification<Award> spec, Pageable pageable);
-  
+
+  @Query(value = "select nvl(sum(g.nums), 0) AS nums\n" +
+          "  from sys_goods_order g\n" +
+          " inner join sys_brand_income b\n" +
+          "    on g.goods_id = b.good_id\n" +
+          " where to_char(g.PAY_TIME, 'yyyy-mm-dd') between\n" +
+          "       to_char(b.start_date, 'yyyy-mm-dd') and\n" +
+          "       to_char(b.end_date, 'yyyy-mm-dd')\n" +
+          "   and g.goods_id in (?1)", nativeQuery = true)
+  int findCycleSales(List<String> goodIds);
 }

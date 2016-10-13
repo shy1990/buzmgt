@@ -58,7 +58,7 @@ function initDate() {
         }
     });
     var fqTime = $('.J_fqTime').val();
-    if (isEmpty(fqTime)){
+    if (!isEmpty(fqTime)){
         fqTime = changeDateToString(stringToDate(fqTime));
         $('.J_endDate').datetimepicker('setEndDate', fqTime);
         $('.J_endDate').datetimepicker('hide');
