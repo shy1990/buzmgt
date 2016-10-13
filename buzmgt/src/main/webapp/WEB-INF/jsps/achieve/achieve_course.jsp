@@ -23,7 +23,7 @@
     <base href="<%=basePath%>"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>提成设置</title>
+    <title>查看进程</title>
 
     <!-- Bootstrap -->
     <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -55,7 +55,7 @@
             <td>{{start-end-Date}}</td>
             <td><span class="text-lv text-strong">进行中</span></td>
             <td>
-                <button class="btn btn-sm btn-blue">查看明细</button>
+                <button class="btn btn-sm btn-blue" onclick="CheckDetails('{{userId}}','{{achieveId}}');">查看明细</button>
             </td>
         </tr>
         {{/each}}
@@ -71,7 +71,7 @@
             'page': '0',
             'size': '20'
         };
-        var firstNum =${achieve.numberFirst}, secondNum =${achieve.numberSecond}, thirdNum =${achieve.numberThird};
+        <%--var firstNum =${achieve.numberFirst}, secondNum =${achieve.numberSecond}, thirdNum =${achieve.numberThird==null};--%>
         var achieveJson=${achieveJson};//达量设置规则（全局变量）
     </script>
 </head>

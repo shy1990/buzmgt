@@ -3,8 +3,6 @@ package com.wangge.buzmgt.achieveset.service;
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.repository.AchieveIncomeRepository;
-import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
-import com.wangge.buzmgt.achieveset.vo.repository.AchieveIncomeVoRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.income.main.entity.HedgeCost;
@@ -43,19 +41,30 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	@Autowired
 	private AchieveIncomeRepository air;
 	@Autowired
-	private AchieveIncomeVoRepository achieveIncomeVoRepository;
-	@Autowired
 	private	HedgeCostRepository hedgeCostRepository;
 
 
 	@Override
 	public Long countByAchieveId(Long achieveId) {
-		return air.countByAchieveId(achieveId);
+		Long count = air.countByAchieveId(achieveId);
+		return null == count ? 0 : count;
 	}
 
 	@Override
 	public Long countByAchieveIdAndUserId(Long achieveId, String userId) {
 		Long count = air.countByAchieveIdAndUserId(achieveId, userId);
+		return null == count ? 0 : count;
+	}
+
+	@Override
+	public Long countByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum status) {
+		Long count = air.countByAchieveIdAndUserIdAndStatus(achieveId,userId,status);
+		return null == count ? 0 : count;
+	}
+
+	@Override
+	public Long countByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {
+		Long count = air.countByAchieveIdAndStatus(achieveId,status);
 		return null == count ? 0 : count;
 	}
 
@@ -111,7 +120,8 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			if (payStatus == 1) {
 				statusEnum = AchieveIncome.PayStatusEnum.PAY;
 			}
-			Float money = disposeAchieveIncome(achieve, userId, num);
+			//查询收益金额
+			Float money = disposeAchieveIncome(achieve, userId, statusEnum, num);
 			AchieveIncome achieveIncome = new AchieveIncome();
 			achieveIncome.setAchieveId(achieve.getAchieveId());
 			achieveIncome.setUserId(userId);
@@ -157,9 +167,9 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	 * @Description: 根据规则计算收益 1.查询此商品当前的销量， 2.根据销量匹配出提成金额 -- 查询是否有特殊分组，若有分组则在规则中
 	 * 增加对应阶段区间量值; 3.根据数量计算提成金额
 	 */
-	private Float disposeAchieveIncome(Achieve ac, String userId, Integer num) {
+	private Float disposeAchieveIncome(Achieve ac, String userId, AchieveIncome.PayStatusEnum status, Integer num) {
 		// 获取当前商品当前规则的销量；
-		Integer nowNumber = Integer.valueOf(countByAchieveIdAndUserId(ac.getAchieveId(), userId).toString());
+		Integer nowNumber = Integer.valueOf(countByAchieveIdAndUserIdAndStatus(ac.getAchieveId(), userId, status).toString());
 		// 计算后的收益
 		Float money = 0f;
 		Integer firstAdd = 0;
@@ -211,7 +221,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			Integer max = 0;//设置最大值
 			min = rule.getMin() + minAdd;
 			max = rule.getMax() + maxAdd;
-			if (nowNumber > min && nowNumber <= max) {
+			if ((nowNumber==0||nowNumber > min) && nowNumber <= max) {
 				money = rule.getMoney();
 				break;
 			}
@@ -263,6 +273,10 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 		return true;
 	}
 
+	@Override
+	public Long countAchieveAfterSale(Long achieveId){
+		return hedgeCostRepository.countByRuleIdAndRuleType(achieveId,2);
+	}
 	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,
 	                                                                      final Class<AchieveIncome> entityClazz) {
 		return new Specification<AchieveIncome>() {

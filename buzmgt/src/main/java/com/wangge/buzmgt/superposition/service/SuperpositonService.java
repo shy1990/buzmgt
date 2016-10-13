@@ -14,15 +14,16 @@ import java.util.Map;
  */
 public interface SuperpositonService {
 
-    public void stop(Superposition superposition,String checkStatus);//终止方案(逻辑删除)
+    public void changeStatus(Superposition superposition,String checkStatus);//终止方案(逻辑删除)
 
     /**
      * 叠加收益计算
      * @param planId
+     * @param superId
      * @return
      */
 
-    public List<SuperpositionProgress> compute(Long planId);
+    public List<SuperpositionProgress> compute(Long planId,Long superId);
 
     /**
      * 用于退货冲减计算

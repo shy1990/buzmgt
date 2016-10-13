@@ -27,9 +27,12 @@ public class IncomeSubError {
   private String orderno, userId, errorInfo, goodId;
   /**
    * 错误类型:0 达量设置 1 品牌型号 2 价格区间 3.达量奖励 4叠加奖励,<br/>
-   * 5:50计算总工资,51计算油补;
+   * 5:50计算总工资,51计算油补;<br/>
+   * 7:71定时任务执行出错;<br/>
+   * 
    */
   private Integer type;
+  private Long keyId;
   
   private Date newdate = new Date();
   
@@ -89,6 +92,14 @@ public class IncomeSubError {
     this.newdate = newdate;
   }
   
+  public Long getKeyId() {
+    return keyId;
+  }
+  
+  public void setKeyId(Long keyId) {
+    this.keyId = keyId;
+  }
+  
   public IncomeSubError(String orderno, String userId, String errorInfo, String goodId, Integer type) {
     super();
     this.orderno = orderno;
@@ -102,6 +113,13 @@ public class IncomeSubError {
     super();
     this.errorInfo = errorInfo;
     this.type = type;
+  }
+  
+  public IncomeSubError(String errorInfo, Integer type, Long keyId) {
+    super();
+    this.errorInfo = errorInfo;
+    this.type = type;
+    this.keyId = keyId;
   }
   
 }

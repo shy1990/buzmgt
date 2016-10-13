@@ -9,8 +9,11 @@ import com.wangge.buzmgt.superposition.entity.Superposition;
 import com.wangge.buzmgt.superposition.pojo.SuperpositionProgress;
 import com.wangge.buzmgt.superposition.service.GoodsOrderService;
 import com.wangge.buzmgt.superposition.service.SuperpositonService;
+import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.util.DateUtil;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -197,7 +200,7 @@ public class SuperpositionController {
     }
 
     /**
-     * 终止/驳回 方案
+     * 终止/驳回/审核通过 方案
      * @param superposition
      * @return
      */
@@ -206,7 +209,7 @@ public class SuperpositionController {
     public JSONObject stop(@PathVariable("id") Superposition superposition,@RequestParam String checkStatus){
         JSONObject jsonObject = new JSONObject();
         try{
-            superpositonService.stop(superposition,checkStatus);
+            superpositonService.changeStatus(superposition,checkStatus);
             jsonObject.put("result","success");
             jsonObject.put("msg","操作成功");
             return jsonObject;
@@ -222,7 +225,7 @@ public class SuperpositionController {
 
 
     /**
-     * 跳转到财务显示全部的页面
+     * 跳转到渠道全部显示页面
      *
      * @param model
      * @return
@@ -254,18 +257,30 @@ public class SuperpositionController {
         return pageReposne;
     }
 
-//--------------------------- end --------------------------------------------//
+
     /**
-     * 计算
+     * 根据id查询
      *
      * @param superposition
      * @return
      */
-    @RequestMapping(value = "compute/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public List<SuperpositionProgress> compute(Long planId,@PathVariable("id") Superposition superposition) {
+    @RequestMapping(value = "find/{id}", method = RequestMethod.GET)
+    public String findByIdQd(@PathVariable("id") Superposition superposition, Model model) {
 
-        return superpositonService.compute(planId,superposition);
+        model.addAttribute("superposition", superposition);
+        return "superposition/show_one_qd";
+    }
+//--------------------------- end --------------------------------------------//
+    /**
+     * 计算
+     *
+     * @return
+     */
+    @RequestMapping(value = "compute", method = RequestMethod.GET)
+    @ResponseBody
+    public List<SuperpositionProgress> compute(Long planId,Long superId) {
+
+        return superpositonService.compute(planId,superId);
     }
 
 
@@ -321,12 +336,27 @@ public class SuperpositionController {
     }
 
 
+
+
+
     @RequestMapping(value = "ceshi", method = RequestMethod.GET)
     @ResponseBody
     public Superposition ceshi(Long planId) {
 
         return superpositonService.computeAfterReturnGoods("C370113210","f52ec6414ab14626a02ff9d41881d4f9","2016-10-02",1,planId);
     }
+
+
+    /*
+     * 获取用户的方法,用于判断是否有权限
+     */
+    public User getUser() {
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        return user;
+    }
+
+
 }
 
 

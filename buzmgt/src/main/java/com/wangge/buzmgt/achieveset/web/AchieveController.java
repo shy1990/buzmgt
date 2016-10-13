@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
+import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,6 +62,8 @@ public class AchieveController {
   private LogService logService;
   @Autowired
   private AchieveService achieveServer;
+  @Autowired
+  private AchieveIncomeService achieveIncomeServer;
   @Autowired
   private MainPlanService mainPlanService;
   @Autowired
@@ -352,12 +357,29 @@ public class AchieveController {
 	  }catch (Exception e){
 		  e.getMessage();
 	  }
+	  Long achieveId = achieve.getAchieveId();
 	  model.addAttribute("achieve", achieve);
 	  //查询周期销量
-	  model.addAttribute("totalNumber", 100);
+	  Long totalNumber = achieveIncomeServer.countByAchieveIdAndStatus(achieveId, AchieveIncome.PayStatusEnum.STOCK);
+	  model.addAttribute("totalNumber", totalNumber);
 	  //查询退货量
-	  model.addAttribute("retreatAmount", 10);
+		Long retreatAmount = achieveIncomeServer.countAchieveAfterSale(achieveId);
+	  model.addAttribute("retreatAmount", retreatAmount);
 	  return "achieve/achieve_course";
+  }
+  //明细
+	@RequestMapping(value = "/detail")
+  public String showAchieveIncomeDetail(@RequestParam(value = "userId") String userId, @RequestParam(value = "achieveId") Achieve achieve,Model model){
+		model.addAttribute("userId",userId);
+		model.addAttribute("achieve",achieve);
+		Long achieveId = achieve.getAchieveId();
+		//查询周期销量
+		Long totalNumber = achieveIncomeServer.countByAchieveIdAndUserIdAndStatus(achieveId, userId, AchieveIncome.PayStatusEnum.PAY);
+		model.addAttribute("totalNumber", totalNumber);
+		//查询退货量
+		Long retreatAmount = achieveIncomeServer.countAchieveAfterSale(achieveId);
+		model.addAttribute("retreatAmount", retreatAmount);
+		return "achieve/achieve_income_detail";
   }
 
   /**

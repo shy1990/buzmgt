@@ -43,7 +43,23 @@ public interface AchieveIncomeService {
   * @throws
    */
   Long countByAchieveIdAndUserId(Long achieveId, String userId);
-  
+
+	/**
+	 * 根据AchieveId和userId+支付状态查询数量
+	 * @param achieveId
+	 * @param userId
+	 * @param status
+	 * @return
+	 */
+	Long countByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum status);
+
+	/**
+	 * 根据AchieveId+支付状态 查询数量
+	 * @param achieveId
+	 * @param status
+	 * @return
+	 */
+	Long countByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status);
   /**
    * 
   * @Title: findAll 
@@ -127,4 +143,11 @@ public interface AchieveIncomeService {
 	 * @return true-成功；false-失败
 	 */
 	boolean createAchieveIncomeAfterSale(String userId,String goodId, Long palnId, Long hedgeId, Date payTime, Date acceptTime, Integer num);
+
+	/**
+	 * 查询达量售后冲减量
+	 * @param achieveId
+	 * @return
+	 */
+	Long countAchieveAfterSale(Long achieveId);
 }

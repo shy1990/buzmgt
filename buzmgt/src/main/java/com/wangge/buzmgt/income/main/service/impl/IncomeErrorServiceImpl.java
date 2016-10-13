@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wangge.buzmgt.income.main.entity.IncomeSubError;
 import com.wangge.buzmgt.income.main.repository.IncomeSubErroRepository;
 import com.wangge.buzmgt.income.main.service.IncomeErrorService;
+
 @Service
 public class IncomeErrorServiceImpl implements IncomeErrorService {
   @Autowired
@@ -21,8 +22,15 @@ public class IncomeErrorServiceImpl implements IncomeErrorService {
   
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void save(String orderno, String userId, String errorInfo, String goodId, Integer type)  {
+  public void save(String orderno, String userId, String errorInfo, String goodId, Integer type) {
     IncomeSubError error = new IncomeSubError(orderno, userId, errorInfo, goodId, type);
+    errRep.save(error);
+  }
+  
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void saveScheduleError(int type, long jobId, String message) {
+    IncomeSubError error = new IncomeSubError(message, type, jobId);
     errRep.save(error);
   }
 }
