@@ -54,6 +54,7 @@
 								<td><a href="/customTask/list?month={{month}}&&salesId={{userId}}"><span class="text-red-line">{{punish}}</span></a></td>
 								<td><a href=""><span class="text-blue-line">{{reachIncome}}</span></a></td>
 								<td><a href=""><span class="text-blue-line">{{overlyingIncome}}</span></a></td>
+								<td><a href=""><span class="text-strong">{{hedgecut}}</span></a></td>
 								<td><a href=""><span class="text-green text-strong">{{allresult}}</span></a></td>
 			{{#isfh state}}		
 				<td><span class="yfh">已复核</span></td>						
@@ -135,6 +136,7 @@
 								<th>扣罚金额</th>
 								<th>达量收益</th>
 								<th>叠加收益</th>
+								<th>售后冲减</th>
 								<th>合计</th>
 								<th>状态</th>
 								<th>操作</th>

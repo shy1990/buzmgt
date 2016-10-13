@@ -78,8 +78,12 @@ public interface MainIncomeService {
   
   /**
    * 计算已付款的订单的单品方法 <br/>
+   * 
+   * @param achieveFlag
+   *          是否计算达量 0不计算,1计算
    */
-  void caculatePayedOrder(String userId, Long planId, Date payDate, List<OrderGoods> goodList, String regionId);
+  void caculatePayedOrder(String userId, Long planId, Date payDate, List<OrderGoods> goodList, String regionId,
+      int achieveFlag);
   
   /**
    * 删除分支订单收益 <br/>
@@ -89,14 +93,35 @@ public interface MainIncomeService {
   void deleteSubIncome(Long planId, String userId, Date startDate) throws Exception;
   
   /**
-   * 根据方案Id删除分支订单收益 <br/>
-   * 
-   * @throws Exception
-   */
-  void deleteSubIncomeByPlanId(Long planId, Date startDate) throws Exception;
-  
-  /**
    * 每月一算,总结计算
    */
   void calIncomePerMonth();
+  
+  /**
+   * 计算收益修改有效开始时间
+   * 
+   * @return
+   * @since JDK 1.8
+   */
+  Date getEffectiveStartTime(Date startTime, String userId);
+  
+  /**
+   * 保存业务员的达量收入到薪资主表的上月薪资记录里. <br/>
+   * 
+   * @param userId
+   *          业务员id
+   * @param achieveIncome
+   *          新增加的收益
+   * @throws Exception
+   * @since JDK 1.8
+   */
+  void updateAchieveIncome(String userId, double achieveIncome) throws Exception;
+  
+  /**
+   * 保存业务员的叠加收入到薪资主表的上月薪资记录里.<br/>
+   * @param userId
+   * @param superPositionIncome
+   * @throws Exception
+   */
+  void updateSuperIncome(String userId, double superPositionIncome) throws Exception;
 }

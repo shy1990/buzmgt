@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.income.main.entity;
+package com.wangge.buzmgt.common;
 
 public enum CheckedEnum {
   // 正常

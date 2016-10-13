@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.income.main.service;
 
-import com.wangge.buzmgt.income.main.entity.Hedge;
 import com.wangge.buzmgt.income.main.vo.HedgeVo;
 import com.wangge.buzmgt.region.entity.Region;
 import org.springframework.data.domain.Page;
