@@ -23,6 +23,7 @@ import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.achieveset.service.AchieveService;
 import com.wangge.buzmgt.brandincome.entity.BrandIncome;
 import com.wangge.buzmgt.brandincome.service.BrandIncomeService;
+import com.wangge.buzmgt.common.CheckedEnum;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
@@ -70,6 +71,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   ProductionService productionService;
   @Autowired
   IncomeErrorService errorService;
+  
   /**
    * 要避免多线程冲突 <br/>
    * 手机要展示当天的订单预计收益详情和当天的订单预计收益总和统计<br/>
@@ -105,7 +107,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
         String userId1 = uers[1].toString();
         String regionId1 = uers[2].toString();
         if (null != planId) {
-          caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList), regionId1);
+          caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList), regionId1, 1);
         }
       }
     }
@@ -178,7 +180,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    * @since JDK 1.8
    */
   @Override
-  public void caculatePayedOrder(String userId, Long planId, Date payDate, List<OrderGoods> goodList, String regionId) {
+  public void caculatePayedOrder(String userId, Long planId, Date payDate, List<OrderGoods> goodList, String regionId,
+      int achieveFlag) {
     Set<String> goodIdList = new HashSet<>();
     for (OrderGoods good : goodList) {
       goodIdList.add(good.getGoodId());
@@ -194,8 +197,10 @@ public class MainIncomeServiceImpl implements MainIncomeService {
         if (null == subgood) {
           break;
         }
-        achieveIncomeService.createAchieveIncomeByPay((Achieve) ruleMap.get("rule"), subgood.getOrderNo(), userId,
-            subgood.getNums(), subgoodId, 1, planId, subgood.getPrice(), payDate);
+        if (achieveFlag == 1) {
+          achieveIncomeService.createAchieveIncomeByPay((Achieve) ruleMap.get("rule"), subgood.getOrderNo(), userId,
+              subgood.getNums(), subgoodId, 1, planId, subgood.getPrice(), payDate);
+        }
       }
       goodIdList.remove(subgoodId);
       
@@ -244,7 +249,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     }
     Long planId = userOpt.get();
     List<OrderGoods> goodList = orderGoodsRep.findByorderNo(orderNo);
-    caculatePayedOrder(userId, planId, new Date(), goodList, regionId);
+    caculatePayedOrder(userId, planId, new Date(), goodList, regionId, 1);
   }
   
   /*
@@ -304,17 +309,10 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteSubIncome(Long planId, String userId, Date startDate) throws Exception {
-    mainIncomeRep.delAchieveIncome(planId, userId, startDate);
+    startDate = getEffectiveStartTime(startDate, userId);
+    // mainIncomeRep.delAchieveIncome(planId, userId, startDate);
     mainIncomeRep.delBrandIncome(planId, userId, startDate);
     mainIncomeRep.delPriceIncome(planId, userId, startDate);
-  }
-  
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  public void deleteSubIncomeByPlanId(Long planId, Date startDate) throws Exception {
-    mainIncomeRep.delAchieveIncomeByPlanId(planId, startDate);
-    mainIncomeRep.delBrandIncomeByPlanId(planId, startDate);
-    mainIncomeRep.delPriceIncomeByPlanId(planId, startDate);
   }
   
   @Override
@@ -324,6 +322,58 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     } catch (Exception e) {
       LogUtil.info("每月计算基本工资出错!!");
       errorService.save(50, "每月计算基本工资出错!!问题很严重");
+    }
+  }
+  
+  /**
+   * getEffectiveStartTime:(这里用一句话描述这个方法的作用). <br/>
+   */
+  @Override
+  public Date getEffectiveStartTime(Date startTime, String userId) {
+    String execMonth = DateUtil.getPreMonth(startTime, 0);
+    String thisMonth = DateUtil.getPreMonth(new Date(), 0);
+    String premonth = DateUtil.getPreMonth(new Date(), -1);
+    
+    // 如果既不是本月,也不是上个月,那就将起始时间设为上个月的月初;
+    if (!execMonth.equals(thisMonth)) {
+      // 查到上月的工资记录
+      MainIncome income = mainIncomeRep.findBySalesman_IdAndMonth(userId, premonth);
+      
+      if (null != income && income.getState() == CheckedEnum.UNCHECKED) {
+        // 开始时间为上两月,设为从上个月开始
+        if (!premonth.equals(execMonth)) {
+          startTime = DateUtil.getPreMonthDate(new Date(), -1);
+        }
+      } else {
+        // 本月月初开始计算
+        startTime = DateUtil.getPreMonthDate(new Date(), 0);
+      }
+    }
+    return startTime;
+  }
+  
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void updateAchieveIncome(String userId, double achieveIncome) throws Exception {
+    try {
+      String preMonth = DateUtil.getPreMonth(new Date(), -1);
+      MainIncome main = findIncomeMain(userId, preMonth);
+      main.setReachIncome(main.getReachIncome() + achieveIncome);
+      mainIncomeRep.save(main);
+    } catch (Exception e) {
+      throw new Exception("保存达量记录出错");
+    }
+  }
+  
+  @Override
+  public void updateSuperIncome(String userId, double superPositionIncome) throws Exception {
+    try {
+      String preMonth = DateUtil.getPreMonth(new Date(), -1);
+      MainIncome main = findIncomeMain(userId, preMonth);
+      main.setOverlyingIncome(main.getOverlyingIncome() + superPositionIncome);
+      mainIncomeRep.save(main);
+    } catch (Exception e) {
+      throw new Exception("保存达量记录出错");
     }
   }
   

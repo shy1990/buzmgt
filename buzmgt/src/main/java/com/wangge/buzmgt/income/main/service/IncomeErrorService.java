@@ -17,4 +17,6 @@ public interface IncomeErrorService {
    * 使用于具体规则计算的保存
    */
   void save(String orderno, String userId, String errorInfo, String goodId, Integer type);
+
+  void saveScheduleError(int type, long jobId, String message);
 }

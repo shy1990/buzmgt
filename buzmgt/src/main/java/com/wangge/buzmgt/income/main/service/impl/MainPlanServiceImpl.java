@@ -1,11 +1,30 @@
 package com.wangge.buzmgt.income.main.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.persistence.criteria.Predicate;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
+import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
@@ -19,18 +38,8 @@ import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.RoleService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.EnvironmentUtils;
-import net.sf.json.JSONArray;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
-import javax.persistence.criteria.Predicate;
-import java.util.*;
+import net.sf.json.JSONArray;
 
 /**
  * 人员的删除和添加都从当日算起,有个插入时间; 计算执行时间--插入时间之间的东西 ClassName: MainPlanServiceImpl <br/>
@@ -53,6 +62,8 @@ public class MainPlanServiceImpl implements MainPlanService {
   PlanUserVoRepository planUserVorep;
   @Autowired
   JobRepository jobRep;
+  @Autowired
+  MainIncomeService mainIncomeService;
   
   @Override
   public Map<String, Object> findAll(String regionId, Pageable pageReq) {
@@ -344,9 +355,31 @@ public class MainPlanServiceImpl implements MainPlanService {
   public void alterUserFlag(Long planUserId) {
     planUserRep.updateFlagById(FlagEnum.DEL, planUserId);
   }
-
+  
   @Override
   public MainIncomePlan findById(Long id) {
     return mainPlanRep.findOne(id);
+  }
+  
+  /**
+   * 0:删除主方案:不在计算收益;<br/>
+   * 1.删除删除日期当天的收益<br/>
+   * TODO 达量叠加等收益如何处理<br/>
+   * 每个业务员来删除,每个人查东西
+   * 
+   * @since JDK 1.8
+   */
+  @Override
+  public void deleteIncomeMainPlan(Jobtask jobtask) throws Exception {
+    Long planId = jobtask.getPlanId();
+    Date delDate = jobtask.getExectime();
+    try {
+      List<IncomeMainplanUsers> userList = planUserRep.findByMainplan_Id(planId);
+      for (IncomeMainplanUsers usr : userList) {
+        mainIncomeService.deleteSubIncome(planId, usr.getSalesmanId(), delDate);
+      }
+    } catch (Exception e) {
+      LogUtil.error("删除主方案" + planId + "下的订单收益失败");
+    }
   }
 }

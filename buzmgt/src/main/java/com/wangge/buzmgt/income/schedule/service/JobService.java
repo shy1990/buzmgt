@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wangge.buzmgt.common.CheckedEnum;
 import com.wangge.buzmgt.common.IncomeThreadPool;
-import com.wangge.buzmgt.income.main.entity.CheckedEnum;
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
@@ -16,6 +16,7 @@ import com.wangge.buzmgt.income.main.repository.IncomeSubRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
 import com.wangge.buzmgt.income.main.service.HedgeService;
+import com.wangge.buzmgt.income.main.service.IncomeErrorService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.main.vo.OrderGoods;
@@ -55,6 +56,8 @@ public class JobService {
   MainIncomeService mainIncomeService;
   @Autowired
   HedgeService hedgeService;
+  @Autowired
+  IncomeErrorService errorService;
   
   @Transactional(rollbackFor = Exception.class)
   public void initMonthIncome() {
@@ -67,9 +70,13 @@ public class JobService {
       int type = jobtask.getType();
       try {
         switch (type) {
-          // 删除一个收益主方案
+          /**
+           * 0:删除主方案:不在计算收益;<br/>
+           * 1.删除删除日期当天的收益<br/>
+           * TODO 达量叠加如何处理<br/>
+           */
           case 0:
-            deleteIncomeMainPlan(jobtask);
+            mainPlanService.deleteIncomeMainPlan(jobtask);
             break;
           case 10:
             deleteIncomeMainPlanUser(jobtask);
@@ -78,10 +85,12 @@ public class JobService {
             calIncomeMainPlanUser(jobtask);
             break;
           case 20:
-            //计算达量
+            // TODO 计算达量
+//            saveJobTask(21, jobtask.getPlanId(), jobtask.getKeyid(), DateUtil.moveDate(jobtask.getExectime(), 1));
             break;
           case 30:
-            //计算叠加
+            // TODO 计算叠加
+//            saveJobTask(31, jobtask.getPlanId(), jobtask.getKeyid(), DateUtil.moveDate(jobtask.getExectime(), 1));
             break;
           case 60:
             calhedgeAchieve(jobtask);
@@ -89,8 +98,10 @@ public class JobService {
           default:
             break;
         }
+        
         jobtask.setFlag(1);
       } catch (Exception e) {
+        errorService.saveScheduleError(71, jobtask.getId(), "执行定时任务出错");
         LogUtil.error("定时任务失败", e);
       }
     }
@@ -117,15 +128,7 @@ public class JobService {
     String regionId = salesmanRep.findOne(userId).getRegion().getId();
     
     Date endDay = DateUtil.string2Date(DateUtil.date2String(endTime, "yyyy-mm-dd"));
-    String execMonth = DateUtil.getPreMonth(startTime, 0);
-    String thisMonth = DateUtil.getPreMonth(new Date(), 0);
-    if (!execMonth.equals(thisMonth)) {
-      // 查到上月的工资记录
-      MainIncome income = mainIncomeRep.findBySalesman_IdAndMonth(userId, execMonth);
-      if (null != income && income.getState() == CheckedEnum.CHECKED) {
-        startTime = DateUtil.getPreMonthDate(endTime, 0);
-      }
-    }
+    startTime = mainIncomeService.getEffectiveStartTime(startTime, userId);
     int between = DateUtil.daysBetween(startTime, endDay);
     
     // 计算查找每天的结算订单
@@ -136,7 +139,7 @@ public class JobService {
         @Override
         public void run() {
           List<OrderGoods> goodList = orderGoodsRep.findByorderNoByDateAndSalesman(userId, startDate, endDate);
-          mainIncomeService.caculatePayedOrder(userId, planId, startDate, goodList, regionId);
+          mainIncomeService.caculatePayedOrder(userId, planId, startDate, goodList, regionId, 0);
         }
       });
     }
@@ -145,7 +148,7 @@ public class JobService {
       @Override
       public void run() {
         List<OrderGoods> goodList = orderGoodsRep.findByorderNoByDateAndSalesman(userId, endTime, endDay);
-        mainIncomeService.caculatePayedOrder(userId, planId, endDay, goodList, regionId);
+        mainIncomeService.caculatePayedOrder(userId, planId, endDay, goodList, regionId, 0);
       }
     });
     
@@ -160,52 +163,13 @@ public class JobService {
   @Transactional(rollbackFor = Exception.class)
   private void deleteIncomeMainPlanUser(Jobtask jobtask) {
     Date execTime = jobtask.getExectime();
-    String execMonth = DateUtil.getPreMonth(execTime, 0);
-    String thisMonth = DateUtil.getPreMonth(new Date(), 0);
-    Date endDate = jobtask.getInserttime();
     IncomeMainplanUsers user = mainPlanUserRep.findOne(jobtask.getKeyid());
     String userId = user.getSalesmanId();
     Long planId = user.getPlanId();
-    if (!execMonth.equals(thisMonth)) {
-      // 查到上月的工资记录
-      MainIncome income = mainIncomeRep.findBySalesman_IdAndMonth(userId, execMonth);
-      if (null != income && income.getState() == CheckedEnum.CHECKED) {
-        execTime = DateUtil.getPreMonthDate(endDate, 0);
-      }
-    }
-    delOrderByUserAndDate(execTime, userId, planId);
-  }
-  
-  /**
-   * 计算一个用户在某月被删除的订单. <br/>
-   * 
-   * @throws NumberFormatException
-   * @since JDK 1.8
-   */
-  private void delOrderByUserAndDate(Date execTime, String userId, Long planId) {
     try {
       mainIncomeService.deleteSubIncome(planId, userId, execTime);
     } catch (Exception e) {
       LogUtil.info("删除订单收益出错,信息如下:planId-->" + planId + ";userId-->" + userId + ";execTime-->" + execTime);
-    }
-  }
-  
-  /**
-   * 0:删除主方案:不在计算收益;<br/>
-   * 1.删除删除日期当天的收益<br/>
-   * TODO 达量叠加如何处理<br/>
-   * 
-   * @since JDK 1.8
-   */
-  private void deleteIncomeMainPlan(Jobtask jobtask) {
-    Long planId = jobtask.getPlanId();
-    Date delDate = jobtask.getExectime();
-    // Date today = new Date();
-    // TODO 根据日期(某天),主方案删除品牌型号,叠加,达量的收益
-    try {
-      mainIncomeService.deleteSubIncomeByPlanId(planId, delDate);
-    } catch (Exception e) {
-      LogUtil.error("删除主方案" + planId + "下的订单收益失败");
     }
   }
   
@@ -215,12 +179,16 @@ public class JobService {
   @Transactional(rollbackFor = Exception.class)
   public void doUserDel() {
     Date tomorrow = DateUtil.moveDate(new Date(), 1);
-    List<Jobtask> joblist = jobRep.findUserDel(tomorrow);
-    for (Jobtask job : joblist) {
-      mainPlanService.alterUserFlag(job.getKeyid());
-      job.setFlag(1);
+    try {
+      List<Jobtask> joblist = jobRep.findUserDel(tomorrow);
+      for (Jobtask job : joblist) {
+        mainPlanService.alterUserFlag(job.getKeyid());
+        job.setFlag(1);
+      }
+      jobRep.save(joblist);
+    } catch (Exception e) {
+      errorService.saveScheduleError(71, 0, "删除以前的主方案用户任务出错,日期为" + DateUtil.date2String(tomorrow));
     }
-    LogUtil.info("定时任务:用户删除完成!!");
   }
   
   /**

@@ -19,6 +19,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.wangge.buzmgt.common.CheckedEnum;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 /**

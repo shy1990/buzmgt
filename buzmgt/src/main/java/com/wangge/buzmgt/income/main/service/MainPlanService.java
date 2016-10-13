@@ -12,6 +12,7 @@ import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
 import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
 import com.wangge.buzmgt.income.main.vo.PlanUserVo;
+import com.wangge.buzmgt.income.schedule.entity.Jobtask;
 
 import net.sf.json.JSONArray;
 
@@ -113,6 +114,15 @@ public interface MainPlanService {
   void deleteUser(Map<String, Object> user) throws Exception;
   
   void alterUserFlag(Long planUserId);
-
+  
   MainIncomePlan findById(Long id);
+  
+  /**
+   * 0:删除主方案:不在计算收益;<br/>
+   * 1.删除删除日期当天的收益<br/>
+   * TODO 达量叠加如何处理<br/>
+   */
+  void deleteIncomeMainPlan(Jobtask jobtask) throws Exception;
+  
+ 
 }
