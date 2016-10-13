@@ -215,7 +215,7 @@ public class ImportOrderExcel {
       private static String validatFestmailNo(Cell param)throws Exception{
         String FestmailNo = ExcelUtil.getValue(param).replace("\r\n", "").trim();
         if(!"非法字符".equals(FestmailNo) && !"未知类型".equals(FestmailNo) && !"".equals(FestmailNo)){
-          String[] arr = {"9","6","5"};
+          String[] arr = {"9","6","5","7"};
           if(in(arr, FestmailNo.substring(0, 1))){
              
              return FestmailNo;
