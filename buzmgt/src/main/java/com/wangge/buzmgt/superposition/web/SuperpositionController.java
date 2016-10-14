@@ -398,7 +398,7 @@ public class SuperpositionController {
     @ResponseBody
     public Superposition ceshi(Long planId) {
 
-        return superpositonService.computeAfterReturnGoods("C370113210","f52ec6414ab14626a02ff9d41881d4f9","2016-10-02",1,planId);
+        return superpositonService.computeAfterReturnGoods("C370113210","f52ec6414ab14626a02ff9d41881d4f9","2016-10-02",1,planId,"");
     }
 
 
