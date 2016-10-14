@@ -21,7 +21,7 @@ public interface CustomRepository {
   * @return BigDecimal    返回类型 
   * @throws
    */
-  BigDecimal sumMoneyByAchieveId(Long achieveId);
+  BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId, Integer status);
   /**
    * 
   * @Title: sumByAchieveIdAndUserId 
@@ -32,6 +32,6 @@ public interface CustomRepository {
   * @return BigDecimal    返回类型 
   * @throws
    */
-  BigDecimal sumMoneyByAchieveIdAndUserId(Long achieveId,String userId);
+  BigDecimal sumMoneyByAchieveIdAndUserIdAndStatus(Long achieveId,String userId, Integer status);
 
 }

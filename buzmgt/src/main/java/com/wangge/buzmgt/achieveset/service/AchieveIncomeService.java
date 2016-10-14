@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.achieveset.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -150,4 +151,28 @@ public interface AchieveIncomeService {
 	 * @return
 	 */
 	Long countAchieveAfterSale(Long achieveId);
+
+	/**
+	 * 根据userId和AchieveId查询售后冲减量
+	 * @param ahieveId
+	 * @param userId
+	 * @return
+	 */
+	Long countAchieveAfterSaleAndUserId(Long ahieveId, String userId);
+
+	/**
+	 * 根据AchieveId和Status查询收益金额
+	 * @param achieveId
+	 * @param status
+	 * @return
+	 */
+	BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId,AchieveIncome.PayStatusEnum status);
+
+	/**
+	 * 根据AchieveId和UserId和Status查询收益金额
+	 * @param achieveId
+	 * @param status
+	 * @return
+	 */
+	BigDecimal sumMoneyByAchieveIdAndUserIdAndStatus(Long achieveId,String userId, AchieveIncome.PayStatusEnum status);
 }

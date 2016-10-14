@@ -88,24 +88,24 @@
 
         <div class="row">
             <div class="col-sm-4 info-zq">
-                <img src="img/pic1.png" alt="" class="fl" style=" margin-right: 15px;">
+                <img src="/static/earnings/img/pic1.png" alt="" class="fl" style=" margin-right: 15px;">
                 <p class="text-gery text-strong font-w">周期销量</p>
-                <p class="text-lv text-16 text-strong">1000台</p>
+                <p class="text-lv text-16 text-strong">${totalNumber}台</p>
             </div>
             <div class="col-sm-4 info-zq">
-                <img src="img/pic-2.png" alt="" class="fl" style=" margin-right: 15px;">
+                <img src="static/earnings/img/pic-2.png" alt="" class="fl" style=" margin-right: 15px;">
                 <p class=" text-strong text-gery  font-w ">退货冲减</p>
-                <p class="text-jv text-16">50台</p>
+                <p class="text-jv text-16">${retreatAmount}台</p>
             </div>
             <div class="col-sm-4 info-zq">
-                <img src="img/pic3.png" alt="" class="fl" style=" margin-right: 15px;">
+                <img src="static/earnings/img/pic3.png" alt="" class="fl" style=" margin-right: 15px;">
                 <p class="text-gery   font-w text-strong">实际销量</p>
-                <p class="text-gren text-16">950台</p>
+                <p class="text-gren text-16">${totalNumber-retreatAmount}台</p>
             </div>
             <div class="col-sm-4 info-zq">
-                <img src="img/redq.png" alt="" class="fl" style=" margin-right: 15px;">
+                <img src="static/earnings/img/redq.png" alt="" class="fl" style=" margin-right: 15px;">
                 <p class="text-gery   font-w text-strong">预计收益</p>
-                <p class="text-red text-16 text-strong">1230.05元</p>
+                <p class="text-red text-16 text-strong">${totalMoney}元</p>
             </div>
         </div>
 
@@ -114,37 +114,84 @@
         <div class="row" style="padding-left: 20px">
             <div class="col-sm-4 product">
                 <span class="text-strong text-gery">达量产品：</span>
-                <span class="text-lan text-strong">手机小米小米手机5  平板苹果苹果平板2</span>
+                <span class="text-lan text-strong">${achieve.machineType.name } ${achieve.good.name }</span>
             </div>
             <div class="col-sm-4 pro-2">
                 <span class="text-strong text-gery">达量产品：</span>
-                <span class="text-lv text-strong"> 150台</span>
+                <span class="text-lv text-strong">
+                    <c:if test="${achieve.numberFirst != null && achieve.numberFirst != ''}">
+                    ${achieve.numberFirst}台/
+                    </c:if>
+                    <c:if test="${achieve.numberSecond != null && achieve.numberSecond != ''}">
+                    ${achieve.numberSecond}台/
+                    </c:if>
+                    <c:if test="${achieve.numberThird != null && achieve.numberThird != ''}">
+                    ${achieve.numberThird}台
+                    </c:if>
+                </span>
             </div>
             <div class="col-sm-4 pro-2">
                 <span class="text-strong text-gery">起止日期：</span>
-                <span class="text-black text-strong"> 2016.09.02 - 2016.09.02</span>
+                <span class="text-black text-strong" id="srart-end-date">
+                    <fmt:formatDate value="${achieve.startDate}" pattern="yyyy.MM.dd"/>-
+                    <fmt:formatDate value="${achieve.endDate}" pattern="yyyy.MM.dd"/>
+                </span>
             </div>
         </div>
 
         <div class="row" style="padding: 20px;">
-            <div class="col-sm-4 product">
+            <div class="col-sm-11">
                 <span class="text-strong text-gery">奖罚：</span>
-                <span style="background: #fafafa;padding: 5px"> <span class="text-71 ">销售  <</span> <span
-                        class="text-lan">300</span>  <span class="text-71">台 &nbsp; 奖励：</span> <span
-                        class="text-red">-9.00</span> <span class="text-71">元/台</span></span>
+                <c:forEach var="rule" items="${achieve.rewardPunishRules}">
+                    <span style="background: #fafafa;padding: 5px">
+                    (
+                    <c:if test="${rule.min == 0}">
+                        <span class="text-71 ">销量 &lt;</span>
+                        <span class="text-lan">${rule.max}</span>
+                        <span class="text-71">台 &nbsp; 奖励：</span>
+                        <c:if test="${rule.money <0}">
+                            <span class="text-red">${rule.money}</span>
+                        </c:if>
+                        <c:if test="${rule.money >= 0}">
+                            <span class="text-gren">${rule.money}</span>
+                        </c:if>
+                        <span class="text-71">元/台</span></span>
+                    </c:if>
+                    <c:if test="${rule.max ==99999}">
+                        <span class="text-lan">${rule.min}</span>
+                        <span class="text-71 ">台 ≤ 销量 </span>
+                        <span class="text-71">台 &nbsp; 奖励：</span>
+                        <c:if test="${rule.money <0}">
+                            <span class="text-red">${rule.money}</span>
+                        </c:if>
+                        <c:if test="${rule.money >= 0}">
+                            <span class="text-gren">${rule.money}</span>
+                        </c:if>
+                        <span class="text-71">元/台</span></span>
+                    </c:if>
+                    <c:if test="${rule.min != 0 && rule.max !=99999 }">
+                        <span class="text-lan">${rule.min}</span>
+                        <span class="text-71 ">台 ≤ 销量 &LT;</span>
+                        <span class="text-lan">${rule.max}</span>
+                        <span class="text-71">台 &nbsp; 奖励：</span>
+                        <c:if test="${rule.money <0}">
+                            <span class="text-red">${rule.money}</span>
+                        </c:if>
+                        <c:if test="${rule.money >= 0}">
+                            <span class="text-gren">${rule.money}</span>
+                        </c:if>
+                        <span class="text-71">元/台</span>
+                    </c:if>
+                    )
+                    </span>
+                </c:forEach>
             </div>
-            <div class="col-sm-4 pro-2-2">
-                 <span style="background: #fafafa;padding: 5px"> <span class="text-71 ">销售大于300台  奖励：</span> <span
-                         class="text-lan">300</span>  <span class="text-71"> 台 &nbsp; 奖励：</span> <span
-                         class="text-gren">+5.00</span> <span class="text-71">元/台</span></span>
-            </div>
-
         </div>
 
         <div class="row" style="padding: 0px 20px  ">
             <div class="col-sm-4 " style="width: 1200px">
                 <span class="text-strong text-gery">补充说明：</span>
-                <span style="background: #fafafa;padding: 5px"> <span class="text-71 ">跨界，互联网常说的跨界方式无外乎两种：一.传统企业人员学习相关的技术，把业务进行系统化、流程化 ，从而进行数据数据分析统计，算出用户的潜在的行为需求。 </span></span>
+                <span style="background: #fafafa;padding: 5px"> <span class="text-71 ">${achieve.remark}</span></span>
             </div>
 
 
@@ -167,8 +214,7 @@
 
         <select class="ph-select">
             <option>销量订单</option>
-            <option>山东省-德州市-武城县</option>
-            <option>山东省-德州市-武城县</option>
+            <option>退货订单</option>
         </select>
 
 
@@ -193,14 +239,12 @@
             <table class="table table-hover new-table">
                 <thead>
                 <tr>
-                    <th>序号</th>
-                    <th>姓名</th>
-                    <th>负责区域</th>
-                    <th>业务等级</th>
-                    <th>达量指标</th>
-                    <th>分组</th>
-                    <th>查看进程</th>
-                    <th>任务起止日期</th>
+                    <th>商家名称</th>
+                    <th>区域</th>
+                    <th>订单号</th>
+                    <th>产品</th>
+                    <th>数量</th>
+                    <th><span>付款日期</span><span>退货日期</span></th>
                     <th>状态</th>
                     <th>操作</th>
                 </tr>

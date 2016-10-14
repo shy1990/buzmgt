@@ -105,7 +105,7 @@ public class WaterOrderCashServiceImpl implements WaterOrderCashService {
 
       private final static String TYPE_WATERPAYSTATUS_TYPE = "com.wangge.buzmgt.cash.entity.WaterOrderCash$WaterPayStatusEnum";
       
-      private final static String TYPE_FLAG_TYPE = "com.wangge.buzmgt.ywsalary.entity.FlagEnum";
+      private final static String TYPE_FLAG_TYPE = "com.wangge.buzmgt.common.FlagEnum";
 
       private final static String TYPE_DATE = "java.util.Date";
 

@@ -1,14 +1,13 @@
 package com.wangge.buzmgt.achieveset.entity;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.wangge.buzmgt.common.FlagEnum;
+import com.wangge.buzmgt.goods.entity.Goods;
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 
 import javax.persistence.*;
-
-import org.hibernate.annotations.GenericGenerator;
-
-import com.wangge.buzmgt.common.FlagEnum;
-import com.wangge.buzmgt.income.main.vo.PlanUserVo;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 
@@ -50,8 +49,16 @@ public class AchieveIncome implements Serializable{
   @OneToOne
   @JoinColumn(name = "ACHIEVE_ID", insertable = false, updatable = false)
   private Achieve achieve;
-  private String  goodId ;// 商品Id
-  private String  orderNo  ;// 订单号
+  @Column(name = "GOOD_ID")
+	private String  goodId ;// 商品Id
+	@OneToOne
+	@JoinColumn(name = "GOOD_ID", insertable = false, updatable = false)
+	private Goods good ;// 商Id
+  @Column(name = "ORDER_NO")
+	private String  orderNo  ;// 订单号
+	@OneToOne
+	@JoinColumn(name = "ORDER_NO",referencedColumnName = "ORDER_NO",insertable = false, updatable = false)
+	private OrderSignfor order;
   private Integer num ;// 数量
   private Float money ;// 金额
 	@Enumerated(EnumType.ORDINAL)
@@ -145,6 +152,23 @@ public class AchieveIncome implements Serializable{
 	}
 	public void setPrice(Float price) {
 		this.price = price;
+	}
+
+	public Goods getGood() {
+		return good;
+	}
+
+	public void setGood(Goods good) {
+		this.good = good;
+	}
+
+	public OrderSignfor getOrder() {
+		order.setSalesMan(null);
+		return order;
+	}
+
+	public void setOrder(OrderSignfor order) {
+		this.order = order;
 	}
 
 	@Override

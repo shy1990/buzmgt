@@ -95,6 +95,7 @@ public class OrderSignfor implements Serializable {
   @GeneratedValue(generator = "idgen")
   private Long id;
   private String fastmailNo;
+	@Column(name = "ORDER_NO")
   private String orderNo;
   @Transient
   private String aging;//时效

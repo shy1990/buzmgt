@@ -29,18 +29,18 @@
 }
 
 .ico-xx {
-    background: url("/static/earnings/img/start1.png") no-repeat center;
+    background: url("../earnings/img/start1.png") no-repeat center;
 }
 
 .icon-back {
     width: 26px;
     height: 26px;
-    background: url("/static/earnings/img/arrow.png") no-repeat center;
+    background: url("../earnings/img/arrow.png") no-repeat center;
 }
 
 .icon-back:hover {
     width: 26px;
-    background: url("/static/earnings/img/Arrow 2 .png") no-repeat center;
+    background: url("../earnings/img/Arrow 2 .png") no-repeat center;
 }
 
 .fl-right {
@@ -155,4 +155,14 @@
 .text-71 {
     color: #717171;
 
+}
+
+.info-zq {
+    height: 70px;
+    width: 190px;
+    margin-left: 40px;
+
+    background: #fafafa;
+    padding-left: 0px;
+    box-shadow: 5px 5px 5px #ededed;
 }

@@ -277,6 +277,30 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	public Long countAchieveAfterSale(Long achieveId){
 		return hedgeCostRepository.countByRuleIdAndRuleType(achieveId,2);
 	}
+
+	@Override
+	public Long countAchieveAfterSaleAndUserId(Long ahieveId, String userId) {
+		return hedgeCostRepository.countByRuleIdAndRuleTypeAndUserId(ahieveId,2,userId);
+	}
+
+	@Override
+	public BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {
+		Integer statusInteger = 0;
+		if(status==AchieveIncome.PayStatusEnum.PAY){
+			statusInteger =1;
+		}
+		return air.sumMoneyByAchieveIdAndStatus(achieveId, statusInteger);
+	}
+
+	@Override
+	public BigDecimal sumMoneyByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum status) {
+		Integer statusInteger = 0;
+		if(status==AchieveIncome.PayStatusEnum.PAY){
+			statusInteger =1;
+		}
+		return air.sumMoneyByAchieveIdAndUserIdAndStatus(achieveId, userId, statusInteger);
+	}
+
 	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,
 	                                                                      final Class<AchieveIncome> entityClazz) {
 		return new Specification<AchieveIncome>() {

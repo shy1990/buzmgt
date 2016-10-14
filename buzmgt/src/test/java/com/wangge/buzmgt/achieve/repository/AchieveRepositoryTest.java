@@ -3,6 +3,7 @@ package com.wangge.buzmgt.achieve.repository;
 import java.math.BigDecimal;
 import java.util.*;
 
+import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,7 @@ public class AchieveRepositoryTest {
   }
   @Test
   public void test1(){
-    BigDecimal money=achieveIncomeRepository.sumMoneyByAchieveId(1L);
+    BigDecimal money=achieveIncomeRepository.sumMoneyByAchieveIdAndStatus(1L, 0);
     System.out.println(money);
   }
   @Test
