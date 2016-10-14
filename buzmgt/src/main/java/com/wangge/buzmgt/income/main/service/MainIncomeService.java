@@ -14,7 +14,6 @@ import com.wangge.buzmgt.income.main.vo.OrderGoods;
 /**
  * ClassName: MainIncomeService <br/>
  * Function: 提供各种计算功能. 计算订单, 计算业务员 <br/>
- * Reason: TODO ADD REASON(可选). <br/>
  * date: 2016年8月22日 上午11:02:41 <br/>
  * 
  * @author yangqc
@@ -38,7 +37,7 @@ public interface MainIncomeService {
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculatePayedOrder(String orderNo, String userId, String regionId);
+  void caculatePayedOrder(String orderNo, String userId,Date payDate, String regionId);
   
   /**
    * 计算油补

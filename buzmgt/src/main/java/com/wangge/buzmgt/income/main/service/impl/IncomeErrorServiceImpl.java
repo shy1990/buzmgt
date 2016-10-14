@@ -22,8 +22,8 @@ public class IncomeErrorServiceImpl implements IncomeErrorService {
   
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void save(String orderno, String userId, String errorInfo, String goodId, Integer type) {
-    IncomeSubError error = new IncomeSubError(orderno, userId, errorInfo, goodId, type);
+  public void save(String orderno, String userId, String errorInfo, String goodId, Integer type, Long keyId) {
+    IncomeSubError error = new IncomeSubError(0,orderno, userId, errorInfo, goodId, type, keyId);
     errRep.save(error);
   }
   
@@ -31,6 +31,13 @@ public class IncomeErrorServiceImpl implements IncomeErrorService {
   @Transactional(rollbackFor = Exception.class)
   public void saveScheduleError(int type, long jobId, String message) {
     IncomeSubError error = new IncomeSubError(message, type, jobId);
+    errRep.save(error);
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void saveHedgeError(String orderno, String userId, String errorInfo, String goodId, Integer type, Long keyId) {
+    IncomeSubError error = new IncomeSubError(1,orderno, userId, errorInfo, goodId, type, keyId);
     errRep.save(error);
   }
 }
