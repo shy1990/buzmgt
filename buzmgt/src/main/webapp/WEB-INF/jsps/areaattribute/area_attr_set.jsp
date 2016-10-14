@@ -308,7 +308,7 @@
                 commission: commission,
                 regionId: regionId,
                 ruleId: ruleId,
-                type:"BRANDMODEL"
+                type: planType
             },
             success: function (data) {
                 alert(data);
