@@ -8,6 +8,11 @@ import com.wangge.buzmgt.brandincome.service.BrandIncomeService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.section.entity.PriceRange;
 import com.wangge.buzmgt.section.service.PriceRangeService;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.service.ManagerService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +33,8 @@ public class AreaAttributeController {
   private BrandIncomeService brandIncomeService;
   @Autowired
   private PriceRangeService priceRangeService;
+  @Autowired
+  private ManagerService managerService;
 
   /**
    * 跳转到提成区域属性设置
@@ -37,6 +44,11 @@ public class AreaAttributeController {
   @RequestMapping( value = "/setting", method = RequestMethod.GET)
   public String toAreaAttr(String ruleId, String type, Model model) {
     List<AreaAttribute> areaAttributes = null;
+    //获取user
+    Subject subject = SecurityUtils.getSubject();
+    User user=(User) subject.getPrincipal();
+    Manager manager = managerService.getById(user.getId());
+    model.addAttribute("regionId", manager.getRegion().getId());
     if (PlanType.BRANDMODEL.name().equals(type)) {
       BrandIncome brandIncome = brandIncomeService.findById(Long.valueOf(ruleId));
       areaAttributes = areaAttributeService.findByRuleIdAndTypeAndDisabled(Long.valueOf(ruleId),PlanType.BRANDMODEL);

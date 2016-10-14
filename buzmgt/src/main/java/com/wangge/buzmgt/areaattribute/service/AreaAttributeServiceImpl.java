@@ -26,7 +26,7 @@ public class AreaAttributeServiceImpl implements AreaAttributeService {
     Long ruleid = Long.valueOf(ruleId);
     AreaAttribute areaAttribute = new AreaAttribute();
     areaAttribute.setRuleId(ruleid);
-    areaAttribute.setRegion(region);
+    areaAttribute.setRegionId(region.getId());
     areaAttribute.setCommissions(commission);
     if (PlanType.BRANDMODEL.name().equals(type)){
       AreaAttribute brandAttr = areaAttributeRepository.findByRegionAndRuleIdAndTypeAndDisabled(region,ruleid,PlanType.BRANDMODEL,0);
