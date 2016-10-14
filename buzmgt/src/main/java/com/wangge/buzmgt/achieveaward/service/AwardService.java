@@ -3,11 +3,15 @@ package com.wangge.buzmgt.achieveaward.service;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.support.odps.udf.CodecCheck;
+import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import com.wangge.buzmgt.achieveaward.entity.Award;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 达量收益业务层接口
@@ -68,5 +72,40 @@ public interface AwardService {
   * @throws
    */
   Award findOne(Long achieveId);
-  
+
+  /**
+   *
+   * @Title: findCycleSales
+   * @Description: 根据goodId统计该周期内的提货量
+   * @param @param award
+   * @param @return    设定文件
+   * @return int    返回类型
+   * @throws
+   */
+  int findCycleSales(List<String> goodIds);
+
+  /**
+   *
+   * @Title: findAll(达量奖励进程列表)
+   * @Description: 条件查询,分页
+   * @param @param request
+   * @param @param award
+   * @param @param pageable
+   * @param @return    设定文件
+   * @return Page<BrandIncomeVo>    返回类型
+   * @throws
+   */
+  Page<BrandIncomeVo> findAll(HttpServletRequest request, Award award, Pageable pageable);
+
+  /**
+   *
+   * @Title: findAll(达量奖励收益进程)
+   * @Description: 条件查询,排序
+   * @param @param request
+   * @param @param award
+   * @param @return    设定文件
+   * @return List<BrandIncomeVo>    返回类型
+   * @throws
+   */
+  List<BrandIncomeVo> findAll(HttpServletRequest request, Award award);
 }

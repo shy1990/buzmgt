@@ -40,4 +40,10 @@ public interface HedgeRepository extends JpaRepository<Hedge, Long> {
       + "      left join sjzaixian.sj_tb_order oder on h.orderno = oder.order_num\n"
       + "      where  h.inserttime = ?1", nativeQuery = true)
   List<Object> findByDate(Date insertDate);
+
+  @Query(value = "select nvl(sum(hedge.sum), 0) AS nums\n" + "  from SYS_INCOME_SHOUHOU_HEDGE hedge\n"
+          + " inner join sys_brand_income b\n" + "    on hedge.sku = b.good_id\n"
+          + " where to_char(hedge.shdate, 'yyyy-mm-dd') between\n" + "       to_char(b.start_date, 'yyyy-mm-dd') and\n"
+          + "       to_char(b.end_date, 'yyyy-mm-dd')\n" + "   and b.good_id in (?1)", nativeQuery = true)
+  int countByGoodId(List<String> goodIds);
 }

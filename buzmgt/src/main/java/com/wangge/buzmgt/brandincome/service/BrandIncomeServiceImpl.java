@@ -289,7 +289,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
    * @param brandIncome
    * @return
    */
-  private String executeSql(HttpServletRequest request, BrandIncome brandIncome) {
+  public String executeSql(HttpServletRequest request, BrandIncome brandIncome) {
     String hql = "select distinct g.region_id,\n" +
             "                nvl(sum(g.nums) over(partition by g.region_id),0) AS nums,\n" +
             "                g.goods_name,\n" +
@@ -333,7 +333,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
    * @param query
    * @return
    */
-  private List<BrandIncomeVo> findBySql(Query query) {
+  public List<BrandIncomeVo> findBySql(Query query) {
     List<BrandIncomeVo> list = new ArrayList<>();
     List<Object[]> ret = query.getResultList();
     if (CollectionUtils.isNotEmpty(ret)) {

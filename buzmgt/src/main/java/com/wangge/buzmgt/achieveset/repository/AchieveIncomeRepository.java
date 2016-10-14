@@ -20,6 +20,18 @@ JpaSpecificationExecutor<AchieveIncome> ,CustomRepository {
 	 */
 	@Query("SELECT sum (ai.num) from AchieveIncome ai where ai.achieveId = ?1 and ai.userId = ?2")
 	Long countByAchieveIdAndUserId(Long achieveId, String userId);
+	/**
+	 *
+	 * @Title: CountByAchieveIdAndUserId
+	 * @Description: 根据达量设置Id和用户id查询数量+ 支付状态
+	 * @param @param achieveId
+	 * @param @param userId
+	 * @param @return    设定文件
+	 * @return Long    返回类型
+	 * @throws
+	 */
+	@Query("SELECT sum (ai.num) from AchieveIncome ai where ai.achieveId = ?1 and ai.userId = ?2 and ai.status = ?3 " )
+	Long countByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum status);
 
 	/**
 	 *
@@ -32,5 +44,17 @@ JpaSpecificationExecutor<AchieveIncome> ,CustomRepository {
 	 */
 	@Query("SELECT sum (ai.num) from AchieveIncome ai where ai.achieveId = ?1")
 	Long countByAchieveId(Long achieveId);
+
+	/**
+	 *
+	 * @Title: CountByAchieveId
+	 * @Description: 根据
+	 * @param @param achieveId
+	 * @param @return    设定文件
+	 * @return Long    返回类型
+	 * @throws
+	 */
+	@Query("SELECT sum (ai.num) from AchieveIncome ai where ai.achieveId = ?1 and ai.status= ?2")
+	Long countByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status);
 
 }

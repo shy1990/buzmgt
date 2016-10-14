@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.wangge.buzmgt.income.main.service.HedgeService;
+import com.wangge.buzmgt.income.main.service.IncomeErrorService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.schedule.service.JobService;
 import com.wangge.buzmgt.income.ywsalary.service.BaseSalaryService;
@@ -30,6 +31,8 @@ public class IncomeSchedule {
   BaseSalaryService basesalaryService;
   @Autowired
   HedgeService hedgeService;
+  @Autowired
+  IncomeErrorService errorService;
   
   /*
    * 28号23点1分执行<br/> 初始化下个月的薪资

@@ -1,35 +1,8 @@
 var achieveTotal = 0;
 $(function () {
-    // initFunction();
     initExcelExport();// 初始化导出excel
-    findAchieveCourseList();// 查询列表
+    findAchieveDetailList();// 查询列表
 })
-/**
- * 审核操作
- * @param achieveId
- * @param status
- */
-function auditAchieve(achieveId, status) {
-    if (confirm("确认操作？")) {
-        $.ajax({
-            url: base + "achieve/" + achieveId + "?status=" + status,
-            type: "PATCH",
-            dataType: "JSON",
-            success: function (data) {
-                if (data.result == "success") {
-                    alert(data.message);
-                    window.location.reload();
-                    return false;
-                }
-                alert(data.message);
-            },
-            error: function (data) {
-                alert("网络异常，稍后重试！");
-            }
-        })
-    }
-    return;
-}
 /**
  * 检索模糊查询
  */
@@ -55,19 +28,17 @@ function initExcelExport() {
         // window.location.href = base + "achieve/export" + "?" + param;
     });
 }
-function CheckDetails(userId, achieveId) {
-    window.location.href = base + "achieve/detail?userId=" + userId + "&achieveId=" + achieveId;
+function initFunction() {
 }
 /**
  * 查询列表
  * @param page
  */
-function findAchieveCourseList(page) {
+function findAchieveDetailList(page) {
     page = page == null || page == '' ? 0 : page;
     SearchData['page'] = page;
-    SearchData['sc_EQ_status'] = 'STOCK';
     $.ajax({
-        url: "/achieveIncome/total",
+        url: "/achieveIncome/detail",
         type: "GET",
         data: SearchData,
         dataType: "json",
@@ -131,7 +102,7 @@ Handlebars.registerHelper('myIf', function (status, value, options) {
     }
 });
 /**
- * disposeStar 处理星***级
+ * disposeStar
  */
 Handlebars.registerHelper('disposeStar', function (starsLevel) {
     var html = "";
@@ -153,15 +124,15 @@ Handlebars.registerHelper('start-end-Date', function (starsLevel) {
  */
 Handlebars.registerHelper('disposeNum', function (userId) {
     var number = findUserIdForGroup(userId);
-    var html = "";
+    var html="";
     //{{groupName: string, numberFirstAdd: string, numberSecondAdd: string, numberThirdAdd: string}}
-    $.each(number, function (name, value) {
+    $.each(number,function (name, value) {
         console.info(value);
-        if (!isEmpty(value)) {
-            html += value + "台 | ";
+        if(!isEmpty(value)){
+            html+=value+"台 | ";
         }
     })
-    return html.substr(0, html.length - 2);
+    return html.substr(0,html.length-2);
 });
 /**
  * 分组查询
@@ -169,7 +140,7 @@ Handlebars.registerHelper('disposeNum', function (userId) {
 Handlebars.registerHelper('disposeGroup', function (userId, options) {
     var group = findUserIdForGroup(userId);
     //{{groupName: string, numberFirstAdd: string, numberSecondAdd: string, numberThirdAdd: string}}
-    if (isEmpty(group['groupName'])) {
+    if(isEmpty(group['groupName'])){
         return "无分";
     }
     return group['groupName'];
@@ -181,9 +152,9 @@ Handlebars.registerHelper('disposeGroup', function (userId, options) {
  * @returns {{groupName: string, numberFirst, numberSecond, numberThird}}
  */
 function findUserIdForGroup(userId) {
-    var numberFirst = achieveJson['numberFirst'];
-    var numberSecond = achieveJson['numberSecond'];
-    var numberThird = achieveJson['numberThird'];
+    var numberFirst= achieveJson['numberFirst'];
+    var numberSecond= achieveJson['numberSecond'];
+    var numberThird= achieveJson['numberThird'];
 
     var newGroup = {
         "groupName": "",
@@ -201,12 +172,12 @@ function findUserIdForGroup(userId) {
                 var numberFirstAdd = groupNumber['numberFirstAdd'];
                 var numberSecondAdd = groupNumber['numberSecondAdd'];
                 var numberThirdAdd = groupNumber['numberThirdAdd'];
-                newGroup = {
-                    "groupName": groupName,
-                    "numberFirst": numberFirst + numberFirstAdd,
-                    "numberSecond": numberSecond + numberSecondAdd,
-                    "numberThird": numberThird + numberThirdAdd
-                }
+                    newGroup = {
+                        "groupName": groupName,
+                        "numberFirst": numberFirst+numberFirstAdd,
+                        "numberSecond": numberSecond+numberSecondAdd,
+                        "numberThird": numberThird+numberThirdAdd
+                    }
                 return newGroup;
             }
         }
@@ -228,19 +199,47 @@ Handlebars.registerHelper('compareDate', function (startDate, endDate, options) 
 /**
  * 待付金额
  */
-Handlebars.registerHelper('isCheckStatus',
-    function (isCheck, userId, createDate) {
-        var formcreateDate = changeDateToString(new Date(createDate));
-        var html = '<button class="btn btn-sm btn-blue" onClick="checkPending(\''
-            + userId
-            + '\',\''
-            + formcreateDate
-            + '\')">确认</button>'
-        if (isCheck == '已审核') {
-            return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
-        }
-        return html;
-    });
+Handlebars
+    .registerHelper(
+        'isCheckStatus',
+        function (isCheck, userId, createDate) {
+            var formcreateDate = changeDateToString(new Date(createDate));
+            var html = '<button class="btn btn-sm btn-blue" onClick="checkPending(\''
+                + userId
+                + '\',\''
+                + formcreateDate
+                + '\')">确认</button>'
+            if (isCheck == '已审核') {
+                return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
+            }
+            return html;
+        });
 
+/**
+ * 解析json参数为url参数使用&连接
+ */
+var parseParam = function (param, key) {
+    var paramStr = "";
+    if (param instanceof String || param instanceof Number
+        || param instanceof Boolean) {
+        paramStr += "&" + key + "=" + encodeURIComponent(param);
+    } else {
+        $.each(param, function (i) {
+            var k = key == null ? i : key
+            + (param instanceof Array ? "[" + i + "]" : "." + i);
+            paramStr += '&' + parseParam(this, k);
+        });
+    }
+    return paramStr.substr(1);
+};
+/**
+ * 判读是否为空
+ *
+ * @param value
+ * @returns 为空返回true 不为空返回false
+ */
+function isEmpty(value) {
+    return value == undefined || value == "" || value == null;
+}
 
 

@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.income.main.service;
 
-import com.wangge.buzmgt.income.main.entity.Hedge;
 import com.wangge.buzmgt.income.main.vo.HedgeVo;
 import com.wangge.buzmgt.region.entity.Region;
 import org.springframework.data.domain.Page;
@@ -44,6 +43,17 @@ public interface HedgeService {
    * @throws
    */
   int countByGoodId(String goodId);
+
+  /**
+   *
+   * @Title: countByGoodId
+   * @Description: 根据goodId统计该周期内的提货量
+   * @param @param brandIncome
+   * @param @return    设定文件
+   * @return int    返回类型
+   * @throws
+   */
+  int countByGoodId(List<String> goodIds);
 
   /**
    *

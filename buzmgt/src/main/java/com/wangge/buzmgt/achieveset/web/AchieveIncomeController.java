@@ -53,6 +53,12 @@ public class AchieveIncomeController {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
 		return achieveIncomeVoService.findAll(searchParams, pageable);
 	}
+	@RequestMapping(value = "/detail",method = RequestMethod.GET, headers = "Accept=application/json")
+	@ResponseBody
+	public Page<AchieveIncomeVo> findAllAchieveIncome(@PageableDefault(page = 0, size = 10, sort = {"RNID"}) Pageable pageable, HttpServletRequest request) {
+		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+		return achieveIncomeVoService.findAll(searchParams, pageable);
+	}
 	@RequestMapping("/test")
 	@ResponseBody
 	public JsonResponse<List<Map<String, Object>>> test(@RequestParam String goodId, @RequestParam Long planId, @RequestParam String userId, @RequestParam String orderNo) {

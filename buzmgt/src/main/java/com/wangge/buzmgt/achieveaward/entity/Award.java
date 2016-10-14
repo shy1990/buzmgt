@@ -54,7 +54,7 @@ public class Award implements Serializable {
   @GeneratedValue(generator = "idgen")
   private Long awardId; // 主键
   
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) 
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "AWARD_ID")
   private List<AwardGood> awardGoods;
   private Integer numberFirst; // 任务量一

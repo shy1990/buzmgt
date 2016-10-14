@@ -80,6 +80,11 @@ public class HedgeServiceImpl implements HedgeService {
   public int countByGoodId(String goodId) {
     return hedgeRep.countByGoodId(goodId);
   }
+
+  @Override
+  public int countByGoodId(List<String> goodIds) {
+    return hedgeRep.countByGoodId(goodIds);
+  }
   
   @Override
   public Page<HedgeVo> findAll(HttpServletRequest request, Region region, Pageable pageable) {

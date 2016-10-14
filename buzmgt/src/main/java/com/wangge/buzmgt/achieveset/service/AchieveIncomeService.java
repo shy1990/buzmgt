@@ -43,7 +43,23 @@ public interface AchieveIncomeService {
   * @throws
    */
   Long countByAchieveIdAndUserId(Long achieveId, String userId);
-  
+
+	/**
+	 * 根据AchieveId和userId+支付状态查询数量
+	 * @param achieveId
+	 * @param userId
+	 * @param status
+	 * @return
+	 */
+	Long countByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum status);
+
+	/**
+	 * 根据AchieveId+支付状态 查询数量
+	 * @param achieveId
+	 * @param status
+	 * @return
+	 */
+	Long countByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status);
   /**
    * 
   * @Title: findAll 
