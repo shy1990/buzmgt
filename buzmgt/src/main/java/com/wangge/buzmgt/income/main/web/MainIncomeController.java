@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
@@ -64,11 +65,23 @@ public class MainIncomeController {
     }
   }
   
-  @RequestMapping("/calcu")
-  public @ResponseBody String test(HttpServletRequest request, HttpServletResponse response, Pageable pageReq)
-      throws Exception {
-    incomeService.caculateOutedOrder("20160620174259875", "c178c6ff92334a379b9c75af8720b4ac", "1",
-        DateUtil.string2Date("2016-09-29 15:30:16"));
-    return "xxx";
+  /**
+   * @param payDate
+   *          支付时间
+   * @param orderNo
+   *          订单号
+   * @param userId
+   *          用户id
+   * @param regionId
+   *          区域id
+   * @return
+   * @throws Exception
+   * @since JDK 1.8
+   */
+  @RequestMapping("/calcuPayed")
+  public @ResponseBody String calPayedOrder(@RequestParam Date payDate, @RequestParam String orderNo,
+      @RequestParam String userId, @RequestParam String regionId) throws Exception {
+    incomeService.caculatePayedOrder(orderNo, userId, payDate, regionId);
+    return "ok";
   }
 }
