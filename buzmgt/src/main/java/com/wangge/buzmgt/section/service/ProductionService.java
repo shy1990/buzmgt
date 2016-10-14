@@ -56,7 +56,7 @@ public interface ProductionService {
 
     /**
      * @Description: 价格区间出库计算
-     * @param orderNo:订单id/单品详情id
+     * @param orderNo:订单号
      * @param price:产品价格
      * @param userId:业务员id
      * @param goodsId:产品id
@@ -68,7 +68,6 @@ public interface ProductionService {
     public String compute(String orderNo,Double price,
         String userId,String goodsId,String type,Long planId,Integer num,String regionId);
 
-
     /**
      * @Description: 价格区间出库计算
      * @param orderNo:订单id/单品详情id
@@ -79,7 +78,6 @@ public interface ProductionService {
      * @return
      */
     public String compute(String orderNo, String userId, String goodsId, List<OrderGoods> orderGoodsList, Long planId,String regionId);
-
 
     public Production delete(Production production);
 }

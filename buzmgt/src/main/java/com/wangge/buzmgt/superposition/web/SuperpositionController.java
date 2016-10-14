@@ -1,7 +1,9 @@
 package com.wangge.buzmgt.superposition.web;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.main.vo.PlanUserVo;
+import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.plan.service.MachineTypeService;
 import com.wangge.buzmgt.superposition.entity.Result;
@@ -16,6 +18,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -25,6 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +50,9 @@ public class SuperpositionController {
     @Autowired
     private GoodsOrderService goodsOrderService;
 
+    @Autowired
+    private MainPlanService mainPlanService;
+
     private static final String SEARCH_OPERTOR = "sc_";
 
 
@@ -64,29 +72,77 @@ public class SuperpositionController {
         return "superposition/superposition";
     }
 
-    /**
-     * 跳转到添加人员分组的页面
-     *
-     * @return
-     */
-    @RequestMapping(value = "addGroup", method = RequestMethod.GET)
-    public String toGroupJSP(String planId, Model model) {
-        model.addAttribute("planId", planId);
-        return "superposition/add_group_1";
-    }
+//    /**
+//     * 跳转到添加人员分组的页面
+//     *
+//     * @return
+//     */
+//    @RequestMapping(value = "addGroup", method = RequestMethod.GET)
+//    public String toGroupJSP(String planId, Model model) {
+//        model.addAttribute("planId", planId);
+//        return "superposition/add_group_1";
+//    }
+//
+//    /**
+//     * 跳转到添加页面
+//     *
+//     * @return
+//     */
+//    @RequestMapping(value = "", method = RequestMethod.GET)
+//    public String toSuperJSP(String planId, Model model) {
+//        List<MachineType> machineTypes = machineTypeServer.findAll();
+//        model.addAttribute("machineTypes", machineTypes);
+//        model.addAttribute("planId", planId);
+//        return "superposition/superposition_add";
+//    }
+//
+
 
     /**
-     * 跳转到添加页面
-     *
+     * 进入添加页面
+     * @param planId
+     * @param model
      * @return
      */
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String toSuperJSP(String planId, Model model) {
+
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public String showAdd(@RequestParam String planId, Model model) {
+
         List<MachineType> machineTypes = machineTypeServer.findAll();
-        model.addAttribute("machineTypes", machineTypes);
         model.addAttribute("planId", planId);
-        return "superposition/superposition_add";
+        model.addAttribute("machineTypes", machineTypes);
+        return "superposition/super_add";
     }
+
+
+
+    /**
+     *
+     * @Title: getPlanUsers
+     * @Description: 查询方案的所有用户
+     * @param @param planId
+     * @param @param pageRequest
+     * @param @return    设定文件
+     * @return Page<PlanUserVo>    返回类型
+     * @throws
+     */
+    @RequestMapping(value = "/planUser")
+    @ResponseBody
+    public Page<PlanUserVo> getPlanUsers(@RequestParam String planId,
+                                         @PageableDefault(page = 0, size = 10, sort = { "regdate" }, direction = Sort.Direction.DESC) Pageable pageRequest) {
+        Map<String, Object> searchParams = new HashMap<>();
+        Page<PlanUserVo> page = new PageImpl<>(new ArrayList<>());
+        try {
+            searchParams.put("EQ_planId", Integer.parseInt(planId));
+            page = mainPlanService.getUserpage(pageRequest, searchParams);
+        } catch (Exception e) {
+            LogUtil.error("查询planId=" + planId + "方案人员失败", e);
+        }
+        return page;
+    }
+
+
+
 
     /**
      * 添加 superposition
@@ -223,7 +279,6 @@ public class SuperpositionController {
 
 //--------------------------- 渠道操作 --------------------------------------------//
 
-
     /**
      * 跳转到渠道全部显示页面
      *
@@ -343,7 +398,7 @@ public class SuperpositionController {
     @ResponseBody
     public Superposition ceshi(Long planId) {
 
-        return superpositonService.computeAfterReturnGoods("C370113210","f52ec6414ab14626a02ff9d41881d4f9","2016-10-02",1,planId);
+        return superpositonService.computeAfterReturnGoods("C370113210","f52ec6414ab14626a02ff9d41881d4f9","2016-10-02",1,planId,"");
     }
 
 
@@ -355,6 +410,8 @@ public class SuperpositionController {
         User user = (User) subject.getPrincipal();
         return user;
     }
+
+
 
 
 }

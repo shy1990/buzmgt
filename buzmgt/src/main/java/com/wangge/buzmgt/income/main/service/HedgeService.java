@@ -46,6 +46,17 @@ public interface HedgeService {
 
   /**
    *
+   * @Title: countByGoodId
+   * @Description: 根据goodId统计该周期内的提货量
+   * @param @param brandIncome
+   * @param @return    设定文件
+   * @return int    返回类型
+   * @throws
+   */
+  int countByGoodId(List<String> goodIds);
+
+  /**
+   *
    * @Title: findAll
    * @Description: 根据条件统计退货冲减订单(品牌型号)
    * @param @param request

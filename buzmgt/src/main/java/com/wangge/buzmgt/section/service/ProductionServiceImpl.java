@@ -52,7 +52,8 @@ public class ProductionServiceImpl implements ProductionService {
 
 
     /**
-     *  已支付计算
+     * 已支付计算
+     *
      * @param orderNo:订单号
      * @param payTime1:支付时间("yyyy-MM-dd")
      * @param price:产品价格
@@ -64,9 +65,9 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public String compute(String orderNo, Date payTime1, Double price, String userId, String goodsId, String type, Long planId,Integer num,String regionId) {
+    public String compute(String orderNo, Date payTime1, Double price, String userId, String goodsId, String type, Long planId, Integer num, String regionId) {
         //1.需要的参数: 1.订单号 2.订单单品支付时间 3.商品的价格 4.用户id 5.区域id 6.产品类型 7.方案id(下面是模拟数据)
-        String payTime = DateUtil.date2String(payTime1,"yyyy-MM-dd");
+        String payTime = DateUtil.date2String(payTime1, "yyyy-MM-dd");
         try {
             //2.查询当前产品使用的价格区间
             Production p = findNow(type, payTime, planId);//订单日期正在使用的
@@ -98,7 +99,7 @@ public class ProductionServiceImpl implements ProductionService {
                             }
                         }
                     } catch (ParseException e) {
-                        return ;
+                        return;
                     }
                 });
             }
@@ -108,11 +109,12 @@ public class ProductionServiceImpl implements ProductionService {
 
                     String[] prices = priceRange.getPriceRange().split("-");
                     if (Double.parseDouble(prices[0]) <= price && price < Double.parseDouble(prices[1])) {
-                        AreaAttribute areaAttribute = attributeService.findByRegionIdAndRuleId(regionId,priceRange.getPriceRangeId());
+                        AreaAttribute areaAttribute = attributeService.findByRegionIdAndRuleIdAndType(regionId, priceRange.getPriceRangeId(), AreaAttribute.PlanType.PRICERANGE);
+
                         SectionRecord sectionRecord = new SectionRecord();
-                        if(ObjectUtils.notEqual(areaAttribute,null)){
-                            sectionRecord.setPercentage(priceRange.getPercentage()+areaAttribute.getCommissions());
-                        }else {
+                        if (ObjectUtils.notEqual(areaAttribute, null)) {
+                            sectionRecord.setPercentage(priceRange.getPercentage() + areaAttribute.getCommissions());
+                        } else {
                             sectionRecord.setPercentage(priceRange.getPercentage());
                         }
                         sectionRecord.setOrderNo(orderNo);//订单详情/订单
@@ -125,9 +127,9 @@ public class ProductionServiceImpl implements ProductionService {
                         sectionRecord.setNum(num);
                         sectionRecord.setOrderflag(1);//已付款
                         SectionRecord sectionRecord1 = sectionRecordService.save(sectionRecord);
-                        logService.log(null, "区间方案单品已付款计算: "+sectionRecord1, Log.EventType.SAVE);
+                        logService.log(null, "区间方案单品已付款计算: " + sectionRecord1, Log.EventType.SAVE);
                         logger.info(sectionRecord1);
-                        return ;
+                        return;
                     }
                 });
             }
@@ -141,6 +143,7 @@ public class ProductionServiceImpl implements ProductionService {
 
     /**
      * 出库计算
+     *
      * @param orderNo:订单号
      * @param price:产品价格
      * @param userId:业务员id
@@ -151,9 +154,9 @@ public class ProductionServiceImpl implements ProductionService {
      * @return
      */
     @Override
-    public String compute(String orderNo, Double price, String userId, String goodsId, String type, Long planId,Integer num,String regionId) {
+    public String compute(String orderNo, Double price, String userId, String goodsId, String type, Long planId, Integer num, String regionId) {
 //1.需要的参数: 1.订单id 2.订单单品支付时间 3.商品的价格 4.用户id 5.区域id 6.产品类型 7.方案id(下面是模拟数据)
-        String payTime = DateUtil.date2String(new Date(),"yyyy-MM-dd");
+        String payTime = DateUtil.date2String(new Date(), "yyyy-MM-dd");
         try {
             //2.查询当前产品使用的价格区间
             Production p = findNow(type, payTime, planId);//订单日期正在使用的
@@ -185,7 +188,7 @@ public class ProductionServiceImpl implements ProductionService {
                             }
                         }
                     } catch (Exception e) {
-                        return ;
+                        return;
                     }
                 });
             }
@@ -194,11 +197,11 @@ public class ProductionServiceImpl implements ProductionService {
                 priceRanges1.forEach(priceRange -> {
                     String[] prices = priceRange.getPriceRange().split("-");
                     if (Double.parseDouble(prices[0]) <= price && price < Double.parseDouble(prices[1])) {
-                        AreaAttribute areaAttribute = attributeService.findByRegionIdAndRuleId(regionId,priceRange.getPriceRangeId());
+                        AreaAttribute areaAttribute = attributeService.findByRegionIdAndRuleIdAndType(regionId, priceRange.getPriceRangeId(), AreaAttribute.PlanType.PRICERANGE);
                         SectionRecord sectionRecord = new SectionRecord();
-                        if(ObjectUtils.notEqual(areaAttribute,null)){
-                            sectionRecord.setPercentage(priceRange.getPercentage()+areaAttribute.getCommissions());
-                        }else {
+                        if (ObjectUtils.notEqual(areaAttribute, null)) {
+                            sectionRecord.setPercentage(priceRange.getPercentage() + areaAttribute.getCommissions());
+                        } else {
                             sectionRecord.setPercentage(priceRange.getPercentage());
                         }
                         sectionRecord.setOrderNo(orderNo);//订单号
@@ -211,7 +214,7 @@ public class ProductionServiceImpl implements ProductionService {
                         sectionRecord.setNum(num);
                         sectionRecord.setOrderflag(0);//出库计算
                         SectionRecord sectionRecord1 = sectionRecordService.save(sectionRecord);
-                        logService.log(null, "区间方案单品出库计算: "+sectionRecord1, Log.EventType.SAVE);
+                        logService.log(null, "区间方案单品出库计算: " + sectionRecord1, Log.EventType.SAVE);
                         logger.info(sectionRecord1);
                     }
                 });
@@ -223,8 +226,10 @@ public class ProductionServiceImpl implements ProductionService {
         return "";
     }
 
+
     /**
      * 出库计算(修改接口,传过订单详情集合.注意:优化的时候去做)
+     *
      * @param orderNo:订单id/单品详情id
      * @param userId:业务员id
      * @param goodsId:产品id
@@ -241,19 +246,20 @@ public class ProductionServiceImpl implements ProductionService {
 
     /**
      * 逻辑删除叠加方案
+     *
      * @param production
      * @return
      */
     @Override
     public Production delete(Production production) {
         production.setStatus("1");//更改状态为1
-        if(CollectionUtils.isNotEmpty(production.getPriceRanges())){
+        if (CollectionUtils.isNotEmpty(production.getPriceRanges())) {
             production.getPriceRanges().forEach(priceRange -> {
                 priceRange.setStatus("1");//小区间方案也修改
             });
         }
         Production production1 = productionRepository.save(production);
-        logService.log(null, "逻辑删除被驳回/创建中的区间方案: "+production1, Log.EventType.UPDATE);
+        logService.log(null, "逻辑删除被驳回/创建中的区间方案: " + production1, Log.EventType.UPDATE);
         return production1;
     }
 
@@ -281,7 +287,7 @@ public class ProductionServiceImpl implements ProductionService {
         production.setPriceRanges(priceRanges);//添加区间
         production.setProductionType(productType);//产品类型
         Production pc = productionRepository.save(production);
-        logService.log(null,"创建区间方案: "+pc,Log.EventType.SAVE);
+        logService.log(null, "创建区间方案: " + pc, Log.EventType.SAVE);
         return pc;
 
     }
@@ -307,7 +313,7 @@ public class ProductionServiceImpl implements ProductionService {
         }
         p.setPriceRanges(priceRanges);
         productionRepository.save(p);
-        logService.log(null,"区间方案进入审核状态: "+p,Log.EventType.UPDATE);
+        logService.log(null, "区间方案进入审核状态: " + p, Log.EventType.UPDATE);
 
     }
 
@@ -396,7 +402,7 @@ public class ProductionServiceImpl implements ProductionService {
         }
         p.setPriceRanges(priceRanges);
         Production production = productionRepository.save(p);
-        logService.log(null,"渠道审核区间方案",Log.EventType.UPDATE);
+        logService.log(null, "渠道审核区间方案", Log.EventType.UPDATE);
         return production;
     }
 

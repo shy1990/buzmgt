@@ -26,13 +26,17 @@ public interface SuperpositonService {
     public List<SuperpositionProgress> compute(Long planId,Long superId);
 
     /**
-     * 用于退货冲减计算
-     * @param userId
-     * @param goodsId
-     * @param payTime
-     * @param num
+     * 用户退后冲减计算
+     * @param userId 业务员id
+     * @param goodsId 商品id
+     * @param payTime 支付时间
+     * @param num 退货数量
+     * @param planId 主方案id
+     * @param receivingTime 售后收货时间
+     * @return
      */
-    public Superposition computeAfterReturnGoods(String userId,String goodsId,String payTime,Integer num,Long planId);
+
+    public Superposition computeAfterReturnGoods(String userId,String goodsId,String payTime,Integer num,Long planId,String receivingTime);
 
     public Page<SuperpositionProgress> searchDetail(Long planId,Long superId,String userId,String startDate,String endDate,String name,Integer page,Integer size);
 

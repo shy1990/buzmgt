@@ -9,12 +9,18 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
+import com.wangge.buzmgt.income.main.service.HedgeService;
+import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
+import com.wangge.buzmgt.teammember.service.SalesManService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -62,6 +68,10 @@ public class AwardController {
   private MainPlanService mainPlanService;
   @Autowired
   private MachineTypeService machineTypeServer;
+  @Autowired
+  private SalesManService salesManService;
+  @Autowired
+  private HedgeService hedgeService;
 
   private static final String SEARCH_OPERTOR = "sc_";
 
@@ -392,5 +402,52 @@ public class AwardController {
       LogUtil.error("查询planId=" + planId + "方案人员失败", e);
     }
     return page;
+  }
+
+  /**
+   * @param award
+   * @param model
+   * @param @return     设定文件
+   * @return String
+   * @throws
+   * @Title: toProcess
+   * @Description: 跳转到进程页
+   */
+  @RequestMapping(value = "/process/{awardId}", method = RequestMethod.GET)
+  public String toProcess(@PathVariable(value = "awardId") Award award, Model model) {
+    List<SalesmanLevel> salesmanLevels = salesManService.findAll();
+    List<AwardGood> awardGoods = award.getAwardGoods();
+    List<String> goodIds = new ArrayList<>();
+    if (CollectionUtils.isNotEmpty(awardGoods)){
+      awardGoods.forEach(awardGood -> {
+        goodIds.add(awardGood.getGoodId());
+      });
+    }
+    int cycleSales = awardServer.findCycleSales(goodIds);//周期销量
+    int hedgeNums = hedgeService.countByGoodId(goodIds);//售后冲减
+    model.addAttribute("hedgeNums", hedgeNums);
+    model.addAttribute("cycleSales", cycleSales);
+    model.addAttribute("salesmanLevels", salesmanLevels);
+    model.addAttribute("award", award);
+    return "award/award_process";
+  }
+
+  /**
+   * @param request
+   * @param brandIncome
+   * @param pageable
+   * @param @return     设定文件
+   * @return Page<BrandIncome>    返回类型
+   * @throws
+   * @Title: findProcessList
+   * @Description: 根据达量奖励id查询该品牌达量奖励进程
+   */
+  @RequestMapping(value = "/processList/{awardId}", method = RequestMethod.GET)
+  @ResponseBody
+  public Page<BrandIncomeVo> findProcessList(HttpServletRequest request,
+                                             @PathVariable(value = "awardId") Award award,
+                                             @PageableDefault(page = 0, size = 20, sort = {"nums"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    Page<BrandIncomeVo> brandIncomeVos = awardServer.findAll(request, award, pageable);
+    return brandIncomeVos;
   }
 }

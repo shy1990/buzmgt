@@ -104,11 +104,11 @@
 
             <td>{{endDate}}</td>
             <td>
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
+                <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
                 </button>
+
                 {{#compare checkStatus 3}}
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#"
-                        onclick="seeProgress('{{planId}}','{{id}}')">进程
+                <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="seeProgress('{{planId}}', '{{id}}')">进程
                 </button>
                 <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="stop('{{id}}')">终止
                     {{else}}
@@ -159,16 +159,18 @@
             </td>
             <td>{{endDate}}</td>
             <td>
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
+                <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
                 </button>
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#"
-                        onclick="seeProgress('{{planId}}','{{id}}')">进程
+                <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="seeProgress('{{planId}}', '{{id}}')">进程
+                </button>
                     <%--</button>--%>
                     <%--<button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止--%>
                     <%--</button>--%>
             </td>
         </tr>
         {{/each}}
+
+
 
     </script>
 

@@ -11,9 +11,18 @@ import java.util.List;
 @Repository
 public interface AreaAttributeRepository extends JpaRepository<AreaAttribute, Long>{
   
-  AreaAttribute findByRegionAndRuleIdAndType(Region region, Long ruleId, PlanType type);
+  AreaAttribute findByRegionAndRuleIdAndTypeAndDisabled(Region region, Long ruleId, PlanType type,int disabled);
 
   List<AreaAttribute> findByRuleIdAndTypeAndDisabled(Long id,PlanType type,int disabled);
 
   public AreaAttribute findByRegionIdAndRuleId(String regionId,Long ruleId);
+
+  /**
+   * 查找对应的区域属性
+   * @param regionId
+   * @param ruleId
+   * @param type
+   * @return
+   */
+  public AreaAttribute findByRegionIdAndRuleIdAndType(String  regionId, Long ruleId, PlanType type);
 }

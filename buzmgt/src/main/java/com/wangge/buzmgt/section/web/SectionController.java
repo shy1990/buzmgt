@@ -147,7 +147,6 @@ public class SectionController {
                                     @RequestParam(value = "page", defaultValue = "0") Integer page,
                                     @RequestParam(value = "size", defaultValue = "20") Integer size
     ) {
-
         Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.ASC, "productionId"));
         model.addAttribute("list", productionService.findNotExpired(planId, type));//当前进行的
         model.addAttribute("listExpired", productionService.findAll(planId, type, pageable).getContent());//过期的
@@ -354,4 +353,23 @@ public class SectionController {
         Date today = DateUtil.string2Date(DateUtil.date2String(new Date(),"yyyy-MM-dd"));
         return today;
     }
+//------------------------------ 代码优化 ---------------------------------------------------
+
+    /**
+     * 查询正在使用的小区间
+     *
+     * @param type 手机类型
+     * @param planId 方案id
+     * @return
+     */
+
+
+    @RequestMapping(value = "listNow", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PriceRange> find(String type, Long planId) {
+        Map<String, Object> map = productionService.findNowCW(type, planId);
+        List<PriceRange> pc = (List) map.get("list");//获取正在使用的小区间
+        return pc;
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.wangge.buzmgt.superposition.service;
 
-import com.wangge.buzmgt.goods.entity.Goods;
+import com.wangge.buzmgt.income.main.entity.HedgeCost;
+import com.wangge.buzmgt.income.main.repository.HedgeCostRepository;
+import com.wangge.buzmgt.income.main.service.HedgeService;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.income.schedule.service.JobService;
@@ -50,11 +52,11 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     @Autowired
     private SuperpositionRepository repository;
 
-    @Resource
-    private ManagerService managerService;
-
-    @Autowired
-    private GoodsOrderService goodsOrderService;
+//    @Resource
+//    private ManagerService managerService;
+//
+//    @Autowired
+//    private GoodsOrderService goodsOrderService;
 
     @Autowired
     private MainPlanService mainPlanService;
@@ -68,6 +70,9 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     @Autowired
     private JobService jobService;
 
+    @Autowired
+    private HedgeCostRepository hedgeCostRepository;
+
     /**
      * 逻辑删除
      *
@@ -78,8 +83,8 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         superposition.setCheckStatus(checkStatus);
         repository.save(superposition);
         //修改完成后添加定时任务
-        if("3".equals(checkStatus)){
-            jobService.saveJobTask(20,superposition.getPlanId(),superposition.getId(),DateUtil.getPreMonthDate(superposition.getGiveDate(),-1));
+        if ("3".equals(checkStatus)) {
+            jobService.saveJobTask(20, superposition.getPlanId(), superposition.getId(), DateUtil.getPreMonthDate(superposition.getGiveDate(), -1));
         }
         logService.log(null, "修改叠加方案状态: " + checkStatus + "(注:4-终止/逻辑删除,2-驳回,3-审核通过)", Log.EventType.UPDATE);
     }
@@ -87,7 +92,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     /**
      * 计算叠加收益
      *
-     * @param planId 方案id
+     * @param planId  方案id
      * @param superId 规则id
      * @return
      */
@@ -190,16 +195,16 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     }
 
     /**
-     * 用于退货冲减计算
-     *
-     * @param userId  业务员id
-     * @param goodsId 产品id
+     * @param userId 业务员id
+     * @param goodsId 商品id
      * @param payTime 支付时间
-     * @param num     数量
-     * @param planId  方案id
+     * @param num 退货数量
+     * @param planId 主方案id
+     * @param receivingTime 售后收货时间
+     * @return
      */
     @Override
-    public Superposition computeAfterReturnGoods(String userId, String goodsId, String payTime, Integer num, Long planId) {
+    public Superposition computeAfterReturnGoods(String userId, String goodsId, String payTime, Integer num, Long planId,String receivingTime) {
         Superposition superposition = repository.findUseByTime(payTime, payTime, planId);//获取此商品使用的方案
         List<GoodsType> goodsTypeList = superposition.getGoodsTypeList();//获取所有叠加的商品
         if (containsGoods(goodsTypeList, goodsId)) {//判断是否有这个商品
@@ -238,9 +243,15 @@ public class SuperpositionServiceImpl implements SuperpositonService {
             Integer newNum = superpositionRecord.getRecord() - num;//计算出冲减之后的数量
             ruleList.forEach(superpositionRule -> {
                 if (newNum >= superpositionRule.getMin() && newNum <= superpositionRule.getMax()) {
-                    logger.info("superpositionRule:------     " + superpositionRule);//保存冲减之后的记录
-
-                    logger.info("--------:  " + (newNum * superpositionRule.getPercentage()));
+                    HedgeCost hedgeCost = new HedgeCost();
+                    hedgeCost.setUserId(userId);
+                    hedgeCost.setGoodsId(goodsId);
+                    hedgeCost.setPaytime(DateUtil.string2Date(payTime));
+                    hedgeCost.setRuletype(3);
+                    hedgeCost.setCost(superpositionRecord.getAmount() - newNum * superpositionRule.getPercentage());//冲减后的差值
+                    hedgeCost.setAccepttime(DateUtil.string2Date(receivingTime));
+                    hedgeCostRepository.save(hedgeCost);
+                    logService.log(null,"叠加冲减保存:  "+hedgeCost, Log.EventType.SAVE);
                 }
             });
 
@@ -735,7 +746,8 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                     Predicate p4 = cb.greaterThanOrEqualTo(root.get("endDate").as(Date.class), new Date());
                     Predicate p5 = cb.equal(root.get("planId").as(Long.class), planId);
                     Predicate p6 = cb.equal(root.get("checkStatus").as(String.class), "3");
-                    Predicate p = cb.and(p5, cb.or(cb.and(cb.or(p1, p2)), cb.and(p3, p4, p6)));
+                    Predicate p7 = cb.greaterThan(root.get("implDate").as(Date.class), new Date());
+                    Predicate p = cb.and(p5, cb.or(cb.and(cb.or(p1, p2, p7)), cb.and(p3, p4, p6)));
                     return p;
                 } else if ("expired".equals(sign)) {//查询已经过期的
                     if (statTime != null && !"".equals(statTime) && endTime != null && !"".equals(endTime)) {

@@ -19,24 +19,22 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "view_income_shouhou_hedge")
 public class HedgeVo {
-  /*
-   * sys_shouhou_hedge(id number(19),orderno VARCHAR2(50),sku
-   * varchar2(500),skuname varchar2(500),shdate date,sum number(3),uniquenumber
-   * varchar2(200));
-   */
   @Id
   private Long id;
-  // 订单号,sku号,唯一码  s.user_id, s.truename,r.namepath
-  private String orderno, sku, uniquenumber,userId,namepath,truename,shopName,regionId,shopRegionId;
+  // 订单号,sku号,唯一码 s.user_id, s.truename,r.namepath
+  private String orderno, sku, uniquenumber, userId, namepath, truename, shopName, regionId, shopRegionId;
   // 型号名称
   private String goodsName;
   // 到货日期
   private Date shdate;
   // 品牌数量,是否已计算
-  private Integer sum,ruletype;// 收益规则类型0价格区间1:品牌2达量3叠加 4达量奖励;
+  private Integer sum = 0;
+  // 序号
+  private Integer ruletype;// 收益规则类型0价格区间1:品牌2达量3叠加 4达量奖励;
 	private Long ruleId;//规则ID；
   //序号
   private Long rowind;
+
   public String getOrderno() {
     return orderno;
   }
@@ -60,8 +58,7 @@ public class HedgeVo {
   public void setUniquenumber(String uniquenumber) {
     this.uniquenumber = uniquenumber;
   }
-  
-  
+
   public String getGoodsName() {
     return goodsName;
   }
@@ -98,14 +95,6 @@ public class HedgeVo {
   public HedgeVo() {
     super();
   }
-
-//  public Integer getFlag() {
-//    return flag;
-//  }
-//
-//  public void setFlag(Integer flag) {
-//    this.flag = flag;
-//  }
 
   public String getUserId() {
     return userId;
