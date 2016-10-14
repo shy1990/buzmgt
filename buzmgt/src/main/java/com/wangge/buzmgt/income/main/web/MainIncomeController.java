@@ -65,7 +65,7 @@ public class MainIncomeController {
     }
   }
   
-  /**
+  /**实例url http://192.168.2.179:8080/mainIncome/calcuPayed?payDate=2016-09-29 15:30:16&orderNo=20160620174259875&userId=asdad&regionId=370184168
    * @param payDate
    *          支付时间
    * @param orderNo

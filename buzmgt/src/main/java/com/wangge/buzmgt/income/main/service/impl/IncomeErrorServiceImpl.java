@@ -22,8 +22,8 @@ public class IncomeErrorServiceImpl implements IncomeErrorService {
   
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void save(String orderno, String userId, String errorInfo, String goodId, Integer type) {
-    IncomeSubError error = new IncomeSubError(orderno, userId, errorInfo, goodId, type);
+  public void save(String orderno, String userId, String errorInfo, String goodId, Integer type, Long keyId) {
+    IncomeSubError error = new IncomeSubError(orderno, userId, errorInfo, goodId, type, keyId);
     errRep.save(error);
   }
   
