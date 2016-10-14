@@ -24,18 +24,21 @@ public class AreaAttributeServiceImpl implements AreaAttributeService {
   @Override
   public String save(double commission, Region region, String ruleId,String type) {
     Long ruleid = Long.valueOf(ruleId);
-    AreaAttribute brandAttr = areaAttributeRepository.findByRegionAndRuleIdAndType(region,ruleid,PlanType.BRANDMODEL);
-    AreaAttribute rangeAttr = areaAttributeRepository.findByRegionAndRuleIdAndType(region,ruleid,PlanType.PRICERANGE);
-    if(ObjectUtils.notEqual(brandAttr,null) || ObjectUtils.notEqual(rangeAttr,null)){
-      return "不能重复添加!";
-    }
     AreaAttribute areaAttribute = new AreaAttribute();
     areaAttribute.setRuleId(ruleid);
     areaAttribute.setRegion(region);
     areaAttribute.setCommissions(commission);
     if (PlanType.BRANDMODEL.name().equals(type)){
+      AreaAttribute brandAttr = areaAttributeRepository.findByRegionAndRuleIdAndTypeAndDisabled(region,ruleid,PlanType.BRANDMODEL,0);
+      if(ObjectUtils.notEqual(brandAttr,null)){
+        return "不能重复添加!";
+      }
       areaAttribute.setType(PlanType.BRANDMODEL);
     }else {
+      AreaAttribute rangeAttr = areaAttributeRepository.findByRegionAndRuleIdAndTypeAndDisabled(region,ruleid,PlanType.PRICERANGE,0);
+      if(ObjectUtils.notEqual(rangeAttr,null)){
+        return "不能重复添加!";
+      }
       areaAttribute.setType(PlanType.PRICERANGE);
     }
     areaAttributeRepository.save(areaAttribute);
