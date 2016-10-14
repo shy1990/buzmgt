@@ -735,7 +735,8 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                     Predicate p4 = cb.greaterThanOrEqualTo(root.get("endDate").as(Date.class), new Date());
                     Predicate p5 = cb.equal(root.get("planId").as(Long.class), planId);
                     Predicate p6 = cb.equal(root.get("checkStatus").as(String.class), "3");
-                    Predicate p = cb.and(p5, cb.or(cb.and(cb.or(p1, p2)), cb.and(p3, p4, p6)));
+                    Predicate p7 = cb.greaterThan(root.get("implDate").as(Date.class), new Date());
+                    Predicate p = cb.and(p5, cb.or(cb.and(cb.or(p1, p2,p7)), cb.and(p3, p4, p6)));
                     return p;
                 } else if ("expired".equals(sign)) {//查询已经过期的
                     if (statTime != null && !"".equals(statTime) && endTime != null && !"".equals(endTime)) {

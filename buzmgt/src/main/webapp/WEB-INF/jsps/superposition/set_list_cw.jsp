@@ -36,6 +36,13 @@
             border-left: 3px solid #44a6dd;
             background: #ffffff;
         }
+        .bnt-zza {
+            width: 50px;
+            height: 22px;
+            background: #7d0000;
+            color: #ffffff;
+            line-height: 10px;
+        }
     </style>
     <script type="text/javascript">
         function see(id) {
@@ -102,17 +109,20 @@
             </td>
 
 
-            <td>{{endDate}}</td>
+            <td>{{createDate}}</td>
+
+
             <td>
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
+                <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
                 </button>
                 {{#compare checkStatus 3}}
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#"
-                        onclick="seeProgress('{{planId}}','{{id}}')">进程
+                <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#"
+                        onclick="seeProgress('{{planId}}', '{{id}}')">进程
                 </button>
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="stop('{{id}}')">终止
-                    {{else}}
-                    {{/compare}}
+                <button class="btn  bnt-sm bnt-zza" data-toggle="modal" data-target="#" onclick="stop('{{id}}')">终止
+                </button>
+                {{else}}
+                {{/compare}}
                 </button>
             </td>
         </tr>
@@ -185,22 +195,22 @@
     <%--<span class="text-gery text-strong ">按日期筛选：</span>--%>
 
     <%--<div class="search-date">--%>
-        <%--<div class="input-group input-group-sm">--%>
-                        <%--<span class="input-group-addon "><i--%>
-                                <%--class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>--%>
-            <%--<input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"--%>
-                   <%--readonly="readonly" style="background: #ffffff">--%>
-        <%--</div>--%>
+    <%--<div class="input-group input-group-sm">--%>
+    <%--<span class="input-group-addon "><i--%>
+    <%--class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>--%>
+    <%--<input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"--%>
+    <%--readonly="readonly" style="background: #ffffff">--%>
+    <%--</div>--%>
 
     <%--</div>--%>
     <%-----%>
     <%--<div class="search-date">--%>
-        <%--<div class="input-group input-group-sm">--%>
-                        <%--<span class="input-group-addon "><i--%>
-                                <%--class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>--%>
-            <%--<input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"--%>
-                   <%--readonly="readonly  " style="background: #ffffff;">--%>
-        <%--</div>--%>
+    <%--<div class="input-group input-group-sm">--%>
+    <%--<span class="input-group-addon "><i--%>
+    <%--class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>--%>
+    <%--<input type="text" class="form-control form_datetime input-sm" placeholder="结束日期"--%>
+    <%--readonly="readonly  " style="background: #ffffff;">--%>
+    <%--</div>--%>
 
     <%--</div>--%>
 

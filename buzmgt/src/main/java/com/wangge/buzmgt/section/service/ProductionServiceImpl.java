@@ -108,7 +108,8 @@ public class ProductionServiceImpl implements ProductionService {
 
                     String[] prices = priceRange.getPriceRange().split("-");
                     if (Double.parseDouble(prices[0]) <= price && price < Double.parseDouble(prices[1])) {
-                        AreaAttribute areaAttribute = attributeService.findByRegionIdAndRuleId(regionId,priceRange.getPriceRangeId());
+                        AreaAttribute areaAttribute = attributeService.findByRegionIdAndRuleIdAndType(regionId,priceRange.getPriceRangeId(), AreaAttribute.PlanType.PRICERANGE);
+
                         SectionRecord sectionRecord = new SectionRecord();
                         if(ObjectUtils.notEqual(areaAttribute,null)){
                             sectionRecord.setPercentage(priceRange.getPercentage()+areaAttribute.getCommissions());
@@ -194,7 +195,7 @@ public class ProductionServiceImpl implements ProductionService {
                 priceRanges1.forEach(priceRange -> {
                     String[] prices = priceRange.getPriceRange().split("-");
                     if (Double.parseDouble(prices[0]) <= price && price < Double.parseDouble(prices[1])) {
-                        AreaAttribute areaAttribute = attributeService.findByRegionIdAndRuleId(regionId,priceRange.getPriceRangeId());
+                        AreaAttribute areaAttribute = attributeService.findByRegionIdAndRuleIdAndType(regionId,priceRange.getPriceRangeId(), AreaAttribute.PlanType.PRICERANGE);
                         SectionRecord sectionRecord = new SectionRecord();
                         if(ObjectUtils.notEqual(areaAttribute,null)){
                             sectionRecord.setPercentage(priceRange.getPercentage()+areaAttribute.getCommissions());
