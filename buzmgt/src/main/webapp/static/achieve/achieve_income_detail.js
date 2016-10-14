@@ -37,13 +37,14 @@ function initFunction() {
 function findAchieveDetailList(page) {
     page = page == null || page == '' ? 0 : page;
     SearchData['page'] = page;
+    SearchData['sc_EQ_status'] = 'STOCK';
     $.ajax({
-        url: "/achieveIncome/detail",
+        url: "/achieveIncome",
         type: "GET",
         data: SearchData,
         dataType: "json",
         success: function (orderData) {
-            createAchieveTable(orderData);
+            createAchieveDetailTable(orderData);
             var searchTotal = orderData.totalElements;
             if (searchTotal != achieveTotal || searchTotal == 0) {
                 achieveTotal = searchTotal;
@@ -65,9 +66,9 @@ var handleHelper = Handlebars.registerHelper("addOne", function (index) {
  *
  * @param data
  */
-function createAchieveTable(data) {
-    var myTemplate = Handlebars.compile($("#course-table-template").html());
-    $('#achieveCourseList').html(myTemplate(data));
+function createAchieveDetailTable(data) {
+    var myTemplate = Handlebars.compile($("#detail-table-template").html());
+    $('#achieveDetailList').html(myTemplate(data));
 }
 /**
  * 分页
@@ -81,7 +82,7 @@ function initPaging(data) {
         showCount: 5,
         limit: limit,
         callback: function (curr, limit, totalCount) {
-            findCheckCashList(curr - 1);
+            findAchieveDetailList(curr - 1);
         }
     });
 }

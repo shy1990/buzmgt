@@ -33,28 +33,18 @@
     <link rel="stylesheet" type="text/css" href="static/bootStrapPager/css/page.css"/>
     <script src="static/js/jquery/jquery-1.11.3.min.js"
             type="text/javascript" charset="utf-8"></script>
-    <script type="text/x-handlebars-template" id="course-table-template">
+    <script type="text/x-handlebars-template" id="detail-table-template">
         {{#if content}}
         {{#each content}}
         <tr>
-            <td>{{addOne @index}}</td>
-            <td>{{userVo.truename}}</td>
-            <td>
-                {{{disposeStar starsLevel}}}
-                {{userVo.namepath}}
-            </td>
-            <td><span class="text-zi text-strong">{{userVo.levelName}}</span></td>
-            <td>
-                <span class="text-red">{{{disposeNum userId}}}</span>
-            </td>
-            <td>
-                <span class="text-lv text-strong">{{{disposeGroup userId}}}组</span>
-            </td>
+            <td>{{order.shopName}}</td>
+            <td>{{planUser.namepath}}</td>
+            <td><span class="text-red">{{orderNo}}</span></td>
+            <td><span class="text-lv text-strong">{{good.name}}</span></td>
             <td>{{num}}台</td>
-            <td>{{start-end-Date}}</td>
-            <td><span class="text-lv text-strong">进行中</span></td>
+            <td>{{formDate createDate}}</td>
             <td>
-                <button class="btn btn-sm btn-blue">查看明细</button>
+                <button class="btn btn-sm btn-blue">查看订单</button>
             </td>
         </tr>
         {{/each}}
@@ -206,15 +196,15 @@
 
     <div class="clearfix"></div>
     <div>
-        <select class="ph-select">
+        <%--<select class="ph-select">
             <option>山东省-德州市-武城县</option>
             <option>山东省-德州市-武城县</option>
             <option>山东省-德州市-武城县</option>
-        </select>
+        </select>--%>
 
-        <select class="ph-select">
-            <option>销量订单</option>
-            <option>退货订单</option>
+        <select class="ph-select" name="status">
+            <option value="pay">销量订单</option>
+            <option value="back">退货订单</option>
         </select>
 
 
@@ -244,106 +234,13 @@
                     <th>订单号</th>
                     <th>产品</th>
                     <th>数量</th>
-                    <th><span>付款日期</span><span>退货日期</span></th>
-                    <th>状态</th>
+                    <th><span class="paydate">付款日期</span><span class="backdate">退货日期</span></th>
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>01</td>
-                    <td>李易峰</td>
-                    <td>
-                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                        山东省济南市天桥区
-                    </td>
-                    <td><span class="text-zi text-strong">大学生</span></td>
-                    <td><span class="text-red">200台 /  300台 / 400台</span></td>
-                    <td><span class="text-lv text-strong">A组</span></td>
-                    <td>350台</td>
-                    <td>2016.08.09 - 2016.08.11</td>
-                    <td><span class="text-lv text-strong">进行中</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-blue">查看明细</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>01</td>
-                    <td>李易峰</td>
-                    <td>
-                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                        山东省济南市天桥区
-                    </td>
-                    <td><span class="text-zi text-strong">大学生</span></td>
-                    <td><span class="text-red">200台 /  300台 / 400台</span></td>
-                    <td><span class="text-lv text-strong">A组</span></td>
-                    <td>350台</td>
-                    <td>2016.08.09 - 2016.08.11</td>
-                    <td><span class="text-lv text-strong">进行中</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-blue">查看明细</button>
-                    </td>
-                </tr>
-
-
-                <tr>
-                    <td>01</td>
-                    <td>李易峰</td>
-                    <td>
-                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                        山东省济南市天桥区
-                    </td>
-                    <td><span class="text-hong text-strong">中学生</span></td>
-                    <td><span class="text-red">200台 /  300台 / 400台</span></td>
-                    <td><span class="text-lan text-strong">B组</span></td>
-                    <td>350台</td>
-                    <td>2016.08.09 - 2016.08.11</td>
-                    <td><span class="text-hong text-strong">待审核</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-blue">查看明细</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>01</td>
-                    <td>李易峰</td>
-                    <td>
-                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                        山东省济南市天桥区
-                    </td>
-                    <td><span class="text-lan text-strong">小学生</span></td>
-                    <td><span class="text-red">200台 /  300台 / 400台</span></td>
-                    <td><span class="text-huang text-strong">C组</span></td>
-                    <td>350台</td>
-                    <td>2016.08.09 - 2016.08.11</td>
-                    <td><span class="text-lan text-strong">已核对</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-blue">查看明细</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>01</td>
-                    <td>李易峰</td>
-                    <td>
-                        <i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i><i class=" icon-x ico-xx"></i>
-                        山东省济南市天桥区
-                    </td>
-                    <td><span class="text-lan text-strong">小学生</span></td>
-                    <td><span class="text-red">200台 /  300台 / 400台</span></td>
-                    <td><span class="text-cao text-strong">D组</span></td>
-                    <td>350台</td>
-                    <td>2016.08.09 - 2016.08.11</td>
-                    <td><span class="text-lan text-strong">已核对</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-blue">查看明细</button>
-                    </td>
-                </tr>
-
-
-                </tbody>
+                <tbody id="achieveDetailList"></tbody>
             </table>
+            <div id="initPager"></div>
         </div>
         <!--table-box-->
 
@@ -368,6 +265,6 @@
         charset="utf-8"></script>
 <script type="text/javascript"
         src="static/bootStrapPager/js/extendPagination.js"></script>
-<script type="text/javascript" src="static/achieve/achieve_course.js"></script>
+<script type="text/javascript" src="static/achieve/achieve_income_detail.js"></script>
 </body>
 </html>

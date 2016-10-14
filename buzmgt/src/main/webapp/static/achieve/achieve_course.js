@@ -110,7 +110,7 @@ function initPaging(data) {
         showCount: 5,
         limit: limit,
         callback: function (curr, limit, totalCount) {
-            findCheckCashList(curr - 1);
+            findAchieveCourseList(curr - 1);
         }
     });
 }

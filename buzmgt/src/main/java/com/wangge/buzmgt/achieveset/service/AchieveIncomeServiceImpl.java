@@ -298,7 +298,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 		if(status==AchieveIncome.PayStatusEnum.PAY){
 			statusInteger =1;
 		}
-		return air.sumMoneyByAchieveIdAndUserIdAndStatus(achieveId, userId, statusInteger);
+		return air.sumMoneyByAchieveIdAndUserIdAndStatus(achieveId, userId,statusInteger);
 	}
 
 	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,
@@ -374,7 +374,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 									predicates.add(cb.equal(expression, filter.value));
 								} else if (javaTypeName.equals(TYPE_ACHIEVEINCOME_STATUS)) {
 									/**
-									 * FlagEnum格式转换
+									 * PayStatusEnum格式转换
 									 */
 									try {
 										String status = filter.value.toString();
