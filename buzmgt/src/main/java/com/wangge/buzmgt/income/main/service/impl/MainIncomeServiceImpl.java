@@ -241,7 +241,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    * 5.更新收益主表<br/>
    */
   @Override
-  public void caculatePayedOrder(String orderNo, String userId, String regionId) {
+  public void caculatePayedOrder(String orderNo, String userId,Date payDate, String regionId) {
     
     Optional<Long> userOpt = mainPlanUserRep.findFirst(userId, FlagEnum.NORMAL);
     if (!userOpt.isPresent()) {
@@ -249,7 +249,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     }
     Long planId = userOpt.get();
     List<OrderGoods> goodList = orderGoodsRep.findByorderNo(orderNo);
-    caculatePayedOrder(userId, planId, new Date(), goodList, regionId, 1);
+    caculatePayedOrder(userId, planId, payDate, goodList, regionId, 1);
   }
   
   /*
