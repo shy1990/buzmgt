@@ -7,6 +7,7 @@ $(function() {
 	initFunction();
 	initExcelExport();
 	findBrandIncomeList();
+	findSectionList();//叠加查询
 })
 /**
  * 跳转添加页面 获取planId和machineType
@@ -114,6 +115,7 @@ function initFunction(){
 		SearchData['sc_EQ_machineType.id'] = $machineType;
 		findAchieveList();
 		findBrandIncomeList();
+		findSectionList();
 	});
 }
 /**
@@ -341,6 +343,141 @@ Handlebars.registerHelper('formDate', function(value) {
 	}
 	return changeDateToString_(new Date(value));
 });
+
+//----------------------价格区间的操作---------------------------------------------
+/**
+ * 查找正在使用的价格区间
+ * @param type
+ * @param planId
+ */
+function findSectionList(){
+	var $machineType=$(".J_MachineType li.active").attr('title');
+	var $planId = $("#planId").val();
+	$.ajax({
+		url : "/section/listNow?planId=" + $planId+"&type="+$machineType,
+		type : "GET",
+		dataType : "json",
+		success:function(data){
+			console.log(data);
+			createSectionTable(data)
+		},
+		error:function(){
+			alert('系统错误');
+
+		}
+	})
+}
+
+/**
+ * 生成价格区间列表
+ *
+ * @param data
+ */
+function createSectionTable(content) {
+	var myTemplate = Handlebars.compile($("#section-table-template").html());
+	$('#sectionList').html(myTemplate(content));
+}
+
+/**
+ * 终止小区间
+ */
+function del(id){
+	$('#del').modal('show').on('show.bs.modal',function(){
+
+	})
+	$('#sure_del').on('click',function(){
+		console.log(id);
+		$.ajax({
+			url:'/section/modify/'+id,
+			type:'GET',
+			success:function(data){
+				console.log(data);
+				alert('终止成功');
+				window.location.reload();//刷新当前页面.
+			},
+			error:function(){
+
+			}
+		});
+	});
+}
+/**
+ * 修改单个小区间
+ * @param id
+ * @param priceRange
+ */
+function modify(id, priceRange,productionId) {
+	console.log(id + '  ' + priceRange);
+
+	$('#gaigai').modal('show').on('shown.bs.modal', function () {
+		$("#priceRange").text(priceRange);
+		$("#sure_save").click(function () {
+			var valueData = $("#modifySection").serializeArray();
+			console.log(valueData);
+			var percentage = valueData[0]['value'];
+			var implDate = valueData[1]['value'];
+			var auditorId = valueData[2]['value'];
+			var productionId = productionId;
+			console.log(percentage + " " + implDate + "  " + auditorId +'  '+id);
+			$.ajax({
+				url:'/section/modifyPriceRange/' + id,
+				type: 'post',
+				data: {
+					percentage: percentage,
+					implDate: implDate,
+					auditorId: auditorId,
+					productionId: productionId
+				},
+				success: function (data) {
+					alert("修改成功,正在审核");
+					refresh();
+				},
+				error: function () {
+
+				}
+			});
+
+		});
+	})
+}
+
+/**
+ * 当弹框消失的时候刷新页面
+ */
+$('#gaigai').on('hidden.bs.modal', function () {
+	refresh();
+})
+function refresh() {
+	window.location.reload();//刷新当前页面.
+}
+
+/**
+ * 价格区间设置
+ */
+function add_section(){
+	var planId = $("#planId").val();
+	var machineType = findMachineType();
+	window.location.href = '/section/addPriceRanges?type='+machineType+'&planId='+planId;
+
+}
+/**
+ * 查询记录
+ */
+function setSectionRecord(){
+	var planId = $("#planId").val();
+	var machineType = findMachineType();
+	window.location.href = '/section/toNotExpiredJsp?type='+machineType+'&planId='+planId;
+}
+/**
+ * 添加区域属性
+ * @param id
+ */
+function addRegion(id){
+	window.location.href = "/areaAttr/setting?type=PRICERANGE&ruleId="+id;
+}
+
+//------------------------ 价格区间操作结束 -------------------------------
+
 /**
  * 待付金额
  */

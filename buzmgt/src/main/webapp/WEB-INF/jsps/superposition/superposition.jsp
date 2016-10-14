@@ -40,7 +40,7 @@
             background: url("img/tcje.png") no-repeat center;
         }
 
-        .ph-icon{
+        .ph-icon {
             height: 30px;
             padding: 5px 10px;
             font-size: 12px;
@@ -48,14 +48,38 @@
             border-radius: 3px;
         }
 
-        .icon-riz{
+        .icon-riz {
             background: url("<%=basePath%>static/earnings/img/rizi.png") no-repeat center;
         }
 
-        .icon-reny{
+        .icon-reny {
             background: url("<%=basePath%>static/earnings/img/shry.png") no-repeat center;
         }
     </style>
+    <script>
+        function seeProgress(planId, id) {
+            window.location.href = 'progress?planId=' + planId + '&id=' + id;
+        }
+        function stop(id) {
+            $.ajax({
+                url: 'stop/' + id,
+                data: {checkStatus: '4'},
+                dataType: 'json',
+                type: 'POST',
+                success: function (data) {
+                    if (data.result == 'success') {
+                        alert("操作成功");
+                    }
+                    window.location.reload();
+                },
+                error: function (data) {
+
+                }
+            })
+
+        }
+    </script>
+
 
 </head>
 <body>
@@ -581,10 +605,11 @@
                         <!--导航开始-->
 
                         <div class="ph-btn-set">
-                            <a href="/superposition/addGroup?planId=${planId}" class="btn ph-blue">
+                            <a href="/superposition/add?planId=${planId}" class="btn ph-blue">
                                 <i class="ico icon-xj"></i> <span class="text-gery">添加</span>
                             </a>
-                            <a href="/superposition/findAll?planId=${planId}" class="btn ph-blue" style="margin-right: 30px">
+                            <a href="/superposition/findAll?planId=${planId}" class="btn ph-blue"
+                               style="margin-right: 30px">
                                 <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
                             </a>
 
@@ -660,10 +685,9 @@
                                         <td>
                                             <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
                                             </button>
-                                            <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#">进程
+                                            <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="seeProgress('{{planId}}', '{{id}}')">进程
                                             </button>
-                                            <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
-                                            </button>
+                                            <button class="btn  bnt-sm bnt-zza" data-toggle="modal" data-target="#" onclick="stop('{{id}}')">终止</button>
                                         </td>
                                     </tr>
                                     {{/each}}
@@ -701,7 +725,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">选择价格区间：</label>
                                 <div class="col-sm-7">
-                                    <span class="text-gery" >0-50</span>
+                                    <span class="text-gery">0-50</span>
                                 </div>
                             </div>
 
@@ -724,7 +748,8 @@
                                 <div class="col-sm-7">
                                     <div class="input-group are-line">
                                         <span class="input-group-addon "><i class=" ph-icon icon-riz"></i></span>
-                                        <input type="text" class="form-control form_datetime " placeholder="请选择实施日期" readonly="readonly  " style="background: #ffffff;">
+                                        <input type="text" class="form-control form_datetime " placeholder="请选择实施日期"
+                                               readonly="readonly  " style="background: #ffffff;">
                                     </div>
                                     <span class="text-gery " style="float: right;margin-right: -30px;margin-top: -25px">起</span>
                                 </div>
@@ -802,7 +827,7 @@
      * 查看信息
      * @param id
      */
-    function see(id){
+    function see(id) {
         window.location.href = id;
 
     }
@@ -830,12 +855,12 @@
                 totalCount = data.totalElements;
                 limit = data.size;
                 var listTemplate = Handlebars.compile($("#list-template").html());
-                Handlebars.registerHelper('state',function(){
-                    if(data.status == 1){
+                Handlebars.registerHelper('state', function () {
+                    if (data.status == 1) {
                         return '审核中';
-                    }else if(data.status == 2){
+                    } else if (data.status == 2) {
                         return '驳回';
-                    }else{
+                    } else {
                         return '审核通过';
                     }
 

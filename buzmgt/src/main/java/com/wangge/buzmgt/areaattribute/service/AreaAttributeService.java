@@ -22,4 +22,6 @@ public interface AreaAttributeService {
   List<AreaAttribute> findByRuleIdAndTypeAndDisabled(Long id, PlanType type);
 
   public AreaAttribute findByRegionIdAndRuleId(String regionId,Long ruleId);//用于价格区间计算
+
+  public AreaAttribute findByRegionIdAndRuleIdAndType(String  regionId, Long ruleId, PlanType type);
 }
