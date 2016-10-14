@@ -1,4 +1,5 @@
 var achieveTotal = 0;
+var achieveAfterSaleTotal = 0;
 $(function () {
     initExcelExport();// 初始化导出excel
     findAchieveDetailList();// 查询列表
@@ -6,15 +7,36 @@ $(function () {
 /**
  * 检索模糊查询
  */
-function goSearchSalesman() {
-    var userName = $('#searchSalesMan').val();
-    if (!isEmpty(userName)) {
-        SearchData['sc_EQ_userVo.truename'] = userName;
-        findAchieveCourseList();
-        delete SearchData['sc_EQ_userVo.truename'];
+function goSearch() {
+    var searchValue = $('#searchValue').val();
+    if (!isEmpty(searchValue)) {
+        var orderStatus = $('#orderStatus').val();
+        if(orderStatus == "back"){
+            SearchData_['SC_ORE_shopName'] = "orderno_"+searchValue;
+            findAchieveAfterSaleList();
+            delete SearchData_['SC_ORE_shopName'];
+            return false;
+        }
+        SearchData['sc_ORE_order.shopName'] = "orderNo_"+searchValue;
+        findAchieveDetailList();
+        delete SearchData['sc_OR_order.shopName'];
     } else {
         alert("请输入名称！");
     }
+}
+function findStatus() {
+    var paydate=$('.paydate');
+    var backdate=$('.backdate');
+    var orderStatus = $('#orderStatus').val();
+    if (orderStatus == "back"){
+        findAchieveAfterSaleList();
+        paydate.hide();
+        backdate.show();
+        return false;
+    }
+    paydate.show();
+    backdate.hide();
+    findAchieveDetailList();
 }
 /**
  * 导出excel
@@ -37,7 +59,10 @@ function initFunction() {
 function findAchieveDetailList(page) {
     page = page == null || page == '' ? 0 : page;
     SearchData['page'] = page;
+    SearchData['sc_EQ_achieveId'] = $('#achieveId').val();
+    SearchData['sc_EQ_userId'] = $('#userId').val();
     SearchData['sc_EQ_status'] = 'STOCK';
+    delete SearchData['sc_EQ_ruletype'];
     $.ajax({
         url: "/achieveIncome",
         type: "GET",
@@ -49,6 +74,34 @@ function findAchieveDetailList(page) {
             if (searchTotal != achieveTotal || searchTotal == 0) {
                 achieveTotal = searchTotal;
                 initPaging(orderData);
+            }
+        },
+        error: function () {
+            alert("系统异常，请稍后重试！");
+        }
+    })
+}
+/**
+ * 查询售后冲减列表
+ */
+function findAchieveAfterSaleList(page) {
+    page = page == null || page == '' ? 0 : page;
+    SearchData_['page'] = page;
+    SearchData_['SC_EQ_ruleId'] = $('#achieveId').val();
+    SearchData_['SC_EQ_userId'] = $('#userId').val();
+    SearchData_['SC_EQ_ruletype'] = 2;
+
+    $.ajax({
+        url: "/hedge/getData",
+        type: "GET",
+        data: SearchData_,
+        dataType: "json",
+        success: function (orderData) {
+            createAchieveAfterSaleTable(orderData);
+            var searchTotal = orderData.totalElements;
+            if (searchTotal != achieveAfterSaleTotal || searchTotal == 0) {
+                achieveAfterSaleTotal = searchTotal;
+                initPaging_(orderData);
             }
         },
         error: function () {
@@ -71,6 +124,14 @@ function createAchieveDetailTable(data) {
     $('#achieveDetailList').html(myTemplate(data));
 }
 /**
+ *
+ * @param data
+ */
+function createAchieveAfterSaleTable(data) {
+    var myTemplate = Handlebars.compile($("#aftersale-table-template").html());
+    $('#achieveDetailList').html(myTemplate(data));
+}
+/**
  * 分页
  *
  * @param data
@@ -83,6 +144,17 @@ function initPaging(data) {
         limit: limit,
         callback: function (curr, limit, totalCount) {
             findAchieveDetailList(curr - 1);
+        }
+    });
+}
+function initPaging_(data) {
+    var totalCount = data.totalElements, limit = data.size;
+    $('#initPager').extendPagination({
+        totalCount: totalCount,
+        showCount: 5,
+        limit: limit,
+        callback: function (curr, limit, totalCount) {
+            findAchieveAfterSaleList(curr - 1);
         }
     });
 }

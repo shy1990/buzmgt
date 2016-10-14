@@ -33,7 +33,8 @@ public class HedgeVo {
   // 到货日期
   private Date shdate;
   // 品牌数量,是否已计算
-  private Integer sum,flag=0;
+  private Integer sum,ruletype;// 收益规则类型0价格区间1:品牌2达量3叠加 4达量奖励;
+	private Long ruleId;//规则ID；
   //序号
   private Long rowind;
   public String getOrderno() {
@@ -98,13 +99,13 @@ public class HedgeVo {
     super();
   }
 
-  public Integer getFlag() {
-    return flag;
-  }
-
-  public void setFlag(Integer flag) {
-    this.flag = flag;
-  }
+//  public Integer getFlag() {
+//    return flag;
+//  }
+//
+//  public void setFlag(Integer flag) {
+//    this.flag = flag;
+//  }
 
   public String getUserId() {
     return userId;
@@ -161,4 +162,20 @@ public class HedgeVo {
   public void setShopRegionId(String shopRegionId) {
     this.shopRegionId = shopRegionId;
   }
+
+	public Integer getRuletype() {
+		return ruletype;
+	}
+
+	public void setRuletype(Integer ruletype) {
+		this.ruletype = ruletype;
+	}
+
+	public Long getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
+	}
 }

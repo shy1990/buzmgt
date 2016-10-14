@@ -54,9 +54,34 @@
         </tr>
         {{/if}}
     </script>
+    <script type="text/x-handlebars-template" id="aftersale-table-template">
+        {{#if content}}
+        {{#each content}}
+        <tr>
+            <td>{{shopName}}</td>
+            <td>{{namepath}}</td>
+            <td><span class="text-red">{{orderno}}</span></td>
+            <td><span class="text-lv text-strong">{{goodsName}}</span></td>
+            <td>{{sum}}台</td>
+            <td>{{formDate shdate}}</td>
+            <td>
+                <button class="btn btn-sm btn-blue">查看订单</button>
+            </td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td colspan="100">没有相关数据</td>
+        </tr>
+        {{/if}}
+    </script>
     <script type="text/javascript">
         var base = '<%=basePath%>';
         var SearchData = {
+            'page': '0',
+            'size': '20'
+        };
+        var SearchData_ = {
             'page': '0',
             'size': '20'
         };
@@ -69,6 +94,8 @@
 <div class="content main">
     <h4 class="page-header ">
         <i class="ico icon-ck"></i>明细
+        <input type="hidden" value="${userId}" id="userId">
+        <input type="hidden" value="${achieve.achieveId}" id="achieveId">
         <!--区域选择按钮-->
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
 
@@ -202,19 +229,17 @@
             <option>山东省-德州市-武城县</option>
         </select>--%>
 
-        <select class="ph-select" name="status">
+        <select class="ph-select" name="status" id="orderStatus">
             <option value="pay">销量订单</option>
             <option value="back">退货订单</option>
         </select>
 
 
-        <button class="btn btn-blue btn-sm" style="margin-left: 10px">
-            检索
-        </button>
+        <button class="btn btn-blue btn-sm" style="margin-left: 10px" onclick="findStatus();">检索        </button>
 
         <div class="link-posit-t pull-right export">
-            <input class="ph-select text-gery-hs" placeholder="  请输入业务员名称">
-            <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
+            <input id="searchValue" class="ph-select text-gery-hs" placeholder="商家/订单号">
+            <button class="btn btn-blue btn-sm" onclick="goSearch();">
                 检索
             </button>
             <a class="table-export" href="javascript:void(0);">导出excel</a>
