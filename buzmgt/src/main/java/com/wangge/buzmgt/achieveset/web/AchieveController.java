@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
+import com.wangge.buzmgt.income.schedule.service.JobService;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,8 @@ public class AchieveController {
 	private LogService logService;
 	@Autowired
 	private AchieveService achieveServer;
+	@Autowired
+	private JobService jobService;
 	@Autowired
 	private AchieveIncomeService achieveIncomeServer;
 	@Autowired
@@ -286,6 +289,10 @@ public class AchieveController {
 			AchieveStatusEnum statusEnum = AchieveStatusEnum.valueOf(status);
 			achieve.setStatus(statusEnum);
 			achieveServer.save(achieve);
+
+			//保存定时任务
+			jobService.saveJobTask(30,Long.valueOf(achieve.getPlanId()),achieve.getAchieveId(),achieve.getIssuingDate());
+
 			logService.log(null, "修改审核状态=" + status, EventType.UPDATE);
 			json.put("result", "success");
 			json.put("message", "操作成功");

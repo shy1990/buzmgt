@@ -143,7 +143,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 		} catch (Exception e) {
 			LogUtil.error("xx", e);
 			//计算收益异常
-			incomeErrorService.save(orderNo,userId,e.getMessage(),goodId, 0);
+			incomeErrorService.save(orderNo,userId,e.getMessage(),goodId,0,achieve.getAchieveId());
 			return false;
 		}
 		return true;
@@ -250,6 +250,8 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	 */
 	@Override
 	public boolean createAchieveIncomeAfterSale(String userId, String goodId, Long palnId, Long hedgeId, Date payTime, Date acceptTime, Integer num) {
+		String orderNo = "";
+		Long ruleId = null;
 		try {
 			Map<String, Object> searchParams = new HashedMap();
 			searchParams.put("EQ_userId", userId);
@@ -261,9 +263,10 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 				return false;
 			}
 			AchieveIncome achieveIncome = achieveIncomes.get(0);
+			orderNo = achieveIncome.getOrderNo();
+			ruleId = achieveIncome.getAchieveId();
 			Float money = achieveIncome.getMoney();
 			Integer count = achieveIncome.getNum();
-			Long ruleId = achieveIncome.getAchieveId();
 			//售后冲减的金额
 			Float AfterSaleMoney = new BigDecimal(Float.toString(money)).divide(new BigDecimal(count)).multiply(new BigDecimal(num)).floatValue();
 			HedgeCost hedgeCost = new HedgeCost(hedgeId, ruleId, 2, userId, goodId, payTime, acceptTime, AfterSaleMoney);
@@ -271,7 +274,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			//组装售后冲减信息
 		} catch (Exception e) {
 			LogUtil.error(e.getMessage(), e);
-//			incomeErrorService.save();
+			incomeErrorService.saveHedgeError(orderNo,userId,e.getMessage(),goodId,0,ruleId);
 			return false;
 		}
 		return true;
