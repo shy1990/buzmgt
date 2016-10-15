@@ -110,27 +110,27 @@ public class WaterOrderCashController {
         Map<String, Object> obMap1 = new HashMap<String, Object>();
         obMap1.put("firstRow", start + 1);
         obMap1.put("lastRow", end);
-        obMap1.put("firstCol", 3);
-        obMap1.put("lastCol", 3);
+        obMap1.put("firstCol", 4);
+        obMap1.put("lastCol", 4);
         marginList.add(obMap1);
 
         Map<String, Object> obMap2 = new HashMap<String, Object>();
         obMap2.put("firstRow", start + 1);
         obMap2.put("lastRow", end);
-        obMap2.put("firstCol", 4);
-        obMap2.put("lastCol", 4);
+        obMap2.put("firstCol", 5);
+        obMap2.put("lastCol", 5);
         marginList.add(obMap2);
 
         Map<String, Object> obMap3 = new HashMap<String, Object>();
         obMap3.put("firstRow", start + 1);
         obMap3.put("lastRow", end);
-        obMap3.put("firstCol", 5);
-        obMap3.put("lastCol", 5);
+        obMap3.put("firstCol", 6);
+        obMap3.put("lastCol", 6);
         marginList.add(obMap3);
       }
       start = end;
     }
-	  String[] gridTitles_ = { "流水单号", "订单编号", "订单金额", "订单实际金额", "总金额",  "状态", "日期" };
+	  String[] gridTitles_ = { "流水单号", "订单编号", "订单金额", "实际金额", "总金额",  "状态", "日期" };
 	  String[] coloumsKey_ = { "serialNo", "orderNo", "orderPrice", "actualPayNum", "cashMoney", "status", "createDate" };
     MapedExcelExport.doExcelExport("流水单号.xls", alList, gridTitles_, coloumsKey_, request, response, marginList);
   }
