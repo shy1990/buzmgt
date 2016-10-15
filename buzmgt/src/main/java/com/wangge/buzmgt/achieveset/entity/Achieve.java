@@ -37,7 +37,7 @@ public class Achieve implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static enum AchieveStatusEnum {
-		BACK("驳回"), WAIT("待审核"), OVER("已审核");
+		BACK("驳回"), WAIT("待审核"), OVER("已审核"), ISSUED("已发放");
 		private String name;
 
 		AchieveStatusEnum(String name) {

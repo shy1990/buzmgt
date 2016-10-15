@@ -185,6 +185,9 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	private Float disposeAchieveIncome(Achieve ac, String userId, AchieveIncome.PayStatusEnum status, Integer num) {
 		// 获取当前商品当前规则的销量；
 		Integer nowNumber = Integer.valueOf(countByAchieveIdAndUserIdAndStatus(ac.getAchieveId(), userId, status).toString());
+		//查询售后冲减的量
+		Integer afterSaleNum = findAfterSaleNum(ac.getAchieveId(),userId);
+		nowNumber +=afterSaleNum;
 		// 计算后的收益
 		Float money = 0f;
 		Integer firstAdd = 0;
@@ -323,6 +326,9 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	public String calculateAchieveIncomeTotal(Long planId, Long achieveId) {
 		//1.查询规则
 		Achieve achieve = achieveService.findByAchieveIdAndPlanId(achieveId, planId.toString());
+		if(achieve.getStatus()== Achieve.AchieveStatusEnum.ISSUED){
+			return "收益已发放";
+		}
 //		achieve.getGroupNumbers();
 //		achieve.getRewardPunishRules();
 		List<Map<String,Object>> userAchieves = new ArrayList<>();
@@ -344,11 +350,16 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			try {
 				String userId = (String) userAchieve.get("userId");
 				Integer num = (Integer) userAchieve.get("num");
-				//4.计算收益
-				Double totalMoney =Double.parseDouble(String.valueOf(disposeAchieveIncome(achieve, userId, AchieveIncome.PayStatusEnum.PAY, num)));
+				//查询售后冲减的量
+				Integer afterSaleNum = findAfterSaleNum(achieveId,userId);
+				//4.计算收益(减去售后量)
+				Double totalMoney =Double.parseDouble(String.valueOf(disposeAchieveIncome(achieve, userId, AchieveIncome.PayStatusEnum.PAY, num-afterSaleNum)));
+
 				LogUtil.info(userId + "的收益金额 totalMoney：" + totalMoney);
 				//5.保存薪资
 				mainIncomeService.updateAchieveIncome(userId,totalMoney);
+				achieve.setStatus(Achieve.AchieveStatusEnum.ISSUED);
+				achieveService.save(achieve);
 			}catch (Exception e){
 				LogUtil.error(e.getMessage(),e);
 				return;
@@ -357,7 +368,11 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 		return "OK";
 	}
-
+	//查询售后冲减的量
+	public Integer findAfterSaleNum(Long achieveId, String userId){
+		Long afterSaleNum = hedgeCostRepository.countByRuleIdAndRuleTypeAndUserId(achieveId,2,userId);
+		return afterSaleNum.intValue();
+	}
 	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,
 	                                                                      final Class<AchieveIncome> entityClazz) {
 		return new Specification<AchieveIncome>() {
