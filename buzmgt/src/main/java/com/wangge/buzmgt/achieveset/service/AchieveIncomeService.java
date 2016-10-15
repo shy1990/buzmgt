@@ -175,4 +175,12 @@ public interface AchieveIncomeService {
 	 * @return
 	 */
 	BigDecimal sumMoneyByAchieveIdAndUserIdAndStatus(Long achieveId,String userId, AchieveIncome.PayStatusEnum status);
+
+	/**
+	 * 计算达量总收益
+	 * @param planId
+	 * @param achieveId
+	 * @return
+	 */
+	String calculateAchieveIncomeTotal(Long planId,Long achieveId);
 }

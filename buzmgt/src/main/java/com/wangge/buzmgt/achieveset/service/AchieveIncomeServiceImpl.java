@@ -3,11 +3,14 @@ package com.wangge.buzmgt.achieveset.service;
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.repository.AchieveIncomeRepository;
+import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
+import com.wangge.buzmgt.achieveset.vo.service.AchieveIncomeVoService;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.income.main.entity.HedgeCost;
 import com.wangge.buzmgt.income.main.repository.HedgeCostRepository;
 import com.wangge.buzmgt.income.main.service.IncomeErrorService;
+import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.plan.entity.GroupNumber;
 import com.wangge.buzmgt.plan.entity.GroupUser;
@@ -15,6 +18,7 @@ import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.iterators.ObjectArrayIterator;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +49,13 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	private HedgeCostRepository hedgeCostRepository;
 	@Autowired
 	private IncomeErrorService incomeErrorService;
+	@Autowired
+	private AchieveService achieveService;
+	@Autowired
+	private MainIncomeService mainIncomeService;
+	@Autowired
+	private AchieveIncomeVoService achieveIncomeVoService;
+
 
 
 	@Override
@@ -306,6 +317,45 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			statusInteger = 1;
 		}
 		return air.sumMoneyByAchieveIdAndUserIdAndStatus(achieveId, userId, statusInteger);
+	}
+
+	@Override
+	public String calculateAchieveIncomeTotal(Long planId, Long achieveId) {
+		//1.查询规则
+		Achieve achieve = achieveService.findByAchieveIdAndPlanId(achieveId, planId.toString());
+//		achieve.getGroupNumbers();
+//		achieve.getRewardPunishRules();
+		List<Map<String,Object>> userAchieves = new ArrayList<>();
+		//2.查询收益人员列表
+		List<AchieveIncomeVo> achieveIncomeVos = achieveIncomeVoService.findByAchieveIdAndStatus(achieveId, AchieveIncome.PayStatusEnum.PAY);
+		if(achieveIncomeVos.size()<=0){
+			LogUtil.info("此规则没有产生收益（planId="+planId+",achieveId= "+achieveId);
+			return "此规则没有产生收益";
+		}
+		achieveIncomeVos.forEach(achieveIncomeVo -> {
+			//组装参数
+			Map<String,Object> parameters = new HashedMap();
+			parameters.put("userId",achieveIncomeVo.getUserId());
+			parameters.put("num",achieveIncomeVo.getNum());
+			userAchieves.add(parameters);
+		});
+		//3.遍历 查询收益数量
+		userAchieves.forEach(userAchieve->{
+			try {
+				String userId = (String) userAchieve.get("userId");
+				Integer num = (Integer) userAchieve.get("num");
+				//4.计算收益
+				Double totalMoney =Double.parseDouble(String.valueOf(disposeAchieveIncome(achieve, userId, AchieveIncome.PayStatusEnum.PAY, num)));
+				LogUtil.info(userId + "的收益金额 totalMoney：" + totalMoney);
+				//5.保存薪资
+				mainIncomeService.updateAchieveIncome(userId,totalMoney);
+			}catch (Exception e){
+				LogUtil.error(e.getMessage(),e);
+				return;
+			}
+		});
+
+		return "OK";
 	}
 
 	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,

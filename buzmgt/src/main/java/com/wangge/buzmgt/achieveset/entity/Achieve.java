@@ -24,8 +24,13 @@ import java.util.Set;
 @Table(name = "SYS_ACHIEVE_NUMBER_SET")
 @NamedEntityGraph(
 				name = "graph.Achieve.groupNumbers",
-				attributeNodes = @NamedAttributeNode(value = "groupNumbers", subgraph = "graph.Achieve.groupNumbers.groupUsers"),
-				subgraphs = @NamedSubgraph(name = "graph.Achieve.groupNumbers.groupUsers", attributeNodes = @NamedAttributeNode("groupUsers"))
+				attributeNodes = {
+					@NamedAttributeNode(value = "groupNumbers", subgraph = "graph.Achieve.groupNumbers.groupUsers"),
+					@NamedAttributeNode(value = "rewardPunishRules")
+				},
+				subgraphs = {
+					@NamedSubgraph(name = "graph.Achieve.groupNumbers.groupUsers", attributeNodes = @NamedAttributeNode("groupUsers"))
+				}
 )
 public class Achieve implements Serializable {
 

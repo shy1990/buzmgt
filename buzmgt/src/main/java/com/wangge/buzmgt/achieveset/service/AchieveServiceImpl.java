@@ -83,6 +83,11 @@ public class AchieveServiceImpl implements AchieveService {
     return achieveRepository.findOne(id);
   }
 
+	@Override
+	public Achieve findByAchieveIdAndPlanId(Long achieveId, String planId) {
+		return achieveRepository.findByAchieveIdAndPlanId(achieveId, planId);
+	}
+
 	public List<Map<String, Object>> findRule(List<String> goodIds, Long mainPlanId, String userId, Date payDate) {
 		List<Map<String, Object>> list = new ArrayList<>();
 		Map<String,Object> searchParams = new HashMap<>();
