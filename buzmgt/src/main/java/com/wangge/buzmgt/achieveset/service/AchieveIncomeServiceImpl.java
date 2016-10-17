@@ -280,9 +280,18 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			orderNo = achieveIncome.getOrderNo();
 			ruleId = achieveIncome.getAchieveId();
 			Float money = achieveIncome.getMoney();
-			Integer count = achieveIncome.getNum();
+			Integer afterSaleCount = findAfterSaleNum(ruleId,userId);
+			Integer count = achieveIncome.getNum()-afterSaleCount;
 			//售后冲减的金额
-			Float AfterSaleMoney = new BigDecimal(Float.toString(money)).divide(new BigDecimal(count)).multiply(new BigDecimal(num)).floatValue();
+			Float AfterSaleMoney = 0f;
+			//查询规则收益是否发放
+			Achieve achieve = achieveService.findOne(ruleId);
+			//TODO 收益已发放的情况
+			if(achieve.getStatus()== Achieve.AchieveStatusEnum.ISSUED){
+
+			}
+			//售后冲减的金额
+			AfterSaleMoney = new BigDecimal(Float.toString(money)).divide(new BigDecimal(count)).multiply(new BigDecimal(num)).floatValue();
 			HedgeCost hedgeCost = new HedgeCost(hedgeId, ruleId, 2, userId, goodId, payTime, acceptTime, AfterSaleMoney);
 			hedgeCostRepository.save(hedgeCost);
 			//组装售后冲减信息
@@ -356,8 +365,14 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 				Double totalMoney =Double.parseDouble(String.valueOf(disposeAchieveIncome(achieve, userId, AchieveIncome.PayStatusEnum.PAY, num-afterSaleNum)));
 
 				LogUtil.info(userId + "的收益金额 totalMoney：" + totalMoney);
+
+				List<AchieveIncome> achieveIncomes = this.findByAchieveIdAndUserIdAndStatus(achieveId, userId, AchieveIncome.PayStatusEnum.PAY);
+				this.save(achieveIncomes);
+
 				//5.保存薪资
 				mainIncomeService.updateAchieveIncome(userId,totalMoney);
+
+				//6.更改状态
 				achieve.setStatus(Achieve.AchieveStatusEnum.ISSUED);
 				achieveService.save(achieve);
 			}catch (Exception e){
@@ -368,6 +383,22 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 		return "OK";
 	}
+
+	/**
+	 * 根据achieveId和userId ，查询已付款收益
+	 * @param achieveId
+	 * @param userId
+	 * @param pay
+	 * @return
+	 */
+	private List<AchieveIncome> findByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum pay) {
+		Map<String, Object> searchParams =new HashedMap();
+		searchParams.put("EQ_achieveId", achieveId);
+		searchParams.put("EQ_userId", userId);
+		searchParams.put("EQ_status", pay);
+		return this.findAll(searchParams);
+ 	}
+
 	//查询售后冲减的量
 	public Integer findAfterSaleNum(Long achieveId, String userId){
 		Long afterSaleNum = hedgeCostRepository.countByRuleIdAndRuleTypeAndUserId(achieveId,2,userId);

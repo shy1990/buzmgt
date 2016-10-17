@@ -59,27 +59,27 @@ public class AchieveIncomeController {
 		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
 		return achieveIncomeVoService.findAll(searchParams, pageable);
 	}
-	@RequestMapping("/test")
-	@ResponseBody
-	public JsonResponse<List<Map<String, Object>>> test(@RequestParam String goodId, @RequestParam Long planId, @RequestParam String userId, @RequestParam String orderNo) {
-		JsonResponse<List<Map<String, Object>>> jsonResponse = new JsonResponse<>();
-		List<String> goodIds = Arrays.asList(goodId.split(","));
-		List<Map<String, Object>> achieveRule = achieveService.findRuleByGoods(goodIds, planId, userId);
-		if (achieveRule.size() <= 0) {
-			jsonResponse.setErrorMsg("没有此商品的规则！");
-			return jsonResponse;
-		}
-		try {
-			achieveRule.forEach(ruleMap -> {
-				achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, 2, (String) ruleMap.get("goodId"), 0, planId, 100f, new Date());
-			});
-		} catch (Exception e) {
-			jsonResponse.setErrorCode("500");
-			jsonResponse.setErrorMsg("网络异常，稍后重试！");
-			return jsonResponse;
-		}
-		jsonResponse.setResult(achieveRule);
-		jsonResponse.setSuccessMsg("操作成功");
-		return jsonResponse;
-	}
+//	@RequestMapping("/test")
+//	@ResponseBody
+//	public JsonResponse<List<Map<String, Object>>> test(@RequestParam String goodId, @RequestParam Long planId, @RequestParam String userId, @RequestParam String orderNo) {
+//		JsonResponse<List<Map<String, Object>>> jsonResponse = new JsonResponse<>();
+//		List<String> goodIds = Arrays.asList(goodId.split(","));
+//		List<Map<String, Object>> achieveRule = achieveService.findRuleByGoods(goodIds, planId, userId);
+//		if (achieveRule.size() <= 0) {
+//			jsonResponse.setErrorMsg("没有此商品的规则！");
+//			return jsonResponse;
+//		}
+//		try {
+//			achieveRule.forEach(ruleMap -> {
+//				achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, 2, (String) ruleMap.get("goodId"), 0, planId, 100f, new Date());
+//			});
+//		} catch (Exception e) {
+//			jsonResponse.setErrorCode("500");
+//			jsonResponse.setErrorMsg("网络异常，稍后重试！");
+//			return jsonResponse;
+//		}
+//		jsonResponse.setResult(achieveRule);
+//		jsonResponse.setSuccessMsg("操作成功");
+//		return jsonResponse;
+//	}
 }
