@@ -59,5 +59,10 @@ public class AchieveIncomeServerTest {
 		Long num = hedgeCostRepository.countByRuleIdAndRuleType(8L, 2);
 		System.out.println(num);
 	}
+	@Test
+	public void test3(){
+		String msg = achieveIncomeService.calculateAchieveIncomeTotal(20L,9L);
+		System.out.println(msg);
+	}
 
 }

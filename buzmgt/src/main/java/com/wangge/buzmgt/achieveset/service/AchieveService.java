@@ -69,6 +69,8 @@ public interface AchieveService {
    */
   Achieve findOne(Long achieveId);
 
+  Achieve findByAchieveIdAndPlanId(Long achieveId,String planId);
+
   /**
    * 
   * @Title: findRuleByGoods 

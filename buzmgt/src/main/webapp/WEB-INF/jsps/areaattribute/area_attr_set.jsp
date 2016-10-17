@@ -226,7 +226,7 @@
                                 <div class="input-group are-line">
                                     <span class="input-group-addon "><i class="ph-icon   icon-je"></i></span>
                                     <!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
-                                    <input name="commission" type="text" class="form-control input-h"
+                                    <input name="commission" type="text" class="form-control input-h J_commission"
                                            aria-describedby="basic-addon1" placeholder="请设置提成金额">
                                     </input>
                                 </div>
@@ -294,9 +294,8 @@
     console.log(ruleId);
     /*添加*/
     function add() {
-        var o = $("#addForm").serializeArray();
-        var regionId = o[0]["value"].trim();// regionId
-        var commission = o[2]["value"];//commission
+        var regionId = $("#region  option:selected").val().trim();// regionId
+        var commission = $(".J_commission").val().trim();//commission
         if (regionId.length > 8) {
             alert("请您只选择到：要选择区域的最后一级");
             return location.href = '/areaAttr/setting?ruleId='+ruleId +'&type='+planType;

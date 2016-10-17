@@ -32,7 +32,7 @@ public class AchieveServiceImpl implements AchieveService {
   private AchieveRepository achieveRepository;
   @Autowired
   private LogService logService;
-  
+
   public List<Achieve> findAll(Map<String,Object> searchParams){
     return this.findAll(searchParams, new Sort(Direction.DESC, "createDate"));
   }
@@ -82,6 +82,11 @@ public class AchieveServiceImpl implements AchieveService {
   public Achieve findOne(Long id){
     return achieveRepository.findOne(id);
   }
+
+	@Override
+	public Achieve findByAchieveIdAndPlanId(Long achieveId, String planId) {
+		return achieveRepository.findByAchieveIdAndPlanId(achieveId, planId);
+	}
 
 	public List<Map<String, Object>> findRule(List<String> goodIds, Long mainPlanId, String userId, Date payDate) {
 		List<Map<String, Object>> list = new ArrayList<>();

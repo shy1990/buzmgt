@@ -105,9 +105,10 @@
             </div>
             <div class="col-sm-4 product">
                 <span class="text-strong text-gery">起止日期：</span>
-                <span class="text-black text-strong" id="srart-end-date"> <fmt:formatDate value="${achieve.startDate}"
-                                                                      pattern="yyyy.MM.dd"/>-
-                    <fmt:formatDate value="${achieve.endDate}" pattern="yyyy.MM.dd"/></span>
+                <span class="text-black text-strong" id="srart-end-date">
+                    <fmt:formatDate value="${achieve.startDate}" pattern="yyyy.MM.dd"/>-
+                    <fmt:formatDate value="${achieve.endDate}" pattern="yyyy.MM.dd"/>
+                </span>
             </div>
         </div>
 

@@ -21,7 +21,7 @@ public interface CustomRepository {
 	/**
 	 * 根据用户ID和 规则类型 和 规则Id 总查询数量
 	 * @param ruleId
-	 * @param ruleType
+	 * @param ruleType 收益规则类型0价格区间1:品牌2达量3叠加 4达量奖励;
 	 * @param userId
 	 * @return
 	 */

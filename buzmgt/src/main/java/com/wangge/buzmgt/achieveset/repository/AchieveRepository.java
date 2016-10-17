@@ -32,4 +32,6 @@ JpaSpecificationExecutor<Achieve>{
 	@EntityGraph("graph.Achieve.groupNumbers")
 	Achieve findOne(Long achieveId);
 
+	@EntityGraph("graph.Achieve.groupNumbers")
+	Achieve findByAchieveIdAndPlanId(Long achieveId, String planId);
 }

@@ -3,10 +3,14 @@ package com.wangge.buzmgt.achieveset.service;
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.repository.AchieveIncomeRepository;
+import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
+import com.wangge.buzmgt.achieveset.vo.service.AchieveIncomeVoService;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.income.main.entity.HedgeCost;
 import com.wangge.buzmgt.income.main.repository.HedgeCostRepository;
+import com.wangge.buzmgt.income.main.service.IncomeErrorService;
+import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.plan.entity.GroupNumber;
 import com.wangge.buzmgt.plan.entity.GroupUser;
@@ -14,6 +18,7 @@ import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.iterators.ObjectArrayIterator;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +46,16 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	@Autowired
 	private AchieveIncomeRepository air;
 	@Autowired
-	private	HedgeCostRepository hedgeCostRepository;
+	private HedgeCostRepository hedgeCostRepository;
+	@Autowired
+	private IncomeErrorService incomeErrorService;
+	@Autowired
+	private AchieveService achieveService;
+	@Autowired
+	private MainIncomeService mainIncomeService;
+	@Autowired
+	private AchieveIncomeVoService achieveIncomeVoService;
+
 
 
 	@Override
@@ -58,13 +72,13 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 	@Override
 	public Long countByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum status) {
-		Long count = air.countByAchieveIdAndUserIdAndStatus(achieveId,userId,status);
+		Long count = air.countByAchieveIdAndUserIdAndStatus(achieveId, userId, status);
 		return null == count ? 0 : count;
 	}
 
 	@Override
 	public Long countByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {
-		Long count = air.countByAchieveIdAndStatus(achieveId,status);
+		Long count = air.countByAchieveIdAndStatus(achieveId, status);
 		return null == count ? 0 : count;
 	}
 
@@ -139,7 +153,8 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 		} catch (Exception e) {
 			LogUtil.error("xx", e);
-			LogUtil.info(e.getMessage());
+			//计算收益异常
+			incomeErrorService.save(orderNo,userId,e.getMessage(),goodId,0,achieve.getAchieveId());
 			return false;
 		}
 		return true;
@@ -170,6 +185,9 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	private Float disposeAchieveIncome(Achieve ac, String userId, AchieveIncome.PayStatusEnum status, Integer num) {
 		// 获取当前商品当前规则的销量；
 		Integer nowNumber = Integer.valueOf(countByAchieveIdAndUserIdAndStatus(ac.getAchieveId(), userId, status).toString());
+		//查询售后冲减的量
+		Integer afterSaleNum = findAfterSaleNum(ac.getAchieveId(),userId);
+		nowNumber +=afterSaleNum;
 		// 计算后的收益
 		Float money = 0f;
 		Integer firstAdd = 0;
@@ -221,7 +239,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			Integer max = 0;//设置最大值
 			min = rule.getMin() + minAdd;
 			max = rule.getMax() + maxAdd;
-			if ((nowNumber==0||nowNumber > min) && nowNumber <= max) {
+			if ((nowNumber == 0 || nowNumber > min) && nowNumber <= max) {
 				money = rule.getMoney();
 				break;
 			}
@@ -246,6 +264,8 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	 */
 	@Override
 	public boolean createAchieveIncomeAfterSale(String userId, String goodId, Long palnId, Long hedgeId, Date payTime, Date acceptTime, Integer num) {
+		String orderNo = "";
+		Long ruleId = null;
 		try {
 			Map<String, Object> searchParams = new HashedMap();
 			searchParams.put("EQ_userId", userId);
@@ -253,29 +273,105 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			searchParams.put("EQ_planId", palnId);
 			searchParams.put("EQ_createDate", DateUtil.date2String(payTime));
 			List<AchieveIncome> achieveIncomes = findAll(searchParams);
-			if(achieveIncomes.size()<1){
+			if (achieveIncomes.size() < 1) {
 				return false;
 			}
 			AchieveIncome achieveIncome = achieveIncomes.get(0);
+			orderNo = achieveIncome.getOrderNo();
+			ruleId = achieveIncome.getAchieveId();
 			Float money = achieveIncome.getMoney();
 			Integer count = achieveIncome.getNum();
-			Long ruleId = achieveIncome.getAchieveId();
 			//售后冲减的金额
 			Float AfterSaleMoney = new BigDecimal(Float.toString(money)).divide(new BigDecimal(count)).multiply(new BigDecimal(num)).floatValue();
-			HedgeCost hedgeCost = new HedgeCost(hedgeId, ruleId, 2, userId, goodId, payTime,acceptTime,AfterSaleMoney);
+			HedgeCost hedgeCost = new HedgeCost(hedgeId, ruleId, 2, userId, goodId, payTime, acceptTime, AfterSaleMoney);
 			hedgeCostRepository.save(hedgeCost);
 			//组装售后冲减信息
-		}catch (Exception e){
-			LogUtil.error(e.getMessage(),e);
-			e.printStackTrace();
+		} catch (Exception e) {
+			LogUtil.error(e.getMessage(), e);
+			incomeErrorService.saveHedgeError(orderNo,userId,e.getMessage(),goodId,0,ruleId);
 			return false;
 		}
 		return true;
 	}
 
 	@Override
-	public Long countAchieveAfterSale(Long achieveId){
-		return hedgeCostRepository.countByRuleIdAndRuleType(achieveId,2);
+	public Long countAchieveAfterSale(Long achieveId) {
+		return hedgeCostRepository.countByRuleIdAndRuleType(achieveId, 2);
+	}
+
+	@Override
+	public Long countAchieveAfterSaleAndUserId(Long ahieveId, String userId) {
+		return hedgeCostRepository.countByRuleIdAndRuleTypeAndUserId(ahieveId, 2, userId);
+	}
+
+	@Override
+	public BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {
+		Integer statusInteger = 0;
+		if (status == AchieveIncome.PayStatusEnum.PAY) {
+			statusInteger = 1;
+		}
+		return air.sumMoneyByAchieveIdAndStatus(achieveId, statusInteger);
+	}
+
+	@Override
+	public BigDecimal sumMoneyByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum status) {
+		Integer statusInteger = 0;
+		if (status == AchieveIncome.PayStatusEnum.PAY) {
+			statusInteger = 1;
+		}
+		return air.sumMoneyByAchieveIdAndUserIdAndStatus(achieveId, userId, statusInteger);
+	}
+
+	@Override
+	public String calculateAchieveIncomeTotal(Long planId, Long achieveId) {
+		//1.查询规则
+		Achieve achieve = achieveService.findByAchieveIdAndPlanId(achieveId, planId.toString());
+		if(achieve.getStatus()== Achieve.AchieveStatusEnum.ISSUED){
+			return "收益已发放";
+		}
+//		achieve.getGroupNumbers();
+//		achieve.getRewardPunishRules();
+		List<Map<String,Object>> userAchieves = new ArrayList<>();
+		//2.查询收益人员列表
+		List<AchieveIncomeVo> achieveIncomeVos = achieveIncomeVoService.findByAchieveIdAndStatus(achieveId, AchieveIncome.PayStatusEnum.PAY);
+		if(achieveIncomeVos.size()<=0){
+			LogUtil.info("此规则没有产生收益（planId="+planId+",achieveId= "+achieveId);
+			return "此规则没有产生收益";
+		}
+		achieveIncomeVos.forEach(achieveIncomeVo -> {
+			//组装参数
+			Map<String,Object> parameters = new HashedMap();
+			parameters.put("userId",achieveIncomeVo.getUserId());
+			parameters.put("num",achieveIncomeVo.getNum());
+			userAchieves.add(parameters);
+		});
+		//3.遍历 查询收益数量
+		userAchieves.forEach(userAchieve->{
+			try {
+				String userId = (String) userAchieve.get("userId");
+				Integer num = (Integer) userAchieve.get("num");
+				//查询售后冲减的量
+				Integer afterSaleNum = findAfterSaleNum(achieveId,userId);
+				//4.计算收益(减去售后量)
+				Double totalMoney =Double.parseDouble(String.valueOf(disposeAchieveIncome(achieve, userId, AchieveIncome.PayStatusEnum.PAY, num-afterSaleNum)));
+
+				LogUtil.info(userId + "的收益金额 totalMoney：" + totalMoney);
+				//5.保存薪资
+				mainIncomeService.updateAchieveIncome(userId,totalMoney);
+				achieve.setStatus(Achieve.AchieveStatusEnum.ISSUED);
+				achieveService.save(achieve);
+			}catch (Exception e){
+				LogUtil.error(e.getMessage(),e);
+				return;
+			}
+		});
+
+		return "OK";
+	}
+	//查询售后冲减的量
+	public Integer findAfterSaleNum(Long achieveId, String userId){
+		Long afterSaleNum = hedgeCostRepository.countByRuleIdAndRuleTypeAndUserId(achieveId,2,userId);
+		return afterSaleNum.intValue();
 	}
 	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,
 	                                                                      final Class<AchieveIncome> entityClazz) {
@@ -350,7 +446,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 									predicates.add(cb.equal(expression, filter.value));
 								} else if (javaTypeName.equals(TYPE_ACHIEVEINCOME_STATUS)) {
 									/**
-									 * FlagEnum格式转换
+									 * PayStatusEnum格式转换
 									 */
 									try {
 										String status = filter.value.toString();
@@ -456,6 +552,17 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 								Predicate p_ = cb.or(pl);
 								predicates.add(p_);
+								break;
+							case ORE:
+								/**
+								 * 'sc_ORE_order.shopName = orderNo_A37010506130
+								 */
+								String[] parameter = ((String) filter.value).split("_");
+								Path expression_ = root.get(parameter[0]);
+								String value_ = parameter[1];
+								Predicate p = cb.or(cb.equal(expression_, value_), cb.like(expression, "%" + value_ + "%"));
+								predicates.add(p);
+
 								break;
 
 							default:

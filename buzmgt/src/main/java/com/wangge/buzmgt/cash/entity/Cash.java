@@ -52,7 +52,7 @@ public class Cash implements Serializable  {
   @Column(name="id")
   private Long cashId ; //订单id
 //  @Transient
-  @OneToOne(cascade = CascadeType.REFRESH,fetch=FetchType.LAZY)
+  @OneToOne(fetch=FetchType.LAZY)
   @JoinColumn(name="id",insertable=false,updatable=false)
   private OrderSignfor order;//订单
   private String userId ; //用户id

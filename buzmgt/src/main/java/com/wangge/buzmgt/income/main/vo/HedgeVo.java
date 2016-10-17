@@ -30,8 +30,11 @@ public class HedgeVo {
   // 品牌数量,是否已计算
   private Integer sum = 0;
   // 序号
+  private Integer ruletype;// 收益规则类型0价格区间1:品牌2达量3叠加 4达量奖励;
+	private Long ruleId;//规则ID；
+  //序号
   private Long rowind;
-  
+
   public String getOrderno() {
     return orderno;
   }
@@ -55,15 +58,15 @@ public class HedgeVo {
   public void setUniquenumber(String uniquenumber) {
     this.uniquenumber = uniquenumber;
   }
-  
+
   public String getGoodsName() {
     return goodsName;
   }
-  
+
   public void setGoodsName(String goodsName) {
     this.goodsName = goodsName;
   }
-  
+
   public Date getShdate() {
     return shdate;
   }
@@ -88,63 +91,80 @@ public class HedgeVo {
     this.id = id;
   }
   
+
   public HedgeVo() {
     super();
   }
-  
+
   public String getUserId() {
     return userId;
   }
-  
+
   public void setUserId(String userId) {
     this.userId = userId;
   }
-  
+
   public String getNamepath() {
     return namepath;
   }
-  
+
   public void setNamepath(String namepath) {
     this.namepath = namepath;
   }
-  
+
   public String getTruename() {
     return truename;
   }
-  
+
   public void setTruename(String truename) {
     this.truename = truename;
   }
-  
+
   public Long getRowind() {
     return rowind;
   }
-  
+
   public void setRowind(Long rowind) {
     this.rowind = rowind;
   }
-  
+
   public String getShopName() {
     return shopName;
   }
-  
+
   public void setShopName(String shopName) {
     this.shopName = shopName;
   }
-  
+
   public String getRegionId() {
     return regionId;
   }
-  
+
   public void setRegionId(String regionId) {
     this.regionId = regionId;
   }
-  
+
   public String getShopRegionId() {
     return shopRegionId;
   }
-  
+
   public void setShopRegionId(String shopRegionId) {
     this.shopRegionId = shopRegionId;
   }
+
+	public Integer getRuletype() {
+		return ruletype;
+	}
+
+	public void setRuletype(Integer ruletype) {
+		this.ruletype = ruletype;
+	}
+
+	public Long getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
+	}
 }

@@ -1,14 +1,13 @@
 package com.wangge.buzmgt.achieveset.entity;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.wangge.buzmgt.achieveset.vo.OrderVo;
+import com.wangge.buzmgt.common.FlagEnum;
+import com.wangge.buzmgt.goods.entity.Goods;
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 
 import javax.persistence.*;
-
-import org.hibernate.annotations.GenericGenerator;
-
-import com.wangge.buzmgt.common.FlagEnum;
-import com.wangge.buzmgt.income.main.vo.PlanUserVo;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 
@@ -47,11 +46,19 @@ public class AchieveIncome implements Serializable{
   
   @Column(name = "ACHIEVE_ID")
   private Long  achieveId  ;// 达量设置Id
-  @OneToOne
-  @JoinColumn(name = "ACHIEVE_ID", insertable = false, updatable = false)
-  private Achieve achieve;
-  private String  goodId ;// 商品Id
-  private String  orderNo  ;// 订单号
+//  @OneToOne
+//  @JoinColumn(name = "ACHIEVE_ID", insertable = false, updatable = false)
+//  private Achieve achieve;
+  @Column(name = "GOOD_ID")
+	private String  goodId ;// 商品Id
+	@OneToOne
+	@JoinColumn(name = "GOOD_ID", insertable = false, updatable = false)
+	private Goods good ;// 商Id
+  @Column(name = "ORDER_NO")
+	private String  orderNo  ;// 订单号
+	@OneToOne
+	@JoinColumn(name = "ORDER_NO",referencedColumnName = "ORDER_NO",insertable = false, updatable = false)
+	private OrderVo order;
   private Integer num ;// 数量
   private Float money ;// 金额
 	@Enumerated(EnumType.ORDINAL)
@@ -86,12 +93,12 @@ public class AchieveIncome implements Serializable{
   public void setAchieveId(Long achieveId) {
     this.achieveId = achieveId;
   }
-  public Achieve getAchieve() {
-    return achieve;
-  }
-  public void setAchieve(Achieve achieve) {
-    this.achieve = achieve;
-  }
+//  public Achieve getAchieve() {
+//    return achieve;
+//  }
+//  public void setAchieve(Achieve achieve) {
+//    this.achieve = achieve;
+//  }
   public String getGoodId() {
     return goodId;
   }
@@ -147,10 +154,26 @@ public class AchieveIncome implements Serializable{
 		this.price = price;
 	}
 
+	public Goods getGood() {
+		return good;
+	}
+
+	public void setGood(Goods good) {
+		this.good = good;
+	}
+
+	public OrderVo getOrder() {
+		return order;
+	}
+
+	public void setOrder(OrderVo order) {
+		this.order = order;
+	}
+
 	@Override
   public String toString() {
     return "AchieveIncome [id=" + id + ", userId=" + userId + ", planUser=" + planUser + ", achieveId=" + achieveId
-        + ", achieve=" + achieve + ", goodId=" + goodId + ", orderNo=" + orderNo + ", num=" + num + ", money=" + money
+        + ", goodId=" + goodId + ", orderNo=" + orderNo + ", num=" + num + ", money=" + money
         + ", status=" + status + ", createDate=" + createDate + ", flag=" + flag + "]";
   }
   

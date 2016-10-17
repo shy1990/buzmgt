@@ -86,6 +86,18 @@ public class PredicateUtil {
             }
             
             break;
+	        case "ORE":
+		        /**
+		         * 查询HedgeVo 一个值查两个字段
+		         * 'sc_ORE_shopName = orderNo_A37010506130
+		         */
+		        String[] parameter = ((String) value).split("_");
+		        Path expression_ = root.get(parameter[0]);
+		        String value_ = parameter[1];
+		        Predicate p = cb.or(cb.equal(expression_, value_), cb.like(expression, "%" + value_ + "%"));
+		        predicates.add(p);
+
+		        break;
         }
       } catch (ParseException e) {
         throw new RuntimeException("日期格式化失败!");

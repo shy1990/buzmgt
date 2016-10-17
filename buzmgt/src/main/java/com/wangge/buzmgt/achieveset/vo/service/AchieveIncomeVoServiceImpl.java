@@ -8,6 +8,7 @@ import com.wangge.buzmgt.common.PlanTypeEnum;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,9 +39,9 @@ public class AchieveIncomeVoServiceImpl implements AchieveIncomeVoService {
 
 
 	@Override
-	public List<AchieveIncomeVo> findAll(Map<String, Object> searchParams, Sort sort) {
+	public List<AchieveIncomeVo> findAll(Map<String, Object> searchParams) {
 		Specification<AchieveIncomeVo> spec = dispose(searchParams);
-		return achieveIncomeVoRepository.findAll(spec, sort);
+		return achieveIncomeVoRepository.findAll(spec);
 	}
 
 	/**
@@ -56,6 +57,14 @@ public class AchieveIncomeVoServiceImpl implements AchieveIncomeVoService {
 	public Page<AchieveIncomeVo> findAll(Map<String, Object> searchParams, Pageable pageable) {
 		Specification<AchieveIncomeVo> spec = dispose(searchParams);
 		return achieveIncomeVoRepository.findAll(spec, pageable);
+	}
+
+	@Override
+	public List<AchieveIncomeVo> findByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {
+		Map<String,Object> spec = new HashedMap();
+		spec.put("EQ_achieveId",achieveId);
+		spec.put("EQ_status",status);
+		return this.findAll(spec);
 	}
 
 	public static Specification<AchieveIncomeVo> achieveIncomeSpecification(final Collection<SearchFilter> filters,
