@@ -26,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.*;
@@ -57,7 +58,6 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	private AchieveIncomeVoService achieveIncomeVoService;
 
 
-
 	@Override
 	public Long countByAchieveId(Long achieveId) {
 		Long count = air.countByAchieveId(achieveId);
@@ -72,6 +72,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 	@Override
 	public Long countByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum status) {
+
 		Long count = air.countByAchieveIdAndUserIdAndStatus(achieveId, userId, status);
 		return null == count ? 0 : count;
 	}
@@ -125,7 +126,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	 * @param @param payStatus 0-已出库；1-已支付 @param
 	 * @return boolean 返回类型
 	 * @Title: createAchieveIncomeBy
-	 * @Description: 单个数据处理
+	 * @Description: 单个规则数据处理
 	 */
 	public boolean createAchieveIncome(Achieve achieve, String orderNo, String userId, int num, String goodId,
 	                                   int payStatus, Long planId, Float price, Date payDate) {
@@ -135,7 +136,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 				statusEnum = AchieveIncome.PayStatusEnum.PAY;
 			}
 			//查询收益金额
-			Float money = disposeAchieveIncome(achieve, userId, statusEnum, num);
+			Float money = disposeAchieveIncome(achieve, userId, statusEnum, num) * num;
 			AchieveIncome achieveIncome = new AchieveIncome();
 			achieveIncome.setAchieveId(achieve.getAchieveId());
 			achieveIncome.setUserId(userId);
@@ -154,7 +155,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 		} catch (Exception e) {
 			LogUtil.error("xx", e);
 			//计算收益异常
-			incomeErrorService.save(orderNo,userId,e.getMessage(),goodId,0,achieve.getAchieveId());
+			incomeErrorService.save(orderNo, userId, e.getMessage(), goodId, 0, achieve.getAchieveId());
 			return false;
 		}
 		return true;
@@ -173,11 +174,13 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	}
 
 	/**
+	 * 计算商品的收益单价 根据规则和userId状态
+	 *
 	 * @param @param  ac
 	 * @param @param  userId
 	 * @param @param  num
 	 * @param @return 设定文件
-	 * @return Float 返回类型
+	 * @return Float 返回类型 单个商品的收益
 	 * @throws @Title: disposeAchieveIncome
 	 * @Description: 根据规则计算收益 1.查询此商品当前的销量， 2.根据销量匹配出提成金额 -- 查询是否有特殊分组，若有分组则在规则中
 	 * 增加对应阶段区间量值; 3.根据数量计算提成金额
@@ -186,8 +189,9 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 		// 获取当前商品当前规则的销量；
 		Integer nowNumber = Integer.valueOf(countByAchieveIdAndUserIdAndStatus(ac.getAchieveId(), userId, status).toString());
 		//查询售后冲减的量
-		Integer afterSaleNum = findAfterSaleNum(ac.getAchieveId(),userId);
-		nowNumber +=afterSaleNum;
+		Integer afterSaleNum = findAfterSaleNum(ac.getAchieveId(), userId);
+		//实际销量=规则销量+即将发生的销量-售后冲减量
+		nowNumber = nowNumber + num - afterSaleNum;
 		// 计算后的收益
 		Float money = 0f;
 		Integer firstAdd = 0;
@@ -244,7 +248,6 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 				break;
 			}
 		}
-		money = money * num;
 		return money;
 	}
 
@@ -267,10 +270,12 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 		String orderNo = "";
 		Long ruleId = null;
 		try {
+			//查询收益
 			Map<String, Object> searchParams = new HashedMap();
 			searchParams.put("EQ_userId", userId);
 			searchParams.put("EQ_goodId", goodId);
 			searchParams.put("EQ_planId", palnId);
+			searchParams.put("EQ_status", AchieveIncome.PayStatusEnum.PAY);
 			searchParams.put("EQ_createDate", DateUtil.date2String(payTime));
 			List<AchieveIncome> achieveIncomes = findAll(searchParams);
 			if (achieveIncomes.size() < 1) {
@@ -279,25 +284,21 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			AchieveIncome achieveIncome = achieveIncomes.get(0);
 			orderNo = achieveIncome.getOrderNo();
 			ruleId = achieveIncome.getAchieveId();
-			Float money = achieveIncome.getMoney();
-			Integer afterSaleCount = findAfterSaleNum(ruleId,userId);
-			Integer count = achieveIncome.getNum()-afterSaleCount;
-			//售后冲减的金额
-			Float AfterSaleMoney = 0f;
-			//查询规则收益是否发放
-			Achieve achieve = achieveService.findOne(ruleId);
-			//TODO 收益已发放的情况
-			if(achieve.getStatus()== Achieve.AchieveStatusEnum.ISSUED){
-
-			}
-			//售后冲减的金额
-			AfterSaleMoney = new BigDecimal(Float.toString(money)).divide(new BigDecimal(count)).multiply(new BigDecimal(num)).floatValue();
+			Float money = achieveIncome.getMoney();//一单收益
+			Integer count = achieveIncome.getNum();
+			/**
+			 * 检验是否已经发放
+			 * 1.未发放，总收益计算数量，与此时的金额无关。
+			 * 2.已发放，计算总金额是去修改正真的收益额，获取售后退款的收益将这个钱作为售后冲减金额。
+			 */
+			//售后冲减的金额 =money/count * num
+			Float AfterSaleMoney = new BigDecimal(Float.toString(money)).divide(new BigDecimal(count)).multiply(new BigDecimal(num)).floatValue();
 			HedgeCost hedgeCost = new HedgeCost(hedgeId, ruleId, 2, userId, goodId, payTime, acceptTime, AfterSaleMoney);
 			hedgeCostRepository.save(hedgeCost);
 			//组装售后冲减信息
 		} catch (Exception e) {
 			LogUtil.error(e.getMessage(), e);
-			incomeErrorService.saveHedgeError(orderNo,userId,e.getMessage(),goodId,0,ruleId);
+			incomeErrorService.saveHedgeError(orderNo, userId, e.getMessage(), goodId, 0, ruleId);
 			return false;
 		}
 		return true;
@@ -335,48 +336,53 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	public String calculateAchieveIncomeTotal(Long planId, Long achieveId) {
 		//1.查询规则
 		Achieve achieve = achieveService.findByAchieveIdAndPlanId(achieveId, planId.toString());
-		if(achieve.getStatus()== Achieve.AchieveStatusEnum.ISSUED){
+		if (achieve.getStatus() == Achieve.AchieveStatusEnum.ISSUED) {
 			return "收益已发放";
 		}
 //		achieve.getGroupNumbers();
 //		achieve.getRewardPunishRules();
-		List<Map<String,Object>> userAchieves = new ArrayList<>();
+		List<Map<String, Object>> userAchieves = new ArrayList<>();
 		//2.查询收益人员列表
 		List<AchieveIncomeVo> achieveIncomeVos = achieveIncomeVoService.findByAchieveIdAndStatus(achieveId, AchieveIncome.PayStatusEnum.PAY);
-		if(achieveIncomeVos.size()<=0){
-			LogUtil.info("此规则没有产生收益（planId="+planId+",achieveId= "+achieveId);
+		if (achieveIncomeVos.size() <= 0) {
+			LogUtil.info("此规则没有产生收益（planId=" + planId + ",achieveId= " + achieveId);
 			return "此规则没有产生收益";
 		}
 		achieveIncomeVos.forEach(achieveIncomeVo -> {
 			//组装参数
-			Map<String,Object> parameters = new HashedMap();
-			parameters.put("userId",achieveIncomeVo.getUserId());
-			parameters.put("num",achieveIncomeVo.getNum());
+			Map<String, Object> parameters = new HashedMap();
+			parameters.put("userId", achieveIncomeVo.getUserId());
+			parameters.put("total", achieveIncomeVo.getNum());
 			userAchieves.add(parameters);
 		});
 		//3.遍历 查询收益数量
-		userAchieves.forEach(userAchieve->{
+		userAchieves.forEach(userAchieve -> {
 			try {
 				String userId = (String) userAchieve.get("userId");
-				Integer num = (Integer) userAchieve.get("num");
+				Integer total = (Integer) userAchieve.get("total");
 				//查询售后冲减的量
-				Integer afterSaleNum = findAfterSaleNum(achieveId,userId);
+				Integer afterSaleNum = findAfterSaleNum(achieveId, userId);
 				//4.计算收益(减去售后量)
-				Double totalMoney =Double.parseDouble(String.valueOf(disposeAchieveIncome(achieve, userId, AchieveIncome.PayStatusEnum.PAY, num-afterSaleNum)));
+				Float moneyFloat = disposeAchieveIncome(achieve, userId, AchieveIncome.PayStatusEnum.PAY, 0);
+				Double totalMoney = Double.parseDouble(String.valueOf(moneyFloat * (total - afterSaleNum)));
 
 				LogUtil.info(userId + "的收益金额 totalMoney：" + totalMoney);
 
 				List<AchieveIncome> achieveIncomes = this.findByAchieveIdAndUserIdAndStatus(achieveId, userId, AchieveIncome.PayStatusEnum.PAY);
+				achieveIncomes.forEach(achieveIncome ->{
+					achieveIncome.setMoney(moneyFloat);
+				});
+				//更改每单收益金额
 				this.save(achieveIncomes);
 
 				//5.保存薪资
-				mainIncomeService.updateAchieveIncome(userId,totalMoney);
+				mainIncomeService.updateAchieveIncome(userId, totalMoney);
 
 				//6.更改状态
 				achieve.setStatus(Achieve.AchieveStatusEnum.ISSUED);
 				achieveService.save(achieve);
-			}catch (Exception e){
-				LogUtil.error(e.getMessage(),e);
+			} catch (Exception e) {
+				LogUtil.error(e.getMessage(), e);
 				return;
 			}
 		});
@@ -386,24 +392,26 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 	/**
 	 * 根据achieveId和userId ，查询已付款收益
+	 *
 	 * @param achieveId
 	 * @param userId
 	 * @param pay
 	 * @return
 	 */
 	private List<AchieveIncome> findByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum pay) {
-		Map<String, Object> searchParams =new HashedMap();
+		Map<String, Object> searchParams = new HashedMap();
 		searchParams.put("EQ_achieveId", achieveId);
 		searchParams.put("EQ_userId", userId);
 		searchParams.put("EQ_status", pay);
 		return this.findAll(searchParams);
- 	}
+	}
 
 	//查询售后冲减的量
-	public Integer findAfterSaleNum(Long achieveId, String userId){
-		Long afterSaleNum = hedgeCostRepository.countByRuleIdAndRuleTypeAndUserId(achieveId,2,userId);
+	public Integer findAfterSaleNum(Long achieveId, String userId) {
+		Long afterSaleNum = hedgeCostRepository.countByRuleIdAndRuleTypeAndUserId(achieveId, 2, userId);
 		return afterSaleNum.intValue();
 	}
+
 	public static Specification<AchieveIncome> achieveIncomeSpecification(final Collection<SearchFilter> filters,
 	                                                                      final Class<AchieveIncome> entityClazz) {
 		return new Specification<AchieveIncome>() {
