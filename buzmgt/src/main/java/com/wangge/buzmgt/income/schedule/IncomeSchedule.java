@@ -15,7 +15,8 @@ import com.wangge.buzmgt.log.util.LogUtil;
 /**
  * 收益计算执行的定时器 <br/>
  * date: 2016年9月3日 下午6:31:03 <br/>
- * 
+ * TODO  需讨论:业务离职之后如何算: 收益,售后,工资,离职有新业务员接手,新业务的如何算(冲减,售后
+ * ).
  * @author yangqc
  * @version
  * @since JDK 1.8
