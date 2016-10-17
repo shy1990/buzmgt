@@ -28,6 +28,36 @@ public class SuperpositionRecord {
 
     private Float amount;//提成
 
+    private Integer offsetNums;//售后冲减数量
+
+    private String status;//0-已计算商品;1-售后冲减商品
+
+    private String goodsId;//售后冲减商品id
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public Integer getOffsetNums() {
+        return offsetNums;
+    }
+
+    public void setOffsetNums(Integer offsetNums) {
+        this.offsetNums = offsetNums;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }
@@ -82,11 +112,14 @@ public class SuperpositionRecord {
     public String toString() {
         return "SuperpositionRecord{" +
                 "id=" + id +
-                ", record='" + record + '\'' +
+                ", record=" + record +
                 ", salesmanId='" + salesmanId + '\'' +
                 ", planId=" + planId +
                 ", superId=" + superId +
                 ", amount=" + amount +
+                ", offsetNums=" + offsetNums +
+                ", status='" + status + '\'' +
+                ", goodsId='" + goodsId + '\'' +
                 '}';
     }
 }
