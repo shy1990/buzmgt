@@ -28,9 +28,9 @@ public class SuperpositionRecord {
 
     private Float amount;//提成
 
-    private Integer offsetNums;//售后冲减数量
+    private Integer offsetNums;// 售后冲减数量
 
-    private String status;//0-已计算商品;1-售后冲减商品
+    private String status;//状态值:0-总收益已计算(原始记录),1-售后冲减数量(没有计算之前的).2-售后冲减数量(已经计算后的).3-计算后冲减之后提成(4-表示已过期)
 
     private String goodsId;//售后冲减商品id
 

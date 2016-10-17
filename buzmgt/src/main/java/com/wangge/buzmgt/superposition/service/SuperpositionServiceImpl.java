@@ -259,8 +259,9 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         List<GoodsType> goodsTypeList = superposition.getGoodsTypeList();//获取所有叠加的商品
         if (containsGoods(goodsTypeList, goodsId)) {//判断是否有这个商品
             //有这个商品就保存到收益表中,记录字段是没有计算(售后冲减)
-            //当还没有计算收益时候(发放日期的下个月的这时候计算叠加收益)
-            if (DateUtil.compareDate(DateUtil.string2Date(payTime, "yyyy-mm-dd"), DateUtil.getPreMonthDate(superposition.getGiveDate(), -1))) {
+            // todo 这里判断改成用是否有记录来计算
+            if(recordService.isCompare(planId,superposition.getId(),"0")){
+//            if (DateUtil.compareDate(DateUtil.string2Date(payTime, "yyyy-mm-dd"), DateUtil.getPreMonthDate(superposition.getGiveDate(), -1))) {
                 SuperpositionRecord superpositionRecord = new SuperpositionRecord();
                 superpositionRecord.setPlanId(planId);//主方案id
                 superpositionRecord.setSuperId(superposition.getId());//叠加方案id
@@ -340,6 +341,14 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         return superposition;
     }
 
+    /**
+     * 查找叠加规则计算前冲减总数量 (1)/计算后冲减总数量 (2)
+     * @param userId
+     * @param planId
+     * @param superId
+     * @param status
+     * @return
+     */
     @Override
     public SuperpositionRecord getBySalesmanIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId, String status) {
         String sql = "select nvl(sum(rd.OFFSET_NUMS),0) as offset_nums,rd.SALESMAN_ID,rd.SUPER_ID,rd.PLAN_ID from SYS_SUPERPOSITION_RECORD rd\n" +
@@ -412,32 +421,101 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         sqlQuery.setParameter(b, superId);//叠加方案id
         List<Object[]> list = sqlQuery.list();
         logger.info(list);
+        //用于存储方案中所有人员的一单提货量
         List<SingleIncome> singleIncomeList = new ArrayList<SingleIncome>();
         list.forEach(o -> {
             SingleIncome singleIncome = new SingleIncome();
-            singleIncome.setNums(((BigDecimal) o[0]).intValue());
+            singleIncome.setRecord(((BigDecimal) o[0]).intValue());
             singleIncome.setOrderId((String) o[1]);
             singleIncome.setUserId((String) o[2]);
             singleIncome.setPayTime((Date) o[3]);
             singleIncomeList.add(singleIncome);
 
         });
-
         List<SingleRule> singleRules = superposition.getSingleRules();//获得一单达量设置规则
-        singleRules.forEach(singleRule -> {
-            singleIncomeList.forEach(singleIncome -> {
-                if (singleIncome.getNums() >= singleRule.getMin() && singleIncome.getNums() < singleRule.getMax()) {
-                    singleIncome.setAmount(singleRule.getReward());
-                    //保存到数据库中
-                    SingleIncome singleIncome1 = singleIncomeService.save(singleIncome);
-                    logService.log(null, "一单达量保存: " + singleIncome1, Log.EventType.SAVE);
 
+        singleIncomeList.forEach(singleIncome -> {//遍历方案中所有人员的一单提货量
+            //获取计算前的冲减量
+            SingleIncome singleIncomeFront = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(singleIncome.getUserId(), planId, superposition.getId(), "1");
+            Integer offsetNum = 0;
+            if (singleIncomeFront != null) {
+                offsetNum = singleIncomeFront.getOffsetNums();
+            }
+            for (int i = 0; i < singleRules.size(); i++) {
+                if ((singleIncome.getRecord() - offsetNum) >= singleRules.get(i).getMin() && (singleIncome.getRecord() - offsetNum) < singleRules.get(i).getMax()) {
+                    SingleIncome singleIncomeSave = new SingleIncome();
+                    singleIncomeSave.setPlanId(planId);
+                    singleIncomeSave.setOrderId(singleIncome.getOrderId());
+                    singleIncomeSave.setSuperId(superId);
+                    singleIncomeSave.setAmount(singleRules.get(i).getReward());
+                    singleIncomeSave.setUserId(singleIncome.getUserId());
+                    singleIncomeSave.setStatus("0");//初始数据
+                    singleIncome.setRecord(singleIncome.getRecord() - offsetNum);
+                    singleIncomeService.save(singleIncomeSave);
+//                    TODO 保存到奇才表中
+
+                    break;
                 }
-            });
+
+            }
         });
 
     }
 
+    /**
+     * 一单达量冲减计算
+     *
+     * @param planId
+     * @param orderId
+     * @param goodsId
+     */
+    @Override
+    public void computeOneSingleAfterReturnGoods(String userId, Long planId, String orderId, String goodsId, String payTime, String receivingTime, Integer nums) {
+        //1.记录没有计算之前的商品
+        Superposition superposition = repository.findUseByTime(payTime, payTime, planId);//获取此商品使用的方案
+        List<GoodsType> goodsTypeList = superposition.getGoodsTypeList();//获取所有叠加的商品
+        if (containsGoods(goodsTypeList, goodsId)) {//判断是否有这个商品
+            //todo 用是否有记录来判断是否计算
+            if (singleIncomeService.isCompare(planId,superposition.getId(),"0")) {//计算之前操作:冲减数量保存
+                SingleIncome singleIncome = new SingleIncome();
+                singleIncome.setSuperId(superposition.getId());
+                singleIncome.setGoodsId(goodsId);
+                singleIncome.setPlanId(planId);
+                singleIncome.setOffsetNums(nums);
+                singleIncome.setUserId(userId);
+                singleIncome.setOrderId(orderId);
+                singleIncome.setStatus("1");
+                singleIncomeService.save(singleIncome);
+            }else {//已经计算
+                SingleIncome singleIncome = new SingleIncome();
+                singleIncome.setSuperId(superposition.getId());
+                singleIncome.setGoodsId(goodsId);
+                singleIncome.setPlanId(planId);
+                singleIncome.setOffsetNums(nums);
+                singleIncome.setUserId(userId);
+                singleIncome.setOrderId(orderId);
+                singleIncome.setStatus("2");
+                singleIncomeService.save(singleIncome);
+
+                //获取原始记录
+                SingleIncome singleIncomeSave = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId,planId,superposition.getId(),"0");
+                singleIncomeSave.getRecord();//提货量
+                //获取计算以后的 冲减数量
+                SingleIncome singleIncomeOffert = singleIncomeService.findOffsetNums(userId,planId,superposition.getId(),"2");
+
+//                superposition.getSingleRules().forEach(singleRule -> {
+//
+//
+//                });
+
+
+
+
+            }
+
+        }
+
+    }
 
     /*
         判断是否是特殊组,是返回这个组

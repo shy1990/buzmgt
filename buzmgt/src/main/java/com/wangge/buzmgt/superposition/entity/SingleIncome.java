@@ -20,10 +20,21 @@ public class SingleIncome {
     private String orderId;//订单id
     private String userId;//用户id
     private Date payTime;//支付时间
-    private Integer nums;//一单符合规则的提货数量
+    private Integer offsetNums;//一单符合规则的提货数量
     private Long superId;//叠加达量设置规则
     private Long planId;//方案id
     private Float amount;//收益
+    private String goodsId;//商品id
+    private String status;//状态值:0-总收益已计算(原始记录),1-售后冲减数量(没有计算之前的).2-售后冲减数量(已经计算后的).3-计算后冲减之后提成(4-表示已过期)
+    private Integer record;//一单符合规则的提货数量
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
@@ -57,12 +68,20 @@ public class SingleIncome {
         this.payTime = payTime;
     }
 
-    public Integer getNums() {
-        return nums;
+    public Integer getOffsetNums() {
+        return offsetNums;
     }
 
-    public void setNums(Integer nums) {
-        this.nums = nums;
+    public void setOffsetNums(Integer offsetNums) {
+        this.offsetNums = offsetNums;
+    }
+
+    public Integer getRecord() {
+        return record;
+    }
+
+    public void setRecord(Integer record) {
+        this.record = record;
     }
 
     public Long getSuperId() {
@@ -89,6 +108,14 @@ public class SingleIncome {
         this.amount = amount;
     }
 
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
     @Override
     public String toString() {
         return "SingleIncome{" +
@@ -96,10 +123,13 @@ public class SingleIncome {
                 ", orderId='" + orderId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", payTime=" + payTime +
-                ", nums=" + nums +
+                ", offsetNums=" + offsetNums +
                 ", superId=" + superId +
                 ", planId=" + planId +
                 ", amount=" + amount +
+                ", goodsId='" + goodsId + '\'' +
+                ", status='" + status + '\'' +
+                ", record=" + record +
                 '}';
     }
 }

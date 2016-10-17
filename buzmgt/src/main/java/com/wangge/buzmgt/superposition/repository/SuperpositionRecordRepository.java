@@ -20,8 +20,16 @@ public interface SuperpositionRecordRepository extends JpaRepository<Superpositi
             "where rd.PLAN_ID = ?\n" +
             "and rd.SALESMAN_ID = ?\n" +
             "and rd.SUPER_ID = ?\n" +
-            "and rd.STUTAS = ? \n" +
+            "and rd.STATUS = ? \n" +
             "group by \n" +
             "rd.SALESMAN_ID,rd.SUPER_ID,rd.PLAN_ID")
     public SuperpositionRecord findBySalesmanIdAndPlanIdAndSuperIdAndStatus(String userId,Long planId,Long superId,String status);
+
+    //判断是否已经计算
+    public List<SuperpositionRecord> findByPlanIdAndSuperIdAndStatus(Long planId,Long superId,String status);
+
+
+
+
+
 }

@@ -17,4 +17,6 @@ public interface SuperpositionRecordService {
     public SuperpositionRecord findBySalesmanIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId, String status );
 
 
+    //判断是否已经计算
+    public Boolean isCompare(Long planId,Long superId,String status);
 }

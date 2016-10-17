@@ -46,6 +46,9 @@ public interface SuperpositonService {
      */
     public void computeOneSingle(Long planId,Long superId);
 
+    public void computeOneSingleAfterReturnGoods(String userId,Long planId,String orderId,String goodsId,String payTime,String receivingTime,Integer nums);
+
+
 
     public Page<SuperpositionProgress> searchDetail(Long planId,Long superId,String userId,String startDate,String endDate,String name,Integer page,Integer size);
 
@@ -64,7 +67,6 @@ public interface SuperpositonService {
     public Page<PlanUserVo> findMainPlanUsers(Pageable pageReq, Map<String, Object> searchParams) throws Exception;
 
     public String compute(Superposition superposition);//计算收益
-
 
     //查找冲减商品
     public SuperpositionRecord getBySalesmanIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId, String status);

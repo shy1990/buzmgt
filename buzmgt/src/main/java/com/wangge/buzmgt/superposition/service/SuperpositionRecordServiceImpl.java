@@ -2,6 +2,7 @@ package com.wangge.buzmgt.superposition.service;
 
 import com.wangge.buzmgt.superposition.entity.SuperpositionRecord;
 import com.wangge.buzmgt.superposition.repository.SuperpositionRecordRepository;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +41,15 @@ public class SuperpositionRecordServiceImpl implements SuperpositionRecordServic
 
         SuperpositionRecord superpositionRecords = recordRepository.findBySalesmanIdAndPlanIdAndSuperIdAndStatus(userId,planId,superId,status);
         return superpositionRecords;
+    }
+
+    @Override
+    public Boolean isCompare(Long planId, Long superId, String status) {
+        List<SuperpositionRecord> superpositionRecords = recordRepository.findByPlanIdAndSuperIdAndStatus(planId,superId,status);
+        Boolean flag = false;
+        if(CollectionUtils.isNotEmpty(superpositionRecords)){
+            flag = true;
+        }
+        return flag;
     }
 }

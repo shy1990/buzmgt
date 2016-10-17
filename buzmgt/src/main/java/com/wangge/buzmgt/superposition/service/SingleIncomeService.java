@@ -8,4 +8,10 @@ import com.wangge.buzmgt.superposition.entity.SingleIncome;
 public interface SingleIncomeService {
 
     public SingleIncome save(SingleIncome singleIncome);
+
+    public SingleIncome findByUserIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId,String status);
+
+    public Boolean isCompare(Long planId, Long superId,String status);
+
+    public SingleIncome findOffsetNums(String userId, Long planId, Long superId, String status);
 }
