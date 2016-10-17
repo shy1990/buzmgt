@@ -414,7 +414,8 @@ public class SuperpositionController {
 //        superpositonService.computeOneSingle(12l,1l);
 //        SuperpositionRecord superpositionRecord = superpositonService.getBySalesmanIdAndPlanIdAndSuperIdAndStatus("A371121210",12l,1l,"2");
 //        logger.info(superpositionRecord);
-//        superpositonService.computeAfterReturnGoods("A371121210",);
+//        String userId, String goodsId, String payTime, Integer num, Long planId, String receivingTime, Long hedgeId
+        superpositonService.computeAfterReturnGoods("A371121210","02868a4172b7486683169b4b121f54ad","2015-05-10",2,12l,"",1l);
     }
 
     /*
