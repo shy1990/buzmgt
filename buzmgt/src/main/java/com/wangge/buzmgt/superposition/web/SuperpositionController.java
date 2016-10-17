@@ -338,9 +338,9 @@ public class SuperpositionController {
      */
     @RequestMapping(value = "compute", method = RequestMethod.GET)
     @ResponseBody
-    public List<SuperpositionProgress> compute(Long planId,Long superId) {
+    public List<SuperpositionProgress> compute(Long planId,Long superId) throws Exception {
 
-        return superpositonService.compute(planId,superId);
+            return superpositonService.compute(planId,superId);
     }
 
 
