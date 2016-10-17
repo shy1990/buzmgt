@@ -57,6 +57,10 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	@Autowired
 	private AchieveIncomeVoService achieveIncomeVoService;
 
+	/**
+	 * key: 规则id+业务id; value :数量
+	 */
+	public static Map<String, Integer> achieveCachedMap = new HashMap<>();
 
 	@Override
 	public Long countByAchieveId(Long achieveId) {
@@ -72,7 +76,6 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 	@Override
 	public Long countByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, AchieveIncome.PayStatusEnum status) {
-
 		Long count = air.countByAchieveIdAndUserIdAndStatus(achieveId, userId, status);
 		return null == count ? 0 : count;
 	}
@@ -186,8 +189,8 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	 * 增加对应阶段区间量值; 3.根据数量计算提成金额
 	 */
 	private Float disposeAchieveIncome(Achieve ac, String userId, AchieveIncome.PayStatusEnum status, Integer num) {
-		// 获取当前商品当前规则的销量；
-		Integer nowNumber = Integer.valueOf(countByAchieveIdAndUserIdAndStatus(ac.getAchieveId(), userId, status).toString());
+		// 获取当前商品当前规则的销量；（线程同步）
+		Integer nowNumber = synchFindAchieveIncomeCount(ac.getAchieveId(),userId,status,num);
 		//查询售后冲减的量
 		Integer afterSaleNum = findAfterSaleNum(ac.getAchieveId(), userId);
 		//实际销量=规则销量+即将发生的销量-售后冲减量
@@ -252,10 +255,38 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	}
 
 	/**
+	 * 同步查询收益数量
+	 * @param achieveId
+	 * @param userId
+	 * @param status
+	 * @param num
+	 * @return
+	 */
+	public Integer synchFindAchieveIncomeCount(Long achieveId, String userId, AchieveIncome.PayStatusEnum status, Integer num){
+
+		/**
+		 * key: 规则id+业务id+支付status; value :数量
+		 */
+		synchronized (achieveCachedMap) {
+			String key = achieveId + "+" + userId+"+"+ status.toString();
+			Integer val = achieveCachedMap.get(key);
+			if (val == null) {
+				// 查询总数量
+				val = this.countByAchieveIdAndUserIdAndStatus(achieveId, userId, status).intValue();
+			}
+			val += num;
+			achieveCachedMap.put(key, val);
+
+			return val;
+		}
+	}
+	/**
 	 * 创建达量收益，售后冲减
 	 * 1.查询是否存在规则；
 	 * 2.是否收益金额已发放
 	 * 3.创建售后收益冲减
+	 *
+	 * 不存在线程安全问题：都是单一的数据
 	 *
 	 * @param userId     用户ID
 	 * @param goodId     商品Id
@@ -315,8 +346,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	}
 
 	@Override
-	public BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {
-		Integer statusInteger = 0;
+	public BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {		Integer statusInteger = 0;
 		if (status == AchieveIncome.PayStatusEnum.PAY) {
 			statusInteger = 1;
 		}
@@ -366,8 +396,10 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 				Float moneyFloat = disposeAchieveIncome(achieve, userId, AchieveIncome.PayStatusEnum.PAY, 0);
 				Double totalMoney = Double.parseDouble(String.valueOf(moneyFloat * (total - afterSaleNum)));
 
+
 				LogUtil.info(userId + "的收益金额 totalMoney：" + totalMoney);
 
+				//查询收益列表
 				List<AchieveIncome> achieveIncomes = this.findByAchieveIdAndUserIdAndStatus(achieveId, userId, AchieveIncome.PayStatusEnum.PAY);
 				achieveIncomes.forEach(achieveIncome ->{
 					achieveIncome.setMoney(moneyFloat);
