@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wangge.buzmgt.common.CheckedEnum;
-import com.wangge.buzmgt.common.IncomeThreadPool;
+import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
+import com.wangge.buzmgt.common.IncomeCommon;
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
-import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.repository.IncomeSubRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
@@ -24,6 +23,7 @@ import com.wangge.buzmgt.income.main.vo.repository.OrderGoodsRepository;
 import com.wangge.buzmgt.income.schedule.entity.Jobtask;
 import com.wangge.buzmgt.income.schedule.repository.JobRepository;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.superposition.service.SuperpositonService;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
 
@@ -58,6 +58,10 @@ public class JobService {
   HedgeService hedgeService;
   @Autowired
   IncomeErrorService errorService;
+  @Autowired
+  SuperpositonService superService;
+  @Autowired
+  AchieveIncomeService achieveService;
   
   @Transactional(rollbackFor = Exception.class)
   public void initMonthIncome() {
@@ -67,43 +71,47 @@ public class JobService {
   public void doTask() {
     List<Jobtask> jobList = jobRep.defaltfindAll(new Date());
     for (Jobtask jobtask : jobList) {
-      int type = jobtask.getType();
-      try {
-        switch (type) {
-          /**
-           * 0:删除主方案:不在计算收益;<br/>
-           * 1.删除删除日期当天的收益<br/>
-           * TODO 达量叠加如何处理<br/>
-           */
-          case 0:
-            mainPlanService.deleteIncomeMainPlan(jobtask);
-            break;
-          case 10:
-            deleteIncomeMainPlanUser(jobtask);
-            break;
-          case 12:
-            calIncomeMainPlanUser(jobtask);
-            break;
-          case 20:
-            // TODO 计算达量
-//            saveJobTask(21, jobtask.getPlanId(), jobtask.getKeyid(), DateUtil.moveDate(jobtask.getExectime(), 1));
-            break;
-          case 30:
-            // TODO 计算叠加
-//            saveJobTask(31, jobtask.getPlanId(), jobtask.getKeyid(), DateUtil.moveDate(jobtask.getExectime(), 1));
-            break;
-          case 60:
-            calhedgeAchieve(jobtask);
-            break;
-          default:
-            break;
+      IncomeCommon.EXECUTORSERVICEPOOL.execute(new Runnable() {
+        @Override
+        public void run() {
+          int type = jobtask.getType();
+          try {
+            switch (type) {
+              /**
+               * 0:删除主方案:不在计算收益;<br/>
+               * 1.删除删除日期当天的收益<br/>
+               * TODO 达量叠加如何处理<br/>
+               */
+              case 0:
+                mainPlanService.deleteIncomeMainPlan(jobtask);
+                break;
+              case 10:
+                deleteIncomeMainPlanUser(jobtask);
+                break;
+              case 12:
+                calIncomeMainPlanUser(jobtask);
+                break;
+              case 20:
+                // 叠加计算
+                superService.compute(jobtask.getPlanId(), jobtask.getKeyid());
+                break;
+              case 30:
+                // TODO 计算达量
+                achieveService.calculateAchieveIncomeTotal(jobtask.getPlanId(), jobtask.getKeyid());
+                break;
+              case 60:
+                calhedgeAchieve(jobtask);
+                break;
+              default:
+                break;
+            }
+            jobtask.setFlag(1);
+          } catch (Exception e) {
+            errorService.saveScheduleError(71, jobtask.getId(), "执行定时任务出错");
+            LogUtil.error("定时任务失败", e);
+          }
         }
-        
-        jobtask.setFlag(1);
-      } catch (Exception e) {
-        errorService.saveScheduleError(71, jobtask.getId(), "执行定时任务出错");
-        LogUtil.error("定时任务失败", e);
-      }
+      });
     }
     jobRep.save(jobList);
   }
@@ -135,7 +143,7 @@ public class JobService {
     for (int i = 0; i <= between; i++) {
       Date startDate = DateUtil.moveDate(startTime, i);
       Date endDate = DateUtil.moveDate(startDate, 1);
-      IncomeThreadPool.exServ.execute(new Runnable() {
+      IncomeCommon.EXECUTORSERVICEPOOL.execute(new Runnable() {
         @Override
         public void run() {
           List<OrderGoods> goodList = orderGoodsRep.findByorderNoByDateAndSalesman(userId, startDate, endDate);
@@ -144,7 +152,7 @@ public class JobService {
       });
     }
     // 计算最后一天的订单
-    IncomeThreadPool.exServ.execute(new Runnable() {
+    IncomeCommon.EXECUTORSERVICEPOOL.execute(new Runnable() {
       @Override
       public void run() {
         List<OrderGoods> goodList = orderGoodsRep.findByorderNoByDateAndSalesman(userId, endTime, endDay);

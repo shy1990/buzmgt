@@ -20,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.Hedge;
 import com.wangge.buzmgt.income.main.repository.HedgeRepository;
@@ -31,6 +32,7 @@ import com.wangge.buzmgt.income.schedule.entity.Jobtask;
 import com.wangge.buzmgt.income.schedule.repository.JobRepository;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.superposition.service.SuperpositonService;
 import com.wangge.buzmgt.util.DateUtil;
 
 @Service
@@ -43,6 +45,10 @@ public class HedgeServiceImpl implements HedgeService {
   private JobRepository jobRep;
   @Autowired
   private IncomeMainplanUsersRepository IncomeUserRep;
+  @Autowired
+  private SuperpositonService superService;
+  @Autowired
+  private AchieveIncomeService achieveService;
   
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -80,7 +86,7 @@ public class HedgeServiceImpl implements HedgeService {
   public int countByGoodId(String goodId) {
     return hedgeRep.countByGoodId(goodId);
   }
-
+  
   @Override
   public int countByGoodId(List<String> goodIds) {
     return hedgeRep.countByGoodId(goodIds);
@@ -149,14 +155,19 @@ public class HedgeServiceImpl implements HedgeService {
     List<Object> usergoodList = hedgeRep.findByDate(exectime);
     usergoodList.stream().forEach(object -> {
       Object[] Ordergood = (Object[]) object;
-      String goodId = Ordergood[1].toString();
-      int sum = Integer.valueOf(Ordergood[2].toString());
+      
       Date payTime = DateUtil.string2Date(Ordergood[3].toString());
       String userId = Ordergood[4].toString();
       Long hedgeId = Long.valueOf(Ordergood[5].toString());
-      Date acceptTime = (Date) Ordergood[6];
       // 当查出主方案时调用达量和叠加的冲减算法
+      // TODO 达量奖励,一单达量的计算方法
       IncomeUserRep.findBysalesmanAndDate(payTime, userId).ifPresent(planId -> {
+        String goodsId = Ordergood[1].toString();
+        int sum = Integer.valueOf(Ordergood[2].toString());
+        Date acceptTime = (Date) Ordergood[6];
+        superService.computeAfterReturnGoods(userId, goodsId, DateUtil.date2String(payTime, "yyyy-MM-dd"), sum, planId,
+            DateUtil.date2String(acceptTime, "yyyy-MM-dd"), hedgeId);
+        achieveService.createAchieveIncomeAfterSale(userId, goodsId, planId, hedgeId, payTime, acceptTime, sum);
       });
     });
   }

@@ -11,7 +11,7 @@ public class SuperpositionProgress {
     private String regionId;//业务员区域
     private String userId;//业务员id
     private String namePath;//业务员区域地址
-    private String planId;//方案id
+    private Long planId;//方案id
     private String shopName;//商铺名字
     private String payTime;//付款时间
     private String shopAddress;//商铺地址
@@ -113,11 +113,11 @@ public class SuperpositionProgress {
         this.namePath = namePath;
     }
 
-    public String getPlanId() {
+    public Long getPlanId() {
         return planId;
     }
 
-    public void setPlanId(String planId) {
+    public void setPlanId(Long planId) {
         this.planId = planId;
     }
 

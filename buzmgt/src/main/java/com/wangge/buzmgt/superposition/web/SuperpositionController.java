@@ -8,8 +8,10 @@ import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.plan.service.MachineTypeService;
 import com.wangge.buzmgt.superposition.entity.Result;
 import com.wangge.buzmgt.superposition.entity.Superposition;
+import com.wangge.buzmgt.superposition.entity.SuperpositionRecord;
 import com.wangge.buzmgt.superposition.pojo.SuperpositionProgress;
 import com.wangge.buzmgt.superposition.service.GoodsOrderService;
+import com.wangge.buzmgt.superposition.service.SuperpositionRecordService;
 import com.wangge.buzmgt.superposition.service.SuperpositonService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.util.DateUtil;
@@ -52,6 +54,9 @@ public class SuperpositionController {
 
     @Autowired
     private MainPlanService mainPlanService;
+
+    @Autowired
+    private SuperpositionRecordService superpositionRecordService;
 
     private static final String SEARCH_OPERTOR = "sc_";
 
@@ -333,9 +338,9 @@ public class SuperpositionController {
      */
     @RequestMapping(value = "compute", method = RequestMethod.GET)
     @ResponseBody
-    public List<SuperpositionProgress> compute(Long planId,Long superId) {
+    public List<SuperpositionProgress> compute(Long planId,Long superId) throws Exception {
 
-        return superpositonService.compute(planId,superId);
+            return superpositonService.compute(planId,superId);
     }
 
 
@@ -398,9 +403,19 @@ public class SuperpositionController {
     @ResponseBody
     public Superposition ceshi(Long planId) {
 
-        return superpositonService.computeAfterReturnGoods("C370113210","f52ec6414ab14626a02ff9d41881d4f9","2016-10-02",1,planId,"");
+        return superpositonService.computeAfterReturnGoods("C370113210","f52ec6414ab14626a02ff9d41881d4f9","2016-10-02",1,planId,"",1l);
     }
 
+
+    @RequestMapping(value = "ceshi1", method = RequestMethod.GET)
+    @ResponseBody
+    public void ceshi1() {
+
+//        superpositonService.computeOneSingle(12l,1l);
+//        SuperpositionRecord superpositionRecord = superpositonService.getBySalesmanIdAndPlanIdAndSuperIdAndStatus("A371121210",12l,1l,"2");
+//        logger.info(superpositionRecord);
+//        superpositonService.computeAfterReturnGoods("A371121210",);
+    }
 
     /*
      * 获取用户的方法,用于判断是否有权限
