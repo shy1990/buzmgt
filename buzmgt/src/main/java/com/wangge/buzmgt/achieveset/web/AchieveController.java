@@ -15,12 +15,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.income.schedule.service.JobService;
+import com.wangge.buzmgt.util.DateUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -136,8 +140,30 @@ public class AchieveController {
 	@ResponseBody
 	public JSONObject addAchieve(@RequestBody Achieve achieve) {
 		JSONObject json = new JSONObject();
-
 		try {
+			String goodId = achieve.getGoodId();
+			String startDate = DateUtil.date2String(achieve.getStartDate());
+			String endDate = DateUtil.date2String(achieve.getEndDate());
+			//查询是否存在
+			Map<String, Object> spec = new HashedMap();
+			Sort sort = null;
+			spec.put("EQ_goodId",goodId);
+			spec.put("GTE_endDate",startDate);
+			spec.put("LTE_startDate",startDate);
+			List<Achieve> achieveList1 = achieveServer.findAll(spec, sort);
+			if(!CollectionUtils.isEmpty(achieveList1)){
+				json.put("result", "failure");
+				json.put("message", "这个时间段已经存在此规则！");
+				return json;
+			}
+			spec.put("GTE_endDate",endDate);
+			spec.put("LTE_startDate",endDate);
+			List<Achieve> achieveList2 = achieveServer.findAll(spec, sort);
+			if(!CollectionUtils.isEmpty(achieveList2)){
+				json.put("result", "failure");
+				json.put("message", "这个时间段已经存在此规则！");
+				return json;
+			}
 			achieve.setCreateDate(new Date());
 			achieveServer.save(achieve);
 			logService.log(null, achieve.toString(), EventType.SAVE);

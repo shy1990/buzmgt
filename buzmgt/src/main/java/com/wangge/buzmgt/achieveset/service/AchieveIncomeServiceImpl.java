@@ -346,7 +346,8 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	}
 
 	@Override
-	public BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {		Integer statusInteger = 0;
+	public BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {
+		Integer statusInteger = 0;
 		if (status == AchieveIncome.PayStatusEnum.PAY) {
 			statusInteger = 1;
 		}
