@@ -25,7 +25,6 @@ public class SingleIncomeServiceImpl implements SingleIncomeService {
     private SingleIncomeRepository singleIncomeRepository;
     @Override
     public SingleIncome save(SingleIncome singleIncome) {
-
         SingleIncome singleIncome1 = singleIncomeRepository.save(singleIncome);
         return singleIncome1;
     }
