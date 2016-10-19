@@ -464,6 +464,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                         mainIncomeService.updateSuperIncome(singleIncome.getUserId(), singleIncomeSave.getAmount());
                     } catch (Exception e) {
                         e.printStackTrace();
+
                     }
                     break;
                 }
