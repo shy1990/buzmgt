@@ -28,7 +28,6 @@ import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
-import com.wangge.buzmgt.income.main.repository.IncomeSubRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
 import com.wangge.buzmgt.income.main.service.IncomeErrorService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
@@ -58,8 +57,6 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   @Autowired
   OrderGoodsRepository orderGoodsRep;
   @Autowired
-  IncomeSubRepository incomeSubRep;
-  @Autowired
   BaseSalaryService baseSalaryService;
   @Autowired
   AchieveService achieveService;
@@ -83,7 +80,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    */
   @Override
   public void caculateOutedOrder(String orderNo, String memberId, String payStatus, Date payDate) {
-    Object userO = mainPlanUserRep.findsaleByMemberId(memberId);
+    Object userO = mainPlanUserRep.findsaleByDateAndMemberId(new Date(), memberId);
     if (null == userO) {
       return;
     }
@@ -183,6 +180,9 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   public void caculatePayedOrder(String userId, Long planId, Date payDate, List<OrderGoods> goodList, String regionId,
       int achieveFlag) {
     Set<String> goodIdList = new HashSet<>();
+    if (null == goodList || goodList.size() < 1) {
+      return;
+    }
     for (OrderGoods good : goodList) {
       goodIdList.add(good.getGoodId());
     }
@@ -241,7 +241,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    * 5.更新收益主表<br/>
    */
   @Override
-  public void caculatePayedOrder(String orderNo, String userId,Date payDate, String regionId) {
+  public void caculatePayedOrder(String orderNo, String userId, Date payDate, String regionId) {
     
     Optional<Long> userOpt = mainPlanUserRep.findFirst(userId, FlagEnum.NORMAL);
     if (!userOpt.isPresent()) {
@@ -310,7 +310,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   @Transactional(rollbackFor = Exception.class)
   public void deleteSubIncome(Long planId, String userId, Date startDate) throws Exception {
     startDate = getEffectiveStartTime(startDate, userId);
-    // mainIncomeRep.delAchieveIncome(planId, userId, startDate);
+    mainIncomeRep.delAchieveIncome(planId, userId, startDate);
     mainIncomeRep.delBrandIncome(planId, userId, startDate);
     mainIncomeRep.delPriceIncome(planId, userId, startDate);
   }
@@ -375,6 +375,14 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     } catch (Exception e) {
       throw new Exception("保存达量记录出错");
     }
+  }
+  
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteManinPlanIncome(Long planId, Date startDate) throws Exception {
+    mainIncomeRep.delAchieveIncomeByPlanId(planId, startDate);
+    mainIncomeRep.delBrandIncomeByPlanId(planId, startDate);
+    mainIncomeRep.delPriceIncomeByPlanId(planId, startDate);
   }
   
 }

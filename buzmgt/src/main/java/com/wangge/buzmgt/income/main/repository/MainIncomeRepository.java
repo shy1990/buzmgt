@@ -20,7 +20,7 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
    * @author yangqc
    * @since JDK 1.8
    */
-  @Procedure("init_basicaSalary_eveMonth")
+  @Procedure("init_Income_EveMonth")
   void initMonthSalary();
   
   @Procedure("oil_daily_calculate_prod")

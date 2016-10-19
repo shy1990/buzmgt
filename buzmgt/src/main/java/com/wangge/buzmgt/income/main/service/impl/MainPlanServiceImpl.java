@@ -156,7 +156,7 @@ public class MainPlanServiceImpl implements MainPlanService {
       for (IncomeMainplanUsers u : usList) {
         u.setMainplan(plan);
         if (now.getTime() >= u.getCreatetime().getTime()) {
-          // TODO 计算之前的订单
+          // 计算之前的订单收益
           Jobtask jobtask = new Jobtask(12, u.getSalesmanId(), plan.getId(), u.getCreatetime());
           jobList.add(jobtask);
         }
@@ -175,7 +175,8 @@ public class MainPlanServiceImpl implements MainPlanService {
   
   /**
    * 1.删除主方案从本天生效<br/>
-   * TODO 2.重新计算当天收益
+   * TODO 达量叠加到此日截止,无相应方案
+   * 
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -215,7 +216,7 @@ public class MainPlanServiceImpl implements MainPlanService {
   }
   
   /**
-   * TODO 将事件存入数据库,定时执行 1.删除日期是否要大于今天;
+   * 将事件存入数据库,定时执行 1.删除日期大于今天;
    * 
    * @throws Exception
    * 
@@ -298,7 +299,7 @@ public class MainPlanServiceImpl implements MainPlanService {
         users += usr.getSalesmanId() + ",";
       }
       planUserRep.save(ulist);
-      if (jobList.size() > 1)
+      if (jobList.size() > 0)
         jobRep.save(jobList);
       
       LogUtil.info("用户" + authorName + "---" + authorId + "给主方案--" + plan.getMaintitle() + "添加了" + ulist.size() + "个人员:"
@@ -319,27 +320,32 @@ public class MainPlanServiceImpl implements MainPlanService {
    * @since JDK 1.8
    */
   private void filterCheckedFailedUser(List<IncomeMainplanUsers> ulist, Map<String, Object> remap) {
-    String names = "";
+    String msgs = "";
+    List<String> msgList = new ArrayList<>();
     List<IncomeMainplanUsers> cancleList = new ArrayList<>();
     // 将创建日期小于上个删除日期的业务员剔除
     for (IncomeMainplanUsers usr : ulist) {
       Optional<Date> fqtimeOp = planUserRep.findMaxFqtimeBySalesmanId(usr.getSalesmanId());
       fqtimeOp.ifPresent(fqtime -> {
         if (usr.getCreatetime().getTime() < fqtime.getTime()) {
+          msgList.add(usr.getSalesmanname() + "最新删除日期:" + DateUtil.date2String(fqtime));
           cancleList.add(usr);
         }
       });
     }
-    for (IncomeMainplanUsers usr : cancleList) {
-      names += usr.getSalesmanname() + ",";
+    for (String msg : msgList) {
+      msgs += msg + ",";
     }
     ulist.removeAll(cancleList);
-    if (names.length() > 2)
-      names = names.substring(0, names.length() - 1);
+    if (msgs.length() > 2)
+      msgs = msgs.substring(0, msgs.length() - 1);
+    String finalMsg = "";
     if (cancleList.size() > 0) {
-      String msg = "新增" + ulist.size() + "个用户,然" + names + "等" + cancleList.size() + "个业务员的新增时间与最新的删除时间冲突,请重新添加!!";
-      remap.put("msg", msg);
+      finalMsg = "新增" + ulist.size() + "个用户,然" + cancleList.size() + "个业务员的新增时间与最新的删除时间冲突,请重新添加!!最新删除日期如下:" + msgs;
+    } else {
+      finalMsg = "新增" + ulist.size() + "个用户";
     }
+    remap.put("msg", finalMsg);
   }
   
   /**
@@ -364,8 +370,7 @@ public class MainPlanServiceImpl implements MainPlanService {
   /**
    * 0:删除主方案:不在计算收益;<br/>
    * 1.删除删除日期当天的收益<br/>
-   * TODO 达量叠加等收益如何处理<br/>
-   * 每个业务员来删除,每个人查东西
+   * 将叠加,达量的计算截止到今天. 每个业务员来删除,每个人查东西
    * 
    * @since JDK 1.8
    */
