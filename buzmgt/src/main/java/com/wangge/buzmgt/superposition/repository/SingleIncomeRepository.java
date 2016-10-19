@@ -12,21 +12,21 @@ import java.util.List;
  */
 public interface SingleIncomeRepository extends JpaRepository<SingleIncome,Long> {
 
-    @Query(nativeQuery = true,value = "SELECT NVL(SUM(rd.OFFSET_NUMS),0) AS offset_nums,\n" +
-            "  rd.USER_ID,\n" +
-            "  rd.SUPER_ID,\n" +
-            "  rd.PLAN_ID,\n" +
-            "  rd.ORDER_ID\n" +
-            "FROM SYS_SINGLE_RECORD rd\n" +
-            "WHERE rd.PLAN_ID = ?\n" +
-            "AND rd.USER_ID = ?\n" +
-            "AND rd.SUPER_ID = ?\n" +
-            "AND rd.status   = ?\n" +
-            "AND rd.ORDER_ID   = ?\n" +
-            "GROUP BY rd.USER_ID,\n" +
-            "  rd.SUPER_ID,\n" +
-            "  rd.PLAN_ID,\n" +
-            "  rd.ORDER_ID")
+//    @Query(nativeQuery = true,value = "SELECT NVL(SUM(rd.OFFSET_NUMS),0) AS offset_nums,\n" +
+//            "  rd.USER_ID,\n" +
+//            "  rd.SUPER_ID,\n" +
+//            "  rd.PLAN_ID,\n" +
+//            "  rd.ORDER_ID\n" +
+//            "FROM SYS_SINGLE_RECORD rd\n" +
+//            "WHERE rd.PLAN_ID = ?\n" +
+//            "AND rd.USER_ID = ?\n" +
+//            "AND rd.SUPER_ID = ?\n" +
+//            "AND rd.status   = ?\n" +
+//            "AND rd.ORDER_ID   = ?\n" +
+//            "GROUP BY rd.USER_ID,\n" +
+//            "  rd.SUPER_ID,\n" +
+//            "  rd.PLAN_ID,\n" +
+//            "  rd.ORDER_ID")
     public SingleIncome findByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(String userId, Long planId, Long superId,String status,String orderId);
 
     //用于判断是否已经计算

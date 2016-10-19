@@ -131,7 +131,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                     superpositionRecord.setPlanId(planId);
                     superpositionRecord.setSuperId(superposition.getId());
                     superpositionRecord.setAmount(((Integer.parseInt(su.getNums()) - sum) * (su.getPercentage())));//计算的时候直接减去冲减数量
-                    superpositionRecord.setRecord(Integer.parseInt(su.getNums())-sum);
+                    superpositionRecord.setRecord(Integer.parseInt(su.getNums()) - sum);
                     superpositionRecord.setStatus("0");//总收益已经计算,原始记录
                     SuperpositionRecord superpositionRecord1 = recordService.save(superpositionRecord);
                     mainIncomeService.updateSuperIncome(superpositionRecord1.getSalesmanId(), superpositionRecord1.getAmount());
@@ -332,6 +332,10 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                             logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
                             superpositionRecord2.setStatus("4");//将上一条记录设置为已经过期
                             recordService.save(superpositionRecord2);
+                        } else {
+                            HedgeCost hedgeCost = new HedgeCost(hedgeId, superpositionRecord.getSuperId(), 3, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), superpositionRecord.getAmount() - superpositionRecord1.getAmount());
+                            hedgeCostRepository.save(hedgeCost);
+                            logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
                         }
                         recordService.save(superpositionRecord1);//保存记录
 
@@ -442,13 +446,13 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         List<SingleRule> singleRules = superposition.getSingleRules();//获得一单达量设置规则
         singleIncomeList.forEach(singleIncome -> {//遍历方案中所有人员的一单提货量
             //获取计算前的冲减量
-            SingleIncome singleIncomeFront = getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(singleIncome.getUserId(), planId, superposition.getId(), "1",singleIncome.getOrderId());
+            SingleIncome singleIncomeFront = getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(singleIncome.getUserId(), planId, superposition.getId(), "1", singleIncome.getOrderId());
             Integer offsetNum = 0;
             if (singleIncomeFront != null) {
                 offsetNum = singleIncomeFront.getOffsetNums();
             }
             for (int i = 0; i < singleRules.size(); i++) {
-                if ((singleIncome.getRecord() - offsetNum) >= singleRules.get(i).getMin() && (singleIncome.getRecord() - offsetNum) < singleRules.get(i).getMax()) {
+                if ((singleIncome.getRecord() - offsetNum) > singleRules.get(i).getMin() && (singleIncome.getRecord() - offsetNum) <= singleRules.get(i).getMax()) {
                     SingleIncome singleIncomeSave = new SingleIncome();
                     singleIncomeSave.setPlanId(planId);
                     singleIncomeSave.setOrderId(singleIncome.getOrderId());
@@ -458,7 +462,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                     singleIncomeSave.setStatus("0");//初始数据
                     singleIncomeSave.setRecord(singleIncome.getRecord() - offsetNum);
                     singleIncomeService.save(singleIncomeSave);
-                    logService.log(null,"一单大量保存"+singleIncomeSave, Log.EventType.SAVE);
+                    logService.log(null, "一单达量保存" + singleIncomeSave, Log.EventType.SAVE);
 //                    TODO 保存到奇才表中
                     try {
                         mainIncomeService.updateSuperIncome(singleIncome.getUserId(), singleIncomeSave.getAmount());
@@ -510,16 +514,15 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                     singleIncome.setStatus("2");
                     singleIncomeService.save(singleIncome);
                     //获取原始记录
-                    SingleIncome singleIncomeSave = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "0",orderId);
-                    singleIncomeSave.getRecord();//提货量
+                    SingleIncome singleIncomeSave = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "0", orderId);
                     //获取计算以后的冲减数量
-                    SingleIncome singleIncomeOffset =getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(userId, planId, superposition.getId(), "2",orderId);
+                    SingleIncome singleIncomeOffset = getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(userId, planId, superposition.getId(), "2", orderId);
                     Integer afterOffsetNums = singleIncomeSave.getRecord() - singleIncomeOffset.getOffsetNums();
 
                     List<SingleRule> singleRules = superposition.getSingleRules();
                     if (CollectionUtils.isNotEmpty(singleRules)) {
                         singleRules.forEach(singleRule -> {
-                            if(afterOffsetNums >= singleRule.getMin() && afterOffsetNums < singleRule.getMax()){
+                            if (afterOffsetNums > singleRule.getMin() && afterOffsetNums <= singleRule.getMax()) {
                                 SingleIncome singleIncomeNew = new SingleIncome();
                                 singleIncomeNew.setPlanId(planId);
                                 singleIncomeNew.setOrderId(orderId);
@@ -529,15 +532,33 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                                 singleIncomeNew.setStatus("3");//重新保存数据
                                 singleIncomeNew.setRecord(afterOffsetNums);
                                 //获取上一次计算的
-                                SingleIncome singleIncomeHistory = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "3",orderId);
+                                SingleIncome singleIncomeHistory = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "3", orderId);
                                 if (singleIncomeHistory != null) {
-                                    HedgeCost hedgeCost = new HedgeCost(1l,superposition.getId(),5, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeHistory.getAmount() - singleIncomeNew.getAmount());
+                                    HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeHistory.getAmount() - singleIncomeNew.getAmount());
                                     hedgeCostRepository.save(hedgeCost);
                                     logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
                                     singleIncomeHistory.setStatus("4");//将上一条记录设置为已经过期
                                     singleIncomeService.save(singleIncomeHistory);
+                                } else {
+                                    HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeSave.getAmount() - singleIncomeNew.getAmount());
+                                    hedgeCostRepository.save(hedgeCost);
+                                    logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
                                 }
                                 singleIncomeService.save(singleIncomeNew);
+                            } else if (afterOffsetNums == 0) {
+                                //获取上一次计算的
+                                SingleIncome singleIncomeHistory = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "3", orderId);
+                                if(singleIncomeHistory != null){
+                                    HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeHistory.getAmount());
+                                    singleIncomeHistory.setStatus("4");//将上一条记录设置为已经过期
+                                    singleIncomeService.save(singleIncomeHistory);
+                                    hedgeCostRepository.save(hedgeCost);
+                                } else {
+                                    HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeSave.getAmount());
+                                    singleIncomeService.save(singleIncomeHistory);
+                                    hedgeCostRepository.save(hedgeCost);
+                                }
+
                             }
                         });
                     }
@@ -550,6 +571,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
 
     /**
      * 计算冲减的量  计算前(1)/计算后(2)
+     *
      * @param userId
      * @param planId
      * @param superId
@@ -558,8 +580,8 @@ public class SuperpositionServiceImpl implements SuperpositonService {
      * @return
      */
 
-    public SingleIncome getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(String userId, Long planId, Long superId, String status,String orderId){
-        String sql ="SELECT NVL(SUM(rd.OFFSET_NUMS),0) AS offset_nums,\n" +
+    public SingleIncome getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(String userId, Long planId, Long superId, String status, String orderId) {
+        String sql = "SELECT NVL(SUM(rd.OFFSET_NUMS),0) AS offset_nums,\n" +
                 "  rd.USER_ID,\n" +
                 "  rd.SUPER_ID,\n" +
                 "  rd.PLAN_ID,\n" +
@@ -606,6 +628,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         return singleIncome;
 
     }
+
     /*
         判断是否是特殊组,是返回这个组
      */
