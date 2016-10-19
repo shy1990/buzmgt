@@ -555,7 +555,6 @@ public class SuperpositionServiceImpl implements SuperpositonService {
                                     hedgeCostRepository.save(hedgeCost);
                                 } else {
                                     HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeSave.getAmount());
-                                    singleIncomeService.save(singleIncomeHistory);
                                     hedgeCostRepository.save(hedgeCost);
                                 }
 
