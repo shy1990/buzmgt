@@ -1,31 +1,13 @@
 package com.wangge.buzmgt.ordersignfor.entity;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.NamedSubgraph;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 //@JsonInclude(Include.NON_EMPTY)
 @Entity
@@ -143,7 +125,18 @@ public class OrderSignfor implements Serializable {
   private String customUnSignRemark;
   private Float actualPayNum;//实际支付金额
 
-  
+  private Integer billStatus; //订单结款状态
+
+  private  Float  arrears;//欠款金额
+
+  private Float payAmount;// 实付金额
+
+  private Date overTime ; // 订单结清日期
+
+  private Date updateTime ; // 订单结清日期
+
+
+  private int isPrimaryAccount;
   
   public List<OrderItem> getItems() {
     return items;
@@ -339,4 +332,52 @@ public class OrderSignfor implements Serializable {
 	public void setActualPayNum(Float actualPayNum) {
 		this.actualPayNum = actualPayNum;
 	}
+
+  public Integer getBillStatus() {
+    return billStatus;
+  }
+
+  public void setBillStatus(Integer billStatus) {
+    this.billStatus = billStatus;
+  }
+
+  public Float getArrears() {
+    return arrears;
+  }
+
+  public void setArrears(Float arrears) {
+    this.arrears = arrears;
+  }
+
+  public Float getPayAmount() {
+    return payAmount;
+  }
+
+  public void setPayAmount(Float payAmount) {
+    this.payAmount = payAmount;
+  }
+
+  public Date getOverTime() {
+    return overTime;
+  }
+
+  public void setOverTime(Date overTime) {
+    this.overTime = overTime;
+  }
+
+  public Date getUpdateTime() {
+    return updateTime;
+  }
+
+  public void setUpdateTime(Date updateTime) {
+    this.updateTime = updateTime;
+  }
+
+  public int getIsPrimaryAccount() {
+    return isPrimaryAccount;
+  }
+
+  public void setIsPrimaryAccount(int isPrimaryAccount) {
+    this.isPrimaryAccount = isPrimaryAccount;
+  }
 }
