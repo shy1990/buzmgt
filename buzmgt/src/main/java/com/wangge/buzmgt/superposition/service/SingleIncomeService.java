@@ -9,7 +9,7 @@ public interface SingleIncomeService {
 
     public SingleIncome save(SingleIncome singleIncome);
 
-    public SingleIncome findByUserIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId,String status);
+    public SingleIncome findByUserIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId,String status,String orderId);
 
     public Boolean isCompare(Long planId, Long superId,String status);
 

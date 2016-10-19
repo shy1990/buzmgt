@@ -15,7 +15,7 @@ public class SingleIncome {
     @Id
     @GenericGenerator(name = "idgen",strategy = "increment")
     @GeneratedValue(generator = "idgen")
-    @Column(name = "SINGLE_ID")
+    @Column(name = "SINGLE_RECORD_ID")
     private Long id;
     private String orderId;//订单id
     private String userId;//用户id

@@ -4,8 +4,13 @@ var WsearchData = {
 };
 var itemTotal = 0;
 function findPlanUserList(page) {
-	page = page == null || page == '' ? WsearchData.page: page;
-	WsearchData.page = page;
+	if (page != null && page != undefined && page != "") {
+		WsearchData.page = page;
+	} else {
+		if (page == 0) {
+			WsearchData.page = 0;
+		}
+	}
 	getSearchData();
 	$.ajax({
 		url : "/mainPlanUsers/",
