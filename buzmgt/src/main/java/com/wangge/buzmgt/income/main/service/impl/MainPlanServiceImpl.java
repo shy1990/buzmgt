@@ -387,4 +387,43 @@ public class MainPlanServiceImpl implements MainPlanService {
       LogUtil.error("删除主方案" + planId + "下的订单收益失败");
     }
   }
+  
+  @Override
+  public List<Map<String, Object>> findEffectUserDateList(Long planId, Date startDate, Date endDate) {
+    // iu.salesman_id,iu.createtime,iu.fqtime,m.fqtime
+    List<Object> orList = planUserRep.findEffectiveUserTime(startDate, planId);
+    List<Map<String, Object>> usrList = new ArrayList<>();
+    for (Object or : orList) {
+      Object[] user = (Object[]) or;
+      Map<String, Object> userMap = new HashMap<>();
+      userMap.put("userId", user[0].toString());
+      Date userCreate = (Date) user[1];
+      /***
+       * userCreate的时间一定小于endDate时间 <br/>
+       * 要去最小区间值:即最大开始时间,最小结束时间.
+       */
+      if (userCreate.getTime() > startDate.getTime()) {
+        userMap.put("startDate", userCreate);
+      }
+      // 求最小结束时间
+      Date endDate1 = null;
+      if (null != user[2] && null == user[3]) {
+        endDate1 = (Date) user[2];
+      } else if (null == user[2] && null != user[3]) {
+        endDate1 = (Date) user[3];
+      } else if (null != user[2] && null != user[3]) {
+        Date userEndDate = (Date) user[2];
+        Date planEndDate = (Date) user[3];
+        endDate1 = userEndDate.getTime() > planEndDate.getTime() ? planEndDate : userEndDate;
+      }
+      if (endDate1 == null || endDate1.getTime() > endDate.getTime()) {
+        userMap.put("endDate", endDate);
+      } else {
+        userMap.put("endDate", endDate1);
+      }
+      usrList.add(userMap);
+    }
+    return usrList;
+    
+  }
 }

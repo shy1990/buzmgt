@@ -30,7 +30,6 @@ public interface IncomeMainplanUsersRepository
   @Query("select max(u.fqtime)  from IncomeMainplanUsers u where u.salesmanId=?1")
   Optional<Date> findMaxFqtimeBySalesmanId(String salesmanId);
   
-  
   /**
    * 根据日期和三际商场的用户id找到对应的业务员及其收益主计划信息 <br/>
    * 
@@ -57,5 +56,12 @@ public interface IncomeMainplanUsersRepository
       + "   and m.createtime >? 1    and (m.fqtime is null or m.fqtime < ? 1)\n"
       + "   and (iu.fqtime is null or iu.fqtime < ? 1)   and m.state = 0  and us.user_id = ?2\n"
       + "   and rownum < 2", nativeQuery = true)
-  Optional<Long> findBysalesmanAndDate( Date payDate,String userId);
+  Optional<Long> findBysalesmanAndDate(Date payDate, String userId);
+  
+  @Query(value = "SELECT iu.salesman_id,iu.createtime,iu.fqtime,m.fqtime planfqsj  FROM sys_user us\n"
+      + "        left join sys_income_mainplan_users iu on us.user_id = iu.salesman_id\n"
+      + "        left join sys_income_plan_main m on iu.plain_id = m.id  where us.status = 0\n"
+      + "         and   (m.fqtime is null or m.fqtime >?1 )       and (iu.fqtime is null or iu.fqtime >?1 )\n"
+      + "         and m.id=?2 ", nativeQuery = true)
+  List<Object> findEffectiveUserTime(Date startDate, Long planId);
 }
