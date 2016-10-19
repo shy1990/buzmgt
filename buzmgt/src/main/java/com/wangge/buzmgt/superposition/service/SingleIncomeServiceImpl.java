@@ -31,8 +31,8 @@ public class SingleIncomeServiceImpl implements SingleIncomeService {
     }
 
     @Override
-    public SingleIncome findByUserIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId, String status) {
-        SingleIncome singleIncome = singleIncomeRepository.findByUserIdAndPlanIdAndSuperIdAndStatus(userId,planId,superId,status);
+    public SingleIncome findByUserIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId, String status,String orderId) {
+        SingleIncome singleIncome = singleIncomeRepository.findByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(userId,planId,superId,status,orderId);
         return singleIncome;
     }
 
@@ -47,6 +47,14 @@ public class SingleIncomeServiceImpl implements SingleIncomeService {
         return flag;
     }
 
+    /**
+     * 查询冲减量 计算前(status-"1")/计算后(status-"2")
+     * @param userId
+     * @param planId
+     * @param superId
+     * @param status
+     * @return
+     */
     @Override
     public SingleIncome findOffsetNums(String userId, Long planId, Long superId, String status) {
         String sql = "SELECT NVL(SUM(rd.OFFSET_NUMS),0) AS offset_nums,\n" +
