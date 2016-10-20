@@ -394,9 +394,10 @@ public class SuperpositionController {
      */
     @RequestMapping(value = "compute", method = RequestMethod.GET)
     @ResponseBody
-    public List<SuperpositionProgress> compute(Long planId,Long superId) throws Exception {
+    public String compute(Long planId,Long superId) throws Exception {
 
-        return superpositonService.compute(planId,superId);
+        superpositonService.superIncomeCompute(planId,superId);
+        return null;
     }
 
     @RequestMapping(value = "ceshi", method = RequestMethod.GET)
@@ -404,7 +405,8 @@ public class SuperpositionController {
     public Superposition ceshi(Long planId) {
 //        superpositonService.computeAfterReturnGoods("C370113210","f52ec6414ab14626a02ff9d41881d4f9","2016-10-02",1,planId,"",1l)
 
-        superpositonService.computeOneSingleAfterReturnGoods("C370113210",12l,"41d06af8abc74857b5342a860af6ff31","02868a4172b7486683169b4b121f54ad","2016-05-06","2016-05-06",1);
+//        superpositonService.computeOneSingleAfterReturnGoods("C370113210",12l,"41d06af8abc74857b5342a860af6ff31","02868a4172b7486683169b4b121f54ad","2016-05-06","2016-05-06",1);
+        superpositonService.superIncomeCompute(12l,1l);
         return null;
     }
 
@@ -418,9 +420,11 @@ public class SuperpositionController {
 //        logger.info(superpositionRecord);
 //        String userId, String goodsId, String payTime, Integer num, Long planId, String receivingTime, Long hedgeId
         //售后冲减
-//        superpositonService.computeAfterReturnGoods("C370113210","02868a4172b7486683169b4b121f54ad","2016-05-10",1,12l,"",1l);
+        superpositonService.computeAfterReturnGoods("C370113210","02868a4172b7486683169b4b121f54ad","2016-05-10",1,12l,"",1l);
         //一单达量
-        superpositonService.computeOneSingle(12L,1L);
+//        superpositonService.computeOneSingle(12L,1L);
+//        superpositonService.superIncomeCompute(12l,1l);
+
     }
 
     /*
