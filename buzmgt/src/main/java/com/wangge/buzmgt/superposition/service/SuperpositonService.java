@@ -73,7 +73,7 @@ public interface SuperpositonService {
 
     public Page<PlanUserVo> findMainPlanUsers(Pageable pageReq, Map<String, Object> searchParams) throws Exception;
 
-    public String compute(Superposition superposition);//计算收益
+//    public String compute(Superposition superposition);//计算收益
 
     //查找冲减商品
     public SuperpositionRecord getBySalesmanIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId, String status);
