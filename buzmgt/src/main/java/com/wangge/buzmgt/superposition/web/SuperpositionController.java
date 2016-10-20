@@ -394,9 +394,10 @@ public class SuperpositionController {
      */
     @RequestMapping(value = "compute", method = RequestMethod.GET)
     @ResponseBody
-    public List<SuperpositionProgress> compute(Long planId,Long superId) throws Exception {
+    public String compute(Long planId,Long superId) throws Exception {
 
-        return superpositonService.compute(planId,superId);
+        superpositonService.superIncomeCompute(planId,superId);
+        return null;
     }
 
     @RequestMapping(value = "ceshi", method = RequestMethod.GET)

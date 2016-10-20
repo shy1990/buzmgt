@@ -1390,19 +1390,19 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         return mainPlanService.getUserpage(pageReq, searchParams);
     }
 
-    /**
-     * 计算收益
-     *
-     * @param superposition
-     * @return
-     */
-    @Override
-    public String compute(Superposition superposition) {
-        //1.方案中的
-
-
-        return null;
-    }
+//    /**
+//     * 计算收益
+//     *
+//     * @param superposition
+//     * @return
+//     */
+//    @Override
+//    public String compute(Superposition superposition) {
+//        //1.方案中的
+//
+//
+//        return null;
+//    }
 
 
     /**

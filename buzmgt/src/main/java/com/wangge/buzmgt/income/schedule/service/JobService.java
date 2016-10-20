@@ -90,7 +90,7 @@ public class JobService {
                 break;
               case 20:
                 // 叠加计算 TODO 一单达量
-                superService.compute(jobtask.getPlanId(), jobtask.getKeyid());
+                superService.superIncomeCompute(jobtask.getPlanId(), jobtask.getKeyid());
                 break;
               case 30:
                 // TODO 计算达量奖励 
