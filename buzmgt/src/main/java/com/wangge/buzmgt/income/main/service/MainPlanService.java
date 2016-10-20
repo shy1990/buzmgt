@@ -62,10 +62,11 @@ public interface MainPlanService {
    * 
    * @author yangqc
    * @param plan
+   * @return 
    * @throws Exception
    * @since JDK 1.8
    */
-  void save(MainIncomePlan plan) throws Exception;
+  Map<String, Object> save(MainIncomePlan plan) throws Exception;
   
   /**
    * delete:删除主方案 <br/>

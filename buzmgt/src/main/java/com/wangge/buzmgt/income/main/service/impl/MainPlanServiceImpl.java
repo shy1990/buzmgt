@@ -32,10 +32,14 @@ import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.income.main.vo.repository.PlanUserVoRepository;
 import com.wangge.buzmgt.income.schedule.entity.Jobtask;
 import com.wangge.buzmgt.income.schedule.repository.JobRepository;
+import com.wangge.buzmgt.log.entity.Log;
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.RoleService;
+import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.EnvironmentUtils;
 
@@ -64,6 +68,10 @@ public class MainPlanServiceImpl implements MainPlanService {
   JobRepository jobRep;
   @Autowired
   MainIncomeService mainIncomeService;
+  @Autowired
+  SalesManRepository salesmanRep;
+  @Autowired
+  private LogService logService;
   
   @Override
   public Map<String, Object> findAll(String regionId, Pageable pageReq) {
@@ -139,7 +147,7 @@ public class MainPlanServiceImpl implements MainPlanService {
   
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void save(MainIncomePlan plan) throws Exception {
+  public Map<String, Object> save(MainIncomePlan plan) throws Exception {
     User author = EnvironmentUtils.getUser();
     String authorId = author.getId();
     String authorName = author.getUsername();
@@ -167,10 +175,12 @@ public class MainPlanServiceImpl implements MainPlanService {
         jobRep.save(jobList);
       LogUtil.info("用户" + author.getUsername() + "---" + author.getId() + "创建了一个主方案--" + plan.getMaintitle()
           + "并添加如下人员:" + userIds);
+      logService.log(null, "区间方案单品出库计算: " + plan, Log.EventType.SAVE);
     } catch (Exception e) {
       LogUtil.error("保存主计划失败", e);
       throw new RuntimeException("保存主计划失败");
     }
+    return remap;
   }
   
   /**
@@ -292,7 +302,6 @@ public class MainPlanServiceImpl implements MainPlanService {
         usr.setPlanId(plan.getId());
         // 计算以前的订单
         if (now.getTime() >= usr.getCreatetime().getTime()) {
-          // TODO 计算之前的订单
           Jobtask jobtask = new Jobtask(12, usr.getSalesmanId(), plan.getId(), usr.getCreatetime());
           jobList.add(jobtask);
         }
@@ -302,8 +311,9 @@ public class MainPlanServiceImpl implements MainPlanService {
       if (jobList.size() > 0)
         jobRep.save(jobList);
       
-      LogUtil.info("用户" + authorName + "---" + authorId + "给主方案--" + plan.getMaintitle() + "添加了" + ulist.size() + "个人员:"
-          + users);
+      logService.log(null,
+          "用户" + authorName + "---" + authorId + "给主方案--" + plan.getMaintitle() + "添加了" + ulist.size() + "个人员:" + users,
+          EventType.UPDATE);
     } catch (Exception e) {
       LogUtil.error("保存收益主方案人员出错", e);
       throw new Exception("保存收益主方案人员出错");
@@ -325,27 +335,35 @@ public class MainPlanServiceImpl implements MainPlanService {
     List<IncomeMainplanUsers> cancleList = new ArrayList<>();
     // 将创建日期小于上个删除日期的业务员剔除
     for (IncomeMainplanUsers usr : ulist) {
-      Optional<Date> fqtimeOp = planUserRep.findMaxFqtimeBySalesmanId(usr.getSalesmanId());
+      String userId = usr.getSalesmanId();
+      Optional<Date> fqtimeOp = planUserRep.findMaxFqtimeBySalesmanId(userId);
+      
       fqtimeOp.ifPresent(fqtime -> {
         if (usr.getCreatetime().getTime() < fqtime.getTime()) {
           msgList.add(usr.getSalesmanname() + "最新删除日期:" + DateUtil.date2String(fqtime));
           cancleList.add(usr);
         }
       });
+      // 添加时间必须小于入职时间
+      if (!fqtimeOp.isPresent()) {
+        Date regDate = salesmanRep.findRegdateById(userId);
+        if (usr.getCreatetime().getTime() < regDate.getTime()) {
+          msgList.add(usr.getSalesmanname() + "的入职时间为:" + DateUtil.date2String(regDate));
+          cancleList.add(usr);
+        }
+      }
     }
     for (String msg : msgList) {
-      msgs += msg + ",";
+      msgs += msg + "->";
     }
     ulist.removeAll(cancleList);
     if (msgs.length() > 2)
-      msgs = msgs.substring(0, msgs.length() - 1);
+      msgs = msgs.substring(0, msgs.length() - 2);
     String finalMsg = "";
     if (cancleList.size() > 0) {
       finalMsg = "新增" + ulist.size() + "个用户,然" + cancleList.size() + "个业务员的新增时间与最新的删除时间冲突,请重新添加!!最新删除日期如下:" + msgs;
-    } else {
-      finalMsg = "新增" + ulist.size() + "个用户";
     }
-    remap.put("msg", finalMsg);
+    remap.put("errMsg", finalMsg);
   }
   
   /**

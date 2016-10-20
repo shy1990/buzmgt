@@ -35,7 +35,7 @@ public class IncomeSchedule {
   @Autowired
   IncomeErrorService errorService;
   
-  /*
+  /**
    * 28号23点1分执行<br/> 初始化下个月的薪资
    */
   @Scheduled(cron = " 0 1 23 28 * ? ")
@@ -43,7 +43,7 @@ public class IncomeSchedule {
     jobService.initMonthIncome();
   }
   
-  /*
+  /**
    * 每天23点14分执行删除任务
    */
   @Scheduled(cron = " 20 59 23 * * ? ")

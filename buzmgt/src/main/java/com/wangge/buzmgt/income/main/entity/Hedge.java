@@ -118,5 +118,11 @@ public class Hedge {
   public void setInserttime(Date inserttime) {
     this.inserttime = inserttime;
   }
+
+  @Override
+  public String toString() {
+    return "Hedge [id=" + id + ", orderno=" + orderno + ", sku=" + sku + ", uniquenumber=" + uniquenumber
+        + ", goodsName=" + goodsName + ", shdate=" + shdate + ", inserttime=" + inserttime + ", sum=" + sum + "]";
+  }
   
 }
