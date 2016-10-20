@@ -163,10 +163,16 @@ public class HedgeServiceImpl implements HedgeService {
       // TODO 达量奖励,一单达量的计算方法
       IncomeUserRep.findBysalesmanAndDate(payTime, userId).ifPresent(planId -> {
         String goodsId = Ordergood[1].toString();
+        String orderNo = Ordergood[0].toString();
         int sum = Integer.valueOf(Ordergood[2].toString());
         Date acceptTime = (Date) Ordergood[6];
+        // 叠加计算
         superService.computeAfterReturnGoods(userId, goodsId, DateUtil.date2String(payTime, "yyyy-MM-dd"), sum, planId,
             DateUtil.date2String(acceptTime, "yyyy-MM-dd"), hedgeId);
+        // 叠加:一单达量
+        superService.computeOneSingleAfterReturnGoods(userId, planId, orderNo, goodsId,
+            DateUtil.date2String(payTime, "yyyy-MM-dd"), DateUtil.date2String(acceptTime, "yyyy-MM-dd"), sum);
+        // 达量冲减
         achieveService.createAchieveIncomeAfterSale(userId, goodsId, planId, hedgeId, payTime, acceptTime, sum);
       });
     });

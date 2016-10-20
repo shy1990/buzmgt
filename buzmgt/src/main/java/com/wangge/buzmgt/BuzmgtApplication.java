@@ -16,51 +16,8 @@ public class BuzmgtApplication extends SpringBootServletInitializer {
   }
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+//	  application.context().getEnvironment().setActiveProfiles(profiles);
 		return application.sources(BuzmgtApplication.class);
 	}
-
 	
-	
-	
-	
-	
-	//@Bean
-/*	CommandLineRunner init(UserRepository userRepository, RoleRepository roleRepository,OrganizationRepository organizationRepository,ResourceRepository moduleRepository) {
-		return (evt) -> {
-			
-			// test role
-			Arrays.asList("区域总监,大区经理".split(",")).forEach(r -> {
-				Role role=new Role(r);
-				
-				role.setDescription(r);
-				roleRepository.save(role);
-			});
-			//test module
-			Resource m = new Resource("业务管理",ResourceType.MENU,null,0,new Date());
-			m.addRole(roleRepository.findOne(1L));
-			moduleRepository.save(m);
-			
-			//test org
-			Organization org1=organizationRepository.save(new Organization("三际网格"));
-			Organization org2=new Organization("市场部");
-			org2.setParent(org1);
-			organizationRepository.save(org2);
-			
-			
-			//test user
-			Arrays.asList("root,caozhaoyang,zhangsan".split(",")).forEach(a -> {
-				User user = new User(a, "password");
-				System.out.println("save user " + user.getId() + " " + user.getUsername());
-				if (a.equals("caozhaoyang")) {
-					
-					user.addRole(roleRepository.findOne(1l));
-				}else if(!a.equals("root")){
-					user.addRole(roleRepository.findOne(2l));
-				}
-				user.setOrganization(organizationRepository.findOne(2L));
-				userRepository.save(user);
-			});
-		
-	};
-		};*/
 }
