@@ -32,10 +32,14 @@ import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.income.main.vo.repository.PlanUserVoRepository;
 import com.wangge.buzmgt.income.schedule.entity.Jobtask;
 import com.wangge.buzmgt.income.schedule.repository.JobRepository;
+import com.wangge.buzmgt.log.entity.Log;
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.sys.service.RoleService;
+import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.EnvironmentUtils;
 
@@ -64,6 +68,10 @@ public class MainPlanServiceImpl implements MainPlanService {
   JobRepository jobRep;
   @Autowired
   MainIncomeService mainIncomeService;
+  @Autowired
+  SalesManRepository salesmanRep;
+  @Autowired
+  private LogService logService;
   
   @Override
   public Map<String, Object> findAll(String regionId, Pageable pageReq) {
@@ -139,7 +147,7 @@ public class MainPlanServiceImpl implements MainPlanService {
   
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void save(MainIncomePlan plan) throws Exception {
+  public Map<String, Object> save(MainIncomePlan plan) throws Exception {
     User author = EnvironmentUtils.getUser();
     String authorId = author.getId();
     String authorName = author.getUsername();
@@ -167,16 +175,17 @@ public class MainPlanServiceImpl implements MainPlanService {
         jobRep.save(jobList);
       LogUtil.info("用户" + author.getUsername() + "---" + author.getId() + "创建了一个主方案--" + plan.getMaintitle()
           + "并添加如下人员:" + userIds);
+      logService.log(null, "区间方案单品出库计算: " + plan, Log.EventType.SAVE);
     } catch (Exception e) {
       LogUtil.error("保存主计划失败", e);
       throw new RuntimeException("保存主计划失败");
     }
+    return remap;
   }
   
   /**
    * 1.删除主方案从本天生效<br/>
-   * TODO 达量叠加到此日截止,无相应方案
-   * 
+   * 2.达量叠加到此日截止,查询用户有效时间
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -292,7 +301,6 @@ public class MainPlanServiceImpl implements MainPlanService {
         usr.setPlanId(plan.getId());
         // 计算以前的订单
         if (now.getTime() >= usr.getCreatetime().getTime()) {
-          // TODO 计算之前的订单
           Jobtask jobtask = new Jobtask(12, usr.getSalesmanId(), plan.getId(), usr.getCreatetime());
           jobList.add(jobtask);
         }
@@ -302,8 +310,9 @@ public class MainPlanServiceImpl implements MainPlanService {
       if (jobList.size() > 0)
         jobRep.save(jobList);
       
-      LogUtil.info("用户" + authorName + "---" + authorId + "给主方案--" + plan.getMaintitle() + "添加了" + ulist.size() + "个人员:"
-          + users);
+      logService.log(null,
+          "用户" + authorName + "---" + authorId + "给主方案--" + plan.getMaintitle() + "添加了" + ulist.size() + "个人员:" + users,
+          EventType.UPDATE);
     } catch (Exception e) {
       LogUtil.error("保存收益主方案人员出错", e);
       throw new Exception("保存收益主方案人员出错");
@@ -325,27 +334,35 @@ public class MainPlanServiceImpl implements MainPlanService {
     List<IncomeMainplanUsers> cancleList = new ArrayList<>();
     // 将创建日期小于上个删除日期的业务员剔除
     for (IncomeMainplanUsers usr : ulist) {
-      Optional<Date> fqtimeOp = planUserRep.findMaxFqtimeBySalesmanId(usr.getSalesmanId());
+      String userId = usr.getSalesmanId();
+      Optional<Date> fqtimeOp = planUserRep.findMaxFqtimeBySalesmanId(userId);
+      
       fqtimeOp.ifPresent(fqtime -> {
         if (usr.getCreatetime().getTime() < fqtime.getTime()) {
           msgList.add(usr.getSalesmanname() + "最新删除日期:" + DateUtil.date2String(fqtime));
           cancleList.add(usr);
         }
       });
+      // 添加时间必须小于入职时间
+      if (!fqtimeOp.isPresent()) {
+        Date regDate = salesmanRep.findRegdateById(userId);
+        if (usr.getCreatetime().getTime() < regDate.getTime()) {
+          msgList.add(usr.getSalesmanname() + "的入职时间为:" + DateUtil.date2String(regDate));
+          cancleList.add(usr);
+        }
+      }
     }
     for (String msg : msgList) {
-      msgs += msg + ",";
+      msgs += msg + "->";
     }
     ulist.removeAll(cancleList);
     if (msgs.length() > 2)
-      msgs = msgs.substring(0, msgs.length() - 1);
+      msgs = msgs.substring(0, msgs.length() - 2);
     String finalMsg = "";
     if (cancleList.size() > 0) {
       finalMsg = "新增" + ulist.size() + "个用户,然" + cancleList.size() + "个业务员的新增时间与最新的删除时间冲突,请重新添加!!最新删除日期如下:" + msgs;
-    } else {
-      finalMsg = "新增" + ulist.size() + "个用户";
     }
-    remap.put("msg", finalMsg);
+    remap.put("errMsg", finalMsg);
   }
   
   /**
@@ -405,25 +422,38 @@ public class MainPlanServiceImpl implements MainPlanService {
       if (userCreate.getTime() > startDate.getTime()) {
         userMap.put("startDate", userCreate);
       }
-      // 求最小结束时间
+      // 求最小结束时间 iu.fqtime,方案用户删除m.fqtime planfqsj主方案删除,s.fireddate 业务员辞退时间
       Date endDate1 = null;
-      if (null != user[2] && null == user[3]) {
-        endDate1 = (Date) user[2];
-      } else if (null == user[2] && null != user[3]) {
-        endDate1 = (Date) user[3];
-      } else if (null != user[2] && null != user[3]) {
-        Date userEndDate = (Date) user[2];
-        Date planEndDate = (Date) user[3];
-        endDate1 = userEndDate.getTime() > planEndDate.getTime() ? planEndDate : userEndDate;
-      }
-      if (endDate1 == null || endDate1.getTime() > endDate.getTime()) {
-        userMap.put("endDate", endDate);
-      } else {
-        userMap.put("endDate", endDate1);
-      }
+      Date userEnd = user[2] == null ? null : (Date) user[2];
+      Date planEnd = user[3] == null ? null : (Date) user[3];
+      Date salesmanEnd = user[3] == null ? null : (Date) user[4];
+      endDate1 = compareDate(userEnd, planEnd);
+      endDate1 = compareDate(endDate1, salesmanEnd);
+      userMap.put("endDate", compareDate(endDate1, endDate));
       usrList.add(userMap);
     }
     return usrList;
     
+  }
+  
+  /**
+   * 比较两个日期的大小,求最小值<br/>
+   * 单个为空则返回不为空的,<br/>
+   * 都为空则返回null,<br/>
+   * 不为空则返回最小的那个.
+   */
+  private Date compareDate(Date userEnd1, Date userEnd2) {
+    if (userEnd1 == null && userEnd2 != null) {
+      return userEnd2;
+    } else if (userEnd2 == null && userEnd1 != null) {
+      return userEnd1;
+    } else if (userEnd2 != null && userEnd1 != null) {
+      if (userEnd2.getTime() <= userEnd1.getTime()) {
+        return userEnd2;
+      } else {
+        return userEnd1;
+      }
+    }
+    return null;
   }
 }

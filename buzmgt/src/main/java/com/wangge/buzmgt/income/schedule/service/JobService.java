@@ -77,7 +77,6 @@ public class JobService {
               /**
                * 0:删除主方案:不在计算收益;<br/>
                * 1.删除删除日期当天的收益<br/>
-               * TODO 达量叠加如何处理<br/>
                */
               case 0:
                 mainPlanService.deleteIncomeMainPlan(jobtask);
@@ -89,8 +88,9 @@ public class JobService {
                 calIncomeMainPlanUser(jobtask);
                 break;
               case 20:
-                // 叠加计算 TODO 一单达量
-                superService.compute(jobtask.getPlanId(), jobtask.getKeyid());
+                // 叠加计算 
+                superService.superIncomeCompute(jobtask.getPlanId(), jobtask.getKeyid());
+                superService.computeOneSingle(jobtask.getPlanId(), jobtask.getKeyid());
                 break;
               case 30:
                 // TODO 计算达量奖励 

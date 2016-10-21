@@ -64,7 +64,7 @@ public class MainPlanController {
     Map<String, Object> repMap = new HashMap<String, Object>();
     repMap.put("code", "1");
     try {
-      mainPlanService.save(plan);
+      repMap.putAll(mainPlanService.save(plan));
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.OK);
     } catch (Exception e) {
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -120,6 +120,7 @@ public class MainPlanController {
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   public ResponseEntity<Map<String, Object>> getPlan(@PathVariable("id") MainIncomePlan plan,
       HttpServletRequest request) {
@@ -138,17 +139,16 @@ public class MainPlanController {
       return new ResponseEntity<Map<String, Object>>(repMap, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
-
+  
   /**
    * 根据id获取主方案
    *
    * @param plan
    * @return MainIncomePlan
    *//*
-  @RequestMapping(value = "/dateRange/{id}")
-  @ResponseBody
-  public MainIncomePlan getCashById(@PathVariable("id") MainIncomePlan plan) {
-    return plan;
-  }*/
+     * @RequestMapping(value = "/dateRange/{id}")
+     * 
+     * @ResponseBody public MainIncomePlan getCashById(@PathVariable("id")
+     * MainIncomePlan plan) { return plan; }
+     */
 }

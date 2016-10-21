@@ -40,43 +40,43 @@ public class MainIncomeVo {
    * 
    * @pdOid d0fb01aa-274f-453b-b882-baf589981587
    */
-  private double basicSalary = 0;
+  private Double basicSalary = 0D;
   /**
    * 业务佣金
    * 
    * @pdOid 22050c89-b21f-43dc-ac8b-a342986d2148
    */
-  private double busiIncome = 0;
+  private Double busiIncome = 0D;
   /**
    * 油补
    * 
    * @pdOid d7e1d4fd-7251-4cc1-be5b-b3d05e239525
    */
-  private double oilIncome = 0;
+  private Double oilIncome = 0D;
   /**
    * 扣罚
    * 
    * @pdOid 9e89bfeb-5459-4ac2-a393-4c85e827a6c1
    */
-  private double punish = 0;
+  private Double punish = 0D;
   /**
    * 达量
    * 
    * @pdOid e5adf5b9-78f2-4720-a657-ab951cafc232
    */
-  private double reachIncome = 0;
+  private Double reachIncome = 0D;
   /**
    * 叠加收入
    * 
    * @pdOid 107d595f-9114-4841-bcfa-9da2c79f4620
    */
-  private double overlyingIncome = 0;
+  private Double overlyingIncome = 0D;
   /**
    * 总收入
    * 
    * @pdOid d20b5c01-3f19-44d8-b411-4b475b8fb8e1
    */
-  private double allresult = 0;
+  private Double allresult = 0D;
   /**
    * 状态(0,未审核,1已审核)
    * 
@@ -134,59 +134,59 @@ public class MainIncomeVo {
     this.rolename = rolename;
   }
 
-  public double getBasicSalary() {
+  public Double getBasicSalary() {
     return basicSalary;
   }
 
-  public void setBasicSalary(double basicSalary) {
+  public void setBasicSalary(Double basicSalary) {
     this.basicSalary = basicSalary;
   }
 
-  public double getBusiIncome() {
+  public Double getBusiIncome() {
     return busiIncome;
   }
 
-  public void setBusiIncome(double busiIncome) {
+  public void setBusiIncome(Double busiIncome) {
     this.busiIncome = busiIncome;
   }
 
-  public double getOilIncome() {
+  public Double getOilIncome() {
     return oilIncome;
   }
 
-  public void setOilIncome(double oilIncome) {
+  public void setOilIncome(Double oilIncome) {
     this.oilIncome = oilIncome;
   }
 
-  public double getPunish() {
+  public Double getPunish() {
     return punish;
   }
 
-  public void setPunish(double punish) {
+  public void setPunish(Double punish) {
     this.punish = punish;
   }
 
-  public double getReachIncome() {
+  public Double getReachIncome() {
     return reachIncome;
   }
 
-  public void setReachIncome(double reachIncome) {
+  public void setReachIncome(Double reachIncome) {
     this.reachIncome = reachIncome;
   }
 
-  public double getOverlyingIncome() {
+  public Double getOverlyingIncome() {
     return overlyingIncome;
   }
 
-  public void setOverlyingIncome(double overlyingIncome) {
+  public void setOverlyingIncome(Double overlyingIncome) {
     this.overlyingIncome = overlyingIncome;
   }
 
-  public double getAllresult() {
+  public Double getAllresult() {
     return allresult;
   }
 
-  public void setAllresult(double allresult) {
+  public void setAllresult(Double allresult) {
     this.allresult = allresult;
   }
 

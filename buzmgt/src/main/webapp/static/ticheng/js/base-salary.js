@@ -230,7 +230,7 @@ function createTable(data) {
  * @param data
  */
 function initPaging(data) {
-	var totalCount = data.totalElements, limit = data.size;
+	var totalCount = data.totalElements, limit = SearchData.size;
 	$('#initPage').extendPagination({
 		totalCount : totalCount,
 		showCount : 5,

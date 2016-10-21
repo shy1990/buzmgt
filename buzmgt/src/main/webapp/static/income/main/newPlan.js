@@ -12,7 +12,7 @@ function changeBranch() {
 		}
 	}
 }
-//初始化时间框
+// 初始化时间框
 function initDateInput() {
 	$(".form_datetime").datetimepicker({
 		format : "yyyy-mm-dd",
@@ -43,8 +43,13 @@ function newPlan() {
 		},
 		dataType : "json",
 		success : function(orderData) {
-			alert("新增成功!!");
-			location.href="/mainPlan/index";
+			if (null != orderData.errMsg && orderData.errMsg.length > 2) {
+				var msg = orderData.errMsg.replace("->", "\n");
+				alert("新增主方案成功,但人员有问题:"+msg);
+			} else {
+				alert("新增成功!!");
+			}
+			location.href = "/mainPlan/index";
 		},
 		error : function() {
 			alert("系统异常，请稍后重试！");
@@ -93,11 +98,12 @@ function getPlan() {
 		return;
 	}
 	for (var i = 0; i < salesArr.length; i++) {
-		if ('' != salesArr[i] && ('' == salesArr[i].id||undefined == salesArr[i].id)) {
+		if ('' != salesArr[i]
+				&& ('' == salesArr[i].id || undefined == salesArr[i].id)) {
 			salesSet.push({
 				"salesmanId" : salesArr[i].salesmanId,
 				"salesmanname" : salesArr[i].salesmanname,
-				"createtime":salesArr[i].createtime
+				"createtime" : salesArr[i].createtime
 			});
 		}
 	}

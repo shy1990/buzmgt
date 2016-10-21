@@ -160,8 +160,9 @@ function commitUsers() {
 		},
 		dataType : "json",
 		success : function(orderData) {
-			if (orderData.msg.length > 2) {
-				alert(orderData.msg);
+			if (orderData.errMsg.length > 2) {
+				var msg=orderData.errMsg.replace("->","\n");
+				alert(msg);
 				window.location.reload();
 			} else {
 				alert("新增" + planUsers.length + "个用户");

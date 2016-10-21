@@ -57,9 +57,12 @@ public class HedgeServiceImpl implements HedgeService {
     try {
       excelContent.forEach((key, val) -> {
         String[] vals = val.split("-->");
-        Hedge hedge = new Hedge(vals[0], vals[1], vals[2], Integer.valueOf(vals[3]), DateUtil.string2Date(vals[4]),
-            vals[5]);
-        uList.add(hedge);
+        //订单号不能为空
+        if (!vals[0].toString().equals("空")) {
+          Hedge hedge = new Hedge(vals[0], vals[1], vals[2], Integer.valueOf(vals[4]), Double.valueOf(vals[3]),
+              DateUtil.string2Date(vals[5]), vals[6]);
+          uList.add(hedge);
+        }
       });
       if (uList.size() > 0) {
         hedgeRep.save(uList);
@@ -160,13 +163,19 @@ public class HedgeServiceImpl implements HedgeService {
       String userId = Ordergood[4].toString();
       Long hedgeId = Long.valueOf(Ordergood[5].toString());
       // 当查出主方案时调用达量和叠加的冲减算法
-      // TODO 达量奖励,一单达量的计算方法
+      // TODO 达量奖励的计算方法
       IncomeUserRep.findBysalesmanAndDate(payTime, userId).ifPresent(planId -> {
         String goodsId = Ordergood[1].toString();
+        String orderNo = Ordergood[0].toString();
         int sum = Integer.valueOf(Ordergood[2].toString());
         Date acceptTime = (Date) Ordergood[6];
+        // 叠加计算
         superService.computeAfterReturnGoods(userId, goodsId, DateUtil.date2String(payTime, "yyyy-MM-dd"), sum, planId,
             DateUtil.date2String(acceptTime, "yyyy-MM-dd"), hedgeId);
+        // 叠加:一单达量
+        superService.computeOneSingleAfterReturnGoods(userId, planId, orderNo, goodsId,
+            DateUtil.date2String(payTime, "yyyy-MM-dd"), DateUtil.date2String(acceptTime, "yyyy-MM-dd"), sum);
+        // 达量冲减
         achieveService.createAchieveIncomeAfterSale(userId, goodsId, planId, hedgeId, payTime, acceptTime, sum);
       });
     });

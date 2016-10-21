@@ -16,6 +16,15 @@ import java.util.Map;
 public interface SuperpositonService {
 
     public void changeStatus(Superposition superposition,String checkStatus);//终止方案(逻辑删除)
+    /**
+     * 叠加收益计算(重写)
+     * @param planId
+     * @param superId
+     * @return
+     */
+
+    public void superIncomeCompute(Long planId, Long superId);
+
 
     /**
      * 叠加收益计算
@@ -24,7 +33,7 @@ public interface SuperpositonService {
      * @return
      */
 
-    public List<SuperpositionProgress> compute(Long planId,Long superId) throws Exception;
+//    public List<SuperpositionProgress> compute(Long planId,Long superId) throws Exception;
 
     /**
      * 用户退后冲减计算
@@ -48,8 +57,6 @@ public interface SuperpositonService {
 
     public void computeOneSingleAfterReturnGoods(String userId,Long planId,String orderId,String goodsId,String payTime,String receivingTime,Integer nums);
 
-
-
     public Page<SuperpositionProgress> searchDetail(Long planId,Long superId,String userId,String startDate,String endDate,String name,Integer page,Integer size);
 
     public Page<SuperpositionProgress> findAll(Long planId,Long superId,String startDate,String endDate,String name,Integer page,Integer size);
@@ -66,7 +73,7 @@ public interface SuperpositonService {
 
     public Page<PlanUserVo> findMainPlanUsers(Pageable pageReq, Map<String, Object> searchParams) throws Exception;
 
-    public String compute(Superposition superposition);//计算收益
+//    public String compute(Superposition superposition);//计算收益
 
     //查找冲减商品
     public SuperpositionRecord getBySalesmanIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId, String status);
