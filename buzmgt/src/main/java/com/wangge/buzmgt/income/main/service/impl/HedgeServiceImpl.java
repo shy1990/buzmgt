@@ -160,7 +160,7 @@ public class HedgeServiceImpl implements HedgeService {
       String userId = Ordergood[4].toString();
       Long hedgeId = Long.valueOf(Ordergood[5].toString());
       // 当查出主方案时调用达量和叠加的冲减算法
-      // TODO 达量奖励,一单达量的计算方法
+      // TODO 达量奖励的计算方法
       IncomeUserRep.findBysalesmanAndDate(payTime, userId).ifPresent(planId -> {
         String goodsId = Ordergood[1].toString();
         String orderNo = Ordergood[0].toString();

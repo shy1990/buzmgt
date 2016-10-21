@@ -58,10 +58,12 @@ public interface IncomeMainplanUsersRepository
       + "   and rownum < 2", nativeQuery = true)
   Optional<Long> findBysalesmanAndDate(Date payDate, String userId);
   
-  @Query(value = "SELECT iu.salesman_id,iu.createtime,iu.fqtime,m.fqtime planfqsj  FROM sys_user us\n"
-      + "        left join sys_income_mainplan_users iu on us.user_id = iu.salesman_id\n"
-      + "        left join sys_income_plan_main m on iu.plain_id = m.id  where us.status = 0\n"
-      + "         and   (m.fqtime is null or m.fqtime >?1 )       and (iu.fqtime is null or iu.fqtime >?1 )\n"
-      + "         and m.id=?2 ", nativeQuery = true)
+  @Query(value = 
+      "SELECT iu.salesman_id,iu.createtime,iu.fqtime,m.fqtime planfqsj,s.fireddate  FROM sys_user us\n" +
+          "              left join sys_income_mainplan_users iu on us.user_id = iu.salesman_id\n" + 
+          "              left join  sys_salesman s on s.user_id=us.user_id \n" + 
+          "              left join sys_income_plan_main m on iu.plain_id = m.id  where\n" + 
+          "                (m.fqtime is null or m.fqtime >=?1 )        and (iu.fqtime is null or iu.fqtime >?1 )\n" + 
+          "               and   (us.status=0 or (s.fireddate<=?1 )) and m.id=?2", nativeQuery = true)
   List<Object> findEffectiveUserTime(Date startDate, Long planId);
 }

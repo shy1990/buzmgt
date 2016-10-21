@@ -88,7 +88,7 @@ public class JobService {
                 calIncomeMainPlanUser(jobtask);
                 break;
               case 20:
-                // 叠加计算 TODO 一单达量
+                // 叠加计算 
                 superService.superIncomeCompute(jobtask.getPlanId(), jobtask.getKeyid());
                 superService.computeOneSingle(jobtask.getPlanId(), jobtask.getKeyid());
                 break;

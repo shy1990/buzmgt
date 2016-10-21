@@ -185,8 +185,7 @@ public class MainPlanServiceImpl implements MainPlanService {
   
   /**
    * 1.删除主方案从本天生效<br/>
-   * TODO 达量叠加到此日截止,无相应方案
-   * 
+   * 2.达量叠加到此日截止,查询用户有效时间
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
@@ -423,25 +422,38 @@ public class MainPlanServiceImpl implements MainPlanService {
       if (userCreate.getTime() > startDate.getTime()) {
         userMap.put("startDate", userCreate);
       }
-      // 求最小结束时间
+      // 求最小结束时间 iu.fqtime,方案用户删除m.fqtime planfqsj主方案删除,s.fireddate 业务员辞退时间
       Date endDate1 = null;
-      if (null != user[2] && null == user[3]) {
-        endDate1 = (Date) user[2];
-      } else if (null == user[2] && null != user[3]) {
-        endDate1 = (Date) user[3];
-      } else if (null != user[2] && null != user[3]) {
-        Date userEndDate = (Date) user[2];
-        Date planEndDate = (Date) user[3];
-        endDate1 = userEndDate.getTime() > planEndDate.getTime() ? planEndDate : userEndDate;
-      }
-      if (endDate1 == null || endDate1.getTime() > endDate.getTime()) {
-        userMap.put("endDate", endDate);
-      } else {
-        userMap.put("endDate", endDate1);
-      }
+      Date userEnd = user[2] == null ? null : (Date) user[2];
+      Date planEnd = user[3] == null ? null : (Date) user[3];
+      Date salesmanEnd = user[3] == null ? null : (Date) user[4];
+      endDate1 = compareDate(userEnd, planEnd);
+      endDate1 = compareDate(endDate1, salesmanEnd);
+      userMap.put("endDate", compareDate(endDate1, endDate));
       usrList.add(userMap);
     }
     return usrList;
     
+  }
+  
+  /**
+   * 比较两个日期的大小,求最小值<br/>
+   * 单个为空则返回不为空的,<br/>
+   * 都为空则返回null,<br/>
+   * 不为空则返回最小的那个.
+   */
+  private Date compareDate(Date userEnd1, Date userEnd2) {
+    if (userEnd1 == null && userEnd2 != null) {
+      return userEnd2;
+    } else if (userEnd2 == null && userEnd1 != null) {
+      return userEnd1;
+    } else if (userEnd2 != null && userEnd1 != null) {
+      if (userEnd2.getTime() <= userEnd1.getTime()) {
+        return userEnd2;
+      } else {
+        return userEnd1;
+      }
+    }
+    return null;
   }
 }
