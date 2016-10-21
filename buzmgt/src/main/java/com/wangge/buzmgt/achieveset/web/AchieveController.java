@@ -383,7 +383,7 @@ public class AchieveController {
 		Long achieveId = achieve.getAchieveId();
 		model.addAttribute("achieve", achieve);
 		//查询周期销量
-		Long totalNumber = achieveIncomeServer.countByAchieveIdAndStatus(achieveId, AchieveIncome.PayStatusEnum.STOCK);
+		Long totalNumber = achieveIncomeServer.countByAchieveIdAndStatus(achieveId, AchieveIncome.PayStatusEnum.PAY);
 		model.addAttribute("totalNumber", totalNumber);
 		//查询退货量
 		Long retreatAmount = achieveIncomeServer.countAchieveAfterSale(achieveId);
@@ -403,10 +403,10 @@ public class AchieveController {
 		model.addAttribute("achieve", achieve);
 		Long achieveId = achieve.getAchieveId();
 		//查询周期销量
-		Long totalNumber = achieveIncomeServer.countByAchieveIdAndUserIdAndStatus(achieveId, userId, AchieveIncome.PayStatusEnum.STOCK);
+		Long totalNumber = achieveIncomeServer.countByAchieveIdAndUserIdAndStatus(achieveId, userId, AchieveIncome.PayStatusEnum.PAY);
 		model.addAttribute("totalNumber", totalNumber);
 		//查询
-		BigDecimal totalMoney = achieveIncomeServer.sumMoneyByAchieveIdAndUserIdAndStatus(achieveId, userId, AchieveIncome.PayStatusEnum.STOCK);
+		BigDecimal totalMoney = achieveIncomeServer.sumMoneyByAchieveIdAndUserIdAndStatus(achieveId, userId, AchieveIncome.PayStatusEnum.PAY);
 		model.addAttribute("totalMoney", totalMoney);
 		//查询退货量
 		Long retreatAmount = achieveIncomeServer.countAchieveAfterSaleAndUserId(achieveId, userId);

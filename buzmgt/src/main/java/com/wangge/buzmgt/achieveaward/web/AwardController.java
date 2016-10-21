@@ -1,10 +1,6 @@
 package com.wangge.buzmgt.achieveaward.web;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -416,7 +412,7 @@ public class AwardController {
   @RequestMapping(value = "/process/{awardId}", method = RequestMethod.GET)
   public String toProcess(@PathVariable(value = "awardId") Award award, Model model) {
     List<SalesmanLevel> salesmanLevels = salesManService.findAll();
-    List<AwardGood> awardGoods = award.getAwardGoods();
+    Set<AwardGood> awardGoods = award.getAwardGoods();
     List<String> goodIds = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(awardGoods)){
       awardGoods.forEach(awardGood -> {
@@ -434,7 +430,6 @@ public class AwardController {
 
   /**
    * @param request
-   * @param brandIncome
    * @param pageable
    * @param @return     设定文件
    * @return Page<BrandIncome>    返回类型
