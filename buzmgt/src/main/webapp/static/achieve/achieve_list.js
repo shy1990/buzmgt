@@ -469,12 +469,13 @@ function setSectionRecord(){
 	window.location.href = '/section/toNotExpiredJsp?type='+machineType+'&planId='+planId;
 }
 /**
- * 添加区域属性
+ * 查看区域属性
  * @param id
  */
-function addRegion(id){
-	window.location.href = "/areaAttr/setting?type=PRICERANGE&ruleId="+id;
+function seeRegion(id){
+	window.location.href = "/areaAttr/show?type=PRICERANGE&ruleId="+id;
 }
+
 
 //------------------------ 价格区间操作结束 -------------------------------
 

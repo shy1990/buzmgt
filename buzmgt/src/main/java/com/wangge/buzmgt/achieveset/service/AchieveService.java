@@ -69,8 +69,10 @@ public interface AchieveService {
    */
   Achieve findOne(Long achieveId);
 
+  Achieve findByAchieveIdAndPlanId(Long achieveId,String planId);
+
   /**
-   * 
+   * 已出库——查询规则
   * @Title: findRuleByGoods 
   * @Description: 通过商品id查询其对应的规则
   * @param @param goodIds
@@ -84,7 +86,7 @@ public interface AchieveService {
   List<Map<String,Object>> findRuleByGoods(List<String> goodIds,Long mainPlanId,String userId);
 
 	/**
-	 * 付款查询规则
+	 * 已付款——查询规则
 	 * @param goodIds
 	 * @param mainPlanId
 	 * @param userId

@@ -23,7 +23,7 @@ public interface AchieveIncomeVoService {
 	 * @return List<AchieveIncome>    返回类型
 	 * @throws
 	 */
-	List<AchieveIncomeVo> findAll(Map<String, Object> spec, Sort sort);
+	List<AchieveIncomeVo> findAll(Map<String, Object> spec);
 
 	/**
 	 * @Title: findAll
@@ -35,4 +35,12 @@ public interface AchieveIncomeVoService {
 	 */
 	Page<AchieveIncomeVo> findAll(Map<String, Object> spec, Pageable pageable);
 
+	/**
+	 * @Title: findByAchieveIdAndStatus
+	 * @Description
+	 * @param achieveId
+	 * @param pay
+	 * @return
+	 */
+	List<AchieveIncomeVo> findByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum pay);
 }

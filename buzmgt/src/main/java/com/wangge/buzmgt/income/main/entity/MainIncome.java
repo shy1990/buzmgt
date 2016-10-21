@@ -32,8 +32,7 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
  * @since JDK 1.8
  */
 @Entity
-@NamedStoredProcedureQueries({
-    @NamedStoredProcedureQuery(name = "initMonth", procedureName = "init_basicaSalary_eveMonth"),
+@NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = "initMonth", procedureName = "init_Income_EveMonth"),
     @NamedStoredProcedureQuery(name = "initOilCost", procedureName = "oil_daily_calculate_prod"),
     @NamedStoredProcedureQuery(name = "basicSalayinitMonth", procedureName = "income_month_busisal") })
 @Table(name = "sys_income_main")
@@ -55,38 +54,38 @@ public class MainIncome {
    * 基本工资
    * 
    */
-  private double basicSalary = 0;
+  private Double basicSalary = 0D;
   /**
    * 业务佣金
    * 
    */
-  private double busiIncome = 0;
+  private Double busiIncome = 0D;
   /**
    * 油补
    * 
    */
-  private double oilIncome = 0;
+  private Double oilIncome = 0D;
   /**
    * 扣罚
    * 
    */
-  private double punish = 0;
+  private Double punish = 0D;
   /**
    * 达量
    * 
    */
-  private double reachIncome = 0;
+  private Double reachIncome = 0D;
   /**
    * 叠加收入
    * 
    */
-  private double overlyingIncome = 0;
+  private Double overlyingIncome = 0D;
   // 售后冲减
   private Double hedgecut = 0D;
   /**
    * 总收入
    */
-  private double allresult = 0;
+  private Double allresult = 0D;
   /**
    * 状态(0,未审核,1已审核)
    */
@@ -114,55 +113,55 @@ public class MainIncome {
     this.salesman = salesman;
   }
   
-  public double getBasicSalary() {
+  public Double getBasicSalary() {
     return basicSalary;
   }
   
-  public void setBasicSalary(double basicSalary) {
+  public void setBasicSalary(Double basicSalary) {
     this.basicSalary = basicSalary;
   }
   
-  public double getBusiIncome() {
+  public Double getBusiIncome() {
     return busiIncome;
   }
   
-  public void setBusiIncome(double busiIncome) {
+  public void setBusiIncome(Double busiIncome) {
     this.busiIncome = busiIncome;
   }
   
-  public double getOilIncome() {
+  public Double getOilIncome() {
     return oilIncome;
   }
   
-  public void setOilIncome(double oilIncome) {
+  public void setOilIncome(Double oilIncome) {
     this.oilIncome = oilIncome;
   }
   
-  public double getPunish() {
+  public Double getPunish() {
     return punish;
   }
   
-  public void setPunish(double punish) {
+  public void setPunish(Double punish) {
     this.punish = punish;
   }
   
-  public double getReachIncome() {
+  public Double getReachIncome() {
     return reachIncome;
   }
   
-  public void setReachIncome(double reachIncome) {
+  public void setReachIncome(Double reachIncome) {
     this.reachIncome = reachIncome;
   }
   
-  public double getOverlyingIncome() {
+  public Double getOverlyingIncome() {
     return overlyingIncome;
   }
   
-  public void setOverlyingIncome(double overlyingIncome) {
+  public void setOverlyingIncome(Double overlyingIncome) {
     this.overlyingIncome = overlyingIncome;
   }
   
-  public double getAllresult() {
+  public Double getAllresult() {
     return allresult;
   }
   
@@ -174,7 +173,7 @@ public class MainIncome {
     this.hedgecut = hedgecut;
   }
   
-  public void setAllresult(double allresult) {
+  public void setAllresult(Double allresult) {
     this.allresult = allresult;
   }
   
@@ -194,7 +193,7 @@ public class MainIncome {
     this.month = month;
   }
   
-  public MainIncome(SalesMan salesman, String month, double basicSalaray) {
+  public MainIncome(SalesMan salesman, String month, Double basicSalaray) {
     super();
     this.salesman = salesman;
     this.month = month;
@@ -209,8 +208,17 @@ public class MainIncome {
    * 重新计算总收入
    */
   public void reSetResult() {
-    double result = this.basicSalary + this.busiIncome + this.oilIncome + this.overlyingIncome + this.reachIncome
+    Double result = this.basicSalary + this.busiIncome + this.oilIncome + this.overlyingIncome + this.reachIncome
         - this.punish;
     this.setAllresult(result);
   }
+
+  @Override
+  public String toString() {
+    return "MainIncome [id=" + id + ", salesman=" + salesman + ", basicSalary=" + basicSalary + ", busiIncome="
+        + busiIncome + ", oilIncome=" + oilIncome + ", punish=" + punish + ", reachIncome=" + reachIncome
+        + ", overlyingIncome=" + overlyingIncome + ", hedgecut=" + hedgecut + ", allresult=" + allresult + ", state="
+        + state + ", month=" + month + "]";
+  }
+  
 }

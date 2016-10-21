@@ -1,11 +1,12 @@
 package com.wangge.buzmgt.income.main.web;
 
-import com.wangge.buzmgt.income.main.service.MainIncomeService;
-import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
-import com.wangge.buzmgt.log.util.LogUtil;
-import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.util.DateUtil;
-import com.wangge.buzmgt.util.excel.ExcelExport;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
+import com.wangge.buzmgt.income.main.service.MainIncomeService;
+import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
+import com.wangge.buzmgt.income.schedule.service.JobService;
+import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.superposition.service.SuperpositonService;
+import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 
 @Controller
 @RequestMapping("/mainIncome")
@@ -30,6 +35,12 @@ public class MainIncomeController {
   private MainIncomeService incomeService;
   @Autowired
   RegionService regionService;
+  @Autowired
+  SuperpositonService superService;
+  @Autowired
+  JobService jobService;
+  @Autowired
+  AchieveIncomeService achieveService;
   private static final String SEARCH_OPERTOR = "SC_";
   
   @RequestMapping("/index")
@@ -65,7 +76,10 @@ public class MainIncomeController {
     }
   }
   
-  /**实例url http://192.168.2.179:8080/mainIncome/calcuPayed?payDate=2016-09-29 15:30:16&orderNo=20160620174259875&userId=asdad&regionId=370184168
+  /**
+   * 实例url http://192.168.2.179:8080/mainIncome/calcuPayed?payDate=2016-09-29
+   * 15:30:16&orderNo=20160620174259875&userId=asdad&regionId=370184168
+   * 
    * @param payDate
    *          支付时间
    * @param orderNo
@@ -83,5 +97,16 @@ public class MainIncomeController {
       @RequestParam String userId, @RequestParam String regionId) throws Exception {
     incomeService.caculatePayedOrder(orderNo, userId, payDate, regionId);
     return "ok";
+  }
+  
+  @RequestMapping("/test")
+  public @ResponseBody void test() {
+    try {
+      // superService.compute(20L,2L);
+      // achieveService.calculateAchieveIncomeTotal(20L, 12L);
+      jobService.doTask();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

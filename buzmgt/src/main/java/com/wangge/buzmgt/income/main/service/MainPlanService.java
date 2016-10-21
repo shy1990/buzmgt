@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.income.main.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -61,10 +62,11 @@ public interface MainPlanService {
    * 
    * @author yangqc
    * @param plan
+   * @return 
    * @throws Exception
    * @since JDK 1.8
    */
-  void save(MainIncomePlan plan) throws Exception;
+  Map<String, Object> save(MainIncomePlan plan) throws Exception;
   
   /**
    * delete:删除主方案 <br/>
@@ -124,5 +126,18 @@ public interface MainPlanService {
    */
   void deleteIncomeMainPlan(Jobtask jobtask) throws Exception;
   
- 
+  /**
+   * 查询某主方案下具体达量或叠加规则人员的有效开始时间和结束时间. <br/>
+   * 
+   * @param planId
+   *          方案id
+   * @param startDate
+   *          规则开始时间
+   * @param endDate
+   *          规则结束时间
+   * @return List map(主键:类型)-> userId:String;endDate:Date;startDate:Date
+   * @since JDK 1.8
+   */
+  List<Map<String, Object>> findEffectUserDateList(Long planId, Date startDate, Date endDate);
+  
 }

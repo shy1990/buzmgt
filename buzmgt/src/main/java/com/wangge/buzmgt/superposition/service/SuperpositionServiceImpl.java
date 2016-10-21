@@ -2,7 +2,7 @@ package com.wangge.buzmgt.superposition.service;
 
 import com.wangge.buzmgt.income.main.entity.HedgeCost;
 import com.wangge.buzmgt.income.main.repository.HedgeCostRepository;
-import com.wangge.buzmgt.income.main.service.HedgeService;
+import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.income.schedule.service.JobService;
@@ -10,6 +10,7 @@ import com.wangge.buzmgt.log.entity.Log;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.superposition.entity.*;
 import com.wangge.buzmgt.superposition.pojo.SuperpositionProgress;
+import com.wangge.buzmgt.superposition.pojo.UserGoodsNum;
 import com.wangge.buzmgt.superposition.repository.SuperpositionRepository;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.teammember.service.ManagerService;
@@ -52,8 +53,8 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     @Autowired
     private SuperpositionRepository repository;
 
-//    @Resource
-//    private ManagerService managerService;
+    @Resource
+    private ManagerService managerService;
 //
 //    @Autowired
 //    private GoodsOrderService goodsOrderService;
@@ -73,6 +74,12 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     @Autowired
     private HedgeCostRepository hedgeCostRepository;
 
+    @Autowired
+    private SingleIncomeService singleIncomeService;
+
+    @Autowired
+    private MainIncomeService mainIncomeService;
+
     /**
      * 逻辑删除
      *
@@ -90,44 +97,219 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     }
 
     /**
-     * 计算叠加收益
+     * 叠加收益计算
+     * 注:
+     * 收益表中:3-最终收益,0-原始记录,1-没计算之前冲减数据,2-计算之后的冲减数据
+     * @param planId
+     * @param superId
+     */
+    @Override
+    public void superIncomeCompute(Long planId, Long superId) {
+        //查找叠加规则
+        Superposition superposition = repository.findById(superId);
+        List<Map<String, Object>> userList = mainPlanService.findEffectUserDateList(planId, superposition.getImplDate(), superposition.getEndDate());
+        for(Map<String,Object> userData:userList){
+            String userId = (String) userData.get("userId");//获取userId
+            Date startTime = (Date)userData.get("startDate");
+            Date endTime = (Date)userData.get("endDate");//结束时间
+
+            List<UserGoodsNum> userGoodsNumList = findByUserId(userId, superId, startTime, endTime);
+            Integer nums = 0;
+            for (UserGoodsNum u : userGoodsNumList) {
+                nums += u.getNums();//获取总数
+            }
+            //获取规则
+            List<SuperpositionRule> ruleList = superposition.getRuleList();
+//        //获取用户组
+            Map<String, Object> map = getUse(superposition, userId);
+            if ((Boolean) map.get("flag")) { //判断是否是特殊用户组
+                Group group = (Group) map.get("group");
+                if (superposition.getTaskThree() != null) {
+                    Integer oneAdd = group.getOneAdd();
+                    Integer twoAdd = group.getTwoAdd();
+                    Integer threeAdd = group.getThreeAdd();
+                    ruleList.get(0).setMax(oneAdd);
+                    ruleList.get(1).setMin(oneAdd);
+                    ruleList.get(1).setMax(twoAdd);
+                    ruleList.get(2).setMin(twoAdd);
+                    ruleList.get(2).setMax(threeAdd);
+                    ruleList.get(3).setMin(threeAdd);
+                } else if (superposition.getTaskTwo() != null) {
+                    Integer oneAdd = group.getOneAdd();
+                    Integer twoAdd = group.getTwoAdd();
+                    ruleList.get(0).setMax(oneAdd);
+                    ruleList.get(1).setMin(oneAdd);
+                    ruleList.get(1).setMax(twoAdd);
+                    ruleList.get(2).setMin(twoAdd);
+                } else {
+                    Integer oneAdd = group.getOneAdd();
+                    ruleList.get(0).setMax(oneAdd);
+                    ruleList.get(1).setMin(oneAdd);
+                }
+
+            }
+            //计算这个人的叠加收益
+            //获取冲减的数量(没有计算的时候的数量)
+            SuperpositionRecord record = getBySalesmanIdAndPlanIdAndSuperIdAndStatus(userId, planId, superId, "1");
+            logger.info(record);
+            Integer sum = 0;
+            if (record != null) {
+                sum = record.getOffsetNums();
+            }
+            //判断符合的价格区间段
+            for(SuperpositionRule su:ruleList){
+                if((nums - sum) >= su.getMin() && (nums - sum)<su.getMax()){
+                    SuperpositionRecord superpositionRecord = new SuperpositionRecord();
+                    //计算用户收益的时候去掉计算之前的冲减的商品
+                    superpositionRecord.setSalesmanId(userId);
+                    superpositionRecord.setPlanId(planId);
+                    superpositionRecord.setSuperId(superposition.getId());
+                    superpositionRecord.setAmount((nums - sum) * (su.getPercentage()));//计算的时候直接减去冲减数量
+                    superpositionRecord.setRecord((nums - sum));
+                    superpositionRecord.setStatus("0");//总收益已经计算,原始记录
+                    SuperpositionRecord superpositionRecord1 = recordService.save(superpositionRecord);
+                    try {
+                        mainIncomeService.updateSuperIncome(superpositionRecord1.getSalesmanId(), superpositionRecord1.getAmount());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    logService.log(null, "叠加收益计算保存: " + superpositionRecord, Log.EventType.SAVE);
+                    break;
+                }
+            }
+
+        }
+    }
+
+    /**
+     * 计算个人所有的叠加产品
+     *
+     * @param userId
+     * @param superId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public List<UserGoodsNum> findByUserId(String userId, Long superId, Date startTime, Date endTime) {
+        String sql = " select oder.nums,oder.goods_id,oder.user_id  from \n" +
+                "  sys_goods_order oder \n" +
+                "inner join \n" +
+                "  sys_super_goods_type goods \n" +
+                " on oder.goods_id  = goods.good_id \n" +
+                " \n" +
+                " where oder.user_id = ?\n" +
+                " and goods.su_id = ?\n" +
+                " and oder.pay_time >= ? and oder.pay_time<= ? ";
+        int a = 0;
+        int b = 1;
+        int c = 2;
+        int d = 3;
+        Query query = entityManager.createNativeQuery(sql);
+        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
+        sqlQuery.setParameter(a, userId);//方案id
+        sqlQuery.setParameter(b, superId);//叠加方案id
+        sqlQuery.setParameter(c, startTime);//开始时间
+        sqlQuery.setParameter(d, endTime);//结束时间
+        List<Object[]> list = sqlQuery.list();
+        logger.info(list);
+        //用于存储方案中所有人员的一单提货量
+        List<UserGoodsNum> userGoodsNumList = new ArrayList<UserGoodsNum>();
+        list.forEach(o -> {
+            UserGoodsNum userGoodsNum = new UserGoodsNum();
+            userGoodsNum.setNums(((BigDecimal) o[0]).intValue());
+            userGoodsNum.setGoodsId((String) o[1]);
+            userGoodsNum.setUserId((String) o[2]);
+            userGoodsNumList.add(userGoodsNum);
+        });
+
+        return userGoodsNumList;
+    }
+
+
+    /**
+     * 计算叠加收益(先暂时保留,最初按照查询全部的来处理的)
+     * 注:
+     * 收益表中:3-最终收益,0-原始记录,1-没计算之前冲减数据,2-计算之后的冲减数据
      *
      * @param planId  方案id
      * @param superId 规则id
      * @return
      */
+    /*
     @Override
-    public List<SuperpositionProgress> compute(Long planId, Long superId) {
+    public List<SuperpositionProgress> compute(Long planId, Long superId) throws Exception {
         //根据主方案,查处有几个叠加规则
         Superposition superposition = repository.findById(superId);
+        //发放日期一个月之后计算
+//        if (DateUtil.currentDateToString().equals(DateUtil.date2String(DateUtil.getPreMonthDate(superposition.getGiveDate(), -1), "yyyy-MM-dd"))) {
         List<SuperpositionProgress> progressList1 = findRole(superposition, planId);//获取提货量以及所对应的规则
         //判断属于哪个区间,去掉不符合的记录
+
         if (CollectionUtils.isNotEmpty(progressList1)) {
             Iterator<SuperpositionProgress> progressListIterator = progressList1.iterator();
             while (progressListIterator.hasNext()) {
                 SuperpositionProgress su = progressListIterator.next();
-                if (!(Integer.parseInt(su.getNums()) >= su.getMin() && Integer.parseInt(su.getNums()) < su.getMax())) {
-                    progressListIterator.remove();
+                logger.info(su);
+                //获取冲减的数量(没有计算的时候的数量)
+                SuperpositionRecord record = getBySalesmanIdAndPlanIdAndSuperIdAndStatus(su.getUserId(), planId, superId, "1");
+                logger.info(record);
+                Integer sum = 0;
+                if (record != null) {
+                    sum = record.getOffsetNums();
                 }
-            }
-            //计算收益
-            progressList1.forEach(su -> {
-                SuperpositionRecord superpositionRecord = new SuperpositionRecord();
-                if (!"0".equals(su.getNums())) {
+                //判断符合的价格区间段
+                if (Integer.parseInt(su.getNums()) - sum >= su.getMin() && (Integer.parseInt(su.getNums()) - sum) < su.getMax()) {
+                    SuperpositionRecord superpositionRecord = new SuperpositionRecord();
+                    //计算用户收益的时候去掉计算之前的冲减的商品
                     superpositionRecord.setSalesmanId(su.getUserId());
                     superpositionRecord.setPlanId(planId);
                     superpositionRecord.setSuperId(superposition.getId());
-                    superpositionRecord.setAmount(((Integer.parseInt(su.getNums())) * (su.getPercentage())));
-                    superpositionRecord.setRecord(Integer.parseInt(su.getNums()));
-                    recordService.save(superpositionRecord);
+                    superpositionRecord.setAmount(((Integer.parseInt(su.getNums()) - sum) * (su.getPercentage())));//计算的时候直接减去冲减数量
+                    superpositionRecord.setRecord(Integer.parseInt(su.getNums()) - sum);
+                    superpositionRecord.setStatus("0");//总收益已经计算,原始记录
+                    SuperpositionRecord superpositionRecord1 = recordService.save(superpositionRecord);
+                    mainIncomeService.updateSuperIncome(superpositionRecord1.getSalesmanId(), superpositionRecord1.getAmount());
                     logService.log(null, "叠加收益计算保存: " + superpositionRecord, Log.EventType.SAVE);
-
                 }
-            });
+            }
+//                //计算收益
+//                for (int i = 0; i < progressList1.size(); i++) {
+//                    SuperpositionRecord superpositionRecord = new SuperpositionRecord();
+//                    if (!"0".equals(progressList1.get(i).getNums())) {
+//                        //计算用户收益的时候去掉计算之前的冲减的商品
+//                        superpositionRecord.setSalesmanId(progressList1.get(i).getUserId());
+//                        superpositionRecord.setPlanId(planId);
+//                        superpositionRecord.setSuperId(superposition.getId());
+//                        superpositionRecord.setAmount(((Integer.parseInt(progressList1.get(i).getNums()) - sum) * (progressList1.get(i).getPercentage())));//计算的时候直接减去冲减数量
+//                        superpositionRecord.setRecord(Integer.parseInt(progressList1.get(i).getNums()));
+//                        superpositionRecord.setStatus("0");//总收益已经计算,原始记录
+//                        SuperpositionRecord superpositionRecord1 = recordService.save(superpositionRecord);
+//                        mainIncomeService.updateSuperIncome(superpositionRecord1.getSalesmanId(),superpositionRecord1.getAmount());
+//                        logService.log(null, "叠加收益计算保存: " + superpositionRecord, Log.EventType.SAVE);
+//
+//                    }
+//                }
+
         }
+
+//            progressList1.forEach(su -> {
+//                SuperpositionRecord superpositionRecord = new SuperpositionRecord();
+//                if (!"0".equals(su.getNums())) {
+//                    //计算用户收益的时候去掉冲减的商品
+//                    superpositionRecord.setSalesmanId(su.getUserId());
+//                    superpositionRecord.setPlanId(planId);
+//                    superpositionRecord.setSuperId(superposition.getId());
+//                    superpositionRecord.setAmount(((Integer.parseInt(su.getNums()) - sum) * (su.getPercentage())));//计算的时候直接减去冲减数量
+//                    superpositionRecord.setRecord(Integer.parseInt(su.getNums()));
+//                    recordService.save(superpositionRecord);
+//                    logService.log(null, "叠加收益计算保存: " + superpositionRecord, Log.EventType.SAVE);
+//
+//                }
+//            });
+//        }
         return null;
     }
-
+*/
     /*
         获取规则
      */
@@ -195,70 +377,395 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     }
 
     /**
-     * @param userId 业务员id
-     * @param goodsId 商品id
-     * @param payTime 支付时间
-     * @param num 退货数量
-     * @param planId 主方案id
+     * 售后冲减
+     *
+     * @param userId        业务员id
+     * @param goodsId       商品id
+     * @param payTime       支付时间
+     * @param num           退货数量
+     * @param planId        主方案id
      * @param receivingTime 售后收货时间
      * @return
      */
     @Override
-    public Superposition computeAfterReturnGoods(String userId, String goodsId, String payTime, Integer num, Long planId,String receivingTime) {
+    public Superposition computeAfterReturnGoods(String userId, String goodsId, String payTime, Integer num, Long planId, String receivingTime, Long hedgeId) {
         Superposition superposition = repository.findUseByTime(payTime, payTime, planId);//获取此商品使用的方案
         List<GoodsType> goodsTypeList = superposition.getGoodsTypeList();//获取所有叠加的商品
         if (containsGoods(goodsTypeList, goodsId)) {//判断是否有这个商品
-            //获取规则
-            List<SuperpositionRule> ruleList = superposition.getRuleList();
-            //获取用户组
-            Map<String, Object> map = getUse(superposition, userId);
-            if ((Boolean) map.get("flag")) { //判断是否是特殊用户组
-                Group group = (Group) map.get("group");
-                if (superposition.getTaskThree() != null) {
-                    Integer oneAdd = group.getOneAdd();
-                    Integer twoAdd = group.getTwoAdd();
-                    Integer threeAdd = group.getThreeAdd();
-                    ruleList.get(0).setMax(oneAdd);
-                    ruleList.get(1).setMin(oneAdd);
-                    ruleList.get(1).setMax(twoAdd);
-                    ruleList.get(2).setMin(twoAdd);
-                    ruleList.get(2).setMax(threeAdd);
-                    ruleList.get(3).setMin(threeAdd);
-                } else if (superposition.getTaskTwo() != null) {
-                    Integer oneAdd = group.getOneAdd();
-                    Integer twoAdd = group.getTwoAdd();
-                    ruleList.get(0).setMax(oneAdd);
-                    ruleList.get(1).setMin(oneAdd);
-                    ruleList.get(1).setMax(twoAdd);
-                    ruleList.get(2).setMin(twoAdd);
-                } else {
-                    Integer oneAdd = group.getOneAdd();
-                    ruleList.get(0).setMax(oneAdd);
-                    ruleList.get(1).setMin(oneAdd);
-                }
+            //有这个商品就保存到收益表中,记录字段是没有计算(售后冲减)
+            // todo 这里判断改成用是否有记录来计算
+            if (!recordService.isCompare(planId, superposition.getId(), "0")) {
+//            if (DateUtil.compareDate(DateUtil.string2Date(payTime, "yyyy-mm-dd"), DateUtil.getPreMonthDate(superposition.getGiveDate(), -1))) {
+                SuperpositionRecord superpositionRecord = new SuperpositionRecord();
+                superpositionRecord.setPlanId(planId);//主方案id
+                superpositionRecord.setSuperId(superposition.getId());//叠加方案id
+                superpositionRecord.setOffsetNums(num);//售后冲减数量
+                superpositionRecord.setSalesmanId(userId);//业务员id
+                superpositionRecord.setStatus("1");//售后冲减商品,计算之前的
+                superpositionRecord.setGoodsId(goodsId);//售后冲减商品id
+                recordService.save(superpositionRecord);
+            } else {//计算完之后又有冲减的商品
+                SuperpositionRecord superpositionRecord3 = new SuperpositionRecord();
+                superpositionRecord3.setPlanId(planId);//主方案id
+                superpositionRecord3.setSuperId(superposition.getId());//叠加方案id
+                superpositionRecord3.setOffsetNums(num);//售后冲减数量
+                superpositionRecord3.setSalesmanId(userId);//业务员id
+                superpositionRecord3.setStatus("2");//售后冲减商品,计算之后的
+                superpositionRecord3.setGoodsId(goodsId);//售后冲减商品id
+                recordService.save(superpositionRecord3);
+// ------------------------------------  以下是已经计算之后又有冲减的计算 ----------------------------------------------
+                //获取规则
+                List<SuperpositionRule> ruleList = superposition.getRuleList();
+                //获取用户组
+                Map<String, Object> map = getUse(superposition, userId);
+                if ((Boolean) map.get("flag")) { //判断是否是特殊用户组
+                    Group group = (Group) map.get("group");
+                    if (superposition.getTaskThree() != null) {
+                        Integer oneAdd = group.getOneAdd();
+                        Integer twoAdd = group.getTwoAdd();
+                        Integer threeAdd = group.getThreeAdd();
+                        ruleList.get(0).setMax(oneAdd);
+                        ruleList.get(1).setMin(oneAdd);
+                        ruleList.get(1).setMax(twoAdd);
+                        ruleList.get(2).setMin(twoAdd);
+                        ruleList.get(2).setMax(threeAdd);
+                        ruleList.get(3).setMin(threeAdd);
+                    } else if (superposition.getTaskTwo() != null) {
+                        Integer oneAdd = group.getOneAdd();
+                        Integer twoAdd = group.getTwoAdd();
+                        ruleList.get(0).setMax(oneAdd);
+                        ruleList.get(1).setMin(oneAdd);
+                        ruleList.get(1).setMax(twoAdd);
+                        ruleList.get(2).setMin(twoAdd);
+                    } else {
+                        Integer oneAdd = group.getOneAdd();
+                        ruleList.get(0).setMax(oneAdd);
+                        ruleList.get(1).setMin(oneAdd);
+                    }
 
+                }
+                //获取已经保存的叠加提成(原始记录),每一次计算都是从原始开始计算
+                SuperpositionRecord superpositionRecord = recordService.findBySalesmanIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "0");
+                //获取计算以后的 冲减数量
+                SuperpositionRecord record = getBySalesmanIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "2");
+                Integer newNum = superpositionRecord.getRecord() - record.getOffsetNums();//计算出冲减之后的数量
+                ruleList.forEach(superpositionRule -> {
+                    if (newNum >= superpositionRule.getMin() && newNum <= superpositionRule.getMax()) {
+                        SuperpositionRecord superpositionRecord1 = new SuperpositionRecord();
+                        superpositionRecord1.setPlanId(planId);//主方案id
+                        superpositionRecord1.setSuperId(superposition.getId());//叠加方案id
+                        superpositionRecord1.setAmount(newNum * superpositionRule.getPercentage());//重新计算的金额
+                        superpositionRecord1.setSalesmanId(userId);//业务员id
+                        superpositionRecord1.setRecord(newNum);
+                        superpositionRecord1.setStatus("3");//计算之后有冲减,重新计算的状态
+                        //获取上一次冲减保存的记录
+                        SuperpositionRecord superpositionRecord2 = recordService.findBySalesmanIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "3");
+                        if (superpositionRecord2 != null) {
+                            HedgeCost hedgeCost = new HedgeCost(hedgeId, superpositionRecord.getSuperId(), 3, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), superpositionRecord2.getAmount() - superpositionRecord1.getAmount());
+                            hedgeCostRepository.save(hedgeCost);
+                            logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
+                            superpositionRecord2.setStatus("4");//将上一条记录设置为已经过期
+                            recordService.save(superpositionRecord2);
+                        } else {
+                            HedgeCost hedgeCost = new HedgeCost(hedgeId, superpositionRecord.getSuperId(), 3, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), superpositionRecord.getAmount() - superpositionRecord1.getAmount());
+                            hedgeCostRepository.save(hedgeCost);
+                            logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
+                        }
+                        recordService.save(superpositionRecord1);//保存记录
+
+                    }
+                });
             }
-            //获取已经保存的叠加提成
-            SuperpositionRecord superpositionRecord = recordService.findBySalesmanIdAndPlanIdAndSuperId(userId, planId, superposition.getId());
-            Integer newNum = superpositionRecord.getRecord() - num;//计算出冲减之后的数量
-            ruleList.forEach(superpositionRule -> {
-                if (newNum >= superpositionRule.getMin() && newNum <= superpositionRule.getMax()) {
-                    HedgeCost hedgeCost = new HedgeCost();
-                    hedgeCost.setUserId(userId);
-                    hedgeCost.setGoodsId(goodsId);
-                    hedgeCost.setPaytime(DateUtil.string2Date(payTime));
-                    hedgeCost.setRuletype(3);
-                    hedgeCost.setCost(superpositionRecord.getAmount() - newNum * superpositionRule.getPercentage());//冲减后的差值
-                    hedgeCost.setAccepttime(DateUtil.string2Date(receivingTime));
-                    hedgeCostRepository.save(hedgeCost);
-                    logService.log(null,"叠加冲减保存:  "+hedgeCost, Log.EventType.SAVE);
-                }
-            });
-
         }
         return superposition;
     }
 
+    /**
+     * 查找叠加规则计算前冲减总数量 (1)/计算后冲减总数量 (2)
+     *
+     * @param userId
+     * @param planId
+     * @param superId
+     * @param status
+     * @return
+     */
+    @Override
+    public SuperpositionRecord getBySalesmanIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId, String status) {
+        String sql = "select nvl(sum(rd.OFFSET_NUMS),0) as offset_nums,rd.SALESMAN_ID,rd.SUPER_ID,rd.PLAN_ID from SYS_SUPERPOSITION_RECORD rd\n" +
+                "where rd.PLAN_ID = ?\n" +
+                "and rd.SALESMAN_ID = ?\n" +
+                "and rd.SUPER_ID = ?\n" +
+                "and rd.STATUS = ? \n" +
+                "group by \n" +
+                "rd.SALESMAN_ID,rd.SUPER_ID,rd.PLAN_ID";
+        int a = 0;
+        int b = 1;
+        int c = 2;
+        int d = 3;
+        Query query = entityManager.createNativeQuery(sql);
+        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
+        sqlQuery.setParameter(a, planId);//方案id
+        sqlQuery.setParameter(b, userId);//业务员id
+        sqlQuery.setParameter(c, superId);//叠加方案id
+        sqlQuery.setParameter(d, status);//状态
+        List<Object[]> list = sqlQuery.list();
+        SuperpositionRecord superpositionRecord = null;
+        if (CollectionUtils.isNotEmpty(list)) {
+            Object[] o = list.get(0);
+            logger.info(list);
+            superpositionRecord = new SuperpositionRecord();
+            if (o != null) {
+                superpositionRecord.setOffsetNums(((BigDecimal) o[0]).intValue());
+                superpositionRecord.setSalesmanId(userId);
+                superpositionRecord.setSuperId(superId);
+                superpositionRecord.setPlanId(planId);
+            }
+        }
+
+        return superpositionRecord;
+    }
+
+    /**
+     * 一单达量收益计算
+     *
+     * @param planId
+     * @param superId
+     */
+    @Override
+    public void computeOneSingle(Long planId, Long superId) {
+        Superposition superposition = repository.findById(superId);
+        /*
+        获取每个人每单的提货量
+         */
+        String sql = "select nvl(sum(nums),0) as sum,order_id,user_id,pay_time from (\n" +
+                "select * from sys_goods_order oder \n" +
+                "inner join\n" +
+                "( select * from sys_superposition super\n" +
+                "  left join sys_super_goods_type goods \n" +
+                "  on super.su_po_id = goods.su_id\n" +
+                "  where super.plan_id = ? \n" +
+                "  ) su\n" +
+                "on oder.goods_id = su.good_id \n" +
+                "left join view_income_main_plan_user usr\n" +
+                "on usr.region_id = oder.region_id\n" +
+                "where usr.plan_id = ? \n" +
+                "and su.check_status = 3 \n" +
+                "and su.su_po_id = ? \n" +
+                "and to_date(to_char(oder.pay_time,'yyyy-mm-dd'),'yyyy-mm-dd') >= su.impl_date \n" +
+                "and to_date(to_char(oder.pay_time,'yyyy-mm-dd'),'yyyy-mm-dd') <= su.end_date )\n" +
+                " group by order_id,user_id,pay_time ";
+
+        int a = 0;
+        int b = 1;
+        int c = 2;
+        Query query = entityManager.createNativeQuery(sql);
+        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
+        sqlQuery.setParameter(a, planId);//方案id
+        sqlQuery.setParameter(b, planId);//叠加方案id
+        sqlQuery.setParameter(c, superId);//叠加方案id
+        List<Object[]> list = sqlQuery.list();
+        logger.info(list);
+        //用于存储方案中所有人员的一单提货量
+        List<SingleIncome> singleIncomeList = new ArrayList<SingleIncome>();
+        list.forEach(o -> {
+            SingleIncome singleIncome = new SingleIncome();
+            singleIncome.setRecord(((BigDecimal) o[0]).intValue());
+            singleIncome.setOrderId((String) o[1]);
+            singleIncome.setUserId((String) o[2]);
+            singleIncome.setPayTime((Date) o[3]);
+            singleIncomeList.add(singleIncome);
+
+        });
+        logger.info(singleIncomeList);
+        List<SingleRule> singleRules = superposition.getSingleRules();//获得一单达量设置规则
+        singleIncomeList.forEach(singleIncome -> {//遍历方案中所有人员的一单提货量
+            //获取计算前的冲减量
+            SingleIncome singleIncomeFront = getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(singleIncome.getUserId(), planId, superposition.getId(), "1", singleIncome.getOrderId());
+            Integer offsetNum = 0;
+            if (singleIncomeFront != null) {
+                offsetNum = singleIncomeFront.getOffsetNums();
+            }
+            for (int i = 0; i < singleRules.size(); i++) {
+                if ((singleIncome.getRecord() - offsetNum) > singleRules.get(i).getMin() && (singleIncome.getRecord() - offsetNum) <= singleRules.get(i).getMax()) {
+                    SingleIncome singleIncomeSave = new SingleIncome();
+                    singleIncomeSave.setPlanId(planId);
+                    singleIncomeSave.setOrderId(singleIncome.getOrderId());
+                    singleIncomeSave.setSuperId(superId);
+                    singleIncomeSave.setAmount(singleRules.get(i).getReward());
+                    singleIncomeSave.setUserId(singleIncome.getUserId());
+                    singleIncomeSave.setStatus("0");//初始数据
+                    singleIncomeSave.setRecord(singleIncome.getRecord() - offsetNum);
+                    singleIncomeService.save(singleIncomeSave);
+                    logService.log(null, "一单达量保存" + singleIncomeSave, Log.EventType.SAVE);
+//                    TODO 保存到奇才表中
+                    try {
+                        mainIncomeService.updateSuperIncome(singleIncome.getUserId(), singleIncomeSave.getAmount());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                    }
+                    break;
+                }
+
+            }
+        });
+
+    }
+
+    /**
+     * 一单达量冲减计算
+     *
+     * @param userId:业务员id
+     * @param planId:方案id
+     * @param orderId:订单id
+     * @param goodsId:商品id
+     * @param payTime:支付时间
+     * @param receivingTime:退货时间
+     * @param nums:退货数量
+     */
+    @Override
+    public void computeOneSingleAfterReturnGoods(String userId, Long planId, String orderId, String goodsId,
+                                                 String payTime, String receivingTime, Integer nums) {
+        //获取对应的规则
+        Superposition superposition = repository.findUseByTime(payTime, payTime, planId);//获取此商品使用的方案
+        if (superposition != null) {
+            List<GoodsType> goodsTypeList = superposition.getGoodsTypeList();//获取所有叠加的商品
+            if (containsGoods(goodsTypeList, goodsId)) {//判断是否有这个商品
+                //todo 有记录说明已经计算
+                if (!singleIncomeService.isCompare(planId, superposition.getId(), "0")) {//没有计算操作:冲减数量保存
+                    SingleIncome singleIncome = new SingleIncome();
+                    singleIncome.setSuperId(superposition.getId());
+                    singleIncome.setGoodsId(goodsId);
+                    singleIncome.setPlanId(planId);
+                    singleIncome.setOffsetNums(nums);
+                    singleIncome.setUserId(userId);
+                    singleIncome.setOrderId(orderId);
+                    singleIncome.setStatus("1");
+                    singleIncomeService.save(singleIncome);
+                } else {//已经计算
+                    SingleIncome singleIncome = new SingleIncome();
+                    singleIncome.setSuperId(superposition.getId());
+                    singleIncome.setGoodsId(goodsId);
+                    singleIncome.setPlanId(planId);
+                    singleIncome.setOffsetNums(nums);
+                    singleIncome.setUserId(userId);
+                    singleIncome.setOrderId(orderId);
+                    singleIncome.setStatus("2");
+                    singleIncomeService.save(singleIncome);
+                    //获取原始记录
+                    SingleIncome singleIncomeSave = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "0", orderId);
+                    //获取计算以后的冲减数量
+                    SingleIncome singleIncomeOffset = getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(userId, planId, superposition.getId(), "2", orderId);
+                    Integer afterOffsetNums = singleIncomeSave.getRecord() - singleIncomeOffset.getOffsetNums();
+
+                    List<SingleRule> singleRules = superposition.getSingleRules();
+                    if (CollectionUtils.isNotEmpty(singleRules)) {
+                        singleRules.forEach(singleRule -> {
+                            if (afterOffsetNums > singleRule.getMin() && afterOffsetNums <= singleRule.getMax()) {
+                                SingleIncome singleIncomeNew = new SingleIncome();
+                                singleIncomeNew.setPlanId(planId);
+                                singleIncomeNew.setOrderId(orderId);
+                                singleIncomeNew.setSuperId(superposition.getId());
+                                singleIncomeNew.setAmount(singleRule.getReward());
+                                singleIncomeNew.setUserId(singleIncome.getUserId());
+                                singleIncomeNew.setStatus("3");//重新保存数据
+                                singleIncomeNew.setRecord(afterOffsetNums);
+                                //获取上一次计算的
+                                SingleIncome singleIncomeHistory = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "3", orderId);
+                                if (singleIncomeHistory != null) {
+                                    HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeHistory.getAmount() - singleIncomeNew.getAmount());
+                                    hedgeCostRepository.save(hedgeCost);
+                                    logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
+                                    singleIncomeHistory.setStatus("4");//将上一条记录设置为已经过期
+                                    singleIncomeService.save(singleIncomeHistory);
+                                } else {
+                                    HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeSave.getAmount() - singleIncomeNew.getAmount());
+                                    hedgeCostRepository.save(hedgeCost);
+                                    logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
+                                }
+                                singleIncomeService.save(singleIncomeNew);
+                            } else if (afterOffsetNums == 0) {
+                                //获取上一次计算的
+                                SingleIncome singleIncomeHistory = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId, planId, superposition.getId(), "3", orderId);
+                                if (singleIncomeHistory != null) {
+                                    HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeHistory.getAmount());
+                                    singleIncomeHistory.setStatus("4");//将上一条记录设置为已经过期
+                                    singleIncomeService.save(singleIncomeHistory);
+                                    hedgeCostRepository.save(hedgeCost);
+                                } else {
+                                    HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId, DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeSave.getAmount());
+                                    hedgeCostRepository.save(hedgeCost);
+                                }
+
+                            }
+                        });
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    /**
+     * 计算冲减的量  计算前(1)/计算后(2)
+     *
+     * @param userId
+     * @param planId
+     * @param superId
+     * @param status
+     * @param orderId
+     * @return
+     */
+
+    public SingleIncome getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(String userId, Long planId, Long superId, String status, String orderId) {
+        String sql = "SELECT NVL(SUM(rd.OFFSET_NUMS),0) AS offset_nums,\n" +
+                "  rd.USER_ID,\n" +
+                "  rd.SUPER_ID,\n" +
+                "  rd.PLAN_ID,\n" +
+                "  rd.ORDER_ID\n" +
+                "FROM SYS_SINGLE_RECORD rd\n" +
+                "WHERE rd.PLAN_ID = ?\n" +
+                "AND rd.USER_ID = ?\n" +
+                "AND rd.SUPER_ID = ?\n" +
+                "AND rd.status   = ?\n" +
+                "AND rd.ORDER_ID   = ?\n" +
+                "GROUP BY rd.USER_ID,\n" +
+                "  rd.SUPER_ID,\n" +
+                "  rd.PLAN_ID,\n" +
+                "  rd.ORDER_ID";
+        int a = 0;
+        int b = 1;
+        int c = 2;
+        int d = 3;
+        int e = 4;
+        Query query = entityManager.createNativeQuery(sql);
+        SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
+        sqlQuery.setParameter(a, planId);//方案id
+        sqlQuery.setParameter(b, userId);//业务员id
+        sqlQuery.setParameter(c, superId);//叠加方案id
+        sqlQuery.setParameter(d, status);//状态
+        sqlQuery.setParameter(e, orderId);//状态
+        List<Object[]> list = sqlQuery.list();
+        SingleIncome singleIncome = null;
+        if (CollectionUtils.isNotEmpty(list)) {
+            Object[] o = list.get(0);
+            logger.info(list);
+            singleIncome = new SingleIncome();
+            if (o != null) {
+                singleIncome.setUserId(userId);
+                singleIncome.setOffsetNums(((BigDecimal) o[0]).intValue());
+                singleIncome.setSuperId(superId);
+                singleIncome.setPlanId(planId);
+                singleIncome.setOrderId((String) o[4]);
+//                singleIncome.setUserId((String) o[2]);
+//                singleIncome.setPayTime((Date) o[3]);
+            }
+        }
+
+        return singleIncome;
+
+    }
 
     /*
         判断是否是特殊组,是返回这个组
@@ -883,19 +1390,19 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         return mainPlanService.getUserpage(pageReq, searchParams);
     }
 
-    /**
-     * 计算收益
-     *
-     * @param superposition
-     * @return
-     */
-    @Override
-    public String compute(Superposition superposition) {
-        //1.方案中的
-
-
-        return null;
-    }
+//    /**
+//     * 计算收益
+//     *
+//     * @param superposition
+//     * @return
+//     */
+//    @Override
+//    public String compute(Superposition superposition) {
+//        //1.方案中的
+//
+//
+//        return null;
+//    }
 
 
     /**

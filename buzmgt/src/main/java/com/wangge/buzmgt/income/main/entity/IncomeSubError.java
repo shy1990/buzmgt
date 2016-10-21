@@ -27,7 +27,7 @@ public class IncomeSubError {
   private String orderno, userId, errorInfo, goodId;
   /**
    * 错误类型:0 达量设置 1 品牌型号 2 价格区间3叠加奖励 4.达量奖励 ,<br/>
-   * 5:50计算总工资,51计算油补;<br/>
+   * 5:50计算总工资,51计算油补;52计算基础工资<br/>
    * 7:71定时任务执行出错;<br/>
    * 计算类型:0:收益计算;1.售后冲减,2.其他情况
    */

@@ -7,12 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wangge.buzmgt.common.CheckedEnum;
-import com.wangge.buzmgt.common.IncomeThreadPool;
+import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
+import com.wangge.buzmgt.common.IncomeCommon;
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
-import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
-import com.wangge.buzmgt.income.main.repository.IncomeSubRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
 import com.wangge.buzmgt.income.main.service.HedgeService;
@@ -24,6 +22,7 @@ import com.wangge.buzmgt.income.main.vo.repository.OrderGoodsRepository;
 import com.wangge.buzmgt.income.schedule.entity.Jobtask;
 import com.wangge.buzmgt.income.schedule.repository.JobRepository;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.superposition.service.SuperpositonService;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
 
@@ -45,8 +44,6 @@ public class JobService {
   @Autowired
   private JobRepository jobRep;
   @Autowired
-  private IncomeSubRepository incomeSubRep;
-  @Autowired
   private MainPlanService mainPlanService;
   @Autowired
   OrderGoodsRepository orderGoodsRep;
@@ -58,6 +55,10 @@ public class JobService {
   HedgeService hedgeService;
   @Autowired
   IncomeErrorService errorService;
+  @Autowired
+  SuperpositonService superService;
+  @Autowired
+  AchieveIncomeService achieveService;
   
   @Transactional(rollbackFor = Exception.class)
   public void initMonthIncome() {
@@ -67,45 +68,49 @@ public class JobService {
   public void doTask() {
     List<Jobtask> jobList = jobRep.defaltfindAll(new Date());
     for (Jobtask jobtask : jobList) {
-      int type = jobtask.getType();
-      try {
-        switch (type) {
-          /**
-           * 0:删除主方案:不在计算收益;<br/>
-           * 1.删除删除日期当天的收益<br/>
-           * TODO 达量叠加如何处理<br/>
-           */
-          case 0:
-            mainPlanService.deleteIncomeMainPlan(jobtask);
-            break;
-          case 10:
-            deleteIncomeMainPlanUser(jobtask);
-            break;
-          case 12:
-            calIncomeMainPlanUser(jobtask);
-            break;
-          case 20:
-            // TODO 计算达量
-//            saveJobTask(21, jobtask.getPlanId(), jobtask.getKeyid(), DateUtil.moveDate(jobtask.getExectime(), 1));
-            break;
-          case 30:
-            // TODO 计算叠加
-//            saveJobTask(31, jobtask.getPlanId(), jobtask.getKeyid(), DateUtil.moveDate(jobtask.getExectime(), 1));
-            break;
-          case 60:
-            calhedgeAchieve(jobtask);
-            break;
-          default:
-            break;
+      IncomeCommon.EXECUTORSERVICEPOOL.execute(new Runnable() {
+        @Override
+        public void run() {
+          int type = jobtask.getType();
+          try {
+            switch (type) {
+              /**
+               * 0:删除主方案:不在计算收益;<br/>
+               * 1.删除删除日期当天的收益<br/>
+               */
+              case 0:
+                mainPlanService.deleteIncomeMainPlan(jobtask);
+                break;
+              case 10:
+                deleteIncomeMainPlanUser(jobtask);
+                break;
+              case 12:
+                calIncomeMainPlanUser(jobtask);
+                break;
+              case 20:
+                // 叠加计算 
+                superService.superIncomeCompute(jobtask.getPlanId(), jobtask.getKeyid());
+                superService.computeOneSingle(jobtask.getPlanId(), jobtask.getKeyid());
+                break;
+              case 30:
+                // TODO 计算达量奖励 
+                achieveService.calculateAchieveIncomeTotal(jobtask.getPlanId(), jobtask.getKeyid());
+                break;
+              case 60:
+                calhedgeAchieve(jobtask);
+                break;
+              default:
+                break;
+            }
+            jobRep.updateFlag(jobtask.getId());
+          } catch (Exception e) {
+            errorService.saveScheduleError(71, jobtask.getId(), "执行定时任务出错");
+            LogUtil.error("定时任务失败", e);
+          }
         }
-        
-        jobtask.setFlag(1);
-      } catch (Exception e) {
-        errorService.saveScheduleError(71, jobtask.getId(), "执行定时任务出错");
-        LogUtil.error("定时任务失败", e);
-      }
+      });
     }
-    jobRep.save(jobList);
+    
   }
   
   /**
@@ -120,38 +125,41 @@ public class JobService {
    * 1.查出某天的订单,计算每天的订单
    */
   private void calIncomeMainPlanUser(Jobtask jobtask) {
-    
-    Date startTime = jobtask.getExectime();
-    Date endTime = jobtask.getInserttime();
-    Long planId = jobtask.getPlanId();
-    String userId = jobtask.getSalesmanId();
-    String regionId = salesmanRep.findOne(userId).getRegion().getId();
-    
-    Date endDay = DateUtil.string2Date(DateUtil.date2String(endTime, "yyyy-mm-dd"));
-    startTime = mainIncomeService.getEffectiveStartTime(startTime, userId);
-    int between = DateUtil.daysBetween(startTime, endDay);
-    
-    // 计算查找每天的结算订单
-    for (int i = 0; i <= between; i++) {
-      Date startDate = DateUtil.moveDate(startTime, i);
-      Date endDate = DateUtil.moveDate(startDate, 1);
-      IncomeThreadPool.exServ.execute(new Runnable() {
+    try {
+      Date startTime = jobtask.getExectime();
+      Date endTime = jobtask.getInserttime();
+      Long planId = jobtask.getPlanId();
+      String userId = jobtask.getSalesmanId();
+      String regionId = salesmanRep.getRegionIdByUserId(userId);
+      
+      Date endDay = DateUtil.string2Date(DateUtil.date2String(endTime, "yyyy-mm-dd"));
+      startTime = mainIncomeService.getEffectiveStartTime(startTime, userId);
+      int between = DateUtil.daysBetween(startTime, endDay);
+      
+      // 计算查找每天的结算订单
+      for (int i = 0; i <= between; i++) {
+        Date startDate = DateUtil.moveDate(startTime, i);
+        Date endDate = DateUtil.moveDate(startDate, 1);
+        IncomeCommon.EXECUTORSERVICEPOOL.execute(new Runnable() {
+          @Override
+          public void run() {
+            List<OrderGoods> goodList = orderGoodsRep.findByorderNoByDateAndSalesman(userId, startDate, endDate);
+            mainIncomeService.caculatePayedOrder(userId, planId, startDate, goodList, regionId, 0);
+          }
+        });
+      }
+      // 计算最后一天的订单
+      IncomeCommon.EXECUTORSERVICEPOOL.execute(new Runnable() {
         @Override
         public void run() {
-          List<OrderGoods> goodList = orderGoodsRep.findByorderNoByDateAndSalesman(userId, startDate, endDate);
-          mainIncomeService.caculatePayedOrder(userId, planId, startDate, goodList, regionId, 0);
+          List<OrderGoods> goodList = orderGoodsRep.findByorderNoByDateAndSalesman(userId, endTime, endDay);
+          mainIncomeService.caculatePayedOrder(userId, planId, endDay, goodList, regionId, 0);
         }
       });
+    } catch (Exception e) {
+      LogUtil.error("计算某人之前某段时间收益出错!!", e);
+      errorService.saveScheduleError(jobtask.getType(), jobtask.getId(), "计算某人之前某段时间收益出错!!");
     }
-    // 计算最后一天的订单
-    IncomeThreadPool.exServ.execute(new Runnable() {
-      @Override
-      public void run() {
-        List<OrderGoods> goodList = orderGoodsRep.findByorderNoByDateAndSalesman(userId, endTime, endDay);
-        mainIncomeService.caculatePayedOrder(userId, planId, endDay, goodList, regionId, 0);
-      }
-    });
-    
   }
   
   /**

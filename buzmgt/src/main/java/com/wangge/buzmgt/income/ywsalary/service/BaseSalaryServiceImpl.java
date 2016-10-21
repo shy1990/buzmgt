@@ -6,22 +6,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +23,14 @@ import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.customtask.util.PredicateUtil;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
+import com.wangge.buzmgt.income.main.service.IncomeErrorService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.ywsalary.entity.BaseSalary;
 import com.wangge.buzmgt.income.ywsalary.entity.BaseSalaryUser;
 import com.wangge.buzmgt.income.ywsalary.repository.BaseSalaryRepository;
 import com.wangge.buzmgt.income.ywsalary.repository.BaseSalaryUserRepository;
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
@@ -60,6 +57,10 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   private MainIncomeRepository incomeRep;
   @Autowired
   SalesManRepository salesmanRep;
+  @Autowired
+  private LogService logService;
+  @Autowired
+  private IncomeErrorService errorService;
   
   /**
    * TODO 每次加载组织机构,无解
@@ -179,7 +180,8 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
       baseSalary.setAuthorName(author.getUsername());
       baseSalary = baseSalaryRepository.save(baseSalary);
       calThisMonthWithNewSalaryPlan(baseSalary, salesman);
-      LogUtil.info("用户" + author.getUsername() + "---" + author.getId() + "新建了一个薪资记录:" + baseSalary);
+      logService.log(null, "用户" + author.getUsername() + "---" + author.getId() + "新建了一个薪资记录:" + baseSalary,
+          EventType.SAVE);
     } catch (Exception e) {
       LogUtil.error("保存薪资新增记录出错", e);
       throw new Exception("保存薪资新增记录出错");
@@ -396,7 +398,8 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
       baseSalaryRepository.save(newSalary);
       // 重新计算工资
       calThisMonthWithNewSalaryPlan(newSalary, man);
-      LogUtil.info("用户" + authorName + "---" + authorId + "已修改一个记录:" + baseSalary + "/n 新工资为:" + salary);
+      logService.log(null, "用户" + authorName + "---" + authorId + "已修改一个记录:" + baseSalary + "/n 新工资为:" + salary,
+          EventType.UPDATE);
     } catch (ParseException e) {
       LogUtil.error("更新工资时出错", e);
       throw new Exception("更新工资时因时间转化出错");
@@ -433,11 +436,13 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
           incomeRep.updatebasicSalaryOrPunish(baseSalary, 0, baseSalary - main.getBasicSalary(), main.getId());
         } catch (Exception e) {
           LogUtil.error("月初计算本月工资出错", e);
+          errorService.save(52,"计算基本工资出错!!" + o1);
           throw new Exception("月初计算本月工资出错");
         }
       }
     } catch (Exception e) {
       LogUtil.error("月初计算本月工资出错", e);
+      errorService.save(52, "计算基本工资出错!!");
       throw new Exception("月初计算本月工资出错");
     }
   }

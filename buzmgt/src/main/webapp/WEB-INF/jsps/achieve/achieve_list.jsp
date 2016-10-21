@@ -54,7 +54,7 @@
             </td>
 
 
-            <td><a href="javascript:void(0)" onclick="addRegion('{{priceRangeId}}')">添加区域设置</a></td>
+            <td><a href="javascript:void(0)" onclick="seeRegion('{{priceRangeId}}')">查看区域设置</a></td>
             <td><span class="ph-on">进行中</span></td>
             <td>{{priceRangeCreateDate}}</td>
             <td>

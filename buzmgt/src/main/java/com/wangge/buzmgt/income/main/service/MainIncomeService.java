@@ -85,11 +85,16 @@ public interface MainIncomeService {
       int achieveFlag);
   
   /**
-   * 删除分支订单收益 <br/>
+   * 删除单人主方案订单收益 <br/>
    * 
    * @throws Exception
    */
   void deleteSubIncome(Long planId, String userId, Date startDate) throws Exception;
+  
+  /**
+   * 
+   * */
+  void deleteManinPlanIncome(Long planId,Date startDate) throws Exception;
   
   /**
    * 每月一算,总结计算

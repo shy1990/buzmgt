@@ -147,7 +147,7 @@ public class BankTradeServiceImpl implements BankTradeService {
 
       private final static String TYPE_ORDERSIGNFOR_TYPE = "com.wangge.buzmgt.cash.entity.Cash$CashStatusEnum";
 
-      private final static String TYPE_FlAG_TYPE = "com.wangge.buzmgt.ywsalary.entity.FlagEnum";
+      private final static String TYPE_FlAG_TYPE = "com.wangge.buzmgt.common.FlagEnum";
       
       private final static String TYPE_DATE = "java.util.Date";
 

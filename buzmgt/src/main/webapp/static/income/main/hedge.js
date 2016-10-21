@@ -26,7 +26,7 @@ function initFileUpload() {
 			if (data.result.result === "failure") {
 				alert(data.result.message);
 			} else {
-				alert("上传完成");
+				alert(data.result.message);
 			}
 			// window.location.reload();
 		}
@@ -62,7 +62,7 @@ var WsearchData = {
 };
 var itemTotal = 0;
 // 加载页面
-function findPlanUserList(flag, page) {
+function findPlanUserList(flag,page) {
 	page = page == null || page == '' ? WsearchData.page : page;
 	WsearchData.page = page;
 	if (flag == 0) {
@@ -113,7 +113,7 @@ function oilCostPaging(data) {
 		showCount : 5,
 		limit : limit,
 		callback : function(curr, limit, totalCount) {
-			findPlanUserList(curr - 1);
+			findPlanUserList(2,curr - 1);
 		}
 	});
 }

@@ -49,10 +49,15 @@ function deleteUser() {
 	if (newDate == '') {
 		alert("必须选择日期!!");
 		return;
+	} else {
+		if (GetDateDiffStr(newDate, getTodayDate()) > 7) {
+			alert("最多向前删除一周时间,请重选删除时间");
+			return;
+		}
 	}
 	var fqsj = salesArr[gloIndex - 1].fqsj;
 	if (undefined != fqsj && null != fqsj && fqsj != "") {
-		alert("该用户将于" + fqsj + "计划中,无需重复删除");
+		alert("该用户将于" + fqsj + "删除,无需重复删除");
 		return;
 	} else {
 		salesArr[gloIndex - 1].fqsj = newDate;
@@ -62,6 +67,7 @@ function deleteUser() {
 		"fqtime" : newDate
 	}
 	var user = JSON.stringify(userData);
+
 	$.ajax({
 		url : base + "mainPlanUsers/deleteUser",
 		type : "post",
@@ -131,6 +137,7 @@ function initDateInput() {
 function openUser() {
 	$('#user').modal('show');
 }
+// 提交新增用户
 function commitUsers() {
 	var planUsers = [];
 	for (var i = 0; i < salesArr.length; i++) {
@@ -153,7 +160,8 @@ function commitUsers() {
 		},
 		dataType : "json",
 		success : function(orderData) {
-			if (orderData.msg.length > 2) {
+			if (orderData.errMsg.length > 2) {
+				var msg=orderData.errMsg.replace("->","\n");
 				alert(msg);
 				window.location.reload();
 			} else {
