@@ -39,6 +39,9 @@ public class Hedge {
   private Date shdate, inserttime;
   // 品牌数量
   private Integer sum;
+  // 商品单价
+  private Double price;
+  
   public String getOrderno() {
     return orderno;
   }
@@ -94,9 +97,8 @@ public class Hedge {
   public void setId(Long id) {
     this.id = id;
   }
-
   
-  public Hedge(String orderno, String sku, String goodsName, Integer sum, Date shdate, String uniquenumber) {
+  public Hedge(String orderno, String sku, String goodsName, Integer sum, Double price,Date shdate, String uniquenumber) {
     super();
     this.orderno = orderno;
     this.sku = sku;
@@ -104,12 +106,12 @@ public class Hedge {
     this.goodsName = goodsName;
     this.shdate = shdate;
     this.sum = sum;
+    this.price=price;
   }
   
   public Hedge() {
     super();
   }
-  
   
   public Date getInserttime() {
     return inserttime;
@@ -117,6 +119,14 @@ public class Hedge {
   
   public void setInserttime(Date inserttime) {
     this.inserttime = inserttime;
+  }
+  
+  public Double getPrice() {
+    return price;
+  }
+
+  public void setPrice(Double price) {
+    this.price = price;
   }
 
   @Override

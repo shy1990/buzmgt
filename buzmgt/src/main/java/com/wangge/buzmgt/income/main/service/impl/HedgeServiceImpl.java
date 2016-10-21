@@ -57,9 +57,12 @@ public class HedgeServiceImpl implements HedgeService {
     try {
       excelContent.forEach((key, val) -> {
         String[] vals = val.split("-->");
-        Hedge hedge = new Hedge(vals[0], vals[1], vals[2], Integer.valueOf(vals[3]), DateUtil.string2Date(vals[4]),
-            vals[5]);
-        uList.add(hedge);
+        //订单号不能为空
+        if (!vals[0].toString().equals("空")) {
+          Hedge hedge = new Hedge(vals[0], vals[1], vals[2], Integer.valueOf(vals[4]), Double.valueOf(vals[3]),
+              DateUtil.string2Date(vals[5]), vals[6]);
+          uList.add(hedge);
+        }
       });
       if (uList.size() > 0) {
         hedgeRep.save(uList);
