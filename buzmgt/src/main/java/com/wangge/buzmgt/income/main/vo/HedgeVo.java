@@ -23,8 +23,8 @@ public class HedgeVo {
   private Long id;
   // 订单号,sku号,唯一码 s.user_id, s.truename,r.namepath
   private String orderno, sku, uniquenumber, userId, namepath, truename, shopName, regionId, shopRegionId;
-  // 型号名称
-  private String goodsName;
+  // 商品ID,型号名称
+  private String goodsId,goodsName;
   // 到货日期
   private Date shdate;
   // 品牌数量,是否已计算
@@ -146,5 +146,13 @@ public class HedgeVo {
   
   public void setShopRegionId(String shopRegionId) {
     this.shopRegionId = shopRegionId;
+  }
+
+  public String getGoodsId() {
+    return goodsId;
+  }
+
+  public void setGoodsId(String goodsId) {
+    this.goodsId = goodsId;
   }
 }

@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.income.main.service;
 
+import com.wangge.buzmgt.achieveaward.entity.Award;
 import com.wangge.buzmgt.income.main.vo.HedgeVo;
 import com.wangge.buzmgt.region.entity.Region;
 import org.springframework.data.domain.Page;
@@ -58,7 +59,7 @@ public interface HedgeService {
   /**
    *
    * @Title: findAll
-   * @Description: 根据条件统计退货冲减订单(品牌型号)
+   * @Description: 根据条件统计退货冲减订单(品牌型号,达量奖励)
    * @param @param request
    * @param @param region
    * @param @param pageable
@@ -66,7 +67,7 @@ public interface HedgeService {
    * @return Page<HedgeVo>    返回类型
    * @throws
    */
-  Page<HedgeVo> findAll(HttpServletRequest request, Region region, Pageable pageable);
+  Page<HedgeVo> findAll(HttpServletRequest request, Region region, Award award, Pageable pageable);
 
   /**
    *
@@ -78,7 +79,7 @@ public interface HedgeService {
    * @return Page<HedgeVo>    返回类型
    * @throws
    */
-  List<HedgeVo> findAll(HttpServletRequest request, Region region);
+  List<HedgeVo> findAll(HttpServletRequest request, Region region, Award award);
   
   void calculateHedge();
 

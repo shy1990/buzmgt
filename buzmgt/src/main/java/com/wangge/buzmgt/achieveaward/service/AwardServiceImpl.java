@@ -22,6 +22,7 @@ import com.wangge.buzmgt.brandincome.service.BrandIncomeServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.domain.Sort.Direction;
@@ -309,13 +310,13 @@ public class AwardServiceImpl implements AwardService {
   public Page<BrandIncomeVo> findAll(HttpServletRequest request, Award award, Pageable pageable) {
     Page<BrandIncomeVo> pageResult = null;
     String hql = executeSql(request, award);
-    Query q = entityManager.createNativeQuery(hql);
+    Query query = entityManager.createNativeQuery(hql);
     int page = pageable.getPageNumber();
     int size = pageable.getPageSize();
-    int count = q.getResultList().size();
-    q.setFirstResult(page * size);
-    q.setMaxResults(size);
-    List<BrandIncomeVo> list = brandIncomeService.findBySql(q);
+    int count = query.getResultList().size();
+    query.setFirstResult(page * size);
+    query.setMaxResults(size);
+    List<BrandIncomeVo> list = findBySql(query);
     pageResult = new PageImpl<BrandIncomeVo>(list, new PageRequest(page, size), count);
     return pageResult;
   }
@@ -324,7 +325,7 @@ public class AwardServiceImpl implements AwardService {
   public List<BrandIncomeVo> findAll(HttpServletRequest request, Award award) {
     String hql = executeSql(request, award);
     Query q = entityManager.createNativeQuery(hql);
-    List<BrandIncomeVo> list = brandIncomeService.findBySql(q);
+    List<BrandIncomeVo> list = findBySql(q);
     return list;
   }
 
@@ -340,7 +341,7 @@ public class AwardServiceImpl implements AwardService {
     List<String> goodIds = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(awardGoods)){
       awardGoods.forEach(awardGood -> {
-        goodIds.add(awardGood.getGoodId());
+        goodIds.add("'" + awardGood.getGoodId() + "'");
       });
     }
     String hql = "select distinct g.region_id,\n" +
@@ -351,20 +352,31 @@ public class AwardServiceImpl implements AwardService {
             "                g.goods_id,\n" +
             "                g.stars_level,\n" +
             "                s.level_name,\n" +
-            "                b.start_date,\n" +
-            "                b.end_date,\n" +
-            "                b.status,\n" +
-            "                g.namepath\n" +
+            "                aas.start_date,\n" +
+            "                aas.end_date,\n" +
+            "                aas.status,\n" +
+            "                g.namepath,\n" +
+            "                aas.NUMBER_FIRST,\n" +
+            "                aas.NUMBER_SECOND,\n" +
+            "                aas.NUMBER_THIRD,\n" +
+            "                gn.GROUP_NAME\n" +
             "  from sys_goods_order g\n" +
             " inner join sys_salesman s\n" +
             "    on g.region_id = s.region_id\n" +
-            " inner join sys_brand_income b\n" +
-            "    on g.goods_id = b.good_id\n" +
-            "where to_char(g.PAY_TIME, 'yyyy-mm-dd') between\n" +
-            "       to_char(b.start_date, 'yyyy-mm-dd') and\n" +
-            "       to_char(b.end_date, 'yyyy-mm-dd')\n" +
-            "   and g.goods_id in (" + goodIds + ")";
+            " inner join SYS_AWARD_SET_GOODS asg\n" +
+            "    on g.goods_id = asg.good_id\n" +
+            " inner join SYS_ACHIEVE_AWARD_SET aas\n" +
+            "    on asg.AWARD_ID = aas.AWARD_ID\n" +
+            " inner join SYS_AWARD_SET_GROUP setGroup\n" +
+            "    on aas.AWARD_ID = setGroup.SYS_AWARD_ID\n" +
+            " inner join SYS_GROUPING_NUMBER gn\n" +
+            "    on setGroup.GROUPING_ID = gn.GROUP_ID\n" +
+            "where gn.TYPE='REWARD' and to_char(g.PAY_TIME, 'yyyy-mm-dd') between\n" +
+            "       to_char(aas.start_date, 'yyyy-mm-dd') and\n" +
+            "       to_char(aas.end_date, 'yyyy-mm-dd')";
 
+    String[] arr = (String[])goodIds.toArray(new String[goodIds.size()]);
+    hql += "\n and g.goods_id in (" + String.join(",",arr) + ")";
     String starsLevel = request.getParameter("starsLevel");
     if (StringUtils.isNotEmpty(starsLevel)) {
       hql += "\n and g.stars_level = '" + starsLevel + "'";
@@ -385,7 +397,7 @@ public class AwardServiceImpl implements AwardService {
    *
    * @param query
    * @return
-   *//*
+   */
   private List<BrandIncomeVo> findBySql(Query query) {
     List<BrandIncomeVo> list = new ArrayList<>();
     List<Object[]> ret = query.getResultList();
@@ -404,9 +416,13 @@ public class AwardServiceImpl implements AwardService {
         bi.setEndDate((Date) o[9]);
         bi.setStatus((String) o[10]);
         bi.setNamepath((String) o[11]);
+        bi.setNumberFirst(((BigDecimal) o[12]).intValue());
+        bi.setNumberSecond(((BigDecimal) o[13]).intValue());
+        bi.setNumberThird(((BigDecimal) o[14]).intValue());
+        bi.setGroupName((String) o[15]);
         list.add(bi);
       });
     }
     return list;
-  }*/
+  }
 }

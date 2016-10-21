@@ -88,7 +88,7 @@
                    data-target="#brand">修改</a>--%>
             </td>
             <td>{{formDate startDate}}-{{formDate endDate}}</td>
-            <td><a href=""><span class="text-blue">查看区域属性</span></a></td>
+            <td><a href="javascript:void(0);" onclick="showArea('{{id}}');"><span class="text-blue">查看区域属性</span></a></td>
             <td><span class="ph-on">进行中</span></td>
 
             <td>{{formDate createDate}}</td>
@@ -580,6 +580,11 @@
     function toAudit() {
         var planId = $("#planId").val();
         window.location.href = base + "brandIncome/toAudit?planId=" + planId;
+    }
+
+    /*查看区域属性*/
+    function showArea(id) {
+        window.location.href = '/areaAttr/show?ruleId='+id +'&type=BRANDMODEL';
     }
 </script>
 <script>
