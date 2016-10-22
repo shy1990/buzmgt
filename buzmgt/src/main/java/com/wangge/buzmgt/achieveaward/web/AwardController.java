@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
 import com.wangge.buzmgt.income.main.service.HedgeService;
+import com.wangge.buzmgt.income.schedule.service.JobService;
 import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import org.apache.commons.collections.CollectionUtils;
@@ -66,6 +67,8 @@ public class AwardController {
   private MachineTypeService machineTypeServer;
   @Autowired
   private SalesManService salesManService;
+  @Autowired
+  private JobService jobService;
   @Autowired
   private HedgeService hedgeService;
 
@@ -299,6 +302,8 @@ public class AwardController {
       AwardStatusEnum statusEnum = AwardStatusEnum.valueOf(status);
       award.setStatus(statusEnum);
       awardServer.save(award);
+	    //保存定时任务
+	    jobService.saveJobTask(40,Long.valueOf(award.getPlanId()),award.getAwardId(),award.getIssuingDate());
       logService.log(null, "修改审核状态=" + status, EventType.UPDATE);
       json.put("result", "success");
       json.put("message", "操作成功");

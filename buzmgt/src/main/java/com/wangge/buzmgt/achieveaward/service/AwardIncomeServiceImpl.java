@@ -7,6 +7,7 @@ import com.wangge.buzmgt.achieveaward.entity.AwardIncome;
 import com.wangge.buzmgt.achieveaward.repository.AwardIncomeRepository;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
+import com.wangge.buzmgt.income.main.repository.HedgeCostRepository;
 import com.wangge.buzmgt.income.main.service.IncomeErrorService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
@@ -42,6 +43,8 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 
 	@Autowired
 	private AwardIncomeRepository awardIncomeRepository;
+	@Autowired
+	private HedgeCostRepository hedgeCostRepository;
 
 	@Autowired
 	private AwardService awardService;
@@ -132,7 +135,7 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 			incomeMoney = disposeAwardIncome(award, userId, totalNum).doubleValue();
 			if(awardIncomes.size()>0){
 				awardIncomeRepository.save(awardIncomes);
-				mainIncomeService.updateAchieveIncome(userId, incomeMoney);
+//				mainIncomeService.updateAchieveIncome(userId, incomeMoney);
 			}
 		} catch (Exception e) {
 			incomeErrorService.save(null, userId, "计算达量奖励收益出现问题："+e.getMessage(), goodIds.toString(), 4, award.getAwardId());
@@ -167,11 +170,15 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 	 * 增加对应阶段区间量值; 3.根据数量计算提成金额
 	 */
 	private Float disposeAwardIncome(Award ac, String userId, Integer totalNum) {
+		List<String> goodIds = new ArrayList<>();
 		Float money = 0f;
 		try {
 
+			ac.getAwardGoods().forEach(awardGood -> {
+				goodIds.add(awardGood.getGoodId());
+			});
 			//查询售后冲减的量
-			Integer afterSaleNum = 0;//findAfterSaleNum(ac.getAchieveId(), userId);
+			Integer afterSaleNum = hedgeCostRepository.countByGoodIds(goodIds, userId);//findAfterSaleNum(ac.getAchieveId(), userId);
 			//实际销量=规则销量+即将发生的销量-售后冲减量
 			Integer nowNumber = totalNum - afterSaleNum;
 			// 计算后的收益

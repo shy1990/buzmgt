@@ -7,8 +7,8 @@ import java.util.List;
 
 /**
  * 
-* @ClassName: AchieveIncomeRepositoryCustom
-* @Description: 达量提成自定义sql执行
+* @ClassName: CustomRepository
+* @Description: 达量达量奖励提成自定义sql执行
 * @author ChenGuop
 * @date 2016年9月23日 上午9:58:22
 *

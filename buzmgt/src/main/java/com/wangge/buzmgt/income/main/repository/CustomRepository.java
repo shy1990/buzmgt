@@ -2,6 +2,8 @@ package com.wangge.buzmgt.income.main.repository;/**
  * Created by ChenGuop on 2016/10/11.
  */
 
+import java.util.List;
+
 /**
  * 自定义查询售后冲减
  * CustomRepository
@@ -27,4 +29,10 @@ public interface CustomRepository {
 	 */
 	Long countByRuleIdAndRuleTypeAndUserId(Long ruleId,Integer ruleType,String userId);
 
+	/**
+	 * 根据goodIds列表查询售后冲减数量
+	 * @param goodIds
+	 * @return
+	 */
+	Integer countByGoodIds(List<String> goodIds, String userId);
 }
