@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wangge.buzmgt.achieveaward.service.AwardIncomeService;
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.common.IncomeCommon;
 import com.wangge.buzmgt.income.main.entity.IncomeMainplanUsers;
@@ -59,6 +60,8 @@ public class JobService {
   SuperpositonService superService;
   @Autowired
   AchieveIncomeService achieveService;
+  @Autowired
+  AwardIncomeService awardService;
   
   @Transactional(rollbackFor = Exception.class)
   public void initMonthIncome() {
@@ -88,13 +91,17 @@ public class JobService {
                 calIncomeMainPlanUser(jobtask);
                 break;
               case 20:
-                // 叠加计算 
+                // 叠加计算
                 superService.superIncomeCompute(jobtask.getPlanId(), jobtask.getKeyid());
                 superService.computeOneSingle(jobtask.getPlanId(), jobtask.getKeyid());
                 break;
               case 30:
-                // TODO 计算达量奖励 
+                // 计算达量收益
                 achieveService.calculateAchieveIncomeTotal(jobtask.getPlanId(), jobtask.getKeyid());
+                break;
+              case 40:
+                // 计算达量奖励
+                awardService.calculateAwardIncomeTotal(jobtask.getPlanId(), jobtask.getKeyid());
                 break;
               case 60:
                 calhedgeAchieve(jobtask);
@@ -204,7 +211,7 @@ public class JobService {
    * 
    * @author yangqc
    * @param type
-   *          类型2开头:叠加;20 叠加计算; 3开头:达量设置;30 达量计算;
+   *          类型2开头:叠加;20 叠加计算; 3开头:达量设置;30 达量计算;4达量奖励:40达量奖励计算
    * @param planId
    *          主方案id
    * @param keyid
