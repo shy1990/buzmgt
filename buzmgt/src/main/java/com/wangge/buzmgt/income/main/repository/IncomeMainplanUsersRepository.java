@@ -44,26 +44,35 @@ public interface IncomeMainplanUsersRepository
       + "        left join sys_salesman u on u.region_id = r.parent_id\n"
       + "        left join sys_user us on u.user_id = us.user_id\n"
       + "        left join sys_income_mainplan_users iu on u.user_id = iu.salesman_id\n"
-      + "        left join sys_income_plan_main m on iu.plain_id = m.id  where us.status = 0\n"
-      + "         and m.createtime>?1 and (m.fqtime is null or m.fqtime<?1)\n"
-      + "         and (iu.fqtime is null or  iu.fqtime<?1) and m.state = 0\n"
+      + "        left join sys_income_plan_main m on iu.plain_id = m.id  where (us.status=0 or (u.fireddate>=?1 ) ) \n"
+      + "         and m.createtime<=?1 and (m.fqtime is null or m.fqtime>=?1) \n"
+      + "         and (iu.fqtime is null or  iu.fqtime>=?1) and (m.fqtime is null or m.fqtime >=?1)\n"
       + "          and s.member_id =?2 and rownum<2", nativeQuery = true)
   Object findsaleByDateAndMemberId(Date Date, String member_id);
   
-  @Query(value = "SELECT iu.plain_id  FROM sys_user us\n"
+  @Query(value = "SELECT iu.plain_id  FROM sys_user us  left join sys_salesman u on us.user_id=u.user_id \n"
       + "  left join sys_income_mainplan_users iu on us.user_id = iu.salesman_id\n"
-      + "  left join sys_income_plan_main m on iu.plain_id = m.id\n" + " where us.status = 0\n"
-      + "   and m.createtime >? 1    and (m.fqtime is null or m.fqtime < ? 1)\n"
-      + "   and (iu.fqtime is null or iu.fqtime < ? 1)   and m.state = 0  and us.user_id = ?2\n"
+      + "  left join sys_income_plan_main m on iu.plain_id = m.id \n" + " where (us.status=0 or (u.fireddate>=?1 ) ) \n"
+      + "   and m.createtime <=?1    and (m.fqtime is null or m.fqtime >= ?1)\n"
+      + "   and (iu.fqtime is null or iu.fqtime >= ?1)   and m.state = 0  and us.user_id = ?2\n"
       + "   and rownum < 2", nativeQuery = true)
   Optional<Long> findBysalesmanAndDate(Date payDate, String userId);
   
-  @Query(value = 
-      "SELECT iu.salesman_id,iu.createtime,iu.fqtime,m.fqtime planfqsj,s.fireddate  FROM sys_user us\n" +
-          "              left join sys_income_mainplan_users iu on us.user_id = iu.salesman_id\n" + 
-          "              left join  sys_salesman s on s.user_id=us.user_id \n" + 
-          "              left join sys_income_plan_main m on iu.plain_id = m.id  where\n" + 
-          "                (m.fqtime is null or m.fqtime >=?1 )        and (iu.fqtime is null or iu.fqtime >?1 )\n" + 
-          "               and   (us.status=0 or (s.fireddate<=?1 )) and m.id=?2", nativeQuery = true)
-  List<Object> findEffectiveUserTime(Date startDate, Long planId);
+  @Query(value = "SELECT iu.salesman_id,iu.createtime,iu.fqtime,m.fqtime planfqsj,s.fireddate  FROM sys_user us\n"
+      + "              left join sys_income_mainplan_users iu on us.user_id = iu.salesman_id\n"
+      + "              left join  sys_salesman s on s.user_id=us.user_id \n"
+      + "              left join sys_income_plan_main m on iu.plain_id = m.id  where \n"
+      + "        m.createtime <=?1   and   (m.fqtime is null or m.fqtime >=?1 )      "
+      + "       and (iu.fqtime is null or iu.fqtime >=?1 )\n "
+      + "               and   (us.status=0 or (s.fireddate>=?1 )) and m.id=?2", nativeQuery = true)
+  List<Object> findEffectiveUsersTime(Date startDate, Long planId);
+  
+  @Query(value = "SELECT iu.salesman_id,iu.createtime,iu.fqtime,m.fqtime planfqsj,s.fireddate  FROM sys_user us\n"
+      + "              left join sys_income_mainplan_users iu on us.user_id = iu.salesman_id\n"
+      + "              left join  sys_salesman s on s.user_id=us.user_id \n"
+      + "              left join sys_income_plan_main m on iu.plain_id = m.id  where \n"
+      + "            m.createtime <=?1   and    (m.fqtime is null or m.fqtime >=?1 ) "
+      + "     and (iu.fqtime is null or iu.fqtime >?1 )   \n"
+      + "               and   (us.status=0 or (s.fireddate<=?1 )) and m.id=?2 and us.user_id=?3 ", nativeQuery = true)
+  Object findEffectiveUserTime(Date startDate, Long planId, String userId);
 }

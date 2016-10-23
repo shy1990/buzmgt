@@ -62,7 +62,7 @@ public interface MainPlanService {
    * 
    * @author yangqc
    * @param plan
-   * @return 
+   * @return
    * @throws Exception
    * @since JDK 1.8
    */
@@ -140,4 +140,19 @@ public interface MainPlanService {
    */
   List<Map<String, Object>> findEffectUserDateList(Long planId, Date startDate, Date endDate);
   
+  /**
+   * 查询某主方案下具体某个业务的达量或叠加规则人员的有效开始时间和结束时间. <br/>
+   * 
+   * @param planId
+   *          方案id
+   * @param startDate
+   *          规则开始时间
+   * @param endDate
+   *          规则结束时间
+   * @param userId
+   *          业务Id
+   * @return 没结果则为null; map(主键:类型)-> userId:String;endDate:Date;startDate:Date
+   * @since JDK 1.8
+   */
+  Map<String, Object> findEffectUserDate(Long planId, Date startDate, Date endDate, String userId);
 }
