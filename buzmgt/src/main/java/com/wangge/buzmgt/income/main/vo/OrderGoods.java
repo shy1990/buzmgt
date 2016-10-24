@@ -22,12 +22,12 @@ public class OrderGoods {
   @Id
   private String orderItemId;
   // 订单号;商品ID,商品名称,机型,品牌名称,品牌ID,sku编码,cat
-  private String orderNo, goodId, goodName, machineType, brandName, brandid, skuNum, cat;
+  private String orderNo, goodId, goodName, machineType, brandName, brandid, skuNum, cat,userId;
   private Double amount;
   private Integer nums;
   private float price;
   @Temporal(TemporalType.DATE)
-  private Date payDate;
+  private Date signTime;
   
   public String getOrderItemId() {
     return orderItemId;
@@ -77,6 +77,14 @@ public class OrderGoods {
     this.skuNum = skuNum;
   }
   
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
   public String getCat() {
     return cat;
   }
@@ -125,12 +133,12 @@ public class OrderGoods {
     this.brandName = brandName;
   }
   
-  public Date getPayDate() {
-    return payDate;
+  public Date getSignTime() {
+    return signTime;
   }
   
-  public void setPayDate(Date payDate) {
-    this.payDate = payDate;
+  public void setSignTime(Date signTime) {
+    this.signTime = signTime;
   }
   
   public void setPrice(float price) {

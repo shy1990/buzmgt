@@ -39,16 +39,14 @@ public interface IncomeMainplanUsersRepository
    * @return
    * @since JDK 1.8
    */
-  @Query(value = "SELECT  iu.plain_id,iu.salesman_id,u.region_id   FROM sys_registdata s\n"
-      + "        left join sys_region r on r.region_id = s.region_id\n"
-      + "        left join sys_salesman u on u.region_id = r.parent_id\n"
-      + "        left join sys_user us on u.user_id = us.user_id\n"
-      + "        left join sys_income_mainplan_users iu on u.user_id = iu.salesman_id\n"
-      + "        left join sys_income_plan_main m on iu.plain_id = m.id  where (us.status=0 or (u.fireddate>=?1 ) ) \n"
-      + "         and m.createtime<=?1 and (m.fqtime is null or m.fqtime>=?1) \n"
-      + "         and (iu.fqtime is null or  iu.fqtime>=?1) and (m.fqtime is null or m.fqtime >=?1)\n"
-      + "          and s.member_id =?2 and rownum<2", nativeQuery = true)
-  Object findsaleByDateAndMemberId(Date Date, String member_id);
+  @Query(value = "SELECT iu.plain_id, iu.salesman_id, u.region_id\n" + "  FROM biz_order_signfor s\n"
+      + "  left join sys_salesman u on s.user_id = u.user_id\n" + "  left join sys_user us on u.user_id = us.user_id\n"
+      + "  left join sys_income_mainplan_users iu on u.user_id = iu.salesman_id\n"
+      + "  left join sys_income_plan_main m on iu.plain_id = m.id\n" + " where (us.status = 0 or (u.fireddate >= ?1))\n"
+      + "   and m.createtime <= ?1    and (m.fqtime is null or m.fqtime >= ?1)\n"
+      + "   and (iu.fqtime is null or iu.fqtime >= ?1)\n" + "   and (m.fqtime is null or m.fqtime >= ?1)\n"
+      + "   and s.order_no = ?2\n" + "   and rownum < 2", nativeQuery = true)
+  Object findsaleByDateAndOrderNo(Date Date, String orderNO);
   
   @Query(value = "SELECT iu.plain_id  FROM sys_user us  left join sys_salesman u on us.user_id=u.user_id \n"
       + "  left join sys_income_mainplan_users iu on us.user_id = iu.salesman_id\n"

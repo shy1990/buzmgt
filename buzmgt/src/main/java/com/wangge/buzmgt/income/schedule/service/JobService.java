@@ -104,6 +104,7 @@ public class JobService {
                 awardService.calculateAwardIncomeTotal(jobtask.getPlanId(), jobtask.getKeyid());
                 break;
               case 60:
+                //计算冲减
                 calhedgeAchieve(jobtask);
                 break;
               default:
