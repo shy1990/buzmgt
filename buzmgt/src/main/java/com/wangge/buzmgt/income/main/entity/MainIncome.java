@@ -212,4 +212,13 @@ public class MainIncome {
         - this.punish;
     this.setAllresult(result);
   }
+
+  @Override
+  public String toString() {
+    return "MainIncome [id=" + id + ", salesman=" + salesman + ", basicSalary=" + basicSalary + ", busiIncome="
+        + busiIncome + ", oilIncome=" + oilIncome + ", punish=" + punish + ", reachIncome=" + reachIncome
+        + ", overlyingIncome=" + overlyingIncome + ", hedgecut=" + hedgecut + ", allresult=" + allresult + ", state="
+        + state + ", month=" + month + "]";
+  }
+  
 }

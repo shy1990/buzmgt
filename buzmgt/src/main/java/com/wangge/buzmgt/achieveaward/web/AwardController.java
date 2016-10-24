@@ -1,16 +1,13 @@
 package com.wangge.buzmgt.achieveaward.web;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
 import com.wangge.buzmgt.income.main.service.HedgeService;
+import com.wangge.buzmgt.income.schedule.service.JobService;
 import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import org.apache.commons.collections.CollectionUtils;
@@ -70,6 +67,8 @@ public class AwardController {
   private MachineTypeService machineTypeServer;
   @Autowired
   private SalesManService salesManService;
+  @Autowired
+  private JobService jobService;
   @Autowired
   private HedgeService hedgeService;
 
@@ -303,6 +302,8 @@ public class AwardController {
       AwardStatusEnum statusEnum = AwardStatusEnum.valueOf(status);
       award.setStatus(statusEnum);
       awardServer.save(award);
+	    //保存定时任务
+	    jobService.saveJobTask(40,Long.valueOf(award.getPlanId()),award.getAwardId(),award.getIssuingDate());
       logService.log(null, "修改审核状态=" + status, EventType.UPDATE);
       json.put("result", "success");
       json.put("message", "操作成功");
@@ -416,7 +417,7 @@ public class AwardController {
   @RequestMapping(value = "/process/{awardId}", method = RequestMethod.GET)
   public String toProcess(@PathVariable(value = "awardId") Award award, Model model) {
     List<SalesmanLevel> salesmanLevels = salesManService.findAll();
-    List<AwardGood> awardGoods = award.getAwardGoods();
+    Set<AwardGood> awardGoods = award.getAwardGoods();
     List<String> goodIds = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(awardGoods)){
       awardGoods.forEach(awardGood -> {
@@ -434,7 +435,6 @@ public class AwardController {
 
   /**
    * @param request
-   * @param brandIncome
    * @param pageable
    * @param @return     设定文件
    * @return Page<BrandIncome>    返回类型

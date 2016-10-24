@@ -37,6 +37,8 @@ import com.wangge.buzmgt.income.main.vo.repository.MainIncomeVoRepository;
 import com.wangge.buzmgt.income.main.vo.repository.OrderGoodsRepository;
 import com.wangge.buzmgt.income.main.vo.repository.PlanUserVoRepository;
 import com.wangge.buzmgt.income.ywsalary.service.BaseSalaryService;
+import com.wangge.buzmgt.log.entity.Log.EventType;
+import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.section.service.ProductionService;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
@@ -68,6 +70,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   ProductionService productionService;
   @Autowired
   IncomeErrorService errorService;
+  @Autowired
+  private LogService logService;
   
   /**
    * 要避免多线程冲突 <br/>
@@ -79,8 +83,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    * 5.调用叠加处理逻辑<br/>
    */
   @Override
-  public void caculateOutedOrder(String orderNo, String memberId, String payStatus, Date payDate) {
-    Object userO = mainPlanUserRep.findsaleByDateAndMemberId(new Date(), memberId);
+  public void caculateOutedOrder(String orderNo) {
+    Object userO = mainPlanUserRep.findsaleByDateAndOrderNo (new Date(), orderNo);
     if (null == userO) {
       return;
     }
@@ -95,19 +99,19 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     if (goodList.size() < 1) {
       return;
     }
-    // 计算付款订单
-    if (payStatus.equals("1")) {
-      userO = mainPlanUserRep.findsaleByDateAndMemberId(payDate, memberId);
-      if (null != userO) {
-        uers = (Object[]) userO;
-        Long planId1 = Long.valueOf(uers[0].toString());
-        String userId1 = uers[1].toString();
-        String regionId1 = uers[2].toString();
-        if (null != planId) {
-          caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList), regionId1, 1);
-        }
-      }
-    }
+//    // 计算付款订单
+//    if (payStatus.equals("1")) {
+//      userO = mainPlanUserRep.findsaleByDateAndMemberId(payDate, memberId);
+//      if (null != userO) {
+//        uers = (Object[]) userO;
+//        Long planId1 = Long.valueOf(uers[0].toString());
+//        String userId1 = uers[1].toString();
+//        String regionId1 = uers[2].toString();
+//        if (null != planId) {
+//          caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList), regionId1, 1);
+//        }
+//      }
+//    }
     // 计算出库订单
     List<String> goodIdList = new ArrayList<>();
     for (OrderGoods good : goodList) {
@@ -380,9 +384,25 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void deleteManinPlanIncome(Long planId, Date startDate) throws Exception {
-    mainIncomeRep.delAchieveIncomeByPlanId(planId, startDate);
-    mainIncomeRep.delBrandIncomeByPlanId(planId, startDate);
-    mainIncomeRep.delPriceIncomeByPlanId(planId, startDate);
+    try {
+      mainIncomeRep.delAchieveIncomeByPlanId(planId, startDate);
+      mainIncomeRep.delBrandIncomeByPlanId(planId, startDate);
+      mainIncomeRep.delPriceIncomeByPlanId(planId, startDate);
+    } catch (Exception e) {
+      throw new Exception("删除" + planId + "的主方案收益出错,删除日期:" + startDate);
+    }
+    
+  }
+  
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void check(Long id) throws Exception {
+    try {
+      mainIncomeRep.updateById(CheckedEnum.CHECKED, id);
+      logService.log(null, "审批id为" + id + "的工资", EventType.UPDATE);
+    } catch (Exception e) {
+      throw new Exception("审批id为" + id + "的工资出错");
+    }
   }
   
 }

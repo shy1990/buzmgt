@@ -102,7 +102,7 @@
 			</div>
 			<!--待审核账单-->
 		</div>
-		<div id="usersPager"></div>
+		<div id="usersPager" class="wait-page-index"></div>
 		<!--table-box-->
 		<!--油补记录-->
 	</div>
@@ -156,7 +156,6 @@
 		charset="utf-8"></script>
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
-	<script src='/static/js/dateutil.js'></script>
 	<script src="/static/income/main/hedge.js" type="text/javascript"
 		charset="utf-8"></script>
 	<script type="text/javascript">

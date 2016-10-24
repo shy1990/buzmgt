@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wangge.buzmgt.common.CheckedEnum;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 
 public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, JpaSpecificationExecutor<MainIncome> {
@@ -26,12 +27,17 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
   @Procedure("oil_daily_calculate_prod")
   void calculateOilCost();
   
-  /** 
-    *计算业务佣金和
-    * 
-    */  
+  /**
+   * 计算业务佣金和
+   * 
+   */
   @Procedure("income_month_Busi_all")
   void calIncomePerMonth();
+  
+  @Modifying(clearAutomatically = true)
+  @Transactional(rollbackFor = Exception.class)
+  @Query("update MainIncome i set i.state=?1 where i.id=?2")
+  void updateById(CheckedEnum check, Long id);
   
   /*
    * 刷新纪录,用于订单计算

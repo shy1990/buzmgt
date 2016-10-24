@@ -1,18 +1,10 @@
 package com.wangge.buzmgt.plan.entity;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.wangge.buzmgt.income.main.vo.PlanUserVo;
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 

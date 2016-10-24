@@ -214,7 +214,7 @@ public class ProductionServiceImpl implements ProductionService {
                         sectionRecord.setNum(num);
                         sectionRecord.setOrderflag(0);//出库计算
                         SectionRecord sectionRecord1 = sectionRecordService.save(sectionRecord);
-                        logService.log(null, "区间方案单品出库计算: " + sectionRecord1, Log.EventType.SAVE);
+//                        logService.log(null, "新增收益主方案: " + sectionRecord1, Log.EventType.SAVE);
                         logger.info(sectionRecord1);
                     }
                 });

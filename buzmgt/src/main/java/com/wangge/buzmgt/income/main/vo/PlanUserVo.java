@@ -16,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "view_income_main_plan_user")
-public class PlanUserVo implements Serializable{
+public class PlanUserVo{
   @Id
   private String userId;
   private String truename, rolename, levelName, namepath, plantitle;

@@ -15,6 +15,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.wangge.buzmgt.BuzmgtApplication;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
+import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
@@ -38,7 +39,8 @@ public class ApplicationTest {
   MainIncomeService mainIncomeService;
   @Autowired
   MainPlanService planService;
-  
+  @Autowired
+  MainIncomePlanRepository planRep;
   @Test
   public void testPro() {
     mainIncomeRep.initMonthSalary();
@@ -62,16 +64,17 @@ public class ApplicationTest {
   
   @Test
   public void testQt() {
-    mainIncomeService.caculateOutedOrder("20160620174259875", "c178c6ff92334a379b9c75af8720b4ac", "1",
-        DateUtil.string2Date("2016-09-29 15:30:16"));
+    mainIncomeService.caculateOutedOrder("20160620174259875");
   }
   @Test
   public void testDate() {
-    List<Map<String, Object>> userList = planService.findEffectUserDateList(20L, DateUtil.string2Date("2016-09-01"),
-        DateUtil.string2Date("2016-09-30"));
-    for (Map<String, Object> usr : userList) {
-      System.out
-          .println(usr.get("userId").toString() + usr.get("startDate").toString() + usr.get("endDate").toString());
-    }
+    planUserRep.findsaleByDateAndOrderNo(DateUtil.string2Date("2016-09-01"), "sfsdfa");
+    planUserRep.findBysalesmanAndDate(DateUtil.string2Date("2016-09-01"), "B37028206200");
+//    List<Map<String, Object>> userList = planService.findEffectUserDateList(20L, DateUtil.string2Date("2016-09-01"),
+//        DateUtil.string2Date("2016-09-30"));
+//    for (Map<String, Object> usr : userList) {
+//      System.out
+//          .println(usr.get("userId").toString() + usr.get("startDate").toString() + usr.get("endDate").toString());
+//    }
   }
 }

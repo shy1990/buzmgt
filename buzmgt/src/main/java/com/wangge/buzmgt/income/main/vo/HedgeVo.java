@@ -30,8 +30,9 @@ public class HedgeVo {
   // 品牌数量,是否已计算
   private Integer sum = 0;
   // 序号
-  private Integer ruletype;// 收益规则类型0价格区间1:品牌2达量3叠加 4达量奖励;
-	private Long ruleId;//规则ID；
+//  private Integer ruletype;
+  // 收益规则类型0价格区间1:品牌2达量3叠加 4达量奖励;
+//	private Long ruleId;//规则ID；
   //序号
   private Long rowind;
 
@@ -152,19 +153,4 @@ public class HedgeVo {
     this.shopRegionId = shopRegionId;
   }
 
-	public Integer getRuletype() {
-		return ruletype;
-	}
-
-	public void setRuletype(Integer ruletype) {
-		this.ruletype = ruletype;
-	}
-
-	public Long getRuleId() {
-		return ruleId;
-	}
-
-	public void setRuleId(Long ruleId) {
-		this.ruleId = ruleId;
-	}
 }

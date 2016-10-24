@@ -3,7 +3,12 @@ package com.wangge.buzmgt.achieve.repository;
 import java.math.BigDecimal;
 import java.util.*;
 
+import com.wangge.buzmgt.achieveaward.entity.Award;
+import com.wangge.buzmgt.achieveaward.entity.AwardIncome;
+import com.wangge.buzmgt.achieveaward.repository.AwardIncomeRepository;
+import com.wangge.buzmgt.achieveaward.repository.AwardRepository;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
+import com.wangge.buzmgt.util.DateUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,10 @@ import com.wangge.buzmgt.plan.repository.MachineTypeRepository;
 public class AchieveRepositoryTest {
   @Autowired
   private AchieveRepository achieveRepository;
+  @Autowired
+  private AwardRepository awardRepository;
+  @Autowired
+  private AwardIncomeRepository awardIncomeRepository;
   @Autowired
   private AchieveIncomeRepository achieveIncomeRepository;
   @Autowired
@@ -104,4 +113,14 @@ public class AchieveRepositoryTest {
     System.out.println(count);
   }
 
+  @Test
+  public void test3(){
+  	String [] goodIds = new String[]{"8d869d9e086d4afe8ca151995eb557fc","af5314c1d73b47b19233756053ac8503","a13221f975a74dcda2f39070b2fdd113"};
+  	List<AwardIncome> awardIncomes = awardIncomeRepository.findOrderByUserIdAndGoodsAndPayDate("A371602210",goodIds, DateUtil.string2Date("2016-08-15"),DateUtil.string2Date("2016-10-15"));
+  }
+  @Test
+  public void test4(){
+  	Award award = awardRepository.findByAwardId(10L);
+	  System.out.println(award);
+  }
 }

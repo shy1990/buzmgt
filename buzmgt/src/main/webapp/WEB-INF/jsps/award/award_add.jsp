@@ -314,7 +314,7 @@ var	base='<%=basePath%>';
 						<dl class="dl-horizontal">
 							<dt>补充说明：</dt>
 							<dd>
-								<textarea rows="10" cols="150" class="fl-left J_remark"></textarea>
+								<textarea rows="10" cols="100" class="fl-left J_remark"></textarea>
 
 							</dd>
 						</dl>
