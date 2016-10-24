@@ -28,20 +28,28 @@ public class AwardIncomeRepositoryImpl implements CustomRepository {
 	@PersistenceContext
 	private EntityManager em;
 
+	/**
+	 * 以客户签收（订单完结）时间为准
+	 * @param userId
+	 * @param goodIds
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
 	@Override
 	public List<AwardIncome> findOrderByUserIdAndGoodsAndPayDate(String userId, String[] goodIds, Date startDate, Date endDate) {
 		String startDate_ = DateUtil.date2String(startDate);
 		String endDate_ = DateUtil.date2String(endDate);
 		String goodIds_ = StringUtils.join(goodIds, "','");
-		String sql = "SELECT oi.GOOD_ID, os.ORDER_NO,oi.NAME,os.USER_ID, oi.NUMS, os.CUSTOM_SIGNFOR_TIME as pay_Time, oi.PRICE \n" +
+		String sql = "SELECT oi.GOOD_ID, os.ORDER_NO,oi.NAME,os.USER_ID, oi.NUMS, os.PAY_TIME as pay_Time, oi.PRICE \n" +
 						"FROM SYS_ORDER_ITEM oi \n" +
 						"inner JOIN BIZ_ORDER_SIGNFOR os on os.ORDER_NO = oi.ORDER_NUM\n" +
-						"where os.CUSTOM_SIGNFOR_TIME is not null \n" +
+						"where os.PAY_TIME is not null \n" +
 						"and os.user_id = '" + userId + "' \n" +
 						"and oi.good_id in ('" + goodIds_ + "') \n" +
-						"and os.CUSTOM_SIGNFOR_TIME >= TO_DATE('" + startDate_ + "', 'YYYY-MM-DD') \n" +
-						"and os.CUSTOM_SIGNFOR_TIME <= TO_DATE('" + endDate_ + "', 'YYYY-MM-DD')\n" +
-						"ORDER BY os.CUSTOM_SIGNFOR_TIME DESC";
+						"and os.PAY_TIME >= TO_DATE('" + startDate_ + "', 'YYYY-MM-DD') \n" +
+						"and os.PAY_TIME <= TO_DATE('" + endDate_ + "', 'YYYY-MM-DD')\n" +
+						"ORDER BY os.PAY_TIME DESC";
 
 		Query query = em.createNativeQuery(sql);
 		List<Object[]> objs = query.getResultList();
