@@ -159,8 +159,20 @@
 <body>
 
 <div class="content main">
-    <jsp:include page="income_set_menu.jsp"></jsp:include>
+    <h4 class="page-header">
+        <i class="ico ico-tcsz"></i>提成设置 <a href="javascript:history.back();"><i
+            class="ico icon-back fl-right"></i></a>
+        <input id="planId" hidden="hidden" value="${planId }">
+    </h4>
 
+    <ul class="nav nav-pills  nav-top" id="myTab">
+        <li title="priceSection"><a data-toggle="tab" href="#ajgqj">按价格区间</a></li>
+        <li title="brandIncome"><a data-toggle="tab" href="#ppxhao">品牌型号<span
+                class="qipao">2</span></a></li>
+        <li class="active" title="achieve"><a data-toggle="tab" href="#dlsz">达量设置</a></li>
+        <li title="superposition"><a data-toggle="tab" href="#djsz">叠加设置</a></li>
+        <li title="award"><a href="/award/list?planId=${planId}">达量奖励</a></li>
+    </ul>
     <div class="row">
         <!--col begin-->
         <div class="col-md-12">

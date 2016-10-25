@@ -28,7 +28,7 @@ function add_brand(){
 }
 
 function findTab(){
-	var tab = $('#myTab li.active').attr('data-title');
+	var tab = $('#myTab li.active').attr('title');
 	return tab;
 }
 
@@ -73,7 +73,7 @@ function delAchieve(achieveId){
  */
 function goSearch() {
 	var tab = findTab();
-	var goodName = $('.input-search').val();
+	var goodName = $('#searchGoodsname').val();
 	if (!isEmpty(goodName)) {
 		$.ajax({
 			url:"/goods/likeBrandName?name="+goodName,
