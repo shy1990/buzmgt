@@ -8,6 +8,7 @@ import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 import com.wangge.buzmgt.income.schedule.service.JobService;
 import com.wangge.buzmgt.log.entity.Log;
 import com.wangge.buzmgt.log.service.LogService;
+import com.wangge.buzmgt.salesman.entity.MonthPunishUp;
 import com.wangge.buzmgt.superposition.entity.*;
 import com.wangge.buzmgt.superposition.pojo.SuperpositionProgress;
 import com.wangge.buzmgt.superposition.pojo.UserGoodsNum;
@@ -232,7 +233,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
      * 收益表中:3-最终收益,0-原始记录,1-没计算之前冲减数据,2-计算之后的冲减数据
      *
      * @param planId  方案id
-     * @param superId 规则id
+     * @param
      * @return
      */
     /*
@@ -523,6 +524,241 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         }
 
         return superpositionRecord;
+    }
+
+    /**
+     * 导出进程
+     * @param planId
+     * @param superId
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    @Override
+    public List<SuperpositionProgress> exportProgress(Long planId, Long superId, String startDate, String endDate) {
+        String sql = "\n" +
+                "select \n" +
+                "  nvl(sum(progress.NUMS),0) as NUMS,\n" +
+                "  progress.USER_ID,\n" +
+                "  progress.TRUENAME,\n" +
+                "  progress.REGION_ID, \n" +
+                "  progress.TASK_ONE,\n" +
+                "  progress.TASK_TWO,\n" +
+                "  progress.TASK_THREE,\n" +
+                "  progress.IMPL_DATE,\n" +
+                "  progress.END_DATE,\n" +
+                "  progress.ONE_ADD,\n" +
+                "  progress.TWO_ADD,\n" +
+                "  progress.THREE_ADD,\n " +
+                "  progress.NAMEPATH,\n" +
+                "  progress.NAME " +
+                "from \n" +
+                "  (select \n" +
+                "    usr.TRUENAME,\n" +
+                "    usr.REGION_ID,\n" +
+                "    usr.USER_ID,\n" +
+                "    usr.NAMEPATH,\n" +
+                "    usr.PLAN_ID,\n" +
+                "    oder.SHOP_NAME,\n" +
+                "    oder.PAY_TIME,\n" +
+                "    oder.NUMS,\n" +
+                "    oder.NAMEPATH as SHOP_ADDRESS,\n" +
+                "    super.SU_PO_ID,\n" +
+                "    super.TASK_ONE,\n" +
+                "    super.TASK_TWO,\n" +
+                "    super.TASK_THREE,\n" +
+                "    super.IMPL_DATE,\n" +
+                "    super.END_DATE,\n" +
+                "    t.ONE_ADD,\n" +
+                "    t.TWO_ADD,\n" +
+                "    t.THREE_ADD,\n" +
+                "    t.NAME \n" +
+                "  from \n" +
+                "    VIEW_INCOME_MAIN_PLAN_USER usr\n" +
+                "  left join\n" +
+                "    SYS_SUPERPOSITION super\n" +
+                "  on\n" +
+                "    super.PLAN_ID = usr.PLAN_ID \n" +
+                "  left join\n" +
+                "    SYS_SUPER_GOODS_TYPE goods\n" +
+                "  on\n" +
+                "   goods.SU_ID = super.SU_PO_ID\n" +
+                "  left join \n" +
+                "    SYS_GOODS_ORDER oder\n" +
+                "  on\n" +
+                "    oder.REGION_ID = usr.REGION_ID and oder.GOODS_ID = goods.GOOD_ID and replace(oder.machine_type,',') = goods.MACHINE_TYPE\n" +
+                "  left join\n" +
+                "   (select grop.GROUP_ID,grop.NAME,grop.ONE_ADD,grop.TWO_ADD,grop.THREE_ADD,grop.SU_ID, meber.USER_ID from \n" +
+                "    SYS_SUPER_GROUP grop\n" +
+                "  left join \n" +
+                "    sys_super_member meber\n" +
+                "  on\n" +
+                "    meber.group_id = grop.group_id) t\n" +
+                "  on\n" +
+                "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" +
+                "  where \n" +
+                "        usr.PLAN_ID = ?   \n" +
+                "    and \n" +
+                "        super.SU_PO_ID = ? \n " +
+                "    and super.CHECK_STATUS = '3' \n" +
+                "    and \n" +
+                "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)) progress\n" +
+                "     \n" +
+                "GROUP by  \n" +
+                "    progress.REGION_ID,\n" +
+                "    progress.TRUENAME,\n" +
+                "    progress.USER_ID,\n" +
+                "    progress.TRUENAME,\n" +
+                "    progress.REGION_ID, \n" +
+                "    progress.TASK_ONE,\n" +
+                "    progress.TASK_TWO,\n" +
+                "    progress.TASK_THREE,\n" +
+                "    progress.IMPL_DATE,\n" +
+                "    progress.END_DATE,\n" +
+                "    progress.ONE_ADD,\n" +
+                "    progress.TWO_ADD,\n" +
+                "    progress.THREE_ADD,\n " +
+                "    progress.NAMEPATH,\n" +
+                "    progress.NAME";
+        Query query = null;
+        SQLQuery sqlQuery = null;
+        int a = 0;
+        int b = 1;
+        int c = 2;
+        int d = 3;
+        query = entityManager.createNativeQuery(sql);
+        sqlQuery = query.unwrap(SQLQuery.class);
+        sqlQuery.setParameter(a, planId);//方案id
+        sqlQuery.setParameter(b, superId);//叠加方案id
+        sqlQuery.setParameter(c, startDate);//开始日期
+        sqlQuery.setParameter(d, endDate);//结束日期
+        int count = sqlQuery.list().size();//分页查询出总条数(不是分页之后的)
+        List<SuperpositionProgress> progressList = new ArrayList<SuperpositionProgress>();
+        List<Object[]> ret = sqlQuery.list();
+        if (CollectionUtils.isNotEmpty(ret)) {
+            ret.forEach(r -> {
+                SuperpositionProgress progress = new SuperpositionProgress();
+                if (r[0] != null) {
+                    progress.setNums(((BigDecimal) r[0]).toString());
+                }
+                progress.setUserId((String) r[1]);
+                progress.setTrueName((String) r[2]);
+                progress.setRegionId((String) r[3]);
+                progress.setTaskOne((String) r[4]);
+                progress.setTaskTwo((String) r[5]);
+                progress.setTaskThree((String) r[6]);
+                progress.setImplDate(startDate);
+                progress.setEndDate(endDate);
+                progress.setOneAdd((String) r[9]);
+                progress.setTwoAdd((String) r[10]);
+                progress.setThreeAdd((String) r[11]);
+                progress.setNamePath((String) r[12]);
+                progress.setName((String) r[13]);
+                progressList.add(progress);
+            });
+        }
+
+        return progressList;
+    }
+
+    /**
+     * 导出详情
+     * @param planId
+     * @param superId
+     * @param userId
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    @Override
+    public List<SuperpositionProgress> exportDetail(Long planId, Long superId, String userId, String startDate, String endDate) {
+        String sql = " select \n" +
+                "    usr.PLAN_ID,\n" +
+                "    oder.SHOP_NAME,\n" +
+                "    oder.PAY_TIME,\n" +
+                "    oder.ORDER_NUM,\n" +
+                "    sum(oder.NUMS) as nums,\n" +
+                "    oder.goods_name,\n" +
+                "    oder.NAMEPATH as SHOP_ADDRESS,\n" +
+                "    super.SU_PO_ID,\n" +
+                "    t.NAME,\n" +
+                "    oder.BUSINESS_REGION_ID\n" +
+                "  from \n" +
+                "    VIEW_INCOME_MAIN_PLAN_USER usr\n" +
+                "  left join\n" +
+                "    SYS_SUPERPOSITION super\n" +
+                "  on\n" +
+                "    super.PLAN_ID = usr.PLAN_ID \n" +
+                "  left join\n" +
+                "    SYS_SUPER_GOODS_TYPE goods\n" +
+                "  on\n" +
+                "   goods.SU_ID = super.SU_PO_ID\n" +
+                "  left join \n" +
+                "    SYS_GOODS_ORDER oder\n" +
+                "  on\n" +
+                "    oder.REGION_ID = usr.REGION_ID and oder.GOODS_ID = goods.GOOD_ID and replace(oder.machine_type,',') = goods.MACHINE_TYPE\n" +
+                "  left join\n" +
+                "   -- SYS_SUPER_GROUP grop\n" +
+                "   (select grop.GROUP_ID,grop.NAME,grop.ONE_ADD,grop.TWO_ADD,grop.THREE_ADD,grop.SU_ID, meber.USER_ID from \n" +
+                "    SYS_SUPER_GROUP grop\n" +
+                "  left join \n" +
+                "    sys_super_member meber\n" +
+                "  on\n" +
+                "    meber.group_id = grop.group_id) t\n" +
+                "  on\n" +
+                "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" +
+                "  where \n" +
+                "        usr.PLAN_ID = ?   \n" +
+                "    and \n" +
+                "        super.SU_PO_ID = ?\n" +
+                "    and\n" +
+                "        usr.user_id = ?\n" +
+                "    and \n" +
+                "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)\n" +
+                " group by\n" +
+                "    oder.BUSINESS_REGION_ID,\n" +
+                "    usr.PLAN_ID,\n" +
+                "    oder.SHOP_NAME,\n" +
+                "    oder.PAY_TIME,\n" +
+                "    oder.NAMEPATH,\n" +
+                "    super.SU_PO_ID,\n" +
+                "    t.NAME,\n" +
+                "    oder.ORDER_NUM,\n" +
+                "    oder.goods_name ";
+
+        Query query = null;
+        SQLQuery sqlQuery = null;
+        int a = 0;
+        int b = 1;
+        int c = 2;
+        int d = 3;
+        int e = 4;
+        query = entityManager.createNativeQuery(sql);
+        sqlQuery = query.unwrap(SQLQuery.class);
+        sqlQuery.setParameter(a, planId);//方案id
+        sqlQuery.setParameter(b, superId);//叠加方案id
+        sqlQuery.setParameter(c, userId);//业务员id
+        sqlQuery.setParameter(d, startDate);//开始日期
+        sqlQuery.setParameter(e, endDate);//结束日期
+        int count = sqlQuery.list().size();//分页查询出总条数(不是分页之后的)
+        List<SuperpositionProgress> progressList = new ArrayList<SuperpositionProgress>();
+        List<Object[]> ret = sqlQuery.list();
+        if (CollectionUtils.isNotEmpty(ret)) {
+            ret.forEach(r -> {
+                SuperpositionProgress progress = new SuperpositionProgress();
+                progress.setShopName((String) r[1]);
+                progress.setPayTime(DateUtil.date2String((Date) r[2]));
+                progress.setOrderNum((String) r[3]);
+                if (r[4] != null) {
+                    progress.setNums(((BigDecimal) r[4]).toString());
+                }
+                progress.setGoodsName((String) r[5]);
+                progress.setShopAddress((String) r[6]);
+                progressList.add(progress);
+            });
+
+        }
+        return progressList;
     }
 
     /**

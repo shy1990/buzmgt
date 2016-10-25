@@ -11,9 +11,6 @@ import com.wangge.buzmgt.income.main.vo.OrderGoods;
 public interface OrderGoodsRepository extends JpaRepository<OrderGoods, String> {
   List<OrderGoods> findByorderNo(String orderNo);
   
-  @Query(value = "select v.*  from view_order_shouji_brandsku v \n"
-      + "  left join biz_order_signfor b on v.order_no = b.order_no \n" + " where b.user_id = ?1 \n"
-      + "   and v.pay_date >= ?2   and v.pay_date <=?3 ", nativeQuery = true)
+  @Query("select v  from OrderGoods v    where v.userId = ?1 \n" + "   and v.signTime >= ?2   and v.signTime <=?3 ")
   List<OrderGoods> findByorderNoByDateAndSalesman(String userId, Date startDate, Date endDate);
 }
-

@@ -83,8 +83,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    * 5.调用叠加处理逻辑<br/>
    */
   @Override
-  public void caculateOutedOrder(String orderNo, String memberId, String payStatus, Date payDate) {
-    Object userO = mainPlanUserRep.findsaleByDateAndMemberId(new Date(), memberId);
+  public void caculateOutedOrder(String orderNo) {
+    Object userO = mainPlanUserRep.findsaleByDateAndOrderNo (new Date(), orderNo);
     if (null == userO) {
       return;
     }
@@ -99,19 +99,19 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     if (goodList.size() < 1) {
       return;
     }
-    // 计算付款订单
-    if (payStatus.equals("1")) {
-      userO = mainPlanUserRep.findsaleByDateAndMemberId(payDate, memberId);
-      if (null != userO) {
-        uers = (Object[]) userO;
-        Long planId1 = Long.valueOf(uers[0].toString());
-        String userId1 = uers[1].toString();
-        String regionId1 = uers[2].toString();
-        if (null != planId) {
-          caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList), regionId1, 1);
-        }
-      }
-    }
+//    // 计算付款订单
+//    if (payStatus.equals("1")) {
+//      userO = mainPlanUserRep.findsaleByDateAndMemberId(payDate, memberId);
+//      if (null != userO) {
+//        uers = (Object[]) userO;
+//        Long planId1 = Long.valueOf(uers[0].toString());
+//        String userId1 = uers[1].toString();
+//        String regionId1 = uers[2].toString();
+//        if (null != planId) {
+//          caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList), regionId1, 1);
+//        }
+//      }
+//    }
     // 计算出库订单
     List<String> goodIdList = new ArrayList<>();
     for (OrderGoods good : goodList) {

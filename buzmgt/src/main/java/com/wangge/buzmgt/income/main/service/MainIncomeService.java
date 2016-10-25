@@ -25,9 +25,14 @@ public interface MainIncomeService {
    * caculateOrder:计算已出库订单 <br/>
    * 
    * @author yangqc
+   * @param orderNo
+   *          订单号
+   * @param memberId
+   * @param payStatus
+   * @param paytime
    * @since JDK 1.8
    */
-  void caculateOutedOrder(String orderNo, String memberId, String payStatus, Date paytime);
+  void caculateOutedOrder(String orderNo);
   
   /**
    * caculatePayedOrder:计算线下支付订单. <br/>
