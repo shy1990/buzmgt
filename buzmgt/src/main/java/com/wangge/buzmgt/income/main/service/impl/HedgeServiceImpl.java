@@ -1,9 +1,6 @@
 package com.wangge.buzmgt.income.main.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
@@ -143,7 +140,7 @@ public class HedgeServiceImpl implements HedgeService {
     }
     Predicate predicate2;
     if (ObjectUtils.notEqual(award,null)){
-      List<AwardGood> awardGoods = award.getAwardGoods();
+      Set<AwardGood> awardGoods = award.getAwardGoods();
       List<String> goodIds = new ArrayList<>();
       if (CollectionUtils.isNotEmpty(awardGoods)){
         awardGoods.forEach(awardGood -> {
