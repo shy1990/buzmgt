@@ -153,22 +153,6 @@ public class HedgeVo {
     this.shopRegionId = shopRegionId;
   }
 
-	public Integer getRuletype() {
-		return ruletype;
-	}
-
-	public void setRuletype(Integer ruletype) {
-		this.ruletype = ruletype;
-	}
-
-	public Long getRuleId() {
-		return ruleId;
-	}
-
-	public void setRuleId(Long ruleId) {
-		this.ruleId = ruleId;
-	}
-
   public String getGoodsId() {
     return goodsId;
   }
