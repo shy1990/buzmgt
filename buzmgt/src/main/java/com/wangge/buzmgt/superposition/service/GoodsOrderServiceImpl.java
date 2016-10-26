@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by joe on 16-9-12.
@@ -98,7 +99,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
         }
         Predicate predicate2;
         if (ObjectUtils.notEqual(award,null)){
-            List<AwardGood> awardGoods = award.getAwardGoods();
+            Set<AwardGood> awardGoods = award.getAwardGoods();
             List<String> goodIds = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(awardGoods)){
                 awardGoods.forEach(awardGood -> {
