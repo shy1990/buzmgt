@@ -4,6 +4,8 @@
  */
 //获取组成员信息
 var groupList = JSON.parse(window.name);
+console.log(groupList);
+var singleRules =new Array();
 //页面初始化
 $(function () {
     initSelectBrand();
@@ -64,15 +66,62 @@ function addRule() {
         max = numArr[i] == undefined ? '' : numArr[i];
         ave = max;
         if (i == (leng - 1)) {
-            max = 10000000;
+            max = 10000;
         }
-        rule[i] = {'num': i, 'min': min, 'max': max, 'serialNumber': i};
+        rule[i] = {'num': i, 'min': min, 'max': max, 'serialNumber': i+1};
     }
     createRules(rule);
     createGroup(leng, first, second, third);
     $('#zzrwul').modal('hide');
 
 }
+
+// 动态添加一单达量规则
+function addRuleOne() {
+//	$('.J_RULE').html("");
+//     rule = new Array();
+    var html = '';
+    var first = $('.O_numberFirst').val();
+    var second = $('.O_numberSecond').val();
+    var third = $('.O_numberThird').val();
+    var number = first + "," + second + "," + third;
+    var numArr = number.split(",");
+    console.log(numArr)
+    //显示数据
+    createNumberOne(numArr);
+//     //赋值
+    var $numberInput = $(".O_number_box input");
+    for (var i = 0; i < numArr.length; i++) {
+        $numberInput[i].value = numArr[i];
+    }
+    //1.更改周期量显示
+    //2.增加奖罚规则
+    var leng = 0; //rule = n(*number*)+1;
+    if (third != "") {
+        leng = 4;
+    } else if (second != "") {
+        leng = 3;
+    } else {
+        leng = 2;
+    }
+    var ave = 0;
+    for (var i = 0; i < leng; i++) {
+        var min = "";
+        var max = "";
+        min = ave;
+        max = numArr[i] == undefined ? '' : numArr[i];
+        ave = max;
+        if (i == (leng - 1)) {
+            max = 10000;
+        }
+        singleRules[i] = {'num': i, 'min': min, 'max': max, 'serialNumber': i};
+    }
+    console.log(singleRules)
+    createRulesOne(singleRules);
+    $('#o_zzrwul').modal('hide');
+
+}
+
 
 
 //动态生成人员分组
@@ -115,7 +164,10 @@ function addMoney(num, value) {
     rule[num]["percentage"] = Number(value);
     console.info(rule);
 }
-
+function addMoneyOne(num, value) {
+    singleRules[num]["reward"] = Number(value);
+    console.info(rule);
+}
 
 function addCount1(num, value) {
     groupList[num]["oneAdd"] = Number(groupList[num]["oneAdd"]) + Number(value);
@@ -176,7 +228,7 @@ function initFunction() {
         }
     });
     $('.J_issuingDate').datetimepicker({
-        format: "yyyy-mm-10",
+        format: "yyyy-mm-02",
         language: 'zh-CN',
         weekStart: 1,
         todayBtn: 1,
@@ -312,9 +364,18 @@ function createRules(data) {
     var myTemplate = Handlebars.compile($("#rules-template").html());
     $('#ruleList').html(myTemplate(data));
 }
+function createRulesOne(data) {
+    var myTemplate = Handlebars.compile($("#rules-template-one").html());
+    $('#ruleListOne').html(myTemplate(data));
+}
 function createNumber(data) {
     var myTemplate = Handlebars.compile($("#numbers-template").html());
     $('#numberList').html(myTemplate(data));
+}
+
+function createNumberOne(data) {
+    var myTemplate = Handlebars.compile($("#numbers-template").html());
+    $('#numberListOne').html(myTemplate(data));
 }
 
 
@@ -323,6 +384,7 @@ function createNumber(data) {
  * @type {Array}
  */
 var goodsTypeList = new Array();
+var showGoodsTypeList = new Array();
 var a = 0;
 function addGood() {
     if($(".J_machineType").val() == '' || $(".J_machineType").val() == undefined || $(".J_machineType").val() == null){
@@ -348,25 +410,46 @@ function addGood() {
 
 }
 
+
+
 function Refresh() {
+    showGoodsTypeList.push({
+        "machineType": $(".J_machineType").find("option:selected").text().trim(),
+        "brand": $(".J_brand").find("option:selected").text().trim(),
+        "good": $(".J_goods").find("option:selected").text().trim()
+    });
+    console.log(showGoodsTypeList);
         $(".J_machineType").val('');
         createBrandType("");
         createGoods("");
 }
+/**
+ * 展示已经添加的产品
+ */
+function showGoods(){
+    var myTemplate = Handlebars.compile($("#show-goods-template").html());
+    $('#showGoods').html(myTemplate(showGoodsTypeList));
+    $('#show_goods').modal('show').on('shown.bs.modal', function () {
+
+    });
 
 
+}
 
 
 function toSubmit() {
 //	var jsonStr = $("#achieveForm").serialize();
     var jsonStr = {
-        // "planId": $(".J_planId").val(),
+        "planId": planId,
         // "machineTypeId": $(".J_machineType").val(),
         // "brandId": $(".J_brand").val(),
         // "goodId": $(".J_goods").val(),
         "taskOne": $(".J_numberFirst_").val(),
         "taskTwo": $(".J_numberSecond_").val(),
         "taskThree": $(".J_numberThird_").val(),
+        "singleOne":$(".O_numberFirst_").val(),
+        "singleTwo":$(".O_numberSecond_").val(),
+        "singleThree":$(".O_numberThird_").val(),
         "implDate": $(".J_startDate").val(),
         "endDate": $(".J_endDate").val(),
         "giveDate": $(".J_issuingDate").val(),
@@ -377,6 +460,7 @@ function toSubmit() {
 
 
     jsonStr.ruleList = rule;//添加规则
+    jsonStr.singleRules = singleRules;//添加一单达量规则
     jsonStr.goodsTypeList = goodsTypeList;//添加商品类型
     jsonStr.groupList = groupList;//添加组
     var superposition = $.toJSON(jsonStr);
@@ -389,7 +473,7 @@ function toSubmit() {
         success: function (result) {
             if(result.status == 1){
                 alert('添加成功');
-                window.location.href = '';
+                window.location.href = 'superposition/findAll?planId='+planId;
             }
         },
         error: function () {

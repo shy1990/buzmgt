@@ -325,9 +325,9 @@
         //导出
         $("#export").click(function(){
 //            console.log(222222);
-            window.location.href = "monthTarget/export?time="+monthTarget.searchData.time;
-//            monthTarget.exportExcel(monthTarget.searchData.time)
-//            $.get("monthTarget/export?time="+monthTarget.searchData.time);
+            window.location.href = "monthtarget/export?time="+monthTarget.searchData.time;
+//            monthtarget.exportExcel(monthtarget.searchData.time)
+//            $.get("monthtarget/export?time="+monthtarget.searchData.time);
         });
 
 
@@ -348,7 +348,7 @@
         },
 
         url: function () {
-            return 'monthTarget/monthTargets';
+            return 'monthtarget/monthTargets';
         },
         //查询全部
         findAll: function (searchData) {
@@ -361,7 +361,7 @@
                     monthTarget.handelerbars_register(data.content);
                     monthTarget._count.totalCount = data.totalElements;//总页数
                     monthTarget._count.limit = data.size;
-//                    console.log(monthTarget._count)
+//                    console.log(monthtarget._count)
                     if (monthTarget._count.totalCount != monthTarget._count.total || monthTarget._count.totalCount == 0) {
                         monthTarget._count.total = monthTarget._count.totalCount;
 //                        console.log("-------");
@@ -385,7 +385,7 @@
 
         },
         exportExcel:function(time){
-            $.get("monthTarget/export?time="+time);
+            $.get("monthtarget/export?time="+time);
         },
 
         //分页工具

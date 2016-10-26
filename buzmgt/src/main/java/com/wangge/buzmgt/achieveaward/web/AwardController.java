@@ -1,20 +1,23 @@
 package com.wangge.buzmgt.achieveaward.web;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
+import com.wangge.buzmgt.income.main.service.HedgeService;
+import com.wangge.buzmgt.income.schedule.service.JobService;
+import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
+import com.wangge.buzmgt.teammember.service.SalesManService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -62,6 +65,20 @@ public class AwardController {
   private MainPlanService mainPlanService;
   @Autowired
   private MachineTypeService machineTypeServer;
+  @Autowired
+  private SalesManService salesManService;
+  @Autowired
+  private JobService jobService;
+  @Autowired
+  private HedgeService hedgeService;
+  @Autowired
+  private RegionService regionService;
+  @Autowired
+  private GoodsOrderService goodsOrderService;
+  @Autowired
+  private OrderSignforService orderSignforService;
+  @Autowired
+  private OrderItemService orderItemService;
 
   private static final String SEARCH_OPERTOR = "sc_";
 
@@ -293,6 +310,8 @@ public class AwardController {
       AwardStatusEnum statusEnum = AwardStatusEnum.valueOf(status);
       award.setStatus(statusEnum);
       awardServer.save(award);
+	    //保存定时任务
+	    jobService.saveJobTask(40,Long.valueOf(award.getPlanId()),award.getAwardId(),award.getIssuingDate());
       logService.log(null, "修改审核状态=" + status, EventType.UPDATE);
       json.put("result", "success");
       json.put("message", "操作成功");
@@ -392,5 +411,162 @@ public class AwardController {
       LogUtil.error("查询planId=" + planId + "方案人员失败", e);
     }
     return page;
+  }
+
+  /**
+   * @param award
+   * @param model
+   * @param @return     设定文件
+   * @return String
+   * @throws
+   * @Title: toProcess
+   * @Description: 跳转到进程页
+   */
+  @RequestMapping(value = "/process/{awardId}", method = RequestMethod.GET)
+  public String toProcess(@PathVariable(value = "awardId") Award award, Model model) {
+    List<SalesmanLevel> salesmanLevels = salesManService.findAll();
+    Set<AwardGood> awardGoods = award.getAwardGoods();
+    List<String> goodIds = new ArrayList<>();
+    if (CollectionUtils.isNotEmpty(awardGoods)){
+      awardGoods.forEach(awardGood -> {
+        goodIds.add(awardGood.getGoodId());
+      });
+    }
+    int cycleSales = awardServer.findCycleSales(goodIds);//周期销量
+    int hedgeNums = hedgeService.countByGoodId(goodIds);//售后冲减
+    model.addAttribute("hedgeNums", hedgeNums);
+    model.addAttribute("cycleSales", cycleSales);
+    model.addAttribute("salesmanLevels", salesmanLevels);
+    model.addAttribute("award", award);
+    model.addAttribute("awardGoods",awardGoods);
+    return "award/award_process";
+  }
+
+  /**
+   * @param request
+   * @param award
+   * @param pageable
+   * @param @return     设定文件
+   * @return Page<BrandIncome>    返回类型
+   * @throws
+   * @Title: findProcessList
+   * @Description: 根据达量奖励id查询该品牌达量奖励进程
+   */
+  @RequestMapping(value = "/processList/{awardId}", method = RequestMethod.GET)
+  @ResponseBody
+  public Page<BrandIncomeVo> findProcessList(HttpServletRequest request,
+                                             @PathVariable(value = "awardId") Award award,
+                                             @PageableDefault(page = 0, size = 20, sort = {"nums"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    Page<BrandIncomeVo> brandIncomeVos = awardServer.findAll(request, award, pageable);
+    return brandIncomeVos;
+  }
+
+  /**
+   * @param request
+   * @param response
+   * @param @return  设定文件
+   * @return void
+   * @throws
+   * @Title: exportProcessList
+   * @Description: 导出达量奖励进程列表
+   */
+  @RequestMapping("/process/export")
+  public void exportProcessList(HttpServletRequest request, HttpServletResponse response,
+                                @RequestParam(value = "awardId") Award award) {
+    List<BrandIncomeVo> list = awardServer.findAll(request, award);
+    String[] gridTitles_1 = {"姓名", "负责区域", "业务等级", "任务量一", "任务量二", "任务量三", "分组", "当前完成量(台)", "任务开始日期", "任务结束日期"};
+    String[] coloumsKey_1 = {"truename", "namepath", "levelName", "numberFirst", "numberSecond", "numberThird", "groupName", "nums", "startDate", "endDate"};
+    ExcelExport.doExcelExport("达量奖励进程导出表.xls", list, gridTitles_1, coloumsKey_1, request, response);
+  }
+
+  /**
+   * @param region
+   * @param goodId
+   * @param @return 设定文件
+   * @return String
+   * @throws
+   * @Title: toDetail
+   * @Description: 跳转到进程明细
+   */
+  @RequestMapping(value = "/detail", method = RequestMethod.GET)
+  public String toDetail(@RequestParam(value = "regionId") Region region, @RequestParam(value = "goodId") String goodId,@RequestParam(value = "awardId") Award award, Model model) {
+    List<Region> regions = regionService.findByRegion(region.getId());
+    model.addAttribute("regions", regions);
+    model.addAttribute("region", region);
+    model.addAttribute("goodId", goodId);
+    model.addAttribute("award",award);
+    return "award/award_process_det";
+  }
+
+  /**
+   * @param request
+   * @param region
+   * @param pageable
+   * @param award
+   * @param @return  设定文件
+   * @return Page<T>    返回类型
+   * @throws
+   * @Title: findDetailList
+   * @Description: 根据条件查询达量奖励明细列表
+   */
+  @RequestMapping(value = "/detailList/{regionId}", method = RequestMethod.GET)
+  @ResponseBody
+  public Page<?> findDetailList(HttpServletRequest request,
+                                @PathVariable(value = "regionId") Region region,
+                                @RequestParam(value = "awardId") Award award,
+                                @PageableDefault(page = 0, size = 20) Pageable pageable) {
+    Page<?> page = null;
+    String orderType = request.getParameter("orderType");
+    if ("sales".equals(orderType)) {
+      page = goodsOrderService.findAll(request, region,award, pageable);
+    } else {
+      page = hedgeService.findAll(request, region,award, pageable);
+    }
+    return page;
+  }
+
+  /**
+   * @param request
+   * @param response
+   * @param region
+   * @param award
+   * @param @return  设定文件
+   * @return void
+   * @throws
+   * @Title: exportDetailList
+   * @Description: 导出达量奖励明细列表
+   */
+  @RequestMapping("/detail/export")
+  public void exportDetailList(HttpServletRequest request, HttpServletResponse response,
+                               @RequestParam(value = "regionId") Region region,@RequestParam(value = "awardId") Award award) {
+    String orderType = request.getParameter("orderType");
+    List<?> list = null;
+    if ("sales".equals(orderType)) {
+      list = goodsOrderService.findAll(request, region,award);
+      String[] gridTitles_1 = {"商家名称", "区域", "订单号", "产品", "数量", "付款日期"};
+      String[] coloumsKey_1 = {"shopName", "namepath", "orderNum", "goodsName", "nums", "payTime"};
+      ExcelExport.doExcelExport("达量奖励订单导出表.xls", list, gridTitles_1, coloumsKey_1, request, response);
+    } else {
+      list = hedgeService.findAll(request, region,award);
+      String[] gridTitles_1 = {"商家名称", "区域", "订单号", "产品", "数量", "退货日期"};
+      String[] coloumsKey_1 = {"shopName", "namepath", "orderno", "goodsName", "sum", "shdate"};
+      ExcelExport.doExcelExport("达量奖励退货订单导出表.xls", list, gridTitles_1, coloumsKey_1, request, response);
+    }
+  }
+
+  /**
+   * 品牌型号订单详情
+   *
+   * @param orderId
+   * @param model
+   * @return String
+   */
+  @RequestMapping(value = "/detail/{orderId}")
+  public String getCashById(@PathVariable("orderId") String orderId, Model model) {
+    //绑定数据订单详情
+    OrderSignfor orderSignfor = orderSignforService.findByOrderNo(orderId);
+    orderItemService.disposeOrderSignfor(orderSignfor);
+    model.addAttribute("order", orderSignfor);
+    return "award/award_order_det";
   }
 }

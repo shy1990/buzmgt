@@ -1,20 +1,30 @@
 package com.wangge.buzmgt.section.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.plan.service.MachineTypeService;
 import com.wangge.buzmgt.section.entity.PriceRange;
 import com.wangge.buzmgt.section.entity.Production;
 import com.wangge.buzmgt.section.service.PriceRangeService;
 import com.wangge.buzmgt.section.service.ProductionService;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.util.DateUtil;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,13 +49,38 @@ public class SectionController {
 //--------------------------------- 财务的操作 -----------------------------------------------------//
 
     /**
+     * 查询正在使用的区间方案
+     *
+     * @param type
+     * @param model
+     * @return
+     */
+
+    @RequestMapping(value = "findNow", method = RequestMethod.GET)
+    public String findNowToJSP(String type, Long planId, Model model) {
+        Map<String, Object> map = productionService.findNowCW(type, planId);
+        List<PriceRange> pc = (List) map.get("list");
+        List<MachineType> machineTypes = machineTypeServer.findAll();//手机类型
+        Long productionId = (Long) map.get("productionId");
+        model.addAttribute("list", pc);
+        model.addAttribute("productionId", productionId);
+        model.addAttribute("type", type);
+        model.addAttribute("machineTypes", machineTypes);
+        model.addAttribute("planId", planId);
+        model.addAttribute("machineId", type);
+        return "section/cw_set";
+    }
+
+
+    /**
      * 跳转到添加页面
      *
      * @return
      */
     @RequestMapping(value = "addPriceRanges", method = RequestMethod.GET)
-    public String toAddJSP(String type, Model model) {
+    public String toAddJSP(String type, String planId, Model model) {
         model.addAttribute("type", type);
+        model.addAttribute("planId", planId);
         return "section/add_form";
     }
 
@@ -58,13 +93,16 @@ public class SectionController {
      */
     @RequestMapping(value = "addPriceRanges", method = RequestMethod.POST)
     @ResponseBody
-    public Long addPriceRanges(String implementationDate, @RequestBody List<PriceRange> priceRanges, String productionType, String status) {
+    public Map<String, Object> addPriceRanges(String implementationDate, @RequestBody List<PriceRange> priceRanges, String productionType, Long planId) {
 
-        Production production = productionService.addProduction(priceRanges, productionType, implementationDate, status);
+        Production production = productionService.addProduction(priceRanges, productionType, implementationDate, planId);
 
         Long id = production.getProductionId();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", id);
+        map.put("planId", planId);
 
-        return id;
+        return map;
     }
 
     /**
@@ -75,9 +113,10 @@ public class SectionController {
      * @return
      */
     @RequestMapping(value = "production/{id}", method = RequestMethod.GET)
-    public String addPriceRanges(@PathVariable("id") Production production, Model model) {
+    public String addPriceRanges(@PathVariable("id") Production production, String planId, Model model) {
 
         model.addAttribute("production", production);
+        model.addAttribute("planId", planId);
         return "section/add_form2";
     }
 
@@ -89,9 +128,9 @@ public class SectionController {
      */
     @RequestMapping(value = "toReview", method = RequestMethod.GET)
     @ResponseBody
-    public Production toReview(Long id, String status, String auditor) {
+    public String toReview(Long id, String status, String auditor, String planId) {
         productionService.toReview(id, status, auditor);
-        return null;
+        return planId;
     }
 
 
@@ -103,16 +142,19 @@ public class SectionController {
      */
     @RequestMapping(value = "toNotExpiredJsp", method = RequestMethod.GET)
     public String findNotExpiredJsp(String type,
+                                    Long planId,
                                     Model model,
                                     @RequestParam(value = "page", defaultValue = "0") Integer page,
                                     @RequestParam(value = "size", defaultValue = "20") Integer size
     ) {
-
         Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.ASC, "productionId"));
-        model.addAttribute("list", productionService.findNotExpired(type));//当前进行的
-        model.addAttribute("listExpired", productionService.findAll(type, pageable).getContent());//过期的
-        model.addAttribute("priceRanges", productionService.findReview(type));//修改小区间的
+        model.addAttribute("list", productionService.findNotExpired(planId, type));//当前进行的
+        model.addAttribute("listExpired", productionService.findAll(planId, type, pageable).getContent());//过期的
+        model.addAttribute("priceRanges", productionService.findReview(planId, type));//修改小区间的
         model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
+        model.addAttribute("planId", planId);
+        model.addAttribute("machineId", type);
+        model.addAttribute("today", getToday());
 //        return "section/set_list";
         return "section/set_list_cw";
     }
@@ -148,7 +190,22 @@ public class SectionController {
         model.addAttribute("production", production);
         return "section/list_one_cw";
     }
+    @RequestMapping(value = "delete/{id}",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject delete(@PathVariable("id") Production production){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            productionService.delete(production);
+            jsonObject.put("result","success");
+            jsonObject.put("msg","操作成功");
+            return jsonObject;//成功
+        }catch (Exception e){
+            jsonObject.put("result","error");
+            jsonObject.put("msg","系统异常,操作失败");
+            return jsonObject;
+        }
 
+    }
 
 //--------------------------------- end -----------------------------------------------------//
 
@@ -164,14 +221,19 @@ public class SectionController {
     @RequestMapping(value = "toReviewJsp", method = RequestMethod.GET)
     public String toReviewJsp(String type,
                               Model model,
+                              Long planId,
                               @RequestParam(value = "page", defaultValue = "0") Integer page,
                               @RequestParam(value = "size", defaultValue = "20") Integer size) {
         Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.ASC, "productionId"));
-        model.addAttribute("list", productionService.findNotExpired(type));//当前进行的
-        model.addAttribute("listExpired", productionService.findAll(type, pageable).getContent());//过期的
-        model.addAttribute("priceRanges", productionService.findReview(type));//修改小区间的
+        model.addAttribute("list", productionService.findNotExpiredQd(planId, type));//当前进行的
+//        model.addAttribute("listExpired", productionService.findAll(planId, type, pageable).getContent());//过期的
+        model.addAttribute("priceRanges", productionService.findReview(planId, type));//修改小区间的
         model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
+        model.addAttribute("planId", planId);
+        model.addAttribute("machineId", type);
+        model.addAttribute("today", getToday());
 //        return "section/review";
+
         return "section/review_qd";
     }
 
@@ -184,9 +246,12 @@ public class SectionController {
      */
     @RequestMapping(value = "review", method = RequestMethod.POST)
     @ResponseBody
-    public Production review(Long id, String status) {
-        productionService.review(id, status);
-        return null;
+    public Map<String, Object> review(Long id, String status) {
+        Production p = productionService.review(id, status);
+        Map<String, Object> map = new HashedMap();
+        map.put("planId", p.getPlanId());
+        map.put("type", p.getProductionType());
+        return map;
     }
 
     /**
@@ -208,31 +273,103 @@ public class SectionController {
     @RequestMapping(value = "/findToOne/{id}", method = RequestMethod.GET)
     public String findOneProduction1(@PathVariable("id") Production production, Model model) {
         model.addAttribute("production", production);
+        //用于判断用户是不是审核人的
+//        String userId = getUser().getId();
+//        model.addAttribute("userId", userId);
         return "section/list_one_qd";
     }
+
+    @RequestMapping(value = "modify/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public PriceRange modify(@PathVariable("id") PriceRange priceRange) {
+        return priceRangeService.stopPriceRange(priceRange);
+    }
+
+
+
+
 //------------------------------------ end ------------------------------------------------------//
 
 
     /**
-     * 查询正在使用的区间方案
+     * 查询过期的用于分页
      *
+     * @param pageable
+     * @param planId
      * @param type
-     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/findOver", method = RequestMethod.POST)
+    @ResponseBody
+    public Page<Production> findOver(
+            @PageableDefault(page = 0,
+                    size = 20,
+                    sort = {"productionId"},
+                    direction = Sort.Direction.DESC) Pageable pageable,
+            Long planId,
+            String type) {
+        Page<Production> pageResponse = productionService.findAll(planId, type, pageable);
+        return pageResponse;
+    }
+
+    /**
+     * 测试计算
+     *
+     * @return
+     */
+    @RequestMapping(value = "compute", method = RequestMethod.GET)
+    @ResponseBody
+    public String compute() {
+
+        String orderNo = "123454";
+        Date payTime = DateUtil.string2Date( "2016-09-28");
+        Double price = 1005.0;
+        String userId = "A123456";
+        String goodsId = "sdfjsdfsjfskdfjdsf";
+        String type = "lj";
+        Long planId = Long.parseLong("1");
+        Integer num = 3;
+        String regionId = "37021108";
+        if(payTime == null || "".equals(payTime)){
+            String msg = productionService.compute(orderNo,price,userId,goodsId,type,planId,num,regionId);//出库计算
+            return msg;
+        }
+        String msg = productionService.compute(orderNo,payTime,price,userId,goodsId,type,planId,num,regionId);//付款计算
+
+        return msg;
+    }
+
+    /*
+     * 获取用户的方法
+     */
+    public User getUser() {
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        return user;
+    }
+
+    public static Date getToday(){
+
+        Date today = DateUtil.string2Date(DateUtil.date2String(new Date(),"yyyy-MM-dd"));
+        return today;
+    }
+//------------------------------ 代码优化 ---------------------------------------------------
+
+    /**
+     * 查询正在使用的小区间
+     *
+     * @param type 手机类型
+     * @param planId 方案id
      * @return
      */
 
-    @RequestMapping(value = "findNow", method = RequestMethod.GET)
-    public String findNowToJSP(String type, Model model) {
-        Map<String, Object> map = productionService.findNowCW(type);
-        List<PriceRange> pc = (List) map.get("list");
-        List<MachineType> machineTypes = machineTypeServer.findAll();//手机类型
-        Long productionId = (Long) map.get("productionId");
-        model.addAttribute("list", pc);
-        model.addAttribute("productionId", productionId);
-        model.addAttribute("type", type);
-        model.addAttribute("machineTypes", machineTypes);
-        return "section/cw_set";
-    }
 
+    @RequestMapping(value = "listNow", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PriceRange> find(String type, Long planId) {
+        Map<String, Object> map = productionService.findNowCW(type, planId);
+        List<PriceRange> pc = (List) map.get("list");//获取正在使用的小区间
+        return pc;
+    }
 
 }

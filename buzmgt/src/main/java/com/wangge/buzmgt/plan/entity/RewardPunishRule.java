@@ -1,18 +1,11 @@
 package com.wangge.buzmgt.plan.entity;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 
@@ -45,13 +38,13 @@ public class RewardPunishRule implements Serializable{
     this.id = id;
   }
   public Integer getMin() {
-    return min;
+    return min == null ? 0 : min;
   }
   public void setMin(Integer min) {
     this.min = min;
   }
   public Integer getMax() {
-    return max;
+    return max == null ? 99999 : max;
   }
   public void setMax(Integer max) {
     this.max = max;

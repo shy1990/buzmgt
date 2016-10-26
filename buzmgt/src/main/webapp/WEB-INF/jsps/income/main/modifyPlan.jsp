@@ -48,89 +48,90 @@
 </head>
 
 <body>
-	<h4 class="page-header">
-		<i class="ico icon-new"></i>适用人员 <a href="javascript:history.back();"><i
-			class="ico icon-back fl-right"></i></a>
-	</h4>
+	<div class="content main">
+		<h4 class="page-header">
+			<i class="ico icon-new"></i>适用人员 <a href="javascript:history.back();"><i
+				class="ico icon-back fl-right"></i></a>
+		</h4>
 
-	<div class="row">
-		<!--col begin-->
-		<div class="col-md-12">
-			<!--orderbox begin-->
-			<div class="order-box">
-				<ul>
-					<li>
-						<dl class="dl-horizontal">
-							<dt>选择所属省份：</dt>
-							<dd>
-								<span class="text-pronce">${plan.regionname}</span>
-							</dd>
-						</dl>
-
-
-					</li>
+		<div class="row">
+			<!--col begin-->
+			<div class="col-md-12">
+				<!--orderbox begin-->
+				<div class="order-box">
+					<ul>
+						<li>
+							<dl class="dl-horizontal">
+								<dt>选择所属省份：</dt>
+								<dd>
+									<span class="text-pronce">${plan.regionname}</span>
+								</dd>
+							</dl>
 
 
-					<li>
-						<dl class="dl-horizontal">
-							<dt>填写方案标题：</dt>
-							<dd>
-								<span class="text-pronce">${plan.maintitle}</span>
-							</dd>
-						</dl>
+						</li>
 
 
-					</li>
+						<li>
+							<dl class="dl-horizontal">
+								<dt>填写方案标题：</dt>
+								<dd>
+									<span class="text-pronce">${plan.maintitle}</span>
+								</dd>
+							</dl>
 
-					<li>
-						<dl class="dl-horizontal">
-							<dt>填写副标题：</dt>
-							<dd>
-								<span class="text-pronce">${plan.subtitle}</span>
 
-							</dd>
-						</dl>
-					</li>
+						</li>
 
-					<li>
-						<dl class="dl-horizontal">
-							<dt>使用人员：</dt>
+						<li>
+							<dl class="dl-horizontal">
+								<dt>填写副标题：</dt>
+								<dd>
+									<span class="text-pronce">${plan.subtitle}</span>
 
-							<dd style="width: 750px; margin-bottom: 20px">
+								</dd>
+							</dl>
+						</li>
 
-								<div class="col-sm-2">
-									<a
-										class="J_addDire btn btn-default ph-btn-bluee icon-tj col-sm-6"
-										onclick="openUser();"></a>
-								</div>
+						<li>
+							<dl class="dl-horizontal">
+								<dt>使用人员：</dt>
 
-							</dd>
-						</dl>
-					</li>
-				</ul>
+								<dd style="width: 750px; margin-bottom: 20px">
 
-				<button class="btn btn-primary col-sm-1" style="margin-left: 180px"
-					onclick="commitUsers()">提交</button>
-			</div>
-			<!--orderobx end-->
-		</div>
-		<!--col end-->
-	</div>
+									<div class="col-sm-2">
+										<a
+											class="J_addDire btn btn-default ph-btn-bluee icon-tj col-sm-6"
+											onclick="openUser();"></a>
+									</div>
 
-	<!--删除-->
-	<div id="del" class="modal fade" role="dialog">
-		<div class="modal-dialog " role="document">
-			<div class="modal-content modal-blue">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h3 class="modal-title">删除提示</h3>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+
+					<button class="btn btn-primary col-sm-1" style="margin-left: 180px"
+						onclick="commitUsers()">提交</button>
 				</div>
+				<!--orderobx end-->
+			</div>
+			<!--col end-->
+		</div>
 
-				<div class="modal-body">
-					<div class="container-fluid">
+		<!--删除-->
+		<div id="del" class="modal fade" role="dialog">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content modal-blue">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h3 class="modal-title">删除提示</h3>
+					</div>
+
+					<div class="modal-body">
+						<div class="container-fluid">
 							<div class="form-group">
 								<div class="form-group">
 									<p class="col-sm-12 text-red ">你确定要将该业务员从方案中移除吗？</p>
@@ -150,27 +151,26 @@
 
 								</div>
 								<div class="btn-qx">
-									<button class="btn btn-danger btn-d"
-										onclick="deleteUser();">确定</button>
+									<button class="btn btn-danger btn-d" onclick="deleteUser();">确定</button>
 								</div>
 
 								<div class="btn-dd">
-									<button  data-dismiss="modal"
-										class="btn btn-primary btn-d">取消</button>
+									<button data-dismiss="modal" class="btn btn-primary btn-d">取消</button>
 								</div>
 							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- 删除其他方案的人员 -->
-	<div id="otherPlan" class="modal fade" role="dialog">
-		<jsp:include flush="true" page="otherPlan.jsp"></jsp:include>
-	</div>
-	<!--添加人员-->
-	<div id="user" class="modal fade" role="dialog">
-		<jsp:include flush="true" page="userSelect.jsp"></jsp:include>
+		<!-- 删除其他方案的人员 -->
+		<div id="otherPlan" class="modal fade" role="dialog">
+			<jsp:include flush="true" page="otherPlan.jsp"></jsp:include>
+		</div>
+		<!--添加人员-->
+		<div id="user" class="modal fade" role="dialog">
+			<jsp:include flush="true" page="userSelect.jsp"></jsp:include>
+		</div>
 	</div>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="static/bootstrap/js/bootstrap.min.js"></script>
@@ -193,15 +193,15 @@
 		var pId = "${plan.id}";
 		var	base='<%=basePath%>';
 		var gloIndex = null;
-		var otherPlanFlag=false;
+		var otherPlanFlag = false;
 		$(function() {
 			initUsers();
 			findPlanUserList(0);
 			initDateInput();
 			//页面未知原因刷新
-			$('#otherPlan').on('hide.bs.modal', function (e) {  
-				otherPlanFlag=false;
-			}); 
+			$('#otherPlan').on('hide.bs.modal', function(e) {
+				otherPlanFlag = false;
+			});
 		});
 	</script>
 

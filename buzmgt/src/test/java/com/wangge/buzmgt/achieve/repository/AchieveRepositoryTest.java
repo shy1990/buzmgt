@@ -1,10 +1,14 @@
 package com.wangge.buzmgt.achieve.repository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+import com.wangge.buzmgt.achieveaward.entity.Award;
+import com.wangge.buzmgt.achieveaward.entity.AwardIncome;
+import com.wangge.buzmgt.achieveaward.repository.AwardIncomeRepository;
+import com.wangge.buzmgt.achieveaward.repository.AwardRepository;
+import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
+import com.wangge.buzmgt.util.DateUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,10 @@ public class AchieveRepositoryTest {
   @Autowired
   private AchieveRepository achieveRepository;
   @Autowired
+  private AwardRepository awardRepository;
+  @Autowired
+  private AwardIncomeRepository awardIncomeRepository;
+  @Autowired
   private AchieveIncomeRepository achieveIncomeRepository;
   @Autowired
   private MachineTypeRepository machineTypeRepository;
@@ -40,7 +48,7 @@ public class AchieveRepositoryTest {
       
       Achieve achieve = new Achieve();
       //组装规则
-      List<RewardPunishRule> rprs=new ArrayList<>();
+      Set<RewardPunishRule> rprs=new HashSet<>();
       for(int i=0;i<3;i++){
         RewardPunishRule rewardPunishRules = new RewardPunishRule();
         rewardPunishRules.setFlag(FlagEnum.NORMAL);
@@ -87,16 +95,32 @@ public class AchieveRepositoryTest {
   @Test
   public void find(){
     try {
-      
-      Achieve achieve=achieveRepository.findOne(6L);
-      achieveRepository.delete(achieve);
+      Achieve achieve=achieveRepository.findOne(4L);
+//      achieveRepository.delete(achieve);
+	    System.out.println(achieve);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
   @Test
   public void test1(){
-    BigDecimal money=achieveIncomeRepository.sumByAchieveId(1L);
+    BigDecimal money=achieveIncomeRepository.sumMoneyByAchieveIdAndStatus(1L, 0);
     System.out.println(money);
+  }
+  @Test
+  public void test2(){
+    Long count = achieveIncomeRepository.countByAchieveIdAndUserId(7L, "A3703021250");
+    System.out.println(count);
+  }
+
+  @Test
+  public void test3(){
+  	String [] goodIds = new String[]{"8d869d9e086d4afe8ca151995eb557fc","af5314c1d73b47b19233756053ac8503","a13221f975a74dcda2f39070b2fdd113"};
+  	List<AwardIncome> awardIncomes = awardIncomeRepository.findOrderByUserIdAndGoodsAndPayDate("A371602210",goodIds, DateUtil.string2Date("2016-08-15"),DateUtil.string2Date("2016-10-15"));
+  }
+  @Test
+  public void test4(){
+  	Award award = awardRepository.findByAwardId(10L);
+	  System.out.println(award);
   }
 }

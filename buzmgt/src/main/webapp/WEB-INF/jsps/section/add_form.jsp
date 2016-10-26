@@ -31,18 +31,19 @@
     </style>
     <script type="text/javascript">
         $(function () {
-
+            /**
+             *
+             */
             $("#create").click(function () {
                 var impldate = $("#impldate").val().trim();
                 if (impldate == null || impldate == undefined || impldate == '') {
                     alert('请输入实施日期');
                     return;
                 }
-                console.log(impldate);
-                var implementationDate = "";
                 var priceRangeArray = new Array();
                 var form = $("#acont .frm");
                 var type = '${type}';
+                var planId = '${planId}';
                 console.log(form);
 
                 for (var i = 0; i < form.size(); i++) {
@@ -72,17 +73,17 @@
                 }
                 console.log(priceRangeArray);
                 $.ajax({
-                    url: 'addPriceRanges?implementationDate=' + impldate + '&productionType=' + type + '&status=0',
+                    url: 'addPriceRanges?implementationDate=' + impldate + '&productionType=' + type +'&planId='+planId,
                     type: "POST",
                     contentType: 'application/json;charset=utf-8',//这是请求头信息
                     dataType: "json",
                     data: $.toJSON(priceRangeArray),//将Json对象序列化成Json字符串，toJSON()需要引用jquery.json.min.js
                     success: function (data) {
                         alert("创建成功");
-                        window.location.href = "production/" + data;
+                        window.location.href = "production/" + data.id+'?planId='+data.planId;
                     },
                     error: function () {
-                        alert("程序有误,请打死程序猿");
+                        alert("系统故障");
                     }
                 });
 

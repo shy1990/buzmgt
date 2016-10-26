@@ -1,13 +1,13 @@
 package com.wangge.buzmgt.achieveset.service;
 
-import java.util.List;
-import java.util.Map;
-
+import com.wangge.buzmgt.achieveset.entity.Achieve;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import com.wangge.buzmgt.achieveset.entity.Achieve;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -69,17 +69,30 @@ public interface AchieveService {
    */
   Achieve findOne(Long achieveId);
 
+  Achieve findByAchieveIdAndPlanId(Long achieveId,String planId);
+
   /**
-   * 
+   * 已出库——查询规则
   * @Title: findRuleByGoods 
   * @Description: 通过商品id查询其对应的规则
   * @param @param goodIds
   * @param @param mainPlanId
   * @param @param userId
-  * @param @return    设定文件 
+  * @param @param 计算时间
+  * @param @return    设定文件
   * @return List<Map<String,Object>>    返回类型 
   * @throws
    */
   List<Map<String,Object>> findRuleByGoods(List<String> goodIds,Long mainPlanId,String userId);
-  
+
+	/**
+	 * 已付款——查询规则
+	 * @param goodIds
+	 * @param mainPlanId
+	 * @param userId
+	 * @param payDate
+	 * @return
+	 */
+  List<Map<String,Object>> findRuleByGoods(List<String> goodIds, Long mainPlanId, String userId, Date payDate);
+
 }

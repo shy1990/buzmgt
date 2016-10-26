@@ -1,7 +1,7 @@
-package com.wangge.buzmgt.monthTarget.web;
+package com.wangge.buzmgt.monthtarget.web;
 
-import com.wangge.buzmgt.monthTarget.entity.MonthTarget;
-import com.wangge.buzmgt.monthTarget.service.MonthTargetService;
+import com.wangge.buzmgt.monthtarget.entity.MonthTarget;
+import com.wangge.buzmgt.monthtarget.service.MonthTargetService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@RequestMapping("/monthTarget")
+@RequestMapping("/monthtarget")
 @Controller
 public class MonthTargetController {
   private static final Logger logger = Logger.getLogger(MonthTargetController.class);
@@ -41,10 +41,10 @@ public class MonthTargetController {
    * 跳转到月指标
    * @return
    */
-  @RequestMapping("/monthTarget")
+  @RequestMapping("/monthtarget")
   public String toMonthTarget(){
 
-    return "monthTarget/mouth_target";
+    return "monthtarget/mouth_target";
   }
 
   /**
@@ -54,7 +54,7 @@ public class MonthTargetController {
   @RequestMapping("/monthSetting")
   public String toMonthSetting(){
 
-    return "monthTarget/mouth_setting";
+    return "monthtarget/mouth_setting";
   }
 
   /**
@@ -75,7 +75,7 @@ public class MonthTargetController {
     model.addAttribute("region", region);
     model.addAttribute("flag",flag);
     model.addAttribute("id",id);
-    return "monthTarget/update";
+    return "monthtarget/update";
   }
 
   /**

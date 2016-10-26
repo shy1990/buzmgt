@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.income.main.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
 import com.wangge.buzmgt.income.main.vo.BrandType;
 import com.wangge.buzmgt.income.main.vo.MachineType;
 import com.wangge.buzmgt.income.main.vo.PlanUserVo;
+import com.wangge.buzmgt.income.schedule.entity.Jobtask;
 
 import net.sf.json.JSONArray;
 
@@ -60,10 +62,11 @@ public interface MainPlanService {
    * 
    * @author yangqc
    * @param plan
+   * @return
    * @throws Exception
    * @since JDK 1.8
    */
-  void save(MainIncomePlan plan) throws Exception;
+  Map<String, Object> save(MainIncomePlan plan) throws Exception;
   
   /**
    * delete:删除主方案 <br/>
@@ -113,4 +116,43 @@ public interface MainPlanService {
   void deleteUser(Map<String, Object> user) throws Exception;
   
   void alterUserFlag(Long planUserId);
+  
+  MainIncomePlan findById(Long id);
+  
+  /**
+   * 0:删除主方案:不在计算收益;<br/>
+   * 1.删除删除日期当天的收益<br/>
+   * TODO 达量叠加如何处理<br/>
+   */
+  void deleteIncomeMainPlan(Jobtask jobtask) throws Exception;
+  
+  /**
+   * 查询某主方案下具体达量或叠加规则人员的有效开始时间和结束时间. <br/>
+   * 
+   * @param planId
+   *          方案id
+   * @param startDate
+   *          规则开始时间
+   * @param endDate
+   *          规则结束时间
+   * @return List map(主键:类型)-> userId:String;endDate:Date;startDate:Date
+   * @since JDK 1.8
+   */
+  List<Map<String, Object>> findEffectUserDateList(Long planId, Date startDate, Date endDate);
+  
+  /**
+   * 查询某主方案下具体某个业务的达量或叠加规则人员的有效开始时间和结束时间. <br/>
+   * 
+   * @param planId
+   *          方案id
+   * @param startDate
+   *          规则开始时间
+   * @param endDate
+   *          规则结束时间
+   * @param userId
+   *          业务Id
+   * @return 没结果则为null; map(主键:类型)-> userId:String;endDate:Date;startDate:Date
+   * @since JDK 1.8
+   */
+  Map<String, Object> findEffectUserDate(Long planId, Date startDate, Date endDate, String userId);
 }

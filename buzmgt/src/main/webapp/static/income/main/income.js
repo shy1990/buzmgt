@@ -44,12 +44,16 @@ function createTaskTable(data) {
 	var yearMonth = date.getFullYear() + "-"
 			+ (month < 10 ? "0" + month : month);
 	Handlebars.registerHelper("canfh", function(state, month, options) {
-		return options.fn(this);
-		//正式环境为此逻辑
-		/*
-		 * if (state == '已审核'&& yearMonth == month && days > 9) { return
-		 * options.fn(this); } else { return options.inverse(this); }
-		 */
+		// return options.fn(this);
+		// 正式环境为此逻辑
+
+		if (null != checkFlag && checkFlag == 1 && state == '未审核'
+				&& yearMonth >= month && days > 9) {
+			return options.fn(this);
+		} else {
+			return options.inverse(this);
+		}
+
 	});
 
 	var myTemplate = Handlebars.compile($("#user-table-template").html());
@@ -72,13 +76,23 @@ function oilCostPaging(data) {
 	});
 }
 
-
-
 // 发起复核
 function sendFh(id) {
-	var date = new Date();
-	var days = date.getDate();
-	var nyr = date.getDate();
+	$.ajax({
+		url : "/mainIncome/fh",
+		type : "post",
+		data : {
+			id : id
+		},
+		dataType : "json",
+		success : function(orderData) {
+			alert("审批成功");
+			findPlanUserList(WsearchData.page);
+		},
+		error : function(data) {
+			alert("系统异常，请稍后重试！");
+		}
+	});
 }
 function goSearch() {
 	WsearchData.SC_EQ_month = getMonth();

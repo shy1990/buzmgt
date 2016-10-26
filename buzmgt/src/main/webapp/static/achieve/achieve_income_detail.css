@@ -1,0 +1,171 @@
+
+.text-lv {
+    color: #02ae88;
+}
+
+.text-zi {
+    color: #ee038d;
+}
+
+.text-hong {
+    color: #7943dc;
+}
+
+.text-lan {
+    color: #1aaefb;
+}
+
+.text-cao {
+    color: #b2d66c;
+}
+
+.icon-x {
+    display: inline-block;
+    position: relative;
+    z-index: 100;
+    width: 14px;
+    height: 13px;
+    margin-top: 3px;
+}
+
+.ico-xx {
+    background: url("../earnings/img/start1.png") no-repeat center;
+}
+
+.icon-back {
+    width: 26px;
+    height: 26px;
+    background: url("../earnings/img/arrow.png") no-repeat center;
+}
+
+.icon-back:hover {
+    width: 26px;
+    background: url("../earnings/img/Arrow 2 .png") no-repeat center;
+}
+
+.fl-right {
+    float: right;
+    margin-top: 25px;
+    margin-right: 25px;
+}
+
+.ph-select {
+
+    width: 180px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid #c6c6c6;
+    border-radius: 3px;
+    background: #ffffff;
+    color: #a7a7a7;
+    margin-bottom: 20px;
+}
+
+.link-posit-t {
+    display: inline-block;
+    text-align: right;
+    vertical-align: bottom;
+}
+
+.new-table-box {
+    border-top: 3px solid #1e92d4;
+    min-height: 600px;
+    background: #FFF;
+}
+
+.new-table-box > table > tbody > tr:hover {
+    border-left: 3px solid #1e92d4;
+}
+
+.text-gery {
+    color: #999999;
+}
+
+.ph-search-date > input {
+    display: inline-block;
+    width: auto;
+    height: 30px;
+}
+
+.inform {
+    height: 260px;
+    background: #ffffff;
+    padding-top: 30px;
+}
+
+.info-zq {
+    height: 70px;
+    width: 190px;
+    margin-left: 40px;
+
+    background: #fafafa;
+    padding-left: 0px;
+    box-shadow: 5px 5px 5px #ededed;
+}
+
+.fl {
+    float: left;
+}
+
+.text-16 {
+    font-size: 16px;
+}
+
+.font-w {
+    line-height: 30px;
+}
+
+.text-jv {
+    color: #d95413;
+    font-weight: bolder;
+}
+
+.text-gren {
+    color: #accea6;
+    font-weight: bolder;
+}
+
+.icon-ck {
+    background: url("/static/earnings/img/mingx.png") no-repeat center;
+}
+
+.text-red {
+    color: #ee3636;
+}
+
+.text-huang {
+    color: #fd9c3e;
+}
+
+.product {
+    width: 500px;
+
+}
+
+.pro-2 {
+    width: 300px;
+    margin-left: -100px;
+}
+
+.pro-2-2{
+    width: 500px;
+    margin-left: -100px;
+}
+
+.text-71 {
+    color: #717171;
+
+}
+
+.info-zq {
+    height: 70px;
+    width: 190px;
+    margin-left: 40px;
+
+    background: #fafafa;
+    padding-left: 0px;
+    box-shadow: 5px 5px 5px #ededed;
+}
+.backdate{
+    display: none;
+}

@@ -286,7 +286,13 @@
                                             <td class="reason">${priceRange.implementationDate}</td>
                                             <td><span class=""> ${priceRange.percentage} 元</span></td>
                                             <td>${priceRange.priceRangeAuditor}</td>
-                                            <td><span class="text-lan text-strong">审核中</span></td>
+                                            <c:if test="${priceRange.priceRangeStatus == 1}">
+                                                <td><span class="text-lan text-strong">审核中</span></td>
+                                            </c:if>
+                                            <c:if test="${priceRange.priceRangeStatus == 2}">
+                                                <td><span class="text-lan text-strong">驳回</span></td>
+                                            </c:if>
+
                                             <td><span class="ph-weihes">----</span></td>
                                             <td>${priceRange.priceRangeCreateDate}</td>
                                             <td>

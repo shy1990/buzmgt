@@ -5,7 +5,11 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,26 +22,25 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "sys_income_shouhou_hedge")
+@NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(name = "calculateGood", procedureName = "income_shouhou_good_cal"),
+    @NamedStoredProcedureQuery(name = "calculatehedge", procedureName = "income_shouhou_hedge_cal") })
 public class Hedge {
-  /*
-   * sys_shouhou_hedge(id number(19),orderno VARCHAR2(50),sku
-   * varchar2(500),skuname varchar2(500),shdate date,sum number(3),uniquenumber
-   * varchar2(200));
-   */
   @Id
   @GenericGenerator(name = "idgen", strategy = "increment")
   @GeneratedValue(generator = "idgen")
   private Long id;
-  // 订单号,sku号,唯一码
+  // 订单号,sku号,唯一码,规则id
   private String orderno, sku, uniquenumber;
   // 商品名称
   private String goodsName;
-  // 到货日期
-  private Date shdate;
+  // 到货日期,记录生成日期
+  @Temporal(TemporalType.DATE)
+  private Date shdate, inserttime;
   // 品牌数量
   private Integer sum;
-  // 是否计算
-  private Integer flag = 0;
+  // 商品单价
+  private Double price;
   
   public String getOrderno() {
     return orderno;
@@ -95,7 +98,7 @@ public class Hedge {
     this.id = id;
   }
   
-  public Hedge(String orderno, String sku, String goodsName, Integer sum, Date shdate, String uniquenumber) {
+  public Hedge(String orderno, String sku, String goodsName, Integer sum, Double price,Date shdate, String uniquenumber) {
     super();
     this.orderno = orderno;
     this.sku = sku;
@@ -103,18 +106,33 @@ public class Hedge {
     this.goodsName = goodsName;
     this.shdate = shdate;
     this.sum = sum;
+    this.price=price;
   }
   
   public Hedge() {
     super();
   }
   
-  public Integer getFlag() {
-    return flag;
+  public Date getInserttime() {
+    return inserttime;
   }
   
-  public void setFlag(Integer flag) {
-    this.flag = flag;
+  public void setInserttime(Date inserttime) {
+    this.inserttime = inserttime;
+  }
+  
+  public Double getPrice() {
+    return price;
+  }
+
+  public void setPrice(Double price) {
+    this.price = price;
+  }
+
+  @Override
+  public String toString() {
+    return "Hedge [id=" + id + ", orderno=" + orderno + ", sku=" + sku + ", uniquenumber=" + uniquenumber
+        + ", goodsName=" + goodsName + ", shdate=" + shdate + ", inserttime=" + inserttime + ", sum=" + sum + "]";
   }
   
 }

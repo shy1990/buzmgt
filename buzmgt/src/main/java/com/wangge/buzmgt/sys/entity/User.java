@@ -63,6 +63,8 @@ public class User implements Serializable {
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "sys_users_roles", joinColumns = @JoinColumn(name = "user_id") , inverseJoinColumns = @JoinColumn(name = "role_id") )
 	private Set<Role> roles = new HashSet<Role>();
+
+	private String nickname;//昵称
     
 	public User() {
 	}
@@ -141,7 +143,15 @@ public class User implements Serializable {
     this.salseMan = salseMan;
   }
 
-  @Override
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	@Override
   public String toString() {
     return "User [id=" + id + ", username=" + username + ", password="
         + password + ", status=" + status + "]";

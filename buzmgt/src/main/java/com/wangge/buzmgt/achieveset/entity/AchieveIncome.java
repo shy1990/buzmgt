@@ -1,20 +1,13 @@
 package com.wangge.buzmgt.achieveset.entity;
 
+import com.wangge.buzmgt.achieveset.vo.OrderVo;
+import com.wangge.buzmgt.common.FlagEnum;
+import com.wangge.buzmgt.goods.entity.Goods;
+import com.wangge.buzmgt.income.main.vo.PlanUserVo;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-
-import com.wangge.buzmgt.common.FlagEnum;
-import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 
 /**
  * 
@@ -25,33 +18,57 @@ import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 *
  */
 @Entity
-@Table(name = "SYS_ACHIEVE_AWARD_INCOME" )
+@Table(name = "SYS_INCOME_ACHIEVE_SET" )
 public class AchieveIncome implements Serializable{
 
   private static final long serialVersionUID = 1L;
-  
+
+	public enum PayStatusEnum{
+		STOCK("已出库"),PAY("已支付");
+		private String name;
+		PayStatusEnum(String name) {
+			this.name = name;
+		}
+		public String getName() {
+			return name;
+		}
+	}
+
   @Id
-  @GenericGenerator(name = "idgen", strategy = "increment")
-  @GeneratedValue(generator = "idgen")
+  @SequenceGenerator(name = "idgen", sequenceName = "sys_income_job_seq")
+  @GeneratedValue(generator = "idgen", strategy = GenerationType.SEQUENCE)
   private Long  id  ;// 主键
   @Column(name = "USER_ID")
   private String  userId ;// 业务员Id
-  @OneToOne
+  @OneToOne()
   @JoinColumn(name = "USER_ID", insertable = false, updatable = false)
   private PlanUserVo planUser;// 用户ID
   
   @Column(name = "ACHIEVE_ID")
   private Long  achieveId  ;// 达量设置Id
-  @OneToOne
-  @JoinColumn(name = "ACHIEVE_ID", insertable = false, updatable = false)
-  private Achieve achieve;
-  private String  goodId ;// 商品Id
-  private String  orderNo  ;// 订单号
+//  @OneToOne
+//  @JoinColumn(name = "ACHIEVE_ID", insertable = false, updatable = false)
+//  private Achieve achieve;
+  @Column(name = "GOOD_ID")
+	private String  goodId ;// 商品Id
+	@OneToOne
+	@JoinColumn(name = "GOOD_ID", insertable = false, updatable = false)
+	private Goods good ;// 商Id
+  @Column(name = "ORDER_NO")
+	private String  orderNo  ;// 订单号
+	@OneToOne
+	@JoinColumn(name = "ORDER_NO",referencedColumnName = "ORDER_NO",insertable = false, updatable = false)
+	private OrderVo order;
   private Integer num ;// 数量
   private Float money ;// 金额
-  private String  status  ;// 状态
-  private Date  createDate ;// 创建日期
+	@Enumerated(EnumType.ORDINAL)
+	private PayStatusEnum status;//	订单状态（STOCK-已出库，PAY-已支付）
+	private Date  createDate ;// 创建日期
+	@Enumerated(EnumType.STRING)
   private FlagEnum  flag = FlagEnum.NORMAL ;// 是否删除：normal-正常，del-删除
+	private Long planId;//主方案ID
+	private Float price;//商品价格
+
   public Long getId() {
     return id;
   }
@@ -76,12 +93,12 @@ public class AchieveIncome implements Serializable{
   public void setAchieveId(Long achieveId) {
     this.achieveId = achieveId;
   }
-  public Achieve getAchieve() {
-    return achieve;
-  }
-  public void setAchieve(Achieve achieve) {
-    this.achieve = achieve;
-  }
+//  public Achieve getAchieve() {
+//    return achieve;
+//  }
+//  public void setAchieve(Achieve achieve) {
+//    this.achieve = achieve;
+//  }
   public String getGoodId() {
     return goodId;
   }
@@ -106,10 +123,10 @@ public class AchieveIncome implements Serializable{
   public void setMoney(Float money) {
     this.money = money;
   }
-  public String getStatus() {
+  public PayStatusEnum getStatus() {
     return status;
   }
-  public void setStatus(String status) {
+  public void setStatus(PayStatusEnum status) {
     this.status = status;
   }
   public Date getCreateDate() {
@@ -124,10 +141,39 @@ public class AchieveIncome implements Serializable{
   public void setFlag(FlagEnum flag) {
     this.flag = flag;
   }
-  @Override
+	public void setPlanId(Long planId) {
+		this.planId = planId;
+	}
+	public Long getPlanId() {
+		return planId;
+	}
+	public Float getPrice() {
+		return price;
+	}
+	public void setPrice(Float price) {
+		this.price = price;
+	}
+
+	public Goods getGood() {
+		return good;
+	}
+
+	public void setGood(Goods good) {
+		this.good = good;
+	}
+
+	public OrderVo getOrder() {
+		return order;
+	}
+
+	public void setOrder(OrderVo order) {
+		this.order = order;
+	}
+
+	@Override
   public String toString() {
     return "AchieveIncome [id=" + id + ", userId=" + userId + ", planUser=" + planUser + ", achieveId=" + achieveId
-        + ", achieve=" + achieve + ", goodId=" + goodId + ", orderNo=" + orderNo + ", num=" + num + ", money=" + money
+        + ", goodId=" + goodId + ", orderNo=" + orderNo + ", num=" + num + ", money=" + money
         + ", status=" + status + ", createDate=" + createDate + ", flag=" + flag + "]";
   }
   

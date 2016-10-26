@@ -809,7 +809,18 @@ public class DateUtil {
     return nowBegin.getTime() <= nowEnd.getTime();
     
   }
-  
+
+  /**
+   * 名称: compareDate 功能: 比较两个日期大小 参数: @param beginDate 参数: @param endDate 注:
+   * 第二个参数大 为true
+   */
+  public static boolean compareDate(Date beginDate, Date endDate){
+
+    return beginDate.getTime() <= endDate.getTime();
+
+  }
+
+
   /**
    * 获取十分钟之前的时间
    * 

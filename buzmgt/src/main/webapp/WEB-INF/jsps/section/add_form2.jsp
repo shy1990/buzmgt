@@ -89,23 +89,28 @@
             $("#sure").click(function () {
                 var id = '${production.productionId}'.trim();
                 var type = '${production.productionType}';
-                console.log(id)
                 var auditor = "345345345345";
-                var status = '1';
+                var planId = '${planId}';
                 $.ajax({
                     url:'<%=basePath%>section/toReview',
                     type:'GET',
-                    data:{id:id,auditor:auditor,status:status},
+                    data:{id:id,auditor:auditor,status:'1',planId:planId},
                     success:function(data){
-                        window.location.href='<%=basePath%>section/toNotExpiredJsp?type='+type;
+                        window.location.href='<%=basePath%>section/toNotExpiredJsp?type='+type+'&planId='+data;
                     },
                     error:function () {
-                      alert("系统故障:嘴哥给吃了");
+                      alert("系统故障,请稍后重试");
                     }
                 })
             });
 
         });
+
+        function addRegion(id){
+            window.location.href = '<%=basePath%>areaAttr/setting?ruleId='+id+'&type=PRICERANGE';
+
+        }
+
 
     </script>
 </head>
@@ -178,7 +183,7 @@
                                         </td>
                                         <td>${priceRange.implementationDate}</td>
                                         <td>${priceRange.endTime}</td>
-                                        <td><a href="">添加区域设置</a></td>
+                                        <td><a href="javascript:void(0) " onclick="addRegion('${priceRange.priceRangeId}')">添加区域设置</a></td>
                                         <td>${priceRange.priceRangeCreateDate}</td>
                                     </tr>
                                 </c:forEach>

@@ -166,6 +166,30 @@ function checkDate(startTimeStr,endTimeStr){
 		return true;
 	}
 }
+
+/**
+ * 两个字段都不为空时进行日期比较判断
+ * @param startTimeStr
+ * @param endTimeStr
+ * @returns {Boolean}
+ */
+function compareDate(startTimeStr,endTimeStr){
+	//当两个字段都不为空时进行校验;
+	var fale=(startTimeStr != "" && startTimeStr != null)&&
+		(endTimeStr != '' && endTimeStr != null);
+	if(fale){
+		var startDate= stringToDate(startTimeStr);
+		var endDate= stringToDate(endTimeStr);
+		if(endDate.valueOf()-startDate.valueOf()<0){
+			return true;
+		}else{
+			return false;
+		}
+	}else{
+		return true;
+	}
+}
+
 //转化时间格式的
 /*示例代码:
  *将返回本月的date

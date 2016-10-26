@@ -1,24 +1,12 @@
 package com.wangge.buzmgt.plan.entity;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
-
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name="SYS_GROUPING_NUMBER")
@@ -39,10 +27,11 @@ public class GroupNumber implements Serializable{
   private String groupName;//分组Grouping：A，B
   @Enumerated(EnumType.STRING)
   private FlagEnum flag = FlagEnum.NORMAL;//是否删除：normal-正常，del-删除
-  
+
+  @OrderBy("id ASC")
   @OneToMany(cascade=CascadeType.ALL)
   @JoinColumn(name="GROUP_ID")
-  private List<GroupUser> groupUsers;
+  private Set<GroupUser> groupUsers;
 
   public Long getId() {
     return id;
@@ -100,11 +89,11 @@ public class GroupNumber implements Serializable{
     this.flag = flag;
   }
 
-  public List<GroupUser> getGroupUsers() {
+  public Set<GroupUser> getGroupUsers() {
     return groupUsers;
   }
 
-  public void setGroupUsers(List<GroupUser> groupUsers) {
+  public void setGroupUsers(Set<GroupUser> groupUsers) {
     this.groupUsers = groupUsers;
   }
 

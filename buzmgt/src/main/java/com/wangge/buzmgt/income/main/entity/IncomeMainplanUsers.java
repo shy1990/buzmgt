@@ -180,5 +180,12 @@ public class IncomeMainplanUsers {
   public IncomeMainplanUsers() {
     super();
   }
+
+  @Override
+  public String toString() {
+    return "IncomeMainplanUsers [id=" + id + ", salesmanId=" + salesmanId + ", salesmanname=" + salesmanname
+        + ", createtime=" + createtime + ", state=" + state + ", fqtime=" + fqtime + ", mainplan=" + mainplan
+        + ", planId=" + planId + ", authorId=" + authorId + ", uptime=" + uptime + "]";
+  }
   
 }

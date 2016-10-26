@@ -1,8 +1,12 @@
 package com.wangge.buzmgt.income.main.vo;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * 订单商品明细<br/>
@@ -17,9 +21,13 @@ import javax.persistence.Table;
 public class OrderGoods {
   @Id
   private String orderItemId;
-  private String orderNo, goodId, goodName, machineTypebrandName, brandid, skuNum, cat;
-  private Double price, amount;
+  // 订单号;商品ID,商品名称,机型,品牌名称,品牌ID,sku编码,cat
+  private String orderNo, goodId, goodName, machineType, brandName, brandid, skuNum, cat,userId;
+  private Double amount;
   private Integer nums;
+  private float price;
+  @Temporal(TemporalType.DATE)
+  private Date signTime;
   
   public String getOrderItemId() {
     return orderItemId;
@@ -53,14 +61,6 @@ public class OrderGoods {
     this.goodName = goodName;
   }
   
-  public String getMachineTypebrandName() {
-    return machineTypebrandName;
-  }
-  
-  public void setMachineTypebrandName(String machineTypebrandName) {
-    this.machineTypebrandName = machineTypebrandName;
-  }
-  
   public String getBrandid() {
     return brandid;
   }
@@ -77,6 +77,14 @@ public class OrderGoods {
     this.skuNum = skuNum;
   }
   
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
   public String getCat() {
     return cat;
   }
@@ -85,11 +93,11 @@ public class OrderGoods {
     this.cat = cat;
   }
   
-  public Double getPrice() {
+  public Float getPrice() {
     return price;
   }
   
-  public void setPrice(Double price) {
+  public void setPrice(Float price) {
     this.price = price;
   }
   
@@ -107,6 +115,34 @@ public class OrderGoods {
   
   public void setNums(Integer nums) {
     this.nums = nums;
+  }
+  
+  public String getMachineType() {
+    return machineType;
+  }
+  
+  public void setMachineType(String machineType) {
+    this.machineType = machineType;
+  }
+  
+  public String getBrandName() {
+    return brandName;
+  }
+  
+  public void setBrandName(String brandName) {
+    this.brandName = brandName;
+  }
+  
+  public Date getSignTime() {
+    return signTime;
+  }
+  
+  public void setSignTime(Date signTime) {
+    this.signTime = signTime;
+  }
+  
+  public void setPrice(float price) {
+    this.price = price;
   }
   
 }

@@ -55,6 +55,10 @@
 	<div class="conter main">
 		<h4 class="team-member-header page-header">
 			<i class="icon team-member-list-icon"></i>团队成员
+			<!--/等级设置-->
+			<a href="/teammember/levelSetting" class="btn btn-blue">
+				<i class="ico icon-add"></i>设置
+			</a>
 			<!--区域选择按钮-->
 			<div class="area-choose">
 				选择区域：<span>${regionName}</span> <a class="are-line"

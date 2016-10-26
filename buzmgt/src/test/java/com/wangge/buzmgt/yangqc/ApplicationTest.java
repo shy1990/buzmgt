@@ -2,6 +2,8 @@
 package com.wangge.buzmgt.yangqc;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -13,9 +15,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.wangge.buzmgt.BuzmgtApplication;
 import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
+import com.wangge.buzmgt.income.main.repository.MainIncomePlanRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
+import com.wangge.buzmgt.income.main.service.MainIncomeService;
+import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.schedule.IncomeSchedule;
 import com.wangge.buzmgt.income.schedule.repository.JobRepository;
+import com.wangge.buzmgt.util.DateUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BuzmgtApplication.class)
@@ -29,7 +35,12 @@ public class ApplicationTest {
   IncomeSchedule incomeSchedule;
   @Autowired
   IncomeMainplanUsersRepository planUserRep;
-  
+  @Autowired
+  MainIncomeService mainIncomeService;
+  @Autowired
+  MainPlanService planService;
+  @Autowired
+  MainIncomePlanRepository planRep;
   @Test
   public void testPro() {
     mainIncomeRep.initMonthSalary();
@@ -49,5 +60,21 @@ public class ApplicationTest {
   public void testFqsj() {
     Optional<Date> date = planUserRep.findMaxFqtimeBySalesmanId("C370113210");
     date.ifPresent(fqtime -> System.out.println(fqtime));
+  }
+  
+  @Test
+  public void testQt() {
+    mainIncomeService.caculateOutedOrder("20160620174259875");
+  }
+  @Test
+  public void testDate() {
+    planUserRep.findsaleByDateAndOrderNo(DateUtil.string2Date("2016-09-01"), "sfsdfa");
+    planUserRep.findBysalesmanAndDate(DateUtil.string2Date("2016-09-01"), "B37028206200");
+//    List<Map<String, Object>> userList = planService.findEffectUserDateList(20L, DateUtil.string2Date("2016-09-01"),
+//        DateUtil.string2Date("2016-09-30"));
+//    for (Map<String, Object> usr : userList) {
+//      System.out
+//          .println(usr.get("userId").toString() + usr.get("startDate").toString() + usr.get("endDate").toString());
+//    }
   }
 }

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.junit.Test;
@@ -52,6 +54,48 @@ public class UnitTest {
   
   @Test
   public void testV() {
-   System.out.println(ObjectUtils.max("2016-09-16","2016-08-16"));
+    System.out.println(ObjectUtils.max("2016-09-16", "2016-08-16"));
+  }
+  
+  @Test
+  public void testd() {
+    List<Integer> alist = new ArrayList<Integer>(Arrays.asList(1, 7, 8, 4, 2, 4));
+    for (Integer i : alist) {
+      alist.remove(i);
+    }
+    
+  }
+ public static ExecutorService exs = Executors.newFixedThreadPool(3);
+  @Test
+  public void testCurrent() {
+  
+    for (int i = 0; i < 6; i++) {
+      exs.execute(new Runnable() {
+        
+        @Override
+        public void run() {
+          try {
+            Thread.currentThread();
+            Thread.sleep(1000 * 8);
+            System.out.println("执行一次");
+          } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+        }
+      });
+    }
+    // Thread.currentThread();
+    // try {
+    // Thread.sleep(1000 * 40);
+    // } catch (InterruptedException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
+  }
+  
+  public static void main(String[] args) {
+    new UnitTest().testCurrent();
+    //exs.shutdown();
   }
 }

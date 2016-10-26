@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -21,10 +22,16 @@ import com.wangge.buzmgt.achieveset.entity.Achieve;
 public interface AchieveRepository extends JpaRepository<Achieve, Long>,
 JpaSpecificationExecutor<Achieve>{
   @Override
-//  @EntityGraph("graph.Achieve")
+//  @EntityGraph("graph.Achieve.groupNumbers")
   List<Achieve> findAll(Specification<Achieve> spec, Sort sort);
-  @Override
-//  @EntityGraph("graph.Achieve")
-  Page<Achieve> findAll(Specification<Achieve> spec, Pageable pageable);
-  
+	@Override
+	@EntityGraph("graph.Achieve.groupNumbers")
+	Page<Achieve> findAll(Specification<Achieve> spec, Pageable pageable);
+
+	@Override
+	@EntityGraph("graph.Achieve.groupNumbers")
+	Achieve findOne(Long achieveId);
+
+	@EntityGraph("graph.Achieve.groupNumbers")
+	Achieve findByAchieveIdAndPlanId(Long achieveId, String planId);
 }

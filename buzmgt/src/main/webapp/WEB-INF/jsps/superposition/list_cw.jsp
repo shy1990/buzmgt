@@ -90,9 +90,12 @@
         function listAll(superpositionList) {
             var myTemplate = Handlebars.compile($("#list-template").html());
             $("#tbody").html(myTemplate(superpositionList));
-
+        }
+        function see(id){
+            window.location.href = id;
 
         }
+
 
     </script>
     <script id="list-template" type="text/x-handlebars-template">
@@ -130,15 +133,19 @@
             </td>
 
             <td>{{giveDate}}</td>
-            <td><span class="ph-on">进行中</span></td>
+            <td>
+                <%--{{#if checkStatus}}--%>
+                <span class="ph-on">审核中</span>
+                <%--{{/if}}--%>
+            </td>
             <td>{{endDate}}</td>
             <td>
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="see()">查看
+                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="see({{id}})">查看
                 </button>
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">进程
-                </button>
-                <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止
-                </button>
+                <%--<button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">进程--%>
+                <%--</button>--%>
+                <%--<button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#">终止--%>
+                <%--</button>--%>
             </td>
         </tr>
         {{/each}}

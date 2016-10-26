@@ -17,9 +17,11 @@ public class Member {
     @Column(name = "MEMBER_ID")
     private Long id;//标识
 
-    private String name;//用户名
+    @Column(name = "name")
+    private String salesmanName;//用户名
 
-    private String userId;//用户的id
+    @Column(name = "USER_ID")
+    private String salesmanId;//用户的id
 
 
     public Long getId() {
@@ -30,19 +32,28 @@ public class Member {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getSalesmanName() {
+        return salesmanName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSalesmanName(String salesmanName) {
+        this.salesmanName = salesmanName;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getSalesmanId() {
+        return salesmanId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSalesmanId(String salesmanId) {
+        this.salesmanId = salesmanId;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", salesmanName='" + salesmanName + '\'' +
+                ", salesmanId='" + salesmanId + '\'' +
+                '}';
     }
 }

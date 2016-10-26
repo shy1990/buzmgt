@@ -11,23 +11,24 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AchieveIncomeRepositoryImpl implements CustomRepository {
 
-  @PersistenceContext
-  private EntityManager em;
+	@PersistenceContext
+	private EntityManager em;
 
-  @Override
-  public BigDecimal sumByAchieveId(Long achieveId) {
-    String sql = "SELECT SUM(aai.MONEY) as MONEY FROM SYS_ACHIEVE_AWARD_INCOME aai where aai.ACHIEVE_ID = "+ achieveId ;
-    Query query = em.createNativeQuery(sql);
-    return (BigDecimal) query.getSingleResult();
-  }
+	@Override
+	public BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId, Integer status) {
+		String sql = "SELECT SUM(aai.MONEY) as MONEY FROM SYS_INCOME_ACHIEVE_SET aai where aai.ACHIEVE_ID = " + achieveId +
+						"AND aai.status =" + status +" and aai.flag = 'NORMAL' ";
+		Query query = em.createNativeQuery(sql);
+		return (BigDecimal) query.getSingleResult();
+	}
 
-  @Override
-  public BigDecimal sumByAchieveIdAndUserId(Long achieveId, String userId) {
-    String sql = "SELECT SUM(aai.MONEY) MONEY FROM SYS_ACHIEVE_AWARD_INCOME aai where aai.ACHIEVE_ID = "+ achieveId +" and "
-        + "aai.USER_ID = '"+userId+"' ";
-    Query query = em.createNativeQuery(sql);
-    return (BigDecimal) query.getSingleResult();
-  }
-  
-  
+	@Override
+	public BigDecimal sumMoneyByAchieveIdAndUserIdAndStatus(Long achieveId, String userId, Integer status) {
+		String sql = "SELECT SUM(aai.MONEY) MONEY FROM SYS_INCOME_ACHIEVE_SET aai where aai.ACHIEVE_ID = " + achieveId + " and "
+						+ "aai.USER_ID = '" + userId + "' AND  aai.STATUS= " + status +" and aai.flag = 'NORMAL'";
+		Query query = em.createNativeQuery(sql);
+		return (BigDecimal) query.getSingleResult();
+	}
+
+
 }

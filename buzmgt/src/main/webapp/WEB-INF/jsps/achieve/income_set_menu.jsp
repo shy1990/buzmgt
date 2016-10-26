@@ -18,7 +18,7 @@
 					class="qipao">2</span></a></li>
 			<li class="active"><a data-toggle="tab" href="#dlsz">达量设置</a></li>
 			<li><a data-toggle="tab" href="#djsz">叠加设置</a></li>
-			<li><a data-toggle="tab" href="#dljl">达量奖励</a></li>
+			<li><a href="/award/list?planId=${planId}">达量奖励</a></li>
 		</ul>
 </body>
 </html>

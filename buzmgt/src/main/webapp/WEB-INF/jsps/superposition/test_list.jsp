@@ -192,7 +192,7 @@
                             oneAdd: 0,
                             twoAdd: 0,
                             threeAdd: 0,
-                            members: [{name: 'xiaoming', userId: '4556644'}, {name: 'lidong', userId: '97854345'}]
+                            members: [{name: '麦克', userId: '4556644'}, {name: 'joe', userId: '97854345'}]
 
                         },
                         {
@@ -200,7 +200,14 @@
                             oneAdd: 0,
                             twoAdd: 0,
                             threeAdd: 0,
-                            members: [{name: 'dahai', userId: '4556644'}, {name: 'huanghe', userId: '97854345'}]
+                            members: [{name: '张学友', userId: '4556644'}, {name: '黄家驹', userId: '97854345'}]
+                        },
+                        {
+                            name: 'C组',
+                            oneAdd: 0,
+                            twoAdd: 0,
+                            threeAdd: 0,
+                            members: [{name: '灵动', userId: '4556644'}, {name: '刘德华', userId: '97854345'}]
                         }
 
                     ]
@@ -230,6 +237,19 @@
 
         }
 
+
+        $(function(){
+            $.ajax({
+                url:'planUsers',
+                dataType:'json',
+                data:{'sc_EQ_planId':15},
+                success:function(data){
+                    console.log(data);
+                }
+            });
+
+
+        });
 
     </script>
 </head>

@@ -92,6 +92,30 @@
         </div>
         {{/each}}
     </script>
+    <script id="rules-template-one" type="text/x-handlebars-template">
+        {{#each this}}
+        <div class="col-sm-4 jfbox-box">
+            {{#if min}}
+            <span class="text-nub">{{min}}</span>
+            <span class="text-publ"> 台 ≤</span>
+            {{/if}}
+            <span class="text-publ">实际销量 </span>
+            {{#if max}}
+            <span class="text-publ">＜ </span>
+            <span class="text-nub">{{max}}</span>
+            <span class="text-publ">台</span> &nbsp;&nbsp;
+            {{/if}}
+            <span class="text-gery text-size-12">奖励：</span>
+            <input type="text" class="ph-inpt" placeholder="0.00"
+                   onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
+                   onafterpaste="this.value=this.value.replace(/[^\d]/g,'')"
+                   onblur="addMoneyOne('{{num}}',this.value);"/>
+            <span class="text-publ">元/台</span>
+        </div>
+        {{/each}}
+    </script>
+
+
     <script id="numbers-template" type="text/x-handlebars-template">
         {{#each this}}
         {{#if this}}
@@ -100,9 +124,22 @@
         {{/each}}
     </script>
 
+
+    <script id="show-goods-template" type="text/x-handlebars-template">
+       {{#each this}}
+       <tr>
+           <th>{{machineType}}</th>
+           <th>{{brand}}</th>
+           <th>{{good}}</th>
+       </tr>
+        {{/each}}
+    </script>
+
     <script type="text/javascript">
         var base = '<%=basePath%>';
         var rule = new Array();//全局变量
+        var singleRules = new Array();
+        var planId = '${planId}';
     </script>
 <body>
 
@@ -135,6 +172,9 @@
                     </select>
                 </li>
                 <button class="btn  bnt-sm ph-btn-add" onclick="addGood()"><span class="text-strong">添加</span></button>
+                <button class="btn  bnt-sm ph-btn-add" onclick="showGoods()"><span class="text-strong">
+                 已添加商品
+                </span></button>
             </ul>
 
             <!--阶梯提成设置-->
@@ -198,40 +238,108 @@
             <div class="jttcsz">
                 <i class="ico icon-ry"></i><span class="text-head text-strong">人员分组设置</span>
                 <hr>
-
                 <div class="jfbox" id="groupJoe">
-                    <%--<div class="col-sm-6 ryfz-box">--%>
-                    <%--<a href=""><span class="text-big-green">A组（5人）</span></a> &nbsp;--%>
+                </div>
+            </div>
+            <%-- 一单达量设置 --%>
+            <div class="jttcsz">
+                <div class="rwzsql O_number_box">
+                    <span class="text-gery text-strong  ">一单达量：</span>
+                    <!-- 周期任务量 -->
+                    <span id="numberListOne" class="J_number">
+	            	</span>
+                    <i class="new-icon ph-jiaj" data-toggle="modal"
+                       data-target="#o_zzrwul"></i>
+                    <input type="hidden" class="O_numberFirst_" name="numberFirst" value=""/>
+                    <input type="hidden" class="O_numberSecond_" name="numberSecond" value=""/>
+                    <input type="hidden" class="O_numberThird_" name="numberThird" value=""/>
+                </div>
+
+                <div class="jfgz">
+                    <span class="text-gery text-strong  ">奖罚规则：</span>
+                    <div id="ruleListOne" class="jfbox J_RULE"></div>
+                </div>
+            </div>
+
+            <%-- 设置一单任务量 --%>
+            <div id="o_zzrwul" class="modal fade" role="dialog">
+                <div class="modal-dialog " role="document">
+                    <div class="modal-content modal-blue">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h3 class="modal-title">设置任务量</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <form id="addNumberFormOne" class="form-horizontal">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">达量一：</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group are-line">
+                                                <span class="input-group-addon "><i
+                                                        class="ph-icon   ph-renwu"></i></span>
+                                                <!--<span class="input-group-addon"><i class="ico icon-je"></i></span>-->
+                                                <input type="text" class="form-control input-h O_numberFirst"
+                                                       aria-describedby="basic-addon1" placeholder="请输入达量"
+                                                       onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
+                                                       onafterpaste="this.value=this.value.replace(/[^\d]/g,'')">
+                                                </input>
+                                            </div>
+                                            <span class="text-gery "
+                                                  style="float: right;margin-right: -30px;margin-top: -25px">台</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">达量二：</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group are-line">
+                                                <span class="input-group-addon "><i
+                                                        class=" ph-icon ph-renwu"></i></span>
+                                                <input type="text" class="form-control input-h O_numberSecond"
+                                                       onblur="chkScendValue();"
+                                                       aria-describedby="basic-addon1" placeholder="请输入达量"
+                                                       onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
+                                                       onafterpaste="this.value=this.value.replace(/[^\d]/g,'')">
+                                                </input>
+                                            </div>
+                                            <span class="text-gery "
+                                                  style="float: right;margin-right: -30px;margin-top: -25px">台</span>
+                                        </div>
+                                    </div>
 
 
-                    <%--<span class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input--%>
-                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;--%>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">达量三：</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group are-line">
+                                                <span class="input-group-addon "><i
+                                                        class=" ph-icon ph-renwu"></i></span>
+                                                <input type="text" class="form-control input-h O_numberThird"
+                                                       onblur="chkThirdValue();"
+                                                       aria-describedby="basic-addon1" placeholder="请输入达量"
+                                                       onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
+                                                       onafterpaste="this.value=this.value.replace(/[^\d]/g,'')">
+                                                </input>
+                                            </div>
+                                            <span class="text-gery "
+                                                  style="float: right;margin-right: -30px;margin-top: -25px">台</span>
+                                        </div>
+                                    </div>
 
-
-                    <%--<span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input--%>
-                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>--%>
-
-                    <%--</div>--%>
-
-                    <%--<div class="col-sm-6 ryfz-box" style=" ">--%>
-                    <%--<a href=""><span class="text-big-blue">B组（3人）</span></a> &nbsp; <span--%>
-                    <%--class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input--%>
-                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;--%>
-                    <%--<span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input--%>
-                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>--%>
-                    <%--</div>--%>
-
-                    <%--<div class="col-sm-6 ryfz-box">--%>
-                    <%--<a href=""><span class="text-big-org">C组（7人）</span></a> &nbsp; <span--%>
-                    <%--class="text-gery text-size-12">一阶段达量：</span> <span class="text-nub">500+</span> <input--%>
-                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12"> 台 </span>&nbsp; &nbsp;--%>
-                    <%--<span class="text-gery text-size-12">二阶段达量：</span> <span class="text-nub">1000+</span> <input--%>
-                    <%--type="text" class="ph-inpt"> <span class="text-gery text-size-12">台</span>--%>
-                    <%--</div>--%>
-
-                    <%--<div class="col-sm-6 ryfz-box box-add tianjz">--%>
-                    <%--<i class="ico ico-ph-tj "></i> <a href=""> <span class="text-gery">添加组</span></a>--%>
-                    <%--</div>--%>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-4 col-sm-4 ">
+                                            <a herf="javascript:return 0;" onclick="addRuleOne(this)"
+                                               class="Zdy_add  col-sm-12 btn btn-primary ">保存
+                                            </a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -413,6 +521,37 @@
             </div>
         </div>
     </div>
+    <!--产品列表-->
+    <div id="show_goods" class="modal fade" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-blue">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">已添加产品列表</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <table >
+                            <thead>
+                                <tr>
+                                    <th>类型</th>
+                                    <th>品牌</th>
+                                    <th>型号</th>
+                                </tr>
+                            </thead>
+                            <tbody id="showGoods">
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--[if lt IE 9]>
     <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>

@@ -1,27 +1,30 @@
 package com.wangge.buzmgt.achieveaward.service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import com.wangge.buzmgt.achieveaward.entity.AwardGood;
+import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
+import com.wangge.buzmgt.brandincome.service.BrandIncomeServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -46,6 +49,10 @@ public class AwardServiceImpl implements AwardService {
 
   @Autowired
   private AwardRepository awardRepository;
+  @PersistenceContext
+  private EntityManager entityManager;
+  @Autowired
+  private BrandIncomeServiceImpl brandIncomeService;
   
   public List<Award> findAll(Map<String,Object> searchParams){
     return this.findAll(searchParams, new Sort(Direction.DESC, "createDate"));
@@ -94,7 +101,7 @@ public class AwardServiceImpl implements AwardService {
   }
   @Override
   public Award findOne(Long id){
-    return awardRepository.findOne(id);
+    return awardRepository.findByAwardId(id);
   }
 
   public static Specification<Award> awardSearchFilter(final Collection<SearchFilter> filters,
@@ -293,4 +300,129 @@ public class AwardServiceImpl implements AwardService {
     };
   }
 
+  @Override
+  public int findCycleSales(List<String> goodIds) {
+    int num = awardRepository.findCycleSales(goodIds);
+    return num;
+  }
+
+  @Override
+  public Page<BrandIncomeVo> findAll(HttpServletRequest request, Award award, Pageable pageable) {
+    Page<BrandIncomeVo> pageResult = null;
+    String hql = executeSql(request, award);
+    Query query = entityManager.createNativeQuery(hql);
+    int page = pageable.getPageNumber();
+    int size = pageable.getPageSize();
+    int count = query.getResultList().size();
+    query.setFirstResult(page * size);
+    query.setMaxResults(size);
+    List<BrandIncomeVo> list = findBySql(query);
+    pageResult = new PageImpl<BrandIncomeVo>(list, new PageRequest(page, size), count);
+    return pageResult;
+  }
+
+  @Override
+  public List<BrandIncomeVo> findAll(HttpServletRequest request, Award award) {
+    String hql = executeSql(request, award);
+    Query q = entityManager.createNativeQuery(hql);
+    List<BrandIncomeVo> list = findBySql(q);
+    return list;
+  }
+
+  /**
+   * 获取执行的sql
+   *
+   * @param request
+   * @param award
+   * @return
+   */
+  private String executeSql(HttpServletRequest request, Award award) {
+    Set<AwardGood> awardGoods = award.getAwardGoods();
+    List<String> goodIds = new ArrayList<>();
+    if (CollectionUtils.isNotEmpty(awardGoods)){
+      awardGoods.forEach(awardGood -> {
+        goodIds.add("'" + awardGood.getGoodId() + "'");
+      });
+    }
+    String hql = "select distinct g.region_id,\n" +
+            "                nvl(sum(g.nums) over(partition by g.region_id),0) AS nums,\n" +
+            "                g.goods_name,\n" +
+            "                g.brand_name,\n" +
+            "                g.TRUENAME,\n" +
+            "                g.goods_id,\n" +
+            "                g.stars_level,\n" +
+            "                s.level_name,\n" +
+            "                aas.start_date,\n" +
+            "                aas.end_date,\n" +
+            "                aas.status,\n" +
+            "                g.namepath,\n" +
+            "                aas.NUMBER_FIRST,\n" +
+            "                aas.NUMBER_SECOND,\n" +
+            "                aas.NUMBER_THIRD,\n" +
+            "                gn.GROUP_NAME\n" +
+            "  from sys_goods_order g\n" +
+            " inner join sys_salesman s\n" +
+            "    on g.region_id = s.region_id\n" +
+            " inner join SYS_AWARD_SET_GOODS asg\n" +
+            "    on g.goods_id = asg.good_id\n" +
+            " inner join SYS_ACHIEVE_AWARD_SET aas\n" +
+            "    on asg.AWARD_ID = aas.AWARD_ID\n" +
+            " inner join SYS_AWARD_SET_GROUP setGroup\n" +
+            "    on aas.AWARD_ID = setGroup.SYS_AWARD_ID\n" +
+            " inner join SYS_GROUPING_NUMBER gn\n" +
+            "    on setGroup.GROUPING_ID = gn.GROUP_ID\n" +
+            "where gn.TYPE='REWARD' and to_char(g.PAY_TIME, 'yyyy-mm-dd') between\n" +
+            "       to_char(aas.start_date, 'yyyy-mm-dd') and\n" +
+            "       to_char(aas.end_date, 'yyyy-mm-dd')";
+
+    String[] arr = (String[])goodIds.toArray(new String[goodIds.size()]);
+    hql += "\n and g.goods_id in (" + String.join(",",arr) + ")";
+    String starsLevel = request.getParameter("starsLevel");
+    if (StringUtils.isNotEmpty(starsLevel)) {
+      hql += "\n and g.stars_level = '" + starsLevel + "'";
+    }
+    String levelName = request.getParameter("levelName");
+    if (StringUtils.isNotEmpty(levelName)) {
+      hql += "\n and s.level_name = '" + levelName + "'";
+    }
+    String trueName = request.getParameter("trueName");
+    if (StringUtils.isNotEmpty(trueName)) {
+      hql += "\n and s.truename like '%" + trueName + "%'";
+    }
+    return hql;
+  }
+
+  /**
+   * 遍历查询结果
+   *
+   * @param query
+   * @return
+   */
+  private List<BrandIncomeVo> findBySql(Query query) {
+    List<BrandIncomeVo> list = new ArrayList<>();
+    List<Object[]> ret = query.getResultList();
+    if (CollectionUtils.isNotEmpty(ret)) {
+      ret.forEach(o -> {
+        BrandIncomeVo bi = new BrandIncomeVo();
+        bi.setRegionId((String) o[0]);
+        bi.setNums(((BigDecimal) o[1]).intValue());
+        bi.setGoodsName((String) o[2]);
+        bi.setBrandName((String) o[3]);
+        bi.setTruename((String) o[4]);
+        bi.setGoodsId((String) o[5]);
+        bi.setStarsLevel(((BigDecimal) o[6]).intValue());
+        bi.setLevelName((String) o[7]);
+        bi.setStartDate((Date) o[8]);
+        bi.setEndDate((Date) o[9]);
+        bi.setStatus((String) o[10]);
+        bi.setNamepath((String) o[11]);
+        bi.setNumberFirst(((BigDecimal) o[12]).intValue());
+        bi.setNumberSecond(((BigDecimal) o[13]).intValue());
+        bi.setNumberThird(((BigDecimal) o[14]).intValue());
+        bi.setGroupName((String) o[15]);
+        list.add(bi);
+      });
+    }
+    return list;
+  }
 }
