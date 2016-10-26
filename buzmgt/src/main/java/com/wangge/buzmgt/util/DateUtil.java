@@ -1,25 +1,16 @@
 package com.wangge.buzmgt.util;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.wangge.buzmgt.exception.MyRuntimeException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.sparta.xpath.ThisNodeTest;
-import com.wangge.buzmgt.exception.MyRuntimeException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
  
@@ -806,7 +797,25 @@ public class DateUtil {
 //		  
 //		  System.out.println("相差天数---------->"+formatDate(l1));
 //	}
-	
-	
+
+	/**
+	 * 比较时间是否是同一天
+	 * @param date
+	 * @return
+	 * @throws ParseException
+   */
+	public static Boolean compareDate(String date) {
+		java.util.Date nowdate=new java.util.Date();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+//		Date d = null;
+//
+//		try {
+//			d = sdf.parse(date);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+
+		return date2String(nowdate).equals(date);
+	}
 	
 }

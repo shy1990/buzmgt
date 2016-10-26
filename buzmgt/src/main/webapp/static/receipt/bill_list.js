@@ -118,6 +118,22 @@ Handlebars.registerHelper('formDate', function(value) {
     }
     return changeTimeToString(new Date(value));
 });
+
+Handlebars.registerHelper('todaypay', function(value) {
+    if (value == null || value == "") {
+        return "0";
+    }
+  return value;
+});
+
+
+Handlebars.registerHelper('historypay', function(value) {
+    if (value == null || value == "") {
+        return "0";
+    }
+    return value;
+});
+
 /**
  * 根据姓名查询
  */
@@ -151,7 +167,6 @@ function findBySalesManName() {
 
 //查看跳转页面
 function view(userId,todayAllShouldPay,todayShouldPay,historyShouldPay,todayDate) {
-    alert(1111)
     window.location.href= base + "bill/persionBillView?userId="+ userId+"&todayAllShouldPay="+todayAllShouldPay+"&todayShouldPay="+todayShouldPay+"&historyShouldPay="+historyShouldPay+"&todayDate="+todayDate;
 }
 

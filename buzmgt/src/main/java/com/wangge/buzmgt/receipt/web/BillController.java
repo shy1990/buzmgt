@@ -83,6 +83,7 @@ public class BillController {
 		model.addAttribute("todayShouldPay",todayShouldPay);
 		model.addAttribute("historyShouldPay",historyShouldPay);
 		model.addAttribute("userId",userId);
+		model.addAttribute("todayDate",todayDate);
 		return  "/receipt/person_bill_view";
 	}
 
@@ -95,9 +96,9 @@ public class BillController {
 	 * @param
 	 * @return
 	 */
-	@RequestMapping(value="/showorderPayList",method= RequestMethod.GET)
+	@RequestMapping(value="/showOrderPayList",method= RequestMethod.GET)
 	@ResponseBody
-	public Page<BillSalesmanVo> showorderPayList(int page, String date, String userId,
+	public Page<BillSalesmanVo> showOrderPayList(int page, String date, String userId,
 																							 @PageableDefault(page = 0,size=10,sort={"createTime"},direction= Sort.Direction.DESC) Pageable pageRequest ,
 																							 HttpServletRequest request){
 

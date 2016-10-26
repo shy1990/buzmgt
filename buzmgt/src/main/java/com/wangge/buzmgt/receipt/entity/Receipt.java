@@ -18,9 +18,13 @@ public class Receipt {
 	private Integer receiptType;
 	private Date createTime;
 	private String accountId;
-	private int signid;
+
 	private String orderNo;
-	
+
+
+	public Receipt(){
+
+	}
 	
 	public Receipt(Float amountCollected, Integer receiptType, Date createTime,
 								 String accountId, String orderNo) {
@@ -30,6 +34,7 @@ public class Receipt {
 		this.createTime = createTime;
 		this.accountId = accountId;
 		this.orderNo = orderNo;
+
 	}
 	public Integer getId() {
 		return id;
@@ -61,17 +66,11 @@ public class Receipt {
 	public void setAccountId(String accountId) {
 		this.accountId = accountId;
 	}
-	public int getSignid() {
-		return signid;
-	}
-	public void setSignid(int signid) {
-		this.signid = signid;
-	}
 	public String getOrderno() {
 		return orderNo;
 	}
 	public void setOrderno(String orderNo) {
 		this.orderNo = orderNo;
 	}
-	
+
 }

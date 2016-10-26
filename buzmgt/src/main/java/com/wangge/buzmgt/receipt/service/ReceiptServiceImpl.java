@@ -5,6 +5,7 @@ import com.wangge.buzmgt.receipt.entity.BillSalesmanVo;
 import com.wangge.buzmgt.receipt.entity.BillVo;
 import com.wangge.buzmgt.receipt.entity.Receipt;
 import com.wangge.buzmgt.receipt.repository.ReceiptRepository;
+import com.wangge.buzmgt.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-  @Service
+@Service
   public class ReceiptServiceImpl implements ReceiptService {
     @PersistenceContext
     private EntityManager em;
@@ -29,42 +30,58 @@ import java.util.List;
   @Override
   public Page<BillVo> findAllBill(String date, String salesmanName, int pageNum) {
     //总金额查询计算
-    String sql_mall =" (SELECT p.shouldpaymoneny,\n" +
-        "  p.today,\n" +
-        "  a.MOBILEPHONE\n" +
-        "FROM\n" +
-        "  (SELECT SUM(t.ACTUAL_PAY_NUM)   AS shouldpaymoneny,\n '" +date+
-        "'     AS today,\n" +
-        "    m.ADMIN_ID\n" +
-        "  FROM sjzaixian.sj_tb_order t\n" +
-        "  JOIN SJZAIXIAN.SJ_TB_MEMBERS m\n" +
-        "  ON t.MEMBER_ID=m.ID\n" +
-        "  JOIN SJZAIXIAN.SJ_TB_ADMIN a\n" +
-        "  ON m.ADMIN_ID=a.ID\n" +
-        "  WHERE t.createtime BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+date+"','yyyy-mm-dd')-1)+20/24\n" +
+    String sql_mall ="(SELECT SUM(t.ACTUAL_PAY_NUM)   AS shouldpaymoneny,\n" +
+        " '"+date+"'     AS today,\n" +
+        " t.user_id\n" +
+        "  FROM BIZ_ORDER_SIGNFOR t ";
+    /*    "  WHERE t.createtime BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+date+"','yyyy-mm-dd')-1)+20/24\n" +
         "  AND t.PAY_MENT !='0'\n" +
         "  GROUP BY m.ADMIN_ID\n" +
         "  )p\n" +
         "JOIN SJZAIXIAN.SJ_TB_ADMIN a\n" +
-        "ON p.ADMIN_ID=a.ID)sumpay";
+        "ON p.ADMIN_ID=a.ID)sumpay";*/
+
+    if(DateUtil.compareDate(date)){
+      sql_mall+=" WHERE t.creat_time >trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 ";
+    }else{
+      sql_mall+="WHERE t.creat_time BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+date+"','yyyy-mm-dd')-1)+21/24 \n" ;
+    }
+
+    sql_mall+=  "  AND t.fastmail_no is not null GROUP BY t.user_id)sumpay ";
 
     //当天应支付金额
-    String sql_todayshouldpay="(select sum(o.ARREARS) as today_shouldPay ,user_id from BIZ_ORDER_SIGNFOR o  \n" +
-        "WHERE o.creat_time BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+date+"','yyyy-mm-dd')-1)+21/24 \n" +
+    String sql_todayshouldpay="(select sum(o.ARREARS) as today_shouldPay ,user_id from BIZ_ORDER_SIGNFOR o  \n";
+       /* "WHERE o.creat_time BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+date+"','yyyy-mm-dd')-1)+21/24 \n" +
         "and fastmail_no is not null\n" +
+        "group by user_id)todyshouldpay";*/
+
+
+    if(DateUtil.compareDate(date)){
+      sql_todayshouldpay+=" WHERE o.creat_time >trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 ";
+    }else{
+      sql_todayshouldpay+="WHERE o.creat_time BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+date+"','yyyy-mm-dd')-1)+21/24 \n" ;
+    }
+
+    sql_todayshouldpay+=  "and fastmail_no is not null\n" +
         "group by user_id)todyshouldpay";
 
     //历史应付金额
 
-    String sql_historyshouldpay ="(select sum(o.ARREARS) as historypay,o.user_id from BIZ_ORDER_SIGNFOR o  \n" +
-        "group by o.user_id)historyshouldpay";
+    String sql_historyshouldpay ="(select (h.historypay+p.paynum)as historypay,p.user_id from  (select sum(o.ARREARS) as historypay,o.user_id from BIZ_ORDER_SIGNFOR o  \n" +
+        "where o.creat_time <trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24\n" +
+        "group by o.user_id ) h\n" +
+        "join \n" +
+        "(select sum(actual_pay_num) as paynum,o.user_id from BIZ_ORDER_SIGNFOR o  \n" +
+        "where o.creat_time <trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24\n" +
+        "and ORDER_STATUS ='2'\n" +
+        "group by o.user_id ) p on h.user_id=p.user_id)historyshouldpay";
 
 
     //总算法
     String sql="select s.truename as salemanName,s.user_id as userId ,sumpay.shouldpaymoneny as todayAllShouldPay,sumpay.today as todayDate," +
         "todyshouldpay.today_shouldpay as todayShouldPay,historyshouldpay.historypay as historyShouldPay ," +
         "r.name as regionName from "+sql_mall   +
-        " join SYS_SALESMAN s on sumpay.MOBILEPHONE=s.MOBILE\n" +
+        " join SYS_SALESMAN s on sumpay.user_id=s.user_id \n" +
         "join "+sql_todayshouldpay  +" on todyshouldpay.user_id=s.user_id\n" +
         "join "+sql_historyshouldpay + " on historyshouldpay.user_id=s.user_id\n" +
         "join sys_region r on s.region_id=r.region_id";
@@ -73,7 +90,7 @@ import java.util.List;
       sql=sql+" where s.truename like '%"+salesmanName+"%'";
     }
 
-   // System.out.println(sql);
+    System.out.println(sql);
 
     Query query =  em.createNativeQuery(sql);
     int count = query.getResultList().size();
@@ -91,8 +108,17 @@ import java.util.List;
         bl.setUserId(o[1]+"");
         bl.setTodayAllShouldPay(Double.parseDouble(o[2]+""));
         bl.setTodayDate(o[3]+"");
-        bl.setTodayShouldPay(Double.parseDouble(o[4]+""));
-        bl.setHistoryShouldPay(Double.parseDouble(o[5]+""));
+        if(null==o[4]){
+          bl.setTodayShouldPay((double) 0);
+        }else{
+          bl.setTodayShouldPay(Double.parseDouble(o[4]+""));
+        }
+        if(null==o[5]){
+          bl.setTodayShouldPay((double) 0);
+        }else{
+          bl.setHistoryShouldPay(Double.parseDouble(o[5]+""));
+        }
+
         bl.setRegionName(o[6]+"");
         billList.add(bl);
       }
@@ -106,7 +132,7 @@ import java.util.List;
   public Page<BillSalesmanVo> findByUserIdAndCreateTime(String userId, String todayDate, int pageNum) {
     String sql="select o.order_no,o.shop_name,o.ARREARS,o.ORDER_PAY_TYPE,o.BILL_STATUS,o.IS_PRIMARY_ACCOUNT ,'"+todayDate+"'as todayDate" +
         " from biz_order_signfor  o where o.USER_ID='" +userId+
-        "' and o.creat_time BETWEEN trunc( to_date('"+todayDate+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+todayDate+"','yyyy-mm-dd')-1)+20/24  ";
+        "' and o.creat_time BETWEEN trunc( to_date('"+todayDate+"','yyyy-mm-dd')-1)+20/24 AND trunc( to_date('"+todayDate+"','yyyy-mm-dd'))+21/24  and o.fastmail_no is not null ";
       //  + " and o.CUSTOM_SIGNFOR_TIME is not null";
 
 
@@ -124,7 +150,12 @@ import java.util.List;
         BillSalesmanVo bs = new BillSalesmanVo();
         bs.setOrderNum(o[0]+"");
         bs.setShopName(o[1]+"");
-        bs.setArrears(Double.parseDouble(o[2]+""));
+        if(null!=o[2]){
+          bs.setArrears(Double.parseDouble(o[2]+""));
+
+        }else{
+          bs.setArrears((double) 0);
+        }
 
         if(null!=o[3]){
           bs.setOrderPayStatus(Integer.parseInt(o[3]+""));

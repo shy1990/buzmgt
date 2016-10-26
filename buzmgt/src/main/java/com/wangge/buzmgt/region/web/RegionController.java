@@ -409,8 +409,10 @@ public class RegionController {
 	     }else{
 	    	 model.addAttribute("man",man.getTruename());
 	    	 SaojieDataVo saojiedatalist  = sds.getsaojieDataList(man.getId(),null);
+
 	 	    List<SaojieData> list = saojiedatalist.getList();
-	 	    int size = 0;
+
+				 int size = 0;
 				 List<SaojieData> listNewSaojieData=new ArrayList<SaojieData>();
 	 	    if(list!=null && !list.isEmpty()){
 	 	      size = list.size();

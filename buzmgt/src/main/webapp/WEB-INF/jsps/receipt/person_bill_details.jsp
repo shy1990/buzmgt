@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"   pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -149,10 +151,11 @@
 						<dl class="dl-horizontal">
 							<dt><span class="dz-grey">订单详情：</span></dt>
 							<dd>
-								<div  class="text-bg fl"> <span class="text-pronce ">华为 华为畅享5S（限拍5台）x1</span></div>
-								<div  class="text-bg fl"> <span class="text-pronce ">华为 华为畅享5S（限拍5台）x1</span></div>
-								<div  class="text-bg fl"> <span class="text-pronce ">华为 华为畅享5S（限拍5台）x1</span></div>
-
+								<c:if test="${listOrderItem.size() > 0 }">
+									<c:forEach var="item" items="${listOrderItem}" varStatus="status">
+								<div  class="text-bg fl"> <span class="text-pronce ">${item.name}x${item.nums}</span></div>
+									</c:forEach>
+									</c:if>
 							</dd>
 						</dl>
 					</li>
@@ -190,11 +193,24 @@
 						<dl class="dl-horizontal">
 							<dt style="margin-top:20px"><span class="dz-grey ">收款历史：</span></dt>
 							<dd>
-								<div  class="text-bg-sk fl"> <span class="text-pronce ">主账户收款 1000.00元   &nbsp;&nbsp;2016.09.18  08:30</span></div>
-								<div  class="text-bg-sk fl"> <span class="text-pronce ">主账户收款 1000.00元   &nbsp;&nbsp;2016.09.18  08:30</span></div>
-								<div  class="text-bg-sk fl"> <span class="text-pronce ">主账户收款 1000.00元   &nbsp;&nbsp;2016.09.18  08:30</span></div>
-								<div  class="text-bg-sk fl"> <span class="text-pronce ">主账户收款 1000.00元   &nbsp;&nbsp;2016.09.18  08:30</span></div>
-								<div  class="text-bg-sk fl"> <span class="text-pronce ">主账户收款 1000.00元   &nbsp;&nbsp;2016.09.18  08:30</span></div>
+                                <c:if test="${listReceipt.size() > 0 }">
+	                            <c:forEach var="receipt" items="${listReceipt}" varStatus="status">
+								<div  class="text-bg-sk fl">
+									<span class="text-pronce ">
+								<%--		<c:choose>
+											<c:when test="${receipt.orderSignfor.isPrimaryAccount.value=='0'}">主账户收款</c:when>
+											<c:otherwise>子账号收款</c:otherwise>
+												${receipt.amountCollected}元   &nbsp;&nbsp;${receipt.createTime}--%>
+										<c:choose>
+											<c:when test="${orderSignfor.isPrimaryAccount==0}">主账户收款</c:when>
+											<c:otherwise>子账号收款</c:otherwise>
+										</c:choose>
+										${receipt.amountCollected}元   &nbsp;&nbsp;${receipt.createTime}
+										</span>
+								    </span>
+								</div>
+									</c:forEach>
+									</c:if>
 							</dd>
 						</dl>
 					</li>

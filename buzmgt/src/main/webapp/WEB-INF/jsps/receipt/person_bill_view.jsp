@@ -148,10 +148,10 @@
 			<td>{{orderNum}}</td>
 			<td>{{shopName}}</td>
 			<td>{{arrears}}</td>
-			<td>{{orderPayStatus}}</td>
-			<td>{{billStatus}}</td>
+			<td>{{payType orderPayStatus}}</td>
+			<td>{{paybillStatus billStatus}}</td>
 			<td>{{todayDate}}</td>
-			<td>{{isPrimaryAccount}}</td>
+			<td>{{account isPrimaryAccount}}</td>
 			<td>
 
 				<button class="btn btn-green btn-sm btn-w" data-toggle="modal"
@@ -203,6 +203,7 @@
 				<p class="text-gren text-16">${historyShouldPay}元</p>
 
 				<input type="hidden" id="userId" value="${userId}">
+				<input type="hidden" id="todayDate" value="${todayDate}">
 			</div>
 		</div>
 
@@ -215,7 +216,7 @@
 
 		<div class="salesman">
 
-			<div class=" fl">
+			<%--<div class=" fl">
 
 				<input type="text" class="form-control form_datetime  input-sm" id="orderPayDate" placeholder="选择日期"
 					   readonly="readonly" style="background: #ffffff;margin: 0 10px 20px -10px;width: 220px ">
@@ -225,7 +226,7 @@
 
 			<button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
 				检索
-			</button>
+			</button>--%>
 		</div>
 
 		<div class="link-posit-t pull-right export">

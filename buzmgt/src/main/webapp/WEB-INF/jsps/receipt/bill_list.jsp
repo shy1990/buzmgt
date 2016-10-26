@@ -34,14 +34,14 @@
 			<td>{{salemanName}}</td>
 			<td>{{regionName}}</td>
 			<td>{{todayAllShouldPay}}</td>
-			<td>{{todayShouldPay}}</td>
-			<td>{{historyShouldPay}}</td>
+			<td>{{todaypay todayShouldPay}}</td>
+			<td>{{historypay historyShouldPay}}</td>
 			<td>{{todayDate}}</td>
 			<td>
 
 				<button class="btn btn-green btn-sm btn-w" data-toggle="modal"
 						  data-target=""
-						  onclick="view('{{userId}}','{{todayAllShouldPay}}','{{../name}}','{{cardNumber}}','{{bankName}}')">查看
+						  onclick="view('{{userId}}','{{todayAllShouldPay}}','{{todaypay todayShouldPay}}','{{historypay historyShouldPay}}','{{todayDate}}')">查看
 			    </button>
 			</td>
 		</tr>

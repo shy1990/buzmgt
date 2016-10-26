@@ -69,8 +69,10 @@ function findBankTradeList(page) {
     SearchData['page'] = page;
     var userId=$('#userId').val();
     SearchData['userId'] = userId;
+    var todayDate=$('#todayDate').val();
+    SearchData['date'] = todayDate;
     $.ajax({
-        url : "/bill/showorderPayList",
+        url : "/bill/showOrderPayList",
         type : "GET",
         data : SearchData,
         dataType : "json",
@@ -89,7 +91,7 @@ function findBankTradeList(page) {
     })
 }
 /**
- * 生成油补统计列表
+ * 
  *
  * @param data
  */
@@ -121,6 +123,39 @@ Handlebars.registerHelper('formDate', function(value) {
     }
     return changeTimeToString(new Date(value));
 });
+
+Handlebars.registerHelper('payType', function(value) {
+    if(value===0){
+        return "线上支付";
+    }else if(value===1){
+        return "POS";
+    }else if(value===2){
+        return "收现金";
+    }else{
+        return "未收款";
+    }
+});
+
+Handlebars.registerHelper('paybillStatus', function(value) {
+    if(value===0){
+        return "已付清";
+    }else if(value===1){
+        return "整单未付";
+    }else if(value===2){
+        return "部分未付";
+    }else{
+        return "未签收";
+    }
+});
+
+Handlebars.registerHelper('account', function(value) {
+    if(value===0){
+        return "主账号";
+    }else if(value===1){
+        return "子账号";
+    }
+});
+
 /**
  * 根据姓名查询
  */
