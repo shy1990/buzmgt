@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -24,9 +25,13 @@ JpaSpecificationExecutor<Award>{
   @Override
 //  @EntityGraph("graph.Award")
   List<Award> findAll(Specification<Award> spec, Sort sort);
-  @Override
-//  @EntityGraph("graph.Award")
-  Page<Award> findAll(Specification<Award> spec, Pageable pageable);
+
+	@Override
+//	@EntityGraph("graph.Award")
+	Page<Award> findAll(Specification<Award> spec, Pageable pageable);
+
+	@EntityGraph("graph.Award")
+	Award findByAwardId(Long awardId);
 
   @Query(value = "select nvl(sum(g.nums), 0) AS nums\n" +
           "  from sys_goods_order g\n" +

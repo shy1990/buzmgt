@@ -101,7 +101,7 @@ public class AwardServiceImpl implements AwardService {
   }
   @Override
   public Award findOne(Long id){
-    return awardRepository.findOne(id);
+    return awardRepository.findByAwardId(id);
   }
 
   public static Specification<Award> awardSearchFilter(final Collection<SearchFilter> filters,
@@ -337,7 +337,7 @@ public class AwardServiceImpl implements AwardService {
    * @return
    */
   private String executeSql(HttpServletRequest request, Award award) {
-    List<AwardGood> awardGoods = award.getAwardGoods();
+    Set<AwardGood> awardGoods = award.getAwardGoods();
     List<String> goodIds = new ArrayList<>();
     if (CollectionUtils.isNotEmpty(awardGoods)){
       awardGoods.forEach(awardGood -> {

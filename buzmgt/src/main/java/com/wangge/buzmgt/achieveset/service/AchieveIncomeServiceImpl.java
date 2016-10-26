@@ -18,7 +18,6 @@ import com.wangge.buzmgt.plan.entity.RewardPunishRule;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.iterators.ObjectArrayIterator;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.*;
@@ -346,7 +344,8 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	}
 
 	@Override
-	public BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {		Integer statusInteger = 0;
+	public BigDecimal sumMoneyByAchieveIdAndStatus(Long achieveId, AchieveIncome.PayStatusEnum status) {
+		Integer statusInteger = 0;
 		if (status == AchieveIncome.PayStatusEnum.PAY) {
 			statusInteger = 1;
 		}

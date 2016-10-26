@@ -15,6 +15,7 @@ import com.wangge.buzmgt.superposition.service.SuperpositionRecordService;
 import com.wangge.buzmgt.superposition.service.SuperpositonService;
 import com.wangge.buzmgt.sys.entity.User;
 import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -426,6 +428,32 @@ public class SuperpositionController {
 //        superpositonService.superIncomeCompute(12l,1l);
 
     }
+
+
+    /**
+     * 导出进程表
+     * @return
+     */
+    @RequestMapping(value = "exportProgress/{id}")
+    public void exportExcelProgress( HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Superposition superposition){
+        List<SuperpositionProgress> list = superpositonService.exportProgress(superposition.getPlanId(), superposition.getId(), DateUtil.date2String(superposition.getImplDate(), "yyyy-MM-dd"), DateUtil.date2String(superposition.getEndDate(), "yyyy-MM-dd"));
+        String[] title_ = new String[]{"姓名","区域","指标1","指标2","指标3", "分组", "提货量","任务开始日期","任务结束日期"};
+        String[] coloumsKey_ = new String[]{"trueName","namePath","taskOne","taskTwo", "taskThree","name","nums","implDate","endDate"};
+        ExcelExport.doExcelExport("进程.xls",list,title_,coloumsKey_,request,response);
+    }
+    /**
+     * 导出详情表
+     * @return
+     */
+    @RequestMapping(value = "exportDetail/{id}")
+    public void exportExcelDetail( HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Superposition superposition,String userId){
+        List<SuperpositionProgress> list = superpositonService.exportDetail(superposition.getPlanId(), superposition.getId(),userId,DateUtil.date2String(superposition.getImplDate(), "yyyy-MM-dd"), DateUtil.date2String(superposition.getEndDate(), "yyyy-MM-dd"));
+        String[] title_ = new String[]{"商家名称","负责区域","订单号","产品","数量", "付款日期"};
+        String[] coloumsKey_ = new String[]{"shopName","shopAddress","orderNum","goodsName", "nums","payTime"};
+        ExcelExport.doExcelExport("详情.xls",list,title_,coloumsKey_,request,response);
+    }
+
+
 
     /*
      * 获取用户的方法,用于判断是否有权限

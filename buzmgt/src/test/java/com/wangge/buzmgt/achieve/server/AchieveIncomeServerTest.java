@@ -1,7 +1,9 @@
 package com.wangge.buzmgt.achieve.server;
 
-import java.util.*;
-
+import com.wangge.buzmgt.BuzmgtApplication;
+import com.wangge.buzmgt.achieveaward.service.AwardIncomeService;
+import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
+import com.wangge.buzmgt.achieveset.service.AchieveService;
 import com.wangge.buzmgt.income.main.repository.HedgeCostRepository;
 import com.wangge.buzmgt.util.DateUtil;
 import org.junit.Test;
@@ -11,10 +13,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.wangge.buzmgt.BuzmgtApplication;
-import com.wangge.buzmgt.achieveset.entity.Achieve;
-import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
-import com.wangge.buzmgt.achieveset.service.AchieveService;
+import java.util.Date;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BuzmgtApplication.class)
@@ -23,6 +22,8 @@ public class AchieveIncomeServerTest {
 
 	@Autowired
 	private AchieveIncomeService achieveIncomeService;
+	@Autowired
+	private AwardIncomeService awardIncomeService;
 	@Autowired
 	private AchieveService achieveService;
 	@Autowired
@@ -63,6 +64,12 @@ public class AchieveIncomeServerTest {
 	public void test3(){
 		String msg = achieveIncomeService.calculateAchieveIncomeTotal(20L,9L);
 		System.out.println(msg);
+	}
+	@Test
+	public void test4(){
+		Long awardId = 10L;
+		Long planId = 20L;
+		awardIncomeService.calculateAwardIncomeTotal(planId,awardId);
 	}
 
 }

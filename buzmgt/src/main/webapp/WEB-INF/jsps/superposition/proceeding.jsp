@@ -320,7 +320,7 @@
             <button class="btn btn-blue btn-sm" onclick="goSearch();">
                 检索
             </button>
-            <a class="table-export" href="javascript:void(0);">导出excel</a>
+            <a class="table-export" href="javascript:void(0);" onclick="exportExcel()">导出excel</a>
         </div>
 
     </div>
@@ -417,6 +417,9 @@
         window.location.href = 'detail?planId=${planId}&id=${id}&userId='+userId;
     }
 
+    function exportExcel(){
+        window.location.href = 'exportProgress/${id}';
+    }
 </script>
 
 

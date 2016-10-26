@@ -65,7 +65,7 @@ function CheckDetails(userId, achieveId) {
 function findAchieveCourseList(page) {
     page = page == null || page == '' ? 0 : page;
     SearchData['page'] = page;
-    SearchData['sc_EQ_status'] = 'STOCK';
+    SearchData['sc_EQ_status'] = 'PAY';
     $.ajax({
         url: "/achieveIncome/total",
         type: "GET",

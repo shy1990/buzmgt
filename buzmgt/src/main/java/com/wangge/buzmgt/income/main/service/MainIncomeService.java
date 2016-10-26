@@ -25,9 +25,14 @@ public interface MainIncomeService {
    * caculateOrder:计算已出库订单 <br/>
    * 
    * @author yangqc
+   * @param orderNo
+   *          订单号
+   * @param memberId
+   * @param payStatus
+   * @param paytime
    * @since JDK 1.8
    */
-  void caculateOutedOrder(String orderNo, String memberId, String payStatus, Date paytime);
+  void caculateOutedOrder(String orderNo);
   
   /**
    * caculatePayedOrder:计算线下支付订单. <br/>
@@ -37,7 +42,7 @@ public interface MainIncomeService {
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculatePayedOrder(String orderNo, String userId,Date payDate, String regionId);
+  void caculatePayedOrder(String orderNo, String userId, Date payDate, String regionId);
   
   /**
    * 计算油补
@@ -94,7 +99,7 @@ public interface MainIncomeService {
   /**
    * 
    * */
-  void deleteManinPlanIncome(Long planId,Date startDate) throws Exception;
+  void deleteManinPlanIncome(Long planId, Date startDate) throws Exception;
   
   /**
    * 每月一算,总结计算
@@ -123,9 +128,12 @@ public interface MainIncomeService {
   
   /**
    * 保存业务员的叠加收入到薪资主表的上月薪资记录里.<br/>
+   * 
    * @param userId
    * @param superPositionIncome
    * @throws Exception
    */
   void updateSuperIncome(String userId, double superPositionIncome) throws Exception;
+  
+  void check(Long id) throws Exception;
 }

@@ -78,5 +78,9 @@ public interface SuperpositonService {
     //查找冲减商品
     public SuperpositionRecord getBySalesmanIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId, String status);
 
+    public List<SuperpositionProgress> exportProgress(Long planId, Long superId, String startDate, String endDate);
+
+    public List<SuperpositionProgress> exportDetail(Long planId, Long superId, String userId, String startDate, String endDate);
+
 
 }

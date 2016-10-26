@@ -408,32 +408,46 @@ public class MainPlanServiceImpl implements MainPlanService {
   @Override
   public List<Map<String, Object>> findEffectUserDateList(Long planId, Date startDate, Date endDate) {
     // iu.salesman_id,iu.createtime,iu.fqtime,m.fqtime
-    List<Object> orList = planUserRep.findEffectiveUserTime(startDate, planId);
+    List<Object> orList = planUserRep.findEffectiveUsersTime(startDate, planId);
     List<Map<String, Object>> usrList = new ArrayList<>();
     for (Object or : orList) {
       Object[] user = (Object[]) or;
       Map<String, Object> userMap = new HashMap<>();
-      userMap.put("userId", user[0].toString());
-      Date userCreate = (Date) user[1];
-      /***
-       * userCreate的时间一定小于endDate时间 <br/>
-       * 要去最小区间值:即最大开始时间,最小结束时间.
-       */
-      if (userCreate.getTime() > startDate.getTime()) {
-        userMap.put("startDate", userCreate);
-      }
-      // 求最小结束时间 iu.fqtime,方案用户删除m.fqtime planfqsj主方案删除,s.fireddate 业务员辞退时间
-      Date endDate1 = null;
-      Date userEnd = user[2] == null ? null : (Date) user[2];
-      Date planEnd = user[3] == null ? null : (Date) user[3];
-      Date salesmanEnd = user[3] == null ? null : (Date) user[4];
-      endDate1 = compareDate(userEnd, planEnd);
-      endDate1 = compareDate(endDate1, salesmanEnd);
-      userMap.put("endDate", compareDate(endDate1, endDate));
+      getEffectiveDate(startDate, endDate, user, userMap);
       usrList.add(userMap);
     }
     return usrList;
     
+  }
+  
+  /**
+   * getEffectiveDate:获取一个用户的规则有效时间. <br/>
+   * 
+   * @author yangqc
+   * @param startDate
+   * @param endDate
+   * @param user
+   * @param userMap
+   * @since JDK 1.8
+   */
+  private void getEffectiveDate(Date startDate, Date endDate, Object[] user, Map<String, Object> userMap) {
+    userMap.put("userId", user[0].toString());
+    Date userCreate = (Date) user[1];
+    /***
+     * userCreate的时间一定小于endDate时间 <br/>
+     * 要去最小区间值:即最大开始时间,最小结束时间.
+     */
+    if (userCreate.getTime() > startDate.getTime()) {
+      userMap.put("startDate", userCreate);
+    }
+    // 求最小结束时间 iu.fqtime,方案用户删除m.fqtime planfqsj主方案删除,s.fireddate 业务员辞退时间
+    Date endDate1 = null;
+    Date userEnd = user[2] == null ? null : (Date) user[2];
+    Date planEnd = user[3] == null ? null : (Date) user[3];
+    Date salesmanEnd = user[3] == null ? null : (Date) user[4];
+    endDate1 = compareDate(userEnd, planEnd);
+    endDate1 = compareDate(endDate1, salesmanEnd);
+    userMap.put("endDate", compareDate(endDate1, endDate));
   }
   
   /**
@@ -453,6 +467,18 @@ public class MainPlanServiceImpl implements MainPlanService {
       } else {
         return userEnd1;
       }
+    }
+    return null;
+  }
+  
+  @Override
+  public Map<String, Object> findEffectUserDate(Long planId, Date startDate, Date endDate, String userId) {
+    Object userO = planUserRep.findEffectiveUserTime(startDate, planId, userId);
+    if (null != userO) {
+      Object[] user = (Object[]) userO;
+      Map<String, Object> userMap = new HashMap<>();
+      getEffectiveDate(startDate, endDate, user, userMap);
+      return userMap;
     }
     return null;
   }

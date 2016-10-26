@@ -61,17 +61,17 @@ public interface AwardService {
   * @return void    返回类型 
   * @throws
    */
-  void save(Award achieve);
+  void save(Award award);
   /**
    * 
   * @Title: findOne 
   * @Description: 查询Award
-  * @param @param achieveId
+  * @param @param awardId
   * @param @return    设定文件 
   * @return Award    返回类型 
   * @throws
    */
-  Award findOne(Long achieveId);
+  Award findOne(Long awardId);
 
   /**
    *

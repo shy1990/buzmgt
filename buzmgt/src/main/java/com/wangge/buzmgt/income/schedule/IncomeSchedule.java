@@ -89,7 +89,7 @@ public class IncomeSchedule {
   
   /**
    * 计算总和
-   * 
+   * 10号23点开始计算
    */
   @Scheduled(cron = "0 1 23 10 * ? ")
   public void calIncomePerMonth() {
@@ -98,8 +98,9 @@ public class IncomeSchedule {
   
   /**
    * 处理每天需要做的任务
+   * 1点10分
    */
-  @Scheduled(cron = "0 56 16 * * ? ")
+  @Scheduled(cron = "0 10 1 * * ? ")
   public void doChange() {
     jobService.doTask();
   }

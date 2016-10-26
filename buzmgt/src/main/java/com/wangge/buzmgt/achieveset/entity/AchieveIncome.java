@@ -40,7 +40,7 @@ public class AchieveIncome implements Serializable{
   private Long  id  ;// 主键
   @Column(name = "USER_ID")
   private String  userId ;// 业务员Id
-  @OneToOne
+  @OneToOne()
   @JoinColumn(name = "USER_ID", insertable = false, updatable = false)
   private PlanUserVo planUser;// 用户ID
   

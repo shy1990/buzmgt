@@ -169,6 +169,7 @@
 		charset="utf-8"></script>
 	<script type="text/javascript">
 	var	base='<%=basePath%>';
+	var checkFlag="${check}";
 	$(".form_datetime").datetimepicker({
         format: "yyyy-mm",
         language: 'zh-CN',

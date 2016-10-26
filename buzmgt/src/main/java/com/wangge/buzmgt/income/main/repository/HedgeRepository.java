@@ -34,10 +34,9 @@ public interface HedgeRepository extends JpaRepository<Hedge, Long> {
    * 
    */
   @Query(value = "select h.orderno, sk.goods_id,h.sum,\n"
-      + "to_date( to_char(oder.pay_time,'yyyy-mm-dd'),'yyyy-mm-dd') pay_time, o.user_id,h.id,h.shdate\n"
+      + "to_date( to_char(o.custom_signfor_time,'yyyy-mm-dd'),'yyyy-mm-dd') sign_time, o.user_id,h.id,h.shdate\n"
       + "     from sys_income_shouhou_hedge h   left JOIN sjzaixian.sj_tb_goods_sku sk ON sk.id = h.sku\n"
-      + "      left join biz_order_signfor o on h.orderno = o.order_no\n"
-      + "      left join sjzaixian.sj_tb_order oder on h.orderno = oder.order_num\n"
+      + "      left join biz_order_signfor o on h.orderno = o.order_no \n"
       + "      where  h.inserttime = ?1", nativeQuery = true)
   List<Object> findByDate(Date insertDate);
 

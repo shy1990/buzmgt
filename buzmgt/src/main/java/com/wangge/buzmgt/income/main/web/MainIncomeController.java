@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.income.main.web;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +52,13 @@ public class MainIncomeController {
     return "/income/main/income";
   }
   
+  @RequestMapping("/index/check")
+  public String initCheck(Model model, HttpServletRequest request, HttpServletResponse response) {
+    model.addAttribute("regions", regionService.findByTypeOrderById(regionService.findByRegionTypeName("省")));
+    model.addAttribute("check", 1);
+    return "/income/main/income";
+  }
+  
   @RequestMapping("/getVoPage")
   public @ResponseBody Page<MainIncomeVo> getIncomePage(HttpServletRequest request, HttpServletResponse response,
       Pageable pageReq) throws Exception {
@@ -73,6 +83,17 @@ public class MainIncomeController {
     } catch (Exception e) {
       LogUtil.error("导出工资表出错", e);
       throw new Exception("导出工资表出错");
+    }
+  }
+  
+  @RequestMapping(value = "/fh", method = RequestMethod.POST)
+  public ResponseEntity<Map<String, Object>> fh(@RequestParam("id") Long id) {
+    Map<String, Object> hmap = new HashMap<>();
+    try {
+      incomeService.check(id);
+      return new ResponseEntity<Map<String, Object>>(hmap, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<Map<String, Object>>(hmap, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   
