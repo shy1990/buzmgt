@@ -1,9 +1,13 @@
 package com.wangge.buzmgt.superposition.service;
 
+import com.wangge.buzmgt.achieveaward.entity.Award;
+import com.wangge.buzmgt.achieveaward.entity.AwardGood;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.superposition.entity.GoodsOrder;
 import com.wangge.buzmgt.superposition.repository.GoodsOrderRepository;
 import com.wangge.buzmgt.util.DateUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by joe on 16-9-12.
@@ -53,21 +58,21 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
     }
 
     @Override
-    public Page<GoodsOrder> findAll(HttpServletRequest request, Region region, Pageable pageable) {
+    public Page<GoodsOrder> findAll(HttpServletRequest request, Region region, Award award, Pageable pageable) {
         Sort s = new Sort(Sort.Direction.DESC, "payTime");
         pageable = new PageRequest(pageable.getPageNumber(),pageable.getPageSize(),s);
         Page<GoodsOrder> page = goodsOrderRepository.findAll((root, query, cb) -> {
-            List<Predicate> predicates = getPredicate(root,cb,request,region);
+            List<Predicate> predicates = getPredicate(root,cb,request,region,award);
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         }, pageable);
         return page;
     }
 
     @Override
-    public List<GoodsOrder> findAll(HttpServletRequest request, Region region) {
+    public List<GoodsOrder> findAll(HttpServletRequest request, Region region, Award award) {
         Sort s = new Sort(Sort.Direction.DESC, "payTime");
         List<GoodsOrder> list = goodsOrderRepository.findAll((root, query, cb) -> {
-            List<Predicate> predicates = getPredicate(root,cb,request,region);
+            List<Predicate> predicates = getPredicate(root,cb,request,region,award);
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         }, s);
         return list;
@@ -81,7 +86,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
      * @param region
      * @return
      */
-    public List<Predicate> getPredicate(Root<GoodsOrder> root, CriteriaBuilder cb,HttpServletRequest request, Region region){
+    public List<Predicate> getPredicate(Root<GoodsOrder> root, CriteriaBuilder cb,HttpServletRequest request, Region region, Award award){
         Date startDate = DateUtil.string2Date(request.getParameter("startDate"));
         Date endDate = DateUtil.string2Date(request.getParameter("endDate"));
         List<Predicate> predicates = new ArrayList<Predicate>();
@@ -92,12 +97,26 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
         }else {
             predicate1 = cb.equal(root.get("regionId").as(String.class), region.getId());
         }
-        predicates.add(cb.and(predicate, predicate1));
+        Predicate predicate2;
+        if (ObjectUtils.notEqual(award,null)){
+            Set<AwardGood> awardGoods = award.getAwardGoods();
+            List<String> goodIds = new ArrayList<>();
+            if (CollectionUtils.isNotEmpty(awardGoods)){
+                awardGoods.forEach(awardGood -> {
+                    goodIds.add(awardGood.getGoodId());
+                });
+            }
+            predicate2 = root.get("goodsId").in(goodIds);
+        }else {
+            String goodId = request.getParameter("goodId");
+            predicate2 = cb.equal(root.get("goodsId").as(String.class),goodId);
+        }
+        predicates.add(cb.and(predicate, predicate1,predicate2));
         String terms = request.getParameter("terms");
         if (StringUtils.isNotBlank(terms)){
-            Predicate predicate2 = cb.equal(root.get("orderNum").as(String.class),terms);
-            Predicate predicate3 = cb.like(root.get("shopName").as(String.class),"%" + terms + "%");
-            predicates.add(cb.or(predicate2, predicate3));
+            Predicate predicate3 = cb.equal(root.get("orderNum").as(String.class),terms);
+            Predicate predicate4 = cb.like(root.get("shopName").as(String.class),"%" + terms + "%");
+            predicates.add(cb.or(predicate3, predicate4));
         }
         return predicates;
     }

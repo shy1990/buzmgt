@@ -1,5 +1,6 @@
 package com.wangge.buzmgt.superposition.service;
 
+import com.wangge.buzmgt.achieveaward.entity.Award;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.superposition.entity.GoodsOrder;
 import org.springframework.data.domain.Page;
@@ -21,23 +22,25 @@ public interface GoodsOrderService {
    * @param @param  request
    * @param @param  region
    * @param @param  pageable
+   * @param @param  award
    * @param @return 设定文件
    * @return Page<GoodsOrder>    返回类型
    * @throws
    * @Title: findAll
-   * @Description: 根据条件统计销量订单(品牌型号)
+   * @Description: 根据条件统计销量订单(达量奖励)
    */
-  Page<GoodsOrder> findAll(HttpServletRequest request, Region region, Pageable pageable);
+  Page<GoodsOrder> findAll(HttpServletRequest request, Region region, Award award, Pageable pageable);
 
   /**
    *
    * @Title: findAll
-   * @Description: 根据条件统计退货冲减订单(品牌型号)
+   * @Description: 根据条件统计退货冲减订单(达量奖励)
    * @param @param request
    * @param @param region
+   * @param @param award
    * @param @return    设定文件
    * @return Page<GoodsOrder>    返回类型
    * @throws
    */
-  List<GoodsOrder> findAll(HttpServletRequest request, Region region);
+  List<GoodsOrder> findAll(HttpServletRequest request, Region region, Award award);
 }

@@ -32,6 +32,14 @@ public class BrandIncomeVo {
 
     private int starsLevel;//区域星级
 
+    private int numberFirst;//任务量一
+
+    private int numberSecond;//任务量二
+
+    private int numberThird;//任务量三
+
+    private String groupName;//分组
+
     public String getRegionId() {
         return regionId;
     }
@@ -126,5 +134,37 @@ public class BrandIncomeVo {
 
     public void setStarsLevel(int starsLevel) {
         this.starsLevel = starsLevel;
+    }
+
+    public int getNumberFirst() {
+        return numberFirst;
+    }
+
+    public void setNumberFirst(int numberFirst) {
+        this.numberFirst = numberFirst;
+    }
+
+    public int getNumberSecond() {
+        return numberSecond;
+    }
+
+    public void setNumberSecond(int numberSecond) {
+        this.numberSecond = numberSecond;
+    }
+
+    public int getNumberThird() {
+        return numberThird;
+    }
+
+    public void setNumberThird(int numberThird) {
+        this.numberThird = numberThird;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }

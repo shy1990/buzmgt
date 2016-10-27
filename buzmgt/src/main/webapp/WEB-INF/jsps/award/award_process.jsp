@@ -33,8 +33,8 @@
                 {{namepath}}
             </td>
             <td><span class="text-zi text-strong">{{levelName}}</span></td>
-            <td > <span class="text-red">{{brandName}}</span></td>
-            <td><span class="text-lv text-strong">{{goodsName}}</span></td>
+            <td > <span class="text-red">{{numberFirst}}台/{{numberSecond}}台/{{numberThird}}台</span></td>
+            <td><span class="text-lv text-strong">{{groupName}}</span></td>
             <td>{{nums}}台</td>
             <td>{{formDate startDate}}-{{formDate endDate}}</td>
             <td>{{compareDate startDate endDate}}</td>
@@ -64,17 +64,25 @@
         <i class="ico icon-ck"></i>查看进程
         <!--区域选择按钮-->
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
-        <input id="brandId" hidden="hidden" value="${brandIncome.id}">
+        <input id="awardId" hidden="hidden" value="${award.awardId}">
     </h4>
     <div class=" inform">
         <div class="row">
             <div class="col-sm-4 product">
                 <span class="text-strong text-gery">达量奖励产品：</span>
-                <span class="text-lan text-strong">${brandIncome.brand.name} ${brandIncome.good.name}</span>
+                <c:if test="${!empty awardGoods}">
+                    <c:forEach items="${awardGoods}" var="awardGood" varStatus="status">
+                        <span class="text-lan text-strong">${awardGood.brand.name} ${awardGood.good.name}</span>
+                    </c:forEach>
+                </c:if>
+            </div>
+            <div class="col-sm-4 pro-2">
+                <span class="text-strong text-gery">达量奖励指标：</span>
+                <span class="text-lv text-strong"> ${award.numberFirst}台/${award.numberSecond}台/${award.numberThird}台</span>
             </div>
             <div class="col-sm-4 pro-2">
                 <span class="text-strong text-gery">起止日期：</span>
-                <span class="text-black text-strong"><fmt:formatDate value="${brandIncome.startDate}" pattern="yyyy-MM-dd"/> 至 <fmt:formatDate value="${brandIncome.endDate}" pattern="yyyy-MM-dd"/></span>
+                <span class="text-black text-strong"><fmt:formatDate value="${award.startDate}" pattern="yyyy-MM-dd"/> 至 <fmt:formatDate value="${award.endDate}" pattern="yyyy-MM-dd"/></span>
             </div>
         </div>
 
@@ -120,7 +128,7 @@
 
         <select class="ph-select J_serviceLevel">
             <option>业务等级</option>
-            <c:if test="${!empty brandIncome}">
+            <c:if test="${!empty salesmanLevels}">
                 <c:forEach items="${salesmanLevels}" var="level" varStatus="status">
                     <option>${level.levelName}</option>
                 </c:forEach>
@@ -158,20 +166,20 @@
                     <th>姓名</th>
                     <th>负责区域</th>
                     <th>业务等级</th>
-                    <th>品牌</th>
-                    <th>型号</th>
-                    <th>查看进程</th>
+                    <th>达量奖励指标</th>
+                    <th>分组</th>
+                    <th>当前完成量</th>
                     <th>任务起止日期</th>
                     <th>状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody id="brandProcessList">
+                <tbody id="awardProcessList">
 
                 </tbody>
             </table>
         </div>
-        <div id="brandProcessPager"></div>
+        <div id="awardProcessPager"></div>
         <!--table-box-->
 
         <!--待审核账单-->
@@ -185,7 +193,7 @@
 <script src="<%=basePath%>static/js/dateutil.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js" charset="utf-8"></script>
 <script type="text/javascript" src="<%=basePath%>static/bootStrapPager/js/extendPagination.js"></script>
-<script type="text/javascript" src="<%=basePath%>static/brandincome/js/brand_process.js" charset="utf-8"></script>
+<script type="text/javascript" src="<%=basePath%>static/award/award_process.js" charset="utf-8"></script>
 
 </body>
 </html>
