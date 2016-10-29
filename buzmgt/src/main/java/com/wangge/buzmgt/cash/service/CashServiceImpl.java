@@ -209,7 +209,7 @@ public class CashServiceImpl implements CashService {
         for(Cash cash:cashlist){
           //计算流水单号收现金金额
 	        OrderSignfor order=cash.getOrder();
-	        totalPrice=totalPrice.add(new BigDecimal(Float.toString(order.getOrderPrice())));
+	        totalPrice=totalPrice.add(new BigDecimal(Float.toString(order.getActualPayNum())));
 
           //组装流水单号详情数据
           WaterOrderDetail detail=new WaterOrderDetail();
