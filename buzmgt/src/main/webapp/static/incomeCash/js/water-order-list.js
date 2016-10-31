@@ -144,9 +144,9 @@ Handlebars.registerHelper('formDate', function(value) {
  * 
  */
 Handlebars.registerHelper('disposePayStatus', function(payStatus) {
-	var html = '<span class="icon-wfk">已审核</span>';
-	var html_= '<span class="icon-dsh">待审核</span>';
-	if(payStatus=='已审核'){
+	var html = '<span class="icon-wfk">已付款</span>';
+	var html_= '<span class="icon-dsh">待付款</span>';
+	if(payStatus=='已付款'){
 		return html;
 	}
 	return html_;

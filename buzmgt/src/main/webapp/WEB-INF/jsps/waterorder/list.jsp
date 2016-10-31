@@ -33,6 +33,7 @@
 		<tr>
       <td>{{serialNo}}</td>
       <td>{{userId}}</td>
+      <td>{{salesMan.truename}}</td>
       <td class="bg-style">
 				{{#each orderDetails}}
 				{{#with cash}}{{#with order}}
@@ -121,6 +122,7 @@ var	base='<%=basePath%>';
 						<tr>
 							<th>流水单号</th>
 							<th>用户Id</th>
+							<th>用户名称</th>
 							<th>订单编号</th>
 							<th>订单金额</th>
                             <th>实际金额</th>

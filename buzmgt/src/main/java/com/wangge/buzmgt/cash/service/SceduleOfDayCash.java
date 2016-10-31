@@ -22,7 +22,7 @@ public class SceduleOfDayCash {
 
 	private Logger logger=Logger.getLogger(SceduleOfDayCash.class);
 	// 每日23时30分执行 0 30 23 * * ? 
-	@Scheduled(cron = " 0 30 23 * * ? ")
+//	@Scheduled(cron = " 0 30 23 * * ? ")
 	public void handleCashData() {
 	  logger.info("-----------------开启定时结算");
 	  List<String> userIds=cashService.findByStatusGroupByUserId();

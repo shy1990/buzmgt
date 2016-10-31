@@ -4,24 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.NamedSubgraph;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -56,10 +41,9 @@ public class WaterOrderCash implements Serializable  {
    * 
    */
   private static final long serialVersionUID = 1L;
-  
-  
-  public enum WaterPayStatusEnum{
-    UnPay("待审核"), OverPay("已审核");
+
+	public enum WaterPayStatusEnum{
+    UnPay("待付款"), OverPay("已付款");
     private String name;
     WaterPayStatusEnum(String name){
       this.name=name;
@@ -68,13 +52,16 @@ public class WaterOrderCash implements Serializable  {
       return name;
     }
   }
-  
-  
+
   @Id
   @Column(name="SERIAL_NO",insertable=false,updatable=false)
   private String serialNo ; //流水单号
-  
+  @Column(name = "user_id")
   private String userId ; //用户id
+	@OneToOne
+	@JoinColumn(name = "user_id",updatable = false,insertable = false)
+	private SalesMan salesMan;//用户名
+
   private Float cashMoney  ;//收现金额
   private Float paymentMoney ;//支付金额
   private Integer isPunish ;//是否扣罚
@@ -146,7 +133,11 @@ public class WaterOrderCash implements Serializable  {
   public void setPayDate(Date payDate) {
     this.payDate = payDate;
   }
-
-  
+	public SalesMan getSalesMan() {
+		return salesMan;
+	}
+	public void setSalesMan(SalesMan salesMan) {
+		this.salesMan = salesMan;
+	}
 
 }

@@ -40,7 +40,7 @@ public class WaterOrderCashController {
 
   @RequestMapping(value = "", method = RequestMethod.GET)
   // @ResponseBody
-  @JSONFormat(filterField = { "OrderSignfor.salesMan" }, nonnull = true, dateFormat = "yyyy-MM-dd HH:mm")
+  @JSONFormat(filterField = { "SalesMan.user","SalesMan.region","OrderSignfor.salesMan" }, nonnull = true, dateFormat = "yyyy-MM-dd HH:mm")
   public Page<WaterOrderCash> getWaterOrderCashList(HttpServletRequest request,
       @PageableDefault(page = 0, size = 10, sort = { "createDate" }, direction = Direction.DESC) Pageable pageRequest) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
