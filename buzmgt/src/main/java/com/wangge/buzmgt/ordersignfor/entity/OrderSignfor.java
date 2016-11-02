@@ -50,6 +50,22 @@ public class OrderSignfor implements Serializable {
   */
   
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 所属店铺关联状态
+   */
+  public static enum RelatedStatus {
+    NOTRELATED("未关联"), ENDRELATED("已关联");
+    private String name;
+
+    RelatedStatus(String name) {
+      this.name = name;
+    }
+
+    public String getName() {
+      return this.name;
+    }
+  }
   
   /**
    * 订单状态
@@ -137,11 +153,15 @@ public class OrderSignfor implements Serializable {
   private String yewuSignforGeopoint;
   private String customSignforGeopoint;
   private Integer customSignforException;
-  private Integer partsCount;
+  private int partsCount;
   private Date fastmailTime;
   private String customUnSignRemark;
-  
-  
+  private Float actualPayNum;//实际支付金额
+
+  @Enumerated(EnumType.STRING)
+  private RelatedStatus relatedStatus;
+
+  private String memberPhone;
   
   public List<OrderItem> getItems() {
     return items;
@@ -323,13 +343,35 @@ public class OrderSignfor implements Serializable {
     this.customUnSignRemark = customUnSignRemark;
   }
 
-  public Integer getPartsCount() {
+  public int getPartsCount() {
     return partsCount;
   }
 
-  public void setPartsCount(Integer partsCount) {
+  public void setPartsCount(int partsCount) {
     this.partsCount = partsCount;
   }
 
-  
+  public Float getActualPayNum() {
+    return actualPayNum;
+  }
+
+  public void setActualPayNum(Float actualPayNum) {
+    this.actualPayNum = actualPayNum;
+  }
+
+  public RelatedStatus getRelatedStatus() {
+    return relatedStatus;
+  }
+
+  public void setRelatedStatus(RelatedStatus relatedStatus) {
+    this.relatedStatus = relatedStatus;
+  }
+
+  public String getMemberPhone() {
+    return memberPhone;
+  }
+
+  public void setMemberPhone(String memberPhone) {
+    this.memberPhone = memberPhone;
+  }
 }
