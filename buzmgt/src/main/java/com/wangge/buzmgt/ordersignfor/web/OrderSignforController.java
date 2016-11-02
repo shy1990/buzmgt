@@ -1,5 +1,7 @@
 package com.wangge.buzmgt.ordersignfor.web;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -127,7 +129,7 @@ public class OrderSignforController {
   
   @RequestMapping(value="/fastMail")
   @ResponseBody
-  public JSONObject createFastMailNo(String orderNo){
+  public JSONObject createFastMailNo(String orderNo) throws Exception{
     JSONObject json=new JSONObject();
     String[] orderNos=orderNo.split(",");
     List<String> orderNums=new ArrayList<>();
@@ -135,17 +137,19 @@ public class OrderSignforController {
     Map<String, Object> spec=new HashMap<>();
     
     spec.put("IN_orderNo", orderNums);
+    SimpleDateFormat  format = new SimpleDateFormat("yyyy/MM/dd");
     try {
       // 修改原有扣罚状态
       List<OrderSignfor> list=os.findAll(spec);
       //四位随机数字
       int number=(int) (Math.random()*10000);
       String fastMailNo=DateUtil.date2String(new Date(), "yyyyMMddHHmmss")+number;
-      
+      Date fastMailTime = format.parse(format.format(new Date()));
       if (list.size() > 0) {
         list.forEach(l->{
           l.setFastmailNo(fastMailNo);
-          l.setFastmailTime(new Date());
+          l.setFastmailTime(fastMailTime);
+         
         });
         os.save(list);
         json.put("fastMailNo", fastMailNo);
@@ -156,6 +160,11 @@ public class OrderSignforController {
       json.put("status", "error");
       json.put("errorMsg", "未查到该数据");
 
+    }catch (ParseException e) {
+      e.printStackTrace();
+      json.put("status", "error");
+      json.put("errorMsg", "日期类型转换错误");
+      return json;
     } catch (Exception e) {
       e.printStackTrace();
       json.put("status", "error");
