@@ -42,9 +42,9 @@ import java.util.List;
         "ON p.ADMIN_ID=a.ID)sumpay";*/
 
     if(DateUtil.compareDate(date)){
-      sql_mall+=" WHERE t.creat_time >trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 ";
+      sql_mall+=" WHERE t.fastmail_time >trunc( to_date('"+date+"','yyyy-mm-dd')-2) ";
     }else{
-      sql_mall+="WHERE t.creat_time BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+date+"','yyyy-mm-dd')-1)+21/24 \n" ;
+      sql_mall+="WHERE t.fastmail_time BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2) AND trunc( to_date('"+date+"','yyyy-mm-dd')-1) \n" ;
     }
 
     sql_mall+=  "  AND t.fastmail_no is not null GROUP BY t.user_id)sumpay ";
@@ -57,9 +57,9 @@ import java.util.List;
 
 
     if(DateUtil.compareDate(date)){
-      sql_todayshouldpay+=" WHERE o.creat_time >trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 ";
+      sql_todayshouldpay+=" WHERE o.fastmail_time >trunc( to_date('"+date+"','yyyy-mm-dd')-2) ";
     }else{
-      sql_todayshouldpay+="WHERE o.creat_time BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+date+"','yyyy-mm-dd')-1)+21/24 \n" ;
+      sql_todayshouldpay+="WHERE o.fastmail_time BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2) AND trunc( to_date('"+date+"','yyyy-mm-dd')-1) \n" ;
     }
 
     sql_todayshouldpay+=  "and fastmail_no is not null\n" +
@@ -68,11 +68,11 @@ import java.util.List;
     //历史应付金额
 
     String sql_historyshouldpay ="(select (h.historypay+p.paynum)as historypay,p.user_id from  (select sum(o.ARREARS) as historypay,o.user_id from BIZ_ORDER_SIGNFOR o  \n" +
-        "where o.creat_time <trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24\n" +
+        "where o.fastmail_time <trunc( to_date('"+date+"','yyyy-mm-dd')-2)\n" +
         "group by o.user_id ) h\n" +
         "join \n" +
         "(select sum(actual_pay_num) as paynum,o.user_id from BIZ_ORDER_SIGNFOR o  \n" +
-        "where o.creat_time <trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24\n" +
+        "where o.fastmail_time <trunc( to_date('"+date+"','yyyy-mm-dd')-2)\n" +
         "and ORDER_STATUS ='2'\n" +
         "group by o.user_id ) p on h.user_id=p.user_id)historyshouldpay";
 
@@ -132,7 +132,7 @@ import java.util.List;
   public Page<BillSalesmanVo> findByUserIdAndCreateTime(String userId, String todayDate, int pageNum) {
     String sql="select o.order_no,o.shop_name,o.ARREARS,o.ORDER_PAY_TYPE,o.BILL_STATUS,o.IS_PRIMARY_ACCOUNT ,'"+todayDate+"'as todayDate" +
         " from biz_order_signfor  o where o.USER_ID='" +userId+
-        "' and o.creat_time BETWEEN trunc( to_date('"+todayDate+"','yyyy-mm-dd')-1)+20/24 AND trunc( to_date('"+todayDate+"','yyyy-mm-dd'))+21/24  and o.fastmail_no is not null ";
+        "' and o.fastmail_time = trunc( to_date('"+todayDate+"','yyyy-mm-dd')-1)";
       //  + " and o.CUSTOM_SIGNFOR_TIME is not null";
 
 
