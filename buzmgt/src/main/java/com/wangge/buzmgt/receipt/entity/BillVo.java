@@ -1,5 +1,7 @@
 package com.wangge.buzmgt.receipt.entity;
 
+import java.math.BigDecimal;
+
 /**
  * Created by jiabin on 16-10-14.
  */
@@ -11,11 +13,11 @@ public class BillVo {
 
   private String regionName;//区域名字
 
-  private Double todayAllShouldPay;//当日所有货物总款，不包括线上支付和pos
+  private BigDecimal todayAllShouldPay;//当日所有货物总款，不包括线上支付和pos
 
-  private Double  todayShouldPay;//当日未支付的总额
+  private BigDecimal  todayShouldPay;//当日未支付的总额
 
-  private Double historyShouldPay;//历史拖欠金额
+  private BigDecimal historyShouldPay;//历史拖欠金额
 
   private String todayDate;//日期
 
@@ -44,27 +46,28 @@ public class BillVo {
     this.regionName = regionName;
   }
 
-  public Double getTodayAllShouldPay() {
+
+  public BigDecimal getTodayAllShouldPay() {
     return todayAllShouldPay;
   }
 
-  public void setTodayAllShouldPay(Double todayAllShouldPay) {
+  public void setTodayAllShouldPay(BigDecimal todayAllShouldPay) {
     this.todayAllShouldPay = todayAllShouldPay;
   }
 
-  public Double getTodayShouldPay() {
+  public BigDecimal getTodayShouldPay() {
     return todayShouldPay;
   }
 
-  public void setTodayShouldPay(Double todayShouldPay) {
+  public void setTodayShouldPay(BigDecimal todayShouldPay) {
     this.todayShouldPay = todayShouldPay;
   }
 
-  public Double getHistoryShouldPay() {
+  public BigDecimal getHistoryShouldPay() {
     return historyShouldPay;
   }
 
-  public void setHistoryShouldPay(Double historyShouldPay) {
+  public void setHistoryShouldPay(BigDecimal historyShouldPay) {
     this.historyShouldPay = historyShouldPay;
   }
 
