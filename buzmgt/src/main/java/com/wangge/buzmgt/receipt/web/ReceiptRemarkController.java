@@ -149,7 +149,7 @@ public class ReceiptRemarkController {
   /**
    * s收现金详情
    * @param request
-   * @param pageRequest
+   * @param orderSignfor
    * @return
    */
   @RequestMapping(value="/cash/{orderId}")
@@ -163,7 +163,7 @@ public class ReceiptRemarkController {
   /**
    * 报备列表
    * @param request
-   * @param pageRequest
+   * @param receiptRemark
    * @return
    */
   @RequestMapping(value="/remarkList/{orderId}")
@@ -230,7 +230,7 @@ public class ReceiptRemarkController {
         list.getSalesMan().setUser(null);
         list.getSalesMan().setRegion(null);
         String phoneNum= list.getPhoneCount().toString();
-        String partsNum=list.getPartsCount().toString();
+        String partsNum= String.valueOf(list.getPartsCount());
         list.setGoodNum("手机 "+phoneNum+"部，配件"+partsNum+"件");
       });
       String[] gridTitles_1 = {"订单号", "店铺名称","业务名称", "商品数量","下单时间","交易额","收款状态","订单状态"};

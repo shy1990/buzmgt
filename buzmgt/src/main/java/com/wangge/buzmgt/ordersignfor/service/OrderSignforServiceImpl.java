@@ -35,36 +35,36 @@ public class OrderSignforServiceImpl implements OrderSignforService {
 
  private static final Logger logger = Logger.getLogger(OrderSignforServiceImpl.class);
 
-  @PersistenceContext  
-  private EntityManager em; 
+  @PersistenceContext
+  private EntityManager em;
   @Autowired
   private OrderSignforRepository orderSignforRepository;
-  
+
   @Autowired
   private SalesManService salesManService;
-  
+
   @Autowired
   private WaterOrderCashService waterOrderCashService;
-  
+
   @Autowired
   private WaterOrderDetialService detialService;
-  
+
   @Autowired
   private RegionService regionService;
-  
+
   @Override
   public void updateOrderSignfor(OrderSignfor xlsOrder) {
     orderSignforRepository.save(xlsOrder);
-    
+
   }
   @Override
   public OrderSignfor findByOrderNo(String orderNo) {
     return  orderSignforRepository.findByOrderNo(orderNo);
   }
-  
+
   @Override
   public List<OrderSignfor> findAll(){
-    return orderSignforRepository.findAll(); 
+    return orderSignforRepository.findAll();
   }
 
 
@@ -90,7 +90,7 @@ public class OrderSignforServiceImpl implements OrderSignforService {
     return orderSignforRepository.findAll(spec,pageRequest);
   }
 
-  
+
   private static <T> Specification<OrderSignfor> orderSignforSearchFilter(final Collection<SearchFilter> filters,
       final Class<OrderSignfor> entityClazz) {
 
@@ -158,7 +158,7 @@ public class OrderSignforServiceImpl implements OrderSignforService {
               break;
             case LIKE:
               predicates.add(cb.like(expression, "%" + filter.value + "%"));
-              
+
               break;
             case GT:
               if (javaTypeName.equals(TYPE_DATE)) {
@@ -226,14 +226,14 @@ public class OrderSignforServiceImpl implements OrderSignforService {
 
               break;
             case NOTNULL:
-                
+
                 predicates.add(cb.isNotNull(expression));
-              
+
               break;
             default:
               break;
-              
-              
+
+
             }
           }
 
@@ -292,9 +292,11 @@ public class OrderSignforServiceImpl implements OrderSignforService {
   @Override
   public void deleteById(Long id) {
     orderSignforRepository.delete(id);
-    
+
   }
 
-
-
+  @Override
+  public OrderSignfor save(OrderSignfor orderSignfor) {
+    return orderSignforRepository.save(orderSignfor);
+  }
 }
