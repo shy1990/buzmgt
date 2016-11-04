@@ -1,13 +1,29 @@
 package com.wangge.buzmgt.ordersignfor.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 //@JsonInclude(Include.NON_EMPTY)
 @Entity
@@ -34,6 +50,22 @@ public class OrderSignfor implements Serializable {
   */
   
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 所属店铺关联状态
+   */
+  public static enum RelatedStatus {
+    NOTRELATED("未关联"), ENDRELATED("已关联");
+    private String name;
+
+    RelatedStatus(String name) {
+      this.name = name;
+    }
+
+    public String getName() {
+      return this.name;
+    }
+  }
   
   /**
    * 订单状态
@@ -79,6 +111,7 @@ public class OrderSignfor implements Serializable {
   @GeneratedValue(generator = "idgen")
   private Long id;
   private String fastmailNo;
+	@Column(name = "ORDER_NO")
   private String orderNo;
   @Transient
   private String aging;//时效
@@ -120,23 +153,15 @@ public class OrderSignfor implements Serializable {
   private String yewuSignforGeopoint;
   private String customSignforGeopoint;
   private Integer customSignforException;
-  private Integer partsCount;
+  private int partsCount;
   private Date fastmailTime;
   private String customUnSignRemark;
   private Float actualPayNum;//实际支付金额
 
-  private Integer billStatus; //订单结款状态
+  @Enumerated(EnumType.STRING)
+  private RelatedStatus relatedStatus;
 
-  private  Float  arrears;//欠款金额
-
-  private Float payAmount;// 实付金额
-
-  private Date overTime ; // 订单结清日期
-
-  private Date updateTime ; // 订单结清日期
-
-
-  private int isPrimaryAccount;
+  private String memberPhone;
   
   public List<OrderItem> getItems() {
     return items;
@@ -318,66 +343,35 @@ public class OrderSignfor implements Serializable {
     this.customUnSignRemark = customUnSignRemark;
   }
 
-  public Integer getPartsCount() {
+  public int getPartsCount() {
     return partsCount;
   }
 
-  public void setPartsCount(Integer partsCount) {
+  public void setPartsCount(int partsCount) {
     this.partsCount = partsCount;
   }
 
-	public Float getActualPayNum() {
-		return actualPayNum == null ? orderPrice : actualPayNum;
-	}
-	public void setActualPayNum(Float actualPayNum) {
-		this.actualPayNum = actualPayNum;
-	}
-
-  public Integer getBillStatus() {
-    return billStatus;
+  public Float getActualPayNum() {
+    return actualPayNum;
   }
 
-  public void setBillStatus(Integer billStatus) {
-    this.billStatus = billStatus;
+  public void setActualPayNum(Float actualPayNum) {
+    this.actualPayNum = actualPayNum;
   }
 
-  public Float getArrears() {
-    return arrears;
+  public RelatedStatus getRelatedStatus() {
+    return relatedStatus;
   }
 
-  public void setArrears(Float arrears) {
-    this.arrears = arrears;
+  public void setRelatedStatus(RelatedStatus relatedStatus) {
+    this.relatedStatus = relatedStatus;
   }
 
-  public Float getPayAmount() {
-    return payAmount;
+  public String getMemberPhone() {
+    return memberPhone;
   }
 
-  public void setPayAmount(Float payAmount) {
-    this.payAmount = payAmount;
-  }
-
-  public Date getOverTime() {
-    return overTime;
-  }
-
-  public void setOverTime(Date overTime) {
-    this.overTime = overTime;
-  }
-
-  public Date getUpdateTime() {
-    return updateTime;
-  }
-
-  public void setUpdateTime(Date updateTime) {
-    this.updateTime = updateTime;
-  }
-
-  public int getIsPrimaryAccount() {
-    return isPrimaryAccount;
-  }
-
-  public void setIsPrimaryAccount(int isPrimaryAccount) {
-    this.isPrimaryAccount = isPrimaryAccount;
+  public void setMemberPhone(String memberPhone) {
+    this.memberPhone = memberPhone;
   }
 }
