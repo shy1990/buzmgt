@@ -290,6 +290,9 @@ public class OrderSignforServiceImpl implements OrderSignforService {
   public void save(List<OrderSignfor> list) {
     orderSignforRepository.save(list);
   }
-  
 
- }
+  @Override
+  public OrderSignfor save(OrderSignfor orderSignfor) {
+    return orderSignforRepository.save(orderSignfor);
+  }
+}

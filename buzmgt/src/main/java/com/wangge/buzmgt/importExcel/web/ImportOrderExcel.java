@@ -1,21 +1,19 @@
 package com.wangge.buzmgt.importExcel.web;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.wangge.buzmgt.assess.entity.RegistData;
+import com.wangge.buzmgt.assess.service.RegistDataService;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.RelatedStatus;
+import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
+import com.wangge.buzmgt.util.ExcelUtil;
+import com.wangge.buzmgt.util.FileUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +21,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
-import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
-import com.wangge.buzmgt.util.ExcelUtil;
-import com.wangge.buzmgt.util.FileUtil;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -42,6 +49,10 @@ public class ImportOrderExcel {
   
   @Resource
   private OrderSignforService orderSignforService;
+  @PersistenceContext
+  private EntityManager entityManager;
+  @Resource
+  private RegistDataService registDataService;
   
   @RequestMapping(value = "/toImportLogisticsNo")
   public String toImportLogisticsNo(){
@@ -113,7 +124,70 @@ public class ImportOrderExcel {
                  orderSf.setFastmailNo(os.getFastmailNo());
                  orderSf.setFastmailTime(os.getFastmailTime());
                  orderSignforService.updateOrderSignfor(orderSf);
-                }
+             }else {
+               String sql = "select o.order_num,\n" +
+                               "       o.total_cost,\n" +
+                               "       o.actual_pay_num,\n" +
+                               "       nvl(count(oi.nums),0),\n" +
+                               "       m.username,\n" +
+                               "       m.mobile\n" +
+                               "  from SJZAIXIAN.SJ_TB_ORDER o\n" +
+                               "  left join SJZAIXIAN.Sj_Tb_Order_Items oi\n" +
+                               "    on o.id = oi.order_id\n" +
+                               "  left join SJZAIXIAN.Sj_Tb_Members m\n" +
+                               "    on o.member_id = m.id\n" +
+                               " where oi.target_type = 'sku' and o.order_num=?\n" +
+                               " group by o.order_num, o.total_cost, o.actual_pay_num,m.username,m.mobile";
+               Query query = null;
+               SQLQuery sqlQuery = null;
+               query = entityManager.createNativeQuery(sql);
+               sqlQuery = query.unwrap(SQLQuery.class);
+               int a = 0;
+               sqlQuery.setParameter(a, orderno[i]);
+               List<Object[]> ret = sqlQuery.list();
+               //查询配件数量
+               sql = "select nvl(count(oi.nums),0)\n" +
+                               "  from SJZAIXIAN.SJ_TB_ORDER o\n" +
+                               "  left join SJZAIXIAN.Sj_Tb_Order_Items oi\n" +
+                               "    on o.id = oi.order_id\n" +
+                               "  left join SJZAIXIAN.Sj_Tb_Members m\n" +
+                               "    on o.member_id = m.id\n" +
+                               " where oi.target_type = 'accessories' and o.order_num=?\n" +
+                               " group by o.order_num";
+               Query query1 =  entityManager.createNativeQuery(sql);
+               sqlQuery = query1.unwrap(SQLQuery.class);
+               sqlQuery.setParameter(a, orderno[i]);
+               List<Object[]>  resultList = sqlQuery.list();
+               if (CollectionUtils.isNotEmpty(ret)) {
+                 ret.forEach(result -> {
+                   OrderSignfor o = new OrderSignfor();
+                   o.setOrderNo((String) result[0]);
+                   o.setCreateTime(new Date());
+                   o.setOrderPrice(((BigDecimal)result[1]).floatValue());
+                   o.setActualPayNum(((BigDecimal)result[2]).floatValue());//实际金额
+                   o.setPhoneCount(((BigDecimal)result[3]).intValue());
+                   o.setOrderStatus(OrderSignfor.OrderStatus.SUCCESS);
+                   o.setShopName((String) result[4]);
+                   //获取配件数量
+                   if (CollectionUtils.isNotEmpty(resultList)){
+                     resultList.forEach(r -> {
+                       o.setPartsCount((int)r[0]);
+                     });
+                   }
+                   //查询是否已关联
+                   List<RegistData> registData = registDataService.findByLoginAccount((String) result[5]);
+                   if (CollectionUtils.isNotEmpty(registData)){
+                     o.setRelatedStatus(RelatedStatus.ENDRELATED);
+                   }else {
+                     o.setRelatedStatus(RelatedStatus.NOTRELATED);
+                   }
+                   o.setMemberPhone((String) result[5]);
+                   o.setFastmailNo(os.getFastmailNo());
+                   o.setFastmailTime(os.getFastmailTime());
+                   orderSignforService.save(o);
+                 });
+               }
+             }
            }
        }
      }

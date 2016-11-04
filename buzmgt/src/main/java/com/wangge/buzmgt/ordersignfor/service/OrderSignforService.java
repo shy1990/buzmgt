@@ -42,6 +42,6 @@ public interface OrderSignforService {
 
   void save(List<OrderSignfor> list);
   
-  
+  OrderSignfor save(OrderSignfor orderSignfor);
   
 }
