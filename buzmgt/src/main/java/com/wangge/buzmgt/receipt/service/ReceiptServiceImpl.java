@@ -69,7 +69,7 @@ import java.util.List;
         "group by user_id)todyshouldpay";
     
     
-  /*  String sql_todayshouldpay_unsign = "select sum(o.actual_pay_num) as today_shouldPay from BIZ_ORDER_SIGNFOR o  \n" + 
+   /* String sql_todayshouldpay_unsign = "select sum(o.actual_pay_num) as today_shouldPay from BIZ_ORDER_SIGNFOR o  \n" + 
         " WHERE o.fastmail_time >= trunc( to_date('"+date+"','yyyy-mm-dd')-1) AND o.fastmail_time < trunc( to_date('"+date+"','yyyy-mm-dd')) \n" + 
         " and o.fastmail_no is not null and ( o.order_status = '2' or  o.order_status = '0' ) ";
     */
@@ -79,6 +79,7 @@ import java.util.List;
 
     String sql_historyshouldpay ="(select h.historypay as historypay,h.user_id from  (select sum(o.ARREARS) as historypay,o.user_id from BIZ_ORDER_SIGNFOR o  \n" +
         "where o.fastmail_time <trunc( to_date('"+date+"','yyyy-mm-dd')-1)\n" +
+        " and  ORDER_STATUS ='3' "+
         "group by o.user_id ) h)historyshouldpay\n";
         
     
@@ -94,7 +95,7 @@ import java.util.List;
         "r.name as regionName from "+sql_mall   +
         " join SYS_SALESMAN s on sumpay.user_id=s.user_id \n" +
         "join "+sql_todayshouldpay  +" on todyshouldpay.user_id=s.user_id\n" +
-        "join "+sql_historyshouldpay + " on historyshouldpay.user_id=s.user_id\n" +
+        "left join "+sql_historyshouldpay + " on historyshouldpay.user_id=s.user_id\n" +
         "join sys_region r on s.region_id=r.region_id";
 
     if(null!=salesmanName&&!"".equals(salesmanName)){
@@ -109,9 +110,9 @@ import java.util.List;
     query.setMaxResults(20);
     
     Query query2 =  em.createNativeQuery(sql_historyshouldpay_unsign);
-     Object TodayAllShouldPayUnsign =   query2.getSingleResult();
+     Object historyshouldpayUnsign =   query2.getSingleResult();
      
-  /*   Query query3 =  em.createNativeQuery(sql_todayshouldpay_unsign);
+   /*  Query query3 =  em.createNativeQuery(sql_todayshouldpay_unsign);
      Object todayshouldpayunsign =   query3.getSingleResult();
     */
     
@@ -125,17 +126,17 @@ import java.util.List;
 
         bl.setSalemanName(o[0]+"");
         bl.setUserId(o[1]+"");
-        bl.setTodayAllShouldPay(add(new BigDecimal(o[2]+""), TodayAllShouldPayUnsign!= null ? new BigDecimal(TodayAllShouldPayUnsign+"") : new BigDecimal(0)));
+        bl.setTodayAllShouldPay(new BigDecimal(o[2]+""));
         bl.setTodayDate(o[3]+"");
         if(null==o[4]){
           bl.setTodayShouldPay(new BigDecimal(0) );
         }else{
-          bl.setTodayShouldPay(getTodayAllShouldPay(o[4]+"",o[1]+"",date));
+          bl.setTodayShouldPay(getTodayShouldPay(o[4]+"",o[1]+"",date));
         }
         if(null==o[5]){
-          bl.setTodayShouldPay(new BigDecimal(0));
+          bl.setHistoryShouldPay(new BigDecimal(0));
         }else{
-          bl.setHistoryShouldPay(new BigDecimal(o[5]+""));
+          bl.setHistoryShouldPay(add(new BigDecimal(o[5]+"") , historyshouldpayUnsign!= null ? new BigDecimal(historyshouldpayUnsign+"") : new BigDecimal(0)));
         }
 
         bl.setRegionName(o[6]+"");
@@ -147,14 +148,14 @@ import java.util.List;
   }
 
   
-  private BigDecimal getTodayAllShouldPay(String o,String usetId,String date){
+  private BigDecimal getTodayShouldPay(String o,String usetId,String date){
     String sql_todayshouldpay_unsign = "select sum(o.actual_pay_num) as today_shouldPay from BIZ_ORDER_SIGNFOR o  \n" + 
         " WHERE o.fastmail_time >= trunc( to_date('"+date+"','yyyy-mm-dd')-1) AND o.fastmail_time < trunc( to_date('"+date+"','yyyy-mm-dd')) \n" + 
         " and o.fastmail_no is not null and ( o.order_status = '2' or  o.order_status = '0' ) and o.user_id = '"+usetId+"' ";
     
-    Query query3 =  em.createNativeQuery(sql_todayshouldpay_unsign);
-    Object todayshouldpayunsign =   query3.getSingleResult();
-    BigDecimal todayshouldpay = add(new BigDecimal(o), todayshouldpayunsign!= null ? new BigDecimal(todayshouldpayunsign+"") : new BigDecimal(0));
+    Query query4 =  em.createNativeQuery(sql_todayshouldpay_unsign);
+    Object todayshouldpayunsignbyuserid =   query4.getSingleResult();
+    BigDecimal todayshouldpay = add(new BigDecimal(o), todayshouldpayunsignbyuserid!= null ? new BigDecimal(todayshouldpayunsignbyuserid+"") : new BigDecimal(0));
     return todayshouldpay;
   }
   private static BigDecimal add(BigDecimal ActualPayNum,BigDecimal ActualPayNum2){  
