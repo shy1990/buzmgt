@@ -6,6 +6,7 @@ import com.wangge.buzmgt.receipt.entity.BillVo;
 import com.wangge.buzmgt.receipt.entity.Receipt;
 import com.wangge.buzmgt.receipt.repository.ReceiptRepository;
 import com.wangge.buzmgt.util.DateUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -41,11 +44,11 @@ import java.util.List;
         "JOIN SJZAIXIAN.SJ_TB_ADMIN a\n" +
         "ON p.ADMIN_ID=a.ID)sumpay";*/
 
-    if(DateUtil.compareDate(date)){
-      sql_mall+=" WHERE t.creat_time >trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 ";
-    }else{
-      sql_mall+="WHERE t.creat_time BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+date+"','yyyy-mm-dd')-1)+21/24 \n" ;
-    }
+   /* if(DateUtil.compareDate(date)){
+      sql_mall+=" WHERE t.fastmail_time >trunc( to_date('"+date+"','yyyy-mm-dd')-1) ";
+    }else{*/
+      sql_mall+="WHERE t.fastmail_time >= trunc( to_date('"+date+"','yyyy-mm-dd')-1) AND t.fastmail_time < trunc( to_date('"+date+"','yyyy-mm-dd')) \n" ;
+   /* }*/
 
     sql_mall+=  "  AND t.fastmail_no is not null GROUP BY t.user_id)sumpay ";
 
@@ -56,25 +59,34 @@ import java.util.List;
         "group by user_id)todyshouldpay";*/
 
 
-    if(DateUtil.compareDate(date)){
-      sql_todayshouldpay+=" WHERE o.creat_time >trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 ";
-    }else{
-      sql_todayshouldpay+="WHERE o.creat_time BETWEEN trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24 AND trunc( to_date('"+date+"','yyyy-mm-dd')-1)+21/24 \n" ;
-    }
+   /* if(DateUtil.compareDate(date)){
+      sql_todayshouldpay+=" WHERE o.fastmail_time >trunc( to_date('"+date+"','yyyy-mm-dd')-1) ";
+    }else{*/
+      sql_todayshouldpay+="WHERE o.fastmail_time >= trunc( to_date('"+date+"','yyyy-mm-dd')-1) AND o.fastmail_time < trunc( to_date('"+date+"','yyyy-mm-dd')) \n" ;
+   /* }*/
 
-    sql_todayshouldpay+=  "and fastmail_no is not null\n" +
+    sql_todayshouldpay+=  "and o.fastmail_no is not null and o.order_status = '3' \n" +
         "group by user_id)todyshouldpay";
+    
+    
+   /* String sql_todayshouldpay_unsign = "select sum(o.actual_pay_num) as today_shouldPay from BIZ_ORDER_SIGNFOR o  \n" + 
+        " WHERE o.fastmail_time >= trunc( to_date('"+date+"','yyyy-mm-dd')-1) AND o.fastmail_time < trunc( to_date('"+date+"','yyyy-mm-dd')) \n" + 
+        " and o.fastmail_no is not null and ( o.order_status = '2' or  o.order_status = '0' ) ";
+    */
+        
 
     //历史应付金额
 
-    String sql_historyshouldpay ="(select (h.historypay+p.paynum)as historypay,p.user_id from  (select sum(o.ARREARS) as historypay,o.user_id from BIZ_ORDER_SIGNFOR o  \n" +
-        "where o.creat_time <trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24\n" +
-        "group by o.user_id ) h\n" +
-        "join \n" +
-        "(select sum(actual_pay_num) as paynum,o.user_id from BIZ_ORDER_SIGNFOR o  \n" +
-        "where o.creat_time <trunc( to_date('"+date+"','yyyy-mm-dd')-2)+20/24\n" +
-        "and ORDER_STATUS ='2'\n" +
-        "group by o.user_id ) p on h.user_id=p.user_id)historyshouldpay";
+    String sql_historyshouldpay ="(select h.historypay as historypay,h.user_id from  (select sum(o.ARREARS) as historypay,o.user_id from BIZ_ORDER_SIGNFOR o  \n" +
+        "where o.fastmail_time <trunc( to_date('"+date+"','yyyy-mm-dd')-1)\n" +
+        " and  ORDER_STATUS ='3' "+
+        "group by o.user_id ) h)historyshouldpay\n";
+        
+    
+    String sql_historyshouldpay_unsign = "select sum(actual_pay_num) as paynum from BIZ_ORDER_SIGNFOR o  \n" +
+        "where o.fastmail_time <trunc( to_date('"+date+"','yyyy-mm-dd')-1)\n" +
+        " and ( ORDER_STATUS ='2' or  ORDER_STATUS ='0')\n" ;
+      
 
 
     //总算法
@@ -83,7 +95,7 @@ import java.util.List;
         "r.name as regionName from "+sql_mall   +
         " join SYS_SALESMAN s on sumpay.user_id=s.user_id \n" +
         "join "+sql_todayshouldpay  +" on todyshouldpay.user_id=s.user_id\n" +
-        "join "+sql_historyshouldpay + " on historyshouldpay.user_id=s.user_id\n" +
+        "left join "+sql_historyshouldpay + " on historyshouldpay.user_id=s.user_id\n" +
         "join sys_region r on s.region_id=r.region_id";
 
     if(null!=salesmanName&&!"".equals(salesmanName)){
@@ -96,6 +108,14 @@ import java.util.List;
     int count = query.getResultList().size();
     query.setFirstResult(pageNum * 20);
     query.setMaxResults(20);
+    
+    Query query2 =  em.createNativeQuery(sql_historyshouldpay_unsign);
+     Object historyshouldpayUnsign =   query2.getSingleResult();
+     
+   /*  Query query3 =  em.createNativeQuery(sql_todayshouldpay_unsign);
+     Object todayshouldpayunsign =   query3.getSingleResult();
+    */
+    
     List obj = query.getResultList();
     List<BillVo> billList = new ArrayList<BillVo>();
     if(obj!=null && obj.size()>0){
@@ -106,17 +126,17 @@ import java.util.List;
 
         bl.setSalemanName(o[0]+"");
         bl.setUserId(o[1]+"");
-        bl.setTodayAllShouldPay(Double.parseDouble(o[2]+""));
+        bl.setTodayAllShouldPay(new BigDecimal(o[2]+""));
         bl.setTodayDate(o[3]+"");
         if(null==o[4]){
-          bl.setTodayShouldPay((double) 0);
+          bl.setTodayShouldPay(new BigDecimal(0) );
         }else{
-          bl.setTodayShouldPay(Double.parseDouble(o[4]+""));
+          bl.setTodayShouldPay(getTodayShouldPay(o[4]+"",o[1]+"",date));
         }
         if(null==o[5]){
-          bl.setTodayShouldPay((double) 0);
+          bl.setHistoryShouldPay(new BigDecimal(0));
         }else{
-          bl.setHistoryShouldPay(Double.parseDouble(o[5]+""));
+          bl.setHistoryShouldPay(add(new BigDecimal(o[5]+"") , historyshouldpayUnsign!= null ? new BigDecimal(historyshouldpayUnsign+"") : new BigDecimal(0)));
         }
 
         bl.setRegionName(o[6]+"");
@@ -127,12 +147,33 @@ import java.util.List;
     return page;
   }
 
+  
+  private BigDecimal getTodayShouldPay(String o,String usetId,String date){
+    String sql_todayshouldpay_unsign = "select sum(o.actual_pay_num) as today_shouldPay from BIZ_ORDER_SIGNFOR o  \n" + 
+        " WHERE o.fastmail_time >= trunc( to_date('"+date+"','yyyy-mm-dd')-1) AND o.fastmail_time < trunc( to_date('"+date+"','yyyy-mm-dd')) \n" + 
+        " and o.fastmail_no is not null and ( o.order_status = '2' or  o.order_status = '0' ) and o.user_id = '"+usetId+"' ";
+    
+    Query query4 =  em.createNativeQuery(sql_todayshouldpay_unsign);
+    Object todayshouldpayunsignbyuserid =   query4.getSingleResult();
+    BigDecimal todayshouldpay = add(new BigDecimal(o), todayshouldpayunsignbyuserid!= null ? new BigDecimal(todayshouldpayunsignbyuserid+"") : new BigDecimal(0));
+    return todayshouldpay;
+  }
+  private static BigDecimal add(BigDecimal ActualPayNum,BigDecimal ActualPayNum2){  
+    return ActualPayNum.add(ActualPayNum2);   
+    }   
+  
 
   @Override
   public Page<BillSalesmanVo> findByUserIdAndCreateTime(String userId, String todayDate, int pageNum) {
-    String sql="select o.order_no,o.shop_name,o.ARREARS,o.ORDER_PAY_TYPE,o.BILL_STATUS,o.IS_PRIMARY_ACCOUNT ,'"+todayDate+"'as todayDate" +
-        " from biz_order_signfor  o where o.USER_ID='" +userId+
-        "' and o.creat_time BETWEEN trunc( to_date('"+todayDate+"','yyyy-mm-dd')-1)+20/24 AND trunc( to_date('"+todayDate+"','yyyy-mm-dd'))+21/24  and o.fastmail_no is not null ";
+    String sql="select o.order_no,o.shop_name,o.ARREARS,o.ORDER_PAY_TYPE,o.BILL_STATUS,o.IS_PRIMARY_ACCOUNT , o.USER_ID, '"+todayDate+"'as todayDate" +
+        " from biz_order_signfor  o where " +
+        " o.fastmail_time >= trunc( to_date('"+todayDate+"','yyyy-mm-dd')-1) " +
+        " and o.fastmail_time < trunc( to_date('"+todayDate+"','yyyy-mm-dd')) and o.order_status = '3' and o.USER_ID='"+userId+"'"+
+        "  union " +
+        "select o.order_no,o.shop_name,o.ACTUAL_PAY_NUM,o.ORDER_PAY_TYPE,o.BILL_STATUS,o.IS_PRIMARY_ACCOUNT , o.USER_ID, '"+todayDate+"'as todayDate" +
+        " from biz_order_signfor  o where " +
+        " o.fastmail_time >= trunc( to_date('"+todayDate+"','yyyy-mm-dd')-1) " +
+        " and o.fastmail_time < trunc( to_date('"+todayDate+"','yyyy-mm-dd')) and (o.order_status = '0' or o.order_status = '2') and o.USER_ID='"+userId+"' ";
       //  + " and o.CUSTOM_SIGNFOR_TIME is not null";
 
 
