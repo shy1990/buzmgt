@@ -70,7 +70,7 @@ public class ImportOrderExcel {
     String filename = null;
    
    // String pathdir = "/var/sanji/excel/uploadfile/" + dateformat.format(new Date());// 构件服务器文件保存目录
-  
+
     if(!file.isEmpty()){
       SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd/HH/");
       String pathdir = fileUploadDir + dateformat.format(new Date());// 构件本地文件保存目录 // 得到本地图片保存目录的真实路径 http://localhost:80/aaa.jpg

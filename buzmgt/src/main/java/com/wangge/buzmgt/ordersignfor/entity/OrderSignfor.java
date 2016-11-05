@@ -4,21 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.NamedSubgraph;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -107,8 +93,8 @@ public class OrderSignfor implements Serializable {
   
   @Id
   @Column(name = "SIGNID")
-  @GenericGenerator(name = "idgen", strategy = "increment")
-  @GeneratedValue(generator = "idgen")
+  @SequenceGenerator(name = "idgen")
+  @GeneratedValue(generator = "idgen", strategy = GenerationType.SEQUENCE)
   private Long id;
   private String fastmailNo;
 	@Column(name = "ORDER_NO")
