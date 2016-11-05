@@ -40,9 +40,13 @@ public interface HedgeRepository extends JpaRepository<Hedge, Long> {
       + "      where  h.inserttime = ?1", nativeQuery = true)
   List<Object> findByDate(Date insertDate);
 
-  @Query(value = "select nvl(sum(hedge.sum), 0) AS nums\n" + "  from SYS_INCOME_SHOUHOU_HEDGE hedge\n"
-          + " inner join sys_brand_income b   on hedge.sku = b.good_id\n"
-          + " where to_char(hedge.shdate, 'yyyy-mm-dd') between  to_char(b.start_date, 'yyyy-mm-dd') and\n"
-          + "       to_char(b.end_date, 'yyyy-mm-dd')\n" + "   and b.good_id in (?1)", nativeQuery = true)
+  @Query(value = "select nvl(sum(hedge.sum), 0) AS nums\n"
+          + "  from SYS_INCOME_SHOUHOU_HEDGE hedge\n" +
+          " inner join SYS_AWARD_SET_GOODS asg\n" +
+          "    on hedge.sku = asg.good_id\n" +
+          " inner join SYS_ACHIEVE_AWARD_SET aas\n" +
+          "    on asg.AWARD_ID = aas.AWARD_ID\n"
+          + " where to_char(hedge.shdate, 'yyyy-mm-dd') between\n" + "       to_char(aas.start_date, 'yyyy-mm-dd') and\n"
+          + "       to_char(aas.end_date, 'yyyy-mm-dd')\n" + "   and asg.good_id in (?1)", nativeQuery = true)
   int countByGoodId(List<String> goodIds);
 }

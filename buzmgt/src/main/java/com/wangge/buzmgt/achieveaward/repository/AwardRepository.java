@@ -35,11 +35,13 @@ JpaSpecificationExecutor<Award>{
 
   @Query(value = "select nvl(sum(g.nums), 0) AS nums\n" +
           "  from sys_goods_order g\n" +
-          " inner join sys_brand_income b\n" +
-          "    on g.goods_id = b.good_id\n" +
+          " inner join SYS_AWARD_SET_GOODS asg\n" +
+          "    on g.goods_id = asg.good_id\n" +
+          " inner join SYS_ACHIEVE_AWARD_SET aas\n" +
+          "    on asg.AWARD_ID = aas.AWARD_ID\n" +
           " where to_char(g.PAY_TIME, 'yyyy-mm-dd') between\n" +
-          "       to_char(b.start_date, 'yyyy-mm-dd') and\n" +
-          "       to_char(b.end_date, 'yyyy-mm-dd')\n" +
+          "       to_char(aas.start_date, 'yyyy-mm-dd') and\n" +
+          "       to_char(aas.end_date, 'yyyy-mm-dd')\n" +
           "   and g.goods_id in (?1)", nativeQuery = true)
   int findCycleSales(List<String> goodIds);
 }

@@ -330,9 +330,9 @@ public class BrandIncomeController {
     Page<?> page = null;
     String orderType = request.getParameter("orderType");
     if ("sales".equals(orderType)) {
-      page = goodsOrderService.findAll(request, region, pageable);
+      page = goodsOrderService.findAll(request, region, null, pageable);
     } else {
-      page = hedgeService.findAll(request, region, pageable);
+      page = hedgeService.findAll(request, region, null, pageable);
     }
     return page;
   }
@@ -353,12 +353,12 @@ public class BrandIncomeController {
     String orderType = request.getParameter("orderType");
     List<?> list = null;
     if ("sales".equals(orderType)) {
-      list = goodsOrderService.findAll(request, region);
+      list = goodsOrderService.findAll(request, region, null);
       String[] gridTitles_1 = {"商家名称", "区域", "订单号", "产品", "数量", "付款日期"};
       String[] coloumsKey_1 = {"shopName", "namepath", "orderNum", "goodsName", "nums", "payTime"};
       ExcelExport.doExcelExport("品牌型号销量订单导出表.xls", list, gridTitles_1, coloumsKey_1, request, response);
     } else {
-      list = hedgeService.findAll(request, region);
+      list = hedgeService.findAll(request, region, null);
       String[] gridTitles_1 = {"商家名称", "区域", "订单号", "产品", "数量", "退货日期"};
       String[] coloumsKey_1 = {"shopName", "namepath", "orderno", "goodsName", "sum", "shdate"};
       ExcelExport.doExcelExport("品牌型号退货订单导出表.xls", list, gridTitles_1, coloumsKey_1, request, response);

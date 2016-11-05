@@ -17,4 +17,6 @@ public interface RegistDataRepository extends JpaRepository<RegistData, Long>{
 
   @Query("select count(1) from RegistData r where r.region.id like %?1%")
   int findCountByRegionIdlike(String regionId);
+
+  List<RegistData> findByLoginAccount(String loginAccount);
 }

@@ -120,7 +120,7 @@
 
         <select class="ph-select J_serviceLevel">
             <option>业务等级</option>
-            <c:if test="${!empty brandIncome}">
+            <c:if test="${!empty salesmanLevels}">
                 <c:forEach items="${salesmanLevels}" var="level" varStatus="status">
                     <option>${level.levelName}</option>
                 </c:forEach>

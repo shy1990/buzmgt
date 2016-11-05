@@ -1,8 +1,7 @@
-/*品牌型号明细*/
+/*达量奖励进程明细*/
 var brandDetailTotal = 0;//分页初始值
 var $regionId;//区域ID
 var orderType;//订单类别
-var goodId;//商品ID
 $(function() {
 	initData();//加载上部数据
 	initSearchData();//加载检索数据
@@ -17,7 +16,6 @@ function initData() {
 	var processData = JSON.parse(window.name);
 	$('.info-zq .text-lv').text(processData['cycleSales']);
 	$('.info-zq .text-jv').text(processData['hedgeNums']);
-	$('.J_brand').text(processData['brandName']);
 	$('.J_date').text(processData['date']);
 	$('.info-zq .text-gren').text(processData['realSales']);
 }
@@ -28,8 +26,6 @@ function initData() {
 function initSearchData() {
 	$regionId = $('.J_regionId option:selected').val();
 	orderType = $('.J_orderType option:selected').val();
-	goodId = $('#goodId').val();
-	SearchData['goodId'] = goodId;
 	SearchData['regionId'] = $regionId;//加载默认区域
 	SearchData['orderType'] = orderType;//加载默认订单类别
 	var date = $('.J_date').text();
@@ -37,8 +33,6 @@ function initSearchData() {
 	str = date.split("至");
 	SearchData['startDate'] = str[0].trim();//开始日期
 	SearchData['endDate'] = str[1].trim();//结束日期
-	console.log(str[0]);
-	console.log(str[1]);
 }
 
 /**
@@ -77,8 +71,9 @@ function goSearch() {
 function findDetailList(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
+	var awardId = $('#awardId').val();//获取奖励Id
 	$.ajax({
-		url : "/brandIncome/detailList/" + $regionId,
+		url : "/award/detailList/" + $regionId +"?awardId=" + awardId,
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
@@ -151,21 +146,23 @@ function initExcelExport() {
 	$('.table-export').on(
 		'click',
 		function() {
+			var awardId = $('#awardId').val();//获取奖励Id
+			SearchData['awardId'] = awardId;
 			$regionId = $('.J_regionId option:selected').val();
 			SearchData['regionId'] = $regionId;
 			var param = parseParam(SearchData);
 			delete SearchData['page'];
 			delete SearchData['size'];
-			window.location.href = base + "brandIncome/detail/export" +"?" + param;
+			window.location.href = base + "award/detail/export" +"?" + param;
 		});
 }
 
 /**
- * 查看订单
+ * 查看订单详情
  * @param orderId
  */
 function orderDetail(orderId) {
-	window.location.href = base + "brandIncome/detail/"+orderId;
+	window.location.href = base + "award/detail/"+orderId;
 }
 
 var parseParam = function(param, key) {
