@@ -23,7 +23,7 @@ public class EventCustomer implements EventHandler<MallOrder> {
   public void onEvent(MallOrder mallOrder, long l, boolean b) throws Exception {
     System.out.println("ordernum:"+mallOrder.getOrderNum()+"*****memberid"+mallOrder.getMember_id());
     //mainIncomeService.caculateOutedOrder(mallOrder.getOrderNum());
-   // SpringUtil.getBean(MainIncomeService.class).caculateOutedOrder(mallOrder.getOrderNum());
+    SpringUtil.getBean(MainIncomeService.class).caculateOutedOrder(mallOrder.getOrderNum());
   }
 
 
