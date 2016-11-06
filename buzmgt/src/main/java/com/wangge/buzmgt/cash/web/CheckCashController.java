@@ -46,7 +46,7 @@ public class CheckCashController {
   }
 
   @RequestMapping(value = "", method = RequestMethod.GET)
-  @JSONFormat(filterField = { "OrderSignfor.salesMan" }, nonnull = true, dateFormat = "yyyy-MM-dd")
+  @JSONFormat(filterField = {  "SalesMan.user","SalesMan.region", "OrderSignfor.salesMan" }, nonnull = true, dateFormat = "yyyy-MM-dd")
   public Page<CheckCash> getCashList(HttpServletRequest request, @PageableDefault(page = 0, size = 10, sort = {
       "createDate", "rnid" }, direction = Direction.DESC) Pageable pageable) {
     Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);

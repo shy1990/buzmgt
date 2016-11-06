@@ -193,7 +193,7 @@ Handlebars.registerHelper('disposeStayMoney', function(value) {
 Handlebars.registerHelper('isCheckStatus', function(isCheck,userId,createDate) {
 	var formcreateDate=changeDateToString(new Date(createDate));
 	var html='<button class="btn btn-sm btn-blue" onClick="checkPending(\''+userId+'\',\''+formcreateDate+'\')">确认</button>'
-	if (isCheck == '已审核') {
+	if (isCheck == '已付款') {
 		return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
 	}
 	return html;

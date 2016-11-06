@@ -72,12 +72,15 @@ public class WaterOrderCashController {
         OrderSignfor order = new OrderSignfor();
         order = item.getCash().getOrder();
         objMap.put("serialNo", serialNo);
-        objMap.put("orderNo", order.getOrderNo());
-        objMap.put("orderPrice", order.getOrderPrice());
-        objMap.put("actualPayNum", order.getActualPayNum());
-        objMap.put("cashMoney", waterOrder.getCashMoney());
-        objMap.put("status", waterOrder.getPayStatus());
-        objMap.put("createDate", waterOrder.getCreateDate());
+	      objMap.put("userId", waterOrder.getUserId());
+	      objMap.put("userName", order.getSalesMan().getTruename());
+	      objMap.put("orderNo", order.getOrderNo());
+	      objMap.put("orderPrice", order.getOrderPrice());
+	      objMap.put("actualPayNum", order.getActualPayNum());
+	      objMap.put("cashMoney", waterOrder.getCashMoney());
+	      objMap.put("status", waterOrder.getPayStatus());
+	      objMap.put("createDate", waterOrder.getCreateDate());
+
         alList.add(objMap);
 
         Integer sum = sumMap.get(serialNo);
@@ -106,19 +109,19 @@ public class WaterOrderCashController {
         obMap.put("firstCol", 0);
         obMap.put("lastCol", 0);
         marginList.add(obMap);
-        // 总金额合并
+
         Map<String, Object> obMap1 = new HashMap<String, Object>();
         obMap1.put("firstRow", start + 1);
         obMap1.put("lastRow", end);
-        obMap1.put("firstCol", 4);
-        obMap1.put("lastCol", 4);
+        obMap1.put("firstCol", 1);
+        obMap1.put("lastCol", 1);
         marginList.add(obMap1);
 
         Map<String, Object> obMap2 = new HashMap<String, Object>();
         obMap2.put("firstRow", start + 1);
         obMap2.put("lastRow", end);
-        obMap2.put("firstCol", 5);
-        obMap2.put("lastCol", 5);
+        obMap2.put("firstCol", 2);
+        obMap2.put("lastCol", 2);
         marginList.add(obMap2);
 
         Map<String, Object> obMap3 = new HashMap<String, Object>();
@@ -127,11 +130,25 @@ public class WaterOrderCashController {
         obMap3.put("firstCol", 6);
         obMap3.put("lastCol", 6);
         marginList.add(obMap3);
+
+        Map<String, Object> obMap4 = new HashMap<String, Object>();
+	      obMap4.put("firstRow", start + 1);
+	      obMap4.put("lastRow", end);
+	      obMap4.put("firstCol", 7);
+	      obMap4.put("lastCol", 7);
+        marginList.add(obMap4);
+
+        Map<String, Object> obMap5 = new HashMap<String, Object>();
+	      obMap5.put("firstRow", start + 1);
+	      obMap5.put("lastRow", end);
+	      obMap5.put("firstCol", 8);
+	      obMap5.put("lastCol", 8);
+        marginList.add(obMap5);
       }
       start = end;
     }
-	  String[] gridTitles_ = { "流水单号", "订单编号", "订单金额", "实际金额", "总金额",  "状态", "日期" };
-	  String[] coloumsKey_ = { "serialNo", "orderNo", "orderPrice", "actualPayNum", "cashMoney", "status", "createDate" };
+	  String[] gridTitles_ = { "流水单号","用户Id", "用户名称", "订单编号", "订单金额", "实际金额", "总金额","状态", "日期" };
+	  String[] coloumsKey_ = { "serialNo","userId", "userName", "orderNo", "orderPrice", "actualPayNum", "cashMoney", "status", "createDate" };
     MapedExcelExport.doExcelExport("流水单号.xls", alList, gridTitles_, coloumsKey_, request, response, marginList);
   }
 
