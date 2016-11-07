@@ -345,7 +345,7 @@ public class MainPlanServiceImpl implements MainPlanService {
       });
       // 添加时间必须小于入职时间
       if (!fqtimeOp.isPresent()) {
-        Date regDate = salesmanRep.findRegdateById(userId);
+        Date regDate = salesmanRep.findById(userId).getRegdate();
         if (usr.getCreatetime().getTime() < regDate.getTime()) {
           msgList.add(usr.getSalesmanname() + "的入职时间为:" + DateUtil.date2String(regDate));
           cancleList.add(usr);
@@ -360,7 +360,7 @@ public class MainPlanServiceImpl implements MainPlanService {
       msgs = msgs.substring(0, msgs.length() - 2);
     String finalMsg = "";
     if (cancleList.size() > 0) {
-      finalMsg = "新增" + ulist.size() + "个用户,然" + cancleList.size() + "个业务员的新增时间与最新的删除时间冲突,请重新添加!!最新删除日期如下:" + msgs;
+      finalMsg = "新增" + ulist.size() + "个用户,然" + cancleList.size() + "个业务员存在着时间冲突,请重新添加!!冲突如下:" + msgs;
     }
     remap.put("errMsg", finalMsg);
   }
