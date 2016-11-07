@@ -95,7 +95,6 @@ public class ImportOrderExcel {
 
       } catch (Exception e) {
         FileUtil.deleteFile(pathdir + filename);
-        e.getStackTrace();
         logger.error(e.getMessage());
         json.setMsg("excel导入异常！  " + e.getMessage());
         request.setAttribute("message", json);
