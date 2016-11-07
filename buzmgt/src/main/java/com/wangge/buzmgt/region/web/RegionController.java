@@ -122,7 +122,8 @@ public class RegionController {
     newRegion.setParent(region);
     newRegion.setChildren(collectionRegion);
     newRegion.setStarsLevel(0);
-      regionService.saveRegion(newRegion);
+    newRegion.setNamepath(region.getNamepath()+name);
+    regionService.saveRegion(newRegion);
     return new ResponseEntity<RegionTree>(RegionUtil.getRegionTree(newRegion), HttpStatus.OK);
   }
 
