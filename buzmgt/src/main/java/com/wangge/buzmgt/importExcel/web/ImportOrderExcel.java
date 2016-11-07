@@ -1,26 +1,13 @@
 package com.wangge.buzmgt.importExcel.web;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.servlet.http.HttpServletRequest;
-
 import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.service.RegistDataService;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
-import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.RelatedStatus;
+import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
+import com.wangge.buzmgt.util.ExcelUtil;
+import com.wangge.buzmgt.util.FileUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -34,11 +21,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.RelatedStatus;
-import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
-import com.wangge.buzmgt.util.ExcelUtil;
-import com.wangge.buzmgt.util.FileUtil;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -167,7 +162,8 @@ public class ImportOrderExcel {
             Query query1 = entityManager.createNativeQuery(sql);
             sqlQuery = query1.unwrap(SQLQuery.class);
             sqlQuery.setParameter(a, orderno[i]);
-            List<Object[]> resultList = sqlQuery.list();
+          //  List<Object[]> resultList = sqlQuery.list();
+            BigDecimal partsCount = (BigDecimal) sqlQuery.uniqueResult();
             if (CollectionUtils.isNotEmpty(ret)) {
               ret.forEach(result -> {
                 OrderSignfor o = new OrderSignfor();
@@ -179,11 +175,16 @@ public class ImportOrderExcel {
                 o.setOrderStatus(OrderSignfor.OrderStatus.SUCCESS);
                 o.setShopName((String) result[4]);
                 //获取配件数量
-                if (CollectionUtils.isNotEmpty(resultList)) {
-                  resultList.forEach(r -> {
-                    o.setPartsCount((int) r[0]);
-                  });
-                }
+//                if (CollectionUtils.isNotEmpty(resultList)) {
+//                  resultList.forEach(r -> {
+                    if(null!=partsCount){
+                      o.setPartsCount(Integer.valueOf(partsCount+""));
+                    }else{
+                      o.setPartsCount(0);
+                    }
+
+//                  });
+//                }
                 //查询是否已关联
                 List<RegistData> registData = registDataService.findByLoginAccount((String) result[5]);
                 if (CollectionUtils.isNotEmpty(registData)) {
