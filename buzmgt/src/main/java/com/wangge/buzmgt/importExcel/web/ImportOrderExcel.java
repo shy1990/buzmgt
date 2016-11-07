@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.importExcel.web;
 
-import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.service.RegistDataService;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.RelatedStatus;
@@ -8,6 +7,8 @@ import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.util.ExcelUtil;
 import com.wangge.buzmgt.util.FileUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -94,6 +95,8 @@ public class ImportOrderExcel {
 
       } catch (Exception e) {
         FileUtil.deleteFile(pathdir + filename);
+        e.getStackTrace();
+        logger.error(e.getMessage());
         json.setMsg("excel导入异常！  " + e.getMessage());
         request.setAttribute("message", json);
         return "excel/result";
@@ -162,7 +165,6 @@ public class ImportOrderExcel {
             Query query1 = entityManager.createNativeQuery(sql);
             sqlQuery = query1.unwrap(SQLQuery.class);
             sqlQuery.setParameter(a, orderno[i]);
-          //  List<Object[]> resultList = sqlQuery.list();
             BigDecimal partsCount = (BigDecimal) sqlQuery.uniqueResult();
             if (CollectionUtils.isNotEmpty(ret)) {
               ret.forEach(result -> {
@@ -170,24 +172,24 @@ public class ImportOrderExcel {
                 o.setOrderNo((String) result[0]);
                 o.setCreateTime(new Date());
                 o.setOrderPrice(((BigDecimal) result[1]).floatValue());
-                o.setActualPayNum(((BigDecimal) result[2]).floatValue());//实际金额
+                if (ObjectUtils.notEqual(result[2],null)){
+                  o.setActualPayNum(((BigDecimal) result[2]).floatValue());//实际金额
+                }
                 o.setPhoneCount(((BigDecimal) result[3]).intValue());
                 o.setOrderStatus(OrderSignfor.OrderStatus.SUCCESS);
                 o.setShopName((String) result[4]);
                 //获取配件数量
 //                if (CollectionUtils.isNotEmpty(resultList)) {
 //                  resultList.forEach(r -> {
-                    if(null!=partsCount){
+                    if(ObjectUtils.notEqual(partsCount,null)){
                       o.setPartsCount(Integer.valueOf(partsCount+""));
-                    }else{
-                      o.setPartsCount(0);
                     }
 
 //                  });
 //                }
                 //查询是否已关联
-                List<RegistData> registData = registDataService.findByLoginAccount((String) result[5]);
-                if (CollectionUtils.isNotEmpty(registData)) {
+                String loginAccount = registDataService.findLoginAccountByLoginAccount((String) result[5]);
+                if (StringUtils.isNotEmpty(loginAccount)) {
                   o.setRelatedStatus(RelatedStatus.ENDRELATED);
                 } else {
                   o.setRelatedStatus(RelatedStatus.NOTRELATED);

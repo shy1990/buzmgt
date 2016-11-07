@@ -1,11 +1,9 @@
 package com.wangge.buzmgt.assess.service;
 
-import com.wangge.buzmgt.assess.entity.RegistData;
 import com.wangge.buzmgt.assess.repository.RegistDataRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/7/16.
@@ -21,7 +19,7 @@ public class RegistDataServiceImpl implements RegistDataService{
     }
 
     @Override
-    public List<RegistData> findByLoginAccount(String loginAccount) {
-        return registDataRepository.findByLoginAccount(loginAccount);
+    public String findLoginAccountByLoginAccount(String loginAccount) {
+        return registDataRepository.findLoginAccountByLoginAccount(loginAccount);
     }
 }
