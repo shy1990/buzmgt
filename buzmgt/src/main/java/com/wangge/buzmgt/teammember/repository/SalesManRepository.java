@@ -93,4 +93,6 @@ public interface SalesManRepository extends JpaRepository<SalesMan, String> {
   Set<SalesMan> findForTargetByReginId(String regionId);
   
   SalesMan findByRegionAndIsPrimaryAccount(Region region, int isPrimaryAccount);
+  
+  Date findRegdateById(String userId);
 }

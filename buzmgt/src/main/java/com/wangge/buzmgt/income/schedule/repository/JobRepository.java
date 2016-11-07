@@ -21,7 +21,4 @@ public interface JobRepository extends JpaRepository<Jobtask, Long> {
   @Modifying(clearAutomatically = true)
   @Query("update Jobtask set flag=1 where id=?1")
   void updateFlag(Long id);
-  @Transactional
-  @Modifying(clearAutomatically = true)
-  int deleteByTypeAndKeyid(Integer type,Long keyId);
 }
