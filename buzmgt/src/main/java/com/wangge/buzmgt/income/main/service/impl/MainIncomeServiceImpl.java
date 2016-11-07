@@ -76,6 +76,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    */
   @Override
   public void caculateOutedOrder(String orderNo) {
+    System.out.println("调成功了"+orderNo);
     Object userO = mainPlanUserRep.findsaleByDateAndOrderNo (new Date(), orderNo);
     if (null == userO) {
       return;
