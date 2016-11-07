@@ -36,9 +36,10 @@ public class IncomeSchedule {
   IncomeErrorService errorService;
   
   /**
-   * 28号23点1分执行<br/> 初始化下个月的薪资
+   * 1号0点0分1秒执行<br/>
+   * 初始化本月的薪资;这个人这月已没有收益.
    */
-  @Scheduled(cron = " 0 1 23 28 * ? ")
+  @Scheduled(cron = " 1 0 0 1 * ? ")
   public void initMonthIncome() {
     jobService.initMonthIncome();
   }
@@ -88,8 +89,7 @@ public class IncomeSchedule {
   }
   
   /**
-   * 计算总和
-   * 10号23点开始计算
+   * 计算总和 10号23点开始计算
    */
   @Scheduled(cron = "0 1 23 10 * ? ")
   public void calIncomePerMonth() {
@@ -97,8 +97,7 @@ public class IncomeSchedule {
   }
   
   /**
-   * 处理每天需要做的任务
-   * 1点10分
+   * 处理每天需要做的任务 1点10分
    */
   @Scheduled(cron = "0 10 1 * * ? ")
   public void doChange() {
