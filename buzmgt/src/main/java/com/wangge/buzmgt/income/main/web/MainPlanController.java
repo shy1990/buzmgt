@@ -34,8 +34,10 @@ public class MainPlanController {
   private UserService userService;
   
   @RequestMapping("/index")
-  public String init(Model model) {
+  public String init(HttpServletRequest request, Model model) {
     model.addAttribute("regions", regionService.findByTypeOrderById(regionService.findByRegionTypeName("省")));
+    //为空则普通操作,为1则审核,为2则新建;
+    model.addAttribute("check", request.getParameter("check"));
     return "/income/main/index";
   }
   
