@@ -35,14 +35,17 @@
 					<img src="static/img/fan{{getImg @index}}.png" alt="">
 				</div>
 				<div class="col-sm-7">
-                    <a href="/achieve/list?planId={{id}}"><span class="text-fa-1">{{maintitle}}</span></a>
+                    <a href="/achieve/list?planId={{ifCkeck id}}"><span class="text-fa-1">{{maintitle}}</span></a>
 				</div>
+     {{#ifNew id}} 
 				<div class="col-sm-2 icon-fl-right">
 					<a  href="/mainPlan/update/{{id}}" ><i
 						class="icon-f icon-ren" data-toggle="tooltip"  title="适用人员"></i></a> <i
 						class="icon-f icon-dele" data-toggle="modal"
 						data-pid="{{id}}" data-target="#del"></i>
 				</div>
+     {{else}}
+     {{/ifNew}}
 	</div>
 	{{/each}}
 	
