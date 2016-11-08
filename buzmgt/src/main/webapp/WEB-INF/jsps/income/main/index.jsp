@@ -47,6 +47,7 @@
 	{{/each}}
 	
 {{/if}}
+ {{#ifNew content}} 
 	<div class="col-sm-5 tc-fangan" style="margin-right: 100px; margin-left: 30px;margin-bottom:7px">
 				<div class="col-sm-2" style="margin-left: -30px">
 					<img src="static/img/fan4.png" alt="">
@@ -60,7 +61,8 @@
 				</div>
 
 	</div>
-
+{{else}}
+{{/ifNew}} 
 </script>
 </head>
 
@@ -138,6 +140,7 @@
 	<script type="text/javascript">
 		var gloPlanId = null;
 		var	base='<%=basePath%>';
+		 var check="${check}";
 		$(function() {
 			$("[data-toggle='popover']").popover();
 			findMainPlanList(0);

@@ -1,14 +1,14 @@
 var itemTotal = 0;// 补统计总条数
 var searchData = {
-		"page" : 0,
-		"size" : 15,
-	};
+	"page" : 0,
+	"size" : 15,
+};
 function findMainPlanList(page) {
 	page = page == null || page == '' ? 0 : page;
-	searchData.page=page;
+	searchData.page = page;
 	searchData.regionId = $("#region").val();
 	$.ajax({
-		url : base+"mainPlan/queryPlan",
+		url : base + "mainPlan/queryPlan",
 		type : "GET",
 		data : searchData,
 		dataType : "json",
@@ -28,7 +28,22 @@ function findMainPlanList(page) {
 
 function createTaskTable(data) {
 	Handlebars.registerHelper("getImg", function(index) {
-		return index%3+1;
+		return index % 3 + 1;
+	});
+
+	Handlebars.registerHelper("ifCkeck", function(planId) {
+		if (check == 1) {
+			return planId + "&check=1";
+		}
+		return planId;
+	});
+	Handlebars.registerHelper("ifNew", function(content, options) {
+		if (check == 2) {
+			return options.fn(this);
+		} else {
+			// 不满足条件执行{{else}}部分
+			return options.inverse(this);
+		}
 	});
 	var myTemplate = Handlebars.compile($("#task-table-template").html());
 	$('#planList').html(myTemplate(data));
@@ -50,9 +65,9 @@ function oilCostPaging(data) {
 	});
 }
 
-function  deletePlan(){
+function deletePlan() {
 	$.ajax({
-		url : "/mainPlan/delete/"+gloPlanId,
+		url : "/mainPlan/delete/" + gloPlanId,
 		type : "post",
 		dataType : "json",
 		beforeSend : function(request) {
@@ -65,4 +80,4 @@ function  deletePlan(){
 			alert("系统异常，请稍后重试！");
 		}
 	});
-	}
+}
