@@ -97,7 +97,7 @@
 
 <div class="content main">
     <h4 class="page-header">
-        <i class="ico ico-tcsz"></i>设置记录
+        <i class="ico ico-tcsz"></i>渠道审核
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
         <input id="planId" hidden="hidden" value="${planId }">
         <input id="userId" hidden="hidden" value="${userId }">

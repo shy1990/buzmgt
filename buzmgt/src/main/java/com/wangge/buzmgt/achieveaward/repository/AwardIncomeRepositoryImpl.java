@@ -28,6 +28,14 @@ public class AwardIncomeRepositoryImpl implements CustomRepository {
 	@PersistenceContext
 	private EntityManager em;
 
+	/**
+	 * 以客户签收（订单完结）时间为准
+	 * @param userId
+	 * @param goodIds
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
 	@Override
 	public List<AwardIncome> findOrderByUserIdAndGoodsAndPayDate(String userId, String[] goodIds, Date startDate, Date endDate) {
 		String startDate_ = DateUtil.date2String(startDate);

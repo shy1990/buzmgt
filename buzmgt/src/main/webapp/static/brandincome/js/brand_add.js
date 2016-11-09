@@ -142,7 +142,7 @@ function toSubmit() {
             success: function (data) {
                 if (data.status == "success") {
                     alert(data.successMsg);
-                    window.location.href = base + "/areaAttr/setting?ruleId=" + data.result.id + '&type=BRANDMODEL';
+                    window.location.href = base + "areaAttr/setting?ruleId=" + data.result.id + '&type=BRANDMODEL';
                 } else {
                     alert(data.errorMsg);
                 }

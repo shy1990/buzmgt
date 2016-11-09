@@ -367,10 +367,11 @@ Handlebars.registerHelper('compareDate', function (startDate, endDate, status) {
  */
 Handlebars.registerHelper('whatUnderwayButton', function (status,id,auditor) {
     var userId = $("#userId").val();
+    console.log(userId);
     var html = "";
     id = Handlebars.Utils.escapeExpression(id);
     html += '<button class="btn bnt-sm bnt-ck spc" data-toggle="modal" data-target="#" onclick="brandLook('+ id +');">查看</button>';
-    if (status === "WAIT") {//待审核，未使用，当前登录审核人和指派审核人相符
+    if (status === "WAIT" && userId === auditor) {//待审核，未使用，当前登录审核人和指派审核人相符
         html += '<button class="btn bnt-sm bnt-ck spc" data-toggle="modal" data-target="#" onclick="brandAudit('+ id +');">审核</button>';
         html += '<button class="btn bnt-sm bnt-ck spc" data-toggle="modal" data-target="#" onclick="brandReject('+ id +');">驳回</button>';
     }
