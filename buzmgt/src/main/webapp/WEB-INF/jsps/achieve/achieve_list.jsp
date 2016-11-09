@@ -137,7 +137,10 @@
             <td>
                 <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
                 <a href="/achieve/course/{{achieveId}}" class="btn btn-sm bnt-jc">进程</a>
+                {{#ifNew achieveId}}
                 <button class="btn btn-sm btn-sc " onclick="delAchieve('{{achieveId}}')">删除</button>
+                {{else}}
+                {{/if}}
             </td>
         </tr>
         {{/each}}
@@ -159,8 +162,21 @@
 <body>
 
 <div class="content main">
-    <jsp:include page="income_set_menu.jsp"></jsp:include>
+    <h4 class="page-header">
+        <i class="ico ico-tcsz"></i>提成设置 <a href="javascript:history.back();"><i
+            class="ico icon-back fl-right"></i></a>
+        <input id="planId" hidden="hidden" value="${planId }">
+        <input id="checkId" hidden="hidden" value="${check }">
+    </h4>
 
+    <ul class="nav nav-pills  nav-top" id="myTab">
+        <li title="priceSection"><a data-toggle="tab" href="#ajgqj">按价格区间</a></li>
+        <li title="brandIncome"><a data-toggle="tab" href="#ppxhao">品牌型号<span
+                class="qipao">2</span></a></li>
+        <li class="active" title="achieve"><a data-toggle="tab" href="#dlsz">达量设置</a></li>
+        <li title="superposition"><a data-toggle="tab" href="#djsz">叠加设置</a></li>
+        <li title="award"><a href="/award/list?planId=${planId}">达量奖励</a></li>
+    </ul>
     <div class="row">
         <!--col begin-->
         <div class="col-md-12">
@@ -343,15 +359,19 @@
                         <!--导航开始-->
 
                         <div class="ph-btn-set">
-                            <a href="javascript:add_brand();" class="btn ph-blue">
-                                <i class="ico icon-xj"></i> <span class="text-gery">添加</span>
-                            </a>
-                            <a href="javascript:setRecord();" class="btn ph-blue" style="margin-right: 30px">
-                                <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
-                            </a>
-                            <a href="javascript:toAudit();" class="btn ph-blue" style="margin-right: 30px">
-                                <i class="ico icon-jl"></i> <span class="text-gery">审核</span>
-                            </a>
+                            <c:if test="${check eq '2'}">
+                                <a href="javascript:add_brand();" class="btn ph-blue">
+                                    <i class="ico icon-xj"></i> <span class="text-gery">添加</span>
+                                </a>
+                                <a href="javascript:setRecord();" class="btn ph-blue" style="margin-right: 30px">
+                                    <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
+                                </a>
+                            </c:if>
+                            <c:if test="${check eq '1'}">
+                                <a href="javascript:toAudit();" class="btn ph-blue" style="margin-right: 30px">
+                                    <i class="ico icon-jl"></i> <span class="text-gery">渠道审核</span>
+                                </a>
+                            </c:if>
                             <div class="link-posit pull-right">
                                 <input class="input-search" type="text" placeholder="模糊查询请输入品牌型号">
                                 <button onclick="goSearch();" class="btn  btn-sm bnt-ss ">搜索</button>
@@ -388,12 +408,19 @@
                     <!--达量设置-->
                     <div class="tab-pane fade in active right-body" id="dlsz">
                         <div class="ph-btn-set">
-                            <a href="javascript:add();" class="btn ph-blue"> <i class="ico icon-xj"></i>
-                                <span class="text-gery">添加</span>
-                            </a> <a href="javascript:void(0);" class="btn ph-blue" style="margin-right: 30px">
-                        </a> <a href="JavaScript:record();" class="btn ph-blue" style="margin-right: 30px">
-                            <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
-                        </a>
+                            <c:if test="${check != 1}">
+                                <a href="javascript:add();" class="btn ph-blue"> <i class="ico icon-xj"></i>
+                                    <span class="text-gery">添加</span>
+                                </a>
+                            </c:if>
+                            <c:if test="${check == 1}">
+                                <a href="JavaScript:recordForAudit();" class="btn ph-blue" style="margin-right: 30px">
+                                    <i class="ico icon-xj"></i> <span class="text-gery">审核</span>
+                                </a>
+                            </c:if>
+                            <a href="JavaScript:record();" class="btn ph-blue" style="margin-right: 30px">
+                                <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
+                            </a>
                             <div class="link-posit pull-right">
                                 <input id="searchGoodsname" class="input-search" type="text"
                                        placeholder="模糊查询请输入品牌型号">

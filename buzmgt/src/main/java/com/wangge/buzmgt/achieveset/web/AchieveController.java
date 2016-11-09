@@ -15,6 +15,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.income.schedule.service.JobService;
+import com.wangge.buzmgt.section.pojo.ChannelManager;
+import com.wangge.buzmgt.section.service.ChannelManagerService;
 import com.wangge.buzmgt.util.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
@@ -67,6 +69,8 @@ public class AchieveController {
 	@Autowired
 	private AchieveService achieveServer;
 	@Autowired
+	private ChannelManagerService channelManagerService;
+	@Autowired
 	private JobService jobService;
 	@Autowired
 	private AchieveIncomeService achieveIncomeServer;
@@ -84,8 +88,9 @@ public class AchieveController {
 	 * @Description: 展示达量列表 @param
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String showAchieveList(String planId, Model model) {
+	public String showAchieveList(String planId,String check, Model model) {
 		model.addAttribute("planId", planId);
+		model.addAttribute("check", check);
 		model.addAttribute("machineTypes", mainPlanService.getAllMachineType());
 		return "achieve/achieve_list";
 	}
@@ -121,10 +126,11 @@ public class AchieveController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String showAddAchieve(@RequestParam String planId, Model model) {
-
+		List<ChannelManager> channelManagers = channelManagerService.findChannelManager("渠道总监");
 		List<MachineType> machineTypes = machineTypeServer.findAll();
 		model.addAttribute("planId", planId);
 		model.addAttribute("machineTypes", machineTypes);
+		model.addAttribute("channelManagers", channelManagers);
 		return "achieve/achieve_add";
 	}
 
@@ -307,6 +313,12 @@ public class AchieveController {
 	public JSONObject auditAchieve(@PathVariable("achieveId") Achieve achieve, @RequestParam("status") String status) {
 		JSONObject json = new JSONObject();
 		try {
+			String userId = ((User) SecurityUtils.getSubject().getPrincipal()).getId();
+			if(!userId.equals(achieve.getAuditor())){
+				json.put("result", "failure");
+				json.put("message", "没有权限请联系管理员！");
+				return json;
+			}
 			if (ObjectUtils.equals(achieve, null)) {
 				json.put("result", "failure");
 				json.put("message", "信息有误！");

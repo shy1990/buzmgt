@@ -5,8 +5,10 @@ package com.wangge.buzmgt.achieveaward.service;/**
 import com.wangge.buzmgt.achieveaward.entity.Award;
 import com.wangge.buzmgt.achieveaward.entity.AwardIncome;
 import com.wangge.buzmgt.achieveaward.repository.AwardIncomeRepository;
+import com.wangge.buzmgt.achieveset.entity.AchieveIncome;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.common.PlanTypeEnum;
+import com.wangge.buzmgt.income.main.entity.HedgeCost;
 import com.wangge.buzmgt.income.main.repository.HedgeCostRepository;
 import com.wangge.buzmgt.income.main.service.IncomeErrorService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
@@ -15,8 +17,10 @@ import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.plan.entity.GroupNumber;
 import com.wangge.buzmgt.plan.entity.GroupUser;
 import com.wangge.buzmgt.plan.entity.RewardPunishRule;
+import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +79,62 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 		return awardIncomeRepository.findOne(id);
 	}
 
+	@Override
+	public boolean createAwardIncomeAfterSale(String userId, String goodId, Long palnId, Long hedgeId, Date payTime, Date acceptTime, Integer num) {
+		/**
+		 * 1.查询收益数量:
+		 * 1）没有产生收益
+		 * 1.1）保存售后数量
+		 * 2）产生收益（计算完毕）
+		 * 2.1）保存售后数量+金额 等待有
+		 */
+		String orderNo = "";
+		Long ruleId = null;
+		try {
+
+			//查询收益
+			Map<String, Object> searchParams = new HashedMap();
+			searchParams.put("EQ_userId", userId);
+			searchParams.put("EQ_goodId", goodId);
+			searchParams.put("EQ_planId", palnId);
+			searchParams.put("EQ_status", AwardIncome.PayStatusEnum.PAY);
+			searchParams.put("EQ_createDate", DateUtil.date2String(payTime));
+			List<AwardIncome> awardIncomes = findAll(searchParams, (Sort) null);
+			Award award = new Award();
+			Float AfterSaleMoney = 0f;
+			if (awardIncomes.size() < 0) {
+				searchParams.remove("EQ_userId");
+				searchParams.remove("EQ_status");
+				searchParams.remove("EQ_createDate");
+				List<Award> awards = awardService.findAll(searchParams, (Sort) null);
+				award = awards.get(0);
+				ruleId = award.getAwardId();
+
+			} else {
+
+				//根据这一条数据查询规则和已算收益数据数量size
+				AwardIncome awardIncome = awardIncomes.get(0);
+				award = awardService.findOne(awardIncome.getAwardId());
+				orderNo = awardIncome.getOrderNo();
+				ruleId = awardIncome.getAwardId();
+				searchParams.remove("EQ_createDate");
+				searchParams.put("EQ_awardId",awardIncome.getAwardId());
+				List<AwardIncome> awardIncomes_ = findAll(searchParams, (Sort) null);
+				//售后冲减的金额 =之前的收益-现有的收益
+				AfterSaleMoney = disposeAwardIncome(award, userId, awardIncomes_.size());//之前的收益
+				AfterSaleMoney = AfterSaleMoney - disposeAwardIncome(award,userId,awardIncomes_.size()-num);
+			}
+			//产生达量奖励售后冲减
+			HedgeCost hedgeCost = new HedgeCost(hedgeId, ruleId, 4, userId, goodId, payTime, acceptTime, AfterSaleMoney);
+			hedgeCostRepository.save(hedgeCost);
+		} catch (Exception e) {
+			LogUtil.error("达量奖励收益售后冲减失败", e);
+			incomeErrorService.saveHedgeError(orderNo, userId, e.getMessage(), goodId, 4, ruleId);
+			return false;
+		}
+		return false;
+	}
+
 	/**
 	 * 计算达量奖励总收益
 	 *
@@ -84,13 +144,9 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 	 */
 	@Override
 	public String calculateAwardIncomeTotal(Long planId, Long awardId) {
-//		Map<String, Object> spec = new HashedMap();
-//		spec.put("EQ_awardId",awardId);
-//		awardService.findAll(spec,(Sort) null);
 		Award award = awardService.findOne(awardId);
-//		Long awardId = award.getAwardId();
 		List<Map<String, Object>> userMaps = mainPlanService.findEffectUserDateList(planId, award.getStartDate(), award.getEndDate());
-		if(userMaps.size()<1){
+		if (userMaps.size() < 1) {
 			LogUtil.info("没有查询到达量奖励规则的！");
 			return "没有查询到达量奖励规则的！";
 		}
@@ -107,6 +163,7 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 
 	/**
 	 * 处理每个用户的达量奖励收益
+	 *
 	 * @param award
 	 * @param userId
 	 * @param startDate
@@ -122,6 +179,7 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 			});
 			//查询达量奖励规则内的订单使用之定义查询（AwardIncome）
 			String[] strings = new String[goodIds.size()];
+
 			List<AwardIncome> awardIncomes = findOrderByUserIdAndGoodsAndPayDate(userId, goodIds.toArray(strings), startDate, endDate);
 			//订单总数量
 			Integer totalNum = 0;
@@ -133,13 +191,13 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 			}
 			//查询规则收益
 			incomeMoney = disposeAwardIncome(award, userId, totalNum).doubleValue();
-			if(awardIncomes.size()>0){
+			if (awardIncomes.size() > 0) {
 				awardIncomeRepository.save(awardIncomes);
-//				mainIncomeService.updateAchieveIncome(userId, incomeMoney);
+				mainIncomeService.updateAchieveIncome(userId, incomeMoney);
 			}
 		} catch (Exception e) {
-			incomeErrorService.save(null, userId, "计算达量奖励收益出现问题："+e.getMessage(), goodIds.toString(), 4, award.getAwardId());
-			LogUtil.error("计算达量奖励收益出现问题",e);
+			incomeErrorService.save(null, userId, "计算达量奖励收益出现问题：" + e.getMessage(), goodIds.toString(), 4, award.getAwardId());
+			LogUtil.error("计算达量奖励收益出现问题", e);
 			return;
 		}
 	}
@@ -147,6 +205,7 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 	/**
 	 * 查询规则内的订单
 	 * 使用规则收益来处理数据
+	 *
 	 * @param userId
 	 * @param goodIds
 	 * @param startDate
@@ -154,7 +213,7 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 	 * @return
 	 */
 	public List<AwardIncome> findOrderByUserIdAndGoodsAndPayDate(String userId, String[] goodIds, Date startDate, Date endDate) {
-		return awardIncomeRepository.findOrderByUserIdAndGoodsAndPayDate(userId,goodIds,startDate,endDate);
+		return awardIncomeRepository.findOrderByUserIdAndGoodsAndPayDate(userId, goodIds, startDate, endDate);
 	}
 
 	/**
@@ -169,16 +228,18 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 	 * @Description: 根据规则计算收益 1.查询此商品当前的销量， 2.根据销量匹配出提成金额 -- 查询是否有特殊分组，若有分组则在规则中
 	 * 增加对应阶段区间量值; 3.根据数量计算提成金额
 	 */
-	private Float disposeAwardIncome(Award ac, String userId, Integer totalNum) {
+	private Float disposeAwardIncome(Award award, String userId, Integer totalNum) {
 		List<String> goodIds = new ArrayList<>();
 		Float money = 0f;
 		try {
 
-			ac.getAwardGoods().forEach(awardGood -> {
+			award.getAwardGoods().forEach(awardGood -> {
 				goodIds.add(awardGood.getGoodId());
 			});
-			//查询售后冲减的量
-			Integer afterSaleNum = hedgeCostRepository.countByGoodIds(goodIds, userId);//findAfterSaleNum(ac.getAchieveId(), userId);
+			//TODO 查询售后冲减的量=====================
+			Integer afterSaleNum = hedgeCostRepository.countByRuleIdAndRuleTypeAndUserId(award.getAwardId(),4,userId).intValue();//findAfterSaleNum(ac.getAchieveId(), userId);
+			//TODO 查询售后冲减的量=====================
+
 			//实际销量=规则销量+即将发生的销量-售后冲减量
 			Integer nowNumber = totalNum - afterSaleNum;
 			// 计算后的收益
@@ -186,7 +247,7 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 			Integer secondAdd = 0;
 			Integer thirdAdd = 0;
 			// 查询特殊分组人员增量
-			for (GroupNumber group : ac.getGroupNumbers()) {
+			for (GroupNumber group : award.getGroupNumbers()) {
 				boolean flag = false;
 				for (GroupUser user : group.getGroupUsers()) {
 					// 存在这个组的userId
@@ -202,7 +263,7 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 					break;
 				}
 			}
-			List<RewardPunishRule> rules = new ArrayList<>(ac.getRewardPunishRules());
+			List<RewardPunishRule> rules = new ArrayList<>(award.getRewardPunishRules());
 			Integer minAdd_ = null;
 			Integer maxAdd_ = null;
 			// rules已经排好序，阶段由低到高；
@@ -236,7 +297,7 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 					break;
 				}
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.getMessage();
 			return 0f;
 		}
