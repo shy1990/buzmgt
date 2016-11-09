@@ -297,18 +297,20 @@ public class ProductionServiceImpl implements ProductionService {
      *
      * @param id
      * @param status    状态是1
-     * @param auditorId
+     * @param auditor
      */
     @Override
-    public void toReview(Long id, String status, String auditorId) {
+    public void toReview(Long id, String status, String auditor,String userId) {
         Production p = productionRepository.findByProductionId(id);//查出这套区间
         p.setProductStatus(status);
-        p.setProductionAuditor(auditorId);
+        p.setProductionAuditor(auditor);
+        p.setUserId(userId);
         List<PriceRange> priceRanges = p.getPriceRanges();
         if (CollectionUtils.isNotEmpty(priceRanges)) {
             priceRanges.forEach(priceRange -> {
                 priceRange.setPriceRangeStatus(status);
-                priceRange.setPriceRangeAuditor(auditorId);
+                priceRange.setPriceRangeAuditor(auditor);
+                priceRange.setUserId(userId);
             });
         }
         p.setPriceRanges(priceRanges);
