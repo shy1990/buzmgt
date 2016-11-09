@@ -32,10 +32,7 @@ function createTaskTable(data) {
 	});
 
 	Handlebars.registerHelper("ifCkeck", function(planId) {
-		if (check == 1) {
-			return planId + "&check=1";
-		}
-		return planId;
+		return planId + "&check="+check;
 	});
 	Handlebars.registerHelper("ifNew", function(content, options) {
 		if (check == 2) {
