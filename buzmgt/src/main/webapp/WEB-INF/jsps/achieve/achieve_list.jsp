@@ -97,9 +97,12 @@
                 <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#"
                         onclick="brandProcess('{{id}}');">进程
                 </button>
+                {{#ifCheck id}}
                 <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#brandStop"
                         onclick="brandStop('{{id}}');">终止
                 </button>
+                {{else}}
+                {{/ifCheck}}
             </td>
         </tr>
         {{/each}}
@@ -140,7 +143,7 @@
                 {{#ifNew achieveId}}
                 <button class="btn btn-sm btn-sc " onclick="delAchieve('{{achieveId}}')">删除</button>
                 {{else}}
-                {{/if}}
+                {{/ifNew}}
             </td>
         </tr>
         {{/each}}
