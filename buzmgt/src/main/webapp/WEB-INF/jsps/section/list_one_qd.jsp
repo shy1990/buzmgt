@@ -156,12 +156,12 @@
 
                                 </tbody>
                             </table>
-                            <%--<c:if test="${userId == production.productionAuditor}">--%>
+                            <c:if test="${flag}">
                                 <button class="btn btn-sm btn-zz " onclick="oYes('${production.productionId}')">通过
                                 </button>
                                 <button class="btn btn-sm btn-zz " onclick="oNo('${production.productionId}')">驳回
                                 </button>
-                            <%--</c:if>--%>
+                            </c:if>
 
                         </div>
 

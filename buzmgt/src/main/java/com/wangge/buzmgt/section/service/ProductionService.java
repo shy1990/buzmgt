@@ -21,7 +21,7 @@ public interface ProductionService {
     public Production review(Long id, String status);//改变状态(渠道审核:通过/驳回)
 
     //渠道审核
-    public void toReview(Long id, String status, String auditorId);
+    public void toReview(Long id, String status, String auditor,String userId);
 
     public Production findById(Long id);//根据id查找
 

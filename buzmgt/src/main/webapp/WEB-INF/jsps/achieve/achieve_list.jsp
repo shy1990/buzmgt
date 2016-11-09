@@ -310,12 +310,8 @@
                                                     <div class="input-group are-line">
                                                         <span class="input-group-addon"><i class="ph-icon icon-reny"></i></span>
                                                         <select name="b" type="" class="form-control input-h "
-                                                                aria-describedby="basic-addon1">
-                                                            <option></option>
-                                                            <option>中国银行</option>
-                                                            <option>农业银行</option>
-                                                            <option>工商银行</option>
-                                                            <option>亚细亚银行</option>
+                                                                aria-describedby="basic-addon1" id="select-auditor">
+
                                                         </select>
                                                         <!-- /btn-group -->
                                                     </div>
@@ -606,6 +602,30 @@
         pickerPosition: "bottom-right",
         forceParse: 0
     });
+</script>
+<script id="auditor-template" type="text/x-handlebars-template">
+    {{#each this}}
+    <option value='{{userId}}'>{{name}}</option>
+    {{/each}}
+
+</script>
+<script type="text/javascript">
+    findChannelManager();
+    //查找审核人员
+    function findChannelManager() {
+        $.ajax({
+            url: '<%=basePath%>section/findChannelManager',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var auditorTemplate = Handlebars.compile($("#auditor-template").html());
+                $('#select-auditor').html(auditorTemplate(data));
+
+            }
+
+        })
+
+    }
 </script>
 </body>
 

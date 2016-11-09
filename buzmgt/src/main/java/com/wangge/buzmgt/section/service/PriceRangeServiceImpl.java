@@ -24,16 +24,17 @@ public class PriceRangeServiceImpl implements PriceRangeService {
     /**
      * 修改价格区间,也就是新增一套
      *
-     * @param auditorId:审核人id
+     * @param auditor:审核人
      * @param percentage
      * @param implDate
      * @param priceRange:数据库中原来的数据
      */
     @Override
-    public void modifyPriceRange(Long productionId, String auditorId, Double percentage, String implDate, PriceRange priceRange) {
+    public void modifyPriceRange(Long productionId, String auditor, Double percentage, String implDate, PriceRange priceRange,String userId) {
         PriceRange savePriceRange = new PriceRange();
         savePriceRange.setImplementationDate(DateUtil.string2Date(implDate));//实施日期
-        savePriceRange.setPriceRangeAuditor(auditorId);//指定审核人
+        savePriceRange.setPriceRangeAuditor(auditor);//指定审核人
+        savePriceRange.setUserId(userId);
         savePriceRange.setPriceRange(priceRange.getPriceRange());//设置价格区间
         savePriceRange.setOldId(priceRange.getPriceRangeId());//原来区间的id
         savePriceRange.setPercentage(percentage);//提成

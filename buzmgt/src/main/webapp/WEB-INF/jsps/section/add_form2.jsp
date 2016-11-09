@@ -22,6 +22,7 @@
 
 
     <script src="<%=basePath%>static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="<%=basePath%>static/js/handlebars-v4.0.2.js"></script>
     <style>
 
         .nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
@@ -83,34 +84,57 @@
             background: url("<%=basePath%>/static/phone-set/img/tjxx.png") no-repeat center;
         }
     </style>
+    <script id="auditor-template" type="text/x-handlebars-template">
+        {{#each this}}
+            <option value='{{userId}}'>{{name}}</option>
+        {{/each}}
+
+    </script>
     <script type="text/javascript">
-        $(function(){
+        $(function () {
+            findChannelManager();
             //点击确定走到审核状态
             $("#sure").click(function () {
                 var id = '${production.productionId}'.trim();
                 var type = '${production.productionType}';
-                var auditor = "345345345345";
+                var auditor =   $("#select-auditor").find("option:selected").text();
+                var userId = $("#select-auditor").find("option:selected").val();
                 var planId = '${planId}';
                 $.ajax({
-                    url:'<%=basePath%>section/toReview',
-                    type:'GET',
-                    data:{id:id,auditor:auditor,status:'1',planId:planId},
-                    success:function(data){
-                        window.location.href='<%=basePath%>section/toNotExpiredJsp?type='+type+'&planId='+data;
+                    url: '<%=basePath%>section/toReview',
+                    type: 'GET',
+                    data: {id: id, auditor: auditor, status: '1', planId: planId,userId:userId},
+                    success: function (data) {
+                        window.location.href = '<%=basePath%>section/toNotExpiredJsp?type=' + type + '&planId=' + data;
                     },
-                    error:function () {
-                      alert("系统故障,请稍后重试");
+                    error: function () {
+                        alert("系统故障,请稍后重试");
                     }
                 })
             });
 
         });
 
-        function addRegion(id){
-            window.location.href = '<%=basePath%>areaAttr/setting?ruleId='+id+'&type=PRICERANGE';
+        function addRegion(id) {
+            window.location.href = '<%=basePath%>areaAttr/setting?ruleId=' + id + '&type=PRICERANGE';
 
         }
 
+        //查找审核人员
+        function findChannelManager() {
+            $.ajax({
+                url: '<%=basePath%>section/findChannelManager',
+                type: 'GET',
+                success: function (data) {
+                    console.log(data);
+                    var auditorTemplate = Handlebars.compile($("#auditor-template").html());
+                    $('#select-auditor').html(auditorTemplate(data));
+
+                }
+
+            })
+
+        }
 
     </script>
 </head>
@@ -130,15 +154,18 @@
                 <!--<input type="text" class="form-control" placeholder="请选择指派审核人员" aria-describedby="basic-addon1">-->
                 <div class="inpt-search">
                     <form>
-                        <select name="basic[]" multiple="multiple" class="form-control demo3">
+                        <%--<select name="basic[]" multiple="multiple" class="form-control demo3">--%>
 
-                            <option value="UT">胡老大</option>
-                            <option value="VT">横额啊</option>
-                            <option value="VA">张二啦</option>
-                            <option value="VA">王晓晓</option>
-                            <option value="WV">杭大大</option>
-                            <option value="WV">曹大大</option>
-                            <option value="WI">槽大小</option>
+                        <%--<option value="UT">胡老大</option>--%>
+                        <%--<option value="VT">横额啊</option>--%>
+                        <%--<option value="VA">张二啦</option>--%>
+                        <%--<option value="VA">王晓晓</option>--%>
+                        <%--<option value="WV">杭大大</option>--%>
+                        <%--<option value="WV">曹大大</option>--%>
+                        <%--<option value="WI">槽大小</option>--%>
+                        <%--</select>--%>
+                        <select id="select-auditor"  class="form-control demo3">
+
                         </select>
                     </form>
                 </div>
@@ -183,7 +210,8 @@
                                         </td>
                                         <td>${priceRange.implementationDate}</td>
                                         <td>${priceRange.endTime}</td>
-                                        <td><a href="javascript:void(0) " onclick="addRegion('${priceRange.priceRangeId}')">添加区域设置</a></td>
+                                        <td><a href="javascript:void(0) "
+                                               onclick="addRegion('${priceRange.priceRangeId}')">添加区域设置</a></td>
                                         <td>${priceRange.priceRangeCreateDate}</td>
                                     </tr>
                                 </c:forEach>

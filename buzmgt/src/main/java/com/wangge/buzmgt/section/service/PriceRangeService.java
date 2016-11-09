@@ -9,7 +9,7 @@ import com.wangge.buzmgt.section.entity.Production;
 public interface PriceRangeService {
 
     //修改区间
-    public void modifyPriceRange(Long productionId, String auditorId, Double percentage, String implDate, PriceRange priceRange);
+    public void modifyPriceRange(Long productionId, String auditor, Double percentage, String implDate, PriceRange priceRange,String userId);
 
     //审核小区间
     public void reviewPriceRange(PriceRange priceRange, String status);
