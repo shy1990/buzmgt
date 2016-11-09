@@ -31,7 +31,7 @@ function createTaskTable(data) {
 		return index % 3 + 1;
 	});
 
-	Handlebars.registerHelper("ifCkeck", function(planId) {
+	Handlebars.registerHelper("ifCheck", function(planId) {
 		return planId + "&check="+check;
 	});
 	Handlebars.registerHelper("ifNew", function(content, options) {
