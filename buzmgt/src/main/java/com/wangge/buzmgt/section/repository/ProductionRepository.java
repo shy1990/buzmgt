@@ -17,7 +17,7 @@ public interface ProductionRepository extends JpaRepository<Production,Long> {
 
 
     //查询没有结束时间的(审核通过的)
-    @Query(nativeQuery = true,value = " select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID from sys_production  " +
+    @Query(nativeQuery = true,value = " select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID,USER_ID from sys_production  " +
             " where end_time is null  " +
             " and plan_id = ? " +
             " and production_type = ?" +
@@ -28,7 +28,7 @@ public interface ProductionRepository extends JpaRepository<Production,Long> {
     public Production findByProductionId(Long id);//根据id查询
 
     //查询当前正在使用的
-    @Query(nativeQuery = true, value = "select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID " +
+    @Query(nativeQuery = true, value = "select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID,USER_ID " +
             " from sys_production \n" +
             " where \n" +
             "   (((to_date(?,'yyyy-MM-dd')>=IMPL_DATE and to_date(?,'yyyy-MM-dd')<=end_time)) \n" +
@@ -43,7 +43,7 @@ public interface ProductionRepository extends JpaRepository<Production,Long> {
 
 
     //查询当前正在使用的
-    @Query(nativeQuery = true, value = "select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID " +
+    @Query(nativeQuery = true, value = "select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID,USER_ID " +
             " from sys_production \n" +
             " where \n" +
             "   (((to_date(?,'yyyy-MM-dd')>=IMPL_DATE and to_date(?,'yyyy-MM-dd')<=end_time)) \n" +
@@ -60,7 +60,7 @@ public interface ProductionRepository extends JpaRepository<Production,Long> {
      * @param type
      * @return
      */
-    @Query(nativeQuery = true,value = "select p.PRODUCTION_ID,p.CREATE_TIME,p.END_TIME,IMPL_DATE,p.PRODUCT_STATUS,p.PRODUCTION_AUDITOR,p.PRODUCTION_TYPE,p.STATUS,p.PLAN_ID from sys_production p " +
+    @Query(nativeQuery = true,value = "select p.PRODUCTION_ID,p.CREATE_TIME,p.END_TIME,IMPL_DATE,p.PRODUCT_STATUS,p.PRODUCTION_AUDITOR,p.PRODUCTION_TYPE,p.STATUS,p.PLAN_ID,p.USER_ID from sys_production p " +
             " where p.status = 0" +
             " and p.plan_id=?"+
             " and p.production_type = ? " +
@@ -73,7 +73,7 @@ public interface ProductionRepository extends JpaRepository<Production,Long> {
      * @param type
      * @return
      */
-    @Query(nativeQuery = true,value = "select p.PRODUCTION_ID,p.CREATE_TIME,p.END_TIME,IMPL_DATE,p.PRODUCT_STATUS,p.PRODUCTION_AUDITOR,p.PRODUCTION_TYPE,p.STATUS,p.PLAN_ID from sys_production p " +
+    @Query(nativeQuery = true,value = "select p.PRODUCTION_ID,p.CREATE_TIME,p.END_TIME,IMPL_DATE,p.PRODUCT_STATUS,p.PRODUCTION_AUDITOR,p.PRODUCTION_TYPE,p.STATUS,p.PLAN_ID,p.USER_ID from sys_production p " +
             " where p.status = 0" +
             " and p.plan_id=?"+
             " and p.production_type = ? " +

@@ -303,14 +303,17 @@
                                             <td><span class="ph-weihes">----</span></td>
                                             <td>${priceRange.priceRangeCreateDate}</td>
                                             <td>
-                                                <button class="btn  bnt-sm bnt-ck"
-                                                        onclick="oYes('${priceRange.priceRangeId}')">
-                                                    通过
-                                                </button>
-                                                <button class="btn  bnt-sm bnt-ck"
-                                                        onclick="oNo('${priceRange.priceRangeId}')">
-                                                    驳回
-                                                </button>
+                                                <c:if test="${userId == priceRange.userId || userId == '1'}">
+                                                    <button class="btn  bnt-sm bnt-ck"
+                                                            onclick="oYes('${priceRange.priceRangeId}')">
+                                                        通过
+                                                    </button>
+                                                    <button class="btn  bnt-sm bnt-ck"
+                                                            onclick="oNo('${priceRange.priceRangeId}')">
+                                                        驳回
+                                                    </button>
+                                                </c:if>
+
                                             </td>
                                         </tr>
 

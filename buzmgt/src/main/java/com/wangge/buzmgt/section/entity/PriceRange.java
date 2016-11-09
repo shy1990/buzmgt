@@ -50,6 +50,8 @@ public class PriceRange {
     //记录上次id(是修改的哪个区间),当通过的时候可以根据他来查找,然后增加结束时间
     private Long oldId;
 
+    @Column(name = "user_id")
+    private String userId;//审核人id
     public Long getOldId() {
         return oldId;
     }
@@ -149,6 +151,14 @@ public class PriceRange {
         this.productionId = productionId;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "PriceRange{" +
@@ -156,10 +166,15 @@ public class PriceRange {
                 ", serialNumber='" + serialNumber + '\'' +
                 ", priceRange='" + priceRange + '\'' +
                 ", percentage=" + percentage +
+                ", productionId=" + productionId +
                 ", priceRangeCreateDate=" + priceRangeCreateDate +
                 ", implementationDate=" + implementationDate +
                 ", priceRangeStatus='" + priceRangeStatus + '\'' +
                 ", endTime=" + endTime +
+                ", priceRangeAuditor='" + priceRangeAuditor + '\'' +
+                ", status='" + status + '\'' +
+                ", oldId=" + oldId +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 }

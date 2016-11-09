@@ -46,7 +46,7 @@
 
 <div class="content main">
     <h4 class="page-header">
-        <i class="ico icon-tjry"></i>新建
+        <i class="ico icon-tjry"></i>修改
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
     </h4>
 

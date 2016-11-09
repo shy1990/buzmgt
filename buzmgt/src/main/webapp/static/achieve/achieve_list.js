@@ -407,8 +407,7 @@ function del(id){
  * @param priceRange
  */
 function modify(id, priceRange,productionId) {
-	console.log(id + '  ' + priceRange);
-
+	console.log(id + '  ' + priceRange+'    '+productionId);
 	$('#gaigai').modal('show').on('shown.bs.modal', function () {
 		$("#priceRange").text(priceRange);
 		$("#sure_save").click(function () {
@@ -417,7 +416,8 @@ function modify(id, priceRange,productionId) {
 			var percentage = valueData[0]['value'];
 			var implDate = valueData[1]['value'];
 			var auditorId = valueData[2]['value'];
-			var productionId = productionId;
+			var auditor =   $("#select-auditor").find("option:selected").text();
+			var userId = $("#select-auditor").find("option:selected").val();
 			console.log(percentage + " " + implDate + "  " + auditorId +'  '+id);
 			$.ajax({
 				url:'/section/modifyPriceRange/' + id,
@@ -425,8 +425,9 @@ function modify(id, priceRange,productionId) {
 				data: {
 					percentage: percentage,
 					implDate: implDate,
-					auditorId: auditorId,
-					productionId: productionId
+					userId: userId,
+					productionId: productionId,
+					auditor:auditor
 				},
 				success: function (data) {
 					alert("修改成功,正在审核");

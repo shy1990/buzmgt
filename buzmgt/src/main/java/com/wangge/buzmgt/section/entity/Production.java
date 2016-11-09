@@ -4,18 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
+import com.wangge.buzmgt.teammember.entity.Manager;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -49,8 +40,15 @@ public class Production {
   @Temporal(TemporalType.DATE)
   private Date endTime;// 结束日期（下一个开始执行的时间就是其结束时间）
   
-  private String productionAuditor;// 审核人id(保存的是用户的id)
-  
+  private String productionAuditor;// 审核人名字
+
+//  @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+//  @JoinColumn(name = "user_id")
+//  private Manager manager;
+
+  @Column(name = "user_id")
+  private String userId;
+
   private String status = "0";// 用于记录删除:0:未删除,1:已删除
   
   public String getProductionAuditor() {
@@ -68,7 +66,7 @@ public class Production {
   // 关联方案的id
   @Column(name = "plan_id")
   private Long planId;
-  
+
   public Long getPlanId() {
     return planId;
   }
@@ -140,12 +138,29 @@ public class Production {
   public void setEndTime(Date endTime) {
     this.endTime = endTime;
   }
-  
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
   @Override
   public String toString() {
-    return "Production{" + "productionId=" + productionId + ", productionType='" + productionType + '\''
-        + ", productStatus='" + productStatus + '\'' + ", createTime=" + createTime + ", implDate=" + implDate
-        + ", endTime=" + endTime + ", productionAuditor='" + productionAuditor + '\'' + ", status='" + status + '\''
-        + ", priceRanges=" + priceRanges + ", planId='" + planId + '\'' + '}';
+    return "Production{" +
+            "productionId=" + productionId +
+            ", productionType='" + productionType + '\'' +
+            ", productStatus='" + productStatus + '\'' +
+            ", createTime=" + createTime +
+            ", implDate=" + implDate +
+            ", endTime=" + endTime +
+            ", productionAuditor='" + productionAuditor + '\'' +
+            ", userId='" + userId + '\'' +
+            ", status='" + status + '\'' +
+            ", priceRanges=" + priceRanges +
+            ", planId=" + planId +
+            '}';
   }
 }
