@@ -359,15 +359,19 @@
                         <!--导航开始-->
 
                         <div class="ph-btn-set">
-                            <a href="javascript:add_brand();" class="btn ph-blue">
-                                <i class="ico icon-xj"></i> <span class="text-gery">添加</span>
-                            </a>
-                            <a href="javascript:setRecord();" class="btn ph-blue" style="margin-right: 30px">
-                                <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
-                            </a>
-                            <a href="javascript:toAudit();" class="btn ph-blue" style="margin-right: 30px">
-                                <i class="ico icon-jl"></i> <span class="text-gery">审核</span>
-                            </a>
+                            <c:if test="${check eq '2'}">
+                                <a href="javascript:add_brand();" class="btn ph-blue">
+                                    <i class="ico icon-xj"></i> <span class="text-gery">添加</span>
+                                </a>
+                                <a href="javascript:setRecord();" class="btn ph-blue" style="margin-right: 30px">
+                                    <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
+                                </a>
+                            </c:if>
+                            <c:if test="${check eq '1'}">
+                                <a href="javascript:toAudit();" class="btn ph-blue" style="margin-right: 30px">
+                                    <i class="ico icon-jl"></i> <span class="text-gery">渠道审核</span>
+                                </a>
+                            </c:if>
                             <div class="link-posit pull-right">
                                 <input class="input-search" type="text" placeholder="模糊查询请输入品牌型号">
                                 <button onclick="goSearch();" class="btn  btn-sm bnt-ss ">搜索</button>

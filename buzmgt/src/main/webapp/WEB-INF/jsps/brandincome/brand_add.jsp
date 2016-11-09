@@ -134,14 +134,11 @@
                                         <div class="inpt-search">
                                             <form >
                                                 <select name="auditor" multiple="multiple" class="form-control demo3 J_auditor" style="padding: 0px" >
-
-                                                    <option value="A37028706270" >胡老大</option>
-                                                    <option value="A37028706270">横额啊</option>
-                                                    <option value="VA">张二啦</option>
-                                                    <option value="VA">王晓晓</option>
-                                                    <option value="WV">杭大大</option>
-                                                    <option value="WV">曹大大</option>
-                                                    <option value="WI">槽大小</option>
+                                                    <c:if test="${!empty channelManagers}">
+                                                        <c:forEach var="manager" items="${channelManagers }" varStatus="status">
+                                                            <option value="${manager.userId}" >${manager.name}</option>
+                                                        </c:forEach>
+                                                    </c:if>
                                                 </select>
                                             </form>
                                         </div>
