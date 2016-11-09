@@ -41,20 +41,24 @@ function createTaskTable(data) {
 	var date = new Date();
 	var days = date.getDate();
 	var month = date.getMonth();
+	// 2016年10月是2016-09;
 	var yearMonth = date.getFullYear() + "-"
 			+ (month < 10 ? "0" + month : month);
-	Handlebars.registerHelper("canfh", function(state, month, options) {
-		// return options.fn(this);
-		// 正式环境为此逻辑
+	Handlebars.registerHelper("canfh",
+			function(state, month, options) {
+				// return options.fn(this);
+				// 正式环境为此逻辑:当前的月份要如果是薪资的下月,那么日期要大于9;如果是下下个月,则无此限制
+				if (null != checkFlag
+						&& checkFlag == 1
+						&& state == '未审核'
+						&& ((yearMonth == month  && days > 9) || yearMonth
+								 >month )) {
+					return options.fn(this);
+				} else {
+					return options.inverse(this);
+				}
 
-		if (null != checkFlag && checkFlag == 1 && state == '未审核'
-				&& yearMonth >= month && days > 9) {
-			return options.fn(this);
-		} else {
-			return options.inverse(this);
-		}
-
-	});
+			});
 
 	var myTemplate = Handlebars.compile($("#user-table-template").html());
 	$('#userList').html(myTemplate(data));
