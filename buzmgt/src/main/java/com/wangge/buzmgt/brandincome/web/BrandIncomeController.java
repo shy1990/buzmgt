@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -116,8 +117,7 @@ public class BrandIncomeController {
       brandIncome = brandIncomeService.save(brandIncome);
       logService.log(null, brandIncome, Log.EventType.SAVE);
       json.setStatus(JsonResponse.Status.SUCCESS);
-      json.setSuccessMsg("保存成功");
-      json.setResult(brandIncome);
+      json.setSuccessMsg("保存成功!");
     } catch (Exception e) {
       LogUtil.info(e.getMessage());
       json.setStatus(JsonResponse.Status.ERROR);
@@ -433,6 +433,37 @@ public class BrandIncomeController {
     model.addAttribute("planId", planId);
     model.addAttribute("machineType", machineType);
     return "brandincome/brand_alter";
+  }
+
+  /**
+   * @Title: updateBrandIncome @Description: 修改操作
+   * 设定文件 @return String 返回类型 @throws
+   */
+  @RequestMapping(value = "/update/{brandIncomeId}", method = RequestMethod.POST)
+  @ResponseBody
+  public JsonResponse updateBrandIncome(@PathVariable(value = "brandIncomeId") BrandIncome newBrandIncome,@RequestBody BrandIncome brandIncome) {
+    JsonResponse json = new JsonResponse();
+    try {
+      BrandIncome old = newBrandIncome;
+      newBrandIncome.setStatus(brandIncome.getStatus());
+      newBrandIncome.setCommissions(brandIncome.getCommissions());
+      newBrandIncome.setAuditor(brandIncome.getAuditor());
+      String startDate = DateUtil.date2String(brandIncome.getStartDate());
+      String endDate = DateUtil.date2String(brandIncome.getEndDate());
+      newBrandIncome.setStartDate(DateUtil.string2Date(startDate + TIME_MIN));
+      newBrandIncome.setEndDate(DateUtil.string2Date(endDate + TIME_MAX));
+      newBrandIncome.setCreateDate(new Date());
+      newBrandIncome = brandIncomeService.save(newBrandIncome);
+      logService.log(old, newBrandIncome, Log.EventType.UPDATE);
+      json.setStatus(JsonResponse.Status.SUCCESS);
+      json.setSuccessMsg("修改成功!");
+    } catch (Exception e) {
+      LogUtil.info(e.getMessage());
+      json.setStatus(JsonResponse.Status.ERROR);
+      json.setErrorMsg("系统错误,请稍候重试!");
+      return json;
+    }
+    return json;
   }
 
   /**
