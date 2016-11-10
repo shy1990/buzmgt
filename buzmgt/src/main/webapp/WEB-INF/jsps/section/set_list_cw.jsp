@@ -161,7 +161,15 @@
                                         <tr>
                                             <td><span class="ph-new">新建</span> ${production.implDate} 开始 方案区间</td>
                                             <td class="reason">${production.implDate}</td>
-                                            <td><span class=""> ${production.endTime} </span></td>
+                                            <%--<td><span class=""> ${production.endTime} </span></td>--%>
+                                            <c:choose>
+                                                <c:when test="${production.endTime == null}">
+                                                    <td><span class=""> 未设置结束时间 </span></td>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <td><span class=""> ${production.endTime} </span></td>
+                                                </c:otherwise>
+                                            </c:choose>
                                             <td>${production.productionAuditor}</td>
 
                                             <td><span class="text-hong text-strong">
