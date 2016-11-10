@@ -486,7 +486,9 @@ function seeRegion(id){
 
 
 //------------------------ 价格区间操作结束 -------------------------------
-
+/**
+ * 非审核时按钮显示
+ */
 Handlebars.registerHelper("ifNew", function(content, options) {
     var check = $('#checkId').val();
     if (check != 1) {
@@ -497,18 +499,6 @@ Handlebars.registerHelper("ifNew", function(content, options) {
     }
 });
 
-/**
- * 品牌型号审核
- */
-Handlebars.registerHelper("ifCheck", function(content, options) {
-	var check = $('#checkId').val();
-	if (check != 1) {
-		return options.fn(this);
-	} else {
-		// 不满足条件执行{{else}}部分
-		return options.inverse(this);
-	}
-});
 var parseParam = function(param, key) {
 	var paramStr = "";
 	if (param instanceof String || param instanceof Number
