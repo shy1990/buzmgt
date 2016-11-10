@@ -491,7 +491,7 @@ function seeRegion(id){
  * 增强 if-else使用
  * 比较长度
  */
-Handlebars.registerHelper('ifNew', function(value, options) {
+Handlebars.registerHelper("ifNew", function(content, options) {
     var check = $('#checkId').val();
     if(check != 1){
         //满足添加继续执行
@@ -500,6 +500,7 @@ Handlebars.registerHelper('ifNew', function(value, options) {
     //不满足条件执行{{else}}部分
     return options.inverse(this);
 });
+
 var parseParam = function(param, key) {
 	var paramStr = "";
 	if (param instanceof String || param instanceof Number

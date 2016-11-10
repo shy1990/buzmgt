@@ -116,7 +116,7 @@ var	base='<%=basePath%>';
                         <span class="text-publ">台 ≤ </span>
                     	</c:if>
                         <span class="text-publ">实际销量 </span>
-                    	<c:if test="${rule.max != ''&& rule.max != null  }">
+                    	<c:if test="${rule.max != ''&& rule.max != null  && rule.max != 99999 }">
                         <span class="text-publ">＜ </span>
                         <span class="text-nub"> ${rule.max }</span>
                         <span class="text-publ">台</span>
