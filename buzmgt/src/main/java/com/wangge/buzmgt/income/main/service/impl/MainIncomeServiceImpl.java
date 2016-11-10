@@ -84,7 +84,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    */
   @Override
   public void caculateOutedOrder(String orderNo) {
-    Object userO = mainPlanUserRep.findsaleByDateAndOrderNo (new Date(), orderNo);
+    Object userO = mainPlanUserRep.findsaleByDateAndOrderNo(new Date(), orderNo);
     if (null == userO) {
       return;
     }
@@ -99,19 +99,20 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     if (goodList.size() < 1) {
       return;
     }
-//    // 计算付款订单
-//    if (payStatus.equals("1")) {
-//      userO = mainPlanUserRep.findsaleByDateAndMemberId(payDate, memberId);
-//      if (null != userO) {
-//        uers = (Object[]) userO;
-//        Long planId1 = Long.valueOf(uers[0].toString());
-//        String userId1 = uers[1].toString();
-//        String regionId1 = uers[2].toString();
-//        if (null != planId) {
-//          caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList), regionId1, 1);
-//        }
-//      }
-//    }
+    // // 计算付款订单
+    // if (payStatus.equals("1")) {
+    // userO = mainPlanUserRep.findsaleByDateAndMemberId(payDate, memberId);
+    // if (null != userO) {
+    // uers = (Object[]) userO;
+    // Long planId1 = Long.valueOf(uers[0].toString());
+    // String userId1 = uers[1].toString();
+    // String regionId1 = uers[2].toString();
+    // if (null != planId) {
+    // caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList),
+    // regionId1, 1);
+    // }
+    // }
+    // }
     // 计算出库订单
     List<String> goodIdList = new ArrayList<>();
     for (OrderGoods good : goodList) {
@@ -128,6 +129,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
           subgoodId, 0, planId, subgood.getPrice(), new Date());
     }
+    if (goodIdList.size() < 1)
+      return;
     // 查找计算品牌
     subList = brandIncomeService.findRuleByGoods(goodIdList, planId, userId, new Date());
     
@@ -138,6 +141,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       brandIncomeService.realTimeBrandIncomeOut((BrandIncome) ruleMap.get("rule"), subgood.getNums(), orderNo,
           subgoodId, userId, regionId, subgood.getPrice());
     }
+    if (goodIdList.size() < 1)
+      return;
     // 查找计算价格区间
     for (OrderGoods good : goodList) {
       productionService.compute(orderNo, good.getPrice() + 0D, userId, good.getGoodId(), good.getMachineType(), planId,
@@ -209,6 +214,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       goodIdList.remove(subgoodId);
       
     }
+    if (goodIdList.size() < 1)
+      return;
     // 查找计算品牌
     subList = brandIncomeService.findRuleByGoods(new ArrayList<>(goodIdList), planId, userId, payDate);
     
@@ -224,6 +231,9 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       }
       goodIdList.remove(subgoodId);
     }
+    
+    if (goodIdList.size() < 1)
+      return;
     // 查找计算价格区间
     /**
      * 数据库中商品id字段长度太小
