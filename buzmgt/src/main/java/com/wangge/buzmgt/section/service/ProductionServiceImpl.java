@@ -389,7 +389,10 @@ public class ProductionServiceImpl implements ProductionService {
                 List<PriceRange> priceRanges = pc.getPriceRanges();
                 if (CollectionUtils.isNotEmpty(priceRanges)) {
                     priceRanges.forEach(priceRange -> {
-                        priceRange.setEndTime(endTime);
+                        if(priceRange.getEndTime() == null){
+                            priceRange.setEndTime(endTime);
+                        }
+
                     });
                 }
             }

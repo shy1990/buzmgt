@@ -47,9 +47,9 @@
 
             <td>
                 {{#if priceRange.endTime}}
-                {{endTime}}
-                {{else}}
                 <span style="color: #6a0505">未设置结束日期</span>
+                {{else}}
+                {{endTime}}
                 {{/if}}
             </td>
 
@@ -97,9 +97,12 @@
                 <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#"
                         onclick="brandProcess('{{id}}');">进程
                 </button>
+                {{#ifNew id}}
                 <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#brandStop"
                         onclick="brandStop('{{id}}');">终止
                 </button>
+                {{else}}
+                {{/ifNew}}
             </td>
         </tr>
         {{/each}}
@@ -205,16 +208,31 @@
                 <div class="tab-content">
                     <!--右侧内容开始-->
 
-
                     <%-- 按价格区间开始 --%>
                     <div class="tab-pane fade right-body" id="ajgqj">
                         <div class="ph-btn-set">
-                            <a href="javascript:add_section();" class="btn ph-blue">
-                                <i class="ico icon-xj"></i> <span class="text-gery">添加</span>
-                            </a>
-                            <a href="javascript:setSectionRecord();" class="btn ph-blue" style="margin-right: 30px">
-                                <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
-                            </a>
+                            <c:if test="${check == '1'}"><!-- 渠道操作 -->
+                                <a href="javascript:toReview();" class="btn ph-blue">
+                                    <i class="ico icon-xj"></i> <span class="text-gery">审核</span>
+                                </a>
+                                <a href="javascript:setSectionRecord();" class="btn ph-blue" style="margin-right: 30px">
+                                    <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
+                                </a>
+                            </c:if>
+                            <c:if test="${check == '2'}"><!-- 财务操作操作 -->
+                                <a href="javascript:add_section();" class="btn ph-blue">
+                                    <i class="ico icon-xj"></i> <span class="text-gery">添加</span>
+                                </a>
+                                <a href="javascript:setSectionRecord();" class="btn ph-blue" style="margin-right: 30px">
+                                    <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
+                                </a>
+                            </c:if>
+                            <%--<a href="javascript:add_section();" class="btn ph-blue">--%>
+                                <%--<i class="ico icon-xj"></i> <span class="text-gery">添加</span>--%>
+                            <%--</a>--%>
+                            <%--<a href="javascript:setSectionRecord();" class="btn ph-blue" style="margin-right: 30px">--%>
+                                <%--<i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>--%>
+                            <%--</a>--%>
                         </div>
                         <div class="table-task-list new-table-box table-overflow" style="margin-left: 20px">
                             <table class="table table-hover new-table">
@@ -610,6 +628,11 @@
     /*查看区域属性*/
     function showArea(id) {
         window.location.href = '/areaAttr/show?ruleId='+id +'&type=BRANDMODEL';
+    }
+    function toReview(){
+        var planId = $("#planId").val();
+        window.location.href = '/section/toReviewJsp?type=znj&planId='+ planId;
+
     }
 </script>
 <script>

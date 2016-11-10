@@ -118,10 +118,12 @@ public class RegionController {
     Collection<Region> collectionRegion = new ArrayList<Region>();
     Region region = regionService.findListRegionbyid(pid);
     Long maxid = getMaxId(pid);
-    Region newRegion = new Region(String.valueOf(maxid + 1), name, region.getType().getChildsType());
+    Region newRegion = new Region(String.valueOf(maxid + 1), name, region.getType());
     newRegion.setParent(region);
     newRegion.setChildren(collectionRegion);
-      regionService.saveRegion(newRegion);
+    newRegion.setStarsLevel(0);
+    newRegion.setNamepath(region.getNamepath()+name);
+    regionService.saveRegion(newRegion);
     return new ResponseEntity<RegionTree>(RegionUtil.getRegionTree(newRegion), HttpStatus.OK);
   }
 
@@ -138,7 +140,11 @@ public class RegionController {
     return new ResponseEntity<Integer>(region.getStarsLevel(), HttpStatus.OK);
   }
 
-
+  /**
+   * 更改星级
+   * @param id
+   * @param statsLevae
+   */
   @RequestMapping(value = "/updateStarsLeave", method = RequestMethod.POST)
   public void updateStarsLeave(String id,int statsLevae) {
     Region region = regionService.findListRegionbyid(id);
@@ -159,7 +165,7 @@ public class RegionController {
     
     Region region = regionService.findListRegionbyid(id);
     Long maxid = Long.parseLong(id);
-    Region newRegion = new Region(String.valueOf(maxid), name, region.getType().getChildsType());
+    Region newRegion = new Region(String.valueOf(maxid), name, region.getType());
     newRegion.setParent(region);
     region.setName(name);
     region.setParent(regionService.findListRegionbyid(pid));
@@ -176,7 +182,9 @@ public class RegionController {
   @RequestMapping(value = "/dragRegion", method = RequestMethod.POST)
   public void dragRegion(String id, String pid) {
     Region region = regionService.findListRegionbyid(id);
-    region.setParent(regionService.findListRegionbyid(pid));
+    Region parentRegion=regionService.findListRegionbyid(pid);
+    region.setParent(parentRegion);
+    region.setType(regionService.findRegionType(parentRegion.getType().getParentId()+1));
     regionService.saveRegion(region);
   }
   
@@ -245,7 +253,7 @@ public class RegionController {
     }
     Region region = regionService.findListRegionbyid(parentid);
     Long maxid = getMaxId(parentid);
-    Region entity = new Region(String.valueOf(maxid + 1), name, region.getType().getChildsType());
+    Region entity = new Region(String.valueOf(maxid + 1), name, region.getType());
     entity.setCoordinates(pointbuf.toString());
     entity.setParent(regionService.findListRegionbyid(parentid));
     entity.setCenterPoint(centerPoint);
@@ -314,8 +322,6 @@ public class RegionController {
     } else {
       Subject subject = SecurityUtils.getSubject();
       User user = (User) subject.getPrincipal();
-      // com.wangge.buzmgt.teammember.entity.Manager manager =
-      // managerService.getById(user.getId());
       Manager manager1 = managerService.getById(user.getId());
       regionId = String.valueOf(manager1.getRegion().getId());
     }
@@ -501,6 +507,7 @@ public class RegionController {
     }
     
     saojiedata.setRegion(region);
+    saojiedata.setSalesman(salesman);
     saojieDateService.saveSaojieData(saojiedata);
     if (null != saojiedata.getRegistData()) {
       RegistData registdata = assessService.findRegistData(saojiedata.getRegistData().getId());
@@ -567,11 +574,79 @@ public class RegionController {
   public ResponseEntity<?> getChildByParent(@PathVariable String parentId) {
     return new ResponseEntity<List<RegionTree>>(regionService.getRegionByPid(parentId), HttpStatus.OK);
   }
+
+  /**
+   * 初始化区域类型
+   * @param model
+   * @return
+   */
   @RequestMapping("/initRegionType")
   public String initRegionType(Model model) {
     List<RegionType> listRetionType=regionService.findALlRegionType();
     model.addAttribute("listRetionType",listRetionType);
     return "region/regionType_view";
+  }
+
+  /**
+   * 保存区域类型
+   * @param req
+   * @return
+   */
+  @RequestMapping(value = "/addRegionType", method = RequestMethod.POST)
+  @ResponseBody
+  public String addRegionType(HttpServletRequest req) {
+    System.out.print(req.getParameter("name"));
+    RegionType regionType=new RegionType();
+    regionType.setName(req.getParameter("name"));
+    int id=regionService.findMaxId();
+    regionType.setParentId(id);
+    regionType.setId(id+1);
+    regionService.saveRegionType(regionType);
+    return "suc";
+  }
+
+  /**
+   * 拖拽区域类型
+   * @param ownid
+   * @param preid
+   * @param afterid
+   */
+  @RequestMapping(value = "/updateRegionTypeParentId", method = RequestMethod.POST)
+  public void updateRegionTypeParentId(int ownid, int preid,int afterid) {
+    System.out.print("ownid"+ownid+","+"preid"+preid+",afterid"+afterid);
+    //regionService.saveRegion(region);
+
+    RegionType ownRegionType=regionService.findRegionType(ownid);
+    RegionType preRegionType=regionService.findRegionType(preid);
+    RegionType afterRegionType=regionService.findRegionType(afterid);
+    int i=0;
+    if(null !=preRegionType){
+      ownRegionType.setParentId(preRegionType.getParentId()+1);
+    }else{
+      i++;
+      ownRegionType.setParentId(afterRegionType.getParentId()-1);
+    }
+    regionService.saveRegionType(ownRegionType);
+    if(null !=afterRegionType&&0==i){
+      afterRegionType.setParentId(ownid);
+      regionService.saveRegionType(afterRegionType);
+    }
+  }
+
+  @RequestMapping(value = "/deleteRegionType", method = RequestMethod.POST)
+  @ResponseBody
+  public String deleteRegionType(HttpServletRequest req) {
+    int id =Integer.parseInt(req.getParameter("id"));
+    RegionType ownRegionType=regionService.findRegionType(id);
+    RegionType preRegionType=regionService.findRegionType(ownRegionType.getParentId()-1);
+    RegionType afterRegionType=regionService.findRegionType(ownRegionType.getParentId()+1);
+
+    if(null !=afterRegionType){
+      afterRegionType.setParentId(ownRegionType.getParentId());
+      regionService.saveRegionType(afterRegionType);
+    }
+    regionService.deleteRegionType(ownRegionType);
+    return "suc";
   }
 
 }
