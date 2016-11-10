@@ -487,14 +487,18 @@ function seeRegion(id){
 
 //------------------------ 价格区间操作结束 -------------------------------
 
-Handlebars.registerHelper("ifNew", function(content, options) {
+/**
+ * 增强 if-else使用
+ * 比较长度
+ */
+Handlebars.registerHelper('ifNew', function(value, options) {
     var check = $('#checkId').val();
-    if (check != 1) {
+    if(check != 1){
+        //满足添加继续执行
         return options.fn(this);
-    } else {
-        // 不满足条件执行{{else}}部分
-        return options.inverse(this);
     }
+    //不满足条件执行{{else}}部分
+    return options.inverse(this);
 });
 var parseParam = function(param, key) {
 	var paramStr = "";
