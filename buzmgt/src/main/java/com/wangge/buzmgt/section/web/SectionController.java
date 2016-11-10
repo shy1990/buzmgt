@@ -154,7 +154,7 @@ public class SectionController {
     ) {
         Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.ASC, "productionId"));
         model.addAttribute("list", productionService.findNotExpired(planId, type));//当前进行的
-        model.addAttribute("listExpired", productionService.findAll(planId, type, pageable).getContent());//过期的
+//        model.addAttribute("listExpired", productionService.findAll(planId, type, pageable).getContent());//过期的
         model.addAttribute("priceRanges", productionService.findReview(planId, type));//修改小区间的
         model.addAttribute("machineTypes", machineTypeServer.findAll());//手机类型
         model.addAttribute("planId", planId);
