@@ -35,7 +35,7 @@
 					<img src="static/img/fan{{getImg @index}}.png" alt="">
 				</div>
 				<div class="col-sm-7">
-                    <a href="/achieve/list?planId={{ifCkeck id}}"><span class="text-fa-1">{{maintitle}}</span></a>
+                    <a href="/achieve/list?planId={{ifCheck id}}"><span class="text-fa-1">{{maintitle}}</span></a>
 				</div>
      {{#ifNew id}} 
 				<div class="col-sm-2 icon-fl-right">
