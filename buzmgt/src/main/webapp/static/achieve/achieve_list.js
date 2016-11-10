@@ -28,7 +28,7 @@ function add_brand(){
 }
 
 function findTab(){
-	var tab = $('#myTab li.active').attr('data-title');
+	var tab = $('#myTab li.active').attr('title');
 	return tab;
 }
 
@@ -38,11 +38,18 @@ function findMachineType(){
 }
 
 /**
- * 跳转添加页面 获取planId和machineType
+ * 跳转设置记录页面 获取planId和machineType
  */
 function record(){
 	var planId = $("#planId").val();
 	window.location.href = base + "achieve/record?planId="+planId;
+}
+/**
+ * 跳转审核页面 获取planId和machineType
+ */
+function recordForAudit(){
+	var planId = $("#planId").val();
+	window.location.href = base + "achieve/recordForAudit?planId="+planId;
 }
 /**
  * 删除
@@ -73,7 +80,7 @@ function delAchieve(achieveId){
  */
 function goSearch() {
 	var tab = findTab();
-	var goodName = $('.input-search').val();
+	var goodName = $('#searchGoodsname').val();
 	if (!isEmpty(goodName)) {
 		$.ajax({
 			url:"/goods/likeBrandName?name="+goodName,
@@ -407,8 +414,7 @@ function del(id){
  * @param priceRange
  */
 function modify(id, priceRange,productionId) {
-	console.log(id + '  ' + priceRange);
-
+	console.log(id + '  ' + priceRange+'    '+productionId);
 	$('#gaigai').modal('show').on('shown.bs.modal', function () {
 		$("#priceRange").text(priceRange);
 		$("#sure_save").click(function () {
@@ -417,7 +423,8 @@ function modify(id, priceRange,productionId) {
 			var percentage = valueData[0]['value'];
 			var implDate = valueData[1]['value'];
 			var auditorId = valueData[2]['value'];
-			var productionId = productionId;
+			var auditor =   $("#select-auditor").find("option:selected").text();
+			var userId = $("#select-auditor").find("option:selected").val();
 			console.log(percentage + " " + implDate + "  " + auditorId +'  '+id);
 			$.ajax({
 				url:'/section/modifyPriceRange/' + id,
@@ -425,8 +432,9 @@ function modify(id, priceRange,productionId) {
 				data: {
 					percentage: percentage,
 					implDate: implDate,
-					auditorId: auditorId,
-					productionId: productionId
+					userId: userId,
+					productionId: productionId,
+					auditor:auditor
 				},
 				success: function (data) {
 					alert("修改成功,正在审核");
@@ -478,69 +486,18 @@ function seeRegion(id){
 
 
 //------------------------ 价格区间操作结束 -------------------------------
-
 /**
- * 待付金额
+ * 非审核时按钮显示
  */
-Handlebars.registerHelper('disposeStayMoney', function(value) {
-	if (value == 0 || value == 0.0 || value == 0.00) {
-		return value;
-	}
-	return '<span class="single-exception">' + value + '</span>';
+Handlebars.registerHelper("ifNew", function(content, options) {
+    var check = $('#checkId').val();
+    if (check != 1) {
+        return options.fn(this);
+    } else {
+        // 不满足条件执行{{else}}部分
+        return options.inverse(this);
+    }
 });
-/**
- * 待付金额
- */
-Handlebars
-		.registerHelper(
-				'isCheckStatus',
-				function(isCheck, userId, createDate) {
-					var formcreateDate = changeDateToString(new Date(createDate));
-					var html = '<button class="btn btn-sm btn-blue" onClick="checkPending(\''
-							+ userId
-							+ '\',\''
-							+ formcreateDate
-							+ '\')">确认</button>'
-					if (isCheck == '已审核') {
-						return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
-					}
-					return html;
-				});
-/**
- * 审核没有流水单号的交易记录
- */
-Handlebars.registerHelper('isCheckDebtStatus', function(isCheck, userId,
-		createDate) {
-	var formcreateDate = changeDateToString(new Date(createDate));
-	var html = '<button class="btn btn-sm btn-blue" onClick="checkDebt(\''
-			+ userId + '\',\'' + formcreateDate + '\')">确认</button>'
-	if (isCheck == '已审核') {
-		return '<button class="btn btn-sm btn-blue" disabled>已审核</button> ';
-	}
-	return html;
-});
-/**
- * 根据流水号查询
- */
-function findBySalesManName() {
-	var salesmanName = $('#salesManName').val();
-	var createDate = $('#searchDate').val();
-	$.ajax({
-		url : base + "/checkCash/salesmanName?salesmanName=" + salesmanName
-				+ "&createDate=" + createDate,
-		type : "GET",
-		dataType : "json",
-		success : function(data) {
-			if (data.status == 'success') {
-				createCheckPendingTable(data);
-				return false;
-			}
-		},
-		error : function() {
-			alert("系统异常，请稍后重试！");
-		}
-	})
-}
 
 var parseParam = function(param, key) {
 	var paramStr = "";
@@ -578,27 +535,6 @@ function findUnCheckBankTread() {
 		},
 		error : function(data) {
 			alert("查询失败！");
-		}
-	})
-}
-/**
- * 删除未匹配记录
- */
-function deleteUnCheck(id) {
-	$.ajax({
-		url : base + "/checkCash/delete/" + id,
-		type : "GET",
-		dataType : "json",
-		success : function(data) {
-			if ("success" === data.status) {
-				alert(data.successMsg);
-				findUnCheckBankTread();
-				return;
-			}
-			alert(data.errorMsg);
-		},
-		error : function(data) {
-			alert("操作失败");
 		}
 	})
 }

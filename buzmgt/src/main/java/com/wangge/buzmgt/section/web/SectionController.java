@@ -5,6 +5,8 @@ import com.wangge.buzmgt.plan.entity.MachineType;
 import com.wangge.buzmgt.plan.service.MachineTypeService;
 import com.wangge.buzmgt.section.entity.PriceRange;
 import com.wangge.buzmgt.section.entity.Production;
+import com.wangge.buzmgt.section.pojo.ChannelManager;
+import com.wangge.buzmgt.section.service.ChannelManagerService;
 import com.wangge.buzmgt.section.service.PriceRangeService;
 import com.wangge.buzmgt.section.service.ProductionService;
 import com.wangge.buzmgt.sys.entity.User;
@@ -46,6 +48,9 @@ public class SectionController {
 
     @Autowired
     private MachineTypeService machineTypeServer;
+
+    @Autowired
+    private ChannelManagerService channelManagerService;
 //--------------------------------- 财务的操作 -----------------------------------------------------//
 
     /**
@@ -128,8 +133,8 @@ public class SectionController {
      */
     @RequestMapping(value = "toReview", method = RequestMethod.GET)
     @ResponseBody
-    public String toReview(Long id, String status, String auditor, String planId) {
-        productionService.toReview(id, status, auditor);
+    public String toReview(Long id, String status, String auditor, String planId,String userId) {
+        productionService.toReview(id, status, auditor,userId);
         return planId;
     }
 
@@ -168,13 +173,14 @@ public class SectionController {
     @RequestMapping(value = "/modifyPriceRange/{id}", method = RequestMethod.POST)
     @ResponseBody
     public String modifyPriceRange(Long productionId,
-                                   String auditorId,
+                                   String auditor,
                                    Double percentage,
                                    String implDate,
+                                   String userId,
                                    @PathVariable("id") PriceRange priceRange) {
 
         logger.info(priceRange);
-        priceRangeService.modifyPriceRange(productionId, auditorId, percentage, implDate, priceRange);
+        priceRangeService.modifyPriceRange(productionId, auditor, percentage, implDate, priceRange,userId);
         return "cheng gong";
     }
 
@@ -232,6 +238,9 @@ public class SectionController {
         model.addAttribute("planId", planId);
         model.addAttribute("machineId", type);
         model.addAttribute("today", getToday());
+        //用于判断用户是不是审核人的
+        String userId = getUser().getId();
+        model.addAttribute("userId", userId);
 //        return "section/review";
 
         return "section/review_qd";
@@ -274,8 +283,12 @@ public class SectionController {
     public String findOneProduction1(@PathVariable("id") Production production, Model model) {
         model.addAttribute("production", production);
         //用于判断用户是不是审核人的
-//        String userId = getUser().getId();
-//        model.addAttribute("userId", userId);
+        String userId = getUser().getId();
+        boolean flag = false;
+        if(userId.equals(production.getUserId()) || "1".equals(userId)){
+            flag = true;
+        }
+        model.addAttribute("flag", flag);
         return "section/list_one_qd";
     }
 
@@ -372,4 +385,10 @@ public class SectionController {
         return pc;
     }
 
+
+    @RequestMapping(value = "findChannelManager")
+    @ResponseBody
+    public List<ChannelManager> find(){
+        return channelManagerService.findChannelManager("区域总监");
+    }
 }

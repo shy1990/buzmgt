@@ -35,18 +35,22 @@
 					<img src="static/img/fan{{getImg @index}}.png" alt="">
 				</div>
 				<div class="col-sm-7">
-                    <a href="/achieve/list?planId={{id}}"><span class="text-fa-1">{{maintitle}}</span></a>
+                    <a href="/achieve/list?planId={{ifCheck id}}"><span class="text-fa-1">{{maintitle}}</span></a>
 				</div>
+     {{#ifNew id}} 
 				<div class="col-sm-2 icon-fl-right">
 					<a  href="/mainPlan/update/{{id}}" ><i
 						class="icon-f icon-ren" data-toggle="tooltip"  title="适用人员"></i></a> <i
 						class="icon-f icon-dele" data-toggle="modal"
 						data-pid="{{id}}" data-target="#del"></i>
 				</div>
+     {{else}}
+     {{/ifNew}}
 	</div>
 	{{/each}}
 	
 {{/if}}
+ {{#ifNew content}} 
 	<div class="col-sm-5 tc-fangan" style="margin-right: 100px; margin-left: 30px;margin-bottom:7px">
 				<div class="col-sm-2" style="margin-left: -30px">
 					<img src="static/img/fan4.png" alt="">
@@ -60,7 +64,8 @@
 				</div>
 
 	</div>
-
+{{else}}
+{{/ifNew}} 
 </script>
 </head>
 
@@ -138,6 +143,7 @@
 	<script type="text/javascript">
 		var gloPlanId = null;
 		var	base='<%=basePath%>';
+		 var check="${check}";
 		$(function() {
 			$("[data-toggle='popover']").popover();
 			findMainPlanList(0);

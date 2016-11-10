@@ -17,4 +17,5 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
   Page<Role> findAll(Pageable pageRequest);
 
   Role findByName(String name);
+
 }
