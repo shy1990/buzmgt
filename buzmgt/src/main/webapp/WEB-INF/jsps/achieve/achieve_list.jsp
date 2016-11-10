@@ -177,7 +177,14 @@
         <li title="brandIncome"><a data-toggle="tab" href="#ppxhao">品牌型号<span
                 class="qipao">2</span></a></li>
         <li class="active" title="achieve"><a data-toggle="tab" href="#dlsz">达量设置</a></li>
-        <li title="superposition"><a data-toggle="tab" href="#djsz">叠加设置</a></li>
+        <c:if test="${check == '2'}"><!-- 财务 -->
+            <li title="superposition"><a href="/superposition/superposition?planId=${planId}">叠加设置</a></li>
+
+        </c:if>
+        <c:if test="${check == '1'}"><!-- 渠道 -->
+            <li title="superposition"><a href="/superposition/listAll?planId=${planId}">叠加设置</a></li>
+
+        </c:if>
         <li title="award"><a href="/award/list?planId=${planId}">达量奖励</a></li>
     </ul>
     <div class="row">
