@@ -179,7 +179,7 @@
 
 <div class="content main">
     <h4 class="page-header">
-        <i class="ico ico-tcsz"></i>财务
+        <i class="ico ico-tcsz"></i>渠道审核
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
     </h4>
 
