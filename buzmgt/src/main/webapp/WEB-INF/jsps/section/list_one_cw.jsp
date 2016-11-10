@@ -106,7 +106,15 @@
                                             <span class="text-green">${priceRange.percentage}元/台</span>
                                         </td>
                                         <td>${priceRange.implementationDate}</td>
-                                        <td>${priceRange.endTime}</td>
+                                        <%--<td>${priceRange.endTime}</td>--%>
+                                        <c:choose>
+                                            <c:when test="${priceRange.endTime == null}">
+                                                <td><span class=""> 未设置结束时间 </span></td>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td><span class=""> ${priceRange.endTime} </span></td>
+                                            </c:otherwise>
+                                        </c:choose>
                                         <td><a href="">添加区域设置</a></td>
 
                                             <td><span class="ph-on">

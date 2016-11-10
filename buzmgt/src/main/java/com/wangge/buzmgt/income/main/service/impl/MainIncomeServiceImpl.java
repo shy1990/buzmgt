@@ -1,5 +1,23 @@
 package com.wangge.buzmgt.income.main.service.impl;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import javax.persistence.criteria.Predicate;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.achieveset.service.AchieveService;
@@ -25,16 +43,6 @@ import com.wangge.buzmgt.log.util.LogUtil;
 import com.wangge.buzmgt.section.service.ProductionService;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.criteria.Predicate;
-import java.text.ParseException;
-import java.util.*;
 
 @Service
 public class MainIncomeServiceImpl implements MainIncomeService {
@@ -76,8 +84,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
    */
   @Override
   public void caculateOutedOrder(String orderNo) {
-    System.out.println("调成功了"+orderNo);
-    Object userO = mainPlanUserRep.findsaleByDateAndOrderNo (new Date(), orderNo);
+    Object userO = mainPlanUserRep.findsaleByDateAndOrderNo(new Date(), orderNo);
     if (null == userO) {
       return;
     }
@@ -92,19 +99,20 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     if (goodList.size() < 1) {
       return;
     }
-//    // 计算付款订单
-//    if (payStatus.equals("1")) {
-//      userO = mainPlanUserRep.findsaleByDateAndMemberId(payDate, memberId);
-//      if (null != userO) {
-//        uers = (Object[]) userO;
-//        Long planId1 = Long.valueOf(uers[0].toString());
-//        String userId1 = uers[1].toString();
-//        String regionId1 = uers[2].toString();
-//        if (null != planId) {
-//          caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList), regionId1, 1);
-//        }
-//      }
-//    }
+    // // 计算付款订单
+    // if (payStatus.equals("1")) {
+    // userO = mainPlanUserRep.findsaleByDateAndMemberId(payDate, memberId);
+    // if (null != userO) {
+    // uers = (Object[]) userO;
+    // Long planId1 = Long.valueOf(uers[0].toString());
+    // String userId1 = uers[1].toString();
+    // String regionId1 = uers[2].toString();
+    // if (null != planId) {
+    // caculatePayedOrder(userId1, planId1, payDate, new ArrayList<>(goodList),
+    // regionId1, 1);
+    // }
+    // }
+    // }
     // 计算出库订单
     List<String> goodIdList = new ArrayList<>();
     for (OrderGoods good : goodList) {
@@ -121,6 +129,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       achieveIncomeService.createAchieveIncomeByStock((Achieve) ruleMap.get("rule"), orderNo, userId, subgood.getNums(),
           subgoodId, 0, planId, subgood.getPrice(), new Date());
     }
+    if (goodIdList.size() < 1)
+      return;
     // 查找计算品牌
     subList = brandIncomeService.findRuleByGoods(goodIdList, planId, userId, new Date());
     
@@ -131,6 +141,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       brandIncomeService.realTimeBrandIncomeOut((BrandIncome) ruleMap.get("rule"), subgood.getNums(), orderNo,
           subgoodId, userId, regionId, subgood.getPrice());
     }
+    if (goodIdList.size() < 1)
+      return;
     // 查找计算价格区间
     for (OrderGoods good : goodList) {
       productionService.compute(orderNo, good.getPrice() + 0D, userId, good.getGoodId(), good.getMachineType(), planId,
@@ -202,6 +214,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       goodIdList.remove(subgoodId);
       
     }
+    if (goodIdList.size() < 1)
+      return;
     // 查找计算品牌
     subList = brandIncomeService.findRuleByGoods(new ArrayList<>(goodIdList), planId, userId, payDate);
     
@@ -217,6 +231,9 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       }
       goodIdList.remove(subgoodId);
     }
+    
+    if (goodIdList.size() < 1)
+      return;
     // 查找计算价格区间
     /**
      * 数据库中商品id字段长度太小
@@ -397,5 +414,5 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       throw new Exception("审批id为" + id + "的工资出错");
     }
   }
-
+  
 }
