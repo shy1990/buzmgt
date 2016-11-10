@@ -57,4 +57,13 @@ public interface RegionService {
 	List<RegionType> findALlRegionType();
 
 	RegionType findByRegionTypeName(String name);
+
+
+	RegionType findRegionType(int id);
+
+	int findMaxId();
+
+	void saveRegionType(RegionType regionType);
+
+	void deleteRegionType(RegionType regionType);
 }

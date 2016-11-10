@@ -205,12 +205,34 @@ public class RegionServiceImpl implements RegionService {
 
   @Override
   public List<RegionType> findALlRegionType() {
-    return regionTypeRepository.findAll();
+   // Sort s=new Sort(Sort.Direction.ASC, "parentsType");
+    return regionTypeRepository.findAllRegion() ;
   }
 
   @Override
   public RegionType findByRegionTypeName(String name) {
     return regionTypeRepository.findByName(name);
   }
+
+  @Override
+  public RegionType findRegionType(int id) {
+    return regionTypeRepository.findOne(id);
+  }
+
+  @Override
+  public int findMaxId() {
+    return regionTypeRepository.findMaxId();
+  }
+
+  @Override
+  public void saveRegionType(RegionType regionType) {
+     regionTypeRepository.save(regionType);
+  }
+
+  @Override
+  public void deleteRegionType(RegionType regionType) {
+    regionTypeRepository.delete(regionType);
+  }
+
 
 }

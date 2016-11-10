@@ -1,8 +1,6 @@
 package com.wangge.buzmgt.region.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -21,10 +19,8 @@ public class RegionType implements Serializable {
   private String name;
 
 
-  @JsonIgnore
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "PARENT_ID")
-  private  RegionType childsType;
+  @Column(name = "PARENT_ID")
+  private  int parentId;
 
   public int getId() {
     return id;
@@ -42,11 +38,11 @@ public class RegionType implements Serializable {
     this.name = name;
   }
 
-  public RegionType getChildsType() {
-    return childsType;
+  public int getParentId() {
+    return parentId;
   }
 
-  public void setChildsType(RegionType childsType) {
-    this.childsType = childsType;
+  public void setParentId(int parentId) {
+    this.parentId = parentId;
   }
 }

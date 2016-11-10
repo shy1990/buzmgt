@@ -486,7 +486,9 @@ function seeRegion(id){
 
 
 //------------------------ 价格区间操作结束 -------------------------------
-
+/**
+ * 非审核时按钮显示
+ */
 Handlebars.registerHelper("ifNew", function(content, options) {
     var check = $('#checkId').val();
     if (check != 1) {
@@ -496,6 +498,7 @@ Handlebars.registerHelper("ifNew", function(content, options) {
         return options.inverse(this);
     }
 });
+
 var parseParam = function(param, key) {
 	var paramStr = "";
 	if (param instanceof String || param instanceof Number
