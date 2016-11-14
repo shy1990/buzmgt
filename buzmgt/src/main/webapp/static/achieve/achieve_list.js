@@ -465,16 +465,18 @@ function refresh() {
 function add_section(){
 	var planId = $("#planId").val();
 	var machineType = findMachineType();
-	window.location.href = '/section/addPriceRanges?type='+machineType+'&planId='+planId;
+	var checkId = $('#checkId').val();
+	window.location.href = '/section/addPriceRanges?type='+machineType+'&planId='+planId + '&check=' + checkId;
 
 }
 /**
  * 查询记录
  */
-function setSectionRecord(){
+function setSectionRecord(check){
 	var planId = $("#planId").val();
 	var machineType = findMachineType();
-	window.location.href = '/section/toNotExpiredJsp?type='+machineType+'&planId='+planId;
+	// window.location.href = '/section/toNotExpiredJsp?type='+machineType+'&planId='+planId;
+	window.location.href = '/priceRange/record?&planId=' + planId + '&check=' + check;
 }
 /**
  * 查看区域属性

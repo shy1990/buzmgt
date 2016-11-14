@@ -30,7 +30,7 @@
           href="static/bootStrapPager/css/page.css"/>
     <script src="static/js/jquery/jquery-1.11.3.min.js"
             type="text/javascript" charset="utf-8"></script>
-    <%--叠加模板开始--%>
+    <%--价格区间模板开始--%>
     <script id="section-table-template" type="text/x-handlebars-template">
         {{#if this}}
         {{#each this}}
@@ -39,9 +39,11 @@
             <td>{{priceRange}}元</td>
             <td class="width-fixed">
                 <span class="text-green">{{percentage}}元/台</span>
+                {{#if_check 2}}
                 <a href="javascript:;" class="btn btn-sm btn-findup" data-toggle="modal"
                    onclick="modify('{{priceRangeId}}','{{priceRange}}','{{productionId}}')">修改</a>
-                <%-- data-target="#gaigai" --%>
+                {{else}}
+                {{/if_check}}
             </td>
             <td>{{implementationDate}}</td>
 
@@ -58,9 +60,13 @@
             <td><span class="ph-on">进行中</span></td>
             <td>{{priceRangeCreateDate}}</td>
             <td>
+                {{#if_check 2}}
                 <button class="btn btn-sm btn-zz " data-toggle="" data-target=""
                         onclick="del('{{priceRangeId}}')">终止
                 </button>
+                {{else}}
+                --
+                {{/if_check}}
             </td>
         </tr>
         {{/each}}
@@ -219,18 +225,18 @@
                     <div class="tab-pane fade right-body" id="ajgqj">
                         <div class="ph-btn-set">
                             <c:if test="${check == '1'}"><!-- 渠道操作 -->
-                                <a href="javascript:toReview();" class="btn ph-blue">
-                                    <i class="ico icon-xj"></i> <span class="text-gery">审核</span>
-                                </a>
-                                <a href="javascript:setSectionRecord();" class="btn ph-blue" style="margin-right: 30px">
-                                    <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
+                                <%--<a href="javascript:toReview();" class="btn ph-blue">--%>
+                                    <%--<i class="ico icon-xj"></i> <span class="text-gery">审核</span>--%>
+                                <%--</a>--%>
+                                <a href="javascript:setSectionRecord('${check}');" class="btn ph-blue" style="margin-right: 30px">
+                                    <i class="ico icon-jl"></i> <span class="text-gery">设置记录/审核</span>
                                 </a>
                             </c:if>
                             <c:if test="${check == '2'}"><!-- 财务操作操作 -->
                                 <a href="javascript:add_section();" class="btn ph-blue">
                                     <i class="ico icon-xj"></i> <span class="text-gery">添加</span>
                                 </a>
-                                <a href="javascript:setSectionRecord();" class="btn ph-blue" style="margin-right: 30px">
+                                <a href="javascript:setSectionRecord('${check}');" class="btn ph-blue" style="margin-right: 30px">
                                     <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
                                 </a>
                             </c:if>
@@ -372,10 +378,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
                     <%--按价格区间结束--%>
 
 
@@ -683,6 +685,15 @@
         })
 
     }
+
+    Handlebars.registerHelper("if_check",function(status,options){
+        if('${check}' == status){
+            return options.fn(this);
+        } else {
+            return options.inverse(this);
+        }
+
+    })
 </script>
 </body>
 

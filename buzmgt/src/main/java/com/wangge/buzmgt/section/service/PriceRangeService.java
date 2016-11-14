@@ -3,6 +3,8 @@ package com.wangge.buzmgt.section.service;
 import com.wangge.buzmgt.section.entity.PriceRange;
 import com.wangge.buzmgt.section.entity.Production;
 
+import java.util.List;
+
 /**
  * Created by joe on 16-8-29.
  */
@@ -17,6 +19,8 @@ public interface PriceRangeService {
     public PriceRange stopPriceRange(PriceRange priceRange);
 
     PriceRange findById(Long id);
+
+    public List<PriceRange> findByProductionId(Long productionId);
 
 
 }
