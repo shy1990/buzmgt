@@ -36,7 +36,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-
 @Controller
 @RequestMapping(value = "/import")
 public class ImportOrderExcel {
@@ -46,7 +45,8 @@ public class ImportOrderExcel {
   @Value("${buzmgt.file.fileUploadPath}")
   private String fileUploadDir;
 
-  //private static String url = "http://image.3j1688.com/uploadfile/"; // 外网正式环境
+  // private static String url = "http://image.3j1688.com/uploadfile/"; //
+  // 外网正式环境
 
   @Resource
   private OrderSignforService orderSignforService;
@@ -60,25 +60,29 @@ public class ImportOrderExcel {
     return "excel/toImport";
   }
 
-
   @RequestMapping(value = "/images/upload", method = RequestMethod.POST)
   public String upload(@RequestParam("file") MultipartFile file,
-                       HttpServletRequest request) {
+      HttpServletRequest request) {
     Json json = new Json();
     String filename = null;
 
-    // String pathdir = "/var/sanji/excel/uploadfile/" + dateformat.format(new Date());// 构件服务器文件保存目录
+    // String pathdir = "/var/sanji/excel/uploadfile/" + dateformat.format(new
+    // Date());// 构件服务器文件保存目录
 
     if (!file.isEmpty()) {
       SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd/HH/");
-      String pathdir = fileUploadDir + dateformat.format(new Date());// 构件本地文件保存目录 // 得到本地图片保存目录的真实路径 http://localhost:80/aaa.jpg
+      String pathdir = fileUploadDir + dateformat.format(new Date());// 构件本地文件保存目录
+                                                                     // //
+                                                                     // 得到本地图片保存目录的真实路径
+                                                                     // http://localhost:80/aaa.jpg
       filename = UUID.randomUUID().toString() + FileUtil.getExt(file);// 构建文件名称
 
       // String fileUploadPath = pathdir+filename;
       try {
-        //** 验证文件是否合法 *//*
+        // ** 验证文件是否合法 *//*
         if (ExcelUtil.validateExcel(pathdir + filename)) {
-          String urlPath = FileUtil.saveFile(pathdir, filename, file, dateformat);
+          String urlPath = FileUtil.saveFile(pathdir, filename, file,
+              dateformat);
           if (urlPath != null && !"".equals(urlPath)) {
             json.setMsg("导入成功！");
             saveExcelData(pathdir + filename);
@@ -110,41 +114,37 @@ public class ImportOrderExcel {
     OrderSignfor xlsOrder = null;
     List<OrderSignfor> list;
     list = readXls(path);
-    //从数据库导出表
-    /* try {
-         XlsDto2Excel.xlsDto2Excel(list);
-     } catch (Exception e) {
-         e.printStackTrace();
-     }*/
+    // 从数据库导出表
+    /*
+     * try { XlsDto2Excel.xlsDto2Excel(list); } catch (Exception e) {
+     * e.printStackTrace(); }
+     */
     if (list != null && list.size() > 0) {
       for (OrderSignfor os : list) {
         String[] orderno = os.getOrderNo().split(",");
         for (int i = 0; i < orderno.length; i++) {
-          //  List<OrderSignfor> orderSf = orderSignforService.findByOrderNo(orderno[i]);
-          OrderSignfor orderSf = findOrder(orderSignforService.findListByOrderNo(orderno[i]));
+          // List<OrderSignfor> orderSf =
+          // orderSignforService.findByOrderNo(orderno[i]);
+          OrderSignfor orderSf = findOrder(orderSignforService
+              .findListByOrderNo(orderno[i]));
 
-          if (orderSf != null && (os.getFastmailNo() != null && !"".equals(os.getFastmailNo()))) {
-            orderSf.setFastmailTime(os.getFastmailTime());
-            orderSf.setFastmailNo(os.getFastmailNo());
-            orderSf.setFastmailTime(os.getFastmailTime());
-            orderSignforService.updateOrderSignfor(orderSf);
-          } else {
-            String sql = "select o.order_num,\n" +
-                "       o.total_cost,\n" +
-                "       o.actual_pay_num,\n" +
-                "       nvl(count(oi.nums),0),\n" +
-                "       m.username,\n" +
-                "       m.mobile,\n" +
-                "       a.mobilephone\n" +
-                "  from SJZAIXIAN.SJ_TB_ORDER o\n" +
-                "  left join SJZAIXIAN.Sj_Tb_Order_Items oi\n" +
-                "    on o.id = oi.order_id\n" +
-                "  left join SJZAIXIAN.Sj_Tb_Members m\n" +
-                "    on o.member_id = m.id\n" +
-                "  left join SJZAIXIAN.Sj_Tb_Admin a\n" +
-                "    on m.admin_id=a.id\n" +
-                " where oi.target_type = 'sku' and o.order_num=?\n" +
-                " group by o.order_num, o.total_cost, o.actual_pay_num,m.username,m.mobile,a.mobilephone";
+          if (orderSf == null) {
+            String sql = "select o.order_num,\n"
+                + "       o.total_cost,\n"
+                + "       o.actual_pay_num,\n"
+                + "       nvl(count(oi.nums),0),\n"
+                + "       m.username,\n"
+                + "       m.mobile,\n"
+                + "       a.mobilephone\n"
+                + "  from SJZAIXIAN.SJ_TB_ORDER o\n"
+                + "  left join SJZAIXIAN.Sj_Tb_Order_Items oi\n"
+                + "    on o.id = oi.order_id\n"
+                + "  left join SJZAIXIAN.Sj_Tb_Members m\n"
+                + "    on o.member_id = m.id\n"
+                + "  left join SJZAIXIAN.Sj_Tb_Admin a\n"
+                + "    on m.admin_id=a.id\n"
+                + " where oi.target_type = 'sku' and o.order_num=?\n"
+                + " group by o.order_num, o.total_cost, o.actual_pay_num,m.username,m.mobile,a.mobilephone";
             Query query = null;
             SQLQuery sqlQuery = null;
             query = entityManager.createNativeQuery(sql);
@@ -152,15 +152,15 @@ public class ImportOrderExcel {
             int a = 0;
             sqlQuery.setParameter(a, orderno[i]);
             List<Object[]> ret = sqlQuery.list();
-            //查询配件数量
-            sql = "select nvl(count(oi.nums),0)\n" +
-                "  from SJZAIXIAN.SJ_TB_ORDER o\n" +
-                "  left join SJZAIXIAN.Sj_Tb_Order_Items oi\n" +
-                "    on o.id = oi.order_id\n" +
-                "  left join SJZAIXIAN.Sj_Tb_Members m\n" +
-                "    on o.member_id = m.id\n" +
-                " where oi.target_type = 'accessories' and o.order_num=?\n" +
-                " group by o.order_num";
+            // 查询配件数量
+            sql = "select nvl(count(oi.nums),0)\n"
+                + "  from SJZAIXIAN.SJ_TB_ORDER o\n"
+                + "  left join SJZAIXIAN.Sj_Tb_Order_Items oi\n"
+                + "    on o.id = oi.order_id\n"
+                + "  left join SJZAIXIAN.Sj_Tb_Members m\n"
+                + "    on o.member_id = m.id\n"
+                + " where oi.target_type = 'accessories' and o.order_num=?\n"
+                + " group by o.order_num";
             Query query1 = entityManager.createNativeQuery(sql);
             sqlQuery = query1.unwrap(SQLQuery.class);
             sqlQuery.setParameter(a, orderno[i]);
@@ -171,23 +171,24 @@ public class ImportOrderExcel {
                 o.setOrderNo((String) result[0]);
                 o.setCreateTime(new Date());
                 o.setOrderPrice(((BigDecimal) result[1]).floatValue());
-                if (ObjectUtils.notEqual(result[2],null)){
-                  o.setActualPayNum(((BigDecimal) result[2]).floatValue());//实际金额
+                if (ObjectUtils.notEqual(result[2], null)) {
+                  o.setActualPayNum(((BigDecimal) result[2]).floatValue());// 实际金额
                 }
                 o.setPhoneCount(((BigDecimal) result[3]).intValue());
                 o.setOrderStatus(OrderSignfor.OrderStatus.SUCCESS);
                 o.setShopName((String) result[4]);
-                //获取配件数量
-//                if (CollectionUtils.isNotEmpty(resultList)) {
-//                  resultList.forEach(r -> {
-                    if(ObjectUtils.notEqual(partsCount,null)){
-                      o.setPartsCount(Integer.valueOf(partsCount+""));
-                    }
+                // 获取配件数量
+                // if (CollectionUtils.isNotEmpty(resultList)) {
+                // resultList.forEach(r -> {
+                if (ObjectUtils.notEqual(partsCount, null)) {
+                  o.setPartsCount(Integer.valueOf(partsCount + ""));
+                }
 
-//                  });
-//                }
-                //查询是否已关联
-                String loginAccount = registDataService.findLoginAccountByLoginAccount((String) result[5]);
+                // });
+                // }
+                // 查询是否已关联
+                String loginAccount = registDataService
+                    .findLoginAccountByLoginAccount((String) result[5]);
                 if (StringUtils.isNotEmpty(loginAccount)) {
                   o.setRelatedStatus(RelatedStatus.ENDRELATED);
                 } else {
@@ -230,7 +231,8 @@ public class ImportOrderExcel {
    * 读取xls文件内容
    *
    * @return List<XlsDto>对象
-   * @throws IOException 输入/输出(i/o)异常
+   * @throws IOException
+   *           输入/输出(i/o)异常
    */
   private List<OrderSignfor> readXls(String filePath) throws Exception {
     // filePath = "E:\\excel\\高新：三际平台和51蜂云平台新增渠道.xlsx";
@@ -254,11 +256,10 @@ public class ImportOrderExcel {
         // 循环列Cell
         // 0学号 1姓名 2学院 3课程名 4 成绩
         // for (int cellNum = 0; cellNum <=4; cellNum++) {
-                 /* Cell xy = hssfRow.getCell(0);
-                  if (xy == null) {
-                      continue;
-                  }
-                  System.out.println("==================="+getValue(xy));*/
+        /*
+         * Cell xy = hssfRow.getCell(0); if (xy == null) { continue; }
+         * System.out.println("==================="+getValue(xy));
+         */
 
         Cell ordernum = hssfRow.getCell(0);
         if (ordernum == null) {
@@ -277,8 +278,8 @@ public class ImportOrderExcel {
         }
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
-        orderSignfor.setFastmailTime(date.parse(ExcelUtil.getValue(fastmailTime)));
-
+        orderSignfor.setFastmailTime(date.parse(ExcelUtil
+            .getValue(fastmailTime)));
 
         list.add(orderSignfor);
       }
@@ -297,8 +298,9 @@ public class ImportOrderExcel {
    */
   private static String validatFestmailNo(Cell param) throws Exception {
     String FestmailNo = ExcelUtil.getValue(param).replace("\r\n", "").trim();
-    if (!"非法字符".equals(FestmailNo) && !"未知类型".equals(FestmailNo) && !"".equals(FestmailNo)) {
-      String[] arr = {"9", "6", "5", "7"};
+    if (!"非法字符".equals(FestmailNo) && !"未知类型".equals(FestmailNo)
+        && !"".equals(FestmailNo)) {
+      String[] arr = { "9", "6", "5", "7" };
       if (in(arr, FestmailNo.substring(0, 1))) {
 
         return FestmailNo;
@@ -325,7 +327,8 @@ public class ImportOrderExcel {
     if (!"非法字符".equals(str) && !"未知类型".equals(str) && !"".equals(str)) {
       SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
       try {
-        // 设置lenient为false. 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
+        // 设置lenient为false.
+        // 否则SimpleDateFormat会比较宽松地验证日期，比如2007/02/29会被接受，并转换成2007/03/01
         format.setLenient(false);
         format.parse(str);
       } catch (ParseException e) {
