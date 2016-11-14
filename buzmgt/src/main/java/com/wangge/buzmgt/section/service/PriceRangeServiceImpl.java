@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by joe on 16-8-29.
@@ -84,6 +85,17 @@ public class PriceRangeServiceImpl implements PriceRangeService {
     @Override
     public PriceRange findById(Long id) {
         return priceRangeRepository.findOne(id);
+    }
+
+    /**
+     * 根据productionId查询
+     * @param productionId
+     * @return
+     */
+    @Override
+    public List<PriceRange> findByProductionId(Long productionId) {
+
+        return priceRangeRepository.findByProductionId(productionId);
     }
 
 }

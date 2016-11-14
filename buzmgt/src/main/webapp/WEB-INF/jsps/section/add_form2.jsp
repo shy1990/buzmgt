@@ -105,7 +105,8 @@
                     type: 'GET',
                     data: {id: id, auditor: auditor, status: '1', planId: planId,userId:userId},
                     success: function (data) {
-                        window.location.href = '<%=basePath%>section/toNotExpiredJsp?type=' + type + '&planId=' + data;
+                        <%--window.location.href = '<%=basePath%>section/toNotExpiredJsp?type=' + type + '&planId=' + data;--%>
+                        window.location.href = '<%=basePath%>priceRange/record?&planId=' + data + '&check=' + ${check};
                     },
                     error: function () {
                         alert("系统故障,请稍后重试");

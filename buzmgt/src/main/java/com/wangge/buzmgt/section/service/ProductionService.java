@@ -80,4 +80,14 @@ public interface ProductionService {
     public String compute(String orderNo, String userId, String goodsId, List<OrderGoods> orderGoodsList, Long planId,String regionId);
 
     public Production delete(Production production);
+
+
+
+
+//    -------------------------------------代码优化-----------------------------
+
+    //正在进行的(使用中,审核中的)
+    public List<Production> findOnGoing(Long planId,String type,String today);
+
+    public List<PriceRange> findNowUse(String type,Long planId);
 }
