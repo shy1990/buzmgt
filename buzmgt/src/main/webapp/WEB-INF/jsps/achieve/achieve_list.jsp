@@ -147,7 +147,7 @@
                 <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
                 <a href="/achieve/course/{{achieveId}}" class="btn btn-sm bnt-jc">进程</a>
                 {{#ifNew achieveId}}
-                <button class="btn btn-sm btn-sc " onclick="delAchieve('{{achieveId}}')">删除</button>
+                    <button class="btn btn-sm btn-sc " onclick="delAchieve('{{achieveId}}')">删除</button>
                 {{else}}
                 {{/ifNew}}
             </td>
@@ -445,9 +445,11 @@
                                     <i class="ico icon-xj"></i> <span class="text-gery">审核</span>
                                 </a>
                             </c:if>
-                            <a href="JavaScript:record();" class="btn ph-blue" style="margin-right: 30px">
-                                <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
-                            </a>
+                            <c:if test="${check != 1}">
+                                <a href="JavaScript:record();" class="btn ph-blue" style="margin-right: 30px">
+                                    <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
+                                </a>
+                            </c:if>
                             <div class="link-posit pull-right">
                                 <input id="searchGoodsname" class="input-search" type="text"
                                        placeholder="模糊查询请输入品牌型号">

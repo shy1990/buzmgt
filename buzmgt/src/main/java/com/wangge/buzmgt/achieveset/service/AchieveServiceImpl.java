@@ -14,6 +14,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -41,10 +42,16 @@ public class AchieveServiceImpl implements AchieveService {
    */
   public Specification<Achieve> dispose(Map<String, Object> searchParams){
     //过滤删除
-    searchParams.put("EQ_flag", "NORMAL");
-    Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-    Specification<Achieve> spec = achieveSearchFilter(filters.values(), Achieve.class);
-    return spec;
+	  Specification<Achieve> spec = null;
+	  try {
+		  searchParams.put("EQ_flag", "NORMAL");
+		  Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+		  spec = achieveSearchFilter(filters.values(), Achieve.class);
+	  }catch (Exception e){
+		  e.printStackTrace();
+		  throw e;
+	  }
+	  return spec;
   }
   @Override
   public List<Achieve> findAll(Map<String, Object> searchParams, Sort sort) {
@@ -58,7 +65,8 @@ public class AchieveServiceImpl implements AchieveService {
   @Override
   public Page<Achieve> findAll(Map<String, Object> searchParams, Pageable pageable) {
     Specification<Achieve> spec = dispose(searchParams);
-    return achieveRepository.findAll(spec, pageable);
+	  Page<Achieve> achieves = achieveRepository.findAll(spec, pageable);
+	  return achieves;
   }
 
   @Override
@@ -91,6 +99,7 @@ public class AchieveServiceImpl implements AchieveService {
 	public List<Map<String, Object>> findRule(List<String> goodIds, Long mainPlanId, String userId, Date payDate) {
 		List<Map<String, Object>> list = new ArrayList<>();
 		Map<String,Object> searchParams = new HashMap<>();
+		System.out.println(goodIds);
 		searchParams.put("IN_goodId", goodIds);
 		searchParams.put("EQ_planId", mainPlanId);
 		String calculateDate = "";
@@ -102,14 +111,14 @@ public class AchieveServiceImpl implements AchieveService {
 		searchParams.put("LTE_startDate", calculateDate);
 		searchParams.put("EQ_status", "OVER");
 
-		List<Achieve> achieves = findAll(searchParams);
+		Page<Achieve> achieves = findAll(searchParams,new PageRequest(0,100));
 		achieves.forEach(achieve->{
 			Map<String, Object> e = new HashMap<>();
 			e.put("goodId", achieve.getGoodId());
 			e.put("rule", achieve);
 			list.add(e);
 		});
-
+		System.out.println(list);
 		return list;
 	}
 

@@ -68,12 +68,12 @@
       <td>{{formDate createDate}}</td>
       <td>
         <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
-				{{#isAuditor auditor}} 
-				{{#myIf status 'WAIT'}}
+				<%--{{#isAuditor auditor}} --%>
+				<%--{{#myIf status 'WAIT'}}--%>
         <button class="btn bnt-sm bnt-jc" onclick="auditAchieve({{achieveId}},'OVER')">审核</button>
         <button class="btn bnt-sm btn-sc" onclick="auditAchieve({{achieveId}},'BACK')">驳回</button>
-				{{/myIf}}
-				{{/isAuditor}}
+				<%--{{/myIf}}--%>
+				<%--{{/isAuditor}}--%>
       </td>
     </tr>
 	{{/each}}

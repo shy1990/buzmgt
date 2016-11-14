@@ -83,7 +83,7 @@ public class Achieve implements Serializable {
 	private AchieveStatusEnum status = AchieveStatusEnum.WAIT; // 审核状态：BACK-驳回，WAIT-待审核，OVER-已审核
 	private String planId;
 
-	@OrderBy(value = "id ASC ")
+	@OrderBy(value = "max ASC ")
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinTable(name = "SYS_ACHIEVE_SET_RULE",
 					joinColumns = @JoinColumn(name = "SYS_ACHIEVE_ID"),
