@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.importExcel.web;
+package com.wangge.buzmgt.importExcel;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.wangge.buzmgt.importExcel.web;
+package com.wangge.buzmgt.importExcel;
 
 import com.wangge.buzmgt.assess.service.RegistDataService;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;

@@ -15,7 +15,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.wangge.buzmgt.importExcel.web.ImportOrderExcel;
+import com.wangge.buzmgt.importExcel.ImportOrderExcel;
 
 public class ExcelUtil {
   private static final Logger logger = Logger.getLogger(ImportOrderExcel.class);
