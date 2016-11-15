@@ -37,7 +37,7 @@ public class CacelOrderController {
   @RequestMapping("/cacelOrder")
   public void exportCacelOrder(HttpServletRequest request, HttpServletResponse response) {
     List<CacelOrder> list = cacelOrderService.findAll();
-    String[] gridTitles_1 = {"订单号", "店铺名称", "真实姓名", "订单创建日期", "取消订单数量(台)", "再次下单数量(台)"};
+    String[] gridTitles_1 = {"订单号", "店铺名称", "真实姓名", "订单创建日期", "取消订单数量(次)", "再次下单数量(次)"};
     String[] coloumsKey_1 = {"orderNum", "userName", "trueName", "createTime", "cacelSum", "orderSum"};
     ExcelExport.doExcelExport("昨天取消订单商家导出表.xls", list, gridTitles_1, coloumsKey_1, request, response);
   }
