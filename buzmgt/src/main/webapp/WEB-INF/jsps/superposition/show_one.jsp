@@ -380,7 +380,6 @@
                     <dt>奖罚发放日期：</dt>
                     <dd>
                         <div><span class="text-gery tex">${superposition.giveDate}</span></div>
-
                     </dd>
                 </dl>
             </li>

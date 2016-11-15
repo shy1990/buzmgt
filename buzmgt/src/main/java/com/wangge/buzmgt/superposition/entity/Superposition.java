@@ -49,6 +49,8 @@ public class Superposition {
 
     private String auditor;//审核人id
 
+    private String auditorName;//审核人姓名
+
     @JsonSerialize(using = CustomDateSerializer.class)
     @Temporal(TemporalType.DATE)
     private Date createDate = new Date();//创建日期
@@ -237,6 +239,14 @@ public class Superposition {
         this.singleRules = singleRules;
     }
 
+    public String getAuditorName() {
+        return auditorName;
+    }
+
+    public void setAuditorName(String auditorName) {
+        this.auditorName = auditorName;
+    }
+
     @Override
     public String toString() {
         return "Superposition{" +
@@ -252,6 +262,7 @@ public class Superposition {
                 ", production='" + production + '\'' +
                 ", remark='" + remark + '\'' +
                 ", auditor='" + auditor + '\'' +
+                ", auditorName='" + auditorName + '\'' +
                 ", createDate=" + createDate +
                 ", implDate=" + implDate +
                 ", endDate=" + endDate +
@@ -259,7 +270,7 @@ public class Superposition {
                 ", ruleList=" + ruleList +
                 ", groupList=" + groupList +
                 ", checkStatus='" + checkStatus + '\'' +
-                ", planId='" + planId + '\'' +
+                ", planId=" + planId +
                 '}';
     }
 }

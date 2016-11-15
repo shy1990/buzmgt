@@ -179,6 +179,7 @@
         var userList = new Array();//所有用户的UserId
         var planId = ${planId};
         var singleRules = new Array();
+        var check = '${check}';
     </script>
 <body>
 
@@ -457,16 +458,19 @@
                                             class="icon-s icon-man"></i></span>
                                 <!--<input type="text" class="form-control" placeholder="请选择指派审核人员" aria-describedby="basic-addon1">-->
                                 <div class="inpt-search">
-                                    <select name="" class="form-control demo3 J_auditor">
+                                    <%--<select name="" class="form-control demo3 J_auditor">--%>
 
-                                        <option value="UT">胡老大</option>
-                                        <option value="VT">横额啊</option>
-                                        <option value="VA">张二啦</option>
-                                        <option value="VA">王晓晓</option>
-                                        <option value="WV">杭大大</option>
-                                        <option value="WV">曹大大</option>
-                                        <option value="WI">槽大小</option>
-                                    </select>
+                                        <%--<option value="UT">胡老大</option>--%>
+                                        <%--<option value="VT">横额啊</option>--%>
+                                        <%--<option value="VA">张二啦</option>--%>
+                                        <%--<option value="VA">王晓晓</option>--%>
+                                        <%--<option value="WV">杭大大</option>--%>
+                                        <%--<option value="WV">曹大大</option>--%>
+                                        <%--<option value="WI">槽大小</option>--%>
+                                    <%--</select>--%>
+                                        <select id="select-auditor"  class="form-control demo3 J_auditor">
+
+                                        </select>
                                 </div>
                             </div>
                         </dd>
@@ -640,6 +644,28 @@
         //         search: true,
         // //         selectGroup: true
         //     });
+    </script>
+    <script id="auditor-template" type="text/x-handlebars-template">
+        {{#each this}}
+        <option value='{{userId}}'>{{name}}</option>
+        {{/each}}
+
+    </script>
+    <script>
+        findChannelManager();
+        //查找审核人员
+        function findChannelManager() {
+            $.ajax({
+                url: '<%=basePath%>superposition/findChannelManager',
+                type: 'GET',
+                success: function (data) {
+                    console.log(data);
+                    var auditorTemplate = Handlebars.compile($("#auditor-template").html());
+                    $('#select-auditor').html(auditorTemplate(data));
+                }
+
+            })
+        }
     </script>
 </body>
 

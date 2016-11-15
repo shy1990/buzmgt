@@ -116,13 +116,13 @@ public class PriceRangeController {
     model.addAttribute("check",check);
     model.addAttribute("planId",planId);
     //用于判断用户是不是审核人的
-    String userId = getUser().getId();
+//    String userId = getUser().getId();
 //    boolean flag = false;
 //    if(userId.equals(production.getUserId()) || "1".equals(userId)){
 //      flag = true;
 //    }
 //    model.addAttribute("flag", flag);
-    model.addAttribute("managerId",userId);//当前用户
+    model.addAttribute("managerId",getUser().getId());//当前用户
     model.addAttribute("userId",production.getUserId());//审核人id
     model.addAttribute("priceRangeStatus",production.getProductStatus());
     return "pricerange/price_range";

@@ -72,7 +72,7 @@
                     if (data.result == 'success') {
                         alert("操作成功");
                     }
-                    window.location.href = '<%=basePath%>superposition/listAll?planId='+planId;
+                    window.location.href = '<%=basePath%>superposition/listAll?planId='+planId + '&check=' + ${check};
                 },
                 error: function (data) {
 
@@ -421,7 +421,7 @@
 
                     </dd>
                 </dl>
-                <c:if test="${superposition.checkStatus != 3}">
+                <c:if test="${superposition.checkStatus == '1' && check eq '1' && (superposition.auditor == auditor || auditor == '1')}">
                     <dl class="dl-horizontal">
                         <dd>
                             <div>
@@ -430,8 +430,6 @@
                                 <button class="btn btn-sm btn-zz " onclick="no('${superposition.id}',${superposition.planId})">驳回
                                 </button>
                             </div>
-
-
                         </dd>
                     </dl>
                 </c:if>

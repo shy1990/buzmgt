@@ -140,6 +140,7 @@
         var rule = new Array();//全局变量
         var singleRules = new Array();
         var planId = '${planId}';
+        var check = '${check}';
     </script>
 <body>
 
