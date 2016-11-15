@@ -103,16 +103,16 @@
                                 <%--<a href="/superposition/add?planId=${planId}" class="btn ph-blue">--%>
                                     <%--<i class="ico icon-xj"></i> <span class="text-gery">添加</span>--%>
                                 <%--</a>--%>
-                                <a href="/superposition/listAll?planId=${planId}&check=${check}" class="btn ph-blue"
+                                <a href="/superposition/listAll?planId=${planId}" class="btn ph-blue"
                                    style="margin-right: 30px">
                                     <i class="ico icon-jl"></i> <span class="text-gery">设置记录/审核</span>
                                 </a>
                             </c:if>
                             <c:if test="${check eq '2'}">
-                                <a href="/superposition/add?planId=${planId}&check=${check}" class="btn ph-blue">
+                                <a href="/superposition/add?planId=${planId}" class="btn ph-blue">
                                     <i class="ico icon-xj"></i> <span class="text-gery">添加</span>
                                 </a>
-                                <a href="/superposition/listAll?planId=${planId}&check=${check}" class="btn ph-blue"
+                                <a href="/superposition/findAll?planId=${planId}" class="btn ph-blue"
                                    style="margin-right: 30px">
                                     <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
                                 </a>
@@ -131,7 +131,6 @@
                                     <th>序号</th>
                                     <th>名称</th>
                                     <th>指标</th>
-                                    <th>审核人</th>
                                     <th>方案起止日期</th>
                                     <th>佣金发放</th>
                                     <th>状态</th>
@@ -169,7 +168,7 @@
                                             {{/if}}
                                             </span>
                                         </td>
-                                        <td>{{auditorName}}</td>
+
                                         <td>
                                             {{#if implDate}}
                                             {{implDate}} -- {{endDate}}
@@ -178,25 +177,19 @@
 
                                         <td>{{giveDate}}</td>
                                         <td>
+                                            <span class="ph-on">
                                             {{#if checkStatus}}
-                                            {{checkStatus checkStatus}}
+                                            {{state}}
                                             {{/if}}
                                             </span>
                                         </td>
                                         <td>{{endDate}}</td>
                                         <td>
-                                            {{#checkRecord checkStatus auditor}}
                                             <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
                                             </button>
                                             <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="seeProgress('{{planId}}', '{{id}}')">进程
                                             </button>
-                                            <button class="btn  bnt-sm bnt-zza" data-toggle="modal" data-target="#" onclick="stop('{{id}}')">废弃</button>
-                                            {{else}}
-                                            <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
-                                            </button>
-                                            <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="seeProgress('{{planId}}', '{{id}}')">进程
-                                            </button>
-                                            {{/checkRecord}}
+                                            <button class="btn  bnt-sm bnt-zza" data-toggle="modal" data-target="#" onclick="stop('{{id}}')">终止</button>
                                         </td>
                                     </tr>
                                     {{/each}}
@@ -337,7 +330,8 @@
      * @param id
      */
     function see(id) {
-        window.location.href = id+'?check=' + ${check};
+        window.location.href = id;
+
     }
 
     //查询正在使用的
@@ -363,28 +357,15 @@
                 totalCount = data.totalElements;
                 limit = data.size;
                 var listTemplate = Handlebars.compile($("#list-template").html());
-                //判断审核权限
-                Handlebars.registerHelper("checkRecord", function (status,auditor,options) {
-                    if (status == '3' && '${check}' == '2' && (auditor == ${auditor} || ${auditor} == '1')) {
-                        //满足添加继续执行
-                        return options.fn(this);
+                Handlebars.registerHelper('state', function () {
+                    if (data.status == 1) {
+                        return '审核中';
+                    } else if (data.status == 2) {
+                        return '驳回';
                     } else {
-                        //不满足条件执行{{else}}部分
-                        return options.inverse(this);
+                        return '审核通过';
                     }
-                });
-                //注册状态模板
-                //状态:0-创建中,1-审核中,2-驳回,3-审核通过,4-废弃(删除);
-                Handlebars.registerHelper("checkStatus", function (status) {
-                    if (status == 0) {
-                        return new Handlebars.SafeString('<span>创建中</span>');
-                    } else if (status == 1) {
-                        return new Handlebars.SafeString('<span class="text-hong text-strong">待审核</span>');
-                    } else if (status == 2) {
-                        return new Handlebars.SafeString('<span class="text-zi text-strong">被驳回</span>');
-                    } else if (status == 3) {
-                        return new Handlebars.SafeString(' <span class="text-lan text-strong">已审核</span>');
-                    }
+
                 });
                 $("#super-tbody").html(listTemplate(listArray));
                 if (totalCount != total || totalCount == 0) {
