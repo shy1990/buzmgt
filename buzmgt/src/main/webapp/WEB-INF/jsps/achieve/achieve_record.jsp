@@ -46,7 +46,7 @@
       <td>
 				<span class="text-blue">{{formDate startDate}}-{{formDate endDate}}</span>
       </td>
-			<td>{{auditor}}</td>
+			<td>{{auditorName}}</td>
 			<td>
 			{{#myIf status 'BACK'}}
 			<span class="text-zi text-strong">被驳回</span>

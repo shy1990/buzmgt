@@ -200,7 +200,7 @@ var	base='<%=basePath%>';
                 <dl class="dl-horizontal">
                     <dt>审核人：</dt>
                     <dd>
-                        <div> <span class="text-gery tex">${award.auditor }</span></div>
+                        <div> <span class="text-gery tex">${award.auditorName }</span></div>
                     </dd>
                 </dl>
             </li>

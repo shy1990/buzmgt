@@ -14,7 +14,7 @@
 <base href="<%=basePath%>" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>提成设置（达量设置）</title>
+<title>提成设置（达量奖励）</title>
 
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -76,7 +76,7 @@ var	base='<%=basePath%>';
 
 	<div class="content main">
         <h4 class="page-header">
-            <i class="ico ico-tcsz"></i>提成设置 <a href="javascript:history.back();"><i
+            <i class="ico ico-tcsz"></i>提成设置（达量奖励） <a href="javascript:history.back();"><i
                 class="ico icon-back fl-right"></i></a>
             <input id="planId" hidden="hidden" value="${planId }">
             <input id="checkId" hidden="hidden" value="${check }">

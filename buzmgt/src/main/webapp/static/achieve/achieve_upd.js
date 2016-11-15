@@ -325,6 +325,7 @@ function toSubmit() {
         "endDate": $(".J_endDate").val(),
         "issuingDate": $(".J_issuingDate").val(),
         "auditor":  $(".J_auditor").val(),
+        "auditorName":  $(".J_auditor").find("option:selected").text(),
         "remark":  $(".J_remark").val()
 	};
 	//奖罚规则

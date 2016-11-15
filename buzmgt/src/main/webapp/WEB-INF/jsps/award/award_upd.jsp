@@ -348,16 +348,11 @@ var	base='<%=basePath%>';
 										class="icon-s icon-man"></i></span>
 									<!--<input type="text" class="form-control" placeholder="请选择指派审核人员" aria-describedby="basic-addon1">-->
 									<div class="inpt-search">
-										<select name="basic[]" class="form-control demo3 J_auditor">
-				
-											<option value="${award.auditor }" selected="selected">${award.auditor }</option>
-											<option value="UT">胡老大</option>
-											<option value="VT">横额啊</option>
-											<option value="VA">张二啦</option>
-											<option value="VA">王晓晓</option>
-											<option value="WV">杭大大</option>
-											<option value="WV">曹大大</option>
-											<option value="WI">槽大小</option>
+                                        <select class="form-control demo3 J_auditor">
+                                            <option value="${award.auditor }" selected="selected">${award.auditorName }</option>
+                                            <c:forEach var="manager" items="${channelManagers}" varStatus="status">
+                                                <option value="${manager.userId}">${manager.name}</option>
+                                            </c:forEach>
 										</select>
 									</div>
 								</div>
