@@ -13,6 +13,8 @@ import com.wangge.buzmgt.ordersignfor.service.OrderItemService;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.section.pojo.ChannelManager;
+import com.wangge.buzmgt.section.service.ChannelManagerService;
 import com.wangge.buzmgt.superposition.service.GoodsOrderService;
 import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import com.wangge.buzmgt.teammember.service.SalesManService;
@@ -67,6 +69,8 @@ public class AwardController {
   private LogService logService;
   @Autowired
   private AwardService awardServer;
+  @Autowired
+  private ChannelManagerService channelManagerService;
   @Autowired
   private MainPlanService mainPlanService;
   @Autowired
@@ -137,7 +141,9 @@ public class AwardController {
   public String showAddAward(@RequestParam String planId, Model model) {
 
     List<MachineType> machineTypes = machineTypeServer.findAll();
+	  List<ChannelManager> channelManagers = channelManagerService.findChannelManager("渠道总监");
     model.addAttribute("planId", planId);
+    model.addAttribute("channelManagers", channelManagers);
     model.addAttribute("machineTypes", machineTypes);
     return "award/award_add";
   }
