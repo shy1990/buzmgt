@@ -101,8 +101,9 @@ public class AwardController {
    * @throws
    */
   @RequestMapping(value = "/list", method = RequestMethod.GET)
-  public String showAwardList(String planId, Model model) {
+  public String showAwardList(String planId,String check, Model model) {
     model.addAttribute("planId", planId);
+	  model.addAttribute("check", check);
     return "award/award_list";
   }
 
@@ -314,6 +315,12 @@ public class AwardController {
   public JSONObject auditAward(@PathVariable("awardId") Award award, @RequestParam("status") String status) {
     JSONObject json = new JSONObject();
     try {
+	    String userId = ((User) SecurityUtils.getSubject().getPrincipal()).getId();
+	    if(!userId.equals(award.getAuditor())){
+		    json.put("result", "failure");
+		    json.put("message", "没有权限请联系管理员！");
+		    return json;
+	    }
       if (ObjectUtils.equals(award, null)) {
         json.put("result", "failure");
         json.put("message", "信息有误！");

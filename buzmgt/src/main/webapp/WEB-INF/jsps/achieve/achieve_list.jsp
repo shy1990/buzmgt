@@ -191,7 +191,7 @@
             <li title="superposition"><a href="/superposition/superposition?planId=${planId}&check=${check}">叠加设置</a></li>
 
         </c:if>
-        <li title="award"><a href="/award/list?planId=${planId}">达量奖励</a></li>
+        <li title="award"><a href="/award/list?planId=${planId}&check=${check}">达量奖励</a></li>
     </ul>
     <div class="row">
         <!--col begin-->
