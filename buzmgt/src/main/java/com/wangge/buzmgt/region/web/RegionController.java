@@ -118,7 +118,7 @@ public class RegionController {
     Collection<Region> collectionRegion = new ArrayList<Region>();
     Region region = regionService.findListRegionbyid(pid);
     Long maxid = getMaxId(pid);
-    Region newRegion = new Region(String.valueOf(maxid + 1), name, region.getType());
+    Region newRegion = new Region(String.valueOf(maxid), name, region.getType());
     newRegion.setParent(region);
     newRegion.setChildren(collectionRegion);
     newRegion.setStarsLevel(0);
@@ -253,10 +253,12 @@ public class RegionController {
     }
     Region region = regionService.findListRegionbyid(parentid);
     Long maxid = getMaxId(parentid);
-    Region entity = new Region(String.valueOf(maxid + 1), name, region.getType());
+    Region entity = new Region(String.valueOf(maxid), name, region.getType());
     entity.setCoordinates(pointbuf.toString());
     entity.setParent(regionService.findListRegionbyid(parentid));
     entity.setCenterPoint(centerPoint);
+    entity.setStarsLevel(0);
+    entity.setNamepath(region.getNamepath()+name);
     regionService.saveRegion(entity);
     return true;
     
