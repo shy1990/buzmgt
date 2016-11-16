@@ -80,7 +80,7 @@
                     data: $.toJSON(priceRangeArray),//将Json对象序列化成Json字符串，toJSON()需要引用jquery.json.min.js
                     success: function (data) {
                         alert("创建成功");
-                        window.location.href = "production/" + data.id+'?planId='+data.planId;
+                        window.location.href = "production/" + data.id+'?planId='+data.planId + '&check=' + ${check};
                     },
                     error: function () {
                         alert("系统故障");

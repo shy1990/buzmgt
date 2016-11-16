@@ -14,7 +14,7 @@
 <base href="<%=basePath%>" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>提成设置（达量设置）</title>
+<title>提成设置（达量奖励）</title>
 
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -75,31 +75,20 @@ var	base='<%=basePath%>';
 <body>
 
 	<div class="content main">
-		<jsp:include page="../achieve/income_set_menu.jsp"></jsp:include>
+        <h4 class="page-header">
+            <i class="ico ico-tcsz"></i>提成设置（达量奖励） <a href="javascript:history.back();"><i
+                class="ico icon-back fl-right"></i></a>
+            <input id="planId" hidden="hidden" value="${planId }">
+            <input id="checkId" hidden="hidden" value="${check }">
+        </h4>
+		<%--<jsp:include page="../achieve/income_set_menu.jsp"></jsp:include>--%>
+        <%--<input id="checkId" hidden="hidden" value="${check }">--%>
 		<div class="row">
 			<!--col begin-->
 			<div class="col-md-12">
 				<!--orderbox begin-->
 				<div class="order-box">
 					<!--左侧导航开始-->
-<!-- 					<div style="padding-left: 0"> -->
-<!-- 						<div class=" sidebar left-side" -->
-<!-- 							style="padding-top: 0; margin-top: 5px"> -->
-<!-- 							<ul class="nav nav-sidebar menu J_MachineType"> -->
-<!-- 								<li><i class="ico ico-fl"></i>请选择类别</li> -->
-<%-- 								<c:forEach items="${machineTypes}" var="type" varStatus="status"> --%>
-<%-- 								  <c:choose> --%>
-<%-- 								  	<c:when test="${status.index eq 0 }"> --%>
-<%-- 											<li class="active" title="${type.code }">${type.name }</li> --%>
-<%-- 								  	</c:when> --%>
-<%-- 								  	<c:otherwise> --%>
-<%-- 											<li title="${type.code }">${type.name }</li> --%>
-<%-- 								  	</c:otherwise> --%>
-<%-- 								  </c:choose> --%>
-<%-- 								</c:forEach> --%>
-<!-- 							</ul> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
 					<!--左侧导航结束-->
 					<div class="tab-content">
 						<!--右侧内容开始-->
@@ -108,11 +97,21 @@ var	base='<%=basePath%>';
 						<!--达量奖励设置-->
 						<div class="tab-pane fade in active right-body" id="dljl">
 							<div class="ph-btn-set">
-								<a href="javascript:add();" class="btn ph-blue"> <i class="ico icon-xj"></i>
-									<span class="text-gery">新建奖励</span>
-								</a> <a href="JavaScript:record();" class="btn ph-blue" style="margin-right: 30px">
-									<i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
-								</a>
+                                <c:if test="${check == '2'}">
+                                    <a href="javascript:add();" class="btn ph-blue"> <i class="ico icon-xj"></i>
+                                        <span class="text-gery">新建奖励</span>
+                                    </a>
+                                </c:if>
+                                <c:if test="${check == '2'}">
+                                    <a href="JavaScript:record();" class="btn ph-blue" style="margin-right: 30px">
+                                        <i class="ico icon-jl"></i> <span class="text-gery">设置记录</span>
+                                    </a>
+                                </c:if>
+                                <c:if test="${check == 1}">
+                                    <a href="JavaScript:recordForAudit();" class="btn ph-blue" style="margin-right: 30px">
+                                        <i class="ico icon-jl"></i> <span class="text-gery">审核</span>
+                                    </a>
+                                </c:if>
 								<div class="link-posit pull-right">
 									<input id="searchGoodsname" class="input-search" type="text"
 										placeholder="模糊查询请输入品牌型号">

@@ -19,6 +19,10 @@ function record(){
 	var planId = $("#planId").val();
 	window.location.href = base + "award/record?planId="+planId;
 }
+function recordForAudit(){
+	var planId = $("#planId").val();
+	window.location.href = base + "award/recordForAudit?planId="+planId;
+}
 /**
  * 删除
  * @param awardId

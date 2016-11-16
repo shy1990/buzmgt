@@ -1,5 +1,5 @@
 /**
- * 达量设置添加 2016/08/30 ChenGuop
+ * 叠加设置
  *
  */
 $(function () {
@@ -481,7 +481,8 @@ function toSubmit() {
         "endDate": $(".J_endDate").val(),
         "giveDate": $(".J_issuingDate").val(),
         "auditor": $(".J_auditor").val(),
-        "remark": $(".J_remark").val()
+        "remark": $(".J_remark").val(),
+        "auditorName":$(".J_auditor").find("option:selected").text()
     };
 
     /*
@@ -531,7 +532,7 @@ function toSubmit() {
         success: function (result) {
             if (result.status == 1) {
                 alert('添加成功');
-                window.location.href = 'superposition/findAll?planId=' + planId;
+                window.location.href = 'superposition/listAll?planId='+planId + '&check=' + check;
             }
         },
         error: function () {

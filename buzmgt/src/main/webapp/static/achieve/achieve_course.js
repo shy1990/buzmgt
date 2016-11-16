@@ -5,32 +5,6 @@ $(function () {
     findAchieveCourseList();// 查询列表
 })
 /**
- * 审核操作
- * @param achieveId
- * @param status
- */
-function auditAchieve(achieveId, status) {
-    if (confirm("确认操作？")) {
-        $.ajax({
-            url: base + "achieve/" + achieveId + "?status=" + status,
-            type: "PATCH",
-            dataType: "JSON",
-            success: function (data) {
-                if (data.result == "success") {
-                    alert(data.message);
-                    window.location.reload();
-                    return false;
-                }
-                alert(data.message);
-            },
-            error: function (data) {
-                alert("网络异常，稍后重试！");
-            }
-        })
-    }
-    return;
-}
-/**
  * 检索模糊查询
  */
 function goSearchSalesman() {
@@ -55,6 +29,12 @@ function initExcelExport() {
         // window.location.href = base + "achieve/export" + "?" + param;
     });
 }
+/**
+ * 查看明细
+ * @param userId
+ * @param achieveId
+ * @constructor
+ */
 function CheckDetails(userId, achieveId) {
     window.location.href = base + "achieve/detail?userId=" + userId + "&achieveId=" + achieveId;
 }

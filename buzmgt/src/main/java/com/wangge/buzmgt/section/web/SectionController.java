@@ -83,9 +83,10 @@ public class SectionController {
      * @return
      */
     @RequestMapping(value = "addPriceRanges", method = RequestMethod.GET)
-    public String toAddJSP(String type, String planId, Model model) {
+    public String toAddJSP(String type, String planId,String check, Model model) {
         model.addAttribute("type", type);
         model.addAttribute("planId", planId);
+        model.addAttribute("check",check);
         return "section/add_form";
     }
 
@@ -106,7 +107,6 @@ public class SectionController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
         map.put("planId", planId);
-
         return map;
     }
 
@@ -118,10 +118,11 @@ public class SectionController {
      * @return
      */
     @RequestMapping(value = "production/{id}", method = RequestMethod.GET)
-    public String addPriceRanges(@PathVariable("id") Production production, String planId, Model model) {
+    public String addPriceRanges(@PathVariable("id") Production production, String planId,String check, Model model) {
 
         model.addAttribute("production", production);
         model.addAttribute("planId", planId);
+        model.addAttribute("check",check);
         return "section/add_form2";
     }
 

@@ -13,6 +13,8 @@ import com.wangge.buzmgt.ordersignfor.service.OrderItemService;
 import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.section.pojo.ChannelManager;
+import com.wangge.buzmgt.section.service.ChannelManagerService;
 import com.wangge.buzmgt.superposition.service.GoodsOrderService;
 import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import com.wangge.buzmgt.teammember.service.SalesManService;
@@ -68,6 +70,8 @@ public class AwardController {
   @Autowired
   private AwardService awardServer;
   @Autowired
+  private ChannelManagerService channelManagerService;
+  @Autowired
   private MainPlanService mainPlanService;
   @Autowired
   private MachineTypeService machineTypeServer;
@@ -97,8 +101,9 @@ public class AwardController {
    * @throws
    */
   @RequestMapping(value = "/list", method = RequestMethod.GET)
-  public String showAwardList(String planId, Model model) {
+  public String showAwardList(String planId,String check, Model model) {
     model.addAttribute("planId", planId);
+	  model.addAttribute("check", check);
     return "award/award_list";
   }
 
@@ -137,7 +142,9 @@ public class AwardController {
   public String showAddAward(@RequestParam String planId, Model model) {
 
     List<MachineType> machineTypes = machineTypeServer.findAll();
+	  List<ChannelManager> channelManagers = channelManagerService.findChannelManager("渠道总监");
     model.addAttribute("planId", planId);
+    model.addAttribute("channelManagers", channelManagers);
     model.addAttribute("machineTypes", machineTypes);
     return "award/award_add";
   }
@@ -308,6 +315,12 @@ public class AwardController {
   public JSONObject auditAward(@PathVariable("awardId") Award award, @RequestParam("status") String status) {
     JSONObject json = new JSONObject();
     try {
+	    String userId = ((User) SecurityUtils.getSubject().getPrincipal()).getId();
+	    if(!userId.equals(award.getAuditor())){
+		    json.put("result", "failure");
+		    json.put("message", "没有权限请联系管理员！");
+		    return json;
+	    }
       if (ObjectUtils.equals(award, null)) {
         json.put("result", "failure");
         json.put("message", "信息有误！");

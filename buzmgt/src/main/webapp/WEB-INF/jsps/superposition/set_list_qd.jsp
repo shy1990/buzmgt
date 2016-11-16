@@ -39,7 +39,7 @@
     </style>
     <script type="text/javascript">
         function see(id) {
-            window.location.href = 'find/'+id;
+            window.location.href = id + '?check=' + ${check};
         }
         function seeProgress(planId, id) {
             window.location.href = 'progress?planId=' + planId + '&id=' + id;
@@ -91,6 +91,7 @@
                 |{{taskThree}}
                 {{/if}}
             </td>
+            <td>{{auditorName}}</td>
             <td>
                 {{#if implDate}}
                 {{implDate}} -- {{endDate}}
@@ -98,21 +99,21 @@
             </td>
             <td>{{giveDate}}</td>
             <td>
-                {{transformat checkStatus}}
+                {{checkStatus checkStatus}}
             </td>
-
-
             <td>{{endDate}}</td>
             <td>
                 <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
                 </button>
 
-                {{#compare checkStatus 3}}
+                {{#checkRecord checkStatus auditor}}
                 <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="seeProgress('{{planId}}', '{{id}}')">进程
                 </button>
                 <button class="btn btn-sm btn-zz " data-toggle="modal" data-target="#" onclick="stop('{{id}}')">终止
                     {{else}}
-                    {{/compare}}
+                    <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="seeProgress('{{planId}}', '{{id}}')">进程
+                    </button>
+                    {{/checkRecord}}
                 </button>
             </td>
         </tr>
@@ -148,6 +149,7 @@
                 |{{taskThree}}
                 {{/if}}
             </td>
+            <td>{{auditorName}}</td>
             <td>
                 {{#if implDate}}
                 {{implDate}} -- {{endDate}}
@@ -229,6 +231,7 @@
                                     <th>序号</th>
                                     <th>名称</th>
                                     <th>指标</th>
+                                    <th>审核人</th>
                                     <th>方案起止日期</th>
                                     <th>区佣金发放日</th>
                                     <th>状态</th>
@@ -258,6 +261,7 @@
                                     <th>序号</th>
                                     <th>名称</th>
                                     <th>指标</th>
+                                    <th>审核人</th>
                                     <th>方案起止日期</th>
                                     <th>区佣金发放日</th>
                                     <th>状态</th>
@@ -340,26 +344,6 @@
                 totalCount = data.totalElements;
                 limit = data.size;
                 var listTemplate = Handlebars.compile($("#list-template").html());
-
-
-                Handlebars.registerHelper("transformat", function (value) {
-                    if (value == 1) {
-                        return "审核中";
-                    } else if (value == 2) {
-                        return '驳回';
-                    } else if (value == 3) {
-                        return '审核通过';
-                    }
-                });
-                Handlebars.registerHelper("compare", function (v1, v2, options) {
-                    if (v1 == 3) {
-                        //满足添加继续执行
-                        return options.fn(this);
-                    } else {
-                        //不满足条件执行{{else}}部分
-                        return options.inverse(this);
-                    }
-                });
                 $("#list_now").html(listTemplate(listArray));
                 if (totalCount != total || totalCount == 0) {
                     total = totalCount;
@@ -371,6 +355,29 @@
         });
 
     }
+    //注册状态模板
+    //状态:0-创建中,1-审核中,2-驳回,3-审核通过,4-废弃(删除);
+    Handlebars.registerHelper("checkStatus", function (status) {
+        if (status == 0) {
+            return new Handlebars.SafeString('<span>创建中</span>');
+        } else if (status == 1) {
+            return new Handlebars.SafeString('<span class="text-hong text-strong">待审核</span>');
+        } else if (status == 2) {
+            return new Handlebars.SafeString('<span class="text-zi text-strong">被驳回</span>');
+        } else if (status == 3) {
+            return new Handlebars.SafeString(' <span class="text-lan text-strong">已审核</span>');
+        }
+    });
+    //判断审核权限
+    Handlebars.registerHelper("checkRecord", function (status,auditor,options) {
+        if (status == '3' && '${check}' == '2' && (auditor == ${auditor} || ${auditor} == '1')) {
+            //满足添加继续执行
+            return options.fn(this);
+        } else {
+            //不满足条件执行{{else}}部分
+            return options.inverse(this);
+        }
+    });
     //分页
     function initPaging() {
         $('#callBackPager').extendPagination({
