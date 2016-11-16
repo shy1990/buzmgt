@@ -53,7 +53,7 @@ public interface BaseSalaryRepository extends JpaRepository<BaseSalary, Long>, J
    * @return
    * @since JDK 1.8
    */
-  @Query("select s from BaseSalary s where ((s.deldate is null and s.newdate<?1)or "
+  @Query("select s from BaseSalary s where ((s.deldate is null and s.newdate>?4)or "
       + "(s.flag=?2 and s.deldate<?1 and s.deldate>?4)) and  s.userId=?3")
   Page<BaseSalary> findbyMonthAndUser(Date delDate, FlagEnum flag, String userId, Date startDate, Pageable page);
 }
