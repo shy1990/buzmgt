@@ -92,7 +92,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         repository.save(superposition);
         //修改完成后添加定时任务
         if ("3".equals(checkStatus)) {
-            jobService.saveJobTask(20, superposition.getPlanId(), superposition.getId(), DateUtil.getPreMonthDate(superposition.getGiveDate(), -1));
+            jobService.saveJobTask(20, superposition.getPlanId(), superposition.getId(),  DateUtil.getPreMonthAndDay(superposition.getGiveDate(), 1));
         }
         logService.log(null, "修改叠加方案状态: " + checkStatus + "(注:4-终止/逻辑删除,2-驳回,3-审核通过)", Log.EventType.UPDATE);
     }
