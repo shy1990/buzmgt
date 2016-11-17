@@ -1,6 +1,8 @@
 package com.wangge.buzmgt.brandincome.repository;
 
 import com.wangge.buzmgt.brandincome.entity.BrandIncome;
+import com.wangge.buzmgt.common.FlagEnum;
+import com.wangge.buzmgt.goods.entity.Brand;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,8 +30,11 @@ public interface BrandIncomeRepository extends JpaRepository<BrandIncome, Long>,
                   " where to_char(g.PAY_TIME, 'yyyy-mm-dd') between\n" +
                   "       to_char(b.start_date, 'yyyy-mm-dd') and\n" +
                   "       to_char(b.end_date, 'yyyy-mm-dd')\n" +
-                  "   and g.goods_id = ?1", nativeQuery = true)
-  int findCycleSales(String goodId);
+                  "   and g.goods_id = ?1 and b.id = ?2", nativeQuery = true)
+  int findCycleSales(String goodId,long id);
 
   BrandIncome findByGoodIdAndPlanId(String goodId,Long planId);
+
+  @Query("select b from BrandIncome b where b.id = (select max(t.id) from BrandIncome t where t.goodId = ?1 and t.planId = ?2 and t.flag = ?3)")
+  BrandIncome findByGoodIdAndPlanIdAndStatus(String goodId, long planId, FlagEnum flagEnum);
 }

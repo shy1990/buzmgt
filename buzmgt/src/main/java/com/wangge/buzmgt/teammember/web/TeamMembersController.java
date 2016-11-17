@@ -186,6 +186,7 @@ public class TeamMembersController {
       salesman.setRegdate(new Date());
       salesman.setUser(u);
       salesman.setIsPrimaryAccount(1);
+      salesman.setLevelName("小学生");//设置默认业务等级
       salesManService.addSalesman(salesman);
     //  return "redirect:/salesman/salesManList";
 
@@ -335,7 +336,7 @@ public class TeamMembersController {
     * getSaojiedataMap:(异步获取扫街详情地图数据). <br/>
     *
     * @author peter
-    * @param saojie
+    * @param salesMan
     * @param regionId
     * @return
     * @since JDK 1.8
@@ -359,7 +360,7 @@ public class TeamMembersController {
     * getSojieDtaList:(加载扫街详情列表). <br/>
     *
     * @author Administrator
-    * @param userId
+    * @param salesMan
     * @param regionId
     * @param page
     * @param size

@@ -84,8 +84,9 @@ function initSelectBrand() {
  * @param brandId
  */
 function findGoods(brandId) {
+    var machineType = $('.J_machineType').val();
     $.ajax({
-        url: base + 'goods/' + brandId,
+        url : base + 'goods/' + machineType + '/' + brandId,
         type: 'GET',
         dateType: 'JSON',
         success: function (data) {
@@ -145,6 +146,7 @@ function toSubmit() {
                     window.location.href = base + "areaAttr/setting?ruleId=" + data.result.id + '&type=BRANDMODEL';
                 } else {
                     alert(data.errorMsg);
+                    window.location.reload();
                 }
             },
             error: function () {

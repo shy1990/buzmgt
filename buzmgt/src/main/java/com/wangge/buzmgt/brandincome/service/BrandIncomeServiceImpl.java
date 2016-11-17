@@ -310,7 +310,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
             "where to_char(g.PAY_TIME, 'yyyy-mm-dd') between\n" +
             "       to_char(b.start_date, 'yyyy-mm-dd') and\n" +
             "       to_char(b.end_date, 'yyyy-mm-dd')\n" +
-            "   and g.goods_id = '" + brandIncome.getGoodId() + "'";
+            "   and b.id = '" + brandIncome.getId() + "'";
 
     String starsLevel = request.getParameter("starsLevel");
     if (StringUtils.isNotEmpty(starsLevel)) {
@@ -359,7 +359,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
 
   @Override
   public int findCycleSales(BrandIncome brandIncome) {
-    return brandIncomeRepository.findCycleSales(brandIncome.getGoodId());
+    return brandIncomeRepository.findCycleSales(brandIncome.getGoodId(),brandIncome.getId());
   }
 
   @Override
@@ -458,5 +458,10 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
 
   public AreaAttribute getAreaAttribute(String regionId,Long ruleId){
     return areaAttributeService.findByRegionIdAndRuleId(regionId,ruleId);
+  }
+
+  @Override
+  public BrandIncome findByGoodIdAndPlanIdAndStatus(String goodId,long planId) {
+    return brandIncomeRepository.findByGoodIdAndPlanIdAndStatus(goodId,planId,FlagEnum.NORMAL);
   }
 }

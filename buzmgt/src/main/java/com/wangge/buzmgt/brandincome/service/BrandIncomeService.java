@@ -143,4 +143,15 @@ public interface BrandIncomeService {
    * @throws
    */
   Boolean realTimeBrandIncomeOut(BrandIncome brandIncome,int num,String orderNo,String goodId, String userId,String regionId,double unitPrice);
+
+  /**
+   *
+   * @Title: findByGoodIdAndPlanIdAndStatus
+   * @Description: 根据goodId和planId和status查询当前品牌型号
+   * @param @param brandIncome
+   * @param @return    设定文件
+   * @return int    返回类型
+   * @throws
+   */
+  BrandIncome findByGoodIdAndPlanIdAndStatus(String goodId,long planId);
 }
