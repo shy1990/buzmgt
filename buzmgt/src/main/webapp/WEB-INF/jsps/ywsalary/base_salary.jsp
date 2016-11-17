@@ -168,10 +168,10 @@
 							<div class="form-group">
 								<label class="col-sm-4 control-label">基础薪资：</label>
 								<div class="col-sm-7">
-									<div class="input-group are-line">
+									<div class="input-group are-line" style="margin-left: 5px;">
 										<span class="input-group-addon"><i class="icon icon-xz"></i></span>
-										<input id="salary" type="number" style="width: 200px"
-											class="form-control input-h" aria-describedby="basic-addon1">
+										<input id="salary" type="number" 
+											class="form-control input-h" style="width: 200px;font-size:16px" aria-describedby="basic-addon1">
 									</div>
 									<div class="text-strong"
 										style="float: right; margin-top: -20px">元</div>
@@ -187,7 +187,7 @@
 											<span class="input-group-addon " id="basic-addon1"><i
 												class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
 											<input id="newdate" type="text"
-												class="form-control form_datetime input-sm"
+												class="form-control form_datetime input-sm" style="font-size:16px"
 												placeholder="年-月-日" readonly="readonly" />
 										</div>
 									</div>
