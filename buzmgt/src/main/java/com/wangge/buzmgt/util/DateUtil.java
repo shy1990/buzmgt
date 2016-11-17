@@ -252,7 +252,7 @@ public class DateUtil {
   public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");// 定义日期显示格式
   
   /**
-   * 得到前一个月的时间
+   * 得到前一个月的时间,形式为 yyyy-mm-01
    * 
    * @param date
    * @param flag
@@ -260,17 +260,23 @@ public class DateUtil {
    * @return
    */
   public static String getPreMonth(Date date, int flag) {
-    Calendar calendar = new GregorianCalendar();
-    calendar.setTime(date);
-    calendar.add(Calendar.MONTH, flag);// 把月份往前移一个月
+    Calendar calendar = getCalMonth(date, flag);// 把月份往前移一个月
     return sdf.format(calendar.getTime()); //
   }
+  
+  private static Calendar getCalMonth(Date date, int flag) {
+    Calendar calendar = new GregorianCalendar();
+    calendar.setTime(date);
+    calendar.add(Calendar.MONTH, flag);
+    return calendar;
+  }
+  
   /**
-   * 得到前一个月的时间
+   * 得到前一个月的时间,形式为 yyyy-mm-01
    * 
    * @param date
    * @param flag
-   *          正数为前移,负数为后移
+   *          正数加 flag个月,负数为减flag个月
    * @return
    */
   public static Date getPreMonthDate(Date date, int flag) {
@@ -281,6 +287,13 @@ public class DateUtil {
       LogUtil.error("获取下个月的时间失败", e);
     }
     return nextMonth;
+  }
+  
+  /**
+   * api同上,但日子会保留,形式为yyyy-mm-dd
+   */
+  public static Date getPreMonthAndDay(Date date, int flag) {
+    return getCalMonth(date, flag).getTime();
   }
   
   /***
@@ -809,18 +822,17 @@ public class DateUtil {
     return nowBegin.getTime() <= nowEnd.getTime();
     
   }
-
+  
   /**
    * 名称: compareDate 功能: 比较两个日期大小 参数: @param beginDate 参数: @param endDate 注:
    * 第二个参数大 为true
    */
-  public static boolean compareDate(Date beginDate, Date endDate){
-
+  public static boolean compareDate(Date beginDate, Date endDate) {
+    
     return beginDate.getTime() <= endDate.getTime();
-
+    
   }
-
-
+  
   /**
    * 获取十分钟之前的时间
    * 
