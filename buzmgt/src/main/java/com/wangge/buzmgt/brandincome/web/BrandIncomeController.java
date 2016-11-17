@@ -8,6 +8,7 @@ import com.wangge.buzmgt.brandincome.entity.BrandIncome.BrandIncomeStatus;
 import com.wangge.buzmgt.brandincome.entity.BrandIncomeVo;
 import com.wangge.buzmgt.brandincome.service.BrandIncomeService;
 import com.wangge.buzmgt.common.FlagEnum;
+import com.wangge.buzmgt.goods.entity.Brand;
 import com.wangge.buzmgt.income.main.entity.MainIncomePlan;
 import com.wangge.buzmgt.income.main.service.HedgeService;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
@@ -96,7 +97,7 @@ public class BrandIncomeController {
 
     List<BrandType> brandTypes = mainPlanService.findCodeByMachineType(machineType);
     MainIncomePlan mainIncomePlan = mainPlanService.findById(Long.valueOf(planId));
-    List<ChannelManager> channelManagers = channelManagerService.findChannelManager(null);
+    List<ChannelManager> channelManagers = getChannelManager();
     model.addAttribute("channelManagers",channelManagers);
     model.addAttribute("createTime",mainIncomePlan.getCreatetime());
     model.addAttribute("fqTime",mainIncomePlan.getFqtime());
@@ -104,6 +105,10 @@ public class BrandIncomeController {
     model.addAttribute("brandTypes", brandTypes);
     model.addAttribute("machineType", machineType);
     return "brandincome/brand_add";
+  }
+
+  public List<ChannelManager> getChannelManager(){
+    return channelManagerService.findChannelManager(null);
   }
 
   /**
@@ -115,16 +120,25 @@ public class BrandIncomeController {
   public JsonResponse saveBrandIncome(@RequestBody BrandIncome brandIncome) {
     JsonResponse json = new JsonResponse();
     try {
-      String startDate = DateUtil.date2String(brandIncome.getStartDate());
-      String endDate = DateUtil.date2String(brandIncome.getEndDate());
-      brandIncome.setStartDate(DateUtil.string2Date(startDate + TIME_MIN));
-      brandIncome.setEndDate(DateUtil.string2Date(endDate + TIME_MAX));
-      brandIncome.setCreateDate(new Date());
-      brandIncome = brandIncomeService.save(brandIncome);
-      logService.log(null, brandIncome, Log.EventType.SAVE);
-      json.setStatus(JsonResponse.Status.SUCCESS);
-      json.setSuccessMsg("保存成功!");
-      json.setResult(brandIncome);
+      BrandIncome bi = brandIncomeService.findByGoodIdAndPlanIdAndStatus(brandIncome.getGoodId(),brandIncome.getPlanId());
+      if (BrandIncomeStatus.WAIT.equals(bi.getStatus())){
+        json.setStatus(JsonResponse.Status.ERROR);
+        json.setErrorMsg("当前品牌型号待审核中!");
+      }else if (BrandIncomeStatus.OVER.equals(bi.getStatus()) && DateUtil.compareDate(bi.getStartDate(),new Date()) && DateUtil.compareDate(new Date(),bi.getEndDate())){
+        json.setStatus(JsonResponse.Status.ERROR);
+        json.setErrorMsg("当前品牌型号正在使用中!");
+      }else {
+        String startDate = DateUtil.date2String(brandIncome.getStartDate());
+        String endDate = DateUtil.date2String(brandIncome.getEndDate());
+        brandIncome.setStartDate(DateUtil.string2Date(startDate + TIME_MIN));
+        brandIncome.setEndDate(DateUtil.string2Date(endDate + TIME_MAX));
+        brandIncome.setCreateDate(new Date());
+        brandIncome = brandIncomeService.save(brandIncome);
+        logService.log(null, brandIncome, Log.EventType.SAVE);
+        json.setStatus(JsonResponse.Status.SUCCESS);
+        json.setSuccessMsg("保存成功!");
+        json.setResult(brandIncome);
+      }
     } catch (Exception e) {
       LogUtil.info(e.getMessage());
       json.setStatus(JsonResponse.Status.ERROR);
@@ -435,6 +449,8 @@ public class BrandIncomeController {
   @RequestMapping(value = "/toUpdate/{brandId}", method = RequestMethod.GET)
   public String update(@PathVariable(value = "brandId") BrandIncome brandIncome,@RequestParam String planId, @RequestParam String machineType, Model model) {
     List<AreaAttribute> areaAttributes = areaAttributeService.findByRuleIdAndTypeAndDisabled(brandIncome.getId(), PlanType.BRANDMODEL);
+    List<ChannelManager> channelManagers = getChannelManager();
+    model.addAttribute("channelManagers",channelManagers);
     model.addAttribute("areaAttributes", areaAttributes);
     model.addAttribute("brandIncome", brandIncome);
     model.addAttribute("planId", planId);
