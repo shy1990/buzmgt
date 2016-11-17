@@ -46,7 +46,7 @@
       <td>
 				<span class="text-blue">{{formDate startDate}}-{{formDate endDate}}</span>
       </td>
-			<td>{{auditor}}</td>
+			<td>{{auditorName}}</td>
 			<td>
 			{{#myIf status 'BACK'}}
 			<span class="text-zi text-strong">被驳回</span>
@@ -69,10 +69,10 @@
       <td>
         <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
 				<%--{{#isAuditor auditor}} --%>
-				<%--{{#myIf status 'WAIT'}}--%>
+		{{#myIf status 'WAIT'}}
         <button class="btn bnt-sm bnt-jc" onclick="auditAchieve({{achieveId}},'OVER')">审核</button>
         <button class="btn bnt-sm btn-sc" onclick="auditAchieve({{achieveId}},'BACK')">驳回</button>
-				<%--{{/myIf}}--%>
+		{{/myIf}}
 				<%--{{/isAuditor}}--%>
       </td>
     </tr>
@@ -228,7 +228,7 @@ var	base='<%=basePath%>';
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script type="text/javascript"
-<!-- 		src="static/achieve/achieve_record.js" charset="utf-8"></script> -->
+            src="static/achieve/achieve_record.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(".J_MachineType li").on("click",function(){
 			$(this).addClass("active");

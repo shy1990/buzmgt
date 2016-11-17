@@ -14,7 +14,7 @@
 <base href="<%=basePath%>" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>提成设置</title>
+<title>提成设置（达量奖励）</title>
 
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -27,12 +27,12 @@
 <link rel="stylesheet" type="text/css" href="static/bootStrapPager/css/page.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
-<script id="achieve-table-template" type="text/x-handlebars-template">
+<script id="award-table-template" type="text/x-handlebars-template">
 	{{#if content}}
 	{{#each content}}
    <tr>
       <td>{{addOne @index}}</td>
-      <td>{{good.name}}</td>
+      <td>{{#each awardGoods}}{{good.name}}+{{/each}}</td>
       <td class="reason">
 				<span class="text-red">{{numberFirst}} 
 			{{#if numberSecond}}
@@ -46,7 +46,7 @@
       <td>
 				<span class="text-blue">{{formDate startDate}}-{{formDate endDate}}</span>
       </td>
-			<td>{{auditor}}</td>
+			<td>{{auditorName}}</td>
 			<td>
 			{{#myIf status 'BACK'}}
 			<span class="text-zi text-strong">被驳回</span>
@@ -67,13 +67,11 @@
 			</td>
       <td>{{formDate createDate}}</td>
       <td>
-        <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
-				{{#isAuditor auditor}} 
-				{{#myIf status 'WAIT'}}
-        <button class="btn bnt-sm bnt-jc" onclick="auditAchieve({{achieveId}},'OVER')">审核</button>
-        <button class="btn bnt-sm btn-sc" onclick="auditAchieve({{achieveId}},'BACK')">驳回</button>
-				{{/myIf}}
-				{{/isAuditor}}
+        <a href="/award/list/{{awardId}}" class="btn bnt-sm bnt-ck">查看</a>
+        {{#myIf status 'WAIT'}}
+          <button class="btn bnt-sm bnt-jc" onclick="auditAchieve({{awardId}},'OVER')">审核</button>
+          <button class="btn bnt-sm btn-sc" onclick="auditAchieve({{awardId}},'BACK')">驳回</button>
+        {{/myIf}}
       </td>
     </tr>
 	{{/each}}
@@ -95,7 +93,7 @@ var	base='<%=basePath%>';
 
 <div class="content main">
     <h4 class="page-header">
-        <i class="ico ico-tcsz"></i>设置记录
+        <i class="ico ico-tcsz"></i>审核记录（达量奖励）
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
         <input id="planId" hidden="hidden" value="${planId }">
         <input id="userId" hidden="hidden" value="${userId }">
@@ -228,7 +226,7 @@ var	base='<%=basePath%>';
 	<script type="text/javascript"
 		src="static/bootStrapPager/js/extendPagination.js"></script>
 	<script type="text/javascript"
-<!-- 		src="static/achieve/achieve_record.js" charset="utf-8"></script> -->
+        src="static/award/award_record.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(".J_MachineType li").on("click",function(){
 			$(this).addClass("active");

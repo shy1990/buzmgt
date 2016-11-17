@@ -66,7 +66,6 @@ function goSearch() {
 			type : "GET",
 			dateType : "JSON",
 			success : function(data) {
-				console.info(data);
 				if (data.length > 0) {
 					var ids = data.join(',');
 					SearchData['sc_IN_brand.id'] = ids;
@@ -175,21 +174,18 @@ function initSearchData() {
 function checkTitle(title) {
 
 	if ("going" == title) {
-		console.info(title);
 		delete SearchData['sc_LTE_endDate'];
 		SearchData['sc_GTE_endDate'] = getTodayDate();
 		return false;
 	}
 	delete SearchData['sc_GTE_endDate'];
 	SearchData['sc_LTE_endDate'] = getTodayDate();
-	console.info(title);
 	return false;
 }
 
 function findAchieveList(page) {
 	page = page == null || page == '' ? 0 : page;
 	SearchData['page'] = page;
-	console.info(SearchData);
 	var $planId = $("#planId").val();
 	$.ajax({
 		url : "/award/" + $planId,
@@ -254,7 +250,7 @@ function initPaging(data) {
 		showCount : 5,
 		limit : limit,
 		callback : function(curr, limit, totalCount) {
-			findCheckCashList(curr - 1);
+            findAchieveList(curr - 1);
 		}
 	});
 }
@@ -290,7 +286,6 @@ Handlebars.registerHelper('isAuditor', function(value, options) {
  */
 Handlebars.registerHelper('compareDate', function(startDate, endDate, options) {
 	var nowDate = new Date().getTime();
-	console.info(startDate + "," + endDate)
 	if (startDate <= nowDate && endDate >= nowDate) {
 		// 满足添加继续执行
 		return options.fn(this);

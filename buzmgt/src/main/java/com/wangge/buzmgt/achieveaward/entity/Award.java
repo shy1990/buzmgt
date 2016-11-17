@@ -61,6 +61,7 @@ public class Award implements Serializable {
 	private Date endDate; // 结束日期
 	private Date issuingDate; // 提成发放日期
 	private String auditor; // 审核人
+	private String auditorName; // 审核人
 	private String remark; // 备注
 	private Date createDate; // 创建日期
 	@Enumerated(EnumType.STRING)
@@ -211,11 +212,19 @@ public class Award implements Serializable {
 		this.groupNumbers = groupNumbers;
 	}
 
+	public String getAuditorName() {
+		return auditorName;
+	}
+
+	public void setAuditorName(String auditorName) {
+		this.auditorName = auditorName;
+	}
+
 	@Override
 	public String toString() {
 		return "Award [achieveId=" + awardId + ",numberFirst=" + numberFirst + ", numberSecond="
 						+ numberSecond + ", numberThird=" + numberThird + ", startDate=" + startDate + ", endDate=" + endDate
-						+ ", issuingDate=" + issuingDate + ", auditor=" + auditor + ", remark=" + remark + ", createDate=" + createDate
+						+ ", issuingDate=" + issuingDate + ", auditor=" + auditor + ", auditorName=" + auditorName + ", remark=" + remark + ", createDate=" + createDate
 						+ ", flag=" + flag + ", status=" + status + ", planId=" + planId + "]";
 	}
 

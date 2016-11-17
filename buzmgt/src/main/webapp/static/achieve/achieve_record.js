@@ -273,6 +273,7 @@ Handlebars.registerHelper('formDate', function(value) {
 	}
 	return changeDateToString_(new Date(value));
 });
+
 /**
  * 自定义if
  */

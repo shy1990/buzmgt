@@ -197,7 +197,7 @@ var	base='<%=basePath%>';
                 <dl class="dl-horizontal">
                     <dt>审核人：</dt>
                     <dd>
-                        <div> <span class="text-gery tex">${achieve.auditor }</span></div>
+                        <div> <span class="text-gery tex">${achieve.auditorName }</span></div>
                     </dd>
                 </dl>
             </li>
