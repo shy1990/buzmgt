@@ -210,7 +210,7 @@
                 <div class="col-sm-3 cl-padd">
                     <div class="ratio-box" style=" padding-bottom: 10px;  padding-top: 12px;">
                         <button class="btn  ph-btn-white ph-primary J_addDire " type="button" href="javascript:;">
-                            自定义设置区域
+                            添加价格区间
                         </button>
                     </div>
                 </div>
@@ -240,7 +240,7 @@
     var i = 1;
 
     $('.J_addDire').click(function () {
-        var dirHtml = '<form class="frm"><div class="col-sm-3 cl-padd">' +
+        var dirHtml = '<form class="frm"><div class="col-sm-3 cl-padd" style="width: 28%">' +
                 '<div class="ratio-box">' +
                 '<div class="ratio-box-dd">' +
                 '<span class="label  label-blue">' + (i++) + '区间' + '</span>' +

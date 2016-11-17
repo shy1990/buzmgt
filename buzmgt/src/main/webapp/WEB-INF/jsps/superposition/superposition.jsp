@@ -183,7 +183,7 @@
                                             {{/if}}
                                             </span>
                                         </td>
-                                        <td>{{endDate}}</td>
+                                        <td>{{createDate}}</td>
                                         <td>
                                             {{#checkRecord checkStatus auditor}}
                                             <button class="btn  bnt-sm bnt-ck" data-toggle="modal" data-target="#" onclick="see('{{id}}')">查看
