@@ -439,6 +439,8 @@ public class MainPlanServiceImpl implements MainPlanService {
      */
     if (userCreate.getTime() > startDate.getTime()) {
       userMap.put("startDate", userCreate);
+    } else {
+      userMap.put("startDate", startDate);
     }
     // 求最小结束时间 iu.fqtime,方案用户删除m.fqtime planfqsj主方案删除,s.fireddate 业务员辞退时间
     Date endDate1 = null;
