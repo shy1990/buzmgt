@@ -1,16 +1,17 @@
 package com.wangge.buzmgt.ordersignfor.web;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.wangge.buzmgt.assess.entity.Assess;
+import com.wangge.buzmgt.assess.service.AssessService;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
+import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
+import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.util.excel.ExcelExport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,18 +25,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.wangge.buzmgt.assess.entity.Assess;
-import com.wangge.buzmgt.assess.service.AssessService;
-import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
-import com.wangge.buzmgt.ordersignfor.service.OrderSignforService;
-import com.wangge.buzmgt.region.service.RegionService;
-import com.wangge.buzmgt.teammember.entity.SalesMan;
-import com.wangge.buzmgt.teammember.service.SalesManService;
-import com.wangge.buzmgt.util.DateUtil;
-import com.wangge.buzmgt.util.excel.ExcelExport;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 @Controller
 @RequestMapping(value="/ordersignfor")
@@ -362,6 +355,6 @@ public class OrderSignforController {
     }
     return assessMaxStage.get("max");
   }
-  
+
 }
 
