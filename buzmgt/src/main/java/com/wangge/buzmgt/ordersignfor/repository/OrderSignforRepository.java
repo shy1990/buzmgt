@@ -21,6 +21,8 @@ JpaSpecificationExecutor<OrderSignfor>,OrderSignforRepositoryCustom{
 
   public List<OrderSignfor> findAllByOrderNo(String orderNo);
 
+  OrderSignfor findByFastmailNo(String fastMailNo);
+
 
 //  @Query(value = " select o.order_no,o.shop_name,o.ARREARS,o.ORDER_PAY_TYPE,o.BILL_STATUS,o.IS_PRIMARY_ACCOUNT ,?2 as todayDate" +
 //      "from biz_order_signfor  o where o.USER_ID=?1 " +

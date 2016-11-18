@@ -47,4 +47,6 @@ public interface OrderSignforService {
   void deleteById(Long id);
 
   OrderSignfor save(OrderSignfor orderSignfor);
+
+  OrderSignfor findByFastmailNo(String fastMailNo);
 }
