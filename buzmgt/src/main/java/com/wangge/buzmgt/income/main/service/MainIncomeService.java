@@ -42,7 +42,7 @@ public interface MainIncomeService {
    * @author yangqc
    * @since JDK 1.8
    */
-  void caculatePayedOrder(String orderNo, String userId, Date payDate, String regionId);
+  void caculatePayedOrder(String orderNo, String userId, String regionId);
   
   /**
    * 计算油补

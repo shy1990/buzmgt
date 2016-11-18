@@ -276,7 +276,7 @@ public class DateUtil {
    * 
    * @param date
    * @param flag
-   *          正数加 flag个月,负数为减flag个月
+   *          正数加 flag个月(即下N个月),负数为减flag个月
    * @return
    */
   public static Date getPreMonthDate(Date date, int flag) {
