@@ -18,6 +18,7 @@ import com.wangge.buzmgt.section.service.ChannelManagerService;
 import com.wangge.buzmgt.superposition.service.GoodsOrderService;
 import com.wangge.buzmgt.teammember.entity.SalesmanLevel;
 import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.util.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
@@ -329,8 +330,9 @@ public class AwardController {
       AwardStatusEnum statusEnum = AwardStatusEnum.valueOf(status);
       award.setStatus(statusEnum);
       awardServer.save(award);
+	    Date curdDate = DateUtil.getPreMonthAndDay(award.getIssuingDate(),1);
 	    //保存定时任务
-	    jobService.saveJobTask(40,Long.valueOf(award.getPlanId()),award.getAwardId(),award.getIssuingDate());
+	    jobService.saveJobTask(40,Long.valueOf(award.getPlanId()),award.getAwardId(),curdDate);
       logService.log(null, "修改审核状态=" + status, EventType.UPDATE);
       json.put("result", "success");
       json.put("message", "操作成功");

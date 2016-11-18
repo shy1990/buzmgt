@@ -327,15 +327,16 @@ public class AchieveController {
 			AchieveStatusEnum statusEnum = AchieveStatusEnum.valueOf(status);
 			achieve.setStatus(statusEnum);
 			achieveServer.save(achieve);
+			Date crudDate =DateUtil.getPreMonthDate(achieve.getIssuingDate(),1);
 
 			//保存定时任务
-			jobService.saveJobTask(30,Long.valueOf(achieve.getPlanId()),achieve.getAchieveId(),achieve.getIssuingDate());
+			jobService.saveJobTask(30,Long.valueOf(achieve.getPlanId()),achieve.getAchieveId(),crudDate);
 
 			logService.log(null, "修改审核状态=" + status, EventType.UPDATE);
 			json.put("result", "success");
 			json.put("message", "操作成功");
 		} catch (Exception e) {
-			LogUtil.error("达量提成修改审核状态:" + e.getMessage(), e);
+			LogUtil.error("达量提成修改审核状态异常:" + e.getMessage(), e);
 			json.put("result", "failure");
 			json.put("message", "网络异常，稍后重试！");
 			return json;

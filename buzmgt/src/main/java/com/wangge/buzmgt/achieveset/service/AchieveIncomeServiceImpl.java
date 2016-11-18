@@ -188,7 +188,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	 */
 	private Float disposeAchieveIncome(Achieve ac, String userId, AchieveIncome.PayStatusEnum status, Integer num) {
 		// 获取当前商品当前规则的销量；（线程同步）
-		Integer nowNumber = synchFindAchieveIncomeCount(ac.getAchieveId(),userId,status,num);
+		Integer nowNumber = synchFindAchieveIncomeCount(ac.getAchieveId(),userId,status);
 		//查询售后冲减的量
 		Integer afterSaleNum = findAfterSaleNum(ac.getAchieveId(), userId);
 		//实际销量=规则销量+即将发生的销量-售后冲减量
@@ -254,13 +254,13 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 	/**
 	 * 同步查询收益数量
+	 * (只查询收益数量)
 	 * @param achieveId
 	 * @param userId
 	 * @param status
-	 * @param num
 	 * @return
 	 */
-	public Integer synchFindAchieveIncomeCount(Long achieveId, String userId, AchieveIncome.PayStatusEnum status, Integer num){
+	public Integer synchFindAchieveIncomeCount(Long achieveId, String userId, AchieveIncome.PayStatusEnum status){
 
 		/**
 		 * key: 规则id+业务id+支付status; value :数量
@@ -272,7 +272,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 				// 查询总数量
 				val = this.countByAchieveIdAndUserIdAndStatus(achieveId, userId, status).intValue();
 			}
-			val += num;
+//			val += num;
 			achieveCachedMap.put(key, val);
 
 			return val;
