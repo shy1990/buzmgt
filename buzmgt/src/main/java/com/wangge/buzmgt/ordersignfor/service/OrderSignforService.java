@@ -3,12 +3,19 @@ package com.wangge.buzmgt.ordersignfor.service;
 import java.util.List;
 import java.util.Map;
 
+import com.wangge.buzmgt.ordersignfor.bean.OrderSignforAfterSale;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 
 public interface OrderSignforService {
+  /**
+   * 根据时间查询售后的单子
+   * @param createTime
+   * @return
+   */
+  public Page<OrderSignforAfterSale> findAllByCreateTime(String createTime, Integer page, Integer size);
 
   void updateOrderSignfor(OrderSignfor xlsOrder);
 

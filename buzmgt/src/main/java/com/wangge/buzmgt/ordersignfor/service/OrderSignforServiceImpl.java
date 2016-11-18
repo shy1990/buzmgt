@@ -4,18 +4,23 @@ import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
 import com.wangge.buzmgt.cash.service.WaterOrderCashService;
 import com.wangge.buzmgt.cash.service.WaterOrderDetialService;
+import com.wangge.buzmgt.ordersignfor.bean.OrderSignforAfterSale;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
+import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -23,6 +28,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +39,9 @@ import java.util.Map;
 
 @Service
 public class OrderSignforServiceImpl implements OrderSignforService {
+  private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
+  private final static String TIME_MIN = " 00:00:00 000";
+  private final static String TIME_MAX = " 23:59:59 999";
 
  private static final Logger logger = Logger.getLogger(OrderSignforServiceImpl.class);
 
@@ -71,6 +81,43 @@ public class OrderSignforServiceImpl implements OrderSignforService {
   @Override
   public Long findCount() {
     return orderSignforRepository.count();
+  }
+
+  @Override
+  public Page<OrderSignforAfterSale> findAllByCreateTime(String createTime,Integer page,Integer size) {
+    StringBuilder sql = new StringBuilder();
+    sql.append("select os.ORDER_NO,os.FASTMAIL_NO,usr.NICKNAME,region.NAMEPATH,os.OVER_TIME,os.ORDER_STATUS from biz_order_signfor os\n" +
+            "left join sys_user usr\n" +
+            "on usr.USER_ID = os.USER_ID\n" +
+            "left join sys_salesman saleman\n" +
+            "on usr.USER_ID = saleman.USER_ID\n" +
+            "left join sys_region region\n" +
+            "on region.REGION_ID = saleman.REGION_ID\n" +
+            "where order_no like '%SH%' ");
+    if(createTime != null && !"".equals(createTime)){
+      sql.append(" and to_char(os.creat_time,'yyyy-MM-dd') like '%" + createTime + "%'");
+    }
+    sql.append(" order by os.OVER_TIME ");
+    SQLQuery sqlQuery = sqlQuery = (em.createNativeQuery(sql.toString())).unwrap(SQLQuery.class);
+    Page<OrderSignforAfterSale> PageResult = null;
+    int count = sqlQuery.list().size();//总条数
+    sqlQuery.setFirstResult(page * size);//设置开始的位置
+    sqlQuery.setMaxResults(size);//每页显示的条数
+    List<OrderSignforAfterSale> list = new ArrayList<>();
+    List<Object[]> ret = sqlQuery.list();
+    if(CollectionUtils.isNotEmpty(ret)){
+      ret.forEach(object -> {
+        OrderSignforAfterSale s = new OrderSignforAfterSale();
+        s.setOrderNo((String) object[0]);
+        s.setFastMallNo((String) object[1]);
+        s.setNickName((String) object[2]);
+        s.setNamePath((String) object[3]);
+        s.setOverTime(DateUtil.timestamp2String((Timestamp) object[4],"yyyy-MM-dd"));
+        s.setStatus(((BigDecimal) object[5]).toString());
+        list.add(s);
+      });
+    }
+    return new PageImpl<OrderSignforAfterSale>(list,new PageRequest(page,size),count);
   }
 
   @Override
