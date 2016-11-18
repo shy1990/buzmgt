@@ -147,6 +147,8 @@ public class AwardController {
     model.addAttribute("planId", planId);
     model.addAttribute("channelManagers", channelManagers);
     model.addAttribute("machineTypes", machineTypes);
+	  //添加区域（regions）model.addAttribute("regions", regions);
+	  mainPlanService.assembleBeforeUpdate(model);
     return "award/award_add";
   }
 
