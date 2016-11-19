@@ -67,11 +67,10 @@ public class ImportOrderExcel {
     Json json = new Json();
     String filename = null;
 
-    // String pathdir = "/var/sanji/excel/uploadfile/" + dateformat.format(new Date());// 构件服务器文件保存目录
-
     if (!file.isEmpty()) {
       SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd/HH/");
-      String pathdir = fileUploadDir + dateformat.format(new Date());// 构件本地文件保存目录 // 得到本地图片保存目录的真实路径 http://localhost:80/aaa.jpg
+      String pathdir = "/var/sanji/excel/uploadfile/" + dateformat.format(new Date());// 构件服务器文件保存目录
+//      String pathdir = fileUploadDir + dateformat.format(new Date());// 构件本地文件保存目录 // 得到本地图片保存目录的真实路径 http://localhost:80/aaa.jpg
       filename = UUID.randomUUID().toString() + FileUtil.getExt(file);// 构建文件名称
 
       // String fileUploadPath = pathdir+filename;
@@ -81,7 +80,7 @@ public class ImportOrderExcel {
           String urlPath = FileUtil.saveFile(pathdir, filename, file, dateformat);
           if (urlPath != null && !"".equals(urlPath)) {
             boolean flag = saveExcelData(pathdir + filename);
-            if (flag == false){
+            if (!flag){
               json.setMsg("请先导入正常订单!");
             }else {
               json.setMsg("导入成功！");
@@ -99,6 +98,7 @@ public class ImportOrderExcel {
 
       } catch (Exception e) {
         FileUtil.deleteFile(pathdir + filename);
+        e.getStackTrace();
         logger.error(e.getMessage());
         json.setMsg("excel导入异常！  " + e.getMessage());
         request.setAttribute("message", json);
@@ -130,12 +130,14 @@ public class ImportOrderExcel {
             OrderSignfor signfor = orderSignforService.findByFastmailNo(os.getFastmailNo());
             if (ObjectUtils.notEqual(signfor,null)){//查的到,生成一条售后单
               OrderSignfor orderSignfor = new OrderSignfor();
-              os.setOrderNo(os.getOrderNo());
-              os.setCreateTime(new Date());
-              os.setUserPhone(os.getUserPhone());
-              os.setFastmailNo(os.getFastmailNo());
-              os.setFastmailTime(os.getFastmailTime());
-              orderSignforService.save(os);
+              orderSignfor.setOrderNo(os.getOrderNo());
+              orderSignfor.setCreateTime(new Date());
+              orderSignfor.setUserPhone(signfor.getUserPhone());
+              orderSignfor.setFastmailNo(os.getFastmailNo());
+              orderSignfor.setFastmailTime(os.getFastmailTime());
+              orderSignfor.setOrderPrice(0.0f);
+              orderSignfor.setActualPayNum(0.0f);
+              orderSignforService.save(orderSignfor);
             }else {
               flag = false;//查不到,没有导入正常订单
             }
@@ -345,7 +347,11 @@ public class ImportOrderExcel {
   private static String isValidDate(Cell param) throws Exception {
     String str = ExcelUtil.getValue(param).replace("\r\n", "").trim();
     // 指定日期格式为四位年/两位月份/两位日期，注意yyyy/MM/dd区分大小写；
-
+    Boolean flag = true;
+    if (str.startsWith("SH")){
+      str = str.substring(2);
+      flag = false;
+    }
     if (!"非法字符".equals(str) && !"未知类型".equals(str) && !"".equals(str)) {
       SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
       try {
@@ -358,7 +364,11 @@ public class ImportOrderExcel {
         // convertSuccess=str;
         throw new Exception("订单格式不对！");
       }
-      return str;
+      if (!flag){
+        return "SH" + str;
+      }else {
+        return str;
+      }
     }
     throw new Exception("非法字符或未知类型！");
 
