@@ -1,6 +1,7 @@
 package com.wangge.buzmgt.brandincome.repository;
 
 import com.wangge.buzmgt.brandincome.entity.BrandIncome;
+import com.wangge.buzmgt.brandincome.entity.BrandIncome.BrandIncomeStatus;
 import com.wangge.buzmgt.common.FlagEnum;
 import com.wangge.buzmgt.goods.entity.Brand;
 import org.springframework.data.domain.Page;
@@ -33,7 +34,7 @@ public interface BrandIncomeRepository extends JpaRepository<BrandIncome, Long>,
                   "   and g.goods_id = ?1 and b.id = ?2", nativeQuery = true)
   int findCycleSales(String goodId,long id);
 
-  BrandIncome findByGoodIdAndPlanId(String goodId,Long planId);
+  BrandIncome findByGoodIdAndPlanIdAndStatus(String goodId,Long planId,BrandIncomeStatus status);
 
   @Query("select b from BrandIncome b where b.id = (select max(t.id) from BrandIncome t where t.goodId = ?1 and t.planId = ?2 and t.flag = ?3)")
   BrandIncome findByGoodIdAndPlanIdAndStatus(String goodId, long planId, FlagEnum flagEnum);
