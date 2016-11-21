@@ -193,20 +193,25 @@
             });
             //订单状态：0-订单成功，1-取消订单，2-业务签收，3-客户签收，4-客户拒收
             Handlebars.registerHelper("checkStatus", function (status) {
-                if (status == "0") {
-                    return new Handlebars.SafeString("<span style='color: #77ff80'>订单成功</span>");
-                }
-                if (status == "1") {
-                    return new Handlebars.SafeString("<span style='color: #ffd02a'>取消订单</span>");
-                }
+//                if (status == "0") {
+//                    return new Handlebars.SafeString("<span style='color: #77ff80'>订单成功</span>");
+//                }
+//                if (status == "1") {
+//                    return new Handlebars.SafeString("<span style='color: #ffd02a'>取消订单</span>");
+//                }
+//                if (status == "2") {
+//                    return new Handlebars.SafeString("<span style='color:#42ff2a'>业务签收</span>");
+//                }
+//                if (status == "3") {
+//                    return new Handlebars.SafeString("<span style='color: #0c0f80'>客户签收</span>");
+//                }
+//                if (status == "4") {
+//                    return new Handlebars.SafeString("<span style='color: red'>客户拒收</span>");
+//                }
                 if (status == "2") {
-                    return new Handlebars.SafeString("<span style='color:#42ff2a'>业务签收</span>");
-                }
-                if (status == "3") {
-                    return new Handlebars.SafeString("<span style='color: #0c0f80'>客户签收</span>");
-                }
-                if (status == "4") {
-                    return new Handlebars.SafeString("<span style='color: red'>客户拒收</span>");
+                    return new Handlebars.SafeString("<span style='color:#42ff2a'>已揽收</span>");
+                }else {
+                    return new Handlebars.SafeString("<span style='color:#2e43ff'>已发货</span>");
                 }
 
             });
