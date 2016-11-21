@@ -678,7 +678,8 @@ public class SuperpositionServiceImpl implements SuperpositonService {
      * 获取每个人每单的提货量
      */
     String sql = "select nvl(sum(nums),0) as sum,order_id,user_id,pay_time from (\n"
-        + "select * from sys_goods_order oder \n" + "inner join\n" + "( select * from sys_superposition super\n"
+        + "select oder.nums,oder.order_Id,usr.user_id,oder.pay_time \n "
+        + " from sys_goods_order oder \n" + "inner join\n" + "( select * from sys_superposition super\n"
         + "  left join sys_super_goods_type goods \n" + "  on super.su_po_id = goods.su_id\n"
         + "  where super.plan_id = ? \n" + "  ) su\n" + "on oder.goods_id = su.good_id \n"
         + "left join view_income_main_plan_user usr\n" + "on usr.region_id = oder.region_id\n"
