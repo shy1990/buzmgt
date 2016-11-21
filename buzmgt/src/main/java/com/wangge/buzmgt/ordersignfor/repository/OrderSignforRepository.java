@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -20,6 +21,9 @@ JpaSpecificationExecutor<OrderSignfor>,OrderSignforRepositoryCustom{
   public OrderSignfor findByOrderNo(String orderNo);
 
   public List<OrderSignfor> findAllByOrderNo(String orderNo);
+
+  @Query("select o from OrderSignfor o where o.id = (select max(t.id) from OrderSignfor t where t.fastmailNo = ?1)")
+  OrderSignfor findByFastmailNo(String fastMailNo);
 
 
 //  @Query(value = " select o.order_no,o.shop_name,o.ARREARS,o.ORDER_PAY_TYPE,o.BILL_STATUS,o.IS_PRIMARY_ACCOUNT ,?2 as todayDate" +

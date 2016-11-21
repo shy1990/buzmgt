@@ -125,7 +125,7 @@ public class OrderSignfor implements Serializable {
   private String userPhone;
   private String shopName;
   private Float orderPrice;
-  private Integer phoneCount;
+  private Integer phoneCount = 0;
   @Column(name="CREAT_TIME")
   private Date createTime;
 
@@ -138,7 +138,7 @@ public class OrderSignfor implements Serializable {
   private OrderPayType orderPayType = OrderPayType.NUPANTEBT;
   private String yewuSignforGeopoint;
   private String customSignforGeopoint;
-  private Integer customSignforException;
+  private Integer customSignforException = 0;
   private int partsCount;
   private Date fastmailTime;
   private String customUnSignRemark;

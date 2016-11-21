@@ -346,4 +346,9 @@ public class OrderSignforServiceImpl implements OrderSignforService {
   public OrderSignfor save(OrderSignfor orderSignfor) {
     return orderSignforRepository.save(orderSignfor);
   }
+
+  @Override
+  public OrderSignfor findByFastmailNo(String fastMailNo) {
+    return orderSignforRepository.findByFastmailNo(fastMailNo);
+  }
 }

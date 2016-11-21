@@ -67,11 +67,10 @@ public class ImportOrderExcel {
     Json json = new Json();
     String filename = null;
 
-    // String pathdir = "/var/sanji/excel/uploadfile/" + dateformat.format(new Date());// 构件服务器文件保存目录
-
     if (!file.isEmpty()) {
       SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd/HH/");
-      String pathdir = fileUploadDir + dateformat.format(new Date());// 构件本地文件保存目录 // 得到本地图片保存目录的真实路径 http://localhost:80/aaa.jpg
+      String pathdir = "/var/sanji/excel/uploadfile/" + dateformat.format(new Date());// 构件服务器文件保存目录
+//      String pathdir = fileUploadDir + dateformat.format(new Date());// 构件本地文件保存目录 // 得到本地图片保存目录的真实路径 http://localhost:80/aaa.jpg
       filename = UUID.randomUUID().toString() + FileUtil.getExt(file);// 构建文件名称
 
       // String fileUploadPath = pathdir+filename;
@@ -80,8 +79,12 @@ public class ImportOrderExcel {
         if (ExcelUtil.validateExcel(pathdir + filename)) {
           String urlPath = FileUtil.saveFile(pathdir, filename, file, dateformat);
           if (urlPath != null && !"".equals(urlPath)) {
-            json.setMsg("导入成功！");
-            saveExcelData(pathdir + filename);
+            boolean flag = saveExcelData(pathdir + filename);
+            if (!flag){
+              json.setMsg("请先导入正常订单!");
+            }else {
+              json.setMsg("导入成功！");
+            }
             FileUtil.deleteFile(pathdir + filename);
           } else {
             json.setMsg("导入失败！");
@@ -95,6 +98,7 @@ public class ImportOrderExcel {
 
       } catch (Exception e) {
         FileUtil.deleteFile(pathdir + filename);
+        e.getStackTrace();
         logger.error(e.getMessage());
         json.setMsg("excel导入异常！  " + e.getMessage());
         request.setAttribute("message", json);
@@ -106,7 +110,8 @@ public class ImportOrderExcel {
     return "excel/result";
   }
 
-  private void saveExcelData(String path) throws Exception {
+  private Boolean saveExcelData(String path) throws Exception {
+    Boolean flag = true;
     OrderSignfor xlsOrder = null;
     List<OrderSignfor> list;
     list = readXls(path);
@@ -121,94 +126,111 @@ public class ImportOrderExcel {
         String[] orderno = os.getOrderNo().split(",");
         for (int i = 0; i < orderno.length; i++) {
           //  List<OrderSignfor> orderSf = orderSignforService.findByOrderNo(orderno[i]);
-          OrderSignfor orderSf = findOrder(orderSignforService.findListByOrderNo(orderno[i]));
-
-          if (orderSf != null  && (os.getFastmailNo() != null && !"".equals(os.getFastmailNo()))) {
-           //如果物流单号已存在就不更新2016/11/14
-            if(orderSf.getFastmailNo() == null){
-              orderSf.setFastmailTime(os.getFastmailTime());
-              orderSf.setFastmailNo(os.getFastmailNo());
-              orderSf.setFastmailTime(os.getFastmailTime());
-              orderSignforService.updateOrderSignfor(orderSf);
+          if (orderno[i].startsWith("SH")){//为售后单时导入
+            OrderSignfor signfor = orderSignforService.findByFastmailNo(os.getFastmailNo());
+            if (ObjectUtils.notEqual(signfor,null)){//查的到,生成一条售后单
+              OrderSignfor orderSignfor = new OrderSignfor();
+              orderSignfor.setOrderNo(os.getOrderNo());
+              orderSignfor.setCreateTime(new Date());
+              orderSignfor.setUserPhone(signfor.getUserPhone());
+              orderSignfor.setFastmailNo(os.getFastmailNo());
+              orderSignfor.setFastmailTime(os.getFastmailTime());
+              orderSignfor.setOrderPrice(0.0f);
+              orderSignfor.setActualPayNum(0.0f);
+              orderSignforService.save(orderSignfor);
+            }else {
+              flag = false;//查不到,没有导入正常订单
             }
-           
-          } else {
-            String sql = "select o.order_num,\n" +
-                "       o.total_cost,\n" +
-                "       o.actual_pay_num,\n" +
-                "       nvl(count(oi.nums),0),\n" +
-                "       m.username,\n" +
-                "       m.mobile,\n" +
-                "       a.mobilephone\n" +
-                "  from SJZAIXIAN.SJ_TB_ORDER o\n" +
-                "  left join SJZAIXIAN.Sj_Tb_Order_Items oi\n" +
-                "    on o.id = oi.order_id\n" +
-                "  left join SJZAIXIAN.Sj_Tb_Members m\n" +
-                "    on o.member_id = m.id\n" +
-                "  left join SJZAIXIAN.Sj_Tb_Admin a\n" +
-                "    on m.admin_id=a.id\n" +
-                " where oi.target_type = 'sku' and o.order_num=?\n" +
-                " group by o.order_num, o.total_cost, o.actual_pay_num,m.username,m.mobile,a.mobilephone";
-            Query query = null;
-            SQLQuery sqlQuery = null;
-            query = entityManager.createNativeQuery(sql);
-            sqlQuery = query.unwrap(SQLQuery.class);
-            int a = 0;
-            sqlQuery.setParameter(a, orderno[i]);
-            List<Object[]> ret = sqlQuery.list();
-            //查询配件数量
-            sql = "select nvl(count(oi.nums),0)\n" +
-                "  from SJZAIXIAN.SJ_TB_ORDER o\n" +
-                "  left join SJZAIXIAN.Sj_Tb_Order_Items oi\n" +
-                "    on o.id = oi.order_id\n" +
-                "  left join SJZAIXIAN.Sj_Tb_Members m\n" +
-                "    on o.member_id = m.id\n" +
-                " where oi.target_type = 'accessories' and o.order_num=?\n" +
-                " group by o.order_num";
-            Query query1 = entityManager.createNativeQuery(sql);
-            sqlQuery = query1.unwrap(SQLQuery.class);
-            sqlQuery.setParameter(a, orderno[i]);
-            BigDecimal partsCount = (BigDecimal) sqlQuery.uniqueResult();
-            if (CollectionUtils.isNotEmpty(ret)) {
-              ret.forEach(result -> {
-                OrderSignfor o = new OrderSignfor();
-                o.setOrderNo((String) result[0]);
-                o.setCreateTime(new Date());
-                o.setOrderPrice(((BigDecimal) result[1]).floatValue());
-                if (ObjectUtils.notEqual(result[2],null)){
-                  o.setActualPayNum(((BigDecimal) result[2]).floatValue());//实际金额
-                }
-                o.setPhoneCount(((BigDecimal) result[3]).intValue());
-                o.setOrderStatus(OrderSignfor.OrderStatus.SUCCESS);
-                o.setShopName((String) result[4]);
-                //获取配件数量
+          }else {//为正常订单时导入
+            OrderSignfor orderSf = findOrder(orderSignforService.findListByOrderNo(orderno[i]));
+
+            if (orderSf != null  && (os.getFastmailNo() != null && !"".equals(os.getFastmailNo()))) {
+              //如果物流单号已存在就不更新2016/11/14
+              if(orderSf.getFastmailNo() == null){
+                orderSf.setFastmailTime(os.getFastmailTime());
+                orderSf.setFastmailNo(os.getFastmailNo());
+                orderSf.setFastmailTime(os.getFastmailTime());
+                orderSignforService.updateOrderSignfor(orderSf);
+              }
+
+            } else {
+              String sql = "select o.order_num,\n" +
+                  "       o.total_cost,\n" +
+                  "       o.actual_pay_num,\n" +
+                  "       nvl(count(oi.nums),0),\n" +
+                  "       m.username,\n" +
+                  "       m.mobile,\n" +
+                  "       a.mobilephone\n" +
+                  "  from SJZAIXIAN.SJ_TB_ORDER o\n" +
+                  "  left join SJZAIXIAN.Sj_Tb_Order_Items oi\n" +
+                  "    on o.id = oi.order_id\n" +
+                  "  left join SJZAIXIAN.Sj_Tb_Members m\n" +
+                  "    on o.member_id = m.id\n" +
+                  "  left join SJZAIXIAN.Sj_Tb_Admin a\n" +
+                  "    on m.admin_id=a.id\n" +
+                  " where oi.target_type = 'sku' and o.order_num=?\n" +
+                  " group by o.order_num, o.total_cost, o.actual_pay_num,m.username,m.mobile,a.mobilephone";
+              Query query = null;
+              SQLQuery sqlQuery = null;
+              query = entityManager.createNativeQuery(sql);
+              sqlQuery = query.unwrap(SQLQuery.class);
+              int a = 0;
+              sqlQuery.setParameter(a, orderno[i]);
+              List<Object[]> ret = sqlQuery.list();
+              //查询配件数量
+              sql = "select nvl(count(oi.nums),0)\n" +
+                  "  from SJZAIXIAN.SJ_TB_ORDER o\n" +
+                  "  left join SJZAIXIAN.Sj_Tb_Order_Items oi\n" +
+                  "    on o.id = oi.order_id\n" +
+                  "  left join SJZAIXIAN.Sj_Tb_Members m\n" +
+                  "    on o.member_id = m.id\n" +
+                  " where oi.target_type = 'accessories' and o.order_num=?\n" +
+                  " group by o.order_num";
+              Query query1 = entityManager.createNativeQuery(sql);
+              sqlQuery = query1.unwrap(SQLQuery.class);
+              sqlQuery.setParameter(a, orderno[i]);
+              BigDecimal partsCount = (BigDecimal) sqlQuery.uniqueResult();
+              if (CollectionUtils.isNotEmpty(ret)) {
+                ret.forEach(result -> {
+                  OrderSignfor o = new OrderSignfor();
+                  o.setOrderNo((String) result[0]);
+                  o.setCreateTime(new Date());
+                  o.setOrderPrice(((BigDecimal) result[1]).floatValue());
+                  if (ObjectUtils.notEqual(result[2],null)){
+                    o.setActualPayNum(((BigDecimal) result[2]).floatValue());//实际金额
+                  }
+                  o.setPhoneCount(((BigDecimal) result[3]).intValue());
+                  o.setOrderStatus(OrderSignfor.OrderStatus.SUCCESS);
+                  o.setShopName((String) result[4]);
+                  //获取配件数量
 //                if (CollectionUtils.isNotEmpty(resultList)) {
 //                  resultList.forEach(r -> {
-                    if(ObjectUtils.notEqual(partsCount,null)){
-                      o.setPartsCount(Integer.valueOf(partsCount+""));
-                    }
+                  if(ObjectUtils.notEqual(partsCount,null)){
+                    o.setPartsCount(Integer.valueOf(partsCount+""));
+                  }
 
 //                  });
 //                }
-                //查询是否已关联
-                String loginAccount = registDataService.findLoginAccountByLoginAccount((String) result[5]);
-                if (StringUtils.isNotEmpty(loginAccount)) {
-                  o.setRelatedStatus(RelatedStatus.ENDRELATED);
-                } else {
-                  o.setRelatedStatus(RelatedStatus.NOTRELATED);
-                }
-                o.setMemberPhone((String) result[5]);
-                o.setUserPhone((String) result[6]);
-                o.setFastmailNo(os.getFastmailNo());
-                o.setFastmailTime(os.getFastmailTime());
-                orderSignforService.save(o);
-              });
+                  //查询是否已关联
+                  String loginAccount = registDataService.findLoginAccountByLoginAccount((String) result[5]);
+                  if (StringUtils.isNotEmpty(loginAccount)) {
+                    o.setRelatedStatus(RelatedStatus.ENDRELATED);
+                  } else {
+                    o.setRelatedStatus(RelatedStatus.NOTRELATED);
+                  }
+                  o.setMemberPhone((String) result[5]);
+                  o.setUserPhone((String) result[6]);
+                  o.setFastmailNo(os.getFastmailNo());
+                  o.setFastmailTime(os.getFastmailTime());
+                  orderSignforService.save(o);
+                });
+              }
             }
           }
         }
       }
     }
-
+  return flag;
   }
 
   /**
@@ -325,7 +347,11 @@ public class ImportOrderExcel {
   private static String isValidDate(Cell param) throws Exception {
     String str = ExcelUtil.getValue(param).replace("\r\n", "").trim();
     // 指定日期格式为四位年/两位月份/两位日期，注意yyyy/MM/dd区分大小写；
-
+    Boolean flag = true;
+    if (str.startsWith("SH")){
+      str = str.substring(2);
+      flag = false;
+    }
     if (!"非法字符".equals(str) && !"未知类型".equals(str) && !"".equals(str)) {
       SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
       try {
@@ -338,7 +364,11 @@ public class ImportOrderExcel {
         // convertSuccess=str;
         throw new Exception("订单格式不对！");
       }
-      return str;
+      if (!flag){
+        return "SH" + str;
+      }else {
+        return str;
+      }
     }
     throw new Exception("非法字符或未知类型！");
 
