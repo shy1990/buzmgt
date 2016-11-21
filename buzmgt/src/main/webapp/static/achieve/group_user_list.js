@@ -4,6 +4,13 @@ $(function() {
 	initHandlerbars();
 	findGroupUserList();// 查询列表
 })
+function getSearchData() {
+    SearchData.sc_LK_namepath = $("#namePath").val();
+    SearchData.sc_EQ_roleId = $("#roleId").val();
+    SearchData.sc_EQ_levelName = $("#levelName").val();
+    SearchData.sc_EQ_starsLevel = $("#starsLevel").val();
+    SearchData.sc_LK_truename = $("#trueName").val();
+}
 /**
  * 跳转添加页面 获取planId和machineType
  */
@@ -122,35 +129,6 @@ function groupDelete(userId){
 	createGroupSonByNameTable(groupList);
 }
 
-/**
- * 检索模糊查询
- */
-function goSearch() {
-	var goodName = $('#searchGoodsname').val();
-	if (!isEmpty(goodName)) {
-		$.ajax({
-			url:"/goods/likeBrandName?name="+goodName,
-			type:"GET",
-			dateType:"JSON",
-			success:function(data){
-				console.info(data);
-				if(data.length>0){
-					var ids=data.join(',');
-					SearchData['sc_IN_brand.id'] = ids;
-					findAchieveList();
-					delete SearchData['sc_IN_brand.id'];
-					return false;
-				}
-				alert("没有此品牌");
-			},
-			error:function(data){
-				alert("网络异常，稍后重试！");
-			}
-		});
-	}else{
-		alert("请输入品牌名称");
-	}
-}
 function initGroupFunction(){
 	$(".J_addDire").on("click",function(){
 		var userId = $(this).parents("tr").find("td.J_groupuserId").attr("data-userId");
@@ -219,37 +197,20 @@ function initExcelExport() {
 				window.location.href = base + "achieve/export" +"?" + param;
 			});
 }
-/**
- * 处理检索条件
- * 
- * @returns {String}
- */
-function conditionProcess() {
-	var SearchData_ = "sc_EQ_createDate="
-			+ (SearchData.sc_GTE_dateTime == null ? ''
-					: SearchData.sc_GTE_dateTime)
-			+ "&sc_EQ_createDate="
-			+ (SearchData.sc_LTE_dateTime == null ? ''
-					: SearchData.sc_LTE_dateTime);
-
-	return SearchData_;
-}
-function initSearchData() {
-	var nowDate = getTodayDate();
-	var $machineType=$(".J_MachineType li.active").attr('title');
-	SearchData['sc_GTE_endDate'] = nowDate;
-	SearchData['sc_LTE_startDate'] = nowDate;
-	SearchData['sc_EQ_status'] = "OVER";
-	SearchData['sc_EQ_machineType.id'] = $machineType;
-
+function goSearch() {
+    // 获取参数
+    getSearchData();
+    findGroupUserList();
 }
 
 function findGroupUserList(page) {
 	page = page == null || page == '' ? 0 : page;
-	SearchData['page'] = page;
-	var $planId = $("#planId").val();
-	$.ajax({
-		url : "/achieve/planUsers?planId=" + $planId,
+    var $planId = $("#planId").val();
+    SearchData['page'] = page;
+    SearchData['sc_EQ_planId'] = $planId;
+
+    $.ajax({
+		url : "/achieve/planUsers",
 		type : "GET",
 		data : SearchData,
 		dataType : "json",
@@ -258,7 +219,6 @@ function findGroupUserList(page) {
 			var searchTotal = orderData.totalElements;
 			if (searchTotal != achieveTotal || searchTotal == 0) {
 				achieveTotal = searchTotal;
-
 				initPaging(orderData);
 			}
 		},

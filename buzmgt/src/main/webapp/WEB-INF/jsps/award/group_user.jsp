@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,29 +50,35 @@
 	<input id="groupName" hidden="hidden">
 		<div class="clearfix"></div>
 		<div class="group-search">
-			<select class="ph-select">
-				<option>山东省-德州市-武城县</option>
-				<option>山东省-德州市-武城县</option>
-				<option>山东省-德州市-武城县</option>
-			</select> <select class="ph-select">
-				<option>全部角色</option>
-				<option>山东省-德州市-武城县</option>
-				<option>山东省-德州市-武城县</option>
-			</select> <select class="ph-select">
-				<option>业务等级</option>
-				<option>山东省-德州市-武城县</option>
-				<option>山东省-德州市-武城县</option>
-			</select> <select class="ph-select">
-				<option>区域星级</option>
-				<option>山东省-德州市-武城县</option>
-				<option>山东省-德州市-武城县</option>
-			</select>
+            <select class="ph-select" id="namePath">
+                <option value="">选择区域</option>
+                <c:forEach var="region" items="${regions}">
+                    <option value="${region.name}">${region.name}</option>
+                </c:forEach>
+            </select>
+            <select class="ph-select" id="roleId">
+                <option value=''>业务角色</option>
+                <option value="262144">服务站经理</option>
+                <option value="294914">扩展经理</option>
+             </select>
+            <select class="ph-select" id="levelName">
+                <option value=''>业务等级</option>
+                <option value='大学生'>大学生</option>
+                <option value='中学生'>中学生</option>
+                <option value='小学生'>小学生</option>
+            </select>
+            <select class="ph-select" id='starsLevel'>
+                <option value=''>区域星级</option>
+                <option value='1'>一星</option>
+                <option value='2'>二星</option>
+                <option value='3'>三星</option>
+            </select>
 
-			<button class="btn btn-blue btn-sm" style="margin-left: 10px">
-				检索</button>
+            <button class="btn btn-blue btn-sm" style="margin-left: 10px"
+                    onclick="goSearch(0)">检索</button>
 
-			<input type="text" class="col-sm-12 big-seach"
-				placeholder="请搜索业务人员姓名">
+            <input type="text" id="trueName" class="col-sm-12 big-seach"
+                   placeholder="请搜索业务人员姓名">
 		</div>
 
 		<div class="tab-content ">

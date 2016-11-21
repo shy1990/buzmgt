@@ -114,9 +114,9 @@ public class MainIncomeController {
    * @since JDK 1.8
    */
   @RequestMapping("/calcuPayed")
-  public @ResponseBody String calPayedOrder(@RequestParam Date payDate, @RequestParam String orderNo,
+  public @ResponseBody String calPayedOrder( @RequestParam String orderNo,
       @RequestParam String userId, @RequestParam String regionId) throws Exception {
-    incomeService.caculatePayedOrder(orderNo, userId, payDate, regionId);
+    incomeService.caculatePayedOrder(orderNo, userId, regionId);
     return "ok";
   }
   

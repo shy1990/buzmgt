@@ -17,11 +17,13 @@ import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.income.schedule.service.JobService;
 import com.wangge.buzmgt.section.pojo.ChannelManager;
 import com.wangge.buzmgt.section.service.ChannelManagerService;
+import com.wangge.buzmgt.sys.service.UserService;
 import com.wangge.buzmgt.util.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -66,6 +68,8 @@ import com.wangge.buzmgt.util.excel.ExcelExport;
 public class AchieveController {
 	@Autowired
 	private LogService logService;
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private AchieveService achieveServer;
 	@Autowired
@@ -131,6 +135,8 @@ public class AchieveController {
 		model.addAttribute("planId", planId);
 		model.addAttribute("machineTypes", machineTypes);
 		model.addAttribute("channelManagers", channelManagers);
+		//添加区域（regions）model.addAttribute("regions", regions);
+		mainPlanService.assembleBeforeUpdate(model);
 		return "achieve/achieve_add";
 	}
 
@@ -327,15 +333,16 @@ public class AchieveController {
 			AchieveStatusEnum statusEnum = AchieveStatusEnum.valueOf(status);
 			achieve.setStatus(statusEnum);
 			achieveServer.save(achieve);
+			Date crudDate =DateUtil.getPreMonthDate(achieve.getIssuingDate(),1);
 
 			//保存定时任务
-			jobService.saveJobTask(30,Long.valueOf(achieve.getPlanId()),achieve.getAchieveId(),achieve.getIssuingDate());
+			jobService.saveJobTask(30,Long.valueOf(achieve.getPlanId()),achieve.getAchieveId(),crudDate);
 
 			logService.log(null, "修改审核状态=" + status, EventType.UPDATE);
 			json.put("result", "success");
 			json.put("message", "操作成功");
 		} catch (Exception e) {
-			LogUtil.error("达量提成修改审核状态:" + e.getMessage(), e);
+			LogUtil.error("达量提成修改审核状态异常:" + e.getMessage(), e);
 			json.put("result", "failure");
 			json.put("message", "网络异常，稍后重试！");
 			return json;
@@ -471,17 +478,17 @@ public class AchieveController {
 	 * @Title: getPlanUsers
 	 * @Description: 查询方案的所有用户
 	 */
-	@RequestMapping(value = "/planUsers")
+	@RequestMapping(value = "/planUsers",method = RequestMethod.GET)
 	@ResponseBody
-	public Page<PlanUserVo> getPlanUsers(@RequestParam String planId,
-	                                     @PageableDefault(page = 0, size = 10, sort = {"regdate"}, direction = Direction.DESC) Pageable pageRequest) {
-		Map<String, Object> searchParams = new HashMap<>();
+	public Page<PlanUserVo> getPlanUsers(@PageableDefault(page = 0, size = 10, sort = {"regdate"}, direction = Direction.DESC) Pageable pageRequest,
+	                                     HttpServletRequest request) {
+		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
 		Page<PlanUserVo> page = new PageImpl<>(new ArrayList<>());
 		try {
-			searchParams.put("EQ_planId", Integer.parseInt(planId));
+//			searchParams.put("EQ_planId", Integer.parseInt(planId));
 			page = mainPlanService.getUserpage(pageRequest, searchParams);
 		} catch (Exception e) {
-			LogUtil.error("查询planId=" + planId + "方案人员失败", e);
+			LogUtil.error("查询方案人员失败", e);
 		}
 		return page;
 	}

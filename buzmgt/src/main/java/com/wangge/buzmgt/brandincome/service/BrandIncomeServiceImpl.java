@@ -37,8 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Created by peter on 16-8-31.
- * 品牌型号收益service
+ * Created by peter on 16-8-31. 品牌型号收益service
  */
 
 @Service
@@ -55,34 +54,34 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
   private RegionService regionService;
   @Resource
   private AreaAttributeService areaAttributeService;
-
+  
   @Override
   public BrandIncome findById(Long id) {
     return brandIncomeRepository.findOne(id);
   }
-
+  
   @Override
   public BrandIncome save(BrandIncome brandIncome) {
     return brandIncomeRepository.save(brandIncome);
   }
-
+  
   @Override
   public Page<BrandIncome> findAll(Map<String, Object> searchParams, Pageable pageable) {
     Specification<BrandIncome> spec = dispose(searchParams);
     return brandIncomeRepository.findAll(spec, pageable);
   }
-
+  
   /**
    * 处理条件参数
    */
   public Specification<BrandIncome> dispose(Map<String, Object> searchParams) {
-    //过滤删除
+    // 过滤删除
     searchParams.put("EQ_flag", "NORMAL");
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<BrandIncome> spec = brandIncomeSearchFilter(filters.values(), BrandIncome.class);
     return spec;
   }
-
+  
   @Override
   public List<BrandIncome> findAll(Map<String, Object> searchParams, Sort sort) {
     if (ObjectUtils.equals(sort, null)) {
@@ -91,24 +90,24 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
     Specification<BrandIncome> spec = dispose(searchParams);
     return brandIncomeRepository.findAll(spec, sort);
   }
-
+  
   public static Specification<BrandIncome> brandIncomeSearchFilter(final Collection<SearchFilter> filters,
-                                                                   final Class<BrandIncome> entityClazz) {
+      final Class<BrandIncome> entityClazz) {
     return new Specification<BrandIncome>() {
-
+      
       private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
-
+      
       private final static String TIME_MIN = " 00:00:00 000";
-
+      
       private final static String TIME_MAX = " 23:59:59 999";
-
+      
       private final static String TYPE_FlAG_TYPE = "com.wangge.buzmgt.common.FlagEnum";
-
+      
       private final static String TYPE_BRANDINCOME_STATUS = "com.wangge.buzmgt.brandincome.entity.BrandIncome$BrandIncomeStatus";
-
+      
       private final static String TYPE_DATE = "java.util.Date";
-
-      @SuppressWarnings({"unchecked", "rawtypes"})
+      
+      @SuppressWarnings({ "unchecked", "rawtypes" })
       @Override
       public Predicate toPredicate(Root<BrandIncome> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         if (CollectionUtils.isNotEmpty(filters)) {
@@ -129,9 +128,9 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
                 if (javaTypeName.equals(TYPE_DATE)) {
                   try {
                     predicates.add(cb.greaterThanOrEqualTo(expression,
-                            new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
+                        new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
                     predicates.add(cb.lessThanOrEqualTo(expression,
-                            new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
+                        new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
                   } catch (ParseException e) {
                     throw new RuntimeException("日期格式化失败!");
                   }
@@ -164,76 +163,76 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
                 } else {
                   predicates.add(cb.equal(expression, filter.value));
                 }
-
+                
                 break;
               case IN:
                 predicates.add(cb.in(expression).value(filter.value));
-
+                
                 break;
               case LIKE:
                 predicates.add(cb.like(expression, "%" + filter.value + "%"));
-
+                
                 break;
               case GT:
                 if (javaTypeName.equals(TYPE_DATE)) {
                   try {
                     // 大于最大值
                     predicates.add(cb.greaterThan(expression,
-                            new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
+                        new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
                   } catch (ParseException e) {
                     throw new RuntimeException("日期格式化失败!");
                   }
                 } else {
                   predicates.add(cb.greaterThan(expression, (Comparable) filter.value));
                 }
-
+                
                 break;
               case LT:
                 if (javaTypeName.equals(TYPE_DATE)) {
                   try {
                     // 小于最小值
                     predicates.add(cb.lessThan(expression,
-                            new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
+                        new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
                   } catch (ParseException e) {
                     throw new RuntimeException("日期格式化失败!");
                   }
                 } else {
                   predicates.add(cb.lessThan(expression, (Comparable) filter.value));
                 }
-
+                
                 break;
               case GTE:
                 if (javaTypeName.equals(TYPE_DATE)) {
                   try {
                     // 大于等于最小值
                     predicates.add(cb.greaterThanOrEqualTo(expression,
-                            new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
+                        new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MIN)));
                   } catch (ParseException e) {
                     e.printStackTrace();
                   }
                 } else {
                   predicates.add(cb.greaterThanOrEqualTo(expression, (Comparable) filter.value));
                 }
-
+                
                 break;
               case LTE:
                 if (javaTypeName.equals(TYPE_DATE)) {
                   try {
                     // 小于等于最大值
                     predicates.add(cb.lessThanOrEqualTo(expression,
-                            new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
+                        new SimpleDateFormat(DATE_FORMAT).parse(filter.value.toString() + TIME_MAX)));
                   } catch (ParseException e) {
                     throw new RuntimeException("日期格式化失败!");
                   }
                 } else {
                   predicates.add(cb.lessThanOrEqualTo(expression, (Comparable) filter.value));
                 }
-
+                
                 break;
               case NOTEQ:
-
+                
                 predicates.add(cb.notEqual(expression, filter.value));
-
+                
                 break;
               case ISNULL:
                 boolean value = Boolean.parseBoolean("true");
@@ -241,12 +240,12 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
                   predicates.add(cb.isNull(expression));
                 else
                   predicates.add(cb.isNotNull(expression));
-
+                
                 break;
-
+              
               default:
                 break;
-
+              
             }
           }
           // 将所有条件用 and 联合起来
@@ -258,7 +257,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
       }
     };
   }
-
+  
   @Override
   public Page<BrandIncomeVo> findAll(HttpServletRequest request, BrandIncome brandIncome, Pageable pageable) {
     Page<BrandIncomeVo> pageResult = null;
@@ -273,7 +272,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
     pageResult = new PageImpl<BrandIncomeVo>(list, new PageRequest(page, size), count);
     return pageResult;
   }
-
+  
   @Override
   public List<BrandIncomeVo> findAll(HttpServletRequest request, BrandIncome brandIncome) {
     String hql = executeSql(request, brandIncome);
@@ -281,7 +280,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
     List<BrandIncomeVo> list = findBySql(q);
     return list;
   }
-
+  
   /**
    * 获取执行的sql
    *
@@ -290,28 +289,16 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
    * @return
    */
   public String executeSql(HttpServletRequest request, BrandIncome brandIncome) {
-    String hql = "select distinct g.region_id,\n" +
-            "                nvl(sum(g.nums) over(partition by g.region_id),0) AS nums,\n" +
-            "                g.goods_name,\n" +
-            "                g.brand_name,\n" +
-            "                g.TRUENAME,\n" +
-            "                g.goods_id,\n" +
-            "                g.stars_level,\n" +
-            "                s.level_name,\n" +
-            "                b.start_date,\n" +
-            "                b.end_date,\n" +
-            "                b.status,\n" +
-            "                g.namepath\n" +
-            "  from sys_goods_order g\n" +
-            " inner join sys_salesman s\n" +
-            "    on g.region_id = s.region_id\n" +
-            " inner join sys_brand_income b\n" +
-            "    on g.goods_id = b.good_id\n" +
-            "where to_char(g.PAY_TIME, 'yyyy-mm-dd') between\n" +
-            "       to_char(b.start_date, 'yyyy-mm-dd') and\n" +
-            "       to_char(b.end_date, 'yyyy-mm-dd')\n" +
-            "   and b.id = '" + brandIncome.getId() + "'";
-
+    String hql = "select distinct g.region_id,\n"
+        + "                nvl(sum(g.nums) over(partition by g.region_id),0) AS nums,\n"
+        + "                g.goods_name,\n" + "                g.brand_name,\n" + "                g.TRUENAME,\n"
+        + "                g.goods_id,\n" + "                g.stars_level,\n" + "                s.level_name,\n"
+        + "                b.start_date,\n" + "                b.end_date,\n" + "                b.status,\n"
+        + "                g.namepath\n" + "  from sys_goods_order g\n" + " inner join sys_salesman s\n"
+        + "    on g.region_id = s.region_id\n" + " inner join sys_brand_income b\n" + "    on g.goods_id = b.good_id\n"
+        + "where to_char(g.PAY_TIME, 'yyyy-mm-dd') between\n" + "       to_char(b.start_date, 'yyyy-mm-dd') and\n"
+        + "       to_char(b.end_date, 'yyyy-mm-dd')\n" + "   and b.id = '" + brandIncome.getId() + "'";
+    
     String starsLevel = request.getParameter("starsLevel");
     if (StringUtils.isNotEmpty(starsLevel)) {
       hql += "\n and g.stars_level = '" + starsLevel + "'";
@@ -326,7 +313,7 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
     }
     return hql;
   }
-
+  
   /**
    * 遍历查询结果
    *
@@ -356,27 +343,27 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
     }
     return list;
   }
-
+  
   @Override
   public int findCycleSales(BrandIncome brandIncome) {
-    return brandIncomeRepository.findCycleSales(brandIncome.getGoodId(),brandIncome.getId());
+    return brandIncomeRepository.findCycleSales(brandIncome.getGoodId(), brandIncome.getId());
   }
-
+  
   @Override
-  public List<Map<String,Object>> findRuleByGoods(List<String> goodIds, Long mainPlanId, String userId,Date payDate) {
-    List<Map<String,Object>> list = new ArrayList<>();
-    Map<String,Object> map = new HashMap<>();
+  public List<Map<String, Object>> findRuleByGoods(List<String> goodIds, Long mainPlanId, String userId, Date payDate) {
+    List<Map<String, Object>> list = new ArrayList<>();
+    Map<String, Object> map = new HashMap<>();
     BrandIncome brandIncome = null;
     if (CollectionUtils.isNotEmpty(goodIds)) {
-      for (String g : goodIds){
-        brandIncome = brandIncomeRepository.findByGoodIdAndPlanId(g, mainPlanId);
-        if (ObjectUtils.notEqual(brandIncome,null)){
-          Long payTime = payDate.getTime();//付款日期
-          Long startDate = brandIncome.getStartDate().getTime();//规则开始日期
-          Long endDate = brandIncome.getEndDate().getTime();//规则结束日期
-          if (payTime >= startDate && payTime <= endDate){
-            map.put("goodId",brandIncome.getGoodId());
-            map.put("rule",brandIncome);
+      for (String g : goodIds) {
+        brandIncome = brandIncomeRepository.findByGoodIdAndPlanIdAndStatus(g, mainPlanId, BrandIncomeStatus.OVER);
+        if (ObjectUtils.notEqual(brandIncome, null)) {
+          Long payTime = payDate.getTime();// 付款日期
+          Long startDate = brandIncome.getStartDate().getTime();// 规则开始日期
+          Long endDate = brandIncome.getEndDate().getTime();// 规则结束日期
+          if (payTime >= startDate && payTime <= endDate) {
+            map.put("goodId", brandIncome.getGoodId());
+            map.put("rule", brandIncome);
             list.add(map);
           }
         }
@@ -384,84 +371,86 @@ public class BrandIncomeServiceImpl implements BrandIncomeService {
     }
     return list;
   }
-
+  
   @Override
-  public Boolean realTimeBrandIncomePay(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId, Date payDate,String regionId,double unitPrice) {
+  public Boolean realTimeBrandIncomePay(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId,
+      Date payDate, String regionId, double unitPrice) {
     try {
-      //根据传入参数计算品牌型号收益(已付款)
-      Double income = incomeCal(regionId,brandIncome,num);
+      // 根据传入参数计算品牌型号收益(已付款)
+      Double income = incomeCal(regionId, brandIncome, num);
       BrandIncomeSub brandIncomeSub = new BrandIncomeSub();
       brandIncomeSub.setMainplanId(brandIncome.getPlanId());
       brandIncomeSub.setSubplanId(brandIncome.getId());
-      brandIncomeSub.setIncome(income);//总收益
+      brandIncomeSub.setIncome(income);// 总收益
       brandIncomeSub.setOrderno(orderNo);
       brandIncomeSub.setUserId(userId);
-      brandIncomeSub.setOrderflag(1);//订单状态:已付款
-      brandIncomeSub.setCountDate(payDate);//付款时间
+      brandIncomeSub.setOrderflag(1);// 订单状态:已付款
+      brandIncomeSub.setCountDate(payDate);// 付款时间
       brandIncomeSub.setSum(num);
       brandIncomeSub.setGoodId(goodId);
       brandIncomeSub.setUnitPrice(unitPrice);
       brandIncomeSub = brandIncomeSubRepository.save(brandIncomeSub);
-      logService.log(null,brandIncomeSub, Log.EventType.SAVE);
+      logService.log(null, brandIncomeSub, Log.EventType.SAVE);
       return true;
     } catch (Exception e) {
       LogUtil.info(e.getMessage());
       return false;
     }
   }
-
+  
   @Override
-  public Boolean realTimeBrandIncomeOut(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId,String regionId,double unitPrice) {
+  public Boolean realTimeBrandIncomeOut(BrandIncome brandIncome, int num, String orderNo, String goodId, String userId,
+      String regionId, double unitPrice) {
     try {
-      //根据传入参数计算品牌型号收益(已出库)
-      Double income = incomeCal(regionId,brandIncome,num);
+      // 根据传入参数计算品牌型号收益(已出库)
+      Double income = incomeCal(regionId, brandIncome, num);
       BrandIncomeSub brandIncomeSub = new BrandIncomeSub();
       brandIncomeSub.setMainplanId(brandIncome.getPlanId());
       brandIncomeSub.setSubplanId(brandIncome.getId());
-      brandIncomeSub.setIncome(income);//总收益
+      brandIncomeSub.setIncome(income);// 总收益
       brandIncomeSub.setOrderno(orderNo);
       brandIncomeSub.setUserId(userId);
-      brandIncomeSub.setOrderflag(0);//订单状态:已出库
-      brandIncomeSub.setCountDate(new Date());//出库
+      brandIncomeSub.setOrderflag(0);// 订单状态:已出库
+      brandIncomeSub.setCountDate(new Date());// 出库
       brandIncomeSub.setSum(num);
       brandIncomeSub.setGoodId(goodId);
       brandIncomeSub.setUnitPrice(unitPrice);
       brandIncomeSub = brandIncomeSubRepository.save(brandIncomeSub);
-      logService.log(null,brandIncomeSub, Log.EventType.SAVE);
+      logService.log(null, brandIncomeSub, Log.EventType.SAVE);
       return true;
     } catch (Exception e) {
       LogUtil.info(e.getMessage());
       return false;
     }
   }
-
-  public Double incomeCal(String regionId, BrandIncome brandIncome,int num){
+  
+  public Double incomeCal(String regionId, BrandIncome brandIncome, int num) {
     Double income = 0.0;
-    AreaAttribute areaAttribute = getAreaAttribute(regionId,brandIncome.getId());
-    if (ObjectUtils.notEqual(areaAttribute,null)){
+    AreaAttribute areaAttribute = getAreaAttribute(regionId, brandIncome.getId());
+    if (ObjectUtils.notEqual(areaAttribute, null)) {
       income = areaAttribute.getCommissions() * num;
     }
     Region region = regionService.findListRegionbyid(regionId);
-    areaAttribute = getAreaAttribute(region.getParent().getId(),brandIncome.getId());
-    if (ObjectUtils.notEqual(areaAttribute,null)){
+    areaAttribute = getAreaAttribute(region.getParent().getId(), brandIncome.getId());
+    if (ObjectUtils.notEqual(areaAttribute, null)) {
       income = areaAttribute.getCommissions() * num;
     }
     region = regionService.findListRegionbyid(region.getParent().getId());
-    areaAttribute = getAreaAttribute(region.getParent().getId(),brandIncome.getId());
-    if (ObjectUtils.notEqual(areaAttribute,null)){
+    areaAttribute = getAreaAttribute(region.getParent().getId(), brandIncome.getId());
+    if (ObjectUtils.notEqual(areaAttribute, null)) {
       income = areaAttribute.getCommissions() * num;
-    }else {
+    } else {
       income = (brandIncome.getCommissions()).doubleValue() * num;
     }
     return income;
   }
-
-  public AreaAttribute getAreaAttribute(String regionId,Long ruleId){
-    return areaAttributeService.findByRegionIdAndRuleId(regionId,ruleId);
+  
+  public AreaAttribute getAreaAttribute(String regionId, Long ruleId) {
+    return areaAttributeService.findByRegionIdAndRuleId(regionId, ruleId);
   }
-
+  
   @Override
-  public BrandIncome findByGoodIdAndPlanIdAndStatus(String goodId,long planId) {
-    return brandIncomeRepository.findByGoodIdAndPlanIdAndStatus(goodId,planId,FlagEnum.NORMAL);
+  public BrandIncome findByGoodIdAndPlanIdAndStatus(String goodId, long planId) {
+    return brandIncomeRepository.findByGoodIdAndPlanIdAndStatus(goodId, planId, FlagEnum.NORMAL);
   }
 }
