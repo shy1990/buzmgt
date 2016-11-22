@@ -333,10 +333,9 @@ public class AchieveController {
 			AchieveStatusEnum statusEnum = AchieveStatusEnum.valueOf(status);
 			achieve.setStatus(statusEnum);
 			achieveServer.save(achieve);
-			Date crudDate =DateUtil.getPreMonthDate(achieve.getIssuingDate(),1);
 
 			//保存定时任务
-			jobService.saveJobTask(30,Long.valueOf(achieve.getPlanId()),achieve.getAchieveId(),crudDate);
+			jobService.saveJobTask(30,Long.valueOf(achieve.getPlanId()),achieve.getAchieveId(),achieve.getIssuingDate());
 
 			logService.log(null, "修改审核状态=" + status, EventType.UPDATE);
 			json.put("result", "success");

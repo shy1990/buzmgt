@@ -7,6 +7,7 @@ import com.wangge.buzmgt.income.main.vo.PlanUserVo;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * AchieveIncome统计
@@ -35,6 +36,11 @@ public class AchieveIncomeVo implements Serializable{
 	private Float money;
 	@Enumerated
 	private AchieveIncome.PayStatusEnum status;
+	private Date startDate;//开始日期
+	private Date endDate;//结束日期
+	private Date issuingDate;//发放日期
+	private String goodName;
+	private Integer shNum;//售后冲减数量
 
 	public Integer getRNID() {
 		return RNID;
@@ -92,8 +98,60 @@ public class AchieveIncomeVo implements Serializable{
 		this.status = status;
 	}
 
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public Date getIssuingDate() {
+		return issuingDate;
+	}
+
+	public void setIssuingDate(Date issuingDate) {
+		this.issuingDate = issuingDate;
+	}
+
+	public String getGoodName() {
+		return goodName;
+	}
+
+	public void setGoodName(String goodName) {
+		this.goodName = goodName;
+	}
+
+	public Integer getShNum() {
+		return shNum;
+	}
+
+	public void setShNum(Integer shNum) {
+		this.shNum = shNum;
+	}
+
 	@Override
 	public String toString() {
-		return "AchieveIncomeVo:[ RNID = " + RNID + ", achieveId =" + achieveId + ", userId=" + userId + ",num= " + num + ", money=" + money + "]";
+		return "AchieveIncomeVo{" +
+						"RNID=" + RNID +
+						", achieveId=" + achieveId +
+						", userId='" + userId + '\'' +
+						", num=" + num +
+						", money=" + money +
+						", status=" + status +
+						", startDate=" + startDate +
+						", endDate=" + endDate +
+						", issuingDate=" + issuingDate +
+						", goodName='" + goodName + '\'' +
+						", shNum=" + shNum +
+						'}';
 	}
 }

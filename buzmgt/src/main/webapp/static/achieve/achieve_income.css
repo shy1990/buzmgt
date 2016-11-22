@@ -1,0 +1,95 @@
+
+.icon-daliang{
+    background: url("../img/day.png") no-repeat center;
+}
+.icon-back {
+    width: 26px;
+    height: 26px;
+    background: url("../img/arrow.png") no-repeat center;
+}
+
+.icon-back:hover {
+    width: 26px;
+    background: url("../img/Arrow 2 .png") no-repeat center;
+}
+.fl-right {
+    float: right;
+    margin-top: 25px;
+    margin-right: 25px;
+}
+
+.text-green{
+    color:#0c9969 ;
+}
+
+.btn-bluee{
+    margin-left: 0px;
+    height: 22px;
+    line-height: 10px;
+    font-size: 12px;
+    padding-left: 8px;
+}
+
+.ph-select {
+
+    width: 180px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid #c6c6c6;
+    border-radius: 3px;
+    background: #ffffff;
+    color: #a7a7a7;
+}
+
+
+.link-posit-t {
+    display: inline-block;
+    text-align: right;
+    vertical-align: bottom;
+}
+.new-table-box {
+    border-top:3px solid #1e92d4 ;
+    min-height: 600px;
+    background: #FFF;
+}
+
+.new-table-box >table>tbody>tr:hover{
+    border-left: 3px solid #1e92d4 ;
+}
+
+.ph-text-red{
+    color: #ee3636;
+}
+
+.text-gery{
+    color: #999999;
+}
+
+.ph-search-date {
+    display: inline-block;
+    width: 10%;
+    min-width: 100px;
+    top: 12px;
+}
+
+.ph-search-date > input {
+    display: inline-block;
+    width: auto;
+    height: 30px;
+}
+.ph-kuang-red{
+    background: url("../img/kuang-red.png") no-repeat center;
+}
+.ph-span{
+    display: inline-block;
+    width: 69px;
+    height: 25px;
+    color: #EEEEEE;
+    text-align: center;
+    font-size: 12px;
+    line-height:25px;
+}
+
+.ph-kuang-lv{
+    background: url("../img/kuang-green.png") no-repeat center;
+}
