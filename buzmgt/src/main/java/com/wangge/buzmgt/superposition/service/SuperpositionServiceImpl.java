@@ -108,7 +108,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
    * @param superId
    */
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void superIncomeCompute(Long planId, Long superId) {
     // 查找叠加规则
     Superposition superposition = repository.findById(superId);
@@ -715,7 +715,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
           singleIncome.setRecord(((BigDecimal) o[0]).intValue());
           singleIncome.setOrderId((String) o[1]);
           singleIncome.setUserId((String) o[2]);
-//          singleIncome.setPayTime((Date) o[3]);
+          // singleIncome.setPayTime((Date) o[3]);
           List<SingleRule> singleRules = superposition.getSingleRules();// 获得一单达量设置规则
           // 获取计算前的冲减量
           SingleIncome singleIncomeFront = getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(singleIncome.getUserId(),
@@ -737,7 +737,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
               singleIncomeSave.setRecord(singleIncome.getRecord() - offsetNum);
               singleIncomeService.save(singleIncomeSave);
               logService.log(null, "一单达量保存" + singleIncomeSave, Log.EventType.SAVE);
-              //  保存到奇才表中
+              // 保存到奇才表中
               try {
                 mainIncomeService.updateSuperIncome(singleIncome.getUserId(), singleIncomeSave.getAmount());
               } catch (Exception e1) {
@@ -819,7 +819,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     // singleIncomeSave.setRecord(singleIncome.getRecord() - offsetNum);
     // singleIncomeService.save(singleIncomeSave);
     // logService.log(null, "一单达量保存" + singleIncomeSave, Log.EventType.SAVE);
-    // //  保存到奇才表中
+    // // 保存到奇才表中
     // try {
     // mainIncomeService.updateSuperIncome(singleIncome.getUserId(),
     // singleIncomeSave.getAmount());
