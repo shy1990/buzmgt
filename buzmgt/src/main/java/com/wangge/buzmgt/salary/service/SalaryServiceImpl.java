@@ -120,7 +120,6 @@ public class SalaryServiceImpl implements SalaryService {
 
     }
     public static Date getDate(String time) throws ParseException {
-
         SimpleDateFormat sf = new SimpleDateFormat(DATE_FORMAT);
         Date date = sf.parse(time);
         return date;

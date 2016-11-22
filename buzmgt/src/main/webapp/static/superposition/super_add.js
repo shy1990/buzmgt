@@ -219,6 +219,7 @@ function initFunction() {
         pickerPosition: "bottom-right",
         forceParse: 0
     }).on('changeDate', function (ev) {
+        $('.J_issuingDate').val('');
         $('.form_date_start').removeClass('has-error');
         $('.form_date_end').removeClass('has-error');
         var startInputDateStr = $('.J_startDate').val();
@@ -231,7 +232,7 @@ function initFunction() {
         }
     });
     $('.J_issuingDate').datetimepicker({
-        format: "yyyy-mm-02",
+        format: "yyyy-mm-06",
         language: 'zh-CN',
         weekStart: 1,
         todayBtn: 1,
@@ -241,6 +242,28 @@ function initFunction() {
         minView: 3,
         pickerPosition: "bottom-right",
         forceParse: 0
+    }).on('changeDate', function (ev) {
+        // $('.form_date_start').removeClass('has-error');
+        // $('.form_date_end').removeClass('has-error');
+        // var startInputDateStr = $('.J_startDate').val();
+        // if (startInputDateStr != "" && startInputDateStr != null) {
+        //     var startInputDate = stringToDate(startInputDateStr).valueOf();
+        //     if (ev.date.valueOf() - startInputDate < 0) {
+        //         $('.form_date_end').addClass('has-error');
+        //         alert("请输入正确的日期");
+        //     }
+        // }
+        var J_issuingDateStr = $('.J_issuingDate').val();
+        var endInputDateStr = $('.J_endDate').val();
+        // if(ev.date.valueOf() - stringToDate(endInputDateStr).valueOf()){}
+        console.log(J_issuingDateStr);
+        console.log(endInputDateStr);
+        console.log(stringToDate(J_issuingDateStr).valueOf()-stringToDate(endInputDateStr).valueOf());
+        if((stringToDate(J_issuingDateStr).valueOf()-stringToDate(endInputDateStr).valueOf()) < 5270400000){
+            alert('此日期要比结束日期大于或者等于两个月');
+            $('.J_issuingDate').val('');
+        }
+        // alert(ev.date.valueOf() - stringToDate(endInputDateStr).valueOf());
     });
     var groupName = "";
     $('#tjry').on('shown.bs.modal', function (event) {
