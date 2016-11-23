@@ -7,10 +7,15 @@ import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.achieveset.service.AchieveService;
 import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
 import com.wangge.buzmgt.achieveset.vo.service.AchieveIncomeVoService;
+import com.wangge.buzmgt.ordersignfor.entity.OrderItem;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ordersignfor.service.OrderItemService;
 import com.wangge.buzmgt.util.JsonResponse;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +37,8 @@ public class AchieveIncomeController {
 
 	@Autowired
 	private AchieveService achieveService;
+	@Autowired
+	private OrderItemService orderItemService;
 	@Autowired
 	private AchieveIncomeService achieveIncomeService;
 	@Autowired
@@ -66,11 +73,23 @@ public class AchieveIncomeController {
 		return achieveIncomeVoService.findAll(searchParams, pageable);
 	}
 
-	@RequestMapping(value = "/detail", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseBody
-	public Page<AchieveIncomeVo> findAllAchieveIncome(@PageableDefault(page = 0, size = 10, sort = {"RNID"}) Pageable pageable, HttpServletRequest request) {
-		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
-		return achieveIncomeVoService.findAll(searchParams, pageable);
+	/**
+	 * 订单详情的收益
+	 * @param model
+	 * @param orderSignfor
+	 * @param ruleId
+	 * @return
+	 */
+	@RequestMapping(value = "/detail/{orderId}", method = RequestMethod.GET)
+	public String incomeOrderDetail(Model model,@PathVariable("orderId") OrderSignfor orderSignfor,String ruleId,String userId) {
+		if (orderSignfor != null){
+			orderSignfor.getOrderNo();
+			orderItemService.disposeOrderSignfor(orderSignfor);
+			achieveIncomeService.disposeIncomeForOrderItem(orderSignfor,ruleId,userId);
+			model.addAttribute("order",orderSignfor);
+		}
+
+		return "achieve/income_order_detial";
 	}
 //	@RequestMapping("/test")
 //	@ResponseBody

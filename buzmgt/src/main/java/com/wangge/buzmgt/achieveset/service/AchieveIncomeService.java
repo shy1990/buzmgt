@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.wangge.buzmgt.achieveset.entity.Achieve;
 import com.wangge.buzmgt.achieveset.vo.AchieveIncomeVo;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -183,4 +184,6 @@ public interface AchieveIncomeService {
 	 * @return
 	 */
 	String calculateAchieveIncomeTotal(Long planId,Long achieveId);
+
+	void disposeIncomeForOrderItem(OrderSignfor orderSignfor,String ruleId, String userId);
 }

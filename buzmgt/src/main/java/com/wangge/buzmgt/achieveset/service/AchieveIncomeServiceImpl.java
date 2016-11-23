@@ -12,6 +12,8 @@ import com.wangge.buzmgt.income.main.repository.HedgeCostRepository;
 import com.wangge.buzmgt.income.main.service.IncomeErrorService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.ordersignfor.entity.OrderItem;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.plan.entity.GroupNumber;
 import com.wangge.buzmgt.plan.entity.GroupUser;
 import com.wangge.buzmgt.plan.entity.RewardPunishRule;
@@ -188,7 +190,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	 */
 	private Float disposeAchieveIncome(Achieve ac, String userId, AchieveIncome.PayStatusEnum status, Integer num) {
 		// 获取当前商品当前规则的销量；（线程同步）
-		Integer nowNumber = synchFindAchieveIncomeCount(ac.getAchieveId(),userId,status);
+		Integer nowNumber = synchFindAchieveIncomeCount(ac.getAchieveId(), userId, status);
 		//查询售后冲减的量
 		Integer afterSaleNum = findAfterSaleNum(ac.getAchieveId(), userId);
 		//实际销量=规则销量+即将发生的销量-售后冲减量
@@ -255,18 +257,19 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 	/**
 	 * 同步查询收益数量
 	 * (只查询收益数量)
+	 *
 	 * @param achieveId
 	 * @param userId
 	 * @param status
 	 * @return
 	 */
-	public Integer synchFindAchieveIncomeCount(Long achieveId, String userId, AchieveIncome.PayStatusEnum status){
+	public Integer synchFindAchieveIncomeCount(Long achieveId, String userId, AchieveIncome.PayStatusEnum status) {
 
 		/**
 		 * key: 规则id+业务id+支付status; value :数量
 		 */
 		synchronized (achieveCachedMap) {
-			String key = achieveId + "+" + userId+"+"+ status.toString();
+			String key = achieveId + "+" + userId + "+" + status.toString();
 			Integer val = achieveCachedMap.get(key);
 			if (val == null) {
 				// 查询总数量
@@ -278,12 +281,13 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 			return val;
 		}
 	}
+
 	/**
 	 * 创建达量收益，售后冲减
 	 * 1.查询是否存在规则；
 	 * 2.是否收益金额已发放
 	 * 3.创建售后收益冲减
-	 *
+	 * <p>
 	 * 不存在线程安全问题：都是单一的数据
 	 *
 	 * @param userId     用户ID
@@ -400,7 +404,7 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 
 				//查询收益列表
 				List<AchieveIncome> achieveIncomes = this.findByAchieveIdAndUserIdAndStatus(achieveId, userId, AchieveIncome.PayStatusEnum.PAY);
-				achieveIncomes.forEach(achieveIncome ->{
+				achieveIncomes.forEach(achieveIncome -> {
 					achieveIncome.setMoney(moneyFloat);
 				});
 				//更改每单收益金额
@@ -419,6 +423,27 @@ public class AchieveIncomeServiceImpl implements AchieveIncomeService {
 		});
 
 		return "OK";
+	}
+
+	@Override
+	public void disposeIncomeForOrderItem(OrderSignfor orderSignfor, String ruleId, String userId) {
+		Map<String, Object> spec = new HashedMap();
+		//查询符合条件的收益
+		spec.put("EQ_achieveId", ruleId);
+		spec.put("EQ_status", "PAY");
+		spec.put("EQ_userId", userId);
+		spec.put("EQ_orderNo", orderSignfor.getOrderNo());
+		List<AchieveIncome> achieveIncomes = this.findAll(spec, (Sort) null);
+		List<OrderItem> orderItems = orderSignfor.getItems();
+		orderItems.forEach(orderItem -> {
+			String goodName = orderItem.getName();
+			for (AchieveIncome achieveIncome : achieveIncomes) {
+				if (goodName.equals(achieveIncome.getGood().getName())) {
+					orderItem.setIncomeMoney(achieveIncome.getMoney());
+					break;
+				}
+			}
+		});
 	}
 
 	/**

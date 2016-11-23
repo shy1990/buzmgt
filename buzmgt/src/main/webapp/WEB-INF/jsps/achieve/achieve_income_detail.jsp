@@ -44,7 +44,7 @@
             <td>{{num}}台</td>
             <td>{{formDate createDate}}</td>
             <td>
-                <button class="btn btn-sm btn-blue">查看订单</button>
+                <a class="btn btn-sm btn-blue" href="/achieveIncome/detail/{{order.id}}">查看订单</a>
             </td>
         </tr>
         {{/each}}

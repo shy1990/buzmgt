@@ -2,10 +2,7 @@ package com.wangge.buzmgt.ordersignfor.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
 * @ClassName: OrderItem
@@ -25,9 +22,11 @@ public class OrderItem implements Serializable {
   private String id;
   private String name;
   private String orderNum;
-  private String type;
+  private String type;//sku（手机）,accessories（配件）,gift（赠品）,point(积分)
   
   private Float price;
+	@Transient
+	private Float incomeMoney = 0.0f;//收益金额
   
   private Integer nums;
 
@@ -88,9 +87,12 @@ public class OrderItem implements Serializable {
   public void setAmount(Float amount) {
     this.amount = amount;
   }
-  
-  
 
-  
-  
+	public Float getIncomeMoney() {
+		return incomeMoney;
+	}
+
+	public void setIncomeMoney(Float incomeMoney) {
+		this.incomeMoney = incomeMoney;
+	}
 }

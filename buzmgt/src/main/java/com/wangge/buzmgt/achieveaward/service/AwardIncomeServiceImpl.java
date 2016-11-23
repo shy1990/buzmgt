@@ -118,11 +118,11 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 				orderNo = awardIncome.getOrderNo();
 				ruleId = awardIncome.getAwardId();
 				searchParams.remove("EQ_createDate");
-				searchParams.put("EQ_awardId",awardIncome.getAwardId());
+				searchParams.put("EQ_awardId", awardIncome.getAwardId());
 				List<AwardIncome> awardIncomes_ = findAll(searchParams, (Sort) null);
 				//售后冲减的金额 =之前的收益-现有的收益
 				AfterSaleMoney = disposeAwardIncome(award, userId, awardIncomes_.size());//之前的收益
-				AfterSaleMoney = AfterSaleMoney - disposeAwardIncome(award,userId,awardIncomes_.size()-num);
+				AfterSaleMoney = AfterSaleMoney - disposeAwardIncome(award, userId, awardIncomes_.size() - num);
 			}
 			//产生达量奖励售后冲减
 			HedgeCost hedgeCost = new HedgeCost(hedgeId, ruleId, 4, userId, goodId, payTime, acceptTime, AfterSaleMoney);
@@ -237,7 +237,7 @@ public class AwardIncomeServiceImpl implements AwardIncomeService {
 				goodIds.add(awardGood.getGoodId());
 			});
 			//TODO 查询售后冲减的量=====================
-			Integer afterSaleNum = hedgeCostRepository.countByRuleIdAndRuleTypeAndUserId(award.getAwardId(),4,userId).intValue();//findAfterSaleNum(ac.getAchieveId(), userId);
+			Integer afterSaleNum = hedgeCostRepository.countByRuleIdAndRuleTypeAndUserId(award.getAwardId(), 4, userId).intValue();//findAfterSaleNum(ac.getAchieveId(), userId);
 			//TODO 查询售后冲减的量=====================
 
 			//实际销量=规则销量+即将发生的销量-售后冲减量

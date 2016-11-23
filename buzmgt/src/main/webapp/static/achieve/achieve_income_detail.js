@@ -7,8 +7,8 @@ $(function () {
 /**
  * 检索模糊查询
  */
+var searchValue = $('#searchValue').val();
 function goSearch() {
-    var searchValue = $('#searchValue').val();
     if (!isEmpty(searchValue)) {
         var orderStatus = $('#orderStatus').val();
         if(orderStatus == "back"){
@@ -61,8 +61,8 @@ function findAchieveDetailList(page) {
     SearchData['page'] = page;
     SearchData['sc_EQ_achieveId'] = $('#achieveId').val();
     SearchData['sc_EQ_userId'] = $('#userId').val();
-    SearchData['sc_EQ_status'] = 'STOCK';
-    delete SearchData['sc_EQ_ruletype'];
+    SearchData['sc_EQ_status'] = 'PAY';
+    delete SearchData['SC_EQ_ruletype'];
     $.ajax({
         url: "/achieveIncome",
         type: "GET",

@@ -76,7 +76,7 @@
 				{{/myIf}}
 				{{#myIf status 'OVER'}}
         <a href="/achieve/list/{{achieveId}}" class="btn bnt-sm bnt-ck">查看</a>
-        <a class="btn btn-sm bnt-jc ">进程</a>
+        <a href="/achieve/course/{{achieveId}}" class="btn btn-sm bnt-jc ">进程</a>
 				<button class="btn bnt-sm btn-sc" onclick="delAchieve({{achieveId}})"> 删除 </button>
 				{{/myIf}}
 				
