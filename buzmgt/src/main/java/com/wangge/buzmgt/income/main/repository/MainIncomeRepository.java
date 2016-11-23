@@ -87,5 +87,5 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
   public void delPriceIncomeByPlanId(Long planId, Date startDate);
   
  
-  public Page<Object> findtest(String month, String userId, Pageable pageable);
+//  public Page<Object> findtest(String month, String userId, Pageable pageable);
 }
