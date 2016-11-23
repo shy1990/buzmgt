@@ -125,7 +125,7 @@ function initFunction(){
 		}
 	});
 	$('.J_issuingDate').datetimepicker({
-		format : "yyyy-mm-03",
+		format : "yyyy-mm-07",
 		language : 'zh-CN',
 		weekStart : 1,
 		todayBtn : 1,
@@ -135,7 +135,15 @@ function initFunction(){
 		minView : 3,
 		pickerPosition : "bottom-right",
 		forceParse : 0
-	});
+	}).on("changeDate",function(ev){
+        var endInputDateStr = $('.J_endDate').val();
+        console.info(endInputDateStr);
+        console.info(ev.date);
+        var endInputDateDate = addMonth(stringToDate(endInputDateStr),2).valueOf();
+        if(ev.date.valueOf() - endInputDateDate<0){
+            alert("发放日期必须大于结束日期2个月！");
+        }
+    });
 	var groupName = "";
 	$('#tjry').on('shown.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
@@ -428,12 +436,20 @@ function disposePostGroup(){
 	return newGroup;
 }
 
+//TODO ==================
 function numberAdd(opt, num){
+    var number = opt.value;
 	var x = $(opt).siblings('a.J_group').attr('data-index');
 	var y = "";
+    var numberFirst = $(".J_numberFirst_").val();
+    var numberSecond = $(".J_numberSecond_").val() ;
+    var numberThird = $(".J_numberThird_").val()
 	switch (num) {
 	case 0:
 		y = "numberFirstAdd";
+        // if(numberSecond){
+        //
+        // }
 		break;
 	case 1:
 		y = "numberSecondAdd";

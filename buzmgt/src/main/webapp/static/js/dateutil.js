@@ -129,7 +129,7 @@ function GetDateDiffStr(startDateStr,endDateStr) 
     var startTime = new Date(Date.parse(startDateStr.replace(/-/g,   "/"))).getTime();     
     var endTime = new Date(Date.parse(endDateStr.replace(/-/g,   "/"))).getTime();     
     var dates = Math.abs((startTime - endTime))/(1000*60*60*24);     
-    return  dates;    
+    return dates;   
 }
 /**
  * 计算日期间隔Str
@@ -232,4 +232,14 @@ function getNextMonth(date,reduceNum) {
 	}
 	month = year + "-" + month;
 	return month;
+}
+/**
+ * 增加月份
+ * @param date
+ * @param addNum
+ * @returns {Date}
+ */
+function addMonth(date,addNum ) {
+    var month = date.getMonth()+addNum;
+    return  new Date(date.setMonth(month));
 }
