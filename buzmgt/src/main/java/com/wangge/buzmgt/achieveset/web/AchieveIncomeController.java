@@ -84,7 +84,9 @@ public class AchieveIncomeController {
 	public String incomeOrderDetail(Model model,@PathVariable("orderId") OrderSignfor orderSignfor,String ruleId,String userId) {
 		if (orderSignfor != null){
 			orderSignfor.getOrderNo();
+			//1.处理详情
 			orderItemService.disposeOrderSignfor(orderSignfor);
+			//2.处理收益（前提条件处理详情）
 			achieveIncomeService.disposeIncomeForOrderItem(orderSignfor,ruleId,userId);
 			model.addAttribute("order",orderSignfor);
 		}
