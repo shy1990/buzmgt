@@ -2,6 +2,8 @@ package com.wangge.buzmgt.income.main.repository;
 
 import java.util.Date;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -83,4 +85,20 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
   @Modifying(clearAutomatically = true)
   @Query(value = "delete from SYS_SECTION_RECORD i where i.plan_id=?1  and i.ORDERFLAG=1 and i.compute_time>?2", nativeQuery = true)
   public void delPriceIncomeByPlanId(Long planId, Date startDate);
+  
+  @Query(value = "select r.namepath,\n" + "       o.shop_name,\n" + "       o.order_no,\n" + "       o.phone_count,\n"
+      + "       o.order_status,\n" + "       o.creat_time,\n" + "       nvl(bsv.income, 0) income\n"
+      + "  from biz_order_signfor o\n" + "  left join sys_salesman s on o.user_id = s.user_id\n"
+      + "  left join sys_region r on s.region_id = r.region_id\n"
+      + "  left join (select bis.order_no, sum(bis.income) income\n"
+      + "               from (select t.PERCENTAGE * t.num income, t.order_no\n"
+      + "                       from SYS_SECTION_RECORD t\n" + "                      where t.ORDERFLAG = 1\n"
+      + "                       and to_char(t.pay_time, 'yyyy-mm') = ?1\n" + "                     union all\n"
+      + "                     select t.INCOME, t.ORDERNO order_no\n"
+      + "                       from SYS_INCOME_TICHENG_BRAND t\n" + "                      where t.ORDERFLAG = 1\n"
+      + "                        and to_char(t.COUNT_DATE, 'yyyy-mm') = ?1\n" + "                        ) bis\n"
+      + "              group by bis.order_no) bsv on o.order_no = bsv.order_no\n"
+      + " where to_char(o.custom_signfor_time, 'yyyy-mm') = ?1 and o.user_id=?2", nativeQuery = true, countQuery = "select count(o.signid)\n"
+          + "  from biz_order_signfor o\n" + " where to_char(o.custom_signfor_time, 'yyyy-mm') = ?1 and o.user_id=?2")
+  public Page<Object> findtest(String month, String userId, PageRequest page);
 }

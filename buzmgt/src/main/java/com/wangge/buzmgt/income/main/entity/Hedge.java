@@ -14,8 +14,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * 售后冲减类; 售后计算未定
- * 
+ * 售后冲减类; 售后计算未定<br/>
+ * 6号之前导完上个月收到的售后退货件<br/>
  * @author yangqc
  * @version
  * @since JDK 1.8
@@ -98,7 +98,8 @@ public class Hedge {
     this.id = id;
   }
   
-  public Hedge(String orderno, String sku, String goodsName, Integer sum, Double price,Date shdate, String uniquenumber) {
+  public Hedge(String orderno, String sku, String goodsName, Integer sum, Double price, Date shdate,
+      String uniquenumber) {
     super();
     this.orderno = orderno;
     this.sku = sku;
@@ -106,7 +107,7 @@ public class Hedge {
     this.goodsName = goodsName;
     this.shdate = shdate;
     this.sum = sum;
-    this.price=price;
+    this.price = price;
   }
   
   public Hedge() {
@@ -124,11 +125,11 @@ public class Hedge {
   public Double getPrice() {
     return price;
   }
-
+  
   public void setPrice(Double price) {
     this.price = price;
   }
-
+  
   @Override
   public String toString() {
     return "Hedge [id=" + id + ", orderno=" + orderno + ", sku=" + sku + ", uniquenumber=" + uniquenumber

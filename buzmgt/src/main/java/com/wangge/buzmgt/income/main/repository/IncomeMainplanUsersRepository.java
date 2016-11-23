@@ -72,5 +72,5 @@ public interface IncomeMainplanUsersRepository
       + "            m.createtime <=?1   and    (m.fqtime is null or m.fqtime >=?1 ) "
       + "     and (iu.fqtime is null or iu.fqtime >?1 )   \n"
       + "               and   (us.status=0 or (s.fireddate<=?1 )) and m.id=?2 and us.user_id=?3 ", nativeQuery = true)
-  Object findEffectiveUserTime(Date startDate, Long planId, String userId);
+  List<Object> findEffectiveUserTime(Date startDate, Long planId, String userId);
 }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
+import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.schedule.service.JobService;
@@ -114,8 +115,8 @@ public class MainIncomeController {
    * @since JDK 1.8
    */
   @RequestMapping("/calcuPayed")
-  public @ResponseBody String calPayedOrder( @RequestParam String orderNo,
-      @RequestParam String userId, @RequestParam String regionId) throws Exception {
+  public @ResponseBody String calPayedOrder(@RequestParam String orderNo, @RequestParam String userId,
+      @RequestParam String regionId) throws Exception {
     incomeService.caculatePayedOrder(orderNo, userId, regionId);
     return "ok";
   }
@@ -129,5 +130,18 @@ public class MainIncomeController {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+  
+  @RequestMapping("/businessList")
+  public String InitBusiPage(@RequestParam("id") MainIncome mainIncome, String userId, String month, Model model) {
+    model.addAttribute("businessSalary", mainIncome.getBusiIncome());
+    model.addAttribute("hedge", mainIncome.getHedgecut());
+    model.addAttribute("allBusiSal", mainIncome.getHedgecut() + mainIncome.getBusiIncome());
+    return "";
+  }
+  
+  @RequestMapping("/businessList/findVolist")
+  public @ResponseBody List<?> findVoList() {
+    return null;
   }
 }

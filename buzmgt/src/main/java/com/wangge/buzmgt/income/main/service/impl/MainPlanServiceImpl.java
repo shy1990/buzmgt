@@ -474,14 +474,15 @@ public class MainPlanServiceImpl implements MainPlanService {
   }
   
   @Override
-  public Map<String, Object> findEffectUserDate(Long planId, Date startDate, Date endDate, String userId) {
-    Object userO = planUserRep.findEffectiveUserTime(startDate, planId, userId);
-    if (null != userO) {
-      Object[] user = (Object[]) userO;
+  public List<Map<String, Object>> findEffectUserDate(Long planId, Date startDate, Date endDate, String userId) {
+    List<Object> orList = planUserRep.findEffectiveUserTime(startDate, planId, userId);
+    List<Map<String, Object>> usrList = new ArrayList<>();
+    for (Object or : orList) {
+      Object[] user = (Object[]) or;
       Map<String, Object> userMap = new HashMap<>();
       getEffectiveDate(startDate, endDate, user, userMap);
-      return userMap;
+      usrList.add(userMap);
     }
-    return null;
+    return usrList;
   }
 }
