@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -146,9 +147,33 @@ public class OilCostController {
     model.addAttribute("salesMan", salesMan);
     return "oilsubsidy/oil_subsidy_record";
   }
+
+  /**
+   * 收益统计查看页面跳转
+   */
+  @RequestMapping(value="/incomeOilRecord/{userId}",method=RequestMethod.GET)
+  public String incomeRecordList(@PathVariable String userId,Model model,HttpServletRequest request){
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    searchParams.put("EQ_userId",userId);
+    List<OilCost> oilCostlistAll = oilCostService.findGroupByUserId(searchParams);
+    model.addAttribute("userId", userId);
+    SalesMan salesMan= salesManService.findById(userId);
+    if (CollectionUtils.isNotEmpty(oilCostlistAll)){
+      oilCostlistAll.forEach( oilCost -> {
+        model.addAttribute("oilTotalCost",oilCost.getOilTotalCost());
+        model.addAttribute("totalDistance",oilCost.getTotalDistance());
+      });
+    }
+    model.addAttribute("startTime",searchParams.get("GTE_dateTime"));
+    model.addAttribute("endTime",searchParams.get("LTE_dateTime"));
+    model.addAttribute("salesMan", salesMan);
+    model.addAttribute("flag","income");
+    return "oilsubsidy/oil_subsidy_record";
+  }
+
   /**
    * 
-   * @param userId
+   * @param id
    * @param model
    * @param request
    * @return

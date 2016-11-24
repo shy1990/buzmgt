@@ -139,3 +139,33 @@ function getNextMonth(reduceNum) {
 	month = year + "-" + month;
 	return month;
 }
+
+function oilRecord(userId) {
+	var month = $('#monthDate').val();
+	//初始化月份string
+	var arr = month.split("-");
+	var monthSet = Number(arr[1]);
+	if (!isEmpty(month)) {
+		//new Date(2016,02,0) 实际-->2016年03月
+		var day = new Date(arr[0], monthSet, 0).getDate();
+		SearchData['sc_GTE_dateTime'] = month + "-01";
+		SearchData['sc_LTE_dateTime'] = month + "-" + day;
+	}
+	window.location.href = base + "oilCost/incomeOilRecord/" + userId + "?" + conditionProcess();
+}
+
+/**
+ * 处理检索条件
+ *
+ * @returns {String}
+ */
+function conditionProcess() {
+	var SearchData_ = "sc_GTE_dateTime="
+		+ (SearchData.sc_GTE_dateTime == null ? ''
+			: SearchData.sc_GTE_dateTime)
+		+ "&sc_LTE_dateTime="
+		+ (SearchData.sc_LTE_dateTime == null ? ''
+			: SearchData.sc_LTE_dateTime);
+
+	return SearchData_;
+}

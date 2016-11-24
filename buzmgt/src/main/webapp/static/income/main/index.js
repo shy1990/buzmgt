@@ -62,8 +62,7 @@ function oilCostPaging(data) {
 	});
 }
 
-function deletePlan() {
-	
+function deletePlan() {	
 	$.ajax({
 		url : "/mainPlan/delete/" + gloPlanId,
 		type : "post",

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
   String path = request.getContextPath();
 			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -30,23 +31,29 @@
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <script id="oilCostRecord-table-template" type="text/x-handlebars-template">
-	{{#each content}}
+    {{#if content}}
+        {{#each content}}
+        <tr>
+          <td>{{salesManPart.truename}}({{isPrimaryAccount}})</td>
+          <td class="normal">
+                    {{#each oilRecordList}}
+                        {{{disposeRecordList regionType regionName exception}}}
+                    {{/each}}
+          </td>
+          <td>
+                 <span class="oil-km"><span class="J_oil-km">{{distance}}</span>km</span> /
+                 <span class="oil-mny"><span class="J_oil-mny">{{oilCost}}</span>元</span></td>
+          <td>{{formDate dateTime}}</td>
+          <td>
+            <a class="btn btn-blue btn-sm" href="/oilCost/detail/{{id}}">查看</a>
+          </td>
+        </tr>
+        {{/each}}
+    {{else}}
     <tr>
-      <td>{{salesManPart.truename}}({{isPrimaryAccount}})</td>
-      <td class="normal">
-				{{#each oilRecordList}}
-					{{{disposeRecordList regionType regionName exception}}}
-				{{/each}}
-      </td>
-      <td>
-			 <span class="oil-km"><span class="J_oil-km">{{distance}}</span>km</span> /
-			 <span class="oil-mny"><span class="J_oil-mny">{{oilCost}}</span>元</span></td>
-      <td>{{formDate dateTime}}</td>
-      <td>
-        <a class="btn btn-blue btn-sm" href="/oilCost/detail/{{id}}">查看</a>
-      </td>
-    </tr>     
-	{{/each}}
+        <td colspan="100">没有相关数据</td>
+    </tr>
+    {{/if}}
 </script>
 <script type="text/javascript">
 var	base='<%=basePath%>';
@@ -64,10 +71,18 @@ var SearchData = {
     <h4 class="page-header ">
         <i class="ico icon-oil-detail"></i>油补记录
         <input type="hidden" value="${userId}" id="recordUserID">
-        <a href="/oilCost/list" class="btn btn-blue member-add-btn"
-				type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
-				返回列表
-			</a>
+        <c:if test="${flag eq 'income'}">
+            <a href="/mainIncome/index" class="btn btn-blue member-add-btn"
+               type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
+                返回列表
+            </a>
+        </c:if>
+        <c:if test="${flag eq null}">
+            <a href="/oilCost/list" class="btn btn-blue member-add-btn"
+               type="button"> <i class="icon glyphicon glyphicon-share-alt"></i>
+                返回列表
+            </a>
+        </c:if>
     </h4>
     <div class="row">
         <div class="col-md-9">
@@ -82,7 +97,9 @@ var SearchData = {
                         </div>
                     </div>
                     <a class="screen" onclick="goSearch();" href="javascript:;">筛选</a>
-                    <span class="screen pull-right" id="searchDate">${startTime }--${endTime }   &nbsp;</span>
+                    <c:if test="${startTime ne null } && ${endTime ne null }">
+                        <span class="screen pull-right" id="searchDate">${startTime }--${endTime }   &nbsp;</span>
+                    </c:if>
                 </div>
                 <div class="box-body">
                     <div class="marg-t text-time clearfix">
