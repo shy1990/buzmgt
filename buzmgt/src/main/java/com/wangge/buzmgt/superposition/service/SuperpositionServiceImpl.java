@@ -1,6 +1,5 @@
 package com.wangge.buzmgt.superposition.service;
 
-import com.wangge.buzmgt.income.main.entity.HedgeCost;
 import com.wangge.buzmgt.income.main.repository.HedgeCostRepository;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.service.MainPlanService;
@@ -726,7 +725,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
           List<SingleRule> singleRules = superposition.getSingleRules();// 获得一单达量设置规则
           // 获取计算前的冲减量
           SingleIncome singleIncomeFront = getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(singleIncome.getUserId(),
-              planId, superposition.getId(), "1", singleIncome.getOrderId());
+              planId, superposition.getId(), "1", singleIncome.getOrderId(),DateUtil.date2String(startTime,"yyyy-MM-dd"),DateUtil.date2String(endTime,"yyyy-MM-dd"));
           Integer offsetNum = 0;
           if (singleIncomeFront != null) {
             offsetNum = singleIncomeFront.getOffsetNums();
@@ -871,77 +870,79 @@ public class SuperpositionServiceImpl implements SuperpositonService {
           singleIncome.setUserId(userId);
           singleIncome.setOrderId(orderId);
           singleIncome.setStatus("1");
+          singleIncome.setPayTime(payTime);
           singleIncomeService.save(singleIncome);
-        } else {// 已经计算
-          SingleIncome singleIncome = new SingleIncome();
-          singleIncome.setSuperId(superposition.getId());
-          singleIncome.setGoodsId(goodsId);
-          singleIncome.setPlanId(planId);
-          singleIncome.setOffsetNums(nums);
-          singleIncome.setUserId(userId);
-          singleIncome.setOrderId(orderId);
-          singleIncome.setStatus("2");
-          singleIncomeService.save(singleIncome);
-          // 获取原始记录
-          SingleIncome singleIncomeSave = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId, planId,
-              superposition.getId(), "0", orderId);
-          // 获取计算以后的冲减数量
-          SingleIncome singleIncomeOffset = getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(userId, planId,
-              superposition.getId(), "2", orderId);
-          Integer afterOffsetNums = singleIncomeSave.getRecord() - singleIncomeOffset.getOffsetNums();
-          
-          List<SingleRule> singleRules = superposition.getSingleRules();
-          if (CollectionUtils.isNotEmpty(singleRules)) {
-            singleRules.forEach(singleRule -> {
-              if (afterOffsetNums > singleRule.getMin() && afterOffsetNums <= singleRule.getMax()) {
-                SingleIncome singleIncomeNew = new SingleIncome();
-                singleIncomeNew.setPlanId(planId);
-                singleIncomeNew.setOrderId(orderId);
-                singleIncomeNew.setSuperId(superposition.getId());
-                singleIncomeNew.setAmount(singleRule.getReward());
-                singleIncomeNew.setUserId(singleIncome.getUserId());
-                singleIncomeNew.setStatus("3");// 重新保存数据
-                singleIncomeNew.setRecord(afterOffsetNums);
-                // 获取上一次计算的
-                SingleIncome singleIncomeHistory = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId,
-                    planId, superposition.getId(), "3", orderId);
-                if (singleIncomeHistory != null) {
-                  HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId,
-                      DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime),
-                      singleIncomeHistory.getAmount() - singleIncomeNew.getAmount());
-                  hedgeCostRepository.save(hedgeCost);
-                  logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
-                  singleIncomeHistory.setStatus("4");// 将上一条记录设置为已经过期
-                  singleIncomeService.save(singleIncomeHistory);
-                } else {
-                  HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId,
-                      DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime),
-                      singleIncomeSave.getAmount() - singleIncomeNew.getAmount());
-                  hedgeCostRepository.save(hedgeCost);
-                  logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
-                }
-                singleIncomeService.save(singleIncomeNew);
-              } else if (afterOffsetNums == 0) {
-                // 获取上一次计算的
-                SingleIncome singleIncomeHistory = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId,
-                    planId, superposition.getId(), "3", orderId);
-                if (singleIncomeHistory != null) {
-                  HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId,
-                      DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime),
-                      singleIncomeHistory.getAmount());
-                  singleIncomeHistory.setStatus("4");// 将上一条记录设置为已经过期
-                  singleIncomeService.save(singleIncomeHistory);
-                  hedgeCostRepository.save(hedgeCost);
-                } else {
-                  HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId,
-                      DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeSave.getAmount());
-                  hedgeCostRepository.save(hedgeCost);
-                }
-                
-              }
-            });
-          }
         }
+//        else {// 已经计算
+//          SingleIncome singleIncome = new SingleIncome();
+//          singleIncome.setSuperId(superposition.getId());
+//          singleIncome.setGoodsId(goodsId);
+//          singleIncome.setPlanId(planId);
+//          singleIncome.setOffsetNums(nums);
+//          singleIncome.setUserId(userId);
+//          singleIncome.setOrderId(orderId);
+//          singleIncome.setStatus("2");
+//          singleIncomeService.save(singleIncome);
+//          // 获取原始记录
+//          SingleIncome singleIncomeSave = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId, planId,
+//              superposition.getId(), "0", orderId);
+//          // 获取计算以后的冲减数量
+//          SingleIncome singleIncomeOffset = getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(userId, planId,
+//              superposition.getId(), "2", orderId);
+//          Integer afterOffsetNums = singleIncomeSave.getRecord() - singleIncomeOffset.getOffsetNums();
+//
+//          List<SingleRule> singleRules = superposition.getSingleRules();
+//          if (CollectionUtils.isNotEmpty(singleRules)) {
+//            singleRules.forEach(singleRule -> {
+//              if (afterOffsetNums > singleRule.getMin() && afterOffsetNums <= singleRule.getMax()) {
+//                SingleIncome singleIncomeNew = new SingleIncome();
+//                singleIncomeNew.setPlanId(planId);
+//                singleIncomeNew.setOrderId(orderId);
+//                singleIncomeNew.setSuperId(superposition.getId());
+//                singleIncomeNew.setAmount(singleRule.getReward());
+//                singleIncomeNew.setUserId(singleIncome.getUserId());
+//                singleIncomeNew.setStatus("3");// 重新保存数据
+//                singleIncomeNew.setRecord(afterOffsetNums);
+//                // 获取上一次计算的
+//                SingleIncome singleIncomeHistory = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId,
+//                    planId, superposition.getId(), "3", orderId);
+//                if (singleIncomeHistory != null) {
+//                  HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId,
+//                      DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime),
+//                      singleIncomeHistory.getAmount() - singleIncomeNew.getAmount());
+//                  hedgeCostRepository.save(hedgeCost);
+//                  logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
+//                  singleIncomeHistory.setStatus("4");// 将上一条记录设置为已经过期
+//                  singleIncomeService.save(singleIncomeHistory);
+//                } else {
+//                  HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId,
+//                      DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime),
+//                      singleIncomeSave.getAmount() - singleIncomeNew.getAmount());
+//                  hedgeCostRepository.save(hedgeCost);
+//                  logService.log(null, "叠加冲减保存:  " + hedgeCost, Log.EventType.SAVE);
+//                }
+//                singleIncomeService.save(singleIncomeNew);
+//              } else if (afterOffsetNums == 0) {
+//                // 获取上一次计算的
+//                SingleIncome singleIncomeHistory = singleIncomeService.findByUserIdAndPlanIdAndSuperIdAndStatus(userId,
+//                    planId, superposition.getId(), "3", orderId);
+//                if (singleIncomeHistory != null) {
+//                  HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId,
+//                      DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime),
+//                      singleIncomeHistory.getAmount());
+//                  singleIncomeHistory.setStatus("4");// 将上一条记录设置为已经过期
+//                  singleIncomeService.save(singleIncomeHistory);
+//                  hedgeCostRepository.save(hedgeCost);
+//                } else {
+//                  HedgeCost hedgeCost = new HedgeCost(1l, superposition.getId(), 5, userId, goodsId,
+//                      DateUtil.string2Date(payTime), DateUtil.string2Date(receivingTime), singleIncomeSave.getAmount());
+//                  hedgeCostRepository.save(hedgeCost);
+//                }
+//
+//              }
+//            });
+//          }
+//        }
         
       }
       
@@ -960,23 +961,29 @@ public class SuperpositionServiceImpl implements SuperpositonService {
    */
   
   public SingleIncome getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(String userId, Long planId, Long superId,
-      String status, String orderId) {
+      String status, String orderId,String startTime,String endTime) {
     String sql = "SELECT NVL(SUM(rd.OFFSET_NUMS),0) AS offset_nums,\n" + "  rd.USER_ID,\n" + "  rd.SUPER_ID,\n"
         + "  rd.PLAN_ID,\n" + "  rd.ORDER_ID\n" + "FROM SYS_SINGLE_RECORD rd\n" + "WHERE rd.PLAN_ID = ?\n"
         + "AND rd.USER_ID = ?\n" + "AND rd.SUPER_ID = ?\n" + "AND rd.status   = ?\n" + "AND rd.ORDER_ID   = ?\n"
+        + " and to_date(rd.pay_time,'yyyy-MM-dd') >= to_date(?,'yyyy-MM-dd') and to_date(rd.pay_time,'yyyy-MM-dd') <= to_date(?,'yyyy-MM-dd') "
         + "GROUP BY rd.USER_ID,\n" + "  rd.SUPER_ID,\n" + "  rd.PLAN_ID,\n" + "  rd.ORDER_ID";
     int a = 0;
     int b = 1;
     int c = 2;
     int d = 3;
     int e = 4;
+    int f = 5;
+    int g = 6;
     Query query = entityManager.createNativeQuery(sql);
     SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
     sqlQuery.setParameter(a, planId);// 方案id
     sqlQuery.setParameter(b, userId);// 业务员id
     sqlQuery.setParameter(c, superId);// 叠加方案id
     sqlQuery.setParameter(d, status);// 状态
-    sqlQuery.setParameter(e, orderId);// 状态
+    sqlQuery.setParameter(e, orderId);// 订单id
+    sqlQuery.setParameter(f, startTime);// 开始时间
+    sqlQuery.setParameter(g, endTime);// 结束时间
+
     List<Object[]> list = sqlQuery.list();
     SingleIncome singleIncome = null;
     if (CollectionUtils.isNotEmpty(list)) {

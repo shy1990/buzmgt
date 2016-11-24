@@ -3,7 +3,6 @@ package com.wangge.buzmgt.superposition.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Created by joe on 16-10-15.
@@ -19,7 +18,7 @@ public class SingleIncome {
     private Long id;
     private String orderId;//订单id
     private String userId;//用户id
-    private Date payTime;//支付时间
+    private String payTime;//支付时间
     private Integer offsetNums;//一单符合规则的提货数量
     private Long superId;//叠加达量设置规则
     private Long planId;//方案id
@@ -60,11 +59,11 @@ public class SingleIncome {
         this.userId = userId;
     }
 
-    public Date getPayTime() {
+    public String getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Date payTime) {
+    public void setPayTime(String payTime) {
         this.payTime = payTime;
     }
 
@@ -122,7 +121,7 @@ public class SingleIncome {
                 "id=" + id +
                 ", orderId='" + orderId + '\'' +
                 ", userId='" + userId + '\'' +
-                ", payTime=" + payTime +
+                ", payTime='" + payTime + '\'' +
                 ", offsetNums=" + offsetNums +
                 ", superId=" + superId +
                 ", planId=" + planId +
