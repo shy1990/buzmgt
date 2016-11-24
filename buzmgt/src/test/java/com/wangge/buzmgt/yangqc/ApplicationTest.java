@@ -20,7 +20,7 @@ import com.wangge.buzmgt.income.main.service.MainPlanService;
 import com.wangge.buzmgt.income.schedule.IncomeSchedule;
 import com.wangge.buzmgt.income.schedule.repository.JobRepository;
 import com.wangge.buzmgt.income.schedule.service.JobService;
-import com.wangge.buzmgt.util.DateUtil;
+import com.wangge.buzmgt.income.ywsalary.service.BaseSalaryService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BuzmgtApplication.class)
@@ -42,6 +42,8 @@ public class ApplicationTest {
   MainIncomePlanRepository planRep;
   @Autowired
   JobService jobService;
+  @Autowired
+  BaseSalaryService baseSService;
   
   @Test
   public void testPro() {
@@ -67,20 +69,25 @@ public class ApplicationTest {
   @Test
   public void testQt() {
     jobService.doTask();
+    try {
+      Thread.currentThread();
+      Thread.sleep(1000 * 60 * 5);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
   
   @Test
   public void testDate() {
-    planUserRep.findsaleByDateAndOrderNo(DateUtil.string2Date("2016-09-01"), "sfsdfa");
-    planUserRep.findBysalesmanAndDate(DateUtil.string2Date("2016-09-01"), "B37028206200");
-    // List<Map<String, Object>> userList =
-    // planService.findEffectUserDateList(20L,
-    // DateUtil.string2Date("2016-09-01"),
-    // DateUtil.string2Date("2016-09-30"));
-    // for (Map<String, Object> usr : userList) {
-    // System.out
-    // .println(usr.get("userId").toString() + usr.get("startDate").toString() +
-    // usr.get("endDate").toString());
-    // }
+    baseSService.updateTest();
+    // planUserRep.findsaleByDateAndOrderNo(DateUtil.string2Date("2016-09-01"),
+    // "sfsdfa");
+    // planUserRep.findBysalesmanAndDate(DateUtil.string2Date("2016-09-01"),
+    // "B37028206200");
+  }
+  @Test
+  public void testx(){
+//    planService.findEffectUserDate(2, startDate, endDate, "M370105czgp0");
   }
 }

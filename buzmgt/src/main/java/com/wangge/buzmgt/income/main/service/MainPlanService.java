@@ -151,7 +151,7 @@ public interface MainPlanService {
    *          规则结束时间
    * @param userId
    *          业务Id
-   * @return 没结果则为null; map(主键:类型)-> userId:String;endDate:Date;startDate:Date
+   * @return 没结果则为null; List,map(主键:类型)-> userId:String;endDate:Date;startDate:Date
    * @since JDK 1.8
    */
   List<Map<String, Object>> findEffectUserDate(Long planId, Date startDate, Date endDate, String userId);

@@ -12,6 +12,7 @@ import org.springframework.util.MultiValueMap;
 
 import com.wangge.buzmgt.monthtask.entity.MonthTask;
 import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.teammember.entity.SalesMan;
 
 public interface MonthTaskService {
 
@@ -121,5 +122,14 @@ public interface MonthTaskService {
 	 * @return
 	 */
 	Object getIssueTaskCount();
+
+  /** 
+    * 根据业务员来查找考核阶段,页面展示用 
+    * @author yangqc 
+    * @param salesman
+    * @param model 
+    * @since JDK 1.8 
+    */  
+  void findSalaryAndAcess(SalesMan salesman, Model model);
 
 }

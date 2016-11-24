@@ -436,7 +436,7 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
           incomeRep.updatebasicSalaryOrPunish(baseSalary, 0, baseSalary - main.getBasicSalary(), main.getId());
         } catch (Exception e) {
           LogUtil.error("月初计算本月工资出错", e);
-          errorService.save(52,"计算基本工资出错!!" + o1);
+          errorService.save(52, "计算基本工资出错!!" + o1);
           throw new Exception("月初计算本月工资出错");
         }
       }
@@ -445,5 +445,14 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
       errorService.save(52, "计算基本工资出错!!");
       throw new Exception("月初计算本月工资出错");
     }
+  }
+  
+  @Override
+  @Transactional
+  public void updateTest() {
+    BaseSalary basesal = baseSalaryRepository.findOne(1L);
+    basesal.setSalary(4500D);
+    baseSalaryRepository.save(basesal);
+    throw new NullPointerException("测试用");
   }
 }

@@ -31,8 +31,10 @@ import com.wangge.buzmgt.income.main.repository.IncomeMainplanUsersRepository;
 import com.wangge.buzmgt.income.main.repository.MainIncomeRepository;
 import com.wangge.buzmgt.income.main.service.IncomeErrorService;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
+import com.wangge.buzmgt.income.main.vo.BusinessSalaryVo;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.main.vo.OrderGoods;
+import com.wangge.buzmgt.income.main.vo.repository.BusinessSalaryVoRepository;
 import com.wangge.buzmgt.income.main.vo.repository.MainIncomeVoRepository;
 import com.wangge.buzmgt.income.main.vo.repository.OrderGoodsRepository;
 import com.wangge.buzmgt.income.main.vo.repository.PlanUserVoRepository;
@@ -72,6 +74,8 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   IncomeErrorService errorService;
   @Autowired
   private LogService logService;
+  @Autowired
+  private BusinessSalaryVoRepository businessVoRep;
   
   /**
    * 要避免多线程冲突 <br/>
@@ -413,6 +417,12 @@ public class MainIncomeServiceImpl implements MainIncomeService {
     } catch (Exception e) {
       throw new Exception("审批id为" + id + "的工资出错");
     }
+  }
+  
+  @Override
+  public Page<BusinessSalaryVo> findBusinessSalaryVo(Map<String, Object> reMap, Pageable pageReq) {
+    // TODO Auto-generated method stub
+    return businessVoRep.findAll(pageReq);
   }
   
 }

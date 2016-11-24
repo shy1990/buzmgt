@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.wangge.buzmgt.income.main.entity.MainIncome;
+import com.wangge.buzmgt.income.main.vo.BusinessSalaryVo;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.main.vo.OrderGoods;
 
@@ -136,4 +137,8 @@ public interface MainIncomeService {
   void updateSuperIncome(String userId, double superPositionIncome) throws Exception;
   
   void check(Long id) throws Exception;
+  /**获得某月某业务员员的业务员佣金的订单展示列表
+   * 
+   * */
+  Page<BusinessSalaryVo> findBusinessSalaryVo(Map<String,Object> reMap, Pageable page);
 }

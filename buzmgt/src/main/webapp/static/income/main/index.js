@@ -63,6 +63,7 @@ function oilCostPaging(data) {
 }
 
 function deletePlan() {
+	
 	$.ajax({
 		url : "/mainPlan/delete/" + gloPlanId,
 		type : "post",

@@ -88,6 +88,7 @@ public class MainIncome {
    * 总收入
    */
   private Double allresult = 0D;
+  private Double  rbusiSal=0D;
   /**
    * 状态(0,未审核,1已审核)
    */
@@ -195,6 +196,14 @@ public class MainIncome {
     this.month = month;
   }
   
+  public Double getRbusiSal() {
+    return rbusiSal;
+  }
+
+  public void setRbusiSal(Double rbusiSal) {
+    this.rbusiSal = rbusiSal;
+  }
+
   public MainIncome(SalesMan salesman, String month, Double basicSalaray) {
     super();
     this.salesman = salesman;

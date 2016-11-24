@@ -53,7 +53,7 @@ public class IncomeSchedule {
   }
   
   /**
-   * 每月1日2点1分执行. <br/>
+   * 每月1日2点1分0秒执行. <br/>
    * 重新计算本月有多个记录的业务员的基本工资
    * 
    * @since JDK 1.8
@@ -80,18 +80,18 @@ public class IncomeSchedule {
   }
   
   /**
-   * 每月9号23点,<br/>
+   * 每月8号23点,<br/>
    * 计算上个月售后收件冲减
    */
-  @Scheduled(cron = "0 1 23 9 * ? ")
+  @Scheduled(cron = "0 1 23 8 * ? ")
   public void initShouHedge() {
     hedgeService.calculateHedge();
   }
   
   /**
-   * 计算总和 10号23点开始计算
+   * 计算总和 9号23点开始计算
    */
-  @Scheduled(cron = "0 1 23 10 * ? ")
+  @Scheduled(cron = "0 1 23 9 * ? ")
   public void calIncomePerMonth() {
     mainIncomeService.calIncomePerMonth();
   }

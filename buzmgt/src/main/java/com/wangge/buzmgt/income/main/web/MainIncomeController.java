@@ -27,6 +27,7 @@ import com.wangge.buzmgt.income.main.service.MainIncomeService;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.schedule.service.JobService;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.monthtask.service.MonthTaskService;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.superposition.service.SuperpositonService;
 import com.wangge.buzmgt.util.DateUtil;
@@ -45,6 +46,8 @@ public class MainIncomeController {
   JobService jobService;
   @Autowired
   AchieveIncomeService achieveService;
+  @Autowired
+  MonthTaskService monthService;
   private static final String SEARCH_OPERTOR = "SC_";
   
   @RequestMapping("/index")
@@ -137,11 +140,13 @@ public class MainIncomeController {
     model.addAttribute("businessSalary", mainIncome.getBusiIncome());
     model.addAttribute("hedge", mainIncome.getHedgecut());
     model.addAttribute("allBusiSal", mainIncome.getHedgecut() + mainIncome.getBusiIncome());
-    return "";
+    monthService.findSalaryAndAcess(mainIncome.getSalesman(), model);
+    return "/income/sub/businessSalary";
   }
   
   @RequestMapping("/businessList/findVolist")
-  public @ResponseBody List<?> findVoList() {
-    return null;
+  public @ResponseBody Page<?> findVoList(HttpServletRequest request, HttpServletResponse response, Pageable pageReq) {
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    return incomeService.findBusinessSalaryVo(searchParams, pageReq);
   }
 }

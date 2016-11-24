@@ -85,7 +85,18 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
   @Modifying(clearAutomatically = true)
   @Query(value = "delete from SYS_SECTION_RECORD i where i.plan_id=?1  and i.ORDERFLAG=1 and i.compute_time>?2", nativeQuery = true)
   public void delPriceIncomeByPlanId(Long planId, Date startDate);
+  /**获得业务期间的总销量,售后冲减量
+   * 
+   * */
+  @Query(value = "select nvl(sum(nums), 0) nums, \n"
+      + "       nvl(sum(h.sum), 0) shnums  from (select sum(t.num) nums, sum(t.percentage * t.num) incomes\n"
+      + "          from SYS_SECTION_RECORD t     where t.orderflag = 1\n"
+      + "           and t.salesman_id = ?1      and to_char('yyyy-mm', t.pay_time) = ?2\n" + "        union all\n"
+      + "        select sum(t.SUM) nums, sum(INCOME) incomes\n"
+      + "          from SYS_INCOME_TICHENG_BRAND t         where t.orderflag = 1\n" + "           and t.USER_ID = ?1\n"
+      + "           and to_char('yyyy-mm', t.COUNT_DATE) = ?2)\n" + "  left join sys_income_shouhou_cost c on 1 = 1\n"
+      + "  left join sys_income_shouhou_hedge h on c.hedge_id = h.id\n" + " where c.ruletype in (0, 1)\n"
+      + "   and c.user_id = ?1\n" + "   and to_char('yyyy-mm', c.PAYTIME) = ?2", nativeQuery = true)
+  public Object getBusinessIncome(String userId, String month);
   
- 
-//  public Page<Object> findtest(String month, String userId, Pageable pageable);
 }

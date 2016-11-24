@@ -123,16 +123,16 @@ public class BaseSalaryController {
    */
   @RequestMapping(value = "/{Id}", method = RequestMethod.PUT)
   @ResponseBody
-  public JSONObject updateSalary(@PathVariable("Id") BaseSalary baseSalary, Double salary,String upDate) {
+  public JSONObject updateSalary(@PathVariable("Id") BaseSalary baseSalary, Double salary, String upDate) {
     JSONObject json = new JSONObject();
     
     try {
       
-      baseSalaryService.update(baseSalary, salary,upDate);
+      baseSalaryService.update(baseSalary, salary, upDate);
       json.put("status", "success");
       json.put("successMsg", "操作成功！");
     } catch (Exception e) {
-      LogUtil.error(e.getMessage(),e);
+      LogUtil.error(e.getMessage(), e);
       json.put("status", "failure");
       json.put("errorMsg", "操作失败！");
       return json;
@@ -140,4 +140,9 @@ public class BaseSalaryController {
     return json;
   }
   
+  @RequestMapping(value = "/test", method = RequestMethod.GET)
+  @ResponseBody
+  public void testD() {
+    baseSalaryService.updateTest();
+  }
 }

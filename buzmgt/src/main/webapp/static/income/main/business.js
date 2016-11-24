@@ -1,0 +1,68 @@
+var itemTotal = 0;// 补统计总条数
+var searchData = {
+	"page" : 0,
+	"size" : 15,
+};
+
+function findMainPlanList(page) {
+	page = page == null || page == '' ? 0 : page;
+	searchData.page = page;
+	searchData.regionId = $("#region").val();
+	$.ajax({
+		url : base + "mainIncome/businessList/findVolist",
+		type : "GET",
+		data : searchData,
+		dataType : "json",
+		success : function(orderData) {
+			createTaskTable(orderData);
+			var searchTotal = orderData.totalElements;
+			// debugger;
+			if (searchTotal != itemTotal || searchTotal == 0 || page == 0) {
+				itemTotal = searchTotal;
+				oilCostPaging(orderData);
+			}
+		},
+		error : function(data) {
+			alert("系统异常，请稍后重试！");
+		}
+	});
+}
+function createTaskTable(data) {
+	Handlebars.registerHelper("adaptOS", function(orderStatus) {
+		if (orderStatus == '客户签收') {
+			return "blue";
+		} else if (orderStatus == '业务签收') {
+			return "or";
+		} else if (orderStatus == '客户拒收') {
+			return 'jv';
+		} else {
+			return "reed";
+		}
+	});
+
+	Handlebars.registerHelper("adaptRed", function(payStatus) {
+		if (payStatus != null && payStatus == '已付款') {
+			return 'use';
+		} else {
+			return 'use-red';
+		}
+	});
+
+	var myTemplate = Handlebars.compile($("#task-table-template").html());
+	$('#userList').html(myTemplate(data));
+}
+
+/**
+ * @param data
+ */
+function oilCostPaging(data) {
+	var totalCount = data.totalElements, limit = searchData.size;
+	$('#usersPager').extendPagination({
+		totalCount : totalCount,
+		showCount : 5,
+		limit : limit,
+		callback : function(curr, limit, totalCount) {
+			findMainPlanList(curr - 1);
+		}
+	});
+}
