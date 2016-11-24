@@ -25,6 +25,13 @@
 <link rel="stylesheet" type="text/css" href="/static/income/income.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var	base='<%=basePath%>';
+	var SearchData = {
+		'page':'0',
+		'size':'20'
+	}
+</script>
 <script id="user-table-template" type="text/x-handlebars-template">
 {{#if content}}
 	{{#each content}}
@@ -50,7 +57,7 @@
 								<td>{{month}}</td>
 								<td><a href="/baseSalary/show?month={{month}}&&salesmanId={{userId}}"><span class="text-blue-line ">{{basicSalary}}</span></a></td>
 								<td><a href=""><span class="text-blue-line">{{busiIncome}}</span></a></td>
-								<td><a href=""><span class="text-blue-line">{{oilIncome}}</span></a></td>
+								<td><a href="javascript:void(0);" onclick="oilRecord('{{userId}}');"><span class="text-blue-line">{{oilIncome}}</span></a></td>
 								<td><a href="/customTask/list?month={{month}}&&salesId={{userId}}"><span class="text-red-line">{{punish}}</span></a></td>
 								<td><a href=""><span class="text-blue-line">{{reachIncome}}</span></a></td>
 								<td><a href=""><span class="text-blue-line">{{overlyingIncome}}</span></a></td>
@@ -100,7 +107,7 @@
 					<div class="input-group input-group-sm">
 						<span class="input-group-addon " id="basic-addon1"><i
 							class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-							type="text" class="form-control form_datetime input-sm"
+							id="monthDate" type="text" class="form-control form_datetime input-sm"
 							placeholder="查询年月" readonly="readonly" />
 					</div>
 				</div>

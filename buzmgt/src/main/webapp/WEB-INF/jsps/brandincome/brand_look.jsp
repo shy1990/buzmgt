@@ -162,10 +162,10 @@
                         <dl class="dl-horizontal">
                             <dt>指派审核人员：</dt>
                             <dd>
-                                <c:if test="${!empty brandIncome.user.nickname}">
-                                    <span class="text-pronce  "> ${brandIncome.user.nickname}</span>
+                                <c:if test="${!empty brandIncome.user.manager.truename}">
+                                    <span class="text-pronce  "> ${brandIncome.user.manager.truename}</span>
                                 </c:if>
-                                <c:if test="${empty brandIncome.user.nickname}">
+                                <c:if test="${empty brandIncome.user.manager.truename}">
                                     <span class="text-pronce  "> 暂无</span>
                                 </c:if>
                             </dd>
