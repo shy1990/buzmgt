@@ -3,7 +3,6 @@ package com.wangge.buzmgt.superposition.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by joe on 16-10-7.
@@ -33,6 +32,8 @@ public class SuperpositionRecord {
     private String status;//状态值:0-总收益已计算(原始记录),1-售后冲减数量(没有计算之前的).2-售后冲减数量(已经计算后的).3-计算后冲减之后提成(4-表示已过期)
 
     private String goodsId;//售后冲减商品id
+
+    private String payTime;//下单时间
 
     public String getGoodsId() {
         return goodsId;
@@ -108,6 +109,14 @@ public class SuperpositionRecord {
         this.record = record;
     }
 
+    public String getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
+    }
+
     @Override
     public String toString() {
         return "SuperpositionRecord{" +
@@ -120,6 +129,7 @@ public class SuperpositionRecord {
                 ", offsetNums=" + offsetNums +
                 ", status='" + status + '\'' +
                 ", goodsId='" + goodsId + '\'' +
+                ", payTime='" + payTime + '\'' +
                 '}';
     }
 }
