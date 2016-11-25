@@ -9,127 +9,170 @@ import javax.persistence.*;
  * 叠加收益记录
  */
 @Entity
-@Table(name="SYS_SUPERPOSITION_RECORD")
+@Table(name = "SYS_SUPERPOSITION_RECORD")
 public class SuperpositionRecord {
-    @Id
-    @GenericGenerator(name = "idgen", strategy = "increment")
-    @GeneratedValue(generator = "idgen")
-    @Column(name = "RECORD_ID")
-    private Long id;//标识
+  @Id
+  @GenericGenerator(name = "idgen", strategy = "increment")
+  @GeneratedValue(generator = "idgen")
+  @Column(name = "RECORD_ID")
+  private Long id;//标识
 
-    private Integer record;//提货数量
+  private Integer record;//提货数量
 
-    private String salesmanId;//业务员id
+  private String salesmanId;//业务员id
 
-    private Long planId;//方案id
+  private Long planId;//方案id
 
-    private Long superId;//叠加方案id
+  private Long superId;//叠加方案id
 
-    private Float amount;//提成
+  private Float amount;//提成
 
-    private Integer offsetNums;// 售后冲减数量
+  private Integer offsetNums;// 售后冲减数量
 
-    private String status;//状态值:0-总收益已计算(原始记录),1-售后冲减数量(没有计算之前的).2-售后冲减数量(已经计算后的).3-计算后冲减之后提成(4-表示已过期)
+  private String status;//状态值:0-总收益已计算(原始记录),1-售后冲减数量(没有计算之前的).2-售后冲减数量(已经计算后的).3-计算后冲减之后提成(4-表示已过期)
 
-    private String goodsId;//售后冲减商品id
+  private String goodsId;//售后冲减商品id
 
-    private String payTime;//下单时间
+  private String payTime;//下单时间
 
-    public String getGoodsId() {
-        return goodsId;
-    }
+  private String giveDate;//发放时间
 
-    public void setGoodsId(String goodsId) {
-        this.goodsId = goodsId;
-    }
+  private String computeDate;//计算日期
 
-    public Integer getOffsetNums() {
-        return offsetNums;
-    }
+  private String startTime;//计算开始日期
 
-    public void setOffsetNums(Integer offsetNums) {
-        this.offsetNums = offsetNums;
-    }
+  private String endTime;//计算结束日期
 
-    public String getStatus() {
-        return status;
-    }
+  public String getGoodsId() {
+    return goodsId;
+  }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+  public void setGoodsId(String goodsId) {
+    this.goodsId = goodsId;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Integer getOffsetNums() {
+    return offsetNums;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setOffsetNums(Integer offsetNums) {
+    this.offsetNums = offsetNums;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getSalesmanId() {
+    return salesmanId;
+  }
+
+  public void setSalesmanId(String salesmanId) {
+    this.salesmanId = salesmanId;
+  }
 
 
-    public String getSalesmanId() {
-        return salesmanId;
-    }
+  public Long getPlanId() {
+    return planId;
+  }
 
-    public void setSalesmanId(String salesmanId) {
-        this.salesmanId = salesmanId;
-    }
+  public void setPlanId(Long planId) {
+    this.planId = planId;
+  }
 
+  public Long getSuperId() {
+    return superId;
+  }
 
-    public Long getPlanId() {
-        return planId;
-    }
+  public void setSuperId(Long superId) {
+    this.superId = superId;
+  }
 
-    public void setPlanId(Long planId) {
-        this.planId = planId;
-    }
+  public Float getAmount() {
+    return amount;
+  }
 
-    public Long getSuperId() {
-        return superId;
-    }
+  public void setAmount(Float amount) {
+    this.amount = amount;
+  }
 
-    public void setSuperId(Long superId) {
-        this.superId = superId;
-    }
+  public Integer getRecord() {
+    return record;
+  }
 
-    public Float getAmount() {
-        return amount;
-    }
+  public void setRecord(Integer record) {
+    this.record = record;
+  }
 
-    public void setAmount(Float amount) {
-        this.amount = amount;
-    }
+  public String getPayTime() {
+    return payTime;
+  }
 
-    public Integer getRecord() {
-        return record;
-    }
+  public void setPayTime(String payTime) {
+    this.payTime = payTime;
+  }
 
-    public void setRecord(Integer record) {
-        this.record = record;
-    }
+  public String getGiveDate() {
+    return giveDate;
+  }
 
-    public String getPayTime() {
-        return payTime;
-    }
+  public void setGiveDate(String giveDate) {
+    this.giveDate = giveDate;
+  }
 
-    public void setPayTime(String payTime) {
-        this.payTime = payTime;
-    }
+  public String getComputeDate() {
+    return computeDate;
+  }
 
-    @Override
-    public String toString() {
-        return "SuperpositionRecord{" +
-                "id=" + id +
-                ", record=" + record +
-                ", salesmanId='" + salesmanId + '\'' +
-                ", planId=" + planId +
-                ", superId=" + superId +
-                ", amount=" + amount +
-                ", offsetNums=" + offsetNums +
-                ", status='" + status + '\'' +
-                ", goodsId='" + goodsId + '\'' +
-                ", payTime='" + payTime + '\'' +
-                '}';
-    }
+  public void setComputeDate(String computeDate) {
+    this.computeDate = computeDate;
+  }
+
+  public String getStartTime() {
+    return startTime;
+  }
+
+  public void setStartTime(String startTime) {
+    this.startTime = startTime;
+  }
+
+  public String getEndTime() {
+    return endTime;
+  }
+
+  public void setEndTime(String endTime) {
+    this.endTime = endTime;
+  }
+
+  @Override
+  public String toString() {
+    return "SuperpositionRecord{" +
+            "id=" + id +
+            ", record=" + record +
+            ", salesmanId='" + salesmanId + '\'' +
+            ", planId=" + planId +
+            ", superId=" + superId +
+            ", amount=" + amount +
+            ", offsetNums=" + offsetNums +
+            ", status='" + status + '\'' +
+            ", goodsId='" + goodsId + '\'' +
+            ", payTime='" + payTime + '\'' +
+            ", giveDate='" + giveDate + '\'' +
+            ", computeDate='" + computeDate + '\'' +
+            ", startTime='" + startTime + '\'' +
+            ", endTime='" + endTime + '\'' +
+            '}';
+  }
 }

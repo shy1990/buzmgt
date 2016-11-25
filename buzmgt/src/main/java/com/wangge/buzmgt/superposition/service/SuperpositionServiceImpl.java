@@ -9,6 +9,7 @@ import com.wangge.buzmgt.log.entity.Log;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.superposition.entity.*;
 import com.wangge.buzmgt.superposition.pojo.SuperpositionProgress;
+import com.wangge.buzmgt.superposition.pojo.SuperpositionRecordDetails;
 import com.wangge.buzmgt.superposition.pojo.UserGoodsNum;
 import com.wangge.buzmgt.superposition.repository.SuperpositionRepository;
 import com.wangge.buzmgt.sys.entity.User;
@@ -49,40 +50,94 @@ import java.util.Map;
 @Service
 
 public class SuperpositionServiceImpl implements SuperpositonService {
-  
+
   private static final Logger logger = Logger.getLogger(SuperpositionServiceImpl.class);
   @PersistenceContext
   private EntityManager entityManager;
   @Autowired
   private SuperpositionRepository repository;
-  
+
   @Resource
   private ManagerService managerService;
   //
   // @Autowired
   // private GoodsOrderService goodsOrderService;
-  
+
   @Autowired
   private MainPlanService mainPlanService;
-  
+
   @Autowired
   private SuperpositionRecordService recordService;
-  
+
   @Autowired
   private LogService logService;
-  
+
   @Autowired
   private JobService jobService;
-  
+
   @Autowired
   private HedgeCostRepository hedgeCostRepository;
-  
+
   @Autowired
   private SingleIncomeService singleIncomeService;
-  
+
   @Autowired
   private MainIncomeService mainIncomeService;
-  
+
+  /**
+   * 收益详情
+   * @param userId
+   * @param superId
+   * @param startTime
+   * @param endTime
+   * @return
+   */
+  @Override
+  public List<SuperpositionRecordDetails> showDetails(String userId, Long superId, Date startTime, Date endTime) {
+    String sql = " select oder.nums,oder.goods_name,oder.shop_name,oder.order_num,oder.namepath,oder.pay_time  from \n" + "  sys_goods_order oder \n" + "inner join \n"
+            + "  sys_super_goods_type goods \n" + " on oder.goods_id  = goods.good_id \n" + " \n"
+            + " where oder.user_id = ? \n"
+            + " and oder.pay_time >= ? \n "
+            + " and oder.pay_time<= ? \n"
+//            + " and goods.su_id = ?"
+            ;
+    int a = 0;
+    int b = 1;
+    int c = 2;
+    int d = 3;
+    Query query = entityManager.createNativeQuery(sql);
+    SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
+    sqlQuery.setParameter(a,userId);// 方案id
+    sqlQuery.setParameter(b,startTime );//开始时间
+    sqlQuery.setParameter(c,endTime);// 结束时间
+//    sqlQuery.setParameter(d,superId);//  叠加方案id
+    List<Object[]> list = sqlQuery.list();
+    List<SuperpositionRecordDetails> detailsList = new ArrayList<>();
+    list.forEach(object -> {
+      SuperpositionRecordDetails details = new SuperpositionRecordDetails();
+      details.setAmount(((BigDecimal) object[0]).intValue());//数量
+      details.setProductionName((String) object[1]);
+      details.setShopName((String) object[2]);
+      details.setOrderNo((String) object[3]);
+      details.setNamePath((String) object[4]);
+      details.setPayTime(DateUtil.date2String((Date) object[5],"yyyy-MM-dd"));
+      detailsList.add(details);
+    });
+    return detailsList;
+  }
+
+  /**
+   * 显示收益
+   * @param time:发放日期
+   * @param salesmanId:业务员id
+   * @return
+   */
+  @Override
+  public List<SuperpositionRecord> findRecord(String time, String salesmanId) {
+
+    return recordService.findByGiveDateAndSalesmanId(time,salesmanId);
+  }
+
   /**
    * 逻辑删除
    *
@@ -95,11 +150,11 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     // 修改完成后添加定时任务
     if ("3".equals(checkStatus)) {
       jobService.saveJobTask(20, superposition.getPlanId(), superposition.getId(),
-          DateUtil.getPreMonthAndDay(superposition.getGiveDate(), 1));
+              DateUtil.getPreMonthAndDay(superposition.getGiveDate(), 1));
     }
     logService.log(null, "修改叠加方案状态: " + checkStatus + "(注:4-终止/逻辑删除,2-驳回,3-审核通过)", Log.EventType.UPDATE);
   }
-  
+
   /**
    * 叠加收益计算 注: 收益表中:3-最终收益,0-原始记录,1-没计算之前冲减数据,2-计算之后的冲减数据
    *
@@ -112,14 +167,14 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     // 查找叠加规则
     Superposition superposition = repository.findById(superId);
     List<Map<String, Object>> userList = mainPlanService.findEffectUserDateList(planId, superposition.getImplDate(),
-        superposition.getEndDate());
+            superposition.getEndDate());
     for (Map<String, Object> userData : userList) {
       String userId = (String) userData.get("userId");// 获取userId
       Date startTime = (Date) userData.get("startDate");//开始时间
       Date endTime = (Date) userData.get("endDate");// 结束时间
-      
+
       List<UserGoodsNum> userGoodsNumList = findByUserId(userId, superId, startTime, endTime);
-      Integer nums = 0;
+      Integer nums = 0;//总数
       for (UserGoodsNum u : userGoodsNumList) {
         nums += u.getNums();// 获取总数
       }
@@ -151,11 +206,11 @@ public class SuperpositionServiceImpl implements SuperpositonService {
           ruleList.get(0).setMax(oneAdd);
           ruleList.get(1).setMin(oneAdd);
         }
-        
+
       }
       // 计算这个人的叠加收益
       // 获取冲减的数量(没有计算的时候的数量)
-      SuperpositionRecord record = getBySalesmanIdAndPlanIdAndSuperIdAndStatus(userId, planId, superId, "1",DateUtil.date2String(startTime,"yyyy-MM-dd"),DateUtil.date2String(endTime,"yyyy-MM-dd"));
+      SuperpositionRecord record = getBySalesmanIdAndPlanIdAndSuperIdAndStatus(userId, planId, superId, "1", DateUtil.date2String(startTime, "yyyy-MM-dd"), DateUtil.date2String(endTime, "yyyy-MM-dd"));
       logger.info(record);
       Integer sum = 0;
       if (record != null) {
@@ -170,9 +225,15 @@ public class SuperpositionServiceImpl implements SuperpositonService {
           superpositionRecord.setPlanId(planId);
           superpositionRecord.setSuperId(superposition.getId());
           superpositionRecord.setAmount((nums - sum) * (su.getPercentage()));// 计算的时候直接减去冲减数量
-          superpositionRecord.setRecord((nums - sum));
+          superpositionRecord.setRecord(nums);
           superpositionRecord.setStatus("0");// 总收益已经计算,原始记录
+          superpositionRecord.setGiveDate(DateUtil.date2String(superposition.getGiveDate(),"yyyy-MM-dd"));//工资发放日期
+          superpositionRecord.setComputeDate(DateUtil.date2String(new Date(),"yyyy-MM-dd"));//工资计算日期
+          superpositionRecord.setStartTime(DateUtil.date2String(startTime, "yyyy-MM-dd"));
+          superpositionRecord.setEndTime(DateUtil.date2String(endTime, "yyyy-MM-dd"));
+          superpositionRecord.setOffsetNums(sum);//冲减的数量
           SuperpositionRecord superpositionRecord1 = recordService.save(superpositionRecord);
+
           try {
             mainIncomeService.updateSuperIncome(superpositionRecord1.getSalesmanId(), superpositionRecord1.getAmount());
           } catch (Exception e) {
@@ -182,10 +243,10 @@ public class SuperpositionServiceImpl implements SuperpositonService {
           break;
         }
       }
-      
+
     }
   }
-  
+
   /**
    * 计算个人所有的叠加产品
    *
@@ -197,8 +258,8 @@ public class SuperpositionServiceImpl implements SuperpositonService {
    */
   public List<UserGoodsNum> findByUserId(String userId, Long superId, Date startTime, Date endTime) {
     String sql = " select oder.nums,oder.goods_id,oder.user_id  from \n" + "  sys_goods_order oder \n" + "inner join \n"
-        + "  sys_super_goods_type goods \n" + " on oder.goods_id  = goods.good_id \n" + " \n"
-        + " where oder.user_id = ?\n" + " and goods.su_id = ?\n" + " and oder.pay_time >= ? and oder.pay_time<= ? ";
+            + "  sys_super_goods_type goods \n" + " on oder.goods_id  = goods.good_id \n" + " \n"
+            + " where oder.user_id = ?\n" + " and goods.su_id = ?\n" + " and oder.pay_time >= ? and oder.pay_time<= ? ";
     int a = 0;
     int b = 1;
     int c = 2;
@@ -220,15 +281,14 @@ public class SuperpositionServiceImpl implements SuperpositonService {
       userGoodsNum.setUserId((String) o[2]);
       userGoodsNumList.add(userGoodsNum);
     });
-    
+
     return userGoodsNumList;
   }
-  
+
   /**
    * 计算叠加收益(先暂时保留,最初按照查询全部的来处理的) 注: 收益表中:3-最终收益,0-原始记录,1-没计算之前冲减数据,2-计算之后的冲减数据
    *
-   * @param planId
-   *          方案id
+   * @param planId 方案id
    * @param
    * @return
    */
@@ -313,7 +373,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
             } else if ("3".equals(progress.getSign())) {
               progress.setMin(Integer.parseInt(progress.getTwoAdd()));
               progress.setMax(Integer.parseInt(progress.getTaskThree()));
-              
+
             } else if ("4".equals(progress.getSign())) {
               progress.setMin(Integer.parseInt(progress.getThreeAdd()));
             }
@@ -337,7 +397,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
           } else {
             progressList1.add(progress);
           }
-          
+
         });
       } else if (superposition.getTaskOne() != null) {// 一个指标
         progressList.forEach(progress -> {
@@ -351,35 +411,30 @@ public class SuperpositionServiceImpl implements SuperpositonService {
           } else {
             progressList1.add(progress);
           }
-          
+
         });
       }
     }
-    
+
     logger.info("progressList1:  " + progressList1);
     return progressList1;
   }
-  
+
   /**
    * 售后冲减:
-   *  判断退货商品属于哪个叠加规则并记录到叠加收益表中
-   * @param userId
-   *          业务员id
-   * @param goodsId
-   *          商品id
-   * @param payTime
-   *          签收时间("yyyy-MM-dd")
-   * @param num
-   *          退货数量
-   * @param planId
-   *          主方案id
-   * @param receivingTime
-   *          售后收货时间
+   * 判断退货商品属于哪个叠加规则并记录到叠加收益表中
+   *
+   * @param userId        业务员id
+   * @param goodsId       商品id
+   * @param payTime       签收时间("yyyy-MM-dd")
+   * @param num           退货数量
+   * @param planId        主方案id
+   * @param receivingTime 售后收货时间
    * @return
    */
   @Override
   public Superposition computeAfterReturnGoods(String userId, String goodsId, String payTime, Integer num, Long planId,
-      String receivingTime, Long hedgeId) {
+                                               String receivingTime, Long hedgeId) {
     Superposition superposition = repository.findUseByTime(payTime, payTime, planId);// 获取此商品使用的方案
     List<GoodsType> goodsTypeList = superposition.getGoodsTypeList();// 获取所有叠加的商品
     if (containsGoods(goodsTypeList, goodsId)) {// 判断是否有这个商品
@@ -481,7 +536,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     }
     return superposition;
   }
-  
+
   /**
    * 查找叠加规则计算前冲减总数量 (1)/计算后冲减总数量 (2)
    *
@@ -493,11 +548,11 @@ public class SuperpositionServiceImpl implements SuperpositonService {
    */
   @Override
   public SuperpositionRecord getBySalesmanIdAndPlanIdAndSuperIdAndStatus(String userId, Long planId, Long superId,
-      String status,String startTime,String endTime) {
+                                                                         String status, String startTime, String endTime) {
     String sql = "select nvl(sum(rd.OFFSET_NUMS),0) as offset_nums,rd.SALESMAN_ID,rd.SUPER_ID,rd.PLAN_ID from SYS_SUPERPOSITION_RECORD rd\n"
-        + "where rd.PLAN_ID = ?\n" + "and rd.SALESMAN_ID = ?\n" + "and rd.SUPER_ID = ?\n" + "and rd.STATUS = ? \n " +
+            + "where rd.PLAN_ID = ?\n" + "and rd.SALESMAN_ID = ?\n" + "and rd.SUPER_ID = ?\n" + "and rd.STATUS = ? \n " +
             " and to_date(rd.pay_time,'yyyy-MM-dd') >= to_date(?,'yyyy-MM-dd') and to_date(rd.pay_time,'yyyy-MM-dd') <= to_date(?,'yyyy-MM-dd') "
-        + " group by \n" + "rd.SALESMAN_ID,rd.SUPER_ID,rd.PLAN_ID";
+            + " group by \n" + "rd.SALESMAN_ID,rd.SUPER_ID,rd.PLAN_ID";
     int a = 0;
     int b = 1;
     int c = 2;
@@ -525,10 +580,10 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         superpositionRecord.setPlanId(planId);
       }
     }
-    
+
     return superpositionRecord;
   }
-  
+
   /**
    * 导出进程
    *
@@ -541,30 +596,30 @@ public class SuperpositionServiceImpl implements SuperpositonService {
   @Override
   public List<SuperpositionProgress> exportProgress(Long planId, Long superId, String startDate, String endDate) {
     String sql = "\n" + "select \n" + "  nvl(sum(progress.NUMS),0) as NUMS,\n" + "  progress.USER_ID,\n"
-        + "  progress.TRUENAME,\n" + "  progress.REGION_ID, \n" + "  progress.TASK_ONE,\n" + "  progress.TASK_TWO,\n"
-        + "  progress.TASK_THREE,\n" + "  progress.IMPL_DATE,\n" + "  progress.END_DATE,\n" + "  progress.ONE_ADD,\n"
-        + "  progress.TWO_ADD,\n" + "  progress.THREE_ADD,\n " + "  progress.NAMEPATH,\n" + "  progress.NAME "
-        + "from \n" + "  (select \n" + "    usr.TRUENAME,\n" + "    usr.REGION_ID,\n" + "    usr.USER_ID,\n"
-        + "    usr.NAMEPATH,\n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
-        + "    oder.NUMS,\n" + "    oder.NAMEPATH as SHOP_ADDRESS,\n" + "    super.SU_PO_ID,\n"
-        + "    super.TASK_ONE,\n" + "    super.TASK_TWO,\n" + "    super.TASK_THREE,\n" + "    super.IMPL_DATE,\n"
-        + "    super.END_DATE,\n" + "    t.ONE_ADD,\n" + "    t.TWO_ADD,\n" + "    t.THREE_ADD,\n" + "    t.NAME \n"
-        + "  from \n" + "    VIEW_INCOME_MAIN_PLAN_USER usr\n" + "  left join\n" + "    SYS_SUPERPOSITION super\n"
-        + "  on\n" + "    super.PLAN_ID = usr.PLAN_ID \n" + "  left join\n" + "    SYS_SUPER_GOODS_TYPE goods\n"
-        + "  on\n" + "   goods.SU_ID = super.SU_PO_ID\n" + "  left join \n" + "    SYS_GOODS_ORDER oder\n" + "  on\n"
-        + "    oder.REGION_ID = usr.REGION_ID and oder.GOODS_ID = goods.GOOD_ID and replace(oder.machine_type,',') = goods.MACHINE_TYPE\n"
-        + "  left join\n"
-        + "   (select grop.GROUP_ID,grop.NAME,grop.ONE_ADD,grop.TWO_ADD,grop.THREE_ADD,grop.SU_ID, meber.USER_ID from \n"
-        + "    SYS_SUPER_GROUP grop\n" + "  left join \n" + "    sys_super_member meber\n" + "  on\n"
-        + "    meber.group_id = grop.group_id) t\n" + "  on\n"
-        + "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" + "  where \n" + "        usr.PLAN_ID = ?   \n"
-        + "    and \n" + "        super.SU_PO_ID = ? \n " + "    and super.CHECK_STATUS = '3' \n" + "    and \n"
-        + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)) progress\n" + "     \n"
-        + "GROUP by  \n" + "    progress.REGION_ID,\n" + "    progress.TRUENAME,\n" + "    progress.USER_ID,\n"
-        + "    progress.TRUENAME,\n" + "    progress.REGION_ID, \n" + "    progress.TASK_ONE,\n"
-        + "    progress.TASK_TWO,\n" + "    progress.TASK_THREE,\n" + "    progress.IMPL_DATE,\n"
-        + "    progress.END_DATE,\n" + "    progress.ONE_ADD,\n" + "    progress.TWO_ADD,\n"
-        + "    progress.THREE_ADD,\n " + "    progress.NAMEPATH,\n" + "    progress.NAME";
+            + "  progress.TRUENAME,\n" + "  progress.REGION_ID, \n" + "  progress.TASK_ONE,\n" + "  progress.TASK_TWO,\n"
+            + "  progress.TASK_THREE,\n" + "  progress.IMPL_DATE,\n" + "  progress.END_DATE,\n" + "  progress.ONE_ADD,\n"
+            + "  progress.TWO_ADD,\n" + "  progress.THREE_ADD,\n " + "  progress.NAMEPATH,\n" + "  progress.NAME "
+            + "from \n" + "  (select \n" + "    usr.TRUENAME,\n" + "    usr.REGION_ID,\n" + "    usr.USER_ID,\n"
+            + "    usr.NAMEPATH,\n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
+            + "    oder.NUMS,\n" + "    oder.NAMEPATH as SHOP_ADDRESS,\n" + "    super.SU_PO_ID,\n"
+            + "    super.TASK_ONE,\n" + "    super.TASK_TWO,\n" + "    super.TASK_THREE,\n" + "    super.IMPL_DATE,\n"
+            + "    super.END_DATE,\n" + "    t.ONE_ADD,\n" + "    t.TWO_ADD,\n" + "    t.THREE_ADD,\n" + "    t.NAME \n"
+            + "  from \n" + "    VIEW_INCOME_MAIN_PLAN_USER usr\n" + "  left join\n" + "    SYS_SUPERPOSITION super\n"
+            + "  on\n" + "    super.PLAN_ID = usr.PLAN_ID \n" + "  left join\n" + "    SYS_SUPER_GOODS_TYPE goods\n"
+            + "  on\n" + "   goods.SU_ID = super.SU_PO_ID\n" + "  left join \n" + "    SYS_GOODS_ORDER oder\n" + "  on\n"
+            + "    oder.REGION_ID = usr.REGION_ID and oder.GOODS_ID = goods.GOOD_ID and replace(oder.machine_type,',') = goods.MACHINE_TYPE\n"
+            + "  left join\n"
+            + "   (select grop.GROUP_ID,grop.NAME,grop.ONE_ADD,grop.TWO_ADD,grop.THREE_ADD,grop.SU_ID, meber.USER_ID from \n"
+            + "    SYS_SUPER_GROUP grop\n" + "  left join \n" + "    sys_super_member meber\n" + "  on\n"
+            + "    meber.group_id = grop.group_id) t\n" + "  on\n"
+            + "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" + "  where \n" + "        usr.PLAN_ID = ?   \n"
+            + "    and \n" + "        super.SU_PO_ID = ? \n " + "    and super.CHECK_STATUS = '3' \n" + "    and \n"
+            + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)) progress\n" + "     \n"
+            + "GROUP by  \n" + "    progress.REGION_ID,\n" + "    progress.TRUENAME,\n" + "    progress.USER_ID,\n"
+            + "    progress.TRUENAME,\n" + "    progress.REGION_ID, \n" + "    progress.TASK_ONE,\n"
+            + "    progress.TASK_TWO,\n" + "    progress.TASK_THREE,\n" + "    progress.IMPL_DATE,\n"
+            + "    progress.END_DATE,\n" + "    progress.ONE_ADD,\n" + "    progress.TWO_ADD,\n"
+            + "    progress.THREE_ADD,\n " + "    progress.NAMEPATH,\n" + "    progress.NAME";
     Query query = null;
     SQLQuery sqlQuery = null;
     int a = 0;
@@ -602,10 +657,10 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         progressList.add(progress);
       });
     }
-    
+
     return progressList;
   }
-  
+
   /**
    * 导出详情
    *
@@ -618,26 +673,26 @@ public class SuperpositionServiceImpl implements SuperpositonService {
    */
   @Override
   public List<SuperpositionProgress> exportDetail(Long planId, Long superId, String userId, String startDate,
-      String endDate) {
+                                                  String endDate) {
     String sql = " select \n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
-        + "    oder.ORDER_NUM,\n" + "    sum(oder.NUMS) as nums,\n" + "    oder.goods_name,\n"
-        + "    oder.NAMEPATH as SHOP_ADDRESS,\n" + "    super.SU_PO_ID,\n" + "    t.NAME,\n"
-        + "    oder.BUSINESS_REGION_ID\n" + "  from \n" + "    VIEW_INCOME_MAIN_PLAN_USER usr\n" + "  left join\n"
-        + "    SYS_SUPERPOSITION super\n" + "  on\n" + "    super.PLAN_ID = usr.PLAN_ID \n" + "  left join\n"
-        + "    SYS_SUPER_GOODS_TYPE goods\n" + "  on\n" + "   goods.SU_ID = super.SU_PO_ID\n" + "  left join \n"
-        + "    SYS_GOODS_ORDER oder\n" + "  on\n"
-        + "    oder.REGION_ID = usr.REGION_ID and oder.GOODS_ID = goods.GOOD_ID and replace(oder.machine_type,',') = goods.MACHINE_TYPE\n"
-        + "  left join\n" + "   -- SYS_SUPER_GROUP grop\n"
-        + "   (select grop.GROUP_ID,grop.NAME,grop.ONE_ADD,grop.TWO_ADD,grop.THREE_ADD,grop.SU_ID, meber.USER_ID from \n"
-        + "    SYS_SUPER_GROUP grop\n" + "  left join \n" + "    sys_super_member meber\n" + "  on\n"
-        + "    meber.group_id = grop.group_id) t\n" + "  on\n"
-        + "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" + "  where \n" + "        usr.PLAN_ID = ?   \n"
-        + "    and \n" + "        super.SU_PO_ID = ?\n" + "    and\n" + "        usr.user_id = ?\n" + "    and \n"
-        + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)\n" + " group by\n"
-        + "    oder.BUSINESS_REGION_ID,\n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
-        + "    oder.NAMEPATH,\n" + "    super.SU_PO_ID,\n" + "    t.NAME,\n" + "    oder.ORDER_NUM,\n"
-        + "    oder.goods_name ";
-    
+            + "    oder.ORDER_NUM,\n" + "    sum(oder.NUMS) as nums,\n" + "    oder.goods_name,\n"
+            + "    oder.NAMEPATH as SHOP_ADDRESS,\n" + "    super.SU_PO_ID,\n" + "    t.NAME,\n"
+            + "    oder.BUSINESS_REGION_ID\n" + "  from \n" + "    VIEW_INCOME_MAIN_PLAN_USER usr\n" + "  left join\n"
+            + "    SYS_SUPERPOSITION super\n" + "  on\n" + "    super.PLAN_ID = usr.PLAN_ID \n" + "  left join\n"
+            + "    SYS_SUPER_GOODS_TYPE goods\n" + "  on\n" + "   goods.SU_ID = super.SU_PO_ID\n" + "  left join \n"
+            + "    SYS_GOODS_ORDER oder\n" + "  on\n"
+            + "    oder.REGION_ID = usr.REGION_ID and oder.GOODS_ID = goods.GOOD_ID and replace(oder.machine_type,',') = goods.MACHINE_TYPE\n"
+            + "  left join\n" + "   -- SYS_SUPER_GROUP grop\n"
+            + "   (select grop.GROUP_ID,grop.NAME,grop.ONE_ADD,grop.TWO_ADD,grop.THREE_ADD,grop.SU_ID, meber.USER_ID from \n"
+            + "    SYS_SUPER_GROUP grop\n" + "  left join \n" + "    sys_super_member meber\n" + "  on\n"
+            + "    meber.group_id = grop.group_id) t\n" + "  on\n"
+            + "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" + "  where \n" + "        usr.PLAN_ID = ?   \n"
+            + "    and \n" + "        super.SU_PO_ID = ?\n" + "    and\n" + "        usr.user_id = ?\n" + "    and \n"
+            + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)\n" + " group by\n"
+            + "    oder.BUSINESS_REGION_ID,\n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
+            + "    oder.NAMEPATH,\n" + "    super.SU_PO_ID,\n" + "    t.NAME,\n" + "    oder.ORDER_NUM,\n"
+            + "    oder.goods_name ";
+
     Query query = null;
     SQLQuery sqlQuery = null;
     int a = 0;
@@ -668,11 +723,11 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         progress.setShopAddress((String) r[6]);
         progressList.add(progress);
       });
-      
+
     }
     return progressList;
   }
-  
+
   /**
    * 一单达量收益计算
    *
@@ -685,21 +740,21 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     Superposition superposition = repository.findById(superId);
     // 获取每个人的开始结束时间
     List<Map<String, Object>> userList = mainPlanService.findEffectUserDateList(planId, superposition.getImplDate(),
-        superposition.getEndDate());
+            superposition.getEndDate());
     for (Map<String, Object> userData : userList) {
       String userId = (String) userData.get("userId");// 获取userId
       Date startTime = (Date) userData.get("startDate");// 获取开始时间
       Date endTime = (Date) userData.get("endDate");// 结束时间
-      
+
       String sql = " select  nvl(sum(nums),0) as sum,order_id,user_id from(\n" + "\n"
-          + "select oder.nums,oder.order_Id,oder.user_id,oder.pay_time from \n" + "  sys_goods_order oder\n"
-          + "inner join\n" + "  ( select * from \n" + "      sys_superposition super\n" + "    left join \n"
-          + "      sys_super_goods_type goods     \n" + "    on super.su_po_id = goods.su_id\n"
-          + "    where super.plan_id = ? \n" + "    ) su  --关联叠加商品\n" + "on oder.goods_id = su.good_id \n"
-          + "where su.check_status = 3   and su.su_po_id = ?  and oder.user_id = ?\n"
-          + "and to_date(to_char(oder.pay_time,'yyyy-mm-dd'),'yyyy-mm-dd') >= ? \n"
-          + "and to_date(to_char(oder.pay_time,'yyyy-mm-dd'),'yyyy-mm-dd') <= ? ) \n"
-          + " group by nums,order_id,user_id";
+              + "select oder.nums,oder.order_Id,oder.user_id,oder.pay_time from \n" + "  sys_goods_order oder\n"
+              + "inner join\n" + "  ( select * from \n" + "      sys_superposition super\n" + "    left join \n"
+              + "      sys_super_goods_type goods     \n" + "    on super.su_po_id = goods.su_id\n"
+              + "    where super.plan_id = ? \n" + "    ) su  --关联叠加商品\n" + "on oder.goods_id = su.good_id \n"
+              + "where su.check_status = 3   and su.su_po_id = ?  and oder.user_id = ?\n"
+              + "and to_date(to_char(oder.pay_time,'yyyy-mm-dd'),'yyyy-mm-dd') >= ? \n"
+              + "and to_date(to_char(oder.pay_time,'yyyy-mm-dd'),'yyyy-mm-dd') <= ? ) \n"
+              + " group by nums,order_id,user_id";
       int a = 0;
       int b = 1;
       int c = 2;
@@ -725,14 +780,14 @@ public class SuperpositionServiceImpl implements SuperpositonService {
           List<SingleRule> singleRules = superposition.getSingleRules();// 获得一单达量设置规则
           // 获取计算前的冲减量
           SingleIncome singleIncomeFront = getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(singleIncome.getUserId(),
-              planId, superposition.getId(), "1", singleIncome.getOrderId(),DateUtil.date2String(startTime,"yyyy-MM-dd"),DateUtil.date2String(endTime,"yyyy-MM-dd"));
+                  planId, superposition.getId(), "1", singleIncome.getOrderId(), DateUtil.date2String(startTime, "yyyy-MM-dd"), DateUtil.date2String(endTime, "yyyy-MM-dd"));
           Integer offsetNum = 0;
           if (singleIncomeFront != null) {
             offsetNum = singleIncomeFront.getOffsetNums();
           }
           for (int i = 0; i < singleRules.size(); i++) {
             if ((singleIncome.getRecord() - offsetNum) > singleRules.get(i).getMin()
-                && (singleIncome.getRecord() - offsetNum) <= singleRules.get(i).getMax()) {
+                    && (singleIncome.getRecord() - offsetNum) <= singleRules.get(i).getMax()) {
               SingleIncome singleIncomeSave = new SingleIncome();
               singleIncomeSave.setPlanId(planId);
               singleIncomeSave.setOrderId(singleIncome.getOrderId());
@@ -755,7 +810,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         }
       }
     }
-    
+
     // /*
     // * 获取每个人每单的提货量
     // */
@@ -838,9 +893,9 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     //
     // }
     // });
-    
+
   }
-  
+
   /**
    * 一单达量冲减计算
    *
@@ -854,7 +909,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
    */
   @Override
   public void computeOneSingleAfterReturnGoods(String userId, Long planId, String orderId, String goodsId,
-      String payTime, String receivingTime, Integer nums) {
+                                               String payTime, String receivingTime, Integer nums) {
     // 获取对应的规则
     Superposition superposition = repository.findUseByTime(payTime, payTime, planId);// 获取此商品使用的方案
     if (superposition != null) {
@@ -943,12 +998,12 @@ public class SuperpositionServiceImpl implements SuperpositonService {
 //            });
 //          }
 //        }
-        
+
       }
-      
+
     }
   }
-  
+
   /**
    * 计算冲减的量 计算前(1)/计算后(2)
    *
@@ -959,14 +1014,14 @@ public class SuperpositionServiceImpl implements SuperpositonService {
    * @param orderId
    * @return
    */
-  
+
   public SingleIncome getByUserIdAndPlanIdAndSuperIdAndStatusAndOrderId(String userId, Long planId, Long superId,
-      String status, String orderId,String startTime,String endTime) {
+                                                                        String status, String orderId, String startTime, String endTime) {
     String sql = "SELECT NVL(SUM(rd.OFFSET_NUMS),0) AS offset_nums,\n" + "  rd.USER_ID,\n" + "  rd.SUPER_ID,\n"
-        + "  rd.PLAN_ID,\n" + "  rd.ORDER_ID\n" + "FROM SYS_SINGLE_RECORD rd\n" + "WHERE rd.PLAN_ID = ?\n"
-        + "AND rd.USER_ID = ?\n" + "AND rd.SUPER_ID = ?\n" + "AND rd.status   = ?\n" + "AND rd.ORDER_ID   = ?\n"
-        + " and to_date(rd.pay_time,'yyyy-MM-dd') >= to_date(?,'yyyy-MM-dd') and to_date(rd.pay_time,'yyyy-MM-dd') <= to_date(?,'yyyy-MM-dd') "
-        + "GROUP BY rd.USER_ID,\n" + "  rd.SUPER_ID,\n" + "  rd.PLAN_ID,\n" + "  rd.ORDER_ID";
+            + "  rd.PLAN_ID,\n" + "  rd.ORDER_ID\n" + "FROM SYS_SINGLE_RECORD rd\n" + "WHERE rd.PLAN_ID = ?\n"
+            + "AND rd.USER_ID = ?\n" + "AND rd.SUPER_ID = ?\n" + "AND rd.status   = ?\n" + "AND rd.ORDER_ID   = ?\n"
+            + " and to_date(rd.pay_time,'yyyy-MM-dd') >= to_date(?,'yyyy-MM-dd') and to_date(rd.pay_time,'yyyy-MM-dd') <= to_date(?,'yyyy-MM-dd') "
+            + "GROUP BY rd.USER_ID,\n" + "  rd.SUPER_ID,\n" + "  rd.PLAN_ID,\n" + "  rd.ORDER_ID";
     int a = 0;
     int b = 1;
     int c = 2;
@@ -1000,11 +1055,11 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         // singleIncome.setPayTime((Date) o[3]);
       }
     }
-    
+
     return singleIncome;
-    
+
   }
-  
+
   /*
    * 判断是否是特殊组,是返回这个组
    */
@@ -1012,7 +1067,8 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     Group groupUse = null;
     // 判断是特殊用户组
     List<Group> groupList = superposition.getGroupList();
-    flag: for (Group group : groupList) {
+    flag:
+    for (Group group : groupList) {
       for (Member member : group.getMembers()) {
         if (userId.equals(member.getSalesmanId())) {
           groupUse = group;
@@ -1026,10 +1082,10 @@ public class SuperpositionServiceImpl implements SuperpositonService {
       map.put("flag", false);
     else
       map.put("flag", true);
-    
+
     return map;
   }
-  
+
   /*
    * 判断规则中是否有这个商品
    */
@@ -1037,7 +1093,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     Boolean flag = false;
     // 判断是否包含这个产品
     List<String> goodsIds = new ArrayList<String>();
-    
+
     if (CollectionUtils.isNotEmpty(goodsTypeList)) {
       goodsTypeList.forEach(goodsType -> {
         goodsIds.add(goodsType.getGoodId());
@@ -1048,7 +1104,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     }
     return flag;
   }
-  
+
   /**
    * 获取所有的方案中的人员提货量
    *
@@ -1058,35 +1114,35 @@ public class SuperpositionServiceImpl implements SuperpositonService {
    */
   public List<SuperpositionProgress> getAll(Long planId, Superposition superposition) {
     String sql = "SELECT NVL(SUM(progress.NUMS),0) AS NUMS,\n" + "  progress.USER_ID,\n" + "  progress.TRUENAME,\n"
-        + "  progress.REGION_ID,\n" + "  progress.TASK_ONE,\n" + "  progress.TASK_TWO,\n" + "  progress.TASK_THREE,\n"
-        + "  progress.IMPL_DATE,\n" + "  progress.END_DATE,\n" + "  progress.ONE_ADD,\n" + "  progress.TWO_ADD,\n"
-        + "  progress.THREE_ADD,\n" + "  progress.NAMEPATH,\n" + "  progress.NAME,\n" + "  progress.min,\n"
-        + "  progress.max,\n" + "  progress.percentage,\n " + "  progress.sign \n" + "FROM\n"
-        + "  (SELECT usr.TRUENAME,\n" + "    usr.REGION_ID,\n" + "    usr.USER_ID,\n" + "    usr.NAMEPATH,\n"
-        + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n" + "    oder.NUMS,\n"
-        + "    oder.NAMEPATH AS SHOP_ADDRESS,\n" + "    super.SU_PO_ID,\n" + "    super.TASK_ONE,\n"
-        + "    super.TASK_TWO,\n" + "    super.TASK_THREE,\n" + "    super.IMPL_DATE,\n" + "    super.END_DATE,\n"
-        + "    t.ONE_ADD,\n" + "    t.TWO_ADD,\n" + "    t.THREE_ADD,\n" + "    t.NAME,\n" + "    superrule.min,\n"
-        + "    superrule.max,\n" + "    superrule.percentage, \n " + "    superrule.serial_number sign \n"
-        + "  FROM VIEW_INCOME_MAIN_PLAN_USER usr\n" + "  LEFT JOIN SYS_SUPERPOSITION super\n"
-        + "  ON super.PLAN_ID = usr.PLAN_ID\n" + "  LEFT JOIN SYS_SUPERPOSITION_RULE superrule\n"
-        + "  ON superrule.SU_ID = super.SU_PO_ID\n" + "  LEFT JOIN SYS_SUPER_GOODS_TYPE goods\n"
-        + "  ON goods.SU_ID = super.SU_PO_ID\n" + "  LEFT JOIN SYS_GOODS_ORDER oder\n"
-        + "  ON oder.REGION_ID                  = usr.REGION_ID\n"
-        + "  AND oder.GOODS_ID                  = goods.GOOD_ID\n"
-        + "  AND REPLACE(oder.machine_type,',') = goods.MACHINE_TYPE\n" + "  LEFT JOIN\n"
-        + "    (SELECT grop.GROUP_ID,\n" + "      grop.NAME,\n" + "      grop.ONE_ADD,\n" + "      grop.TWO_ADD,\n"
-        + "      grop.THREE_ADD,\n" + "      grop.SU_ID,\n" + "      meber.USER_ID\n"
-        + "    FROM SYS_SUPER_GROUP grop\n" + "    LEFT JOIN sys_super_member meber\n"
-        + "    ON meber.group_id    = grop.group_id\n" + "    ) t ON t.SU_ID       = super.SU_PO_ID\n"
-        + "  AND t.USER_ID          = usr.USER_ID\n" + "  WHERE usr.PLAN_ID      = ?\n"
-        + "  AND super.SU_PO_ID     = ?\n" + "  AND super.CHECK_STATUS = '3'\n"
-        + "  AND (TO_CHAR(oder.pay_time,'yyyy-mm-dd') BETWEEN ? AND ? \n" + "  OR oder.pay_time IS NULL)\n"
-        + "  ) progress\n" + "GROUP BY progress.REGION_ID,\n" + "  progress.TRUENAME,\n" + "  progress.USER_ID,\n"
-        + "  progress.TRUENAME,\n" + "  progress.REGION_ID,\n" + "  progress.TASK_ONE,\n" + "  progress.TASK_TWO,\n"
-        + "  progress.TASK_THREE,\n" + "  progress.IMPL_DATE,\n" + "  progress.END_DATE,\n" + "  progress.ONE_ADD,\n"
-        + "  progress.TWO_ADD,\n" + "  progress.THREE_ADD,\n" + "  progress.NAMEPATH,\n" + "  progress.NAME,\n"
-        + "  progress.min,\n" + "  progress.max,\n" + "  progress.percentage,\n " + "  progress.sign ";
+            + "  progress.REGION_ID,\n" + "  progress.TASK_ONE,\n" + "  progress.TASK_TWO,\n" + "  progress.TASK_THREE,\n"
+            + "  progress.IMPL_DATE,\n" + "  progress.END_DATE,\n" + "  progress.ONE_ADD,\n" + "  progress.TWO_ADD,\n"
+            + "  progress.THREE_ADD,\n" + "  progress.NAMEPATH,\n" + "  progress.NAME,\n" + "  progress.min,\n"
+            + "  progress.max,\n" + "  progress.percentage,\n " + "  progress.sign \n" + "FROM\n"
+            + "  (SELECT usr.TRUENAME,\n" + "    usr.REGION_ID,\n" + "    usr.USER_ID,\n" + "    usr.NAMEPATH,\n"
+            + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n" + "    oder.NUMS,\n"
+            + "    oder.NAMEPATH AS SHOP_ADDRESS,\n" + "    super.SU_PO_ID,\n" + "    super.TASK_ONE,\n"
+            + "    super.TASK_TWO,\n" + "    super.TASK_THREE,\n" + "    super.IMPL_DATE,\n" + "    super.END_DATE,\n"
+            + "    t.ONE_ADD,\n" + "    t.TWO_ADD,\n" + "    t.THREE_ADD,\n" + "    t.NAME,\n" + "    superrule.min,\n"
+            + "    superrule.max,\n" + "    superrule.percentage, \n " + "    superrule.serial_number sign \n"
+            + "  FROM VIEW_INCOME_MAIN_PLAN_USER usr\n" + "  LEFT JOIN SYS_SUPERPOSITION super\n"
+            + "  ON super.PLAN_ID = usr.PLAN_ID\n" + "  LEFT JOIN SYS_SUPERPOSITION_RULE superrule\n"
+            + "  ON superrule.SU_ID = super.SU_PO_ID\n" + "  LEFT JOIN SYS_SUPER_GOODS_TYPE goods\n"
+            + "  ON goods.SU_ID = super.SU_PO_ID\n" + "  LEFT JOIN SYS_GOODS_ORDER oder\n"
+            + "  ON oder.REGION_ID                  = usr.REGION_ID\n"
+            + "  AND oder.GOODS_ID                  = goods.GOOD_ID\n"
+            + "  AND REPLACE(oder.machine_type,',') = goods.MACHINE_TYPE\n" + "  LEFT JOIN\n"
+            + "    (SELECT grop.GROUP_ID,\n" + "      grop.NAME,\n" + "      grop.ONE_ADD,\n" + "      grop.TWO_ADD,\n"
+            + "      grop.THREE_ADD,\n" + "      grop.SU_ID,\n" + "      meber.USER_ID\n"
+            + "    FROM SYS_SUPER_GROUP grop\n" + "    LEFT JOIN sys_super_member meber\n"
+            + "    ON meber.group_id    = grop.group_id\n" + "    ) t ON t.SU_ID       = super.SU_PO_ID\n"
+            + "  AND t.USER_ID          = usr.USER_ID\n" + "  WHERE usr.PLAN_ID      = ?\n"
+            + "  AND super.SU_PO_ID     = ?\n" + "  AND super.CHECK_STATUS = '3'\n"
+            + "  AND (TO_CHAR(oder.pay_time,'yyyy-mm-dd') BETWEEN ? AND ? \n" + "  OR oder.pay_time IS NULL)\n"
+            + "  ) progress\n" + "GROUP BY progress.REGION_ID,\n" + "  progress.TRUENAME,\n" + "  progress.USER_ID,\n"
+            + "  progress.TRUENAME,\n" + "  progress.REGION_ID,\n" + "  progress.TASK_ONE,\n" + "  progress.TASK_TWO,\n"
+            + "  progress.TASK_THREE,\n" + "  progress.IMPL_DATE,\n" + "  progress.END_DATE,\n" + "  progress.ONE_ADD,\n"
+            + "  progress.TWO_ADD,\n" + "  progress.THREE_ADD,\n" + "  progress.NAMEPATH,\n" + "  progress.NAME,\n"
+            + "  progress.min,\n" + "  progress.max,\n" + "  progress.percentage,\n " + "  progress.sign ";
     Query query = null;
     SQLQuery sqlQuery = null;
     int a = 0;
@@ -1131,7 +1187,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     }
     return progressList;
   }
-  
+
   /**
    * 查看详情
    *
@@ -1147,26 +1203,26 @@ public class SuperpositionServiceImpl implements SuperpositonService {
    */
   @Override
   public Page<SuperpositionProgress> searchDetail(Long planId, Long superId, String userId, String startDate,
-      String endDate, String name, Integer page, Integer size) {
+                                                  String endDate, String name, Integer page, Integer size) {
     String sql = " select \n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
-        + "    oder.ORDER_NUM,\n" + "    sum(oder.NUMS) as nums,\n" + "    oder.goods_name,\n"
-        + "    oder.NAMEPATH as SHOP_ADDRESS,\n" + "    super.SU_PO_ID,\n" + "    t.NAME,\n"
-        + "    oder.BUSINESS_REGION_ID\n" + "  from \n" + "    VIEW_INCOME_MAIN_PLAN_USER usr\n" + "  left join\n"
-        + "    SYS_SUPERPOSITION super\n" + "  on\n" + "    super.PLAN_ID = usr.PLAN_ID \n" + "  left join\n"
-        + "    SYS_SUPER_GOODS_TYPE goods\n" + "  on\n" + "   goods.SU_ID = super.SU_PO_ID\n" + "  left join \n"
-        + "    SYS_GOODS_ORDER oder\n" + "  on\n"
-        + "    oder.REGION_ID = usr.REGION_ID and oder.GOODS_ID = goods.GOOD_ID and replace(oder.machine_type,',') = goods.MACHINE_TYPE\n"
-        + "  left join\n" + "   -- SYS_SUPER_GROUP grop\n"
-        + "   (select grop.GROUP_ID,grop.NAME,grop.ONE_ADD,grop.TWO_ADD,grop.THREE_ADD,grop.SU_ID, meber.USER_ID from \n"
-        + "    SYS_SUPER_GROUP grop\n" + "  left join \n" + "    sys_super_member meber\n" + "  on\n"
-        + "    meber.group_id = grop.group_id) t\n" + "  on\n"
-        + "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" + "  where \n" + "        usr.PLAN_ID = ?   \n"
-        + "    and \n" + "        super.SU_PO_ID = ?\n" + "    and\n" + "        usr.user_id = ?\n" + "    and \n"
-        + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)\n" + " group by\n"
-        + "    oder.BUSINESS_REGION_ID,\n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
-        + "    oder.NAMEPATH,\n" + "    super.SU_PO_ID,\n" + "    t.NAME,\n" + "    oder.ORDER_NUM,\n"
-        + "    oder.goods_name ";
-    
+            + "    oder.ORDER_NUM,\n" + "    sum(oder.NUMS) as nums,\n" + "    oder.goods_name,\n"
+            + "    oder.NAMEPATH as SHOP_ADDRESS,\n" + "    super.SU_PO_ID,\n" + "    t.NAME,\n"
+            + "    oder.BUSINESS_REGION_ID\n" + "  from \n" + "    VIEW_INCOME_MAIN_PLAN_USER usr\n" + "  left join\n"
+            + "    SYS_SUPERPOSITION super\n" + "  on\n" + "    super.PLAN_ID = usr.PLAN_ID \n" + "  left join\n"
+            + "    SYS_SUPER_GOODS_TYPE goods\n" + "  on\n" + "   goods.SU_ID = super.SU_PO_ID\n" + "  left join \n"
+            + "    SYS_GOODS_ORDER oder\n" + "  on\n"
+            + "    oder.REGION_ID = usr.REGION_ID and oder.GOODS_ID = goods.GOOD_ID and replace(oder.machine_type,',') = goods.MACHINE_TYPE\n"
+            + "  left join\n" + "   -- SYS_SUPER_GROUP grop\n"
+            + "   (select grop.GROUP_ID,grop.NAME,grop.ONE_ADD,grop.TWO_ADD,grop.THREE_ADD,grop.SU_ID, meber.USER_ID from \n"
+            + "    SYS_SUPER_GROUP grop\n" + "  left join \n" + "    sys_super_member meber\n" + "  on\n"
+            + "    meber.group_id = grop.group_id) t\n" + "  on\n"
+            + "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" + "  where \n" + "        usr.PLAN_ID = ?   \n"
+            + "    and \n" + "        super.SU_PO_ID = ?\n" + "    and\n" + "        usr.user_id = ?\n" + "    and \n"
+            + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)\n" + " group by\n"
+            + "    oder.BUSINESS_REGION_ID,\n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
+            + "    oder.NAMEPATH,\n" + "    super.SU_PO_ID,\n" + "    t.NAME,\n" + "    oder.ORDER_NUM,\n"
+            + "    oder.goods_name ";
+
     Query query = null;
     SQLQuery sqlQuery = null;
     int a = 0;
@@ -1199,13 +1255,13 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         progress.setShopAddress((String) r[6]);
         progressList.add(progress);
       });
-      
+
     }
     Page<SuperpositionProgress> pageResult = new PageImpl<SuperpositionProgress>(progressList,
-        new PageRequest(page, size), count);
+            new PageRequest(page, size), count);
     return pageResult;
   }
-  
+
   /**
    * 查看进程
    *
@@ -1215,33 +1271,33 @@ public class SuperpositionServiceImpl implements SuperpositonService {
    */
   @Override
   public Page<SuperpositionProgress> findAll(Long planId, Long superId, String startDate, String endDate, String name,
-      Integer page, Integer size) {
+                                             Integer page, Integer size) {
     logger.info(startDate + "  : " + endDate);
     String sql = "\n" + "select \n" + "  nvl(sum(progress.NUMS),0) as NUMS,\n" + "  progress.USER_ID,\n"
-        + "  progress.TRUENAME,\n" + "  progress.REGION_ID, \n" + "  progress.TASK_ONE,\n" + "  progress.TASK_TWO,\n"
-        + "  progress.TASK_THREE,\n" + "  progress.IMPL_DATE,\n" + "  progress.END_DATE,\n" + "  progress.ONE_ADD,\n"
-        + "  progress.TWO_ADD,\n" + "  progress.THREE_ADD,\n " + "  progress.NAMEPATH,\n" + "  progress.NAME "
-        + "from \n" + "  (select \n" + "    usr.TRUENAME,\n" + "    usr.REGION_ID,\n" + "    usr.USER_ID,\n"
-        + "    usr.NAMEPATH,\n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
-        + "    oder.NUMS,\n" + "    oder.NAMEPATH as SHOP_ADDRESS,\n" + "    super.SU_PO_ID,\n"
-        + "    super.TASK_ONE,\n" + "    super.TASK_TWO,\n" + "    super.TASK_THREE,\n" + "    super.IMPL_DATE,\n"
-        + "    super.END_DATE,\n" + "    t.ONE_ADD,\n" + "    t.TWO_ADD,\n" + "    t.THREE_ADD,\n" + "    t.NAME \n"
-        + "  from \n" + "    VIEW_INCOME_MAIN_PLAN_USER usr\n" + "  left join\n" + "    SYS_SUPERPOSITION super\n"
-        + "  on\n" + "    super.PLAN_ID = usr.PLAN_ID \n" + "  left join\n" + "    SYS_SUPER_GOODS_TYPE goods\n"
-        + "  on\n" + "   goods.SU_ID = super.SU_PO_ID\n" + "  left join \n" + "    SYS_GOODS_ORDER oder\n" + "  on\n"
-        + "    oder.REGION_ID = usr.REGION_ID and oder.GOODS_ID = goods.GOOD_ID and replace(oder.machine_type,',') = goods.MACHINE_TYPE\n"
-        + "  left join\n"
-        + "   (select grop.GROUP_ID,grop.NAME,grop.ONE_ADD,grop.TWO_ADD,grop.THREE_ADD,grop.SU_ID, meber.USER_ID from \n"
-        + "    SYS_SUPER_GROUP grop\n" + "  left join \n" + "    sys_super_member meber\n" + "  on\n"
-        + "    meber.group_id = grop.group_id) t\n" + "  on\n"
-        + "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" + "  where \n" + "        usr.PLAN_ID = ?   \n"
-        + "    and \n" + "        super.SU_PO_ID = ? \n " + "    and super.CHECK_STATUS = '3' \n" + "    and \n"
-        + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)) progress\n" + "     \n"
-        + "GROUP by  \n" + "    progress.REGION_ID,\n" + "    progress.TRUENAME,\n" + "    progress.USER_ID,\n"
-        + "    progress.TRUENAME,\n" + "    progress.REGION_ID, \n" + "    progress.TASK_ONE,\n"
-        + "    progress.TASK_TWO,\n" + "    progress.TASK_THREE,\n" + "    progress.IMPL_DATE,\n"
-        + "    progress.END_DATE,\n" + "    progress.ONE_ADD,\n" + "    progress.TWO_ADD,\n"
-        + "    progress.THREE_ADD,\n " + "    progress.NAMEPATH,\n" + "    progress.NAME";
+            + "  progress.TRUENAME,\n" + "  progress.REGION_ID, \n" + "  progress.TASK_ONE,\n" + "  progress.TASK_TWO,\n"
+            + "  progress.TASK_THREE,\n" + "  progress.IMPL_DATE,\n" + "  progress.END_DATE,\n" + "  progress.ONE_ADD,\n"
+            + "  progress.TWO_ADD,\n" + "  progress.THREE_ADD,\n " + "  progress.NAMEPATH,\n" + "  progress.NAME "
+            + "from \n" + "  (select \n" + "    usr.TRUENAME,\n" + "    usr.REGION_ID,\n" + "    usr.USER_ID,\n"
+            + "    usr.NAMEPATH,\n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
+            + "    oder.NUMS,\n" + "    oder.NAMEPATH as SHOP_ADDRESS,\n" + "    super.SU_PO_ID,\n"
+            + "    super.TASK_ONE,\n" + "    super.TASK_TWO,\n" + "    super.TASK_THREE,\n" + "    super.IMPL_DATE,\n"
+            + "    super.END_DATE,\n" + "    t.ONE_ADD,\n" + "    t.TWO_ADD,\n" + "    t.THREE_ADD,\n" + "    t.NAME \n"
+            + "  from \n" + "    VIEW_INCOME_MAIN_PLAN_USER usr\n" + "  left join\n" + "    SYS_SUPERPOSITION super\n"
+            + "  on\n" + "    super.PLAN_ID = usr.PLAN_ID \n" + "  left join\n" + "    SYS_SUPER_GOODS_TYPE goods\n"
+            + "  on\n" + "   goods.SU_ID = super.SU_PO_ID\n" + "  left join \n" + "    SYS_GOODS_ORDER oder\n" + "  on\n"
+            + "    oder.REGION_ID = usr.REGION_ID and oder.GOODS_ID = goods.GOOD_ID and replace(oder.machine_type,',') = goods.MACHINE_TYPE\n"
+            + "  left join\n"
+            + "   (select grop.GROUP_ID,grop.NAME,grop.ONE_ADD,grop.TWO_ADD,grop.THREE_ADD,grop.SU_ID, meber.USER_ID from \n"
+            + "    SYS_SUPER_GROUP grop\n" + "  left join \n" + "    sys_super_member meber\n" + "  on\n"
+            + "    meber.group_id = grop.group_id) t\n" + "  on\n"
+            + "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" + "  where \n" + "        usr.PLAN_ID = ?   \n"
+            + "    and \n" + "        super.SU_PO_ID = ? \n " + "    and super.CHECK_STATUS = '3' \n" + "    and \n"
+            + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)) progress\n" + "     \n"
+            + "GROUP by  \n" + "    progress.REGION_ID,\n" + "    progress.TRUENAME,\n" + "    progress.USER_ID,\n"
+            + "    progress.TRUENAME,\n" + "    progress.REGION_ID, \n" + "    progress.TASK_ONE,\n"
+            + "    progress.TASK_TWO,\n" + "    progress.TASK_THREE,\n" + "    progress.IMPL_DATE,\n"
+            + "    progress.END_DATE,\n" + "    progress.ONE_ADD,\n" + "    progress.TWO_ADD,\n"
+            + "    progress.THREE_ADD,\n " + "    progress.NAMEPATH,\n" + "    progress.NAME";
     Query query = null;
     SQLQuery sqlQuery = null;
     int a = 0;
@@ -1283,10 +1339,10 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     }
     logger.info(progressList);
     Page<SuperpositionProgress> pageResult = new PageImpl<SuperpositionProgress>(progressList,
-        new PageRequest(page, size), count);
+            new PageRequest(page, size), count);
     return pageResult;
   }
-  
+
   /**
    * 添加叠加任务设置
    *
@@ -1301,7 +1357,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     Superposition superposition1 = repository.save(superposition);
     return superposition1;
   }
-  
+
   /**
    * 根据id查询
    *
@@ -1313,7 +1369,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     Superposition superposition = repository.findOne(id);
     return superposition;
   }
-  
+
   /**
    * 查询全部的
    *
@@ -1341,9 +1397,9 @@ public class SuperpositionServiceImpl implements SuperpositonService {
         } else if ("expired".equals(sign)) {// 查询已经过期的
           if (statTime != null && !"".equals(statTime) && endTime != null && !"".equals(endTime)) {
             list.add(cb.greaterThanOrEqualTo(root.get("implDate").as(Date.class),
-                DateUtil.string2Date(statTime, "yyyy-MM-dd")));
+                    DateUtil.string2Date(statTime, "yyyy-MM-dd")));
             list.add(
-                cb.lessThanOrEqualTo(root.get("implDate").as(Date.class), DateUtil.string2Date(endTime, "yyyy-MM-dd")));
+                    cb.lessThanOrEqualTo(root.get("implDate").as(Date.class), DateUtil.string2Date(endTime, "yyyy-MM-dd")));
           }
           list.add(cb.lessThanOrEqualTo(root.get("endDate").as(Date.class), new Date()));// 大于结束日期
           list.add(cb.equal(root.get("checkStatus").as(String.class), "3"));// 通过审核的
@@ -1355,7 +1411,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     }, pageable);
     return page;
   }
-  
+
   /**
    * 根据id删除
    *
@@ -1365,7 +1421,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
   public void delete(Long id) {
     repository.delete(id);
   }
-  
+
   /**
    * 判断使用哪个叠加任务周期量
    *
@@ -1402,9 +1458,9 @@ public class SuperpositionServiceImpl implements SuperpositonService {
             ruleList.get(1).setMin(oneAdd);
           }
         });
-        
+
       });
-      
+
       return superposition;
     }
     
@@ -1426,10 +1482,10 @@ public class SuperpositionServiceImpl implements SuperpositonService {
             ruleList.get(2).setMin(twoAdd);
           }
         });
-        
+
       });
       return superposition;
-      
+
     }
     /*
      * 有三个指标
@@ -1453,15 +1509,15 @@ public class SuperpositionServiceImpl implements SuperpositonService {
             ruleList.get(3).setMin(threeAdd);
           }
         });
-        
+
       });
-      
+
       return superposition;
     }
-    
+
     return null;
   }
-  
+
   /**
    * 查询方案人员
    *
@@ -1472,7 +1528,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
   public Page<PlanUserVo> findMainPlanUsers(Pageable pageReq, Map<String, Object> searchParams) throws Exception {
     return mainPlanService.getUserpage(pageReq, searchParams);
   }
-  
+
   // /**
   // * 计算收益
   // *
@@ -1486,7 +1542,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
   //
   // return null;
   // }
-  
+
   /**
    * 获取用户的id
    *
@@ -1497,5 +1553,5 @@ public class SuperpositionServiceImpl implements SuperpositonService {
     User user = (User) subject.getPrincipal();
     return user.getId();
   }
-  
+
 }

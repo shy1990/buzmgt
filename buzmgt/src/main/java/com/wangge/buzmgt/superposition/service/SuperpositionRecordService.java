@@ -19,4 +19,6 @@ public interface SuperpositionRecordService {
 
     //判断是否已经计算
     public Boolean isCompare(Long planId,Long superId,String status);
+
+    public List<SuperpositionRecord> findByGiveDateAndSalesmanId(String time, String salesmanId);
 }
