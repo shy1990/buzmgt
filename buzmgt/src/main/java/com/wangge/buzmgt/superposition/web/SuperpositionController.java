@@ -12,6 +12,7 @@ import com.wangge.buzmgt.superposition.entity.Result;
 import com.wangge.buzmgt.superposition.entity.Superposition;
 import com.wangge.buzmgt.superposition.entity.SuperpositionRecord;
 import com.wangge.buzmgt.superposition.pojo.SuperpositionProgress;
+import com.wangge.buzmgt.superposition.pojo.SuperpositionRecordDetails;
 import com.wangge.buzmgt.superposition.service.GoodsOrderService;
 import com.wangge.buzmgt.superposition.service.SuperpositionRecordService;
 import com.wangge.buzmgt.superposition.service.SuperpositonService;
@@ -34,10 +35,7 @@ import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by joe on 16-9-5.
@@ -471,6 +469,49 @@ public class SuperpositionController {
     String[] coloumsKey_ = new String[]{"shopName", "shopAddress", "orderNum", "goodsName", "nums", "payTime"};
     ExcelExport.doExcelExport("详情.xls", list, title_, coloumsKey_, request, response);
   }
+
+  /**
+   * 显示收益记录信息
+   * @param time
+   * @param salesmanId
+   * @param model
+   * @return
+   */
+  @RequestMapping(value = "showRecords", method = RequestMethod.GET)
+  public String showRecord(String time, String salesmanId,Model model) {
+    model.addAttribute("time",time);
+    model.addAttribute("salesmanId",salesmanId);
+    return "superposition/show_records";
+  }
+  @RequestMapping(value = "showRecords", method = RequestMethod.POST)
+  @ResponseBody
+  public List<SuperpositionRecord> showRecord(String time, String salesmanId) {
+    return superpositonService.findRecord(time,salesmanId);
+  }
+
+  /**
+   * 显示收益信息详情
+   * @param userId
+   * @param superId
+   * @param startTime
+   * @param endTime
+   * @param model
+   * @return
+   */
+  @RequestMapping(value = "showRecordsDetails", method = RequestMethod.GET)
+  public String showRecordsDetails(String userId, Long superId, String startTime, String endTime,Model model) {
+    return "superposition/show_records_details";
+  }
+  @RequestMapping(value = "showRecordsDetails", method = RequestMethod.POST)
+  @ResponseBody
+  public List<SuperpositionRecordDetails> showRecordsDetails(String userId, Long superId, String startTime, String endTime) {
+    userId = "M370105czgp0";
+    superId = 1l;
+    startTime = "2016-11-18";
+    endTime = "2016-11-19";
+    return superpositonService.showDetails(userId,superId,DateUtil.string2Date(startTime,"yyyy-MM-dd"),DateUtil.string2Date(endTime,"yyyy-MM-dd"));
+  }
+
 
 
   /*

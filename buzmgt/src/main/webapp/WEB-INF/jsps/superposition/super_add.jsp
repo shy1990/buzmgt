@@ -83,9 +83,14 @@
             {{/if}}
             <span class="text-gery text-size-12">提成：</span>
             <input type="text" class="ph-inpt" placeholder="0.00"
-                   onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
-                   onafterpaste="this.value=this.value.replace(/[^\d]/g,'')"
-                   onblur="addMoney({{num}},this.value);"/>
+                   onkeyup="checkNumber(this.value,this)"
+                   onafterpaste="checkNumber(this.value,this)"
+                   <%--onchange="checkNumber(this.value,this)"--%>
+                   onblur="addMoney({{num}},this.value);"
+
+            />
+
+
             <span class="text-publ">元/台</span>
         </div>
         {{/each}}
@@ -105,8 +110,9 @@
             {{/if}}
             <span class="text-gery text-size-12">奖励：</span>
             <input type="text" class="ph-inpt" placeholder="0.00"
-                   onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
-                   onafterpaste="this.value=this.value.replace(/[^\d]/g,'')"
+                   onkeyup="checkNumber(this.value,this)"
+                   onafterpaste="checkNumber(this.value,this)"
+                   <%--onchange="checkNumber(this.value,this)"--%>
                    onblur="addMoneyOne('{{num}}',this.value);"/>
             <span class="text-publ">元/台</span>
         </div>
@@ -665,6 +671,14 @@
                 }
 
             })
+        }
+        function checkNumber(v, a) {
+            console.log("------------------------------------: " + v)
+            var re = /^[0-9]+.?[0-9]*$/;
+            if (!re.test(v)){
+                alert("请输入数字");
+                $(a).val('');
+            }
         }
     </script>
 </body>
