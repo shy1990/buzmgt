@@ -155,4 +155,9 @@ public interface MainIncomeService {
    * 向..中添加收益
    */
   OrderSignfor disposeIncomeForOrderItem(String orderno);
+  
+  /**
+   * 每天计算本月工资
+   */
+  void calBusinessSal();
 }

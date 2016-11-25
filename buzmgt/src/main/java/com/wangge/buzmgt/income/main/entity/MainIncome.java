@@ -36,7 +36,8 @@ import com.wangge.buzmgt.teammember.entity.SalesMan;
 @Entity
 @NamedStoredProcedureQueries({ @NamedStoredProcedureQuery(name = "initMonth", procedureName = "init_Income_EveMonth"),
     @NamedStoredProcedureQuery(name = "initOilCost", procedureName = "oil_daily_calculate_prod"),
-    @NamedStoredProcedureQuery(name = "basicSalayinitMonth", procedureName = "income_month_busisal") })
+    @NamedStoredProcedureQuery(name = "basicSalayinitMonth", procedureName = "income_month_busisal"),
+    @NamedStoredProcedureQuery(name = "basicSalayinitdaily", procedureName = "income_daily_busiSal")})
 @Table(name = "sys_income_main")
 public class MainIncome {
   /** @pdOid 08793dc7-7b0c-45cf-9e6e-4cb30870c2f9 */

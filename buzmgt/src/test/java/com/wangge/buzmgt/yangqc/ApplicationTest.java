@@ -88,6 +88,6 @@ public class ApplicationTest {
   }
   @Test
   public void testx(){
-//    planService.findEffectUserDate(2, startDate, endDate, "M370105czgp0");
+    mainIncomeRep.calIncomeDaily();
   }
 }
