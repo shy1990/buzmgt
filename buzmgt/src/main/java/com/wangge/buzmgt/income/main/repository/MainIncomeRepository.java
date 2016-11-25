@@ -94,7 +94,7 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
       + "           and t.salesman_id = ?1      and to_char('yyyy-mm', t.pay_time) = ?2\n" + "        union all\n"
       + "        select sum(t.SUM) nums, sum(INCOME) incomes\n"
       + "          from SYS_INCOME_TICHENG_BRAND t         where t.orderflag = 1\n" + "           and t.USER_ID = ?1\n"
-      + "           and to_char('yyyy-mm', t.COUNT_DATE) = ?2)\n" + "  left join sys_income_shouhou_cost c on 1 = 1\n"
+      + "           and to_char('yyyy-mm', t.COUNT_DATE) = ?2)  left join sys_income_shouhou_cost c on 1 = 1\n"
       + "  left join sys_income_shouhou_hedge h on c.hedge_id = h.id\n" + " where c.ruletype in (0, 1)\n"
       + "   and c.user_id = ?1\n" + "   and to_char('yyyy-mm', c.PAYTIME) = ?2", nativeQuery = true)
   public Object getBusinessIncome(String userId, String month);

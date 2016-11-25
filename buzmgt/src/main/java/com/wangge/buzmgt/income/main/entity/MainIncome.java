@@ -88,7 +88,10 @@ public class MainIncome {
    * 总收入
    */
   private Double allresult = 0D;
+  //实际业务收益
   private Double  rbusiSal=0D;
+  private Integer busiShouNums =0;
+  private Integer busiNums =0;
   /**
    * 状态(0,未审核,1已审核)
    */
@@ -211,6 +214,22 @@ public class MainIncome {
     this.basicSalary = basicSalaray;
   }
   
+  public Integer getBusiShouNums() {
+    return busiShouNums;
+  }
+
+  public void setBusiShouNums(Integer busiShouNums) {
+    this.busiShouNums = busiShouNums;
+  }
+
+  public Integer getBusiNums() {
+    return busiNums;
+  }
+
+  public void setBusiNums(Integer busiNums) {
+    this.busiNums = busiNums;
+  }
+
   public MainIncome() {
     super();
   }
@@ -223,13 +242,15 @@ public class MainIncome {
         - this.punish;
     this.setAllresult(result);
   }
-  
+
   @Override
   public String toString() {
     return "MainIncome [id=" + id + ", salesman=" + salesman + ", basicSalary=" + basicSalary + ", busiIncome="
         + busiIncome + ", oilIncome=" + oilIncome + ", punish=" + punish + ", reachIncome=" + reachIncome
-        + ", overlyingIncome=" + overlyingIncome + ", hedgecut=" + hedgecut + ", allresult=" + allresult + ", state="
-        + state + ", month=" + month + "]";
+        + ", overlyingIncome=" + overlyingIncome + ", hedgecut=" + hedgecut + ", allresult=" + allresult + ", rbusiSal="
+        + rbusiSal + ", busiShouNums=" + busiShouNums + ", busiNums=" + busiNums + ", state=" + state + ", month="
+        + month + "]";
   }
   
+ 
 }

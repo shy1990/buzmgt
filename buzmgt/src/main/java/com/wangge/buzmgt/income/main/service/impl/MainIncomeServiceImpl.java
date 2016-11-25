@@ -42,6 +42,10 @@ import com.wangge.buzmgt.income.ywsalary.service.BaseSalaryService;
 import com.wangge.buzmgt.log.entity.Log.EventType;
 import com.wangge.buzmgt.log.service.LogService;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.ordersignfor.entity.OrderItem;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
+import com.wangge.buzmgt.ordersignfor.service.OrderItemService;
 import com.wangge.buzmgt.section.service.ProductionService;
 import com.wangge.buzmgt.teammember.repository.SalesManRepository;
 import com.wangge.buzmgt.util.DateUtil;
@@ -76,7 +80,10 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   private LogService logService;
   @Autowired
   private BusinessSalaryVoRepository businessVoRep;
-  
+  @Autowired
+  private OrderSignforRepository orderSignforRepository;
+  @Autowired
+  private OrderItemService orderItemService;
   /**
    * 要避免多线程冲突 <br/>
    * 手机要展示当天的订单预计收益详情和当天的订单预计收益总和统计<br/>
@@ -420,9 +427,46 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   }
   
   @Override
-  public Page<BusinessSalaryVo> findBusinessSalaryVo(Map<String, Object> reMap, Pageable pageReq) {
-    // TODO Auto-generated method stub
-    return businessVoRep.findAll(pageReq);
+  public Page<BusinessSalaryVo> findBusinessSalaryVo(Map<String, Object> searchParams, Pageable pageReq) {
+    Page<BusinessSalaryVo> voPage = businessVoRep.findAll((Specification<BusinessSalaryVo>) (root, query, cb) -> {
+      List<Predicate> predicates = new ArrayList<Predicate>();
+      PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
+      return cb.and(predicates.toArray(new Predicate[] {}));
+    }, pageReq);
+    return voPage;
   }
   
+  @Override
+  public List<BusinessSalaryVo> findAllBusines(Map<String, Object> searchParams) {
+    List<BusinessSalaryVo> voList = businessVoRep.findAll((Specification<BusinessSalaryVo>) (root, query, cb) -> {
+      List<Predicate> predicates = new ArrayList<Predicate>();
+      PredicateUtil.createPedicateByMap(searchParams, root, cb, predicates);
+      return cb.and(predicates.toArray(new Predicate[] {}));
+    });
+    return voList;
+  }
+  
+  @Override
+  public OrderSignfor disposeIncomeForOrderItem(String orderno) {
+    OrderSignfor orderSignfor=orderSignforRepository.findByOrderNo(orderno);
+    orderItemService.disposeOrderSignfor(orderSignfor);
+    List<OrderItem> orderItems = orderSignfor.getItems();
+    List<Object> valList = businessVoRep.findByOrder(orderSignfor.getOrderNo());
+    orderItems.forEach(orderItem -> {
+      String goodName = orderItem.getName();
+      for (Object val : valList) {
+        Object[] vals = (Object[]) val;
+        String goodsName = vals[0].toString();
+        Object income = vals[2];
+        if (null != income) {
+          Integer num = Integer.valueOf(vals[1].toString());
+          if (goodsName.equals(goodName) && num == orderItem.getNums()) {
+            orderItem.setIncomeMoney(Float.valueOf(income.toString()));
+            break;
+          }
+        }
+      }
+    });
+    return orderSignfor;
+  }
 }

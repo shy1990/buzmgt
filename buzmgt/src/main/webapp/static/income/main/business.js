@@ -1,13 +1,30 @@
 var itemTotal = 0;// 补统计总条数
 var searchData = {
 	"page" : 0,
-	"size" : 15,
+	"size" : 14,
 };
+function getSearchParam() {
+	var orderno = $("#orderno").val();
+	searchData.SC_EQ_userId = userId;
+	searchData.SC_EQ_incometype = $("#incomeType").val();
+	if (orderno == null || orderno == "") {
+		searchData.SC_EQ_cmonth = $("#cmonth").val();
+		searchData.SC_EQ_payStatus = $("#payStatus").val();
+		searchData.SC_EQ_orderStatus = $("#orderStatus").val();
+		searchData.SC_EQ_regionId = $("#regionId").val();
+	} else {
+		searchData.SC_EQ_cmonth = "";
+		searchData.SC_EQ_payStatus = "";
+		searchData.SC_EQ_orderStatus = "";
+		searchData.SC_EQ_regionId = "";
+		searchData.SC_LK_orderno = orderno;
+	}
+}
 
 function findMainPlanList(page) {
 	page = page == null || page == '' ? 0 : page;
 	searchData.page = page;
-	searchData.regionId = $("#region").val();
+	getSearchParam();
 	$.ajax({
 		url : base + "mainIncome/businessList/findVolist",
 		type : "GET",
@@ -47,7 +64,10 @@ function createTaskTable(data) {
 			return 'use-red';
 		}
 	});
-
+	/*
+	 * Handlebars.registerHelper("addOne", function(index) { if (index < 9) {
+	 * return '0' + (index + 1); } else { return (index + 1); } });
+	 */
 	var myTemplate = Handlebars.compile($("#task-table-template").html());
 	$('#userList').html(myTemplate(data));
 }
@@ -65,4 +85,8 @@ function oilCostPaging(data) {
 			findMainPlanList(curr - 1);
 		}
 	});
+}
+function exportExcel() {
+	window.location.href = base + "mainIncome/exportBusiness?SC_EQ_incometype=1&SC_EQ_cmonth="
+			+ searchData.SC_EQ_cmonth + "&SC_EQ_userId=" + searchData.SC_EQ_userId;
 }

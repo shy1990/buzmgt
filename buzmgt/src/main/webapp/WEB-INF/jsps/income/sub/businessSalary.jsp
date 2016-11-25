@@ -27,6 +27,10 @@
 <link href="static/bootStrapPager/css/page.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"
 	href="/static/incomeCash/css/income-cash.css">
+<link rel="stylesheet" type="text/css"
+	href="/static/month-task/findup-month-task.css">
+<link rel="stylesheet" type="text/css"
+	href="/static/abnormal/abnormal.css" />
 <link rel="stylesheet" type="text/css" href="/static/income/income.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
@@ -38,8 +42,8 @@
 											<td>{{rowind}}</td>
 											<td>{{namepath}}</td>
 											<td>{{shopName}}</td>
-											<td>{{orderno}}</td>
-											<td>{{phoneCount}}台</td>
+											<td><a href="mainIncome/detail/{{orderno}}">{{orderno}}</a></td>
+											<td>{{phoneCount}}</td>
 											<td><span class="text-{{adaptOS  orderStatus}} text-strong">{{orderStatus}}</span><span
 												class="text-gery-s">{{orderPayType}}</span></td>
 											<td><span class="ph-{{adaptRed payStatus}}">{{payStatus}}</span></td>
@@ -69,8 +73,9 @@
 						<div class=" inform">
 							<div class="row">
 								<div class="col-sm-4 product">
-									<span class="text-strong text-blue">2016年8月份佣金 &nbsp;</span> <span
-										class="text-cheng">注：</span> <span class="text-grey-s">此统计数值为价格区间计算收益的产品，且属于已付款状态。</span>
+									<span class="text-strong text-blue">${mainIncome.month}月佣金
+										&nbsp;</span> <span class="text-cheng">注：</span> <span
+										class="text-grey-s">此统计数值为价格区间计算收益的产品，且属于已付款状态。</span>
 								</div>
 							</div>
 
@@ -81,25 +86,25 @@
 									<img src="static/phone-set/img/pic1.png" alt="" class="fl"
 										style="margin-right: 15px;">
 									<p class="text-gery text-strong font-w">周期销量</p>
-									<p class="text-lv text-16 text-strong">1000台</p>
+									<p class="text-lv text-16 text-strong">${mainIncome.busiNums}台</p>
 								</div>
 								<div class="col-sm-3 info-zq">
 									<img src="static/phone-set/img/pic-2.png" alt="" class="fl"
 										style="margin-right: 15px;">
 									<p class=" text-strong text-gery  font-w ">退货冲减</p>
-									<p class="text-jv text-16">-50台</p>
+									<p class="text-jv text-16">-${mainIncome.busiShouNums}台</p>
 								</div>
 								<div class="col-sm-3 info-zq">
 									<img src="static/phone-set/img/pic3.png" alt="" class="fl"
 										style="margin-right: 15px;">
 									<p class="text-gery   font-w text-strong">实际销量</p>
-									<p class="text-gren text-16">950台</p>
+									<p class="text-gren text-16">${mainIncome.busiNums-mainIncome.busiShouNums}台</p>
 								</div>
 								<div class="col-sm-3 info-zq">
 									<img src="static/phone-set/img/pic4.png" alt="" class="fl"
 										style="margin-right: 15px;">
 									<p class="text-gery   font-w text-strong">预计收益</p>
-									<p class="text-lan text-16">950台</p>
+									<p class="text-lan text-16">${mainIncome.rbusiSal}元</p>
 								</div>
 							</div>
 
@@ -109,10 +114,11 @@
 							<div class="row">
 								<div class="col-sm-4">
 									<span class="text-gery text-strong">选择区域：</span> <select
-										class="selectpicker show-tick  ">
-										<option>山东省-德州市-武城县</option>
-										<option>山东省-德州市-武城县</option>
-										<option>山东省-德州市-武城县</option>
+										class="selectpicker show-tick" id='regionId'>
+										<option value="">全部乡镇</option>
+										<c:forEach var='region' items='${regions}'>
+											<option value="${region.id}">${region.name}</option>
+										</c:forEach>
 									</select>
 								</div>
 								<div class="col-sm-4">
@@ -121,57 +127,60 @@
 										<div class="input-group input-group-sm" style="width: 220px">
 											<span class="input-group-addon " id="basic-addon1"><i
 												class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span>
-											<input type="text"
+											<input type="text" id="cmonth"
 												class="form-control form_datetime input-sm"
 												placeholder="请选择年-月" readonly="readonly">
 										</div>
 									</div>
 								</div>
 								<div class="col-sm-4">
-									<span class="text-gery text-strong">实时订单：</span> <select
-										class="selectpicker show-tick  ">
-										<option>山东省-德州市-武城县</option>
-										<option>山东省-德州市-武城县</option>
-										<option>山东省-德州市-武城县</option>
+									<span class="text-gery text-strong">收益类型：</span> <select
+										id="incomeType" class="selectpicker show-tick  ">
+										<option value='1'>实时收益</option>
+										<option value='0'>预计收益</option>
 									</select>
 								</div>
 							</div>
-
 							<div class="row" style="margin-top: 20px">
 								<div class="col-sm-4">
-									<span class="text-gery text-strong">付款状况：</span> <select
-										class="selectpicker show-tick  ">
-										<option>全部</option>
-										<option>山东省-德州市-武城县</option>
-										<option>山东省-德州市-武城县</option>
+									<span class="text-gery text-strong">支付状况：</span> <select
+										class="selectpicker show-tick" id="payStatus">
+										<option value="">全部</option>
+										<option value='0'>未付款</option>
+										<option value='1'>已付款</option>
+										<option value='2'>待退款</option>
+										<option value='3'>已退款</option>
+										<option value='4'>卖家拒绝退款</option>
 									</select>
 								</div>
-
 								<div class="col-sm-4">
 									<span class="text-gery text-strong">签收状态：</span> <select
-										class="selectpicker show-tick  ">
-										<option>全部</option>
-										<option>山东省-德州市-武城县</option>
-										<option>山东省-德州市-武城县</option>
+										class="selectpicker show-tick  " id="orderStatus">
+										<option value="">全部</option>
+										<option value="0">订单成功</option>
+										<option value="1">订单取消</option>
+										<option value="2">业务签收</option>
+										<option value="3">客户签收</option>
+										<option value="4">客户拒收</option>
 									</select>
 								</div>
 
 								<div class="col-sm-4">
-									<button class="btn btn-blue  col-sm-5">确定</button>
+									<button class="btn btn-blue  col-sm-5"
+										onclick="findMainPlanList(0);">确定</button>
 								</div>
 							</div>
 							<hr>
-							<span class="text-hei">佣金共计：</span> <span class="text-red">1,250.08元</span>
+							<span class="text-hei">佣金共计：</span> <span class="text-red">${mainIncome.rbusiSal}元</span>
 
 							<div class="d-daochu" style="margin-top: 1px">
 								<div class="salesman">
-									<input class="cs-select  text-gery-hs" placeholder="  请输入业务员名称">
-									<button class="btn btn-blue btn-sm"
-										onclick="goSearch('${salesman.id}','${assess.id}');">
+									<input class="cs-select  text-gery-hs" id="orderno" placeholder="请输入订单号" />
+									<button class="btn btn-blue btn-sm" onclick="findMainPlanList(0)">
 										检索</button>
 								</div>
 								<div class="link-posit-t pull-right export">
-									<a class="table-export" href="javascript:void(0);">导出excel</a>
+									<a class="table-export" href="javascript:void(0);" onclick="exportExcel();">导出excel</a>
 								</div>
 							</div>
 						</div>
@@ -238,6 +247,8 @@
 		charset="utf-8"></script>
 	<script type="text/javascript">
 		var	base="<%=basePath%>";
+		var userId = "${mainIncome.salesman.id}";
+		var month = "${mainIncome.month}";
 		$(".form_datetime").datetimepicker({
 			format : "yyyy-mm",
 			language : 'zh-CN',
@@ -251,6 +262,7 @@
 			forceParse : 0,
 
 		});
+		$("#cmonth").val(month);
 		$(function() {
 			findMainPlanList(0);
 		});
