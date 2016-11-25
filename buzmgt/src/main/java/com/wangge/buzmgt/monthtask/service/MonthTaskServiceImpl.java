@@ -361,10 +361,15 @@ public class MonthTaskServiceImpl implements MonthTaskService {
   @Override
   public void findSalesMan(MonthTask task, Model model) {
     SalesMan salesman = task.getMonthData().getSalesman();
+    findSalaryAndAcess(salesman, model);
+    
+  }
+  
+  @Override
+  public void findSalaryAndAcess(SalesMan salesman, Model model) {
     Assess assess = findAssessBySalesMan(salesman);
     model.addAttribute("salesMan", salesman);
     model.addAttribute("assess", assess);
-    
   }
   
   @Override
@@ -447,12 +452,11 @@ public class MonthTaskServiceImpl implements MonthTaskService {
     return rate;
   }
   
-  /** 
-    * 8月5日 修复 导出excle时单元格合并出错的问题,原因合并的单元格与内容不对称.
-    * 1. 输出内容list未排序
-    * 2.合并单元格数据元数据与list数据布局不对称的问题 
-    *  
-    */ 
+  /**
+   * 8月5日 修复 导出excle时单元格合并出错的问题,原因合并的单元格与内容不对称. 1. 输出内容list未排序
+   * 2.合并单元格数据元数据与list数据布局不对称的问题
+   * 
+   */
   @Override
   public void ExportSetExcel(MonthTask task, String salesName, HttpServletRequest request,
       HttpServletResponse response) {
@@ -496,13 +500,13 @@ public class MonthTaskServiceImpl implements MonthTaskService {
     List<Map<String, Object>> marginList = new ArrayList<Map<String, Object>>();
     int start = 0;
     int end = 0;
-    //按任务目标降序排序
+    // 按任务目标降序排序
     for (int level : levels) {
       if (null == sumMap.get(level + "")) {
         continue;
       }
       int sum = sumMap.get(level + "");
-      if (sum >1) {
+      if (sum > 1) {
         Map<String, Object> obMap = new HashMap<String, Object>();
         /*
          * int firstRow, int lastRow, int firstCol, int lastCol)

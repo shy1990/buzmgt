@@ -33,8 +33,8 @@ public class MainIncomeVo {
    * 
    * @pdOid 00f5a3a0-8082-4edd-84fd-93f1b7aeba43
    */
-  //用户id,业务名称,区域路径,角色名称
-  private String  userId,truename,namepath,rolename;
+  // 用户id,业务名称,区域路径,角色名称
+  private String userId, truename, namepath, rolename;
   /**
    * 基本工资
    * 
@@ -42,11 +42,11 @@ public class MainIncomeVo {
    */
   private Double basicSalary = 0D;
   /**
-   * 业务佣金
+   * 业务佣金,实际佣金
    * 
    * @pdOid 22050c89-b21f-43dc-ac8b-a342986d2148
    */
-  private Double busiIncome = 0D;
+  private Double busiIncome = 0D, rbusiSal = 0D;
   /**
    * 油补
    * 
@@ -82,7 +82,7 @@ public class MainIncomeVo {
    * 
    * @pdOid 4141425b-daa4-487b-8b9a-3e426735dede
    */
-  private String  state ;
+  private String state;
   
   /**
    * 月份
@@ -91,128 +91,132 @@ public class MainIncomeVo {
    */
   private String month;
   
-  
-
   public Long getId() {
     return id;
   }
-
+  
   public void setId(Long id) {
     this.id = id;
   }
-
   
   public String getUserId() {
     return userId;
   }
-
+  
   public void setUserId(String userId) {
     this.userId = userId;
   }
-
+  
   public String getTruename() {
     return truename;
   }
-
+  
   public void setTruename(String truename) {
     this.truename = truename;
   }
-
+  
   public String getNamepath() {
     return namepath;
   }
-
+  
   public void setNamepath(String namepath) {
     this.namepath = namepath;
   }
-
+  
   public String getRolename() {
     return rolename;
   }
-
+  
   public void setRolename(String rolename) {
     this.rolename = rolename;
   }
-
+  
   public Double getBasicSalary() {
     return basicSalary;
   }
-
+  
   public void setBasicSalary(Double basicSalary) {
     this.basicSalary = basicSalary;
   }
-
+  
   public Double getBusiIncome() {
     return busiIncome;
   }
-
+  
   public void setBusiIncome(Double busiIncome) {
     this.busiIncome = busiIncome;
   }
-
+  
   public Double getOilIncome() {
     return oilIncome;
   }
-
+  
   public void setOilIncome(Double oilIncome) {
     this.oilIncome = oilIncome;
   }
-
+  
   public Double getPunish() {
     return punish;
   }
-
+  
   public void setPunish(Double punish) {
     this.punish = punish;
   }
-
+  
   public Double getReachIncome() {
     return reachIncome;
   }
-
+  
   public void setReachIncome(Double reachIncome) {
     this.reachIncome = reachIncome;
   }
-
+  
   public Double getOverlyingIncome() {
     return overlyingIncome;
   }
-
+  
   public void setOverlyingIncome(Double overlyingIncome) {
     this.overlyingIncome = overlyingIncome;
   }
-
+  
   public Double getAllresult() {
     return allresult;
   }
-
+  
   public void setAllresult(Double allresult) {
     this.allresult = allresult;
   }
-
+  
   public String getState() {
     return state;
   }
-
+  
   public void setState(String state) {
     this.state = state;
   }
-
+  
   public java.lang.String getMonth() {
     return month;
   }
-
+  
   public Long getRoleId() {
     return roleId;
   }
-
+  
   public void setRoleId(Long roleId) {
     this.roleId = roleId;
   }
-
+  
   public void setMonth(java.lang.String month) {
     this.month = month;
   }
 
+  public Double getRbusiSal() {
+    return rbusiSal;
+  }
+
+  public void setRbusiSal(Double rbusiSal) {
+    this.rbusiSal = rbusiSal;
+  }
   
 }

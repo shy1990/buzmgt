@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,9 +25,13 @@ import org.springframework.web.util.WebUtils;
 import com.wangge.buzmgt.achieveset.service.AchieveIncomeService;
 import com.wangge.buzmgt.income.main.entity.MainIncome;
 import com.wangge.buzmgt.income.main.service.MainIncomeService;
+import com.wangge.buzmgt.income.main.vo.BusinessSalaryVo;
 import com.wangge.buzmgt.income.main.vo.MainIncomeVo;
 import com.wangge.buzmgt.income.schedule.service.JobService;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.monthtask.service.MonthTaskService;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
+import com.wangge.buzmgt.ordersignfor.service.OrderItemService;
 import com.wangge.buzmgt.region.service.RegionService;
 import com.wangge.buzmgt.superposition.service.SuperpositonService;
 import com.wangge.buzmgt.util.DateUtil;
@@ -45,6 +50,9 @@ public class MainIncomeController {
   JobService jobService;
   @Autowired
   AchieveIncomeService achieveService;
+  @Autowired
+  MonthTaskService monthService;
+  
   private static final String SEARCH_OPERTOR = "SC_";
   
   @RequestMapping("/index")
@@ -77,7 +85,7 @@ public class MainIncomeController {
       searchParams.put("EQ_month", month);
       String[] gridTitles = { "业务员", "负责区域", "业务角色", "月份", " 基本工资", "业务佣金", "油补佣金", "扣罚金额", "达量收入", "叠加收入", "总收入",
           "是否审核" };
-      String[] coloumsKey = { "truename", "namepath", "rolename", "month", "basicSalary", "busiIncome", "oilIncome",
+      String[] coloumsKey = { "truename", "namepath", "rolename", "month", "basicSalary", "rbusiSal", "oilIncome",
           "punish", "reachIncome", "overlyingIncome", "allresult", "state" };
       List<MainIncomeVo> list = incomeService.findAll(searchParams);
       ExcelExport.doExcelExport(month + "业务员工资表.xls", list, gridTitles, coloumsKey, request, response);
@@ -126,7 +134,7 @@ public class MainIncomeController {
     try {
       // superService.compute(20L,2L);
       // achieveService.calculateAchieveIncomeTotal(20L, 12L);
-      jobService.doTask();
+      // jobService.doTask();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -134,14 +142,49 @@ public class MainIncomeController {
   
   @RequestMapping("/businessList")
   public String InitBusiPage(@RequestParam("id") MainIncome mainIncome, String userId, String month, Model model) {
-    model.addAttribute("businessSalary", mainIncome.getBusiIncome());
-    model.addAttribute("hedge", mainIncome.getHedgecut());
-    model.addAttribute("allBusiSal", mainIncome.getHedgecut() + mainIncome.getBusiIncome());
-    return "";
+    model.addAttribute("mainIncome", mainIncome);
+    model.addAttribute("regions", regionService.getListByIds(mainIncome.getSalesman()));
+    monthService.findSalaryAndAcess(mainIncome.getSalesman(), model);
+    return "/income/sub/businessSalary";
   }
   
   @RequestMapping("/businessList/findVolist")
-  public @ResponseBody List<?> findVoList() {
-    return null;
+  public @ResponseBody Page<BusinessSalaryVo> findVoList(HttpServletRequest request, HttpServletResponse response,
+      Pageable pageReq) {
+    Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+    return incomeService.findBusinessSalaryVo(searchParams, pageReq);
+  }
+  
+  @RequestMapping(value = "/exportBusiness", method = RequestMethod.GET)
+  public void exportBusiness(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    try {
+      Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, SEARCH_OPERTOR);
+      String month = searchParams.get("EQ_cmonth") + "";
+      String[] gridTitles = { "业务员", "月份", "负责区域", "店铺名称", "订单编号", "手机总数", "订单状态", "支付状态", "佣金", "下单日期" };
+      String[] coloumsKey = { "truename", "cmonth", "namepath", "shopName", "orderno", "phoneCount", "orderStatus",
+          "payStatus", "income", "createTime" };
+      List<BusinessSalaryVo> list = incomeService.findAllBusines(searchParams);
+      String title = month + "业务员业务佣金表.xls";
+      if (null != list && list.size() > 0)
+        title = list.get(0).getTruename() + title;
+      ExcelExport.doExcelExport(title, list, gridTitles, coloumsKey, request, response);
+    } catch (Exception e) {
+      LogUtil.error("导出业务佣金表出错", e);
+    }
+  }
+  
+  /**
+   * 订单详情的收益
+   * 
+   * @param model
+   * @param orderSignfor
+   * @param ruleId
+   * @return
+   */
+  @RequestMapping(value = "/detail/{orderNo}", method = RequestMethod.GET)
+  public String incomeOrderDetail(Model model, @PathVariable("orderNo") String orderNo) {
+    OrderSignfor orderSignfor = incomeService.disposeIncomeForOrderItem(orderNo);
+    model.addAttribute("order", orderSignfor);
+    return "achieve/income_order_detial";
   }
 }

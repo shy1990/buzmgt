@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import org.apache.commons.lang.ObjectUtils;
 import org.junit.Test;
 
+import com.wangge.buzmgt.income.main.vo.BusinessSalaryVo.PayType;
 import com.wangge.buzmgt.util.DateUtil;
 
 public class UnitTest {
@@ -91,7 +92,15 @@ public class UnitTest {
     // e.printStackTrace();
     // }
   }
-  
+  @Test
+  public void testEnum(){
+    Class<?> classz=PayType.class;
+    Object[] xxs=classz.getEnumConstants();
+    for(Object o:xxs){
+      System.out.println(o);
+    }
+    System.out.println(String.class.getEnumConstants().length);
+  }
   public static void main(String[] args) {
     new UnitTest().testCurrent();
     //exs.shutdown();
