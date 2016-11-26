@@ -448,10 +448,10 @@ public class BaseSalaryServiceImpl implements BaseSalaryService {
   }
   
   @Override
-  @Transactional
-  public void updateTest() {
+  @Transactional(dontRollbackOn = RuntimeException.class)
+  public void testCal() {
     BaseSalary basesal = baseSalaryRepository.findOne(1L);
-    basesal.setSalary(4500D);
+    basesal.setSalary(5500D);
     baseSalaryRepository.save(basesal);
     throw new NullPointerException("测试用");
   }

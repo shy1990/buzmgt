@@ -80,7 +80,7 @@ public class ApplicationTest {
   
   @Test
   public void testDate() {
-    baseSService.updateTest();
+    baseSService.testCal();
     // planUserRep.findsaleByDateAndOrderNo(DateUtil.string2Date("2016-09-01"),
     // "sfsdfa");
     // planUserRep.findBysalesmanAndDate(DateUtil.string2Date("2016-09-01"),

@@ -143,6 +143,6 @@ public class BaseSalaryController {
   @RequestMapping(value = "/test", method = RequestMethod.GET)
   @ResponseBody
   public void testD() {
-    baseSalaryService.updateTest();
+    baseSalaryService.testCal();
   }
 }
