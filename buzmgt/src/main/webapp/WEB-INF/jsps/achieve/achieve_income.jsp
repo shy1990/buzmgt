@@ -71,6 +71,7 @@
         <i class="ico icon-daliang"></i>达量收益
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
         <input id="userId" value="${userId}" type="hidden"/>
+        <input id="yearMonth" value="${yearMonth}" type="hidden"/>
     </h4>
     <div class="clearfix"></div>
     <div class="form-inline" style="margin-bottom: 10px;">

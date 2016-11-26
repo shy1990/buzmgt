@@ -59,9 +59,9 @@
 								<td><a href="/mainIncome/businessList?id={{id}}&month={{month}}&&salesId={{userId}}"><span class="text-blue-line">{{rbusiSal}}</span></a></td>	
 								<td><a href="javascript:void(0);" onclick="oilRecord('{{userId}}');"><span class="text-blue-line">{{oilIncome}}</span></a></td>
 								<td><a href="/customTask/list?month={{month}}&&salesId={{userId}}"><span class="text-red-line">{{punish}}</span></a></td>
-								<td><a href=""><span class="text-blue-line">{{reachIncome}}</span></a></td>
-								<td><a href=""><span class="text-blue-line">{{overlyingIncome}}</span></a></td>
-								<td><a href=""><span class="text-green text-strong">{{allresult}}</span></a></td>
+								<td><a href="achieveIncome/{{userId}}?yearMonth={{month}}"><span class="text-blue-line">{{reachIncome}}</span></a></td>
+								<td><a href="/superposition/showRecords?time={{month}}&salesmanId={{userId}}"><span class="text-blue-line">{{overlyingIncome}}</span></a></td>
+								<td><a ><span class="text-green text-strong">{{allresult}}</span></a></td>
 			{{#isfh state}}		
 				<td><span class="yfh">已复核</span></td>						
 			{{else}}
@@ -106,8 +106,9 @@
 					<div class="input-group input-group-sm">
 						<span class="input-group-addon " id="basic-addon1"><i
 							class=" glyphicon glyphicon-remove glyphicon-calendar"></i></span> <input
-							id="monthDate" type="text" class="form-control form_datetime input-sm"
-							placeholder="查询年月" readonly="readonly" />
+							id="monthDate" type="text"
+							class="form-control form_datetime input-sm" placeholder="查询年月"
+							readonly="readonly" />
 					</div>
 				</div>
 				<button class="btn btn-blue btn-sm"
@@ -174,20 +175,20 @@
 		charset="utf-8"></script>
 	<script type="text/javascript">
 	var	base='<%=basePath%>';
-	var checkFlag="${check}";
-	$(".form_datetime").datetimepicker({
-        format: "yyyy-mm",
-        language: 'zh-CN',
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 3,
-        minView: 3,
-        pickerPosition: "bottom-left",
-        forceParse: 0,
+		var checkFlag = "${check}";
+		$(".form_datetime").datetimepicker({
+			format : "yyyy-mm",
+			language : 'zh-CN',
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 3,
+			minView : 3,
+			pickerPosition : "bottom-left",
+			forceParse : 0,
 
-    });
+		});
 		$(function() {
 			//initDateInput();
 			goSearch();

@@ -54,8 +54,9 @@ public class AchieveIncomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/{userId}")
-	public String showList(@PathVariable("userId") String userId, Model model) {
+	public String showList(@PathVariable("userId") String userId, @RequestParam("yearMonth") String yearMonth, Model model) {
 		model.addAttribute("userId", userId);
+		model.addAttribute("yearMonth", yearMonth);
 		return "achieve/achieve_income";
 	}
 

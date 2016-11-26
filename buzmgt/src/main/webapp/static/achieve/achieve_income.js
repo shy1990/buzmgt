@@ -85,9 +85,12 @@ function CheckDetails(achieveId) {
 function findAchieveIncomeList(page) {
 	page = page == null || page == '' ? 0 : page;
     var userId = $("#userId").val();
+    var yearMonth = $("#yearMonth").val();
     SearchData['page'] = page;
     SearchData['sc_EQ_status'] = "PAY";//查询已支付的
     SearchData['sc_EQ_userId'] = userId;//查询用户
+    SearchData['sc_GTE_issuingDate'] = yearMonth+"-01";//查询用户
+    SearchData['sc_LTE_issuingDate'] = yearMonth+"-28";//查询用户
 
 	console.info(SearchData);
 	$.ajax({
