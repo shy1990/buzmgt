@@ -206,7 +206,7 @@
                             <li><i class="ico ico-fl"></i>请选择类别</li>
                             <c:forEach items="${machineTypes}" var="type" varStatus="status">
                                 <c:choose>
-                                    <c:when test="${status.index eq 0 }">
+                                    <c:when test="${status.index eq 1 }">
                                         <li class="active" title="${type.code }">${type.name }</li>
                                     </c:when>
                                     <c:otherwise>
