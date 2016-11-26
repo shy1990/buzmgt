@@ -271,6 +271,20 @@ public class ProductionServiceImpl implements ProductionService {
    * @return
    */
 
+  /**
+   * 删除创建中的
+   * @param id
+   * @return
+   */
+  @Override
+  public String realDelete(Long id) {
+    try{
+      productionRepository.delete(id);
+      return "删除成功";
+    }catch (Exception e){
+      return "删除失败";
+    }
+  }
 
   /**
    * 初次添加区间方案

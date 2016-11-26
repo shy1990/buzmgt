@@ -466,7 +466,8 @@ function add_section(){
 	var planId = $("#planId").val();
 	var machineType = findMachineType();
 	var checkId = $('#checkId').val();
-	window.location.href = '/section/addPriceRanges?type='+machineType+'&planId='+planId + '&check=' + checkId;
+	var machineName = $(".J_MachineType li.active").text();
+	window.location.href = '/section/addPriceRanges?type='+machineType+'&planId='+planId + '&check=' + checkId + '&machineName=' + machineName;
 
 }
 /**

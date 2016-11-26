@@ -480,7 +480,7 @@
                     });
                     //被驳回的有删除功能
                     Handlebars.registerHelper("checkDelete", function (productionId,productStatus) {
-                        if (productStatus == '2' && '${check}' == '2') {
+                        if ((productStatus == '2')&& '${check}' == '2') {
                             return new Handlebars.SafeString('<button class="btn  bnt-sm bnt-zza " data-toggle="modal" data-target="#"onclick="deleteReject(' + productionId + ')">删除 </button>');
                         }
                     });
@@ -628,9 +628,9 @@
                     }
                     function deleteReject(id) {
                         $.ajax({
-                            url:'/section/delete/' + id,
+                            url:'/section/realDelete/' + id,
                             success:function(data){
-                                alert("删除成功");
+                                alert(data.msg);
                                 window.location.reload();
                             },
                             error:function(){

@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/income-cash.css">
     <link rel="stylesheet" href="../static/css/phone.css">
     <script src="../static/js/jquery/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
-    <script language="JavaScript" src="../static/js/section/jquery.json.js"></script>
+    <script language="JavaScript" src="../static/js/section/jquery.json.js" ></script>
     <style>
         .table-bordered {
             border: none;
@@ -80,7 +80,7 @@
                     data: $.toJSON(priceRangeArray),//将Json对象序列化成Json字符串，toJSON()需要引用jquery.json.min.js
                     success: function (data) {
                         alert("创建成功");
-                        window.location.href = "production/" + data.id+'?planId='+data.planId + '&check=' + ${check};
+                        window.location.href = "production/" + data.id+'?planId='+data.planId + '&check=' + ${check} + '&machineName=' + '${machineName}';
                     },
                     error: function () {
                         alert("系统故障");

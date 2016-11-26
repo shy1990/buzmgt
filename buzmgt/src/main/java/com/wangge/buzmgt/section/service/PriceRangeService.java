@@ -1,7 +1,6 @@
 package com.wangge.buzmgt.section.service;
 
 import com.wangge.buzmgt.section.entity.PriceRange;
-import com.wangge.buzmgt.section.entity.Production;
 
 import java.util.List;
 
