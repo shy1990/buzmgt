@@ -61,7 +61,7 @@
 								<td><a href="/customTask/list?month={{month}}&&salesId={{userId}}"><span class="text-red-line">{{punish}}</span></a></td>
 								<td><a href="achieveIncome/{{userId}}?yearMonth={{month}}"><span class="text-blue-line">{{reachIncome}}</span></a></td>
 								<td><a href="/superposition/showRecords?time={{month}}&salesmanId={{userId}}"><span class="text-blue-line">{{overlyingIncome}}</span></a></td>
-								<td><a href=""><span class="text-green text-strong">{{allresult}}</span></a></td>
+								<td><a ><span class="text-green text-strong">{{allresult}}</span></a></td>
 			{{#isfh state}}		
 				<td><span class="yfh">已复核</span></td>						
 			{{else}}
