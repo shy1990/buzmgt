@@ -43,7 +43,13 @@ public class IncomeSchedule {
   public void initMonthIncome() {
     jobService.initMonthIncome();
   }
-  
+  /**
+   * 每天11点计算当月的收益(主要是业务佣金)
+   * */
+  @Scheduled(cron = " 1 1 23 * * ? ")
+  public void calBusinessSal(){
+    mainIncomeService.calBusinessSal();
+  } 
   /**
    * 每天23点14分执行删除任务
    */

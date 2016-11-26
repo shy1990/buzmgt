@@ -25,16 +25,22 @@ public interface MainIncomeRepository extends JpaRepository<MainIncome, Long>, J
    */
   @Procedure("init_Income_EveMonth")
   void initMonthSalary();
-  
+  /**计算每天油补
+   * */
   @Procedure("oil_daily_calculate_prod")
   void calculateOilCost();
   
   /**
-   * 计算业务佣金和
+   * 计算上月业务佣金和
    * 
    */
   @Procedure("income_month_Busi_all")
   void calIncomePerMonth();
+  /**
+   * 每天计算本月的收益
+   * */
+  @Procedure("income_daily_busiSal")
+  void calIncomeDaily();
   
   @Modifying(clearAutomatically = true)
   @Transactional(rollbackFor = Exception.class)

@@ -84,6 +84,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   private OrderSignforRepository orderSignforRepository;
   @Autowired
   private OrderItemService orderItemService;
+  
   /**
    * 要避免多线程冲突 <br/>
    * 手机要展示当天的订单预计收益详情和当天的订单预计收益总和统计<br/>
@@ -391,6 +392,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   }
   
   @Override
+  @Transactional(rollbackFor = Exception.class)
   public void updateSuperIncome(String userId, double superPositionIncome) throws Exception {
     try {
       String preMonth = DateUtil.getPreMonth(new Date(), -1);
@@ -448,7 +450,7 @@ public class MainIncomeServiceImpl implements MainIncomeService {
   
   @Override
   public OrderSignfor disposeIncomeForOrderItem(String orderno) {
-    OrderSignfor orderSignfor=orderSignforRepository.findByOrderNo(orderno);
+    OrderSignfor orderSignfor = orderSignforRepository.findByOrderNo(orderno);
     orderItemService.disposeOrderSignfor(orderSignfor);
     List<OrderItem> orderItems = orderSignfor.getItems();
     List<Object> valList = businessVoRep.findByOrder(orderSignfor.getOrderNo());
@@ -468,5 +470,12 @@ public class MainIncomeServiceImpl implements MainIncomeService {
       }
     });
     return orderSignfor;
+  }
+  
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void calBusinessSal() {
+    mainIncomeRep.calIncomeDaily();
+    
   }
 }
