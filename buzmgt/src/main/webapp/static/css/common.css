@@ -674,7 +674,7 @@ a.table-export:focus {
 	bottom: 0;
 	background-color:#000; 
 	background:rgba(0,0,0,0.3);  
-  background:#000 9;/*CSS Hack,只能对ie9以下浏览器ie6,ie7,ie8有效，否侧ie10,FF,Cherome会失去透明效果*/  
+    background:#000 ;/*CSS Hack,只能对ie9以下浏览器ie6,ie7,ie8有效，否侧ie10,FF,Cherome会失去透明效果*/
   filter:Alpha(opacity=30); /*只对ie7,ie8有效*/  
  /* 	opacity:0.3; */
   z-index:1000;
@@ -734,4 +734,18 @@ a.table-export:focus {
 }
 .marg-t-30{
 	margin-top: 30px;
+}
+.icon-back {
+    width: 26px;
+    height: 26px;
+    background: url("../img/arrow.png") no-repeat center;
+}
+.icon-back:hover {
+    width: 26px;
+    background: url("../img/Arrow 2 .png") no-repeat center;
+}
+.fl-right {
+    float: right;
+    margin-top: 25px;
+    margin-right: 25px;
 }
