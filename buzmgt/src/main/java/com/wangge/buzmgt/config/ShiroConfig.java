@@ -47,6 +47,7 @@ public class ShiroConfig {
 		filterChainDefinitionMapping.put("/logout", "logout");
 		filterChainDefinitionMapping.put("/static/**", "anon");
 		filterChainDefinitionMapping.put("/mainIncome/calcuPayed", "anon");
+		filterChainDefinitionMapping.put("/baseSalary/test", "anon");
 		filterChainDefinitionMapping.put("/**", "user");
 		shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMapping);
 		shiroFilter.setSecurityManager(securityManager);
