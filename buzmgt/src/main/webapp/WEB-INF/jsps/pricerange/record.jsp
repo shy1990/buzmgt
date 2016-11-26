@@ -346,6 +346,7 @@
                             <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#"
                                     onclick="showDetails('{{productionId}}')">详情
                             </button>
+                            {{checkDelete productionId productStatus}}
                         </td>
                     </tr>
                     {{/each}}
@@ -477,6 +478,13 @@
                     Handlebars.registerHelper("addOne", function (index) {
                         return (index + 1) + '';
                     });
+                    //被驳回的有删除功能
+                    Handlebars.registerHelper("checkDelete", function (productionId,productStatus) {
+                        if (productStatus == '2' && '${check}' == '2') {
+                            return new Handlebars.SafeString('<button class="btn  bnt-sm bnt-zza " data-toggle="modal" data-target="#"onclick="deleteReject(' + productionId + ')">删除 </button>');
+                        }
+                    });
+
                     //判断有没有审核修改功能
                     <%--Handlebars.registerHelper("checkReview",function (auditor,options) {--%>
                         <%--if((auditor == ${managerId} || ${managerId} == '1') && oldId != null){--%>
@@ -617,6 +625,19 @@
                     function handelerbars_register(content) {
                         var over_template = Handlebars.compile($("#over-template").html());//注册
                         $("#over_tbody").html(over_template(content));
+                    }
+                    function deleteReject(id) {
+                        $.ajax({
+                            url:'/section/delete/' + id,
+                            success:function(data){
+                                alert("删除成功");
+                                window.location.reload();
+                            },
+                            error:function(){
+                                alert('系统故障');
+                            }
+
+                        })
                     }
                 </script>
 
