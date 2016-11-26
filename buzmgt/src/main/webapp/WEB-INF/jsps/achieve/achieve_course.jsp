@@ -81,7 +81,7 @@
         <i class="ico icon-ck"></i>查看进程
         <!--区域选择按钮-->
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
-
+        <input id="achieveId"type="hidden" value="${achieve.achieveId}">
     </h4>
     <div class=" inform">
         <div class="row">

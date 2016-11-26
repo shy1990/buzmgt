@@ -83,9 +83,9 @@ body {
 	{{/if}}
 	<span class="text-gery text-size-12">提成：</span>
 	<input type="text" class="ph-inpt" placeholder="0.00"
-	onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
-	onafterpaste="this.value=this.value.replace(/[^\d]/g,'')"
-	onblur="addMoney({{num}},this.value);" /> 
+           onkeyup="this.value=this.value.replace(/[^\d\\.]/g,'')"
+           onafterpaste="this.value=this.value.replace(/[^\d\\.]/g,'')"
+	onblur="addMoney({{num}},this.value);" />
 	<span class="text-publ">元/台</span>
 </div>
 {{/each}}

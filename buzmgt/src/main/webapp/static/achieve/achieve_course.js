@@ -1,6 +1,5 @@
 var achieveTotal = 0;
 $(function () {
-    // initFunction();
     initExcelExport();// 初始化导出excel
     findAchieveCourseList();// 查询列表
 })
@@ -44,8 +43,10 @@ function CheckDetails(userId, achieveId) {
  */
 function findAchieveCourseList(page) {
     page = page == null || page == '' ? 0 : page;
+    var achieveId = $('#achieveId').val();
     SearchData['page'] = page;
     SearchData['sc_EQ_status'] = 'PAY';
+    SearchData['sc_EQ_achieveId'] = achieveId;
     $.ajax({
         url: "/achieveIncome/total",
         type: "GET",

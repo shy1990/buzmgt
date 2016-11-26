@@ -32,6 +32,7 @@
 	<div class="content main">
 		<h4 class="page-header">
 			<i class="ico icon-order-detail"></i>订单详情
+            <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
 		</h4>
 		<!--row begin-->
 		<div class="row">
