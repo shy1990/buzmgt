@@ -258,7 +258,7 @@
     });
     //判断有没有审核修改功能
     Handlebars.registerHelper("checkReview", function (auditor, oldId, status, options) {
-        if ((auditor == ${managerId} || ${managerId} == '1') && oldId != null && status == 1) {
+        if ((auditor == ${managerId} || ${managerId} == '1') && oldId != null && status == 1 && ${check == 1}) {
             return options.fn(this);
         } else {
             return options.inverse(this);
