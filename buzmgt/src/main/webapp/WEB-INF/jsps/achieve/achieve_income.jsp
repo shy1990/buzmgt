@@ -93,10 +93,6 @@
         </button>
 
         <div class="link-posit-t pull-right export">
-            <input class="ph-select text-gery-hs" placeholder="  请输入业务员名称">
-            <button class="btn btn-blue btn-sm" onclick="goSearch('${salesman.id}','${assess.id}');">
-                检索
-            </button>
             <a class="table-export" href="javascript:void(0);">导出excel</a>
         </div>
 

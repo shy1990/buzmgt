@@ -196,6 +196,7 @@
                                             </button>
                                             <button class="btn btn-sm bnt-jc " data-toggle="modal" data-target="#" onclick="seeProgress('{{planId}}', '{{id}}')">进程
                                             </button>
+                                            {{checkDelete checkStatus id}}
                                             {{/checkRecord}}
                                         </td>
                                     </tr>
@@ -373,6 +374,13 @@
                         return options.inverse(this);
                     }
                 });
+                //判断是否是驳回的
+                Handlebars.registerHelper("checkDelete", function (status,id) {
+                    if (status == '2' && '${check}' == '2') {
+                        return new Handlebars.SafeString('<button class="btn  bnt-sm bnt-zza " data-toggle="modal" data-target="#" onclick="deleteReject('+id+')">删除</button>');
+                    }
+                });
+
                 //注册状态模板
                 //状态:0-创建中,1-审核中,2-驳回,3-审核通过,4-废弃(删除);
                 Handlebars.registerHelper("checkStatus", function (status) {
@@ -410,7 +418,24 @@
             }
         });
     }
+
+    function deleteReject(id) {
+        $.ajax({
+            url:'delete/' + id,
+            success:function(data){
+                alert("删除成功");
+                window.location.reload();
+            },
+            error:function(){
+                alert('系统故障');
+            }
+
+        })
+    }
+
     listNow(searchData);
+
+
 </script>
 </body>
 </html>

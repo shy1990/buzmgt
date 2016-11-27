@@ -673,7 +673,6 @@
             })
         }
         function checkNumber(v, a) {
-            console.log("------------------------------------: " + v)
             var re = /^[0-9]+.?[0-9]*$/;
             if (!re.test(v)){
                 alert("请输入数字");

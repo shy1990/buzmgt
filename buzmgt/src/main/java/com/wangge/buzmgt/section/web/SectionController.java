@@ -83,10 +83,11 @@ public class SectionController {
      * @return
      */
     @RequestMapping(value = "addPriceRanges", method = RequestMethod.GET)
-    public String toAddJSP(String type, String planId,String check, Model model) {
+    public String toAddJSP(String type, String planId,String check, String machineName,Model model) {
         model.addAttribute("type", type);
         model.addAttribute("planId", planId);
         model.addAttribute("check",check);
+        model.addAttribute("machineName",machineName);
         return "section/add_form";
     }
 
@@ -118,11 +119,12 @@ public class SectionController {
      * @return
      */
     @RequestMapping(value = "production/{id}", method = RequestMethod.GET)
-    public String addPriceRanges(@PathVariable("id") Production production, String planId,String check, Model model) {
+    public String addPriceRanges(@PathVariable("id") Production production, String planId,String check,String machineName, Model model) {
 
         model.addAttribute("production", production);
         model.addAttribute("planId", planId);
         model.addAttribute("check",check);
+        model.addAttribute("machineName",machineName);
         return "section/add_form2";
     }
 
@@ -197,12 +199,40 @@ public class SectionController {
         model.addAttribute("production", production);
         return "section/list_one_cw";
     }
+
+    /**
+     * 逻辑删除
+     * @param production
+     * @return
+     */
     @RequestMapping(value = "delete/{id}",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject delete(@PathVariable("id") Production production){
         JSONObject jsonObject = new JSONObject();
         try {
             productionService.delete(production);
+            jsonObject.put("result","success");
+            jsonObject.put("msg","操作成功");
+            return jsonObject;//成功
+        }catch (Exception e){
+            jsonObject.put("result","error");
+            jsonObject.put("msg","系统异常,操作失败");
+            return jsonObject;
+        }
+
+    }
+
+    /**
+     * 物理删除
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "realDelete/{id}",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject realDelete(@PathVariable("id") Long id){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            productionService.realDelete(id);
             jsonObject.put("result","success");
             jsonObject.put("msg","操作成功");
             return jsonObject;//成功

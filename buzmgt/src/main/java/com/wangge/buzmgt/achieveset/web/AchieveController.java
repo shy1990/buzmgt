@@ -389,7 +389,7 @@ public class AchieveController {
 	 * @return String    返回类型
 	 * @throws
 	 * @Title: showtake
-	 * @Description: 查看页面跳转
+	 * @Description: 进程页面跳转
 	 */
 	@RequestMapping(value = "/course/{achieveId}", method = RequestMethod.GET)
 	public String showCourse(@PathVariable(value = "achieveId") Achieve achieve, Model model) {

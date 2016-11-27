@@ -15,79 +15,78 @@ import java.util.Map;
  */
 public interface ProductionService {
 
+	public String realDelete(Long id);
 
-    public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, Long planId);
+	public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, Long planId);
 
-    public Production review(Long id, String status);//改变状态(渠道审核:通过/驳回)
+	public Production review(Long id, String status);//改变状态(渠道审核:通过/驳回)
 
-    //渠道审核
-    public void toReview(Long id, String status, String auditor,String userId);
+	//渠道审核
+	public void toReview(Long id, String status, String auditor, String userId);
 
-    public Production findById(Long id);//根据id查找
+	public Production findById(Long id);//根据id查找
 
-    public List<Production> findNotExpired(Long planId,String type);//查询未过期的(使用中,审核中,被驳回)
+	public List<Production> findNotExpired(Long planId, String type);//查询未过期的(使用中,审核中,被驳回)
 
-    public List<Production> findNotExpiredQd(Long planId,String type);//查询未过期的(使用中,审核中,被驳回)
+	public List<Production> findNotExpiredQd(Long planId, String type);//查询未过期的(使用中,审核中,被驳回)
 
-    public Page<Production> findAll(Long planId,String type, Pageable pageable);
+	public Page<Production> findAll(Long planId, String type, Pageable pageable);
 
-    public Map<String,Object> findNowCW(String type,Long planId);
+	public Map<String, Object> findNowCW(String type, Long planId);
 
-    public Production save(Production production);
+	public Production save(Production production);
 
-    public List<PriceRange> findReview(Long planId,String type);//查询正在审核中的小区间
+	public List<PriceRange> findReview(Long planId, String type);//查询正在审核中的小区间
 
-    public Production findNow(String type, String time,Long planId);//查询下订单日期使用的方案
+	public Production findNow(String type, String time, Long planId);//查询下订单日期使用的方案
 
-    /**
-     * @Description: 已支付计算
-     * @param orderNo:订单号
-     * @param payTime:支付时间("yyyy-MM-dd")
-     * @param price:产品价格
-     * @param userId:业务员id
-     * @param goodsId:产品id
-     * @param type:产品类型
-     * @param planId:方案id
-     * @param num:单品数量
-     * @return
-     */
-    public String compute(String orderNo,Date payTime,
-      Double price, String userId,String goodsId,String type,Long planId,Integer num,String regionId);
+	/**
+	 * @param orderNo:订单号
+	 * @param payTime:支付时间("yyyy-MM-dd")
+	 * @param price:产品价格
+	 * @param userId:业务员id
+	 * @param goodsId:产品id
+	 * @param type:产品类型
+	 * @param planId:方案id
+	 * @param num:单品数量
+	 * @return
+	 * @Description: 已支付计算
+	 */
+	public String compute(String orderNo, Date payTime,
+												Double price, String userId, String goodsId, String type, Long planId, Integer num, String regionId);
 
-    /**
-     * @Description: 价格区间出库计算
-     * @param orderNo:订单号
-     * @param price:产品价格
-     * @param userId:业务员id
-     * @param goodsId:产品id
-     * @param type:产品类型
-     * @param planId:方案id
-     * @param num:单品数量
-     * @return
-     */
-    public String compute(String orderNo,Double price,
-        String userId,String goodsId,String type,Long planId,Integer num,String regionId);
+	/**
+	 * @param orderNo:订单号
+	 * @param price:产品价格
+	 * @param userId:业务员id
+	 * @param goodsId:产品id
+	 * @param type:产品类型
+	 * @param planId:方案id
+	 * @param num:单品数量
+	 * @return
+	 * @Description: 价格区间出库计算
+	 */
+	public String compute(String orderNo, Double price,
+												String userId, String goodsId, String type, Long planId, Integer num, String regionId);
 
-    /**
-     * @Description: 价格区间出库计算
-     * @param orderNo:订单id/单品详情id
-     * @param userId:业务员id
-     * @param goodsId:产品id
-     * @param orderGoodsList:单品详情
-     * @param planId:方案id
-     * @return
-     */
-    public String compute(String orderNo, String userId, String goodsId, List<OrderGoods> orderGoodsList, Long planId,String regionId);
+	/**
+	 * @param orderNo:订单id/单品详情id
+	 * @param userId:业务员id
+	 * @param goodsId:产品id
+	 * @param orderGoodsList:单品详情
+	 * @param planId:方案id
+	 * @return
+	 * @Description: 价格区间出库计算
+	 */
+	public String compute(String orderNo, String userId, String goodsId, List<OrderGoods> orderGoodsList, Long planId, String regionId);
 
-    public Production delete(Production production);
-
-
+	public Production delete(Production production);
 
 
 //    -------------------------------------代码优化-----------------------------
 
-    //正在进行的(使用中,审核中的)
-    public List<Production> findOnGoing(Long planId,String type,String today);
+	//正在进行的(使用中,审核中的)
+	public List<Production> findOnGoing(Long planId, String type, String today);
 
-    public List<PriceRange> findNowUse(String type,Long planId);
+	public List<PriceRange> findNowUse(String type, Long planId);
 }

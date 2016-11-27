@@ -176,7 +176,7 @@
 
     <hr class="ph-hr">
     <p><span class="text-gery text-strong" style="margin-left: 12px;margin-bottom: 30px">类别：</span> <span
-            class="text-blue text-strong">智能机</span></p>
+            class="text-blue text-strong">${machineName}</span></p>
     <div class="row">
 
 

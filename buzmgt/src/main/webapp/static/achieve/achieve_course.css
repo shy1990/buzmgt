@@ -33,23 +33,6 @@
     background: url("../earnings/img/start1.png") no-repeat center;
 }
 
-.icon-back {
-    width: 26px;
-    height: 26px;
-    background: url("../earnings/img/arrow.png") no-repeat center;
-}
-
-.icon-back:hover {
-    width: 26px;
-    background: url("../earnings/img/Arrow 2 .png") no-repeat center;
-}
-
-.fl-right {
-    float: right;
-    margin-top: 25px;
-    margin-right: 25px;
-}
-
 .ph-select {
 
     width: 180px;
