@@ -66,5 +66,5 @@ public interface BaseSalaryService {
 
   void calcuThisMonthSalarys() throws  Exception;
   
-  void testCal();
+  void calux();
 }
