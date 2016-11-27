@@ -64,7 +64,6 @@
 			 <a href="javascript:history.back();"><i
 				class="ico icon-back fl-right"></i></a>
 		</h4>
-		</h4>
 
 
 		<div class="row">
