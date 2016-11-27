@@ -39,7 +39,7 @@
 {{#if content}}
 	{{#each content}}
 		<tr>
-											<td>{{rowind}}</td>
+											<td>{{addOne @index}}</td>
 											<td>{{namepath}}</td>
 											<td>{{shopName}}</td>
 											<td><a href="mainIncome/detail/{{orderno}}">{{orderno}}</a></td>
@@ -139,6 +139,7 @@
 								<div class="col-sm-4">
 									<span class="text-gery text-strong">收益类型：</span> <select
 										id="incomeType" class="selectpicker show-tick  ">
+										<option value=''>全部</option>
 										<option value='1'>实时收益</option>
 										<option value='0'>预计收益</option>
 									</select>

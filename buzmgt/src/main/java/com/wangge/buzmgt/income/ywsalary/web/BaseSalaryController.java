@@ -140,9 +140,4 @@ public class BaseSalaryController {
     return json;
   }
   
-  @RequestMapping(value = "/test", method = RequestMethod.GET)
-  @ResponseBody
-  public void testD() {
-    baseSalaryService.testCal();
-  }
 }

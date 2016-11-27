@@ -64,10 +64,17 @@ function createTaskTable(data) {
 			return 'use-red';
 		}
 	});
-	/*
-	 * Handlebars.registerHelper("addOne", function(index) { if (index < 9) {
-	 * return '0' + (index + 1); } else { return (index + 1); } });
-	 */
+	//自定义序号小工具
+	Handlebars.registerHelper("addOne", function(index) {
+		//算出之前的总记录数
+		var prenums=searchData.page*searchData.size;
+		if (index < 9&&prenums<9) {
+			return '0' + (index + 1);
+		} else {
+			return (prenums+index + 1);
+		}
+	});
+
 	var myTemplate = Handlebars.compile($("#task-table-template").html());
 	$('#userList').html(myTemplate(data));
 }
@@ -87,6 +94,8 @@ function oilCostPaging(data) {
 	});
 }
 function exportExcel() {
-	window.location.href = base + "mainIncome/exportBusiness?SC_EQ_incometype=1&SC_EQ_cmonth="
-			+ searchData.SC_EQ_cmonth + "&SC_EQ_userId=" + searchData.SC_EQ_userId;
+	window.location.href = base
+			+ "mainIncome/exportBusiness?SC_EQ_incometype=1&SC_EQ_cmonth="
+			+ searchData.SC_EQ_cmonth + "&SC_EQ_userId="
+			+ searchData.SC_EQ_userId;
 }
