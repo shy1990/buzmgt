@@ -347,7 +347,7 @@
      */
     function delete1(id,planId) {
         $.ajax({
-            url:'<%=basePath%>section/delete/'+id,
+            url:'<%=basePath%>section/realDelete/'+id,
             type:'GET',
             dataType:'json',
             success:function (data) {

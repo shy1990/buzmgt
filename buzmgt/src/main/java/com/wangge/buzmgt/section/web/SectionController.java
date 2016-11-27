@@ -100,9 +100,9 @@ public class SectionController {
      */
     @RequestMapping(value = "addPriceRanges", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> addPriceRanges(String implementationDate, @RequestBody List<PriceRange> priceRanges, String productionType, Long planId) {
+    public Map<String, Object> addPriceRanges(String implementationDate, @RequestBody List<PriceRange> priceRanges, String productionType,String productionName, Long planId) {
 
-        Production production = productionService.addProduction(priceRanges, productionType, implementationDate, planId);
+        Production production = productionService.addProduction(priceRanges, productionType, implementationDate, planId,productionName);
 
         Long id = production.getProductionId();
         Map<String, Object> map = new HashMap<String, Object>();

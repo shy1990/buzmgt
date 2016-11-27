@@ -1,16 +1,13 @@
 package com.wangge.buzmgt.section.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.wangge.buzmgt.section.util.CustomDateSerializer;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.*;
-
-import com.wangge.buzmgt.teammember.entity.Manager;
-import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.wangge.buzmgt.section.util.CustomDateSerializer;
 
 /**
  * 产品类别管理区间 Created by joe on 16-8-19.
@@ -23,7 +20,9 @@ public class Production {
   @GeneratedValue(generator = "idgen")
   @Column(name = "PRODUCTION_ID")
   private Long productionId;// 标识
-  
+
+  private String productionName;//规则名称
+
   private String productionType;// 类型:znj:智能机,hyj:合约机
   
   private String productStatus = "0";// 状态:0-创建中,1-审核中,2-驳回,3-审核通过,4-废弃(删除);
@@ -147,10 +146,19 @@ public class Production {
     this.userId = userId;
   }
 
+  public String getProductionName() {
+    return productionName;
+  }
+
+  public void setProductionName(String productionName) {
+    this.productionName = productionName;
+  }
+
   @Override
   public String toString() {
     return "Production{" +
             "productionId=" + productionId +
+            ", productionName='" + productionName + '\'' +
             ", productionType='" + productionType + '\'' +
             ", productStatus='" + productStatus + '\'' +
             ", createTime=" + createTime +

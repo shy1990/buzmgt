@@ -17,7 +17,7 @@ public interface ProductionService {
 
 	public String realDelete(Long id);
 
-	public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, Long planId);
+	public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, Long planId,String productionName);
 
 	public Production review(Long id, String status);//改变状态(渠道审核:通过/驳回)
 

@@ -16,7 +16,7 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
 
 
   //查询没有结束时间的(审核通过的)
-  @Query(nativeQuery = true, value = " select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID,USER_ID from sys_production  " +
+  @Query(nativeQuery = true, value = " select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID,USER_ID,PRODUCTION_NAME from sys_production  " +
           " where end_time is null  " +
           " and plan_id = ? " +
           " and production_type = ?" +
@@ -26,8 +26,18 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
 
   public Production findByProductionId(Long id);//根据id查询
 
-  //查询当前正在使用的
-  @Query(nativeQuery = true, value = "select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID,USER_ID " +
+  /**
+   * 根据付款时间查询出使用的哪个价格区间大方案
+   *  当有结束时间的时候: 开始时间<= 付款时间 <= 结束时间
+   *  没有结束时间的时候(上边的就不符合了): 开始时间 <=付款时间,并且结束时间是空
+   * @param time1
+   * @param time2
+   * @param time3
+   * @param type
+   * @param planId
+   * @return
+   */
+  @Query(nativeQuery = true, value = "select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID,USER_ID,PRODUCTION_NAME " +
           " from sys_production \n" +
           " where \n" +
           "   (((to_date(?,'yyyy-MM-dd')>=IMPL_DATE and to_date(?,'yyyy-MM-dd')<=end_time)) \n" +
@@ -41,7 +51,7 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
 
 
   //查询当前正在使用的
-  @Query(nativeQuery = true, value = "select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID,USER_ID " +
+  @Query(nativeQuery = true, value = "select PRODUCTION_ID,CREATE_TIME,END_TIME,IMPL_DATE,PRODUCT_STATUS,PRODUCTION_AUDITOR,PRODUCTION_TYPE,STATUS,PLAN_ID,USER_ID,PRODUCTION_NAME " +
           " from sys_production \n" +
           " where \n" +
           "   (((to_date(?,'yyyy-MM-dd')>=IMPL_DATE and to_date(?,'yyyy-MM-dd')<=end_time)) \n" +
@@ -59,7 +69,7 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
    * @param type
    * @return
    */
-  @Query(nativeQuery = true, value = "select p.PRODUCTION_ID,p.CREATE_TIME,p.END_TIME,IMPL_DATE,p.PRODUCT_STATUS,p.PRODUCTION_AUDITOR,p.PRODUCTION_TYPE,p.STATUS,p.PLAN_ID,p.USER_ID from sys_production p " +
+  @Query(nativeQuery = true, value = "select p.PRODUCTION_ID,p.CREATE_TIME,p.END_TIME,IMPL_DATE,p.PRODUCT_STATUS,p.PRODUCTION_AUDITOR,p.PRODUCTION_TYPE,p.STATUS,p.PLAN_ID,p.USER_ID,p.PRODUCTION_NAME from sys_production p " +
           " where p.status = 0" +
           " and p.plan_id=?" +
           " and p.production_type = ? " +
@@ -74,7 +84,7 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
    * @param type
    * @return
    */
-  @Query(nativeQuery = true, value = "select p.PRODUCTION_ID,p.CREATE_TIME,p.END_TIME,IMPL_DATE,p.PRODUCT_STATUS,p.PRODUCTION_AUDITOR,p.PRODUCTION_TYPE,p.STATUS,p.PLAN_ID,p.USER_ID from sys_production p " +
+  @Query(nativeQuery = true, value = "select p.PRODUCTION_ID,p.CREATE_TIME,p.END_TIME,IMPL_DATE,p.PRODUCT_STATUS,p.PRODUCTION_AUDITOR,p.PRODUCTION_TYPE,p.STATUS,p.PLAN_ID,p.USER_ID,p.PRODUCTION_NAME from sys_production p " +
           " where p.status = 0" +
           " and p.plan_id=?" +
           " and p.production_type = ? " +
@@ -87,7 +97,7 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
   public Page<Production> findAll(Specification specification, Pageable pageable);
 
   //----------------------------------- 代码优化 ------------------------------------------------
-  @Query(nativeQuery = true, value = "select p.PRODUCTION_ID,p.CREATE_TIME,p.END_TIME,IMPL_DATE,p.PRODUCT_STATUS,p.PRODUCTION_AUDITOR,p.PRODUCTION_TYPE,p.STATUS,p.PLAN_ID,p.USER_ID from sys_production p " +
+  @Query(nativeQuery = true, value = "select p.PRODUCTION_ID,p.CREATE_TIME,p.END_TIME,IMPL_DATE,p.PRODUCT_STATUS,p.PRODUCTION_AUDITOR,p.PRODUCTION_TYPE,p.STATUS,p.PLAN_ID,p.USER_ID,p.PRODUCTION_NAME from sys_production p " +
           " where p.status = 0" +
           " and p.plan_id=?" +
           " and p.production_type = ? " +

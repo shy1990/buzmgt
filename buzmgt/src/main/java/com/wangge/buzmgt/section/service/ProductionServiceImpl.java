@@ -295,7 +295,7 @@ public class ProductionServiceImpl implements ProductionService {
    * @return:返回这个刚设置区间方案
    */
   @Override
-  public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, Long planId) {
+  public Production addProduction(List<PriceRange> priceRanges, String productType, String implementationDate, Long planId,String productionName) {
     //设置区间
     Date createTime = new Date();//初始化时间
     Date implDate = DateUtil.string2Date(implementationDate, "yyyy-MM-dd");
@@ -309,6 +309,7 @@ public class ProductionServiceImpl implements ProductionService {
     production.setImplDate(implDate);//实施日期
     production.setPriceRanges(priceRanges);//添加区间
     production.setProductionType(productType);//产品类型
+    production.setProductionName(productionName);
     Production pc = productionRepository.save(production);
     logService.log(null, "创建区间方案: " + pc, Log.EventType.SAVE);
     return pc;

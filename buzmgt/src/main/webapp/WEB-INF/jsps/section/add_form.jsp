@@ -36,10 +36,16 @@
              */
             $("#create").click(function () {
                 var impldate = $("#impldate").val().trim();
+                var productionName = $("#productionName").val().trim();
                 if (impldate == null || impldate == undefined || impldate == '') {
                     alert('请输入实施日期');
                     return;
                 }
+                if(productionName == null || productionName == undefined || productionName == ''){
+                    alert('请输入方案名称');
+                    return;
+                }
+
                 var priceRangeArray = new Array();
                 var form = $("#acont .frm");
                 var type = '${type}';
@@ -73,7 +79,7 @@
                 }
                 console.log(priceRangeArray);
                 $.ajax({
-                    url: 'addPriceRanges?implementationDate=' + impldate + '&productionType=' + type +'&planId='+planId,
+                    url: 'addPriceRanges?implementationDate=' + impldate + '&productionType=' + type +'&planId='+planId + '&productionName=' + productionName,
                     type: "POST",
                     contentType: 'application/json;charset=utf-8',//这是请求头信息
                     dataType: "json",
@@ -128,8 +134,10 @@
                     </div>
                     <span class="ph-sm-orange">&nbsp; 注：</span>
                     <span class="ph-sm-gery">0≤区间值＜50</span>
+                    &nbsp; &nbsp;
+                    <span class="text-gery">方案名称：</span>
+                    <input type="text" id="productionName"/>
                 </div>
-
             </div>
             <!--设置提成区间-->
             <div id="acont" class="row">

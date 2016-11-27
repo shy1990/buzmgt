@@ -1218,7 +1218,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
             + "    meber.group_id = grop.group_id) t\n" + "  on\n"
             + "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" + "  where \n" + "        usr.PLAN_ID = ?   \n"
             + "    and \n" + "        super.SU_PO_ID = ?\n" + "    and\n" + "        usr.user_id = ?\n" + "    and \n"
-            + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)\n" + " group by\n"
+            + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ?)\n" + " group by\n"
             + "    oder.BUSINESS_REGION_ID,\n" + "    usr.PLAN_ID,\n" + "    oder.SHOP_NAME,\n" + "    oder.PAY_TIME,\n"
             + "    oder.NAMEPATH,\n" + "    super.SU_PO_ID,\n" + "    t.NAME,\n" + "    oder.ORDER_NUM,\n"
             + "    oder.goods_name ";
@@ -1292,7 +1292,7 @@ public class SuperpositionServiceImpl implements SuperpositonService {
             + "    meber.group_id = grop.group_id) t\n" + "  on\n"
             + "    t.SU_ID = super.SU_PO_ID and t.USER_ID = usr.USER_ID\n" + "  where \n" + "        usr.PLAN_ID = ?   \n"
             + "    and \n" + "        super.SU_PO_ID = ? \n " + "    and super.CHECK_STATUS = '3' \n" + "    and \n"
-            + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ? or oder.pay_time is null)) progress\n" + "     \n"
+            + "      (to_char(oder.pay_time,'yyyy-mm-dd') between ? and ?)) progress\n" + "     \n"
             + "GROUP by  \n" + "    progress.REGION_ID,\n" + "    progress.TRUENAME,\n" + "    progress.USER_ID,\n"
             + "    progress.TRUENAME,\n" + "    progress.REGION_ID, \n" + "    progress.TASK_ONE,\n"
             + "    progress.TASK_TWO,\n" + "    progress.TASK_THREE,\n" + "    progress.IMPL_DATE,\n"

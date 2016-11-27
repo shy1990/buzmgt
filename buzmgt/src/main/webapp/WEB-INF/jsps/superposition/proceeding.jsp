@@ -222,109 +222,108 @@
         <a href="javascript:history.back();"><i class="ico icon-back fl-right"></i></a>
 
     </h4>
-    <div class=" inform">
+    <%--<div class=" inform">--%>
 
 
-        <div class="row">
-            <div class="col-sm-4 info-zq">
-                <img src="<%=basePath%>static/earnings/img/pic1.png" alt="" class="fl" style=" margin-right: 15px;">
-                <p class="text-gery text-strong font-w">周期销量</p>
-                <p class="text-lv text-16 text-strong">1000台</p>
-            </div>
-            <div class="col-sm-4 info-zq">
-                <img src="<%=basePath%>static/earnings/img/pic-2.png" alt="" class="fl" style=" margin-right: 15px;">
-                <p class=" text-strong text-gery  font-w ">退货冲减</p>
-                <p class="text-jv text-16">50台</p>
-            </div>
-            <div class="col-sm-4 info-zq">
-                <img src="<%=basePath%>static/earnings/img/pic3.png" alt="" class="fl" style=" margin-right: 15px;">
-                <p class="text-gery   font-w text-strong">实际销量</p>
-                <p class="text-gren text-16">950台</p>
-            </div>
-            <div class="col-sm-4 info-zq">
-                <img src="<%=basePath%>static/earnings/img/redq.png" alt="" class="fl" style=" margin-right: 15px;">
-                <p class="text-gery   font-w text-strong">预计收益</p>
-                <p class="text-red text-16 text-strong">1230.05元</p>
-            </div>
-        </div>
+        <%--<div class="row">--%>
+            <%--<div class="col-sm-4 info-zq">--%>
+                <%--<img src="<%=basePath%>static/earnings/img/pic1.png" alt="" class="fl" style=" margin-right: 15px;">--%>
+                <%--<p class="text-gery text-strong font-w">周期销量</p>--%>
+                <%--<p class="text-lv text-16 text-strong">1000台</p>--%>
+            <%--</div>--%>
+            <%--<div class="col-sm-4 info-zq">--%>
+                <%--<img src="<%=basePath%>static/earnings/img/pic-2.png" alt="" class="fl" style=" margin-right: 15px;">--%>
+                <%--<p class=" text-strong text-gery  font-w ">退货冲减</p>--%>
+                <%--<p class="text-jv text-16">50台</p>--%>
+            <%--</div>--%>
+            <%--<div class="col-sm-4 info-zq">--%>
+                <%--<img src="<%=basePath%>static/earnings/img/pic3.png" alt="" class="fl" style=" margin-right: 15px;">--%>
+                <%--<p class="text-gery   font-w text-strong">实际销量</p>--%>
+                <%--<p class="text-gren text-16">950台</p>--%>
+            <%--</div>--%>
+            <%--<div class="col-sm-4 info-zq">--%>
+                <%--<img src="<%=basePath%>static/earnings/img/redq.png" alt="" class="fl" style=" margin-right: 15px;">--%>
+                <%--<p class="text-gery   font-w text-strong">预计收益</p>--%>
+                <%--<p class="text-red text-16 text-strong">1230.05元</p>--%>
+            <%--</div>--%>
+        <%--</div>--%>
 
-        <hr class="hr-l">
+        <%--<hr class="hr-l">--%>
 
-        <div class="row" style="padding-left: 20px">
-            <div class="col-sm-4 product">
-                <span class="text-strong text-gery">达量产品：</span>
-                <span class="text-lan text-strong">手机小米小米手机5  平板苹果苹果平板2</span>
-            </div>
-            <div class="col-sm-4 pro-2">
-                <span class="text-strong text-gery">达量产品：</span>
-                <span class="text-lv text-strong"> 150台</span>
-            </div>
-            <div class="col-sm-4 pro-2">
-                <span class="text-strong text-gery">起止日期：</span>
-                <span class="text-black text-strong"> 2016.09.02 - 2016.09.02</span>
-            </div>
-        </div>
+        <%--<div class="row" style="padding-left: 20px">--%>
+            <%--<div class="col-sm-4 product">--%>
+                <%--<span class="text-strong text-gery">达量产品：</span>--%>
+                <%--<span class="text-lan text-strong">手机小米小米手机5  平板苹果苹果平板2</span>--%>
+            <%--</div>--%>
+            <%--<div class="col-sm-4 pro-2">--%>
+                <%--<span class="text-strong text-gery">达量产品：</span>--%>
+                <%--<span class="text-lv text-strong"> 150台</span>--%>
+            <%--</div>--%>
+            <%--<div class="col-sm-4 pro-2">--%>
+                <%--<span class="text-strong text-gery">起止日期：</span>--%>
+                <%--<span class="text-black text-strong"> 2016.09.02 - 2016.09.02</span>--%>
+            <%--</div>--%>
+        <%--</div>--%>
 
-        <div class="row" style="padding: 20px;">
-            <div class="col-sm-4 product">
-                <span class="text-strong text-gery">奖罚：</span>
-                <span style="background: #fafafa;padding: 5px"> <span class="text-71 ">销售  <</span> <span
-                        class="text-lan">300</span>  <span class="text-71">台 &nbsp; 奖励：</span> <span
-                        class="text-red">-9.00</span> <span class="text-71">元/台</span></span>
-            </div>
-            <div class="col-sm-4 pro-2-2">
-                 <span style="background: #fafafa;padding: 5px"> <span class="text-71 ">销售大于300台  奖励：</span> <span
-                         class="text-lan">300</span>  <span class="text-71"> 台 &nbsp; 奖励：</span> <span
-                         class="text-gren">+5.00</span> <span class="text-71">元/台</span></span>
-            </div>
+        <%--<div class="row" style="padding: 20px;">--%>
+            <%--<div class="col-sm-4 product">--%>
+                <%--<span class="text-strong text-gery">奖罚：</span>--%>
+                <%--<span style="background: #fafafa;padding: 5px"> <span class="text-71 ">销售  <</span> <span--%>
+                        <%--class="text-lan">300</span>  <span class="text-71">台 &nbsp; 奖励：</span> <span--%>
+                        <%--class="text-red">-9.00</span> <span class="text-71">元/台</span></span>--%>
+            <%--</div>--%>
+            <%--<div class="col-sm-4 pro-2-2">--%>
+                 <%--<span style="background: #fafafa;padding: 5px"> <span class="text-71 ">销售大于300台  奖励：</span> <span--%>
+                         <%--class="text-lan">300</span>  <span class="text-71"> 台 &nbsp; 奖励：</span> <span--%>
+                         <%--class="text-gren">+5.00</span> <span class="text-71">元/台</span></span>--%>
+            <%--</div>--%>
 
-        </div>
+        <%--</div>--%>
 
-        <div class="row" style="padding: 20px; ">
-            <div class="col-sm-4 " style="width: 1200px">
-                <span class="text-strong text-gery">补充说明：</span>
-                <span style="background: #fafafa;padding: 5px"> <span class="text-71 ">跨界，互联网常说的跨界方式无外乎两种：一.传统企业人员学习相关的技术，把业务进行系统化、流程化 ，从而进行数据数据分析统计，算出用户的潜在的行为需求。 </span></span>
-            </div>
-
-
-        </div>
+        <%--<div class="row" style="padding: 20px; ">--%>
+            <%--<div class="col-sm-4 " style="width: 1200px">--%>
+                <%--<span class="text-strong text-gery">补充说明：</span>--%>
+                <%--<span style="background: #fafafa;padding: 5px"> <span class="text-71 ">跨界，互联网常说的跨界方式无外乎两种：一.传统企业人员学习相关的技术，把业务进行系统化、流程化 ，从而进行数据数据分析统计，算出用户的潜在的行为需求。 </span></span>--%>
+            <%--</div>--%>
 
 
-    </div>
+        <%--</div>--%>
+
+
+    <%--</div>--%>
 
 
     <br>
 
 
     <div class="clearfix"></div>
-    <div>
-        <select class="ph-select">
-            <option>山东省-德州市-武城县</option>
-            <option>山东省-德州市-武城县</option>
-            <option>山东省-德州市-武城县</option>
-        </select>
+    <%--<div>--%>
+        <%--<select class="ph-select">--%>
+            <%--<option>山东省-德州市-武城县</option>--%>
+            <%--<option>山东省-德州市-武城县</option>--%>
+            <%--<option>山东省-德州市-武城县</option>--%>
+        <%--</select>--%>
 
-        <select class="ph-select">
-            <option>销量订单</option>
-            <option>山东省-德州市-武城县</option>
-            <option>山东省-德州市-武城县</option>
-        </select>
+        <%--<select class="ph-select">--%>
+            <%--<option>销量订单</option>--%>
+            <%--<option>山东省-德州市-武城县</option>--%>
+            <%--<option>山东省-德州市-武城县</option>--%>
+        <%--</select>--%>
 
 
-        <button class="btn btn-blue btn-sm" style="margin-left: 10px">
-            检索
-        </button>
+        <%--<button class="btn btn-blue btn-sm" style="margin-left: 10px">--%>
+            <%--检索--%>
+        <%--</button>--%>
 
-        <div class="link-posit-t pull-right export">
-            <input class="ph-select text-gery-hs" placeholder="  请输入业务员名称">
-            <button class="btn btn-blue btn-sm" onclick="goSearch();">
-                检索
-            </button>
-            <a class="table-export" href="javascript:void(0);" onclick="exportExcel()">导出excel</a>
-        </div>
+        <%--<div class="link-posit-t pull-right export">--%>
+            <%--<input class="ph-select text-gery-hs" placeholder="  请输入业务员名称">--%>
+            <%--<button class="btn btn-blue btn-sm" onclick="goSearch();">--%>
+                <%--检索--%>
+            <%--</button>--%>
+            <%--<a class="table-export" href="javascript:void(0);" onclick="exportExcel()">导出excel</a>--%>
+        <%--</div>--%>
 
-    </div>
-
+    <%--</div>--%>
     <div class="tab-content ">
         <!--table-box-->
 

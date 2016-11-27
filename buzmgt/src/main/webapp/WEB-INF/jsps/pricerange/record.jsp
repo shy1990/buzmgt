@@ -80,7 +80,7 @@
                             <li><i class="ico ico-fl"></i>请选择类别</li>
                             <c:forEach items="${machineTypes}" var="type" varStatus="status">
                                 <c:choose>
-                                    <c:when test="${status.index eq 0 }">
+                                    <c:when test="${status.index eq 1 }">
                                         <li class="active" title="${type.code }">${type.name }</li>
                                     </c:when>
                                     <c:otherwise>
@@ -326,7 +326,13 @@
                     {{#each this}}
                     <tr>
                         <td>{{addOne @index}}</td>
-                        <td>方案</td>
+                        <td>
+                            {{#if productionName}}
+                                {{productionName}}
+                            {{else}}
+                                <span style="color: red">没有指定方案名</span>
+                            {{/if}}
+                        </td>
                         <td>{{implDate}}</td>
 
                         <td>
@@ -357,7 +363,13 @@
                     {{#each this}}
                     <tr>
                         <td>{{addOne @index}}</td>
-                        <td>方案</td>
+                        <td>
+                            {{#if productionName}}
+                            {{productionName}}
+                            {{else}}
+                            <span style="color: red">没有指定方案名</span>
+                            {{/if}}
+                        </td>
                         <td>{{implDate}}</td>
                         <td>
                             {{#if endTime}}
@@ -384,7 +396,13 @@
                         {{#show productStatus}}
                         <tr>
                             <td>{{addOne @index}}</td>
-                            <td>方案</td>
+                            <td>
+                                {{#if productionName}}
+                                {{productionName}}
+                                {{else}}
+                                <span style="color: red">没有指定方案名</span>
+                                {{/if}}
+                            </td>
                             <td>{{implDate}}</td>
 
                             <td>
