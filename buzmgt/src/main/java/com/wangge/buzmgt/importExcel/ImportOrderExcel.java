@@ -137,6 +137,7 @@ public class ImportOrderExcel {
               orderSignfor.setFastmailTime(os.getFastmailTime());
               orderSignfor.setOrderPrice(0.0f);
               orderSignfor.setActualPayNum(0.0f);
+              orderSignfor.setUserId(signfor.getUserId());
               orderSignforService.save(orderSignfor);
             }else {
               flag = false;//查不到,没有导入正常订单

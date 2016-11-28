@@ -101,7 +101,7 @@ public class ExcelUtil {
                   SimpleDateFormat sdf = null;  
                   if(format == 14 || format == 22 || format == 31 || format == 57 || format == 58 || format == 166 || format == 176){
                       //日期  
-                      sdf = new SimpleDateFormat("yyyy/MM/dd");  
+                      sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
                   }else if (format == 20 || format == 32) {  
                       //时间  
                       sdf = new SimpleDateFormat("HH:mm");  
