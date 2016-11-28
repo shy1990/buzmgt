@@ -1,4 +1,4 @@
 /* 区域 */
 function getRegion(id) {
-	window.location.href = '/region/getPersonalRegion?flag=' + "account";
+	window.location.href = '/region/getPersonalRegion?flag=' + "chartlist";
 }

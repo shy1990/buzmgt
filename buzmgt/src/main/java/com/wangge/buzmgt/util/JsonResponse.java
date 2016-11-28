@@ -2,6 +2,7 @@ package com.wangge.buzmgt.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.wangge.buzmgt.dto.ChartDto;
 
 /**
  * @author barton
@@ -38,6 +39,8 @@ public final class JsonResponse<R> {
 
     // Error message
     private String errorMsg;
+    
+    private boolean success;
 
     public JsonResponse() {
         super();
@@ -46,6 +49,22 @@ public final class JsonResponse<R> {
     public JsonResponse(R result) {
         super();
         this.result = result;
+    }
+
+   
+
+    public JsonResponse(R result, boolean success) {
+      super();
+      this.result = result;
+      this.success = success;
+    }
+
+   
+
+    public JsonResponse(String errorMsg, boolean success) {
+      super();
+      this.errorMsg = errorMsg;
+      this.success = success;
     }
 
     public Status getStatus() {
@@ -88,4 +107,15 @@ public final class JsonResponse<R> {
         this.status = Status.ERROR;
         this.errorMsg = errorMsg;
     }
+
+    public boolean isSuccess() {
+      return success;
+    }
+
+    public void setSuccess(boolean success) {
+      this.success = success;
+    }
+    
+    
+    
 }

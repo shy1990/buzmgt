@@ -3,10 +3,12 @@ package com.wangge.buzmgt.chartlist.web;
 import java.text.ParseException;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +29,11 @@ public class ChartListController {
   private ChartListService chartService;
   
   @RequestMapping(value="/toChartList")
-  public String toChart(){
+  public String toChart(@RequestParam(value="regionId",defaultValue="",required=false) String regionId,Model model){
+    
+    if(!StringUtils.isEmpty(regionId)){
+       model.addAttribute("regionId", regionId);
+    }
     
     return "chart/chartList";
   }

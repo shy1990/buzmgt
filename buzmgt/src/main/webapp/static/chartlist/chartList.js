@@ -7,76 +7,32 @@ var chartList = {
 	URL : {
 
 		now : function(regionId,date) {
-			var nowUrl;
-			if(regionId && date){
-				 nowUrl = '/chart/outboundChart'+'?regionId='+regionId+'&date='+date;
-			}else{
-				 nowUrl = '/chart/outboundChart';
-			}
 			
-			return nowUrl;
+			return '/chart/outboundChart'+'?regionId='+regionId+'&date='+date;
 		},
 		
 		cash : function(regionId,date){
-			var cashUrl;
-			if(regionId && date){
-				cashUrl = '/chart/cashChart'+'?regionId='+regionId+'&date='+date;
-			}else{
-				cashUrl = '/chart/cashChart';
-			}
-			
-			return cashUrl;
+			return '/chart/cashChart'+'?regionId='+regionId+'&date='+date;
 		},
 		
 		report : function(regionId,date){
-			var reportUrl;
-			if(regionId && date){
-				reportUrl = '/chart/reportChart'+'?regionId='+regionId+'&date='+date;
-			}else{
-				reportUrl = '/chart/reportChart';
-			}
 			
-			return reportUrl;
+			return '/chart/reportChart'+'?regionId='+regionId+'&date='+date;;
 		},
 		unReport : function(regionId,date){
-			var cashUrl;
-			if(regionId && date){
-				unReport = '/chart/unReportChart'+'?regionId='+regionId+'&date='+date;
-			}else{
-				unReport = '/chart/unReportChart';
-			}
-			
-			return unReport;
+			return '/chart/unReportChart'+'?regionId='+regionId+'&date='+date;
 		},
 		refused : function(regionId,date){
-			var refusedUrl;
-			if(regionId && date){
-				refusedUrl = '/chart/refusedChart'+'?regionId='+regionId+'&date='+date;
-			}else{
-				refusedUrl = '/chart/refusedChart';
-			}
 			
-			return refusedUrl;
+			return '/chart/refusedChart'+'?regionId='+regionId+'&date='+date;
 		},
 		statement : function(regionId,date){
-			var refusedUrl;
-			if(regionId && date){
-				statementUrl = '/chart/statementChart'+'?regionId='+regionId+'&date='+date;
-			}else{
-				statementUrl = '/chart/statement';
-			}
 			
-			return refusedUrl;
+			return '/chart/statementChart'+'?regionId='+regionId+'&date='+date;
 		},
 		paidStatement : function(regionId,date){
-			var paidStatement;
-			if(regionId && date){
-				paidStatementUrl = '/chart/paidStatementChart'+'?regionId='+regionId+'&date='+date;
-			}else{
-				paidStatementUrl = '/chart/paidStatementChart';
-			}
 			
-			return paidStatementUrl;
+			return '/chart/paidStatementChart'+'?regionId='+regionId+'&date='+date;
 		}
 
 	},
@@ -290,6 +246,10 @@ var chartList = {
 										+ '</span></div>');
 
 						$("#statement_person").html(data['persons'] + '人');
+						
+						$("#statement_serialPercent").html('<div class="chart" data-percent="'+data['serialPercent']+'"><span>'+ data['serialPercent'] + '</span></div>')
+						
+						$("#statement_serialNum").html(data['serialNum'] + '单')
 
 						chartList.easyPieChart();
 					
@@ -298,8 +258,8 @@ var chartList = {
 					}
 				})
 			},
-			StatementAndPaidChart : function(regionId,darte){
-				$.get(chartList.URL.PaidStatement(regionId,darte), {},
+			statementAndPaidChart : function(regionId,darte){
+				$.get(chartList.URL.paidStatement(regionId,darte), {},
 						function(result) {
 
 							if (result && result['success']) {
@@ -327,6 +287,11 @@ var chartList = {
 												+ '</span></div>');
 
 								$("#paidStatement_person").html(data['persons'] + '人');
+								
+								$("#paidStatement_serialPercent").html('<div class="chart" data-percent="'+data['serialPercent']+'"><span>'+ data['serialPercent'] + '</span></div>')
+								
+								$("#paidStatement_serialNum").html(data['serialNum'] + '单')
+
 
 								chartList.easyPieChart();
 							
@@ -346,18 +311,19 @@ var chartList = {
 
 	chart : {
 		init : function(regionId,darte) {
-
 			chartList.outboundChart(regionId,darte);
 			chartList.cashChart(regionId,darte);
+			chartList.statementChart(regionId,darte);
+			chartList.statementAndPaidChart(regionId,darte);
 			chartList.unReportChart(regionId,darte);
 			chartList.reportChart(regionId,darte);
 			chartList.refusedChart(regionId,darte);
-			chartList.statementChartChart(regionId,darte);
+			
 		},
-		queryChartByParam : function(){
+		queryChartByParam : function(regionId,date){
 			var regionId = $("#regionId").val();
-			var darte = $("#date").val();
-			chartList.chart.init(regionId,darte);
+			var date = $("#date").val();
+			chartList.chart.init(regionId,date);
 		},
 	}
 }

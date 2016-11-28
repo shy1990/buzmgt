@@ -27,12 +27,16 @@ public class ChartRepositoryImpl implements ChartListRepository {
   
   public ChartDto queryByDeelType(String regionId, String date) {
     String dateSql = createTimeSql(date);
+    
+    String regionSql = createRegionSql(regionId);
+    
+    String regionParam = createRegionParamSql(regionId); 
 
-    String cashSql = " select count(*),sum(o.order_price)  from biz_order_signfor o "
-        + "  where o.order_pay_type = '2'  and " + dateSql;
+    String cashSql = " select count(*),sum(o.order_price)  from biz_order_signfor o " + regionSql
+        + "  where o.order_pay_type = '2'  and " + dateSql + regionParam;
 
-    String salemanSql = "select  count(*)  from (select count(*),o.user_id from biz_order_signfor o  where o.order_pay_type = '2' "+
-          " and o.creat_time > trunc(to_date('" + date +"','yyyy/MM/dd') -1) and o.creat_time < trunc(to_date('" + date +"','yyyy/MM/dd') +1) group by o.user_id) "; 
+    String salemanSql = "select  count(*)  from (select count(*),o.user_id from biz_order_signfor o  "+regionSql+" where o.order_pay_type = '2' and "+
+        dateSql+ regionParam+" group by o.user_id) "; 
 
     Query query = em.createNativeQuery(cashSql);
 
@@ -69,12 +73,15 @@ public class ChartRepositoryImpl implements ChartListRepository {
   public ChartDto queryByShipStatus(String regionId, String date){
     String dateSql = createTimeSql(date);
     
+    String regionSql = createRegionSql(regionId);
+    
+    String regionParam = createRegionParamSql(regionId); 
    
-    String outboundChartSql = " select count(*),sum(o.order_price)  from biz_order_signfor o " +
-                "  where o.fastmail_no is not  null  and " + dateSql;
+    String outboundChartSql = " select count(*),sum(o.order_price)  from biz_order_signfor o  " + regionSql+
+                "  where o.fastmail_no is not  null  and " + dateSql + regionParam;
                     
-    String totalOrderSql="       select count(*),sum(o.order_price) " +
-                  " from biz_order_signfor o  where "+dateSql;
+    String totalOrderSql=" select count(*),sum(o.order_price) " + regionSql +
+                  " from biz_order_signfor o  where "+dateSql + regionParam;
     
     Query query = em.createNativeQuery(outboundChartSql);
     
@@ -100,16 +107,18 @@ public class ChartRepositoryImpl implements ChartListRepository {
   @Override
   public ChartDto queryByRefused(String regionId, String date) {
     String dateSql = createTimeSql(date);
+
+    String regionSql = createRegionSql(regionId);
+    
+    String regionParam = createRegionParamSql(regionId); 
     String refusedSql = "select count(*),sum(o.order_price) " +
-  " from biz_order_signfor o " +
- " where  o.order_status = '4' and " +dateSql;
+  " from biz_order_signfor o " + regionSql +
+ " where  o.order_status = '4' and " +dateSql + regionParam;
     
     String salemanSql = "select count(*)  from ( " +
-       " select o.user_id  from biz_order_signfor o " +
-         "   where o.order_status = '4'  "+
-         " and o.creat_time > trunc(to_date('" + date +"','yyyy/MM/dd') -1) and " +
-         " o.creat_time < trunc(to_date('" + date +"','yyyy/MM/dd') +1) " + 
-         " group by o.user_id )";
+       " select o.user_id  from biz_order_signfor o " +  regionSql +
+         "   where o.order_status = '4' and  "+
+         dateSql +  regionParam +    " group by o.user_id )";
     Query query = em.createNativeQuery(refusedSql);
     
     Object[] refusedOrderObj =   (Object[]) query.getSingleResult();
@@ -144,21 +153,23 @@ public class ChartRepositoryImpl implements ChartListRepository {
   @Override
   public ChartDto queryByPayStatus(String regionId, String date) {
     String dateSql = createTimeSql(date);
-    String unReportsql = "select count(*),sum(o.total_cost) " +
-  " from sjzaixian.sj_tb_order o " +
- " where o.pay_status = '0' and " +
-  "  o.order_num not in (select t.orderno from biz_unpayment_remark t where t.create_time > " +
+ 
+    String regionSql = createRegionSql(regionId);
+    
+    String regionParam = createRegionParamSql(regionId);
+    
+    String unReportsql = "select count(*),sum(o.order_price) " +
+  " from biz_order_signfor o " + regionSql +
+ " where o.order_pay_type = '0' and " +
+  "  o.order_no not in (select t.orderno from biz_unpayment_remark t where t.create_time > " +
     "   trunc(to_date('"+date+"', 'yyyy/MM/dd')-1) " +
-      "   and t.create_time < trunc(to_date('"+date+"', 'yyyy/MM/dd'))) and " + 
+      "   and t.create_time < trunc(to_date('"+date+"', 'yyyy/MM/dd')))  "  + regionParam;
 
- " o.createtime > " +
-    "  trunc(to_date('"+date+"', 'yyyy/MM/dd') - 1) " +
- " and o.createtime < " +
-     " trunc(to_date('"+date+"', 'yyyy/MM/dd'))";
+
     
     
     String salemanSql = "select count(*)  from ( " +
-       " select o.user_id  from biz_order_signfor o " +
+       " select o.user_id  from biz_order_signfor o " +  regionSql +
        "  where o.order_pay_type is null " +
          "   and o.order_no not in " +
             "   (select t.orderno " +
@@ -166,9 +177,7 @@ public class ChartRepositoryImpl implements ChartListRepository {
                "  where t.create_time > " +
                     "   trunc(to_date('"+date+"', 'yyyy/MM/dd')) "+
                   " and t.create_time < " +
-                    "   trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1))  "+
-                    " and o.creat_time >     trunc(to_date('"+date+"', 'yyyy/MM/dd') - 1) " +
-                    "   and o.creat_time <  trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1) "+
+                    "   trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1))  " + regionParam +
          " group by o.user_id )";
     Query query = em.createNativeQuery(unReportsql);
     
@@ -209,23 +218,25 @@ public class ChartRepositoryImpl implements ChartListRepository {
   @Override
   public ChartDto queryByReport(String regionId, String date) {
     String dateSql = createTimeSql(date);
+
+    String regionSql = createRegionSql(regionId);
+    
+    String regionParam = createRegionParamSql(regionId);
     String reportsql = "select count(*),sum(o.order_price) " +
-  " from biz_order_signfor o " +
+  " from biz_order_signfor o " + regionSql +
  " where  o.order_no  in (select t.orderno from biz_unpayment_remark t where t.create_time > " +
     "   trunc(to_date('"+date+"', 'yyyy/MM/dd')) " +
-      "   and t.create_time < trunc(to_date('"+date+"', 'yyyy/MM/dd')+1)) and " + dateSql;
+      "   and t.create_time < trunc(to_date('"+date+"', 'yyyy/MM/dd')+1))  "  + regionParam;
     
     String salemanSql = "select count(*)  from ( " +
-       " select o.user_id  from biz_order_signfor o  where " +
-         "  o.order_no  in " +
+       " select o.user_id  from biz_order_signfor o   " + regionSql +
+         " where  o.order_no  in " +
             "   (select t.orderno " +
                "   from biz_unpayment_remark t " +
                "  where t.create_time > " +
                     "   trunc(to_date('"+date+"', 'yyyy/MM/dd')) "+
                   " and t.create_time < " +
-                    "   trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1))  "+
-                    " and o.creat_time >     trunc(to_date('"+date+"', 'yyyy/MM/dd') - 1) " +
-                    "   and o.creat_time <  trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1) " +
+                    "   trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1))  " + regionParam +
          " group by o.user_id )";
     Query query = em.createNativeQuery(reportsql);
     
@@ -263,21 +274,43 @@ public class ChartRepositoryImpl implements ChartListRepository {
   @Override
   public ChartDto queryByStatement(String regionId, String date) {
     String dateSql = createTimeSql(date);
-    String statementSql = "select count(os.signid),sum(os.order_price) " +
-        "  from sys_cash_record cr " +
-         " left join biz_order_signfor os on os.signid = cr.id " +
-        "  where cr.create_date > trunc(to_date('"+date+"', 'yyyy/MM/dd')) " +
-         "  and cr.create_date < trunc(to_date('"+date+"', 'yyyy/MM/dd')+ 1) ";
+
+    String regionSql = createRegionSql(regionId);
     
-    String salemanSql = "select count(*)  from (" +
-         " select os.user_id  from sys_cash_record cr " +
-         " left join biz_order_signfor os on os.signid = cr.id " +
-         " where cr.create_date > trunc(sysdate) " +
-         "  and cr.create_date < trunc(sysdate + 1) " +
-        " group by os.user_id)";
+    String regionParam = createRegionParamSql(regionId);
+    String statementSql = "select count(*),sum(o.order_price) " +
+        " from biz_order_signfor o " + regionSql + 
+       " where o.signid in " +
+            "  (select wod.cash_id " +
+            "   from sys_water_order_cash woc " +
+            "  left join sys_water_order_details wod on wod.serial_no =  woc.serial_no " + 
+            "   where woc.create_date > trunc(to_date('"+date+"', 'yyyy/MM/dd')) " +
+            "   and woc.create_date < " +
+            "    trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1)) "+ regionParam;
+    
+    
+    String cashOrderSql = "select count(*) from sys_cash_record cr where cr.create_date > trunc(to_date('"+date+"', 'yyyy/MM/dd'))  and cr.create_date < trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1) ";
+    
+    String salemanSql =" select count(*)  from ( select o.user_id   from sys_water_order_cash o " +  regionSql + 
+        " left join sys_water_order_details wod on wod.serial_no = o.serial_no " +
+       " where o.create_date > " +
+             " trunc(to_date('"+date+"', 'yyyy/MM/dd')) " +
+         " and o.create_date < " +
+           "  trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1) " + regionParam +" group by o.user_id ) ";
+    
+    
+    
+    String totalManSql = "select count(*)  from (select o.user_id " +
+         " from sys_cash_record o " + regionSql +
+       "  where o.create_date > trunc(sysdate) " + 
+          " and o.create_date < trunc(sysdate + 1) " + regionParam +
+        " group by o.user_id)";
+           
+    
+    
     Query query = em.createNativeQuery(statementSql);
     
-    Object[] unReportObj =   (Object[]) query.getSingleResult();
+    Object[] statementObj =   (Object[]) query.getSingleResult();
     
     query = em.createNativeQuery(createTotalOrder(date));
     
@@ -287,22 +320,28 @@ public class ChartRepositoryImpl implements ChartListRepository {
     
     Object saleManObj = query.getSingleResult();
     
-    query = em.createNativeQuery(createTotalSaleManSql());
+    query = em.createNativeQuery(totalManSql);
     
     Object totalSaleManObj = query.getSingleResult();
     
+  query = em.createNativeQuery(cashOrderSql);
+    
+    Object cashOrderObj = query.getSingleResult();
     
     
    // Object[]  obj = object;
-    String orderPercent = createPrent(unReportObj[0], totalOrderObj[0]);
+    String orderPercent = createPrent(statementObj[0], totalOrderObj[0]);
     
-    String amountPercent = createPrent(unReportObj[1], totalOrderObj[1]);
+    String amountPercent = createPrent(statementObj[1], totalOrderObj[1]);
     
     String personPercent = createPrent(saleManObj,totalSaleManObj);
     
+    String serialPercent =  createPrent(statementObj[0],cashOrderObj);
+    
    // ChartDto dto = new  ChartDto(orderPercent, amountPercent, totalOrder[0]+"", new BigDecimal(totalOrder[1]+""));
     
-    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent, personPercent, totalOrderObj[0]+"", new BigDecimal(totalOrderObj[1]+""));
+    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent,serialPercent, personPercent, totalOrderObj[0]+"", new BigDecimal(totalOrderObj[1]+""),statementObj[0]+"");
+   
     return dto;
   }
 
@@ -310,21 +349,41 @@ public class ChartRepositoryImpl implements ChartListRepository {
   @Override
   public ChartDto queryByStatementAndPaid(String regionId, String date) {
     String dateSql = createTimeSql(date);
-    String statementSql = "select count(os.signid),sum(os.order_price) " +
-        "  from sys_cash_record cr " +
-         " left join biz_order_signfor os on os.signid = cr.id " +
-        "  where cr.status = '2' and cr.create_date > trunc(to_date('"+date+"', 'yyyy/MM/dd')) " +
-         "  and cr.create_date < trunc(to_date('"+date+"', 'yyyy/MM/dd')+ 1) ";
+   
+    String regionSql = createRegionSql(regionId);
     
-    String salemanSql = "select count(*)  from (" +
-         " select os.user_id  from sys_cash_record cr " +
-         " left join biz_order_signfor os on os.signid = cr.id " +
-         " where  cr.status = '2' and cr.create_date > trunc(sysdate) " +
-         "  and cr.create_date < trunc(sysdate + 1) " +
-        " group by os.user_id)";
-    Query query = em.createNativeQuery(statementSql);
+    String regionParam = createRegionParamSql(regionId);
     
-    Object[] unReportObj =   (Object[]) query.getSingleResult();
+    String paidstatementSql = "select count(*),sum(o.order_price) " +
+        " from biz_order_signfor o " + regionSql + 
+        " where o.signid in " +
+             "  (select wod.cash_id " +
+             "   from sys_water_order_cash woc " +
+             "  left join sys_water_order_details wod on wod.serial_no =  woc.serial_no " + 
+             "   where  woc.pay_status = '1' and woc.pay_date is not null and woc.create_date > trunc(to_date('2016-11-26', 'yyyy/MM/dd')) " +
+             "   and woc.create_date < " +
+             "    trunc(to_date('2016-11-26', 'yyyy/MM/dd') + 1)) "+ regionParam;
+    
+    String cashOrderSql = "select count(*) from sys_cash_record cr where    cr.create_date > trunc(to_date('"+date+"', 'yyyy/MM/dd'))  and cr.create_date < trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1) ";
+    
+    
+    String salemanSql =" select count(*)  from ( select o.user_id   from sys_water_order_cash o " +  regionSql + 
+        " left join sys_water_order_details wod on wod.serial_no = o.serial_no " +
+       " where  o.pay_status = '1' and o.pay_date is not null and o.create_date > " +
+             " trunc(to_date('"+date+"', 'yyyy/MM/dd')) " +
+         " and o.create_date < " +
+           "  trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1) " + regionParam +" group by o.user_id ) ";
+    
+    String totalManSql = "select count(*)  from (select o.user_id " +
+        " from sys_cash_record o " + regionSql +
+      "  where  o.create_date > trunc(sysdate) " + 
+         " and o.create_date < trunc(sysdate + 1) " + regionParam +
+       " group by o.user_id)";
+   
+    
+    Query query = em.createNativeQuery(paidstatementSql);
+    
+    Object[] paidstatementObj =   (Object[]) query.getSingleResult();
     
     query = em.createNativeQuery(createTotalOrder(date));
     
@@ -334,22 +393,27 @@ public class ChartRepositoryImpl implements ChartListRepository {
     
     Object saleManObj = query.getSingleResult();
     
-    query = em.createNativeQuery(createTotalSaleManSql());
+    query = em.createNativeQuery(totalManSql);
     
     Object totalSaleManObj = query.getSingleResult();
+    
+    query = em.createNativeQuery(cashOrderSql);
+    
+    Object waterObj = query.getSingleResult();
     
     
     
    // Object[]  obj = object;
-    String orderPercent = createPrent(unReportObj[0], totalOrderObj[0]);
+    String orderPercent = createPrent(paidstatementObj[0], totalOrderObj[0]);
     
-    String amountPercent = createPrent(unReportObj[1], totalOrderObj[1]);
+    String amountPercent = createPrent(paidstatementObj[1], totalOrderObj[1]);
     
     String personPercent = createPrent(saleManObj,totalSaleManObj);
-    
+   
+    String serialPercent = createPrent(paidstatementObj[0],waterObj);
    // ChartDto dto = new  ChartDto(orderPercent, amountPercent, totalOrder[0]+"", new BigDecimal(totalOrder[1]+""));
     
-    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent, personPercent, totalOrderObj[0]+"", new BigDecimal(totalOrderObj[1]+""));
+    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent,serialPercent, personPercent, totalOrderObj[0]+"", new BigDecimal(totalOrderObj[1]+""),paidstatementObj[0]+"");
     return dto;
   }
 
@@ -449,18 +513,18 @@ public class ChartRepositoryImpl implements ChartListRepository {
    */
   private static String createTimeSql(String date) {
 
-    return "o.creat_time > trunc(to_date('" + date +"','yyyy/MM/dd') -1) and o.creat_time < trunc(to_date('" + date +"','yyyy/MM/dd')+1)";
+    return "o.creat_time > trunc(to_date('" + date +"','yyyy/MM/dd') -1) and o.creat_time < trunc(to_date('" + date +"','yyyy/MM/dd'))";
   }
 
- private static String  regionSql (String regionId){
+ private static String  createRegionSql (String regionId){
    
    return  !StringUtils.isEmpty(regionId) ? " left join sys_salesman s on s.user_id = o.user_id" : "";
    
  }  
- private static String  regionparamSql (String regionId){
+ private static String  createRegionParamSql (String regionId){
      
-      return  !StringUtils.isEmpty(regionId) ? "and s.region_id = '"+regionId+"'" : "";
-      
+      return  !StringUtils.isEmpty(regionId) ? "and s.region_id in ( SELECT region_id FROM SYS_REGION START WITH region_id= '"+regionId+"' CONNECT BY PRIOR region_id=PARENT_ID)" : "";
+     
  }
 
 
