@@ -196,7 +196,7 @@ function checkEmpty(value){
 //<span class="icon-tag-wbb">未报备</span>
 //<span class="icon-tag-ybb">已报备</span>
 //<span class="icon-tag-yfka">收现金</span>
-//<span class="text-sbluea">（已付款）</span>
+//<span class="text-sbluea">（已付款）</span>agentPayTime
 //<span class="icon-tag-yfka">刷poss</span>
 //<span class="icon-tag-yfka">网上支付</span> 
 Handlebars.registerHelper('whatOrderPayType', function(value) {
@@ -221,6 +221,22 @@ Handlebars.registerHelper('whatOrderPayType', function(value) {
 	return html;
 });
 
+/**
+ * agentPayStatus(代理商付款状态)
+ * 代理商付款状态判断
+ */
+Handlebars.registerHelper('whatAgentPayStatus', function(value) {
+	var html='';
+	var tag='';
+	if (value == 1){
+		tag='yfka';
+		html='<span class="icon-tag-'+tag+'">已付款</span>';
+	}else {
+		tag='wfka';
+		html='<span class="icon-tag-'+tag+'">未付款</span>';
+	}
+	return html;
+});
 
 /**
  * 根据订单号查询订单

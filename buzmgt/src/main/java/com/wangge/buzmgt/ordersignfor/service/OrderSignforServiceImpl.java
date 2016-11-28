@@ -1,19 +1,28 @@
 package com.wangge.buzmgt.ordersignfor.service;
 
+import com.wangge.buzmgt.cash.entity.Cash;
 import com.wangge.buzmgt.cash.entity.WaterOrderCash;
 import com.wangge.buzmgt.cash.entity.WaterOrderDetail;
+import com.wangge.buzmgt.cash.service.CashService;
 import com.wangge.buzmgt.cash.service.WaterOrderCashService;
 import com.wangge.buzmgt.cash.service.WaterOrderDetialService;
 import com.wangge.buzmgt.ordersignfor.bean.OrderSignforAfterSale;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderStatus;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
+import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
+import com.wangge.buzmgt.receipt.service.OrderReceiptService;
+import com.wangge.buzmgt.receipt.service.ReceiptService;
 import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.rejection.entity.Rejection;
+import com.wangge.buzmgt.rejection.service.RejectionServive;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
 import com.wangge.buzmgt.teammember.service.SalesManService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.SearchFilter;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
@@ -61,6 +70,15 @@ public class OrderSignforServiceImpl implements OrderSignforService {
 
   @Autowired
   private RegionService regionService;
+
+  @Autowired
+  private RejectionServive rejectionServive;
+
+  @Autowired
+  private OrderReceiptService orderReceiptService;
+
+  @Autowired
+  private CashService cashService;
 
   @Override
   public void updateOrderSignfor(OrderSignfor xlsOrder) {
@@ -133,8 +151,60 @@ public class OrderSignforServiceImpl implements OrderSignforService {
     regionService.disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<OrderSignfor> spec = orderSignforSearchFilter(filters.values(), OrderSignfor.class);
-
-    return orderSignforRepository.findAll(spec,pageRequest);
+    Page<OrderSignfor> signforPage = orderSignforRepository.findAll(spec,pageRequest);
+    List<OrderSignfor> list = signforPage.getContent();
+    if (CollectionUtils.isNotEmpty(list)) {
+      list.forEach(os -> {
+        //看是否已发货
+        if (StringUtils.isNotEmpty(os.getFastmailNo())){
+          os.setOrderStatus(OrderStatus.SHIPPED);//状态为已发货
+          os.setRoamTime(os.getFastmailTime());//流转时间为发货时间
+          if (OrderPayType.ONLINE.equals(os.getOrderPayType())){
+            os.setOverTime(os.getCreateTime());//设置付款时间
+          }
+        }
+        //看是否拒收
+        if (OrderStatus.MEMBERREJECT.equals(os.getOrderStatus())){
+          Rejection rejection = rejectionServive.findByOrderno(os.getOrderNo());
+          os.setRoamTime(rejection.getCreateTime());//设置为拒收时间
+        }
+        //业务报备
+        ReceiptRemark receiptRemark = orderReceiptService.findByOrderno(os.getOrderNo());
+        if (ObjectUtils.notEqual(receiptRemark,null)){
+          os.setOrderStatus(OrderStatus.YWREPORTED);//设置业务报备
+          os.setRoamTime(receiptRemark.getCreateTime());//设置报备时间
+        }
+        //取消订单
+        if (OrderStatus.UNDO.equals(os.getOrderStatus())){
+          os.setRoamTime(os.getAbrogateOrderTime());
+        }
+        //pos付款
+        if (OrderPayType.POS.equals(os.getOrderPayType())){
+          os.setRoamTime(os.getBushPoseTime());//流转时间
+          os.setOverTime(os.getBushPoseTime());//客户付款时间
+          os.setAgentPayTime(os.getBushPoseTime());//代理商付款时间
+        }
+        Cash cash = null;
+        if (OrderPayType.CASH.equals(os.getOrderPayType())){
+          cash = cashService.findById(os.getId());
+        }
+        //代理商付款状态(收现金有未付款和已付款两种情况)
+        if (OrderPayType.NUPANTEBT.equals(os.getOrderPayType())){
+          os.setAgentPayStatus(0);
+        }else if (ObjectUtils.notEqual(cash,null)){
+          if (Cash.CashStatusEnum.UnPay.equals(cash.getStatus())){
+            os.setAgentPayStatus(0);
+          }else {
+            os.setAgentPayStatus(1);
+            os.setOverTime(cash.getPayDate());//客户付款时间
+            os.setAgentPayTime(cash.getPayDate());//代理商付款时间
+          }
+        }else {
+          os.setAgentPayStatus(1);
+        }
+      });
+    }
+    return signforPage;
   }
 
 

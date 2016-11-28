@@ -29,22 +29,60 @@
 <link rel="stylesheet" type="text/css" href="static/visit/visit.css" />
 <script src="static/js/jquery/jquery-1.11.3.min.js"
 	type="text/javascript" charset="utf-8"></script>
+	<style>
+		.new-table > tbody > tr > td, .new-table > thead > tr > th {
+			font-size: 12px;
+			color: #555555;
+			height: 46px;
+			padding-left: 10px;
+		}
+
+		.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+			padding: 5px;
+		}
+
+		.input-seach {
+			float: right;
+			width: 250px;
+			margin-top: -5px;
+			font-size: 12px;
+			font-weight: normal;
+			color: #989898;
+		}
+		.icon-ddqk{
+			background: url("../../../static/img/ywqs.png") no-repeat center;
+		}
+	</style>
 <script id="allorder-table-template" type="text/x-handlebars-template">
 	{{#each content}}
- 		<tr>
-      <td class="">{{orderNo}}</td>
-      <td>{{#with salesMan}}{{truename}}{{/with}}</td>
-      <td>{{shopName}}</td>
-      <td>手机&nbsp;<span class="text-sblue">{{phoneCount}}</span>&nbsp;部 &nbsp; 
-				配件<span class="text-sblue">&nbsp;{{whatPartsCount partsCount}}&nbsp;</span>件
-      </td>
-      <td><span class="text-sblue">{{orderPrice}}</span></td>
-      <td><span class="text-sblue">{{actualPayNum}}</span></td>
-      <td>
+	<tr>
+		<td class="">{{orderNo}}</td>
+		<td>{{#with salesMan}}{{truename}}{{/with}}</td>
+		<td>{{shopName}}</td>
+		<td>手机&nbsp;<span class="text-sblue">{{phoneCount}}</span>&nbsp;部 &nbsp;
+			配件<span class="text-sblue">&nbsp;{{whatPartsCount partsCount}}&nbsp;</span>件
+		</td>
+		<td><span class="text-sblue">{{orderPrice}}</span></td>
+		<td><span class="text-sblue">{{actualPayNum}}</span></td>
+		<td><span class="text-blue text-strong">{{OrderStatus}}</span></td>
+		<td>{{formDate roamTime}}</td>
+		<td>
 			{{{whatOrderPayType orderPayType}}}
-			</td>
-      <td><span class="text-sblues">{{whatOrderStatus fastmailTime orderStatus}}</span></td>
-    </tr>
+		</td>
+		<td>{{formDate overTime}}</td>
+		<td>
+			{{{whatAgentPayStatus agentPayStatus}}}
+		</td>
+		<td>{{formDate agentPayTime}}</td>
+		<td>
+			<span class="icon-tag-wfka">未付款</span>
+		</td>
+		<td>2015.11.12 10:30</td>
+		<%--<td>
+			{{{whatOrderPayType orderPayType}}}
+		</td>
+		<td><span class="text-sblues">{{whatOrderStatus fastmailTime orderStatus}}</span></td>--%>
+	</tr>
 	{{/each}}
 </script>
 <script type="text/javascript">
@@ -141,6 +179,13 @@ var	base='<%=basePath%>';
 												<th>实际金额</th>
 												<th>收款状况</th>
 												<th>订单状态</th>
+												<th>订单流转时间</th>
+												<th>客户付款状态</th>
+												<th>客户付款时间</th>
+												<th>代理商付款状态</th>
+												<th>代理商付款时间</th>
+												<th>公司收款状态</th>
+												<th>公司收款时间</th>
 											</tr>
 										</thead>
 										

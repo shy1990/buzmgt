@@ -47,6 +47,13 @@ public interface OrderReceiptService {
    * @return
    */
   public List<OrderSignfor> getCashList(Map<String, Object> searchParams);
+
+  /**
+   * 根据订单号查询报备订单
+   * @param orderno
+   * @return
+   */
+  ReceiptRemark findByOrderno(String orderno);
 }
 
   

@@ -381,4 +381,8 @@ public class OrderReceiptServiceImpl implements OrderReceiptService {
     return cashList;
   }
 
+  @Override
+  public ReceiptRemark findByOrderno(String orderno) {
+    return orderReceiptRepository.findByOrderno(orderno);
+  }
 }

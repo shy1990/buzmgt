@@ -301,7 +301,7 @@ public class ImportOrderExcel {
         if (fastmailTime == null) {
           continue;
         }
-        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
         orderSignfor.setFastmailTime(date.parse(ExcelUtil.getValue(fastmailTime)));
 

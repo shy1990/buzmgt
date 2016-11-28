@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+import org.springframework.format.annotation.DateTimeFormat;
 
 //@JsonInclude(Include.NON_EMPTY)
 @Entity
@@ -58,7 +59,7 @@ public class OrderSignfor implements Serializable {
    *
    */
   public static enum OrderStatus{
-    SUCCESS("订单成功"),UNDO("订单取消"),YWSIGNFOR("业务签收"),MEMBERSIGNFO("客户签收"),MEMBERREJECT("客户拒收");
+    SUCCESS("订单成功"),UNDO("订单取消"),YWSIGNFOR("业务签收"),MEMBERSIGNFO("客户签收"),MEMBERREJECT("客户拒收"),SHIPPED("已发货"),YWREPORTED("业务报备");
     
     private String name;
     
@@ -72,7 +73,7 @@ public class OrderSignfor implements Serializable {
   }
   
   public static enum OrderPayType{
-    ONLINE("0","线上支付"),POS("1","POS"),CASH("2","现金"),NUPANTEBT("","未支付") ;
+    ONLINE("0","线上支付"),POS("1","POS"),CASH("2","现金"),NUPANTEBT("","未支付");
     
     private String name;
     private String value;
@@ -148,6 +149,29 @@ public class OrderSignfor implements Serializable {
   private RelatedStatus relatedStatus;
 
   private String memberPhone;
+
+  @Transient
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date roamTime;//订单流转时间
+
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date overTime;//客户付款时间
+
+  @Column(name = "ABROGATE_TIME")
+  private Date abrogateOrderTime;//取消订单时间
+
+  @Column(name = "BUSH_TIME")
+  private Date bushPoseTime;//刷pose时间
+
+  @Transient
+  private int agentPayStatus;//代理商付款状态0-未付款 1-已付款
+
+  @Transient
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date agentPayTime;//代理商付款时间
   
   public List<OrderItem> getItems() {
     return items;
@@ -359,5 +383,53 @@ public class OrderSignfor implements Serializable {
 
   public void setMemberPhone(String memberPhone) {
     this.memberPhone = memberPhone;
+  }
+
+  public Date getRoamTime() {
+    return roamTime;
+  }
+
+  public void setRoamTime(Date roamTime) {
+    this.roamTime = roamTime;
+  }
+
+  public Date getOverTime() {
+    return overTime;
+  }
+
+  public void setOverTime(Date overTime) {
+    this.overTime = overTime;
+  }
+
+  public Date getAbrogateOrderTime() {
+    return abrogateOrderTime;
+  }
+
+  public void setAbrogateOrderTime(Date abrogateOrderTime) {
+    this.abrogateOrderTime = abrogateOrderTime;
+  }
+
+  public Date getBushPoseTime() {
+    return bushPoseTime;
+  }
+
+  public void setBushPoseTime(Date bushPoseTime) {
+    this.bushPoseTime = bushPoseTime;
+  }
+
+  public int getAgentPayStatus() {
+    return agentPayStatus;
+  }
+
+  public void setAgentPayStatus(int agentPayStatus) {
+    this.agentPayStatus = agentPayStatus;
+  }
+
+  public Date getAgentPayTime() {
+    return agentPayTime;
+  }
+
+  public void setAgentPayTime(Date agentPayTime) {
+    this.agentPayTime = agentPayTime;
   }
 }
