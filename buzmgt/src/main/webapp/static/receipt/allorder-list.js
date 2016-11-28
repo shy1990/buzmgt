@@ -228,12 +228,12 @@ Handlebars.registerHelper('whatOrderPayType', function(value) {
 Handlebars.registerHelper('whatAgentPayStatus', function(value) {
 	var html='';
 	var tag='';
-	if (value == 1){
+	if (value == '已付款'){
 		tag='yfka';
-		html='<span class="icon-tag-'+tag+'">已付款</span>';
+		html='<span class="icon-tag-'+tag+'">'+value+'</span>';
 	}else {
 		tag='wfka';
-		html='<span class="icon-tag-'+tag+'">未付款</span>';
+		html='<span class="icon-tag-'+tag+'">'+value+'</span>';
 	}
 	return html;
 });

@@ -90,6 +90,25 @@ public class OrderSignfor implements Serializable {
       return name;
     }
   }
+
+  public static enum AgentPayType{
+    NUPANTEBT("","未付款"),PAID("","已付款");
+
+    private String name;
+    private String value;
+
+    AgentPayType(String value,String name){
+      this.value=value;
+      this.name=name;
+
+    }
+    public String getValue(){
+      return value;
+    }
+    public String getName(){
+      return name;
+    }
+  }
   
   
   @Id
@@ -166,12 +185,15 @@ public class OrderSignfor implements Serializable {
   private Date bushPoseTime;//刷pose时间
 
   @Transient
-  private int agentPayStatus;//代理商付款状态0-未付款 1-已付款
+  private String agentPayStatus;//代理商付款状态：未付款 1-已付款
 
   @Transient
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
   @Temporal(TemporalType.TIMESTAMP)
   private Date agentPayTime;//代理商付款时间
+
+  @Transient
+  private String orderRoamStatus;//订单流转状态
   
   public List<OrderItem> getItems() {
     return items;
@@ -417,11 +439,11 @@ public class OrderSignfor implements Serializable {
     this.bushPoseTime = bushPoseTime;
   }
 
-  public int getAgentPayStatus() {
+  public String getAgentPayStatus() {
     return agentPayStatus;
   }
 
-  public void setAgentPayStatus(int agentPayStatus) {
+  public void setAgentPayStatus(String agentPayStatus) {
     this.agentPayStatus = agentPayStatus;
   }
 
@@ -431,5 +453,13 @@ public class OrderSignfor implements Serializable {
 
   public void setAgentPayTime(Date agentPayTime) {
     this.agentPayTime = agentPayTime;
+  }
+
+  public String getOrderRoamStatus() {
+    return orderRoamStatus;
+  }
+
+  public void setOrderRoamStatus(String orderRoamStatus) {
+    this.orderRoamStatus = orderRoamStatus;
   }
 }

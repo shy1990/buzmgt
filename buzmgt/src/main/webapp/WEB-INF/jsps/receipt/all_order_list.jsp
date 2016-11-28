@@ -64,7 +64,7 @@
 		</td>
 		<td><span class="text-sblue">{{orderPrice}}</span></td>
 		<td><span class="text-sblue">{{actualPayNum}}</span></td>
-		<td><span class="text-blue text-strong">{{OrderStatus}}</span></td>
+		<td><span class="text-blue text-strong">{{orderRoamStatus}}</span></td>
 		<td>{{formDate roamTime}}</td>
 		<td>
 			{{{whatOrderPayType orderPayType}}}
@@ -75,9 +75,9 @@
 		</td>
 		<td>{{formDate agentPayTime}}</td>
 		<td>
-			<span class="icon-tag-wfka">未付款</span>
+			<span class="icon-tag-wfka">暂无</span>
 		</td>
-		<td>2015.11.12 10:30</td>
+		<td>暂无</td>
 		<%--<td>
 			{{{whatOrderPayType orderPayType}}}
 		</td>
@@ -177,7 +177,6 @@ var	base='<%=basePath%>';
 												<th>商品数量</th>
 												<th>订单金额</th>
 												<th>实际金额</th>
-												<th>收款状况</th>
 												<th>订单状态</th>
 												<th>订单流转时间</th>
 												<th>客户付款状态</th>

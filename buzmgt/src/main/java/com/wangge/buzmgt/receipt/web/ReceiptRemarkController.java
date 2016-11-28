@@ -233,9 +233,9 @@ public class ReceiptRemarkController {
         String partsNum= String.valueOf(list.getPartsCount());
         list.setGoodNum("手机 "+phoneNum+"部，配件"+partsNum+"件");
       });
-      String[] gridTitles_1 = {"订单号", "店铺名称","业务名称", "商品数量","下单时间","交易额","收款状态","订单状态"};
+      String[] gridTitles_1 = {"订单号", "店铺名称","业务名称", "商品数量","下单时间","订单金额","实际金额","订单状态","订单流转时间","客户付款状态","客户付款时间","代理商付款状态","代理商付款时间"};
       String[] coloumsKey_1 = { "orderNo", "shopName", "salesMan.truename", "goodNum","createTime",
-              "orderPrice","orderPayType","orderStatus"};
+              "orderPrice","actualPayNum","orderRoamStatus","roamTime","orderPayType","overTime","agentPayStatus","agentPayTime"};
       ExcelExport.doExcelExport("订单导出"+(searchParams.get("GTE_createTime")+"~"+searchParams.get("LTE_createTime"))+".xls", 
           allOrderList, gridTitles_1, coloumsKey_1, request, response);
       

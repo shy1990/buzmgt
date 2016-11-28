@@ -1,12 +1,12 @@
 package com.wangge.buzmgt.region.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.wangge.buzmgt.region.entity.Region;
 import com.wangge.buzmgt.region.entity.Region.RegionType;
 import com.wangge.buzmgt.region.vo.RegionTree;
 import com.wangge.buzmgt.teammember.entity.SalesMan;
+
+import java.util.List;
+import java.util.Map;
 
 
 

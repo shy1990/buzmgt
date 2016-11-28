@@ -10,6 +10,7 @@ import com.wangge.buzmgt.ordersignfor.bean.OrderSignforAfterSale;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderPayType;
 import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.OrderStatus;
+import com.wangge.buzmgt.ordersignfor.entity.OrderSignfor.AgentPayType;
 import com.wangge.buzmgt.ordersignfor.repository.OrderSignforRepository;
 import com.wangge.buzmgt.receipt.entity.ReceiptRemark;
 import com.wangge.buzmgt.receipt.service.OrderReceiptService;
@@ -143,7 +144,8 @@ public class OrderSignforServiceImpl implements OrderSignforService {
     regionService.disposeSearchParams("userId",searchParams);
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<OrderSignfor> spec = orderSignforSearchFilter(filters.values(), OrderSignfor.class);
-    return orderSignforRepository.findAll(spec);
+    List<OrderSignfor> orderSignfors = orderSignforRepository.findAll(spec);
+    return getOrderSignfors(orderSignfors);
   }
 
   @Override
@@ -152,59 +154,84 @@ public class OrderSignforServiceImpl implements OrderSignforService {
     Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
     Specification<OrderSignfor> spec = orderSignforSearchFilter(filters.values(), OrderSignfor.class);
     Page<OrderSignfor> signforPage = orderSignforRepository.findAll(spec,pageRequest);
-    List<OrderSignfor> list = signforPage.getContent();
+    getOrderSignfors(signforPage.getContent());
+    return signforPage;
+  }
+
+  /**
+   * 获取状态判断后的订单
+   * @param list
+   * @return
+   */
+  private List<OrderSignfor> getOrderSignfors(List<OrderSignfor> list){
     if (CollectionUtils.isNotEmpty(list)) {
       list.forEach(os -> {
+        //订单成功
+        if (OrderStatus.SUCCESS.getName().equals(os.getOrderStatus())){
+          os.setOrderRoamStatus(OrderStatus.SUCCESS.getName());
+        }
         //看是否已发货
         if (StringUtils.isNotEmpty(os.getFastmailNo())){
-          os.setOrderStatus(OrderStatus.SHIPPED);//状态为已发货
+          os.setOrderRoamStatus(OrderStatus.SHIPPED.getName());
           os.setRoamTime(os.getFastmailTime());//流转时间为发货时间
-          if (OrderPayType.ONLINE.equals(os.getOrderPayType())){
+          if (OrderPayType.ONLINE.getName().equals(os.getOrderPayType())){
             os.setOverTime(os.getCreateTime());//设置付款时间
           }
         }
+        //业务签收
+        if (OrderStatus.YWSIGNFOR.getName().equals(os.getOrderStatus())){
+          os.setOrderRoamStatus(OrderStatus.YWSIGNFOR.getName());
+          os.setRoamTime(os.getYewuSignforTime());
+        }
         //看是否拒收
-        if (OrderStatus.MEMBERREJECT.equals(os.getOrderStatus())){
+        if (OrderStatus.MEMBERREJECT.getName().equals(os.getOrderStatus())){
           Rejection rejection = rejectionServive.findByOrderno(os.getOrderNo());
           os.setRoamTime(rejection.getCreateTime());//设置为拒收时间
+          os.setOrderRoamStatus(OrderStatus.MEMBERREJECT.getName());
         }
         //业务报备
         ReceiptRemark receiptRemark = orderReceiptService.findByOrderno(os.getOrderNo());
         if (ObjectUtils.notEqual(receiptRemark,null)){
-          os.setOrderStatus(OrderStatus.YWREPORTED);//设置业务报备
+          os.setOrderRoamStatus(OrderStatus.YWREPORTED.getName());//设置业务报备
           os.setRoamTime(receiptRemark.getCreateTime());//设置报备时间
         }
         //取消订单
-        if (OrderStatus.UNDO.equals(os.getOrderStatus())){
+        if (OrderStatus.UNDO.getName().equals(os.getOrderStatus())){
           os.setRoamTime(os.getAbrogateOrderTime());
+          os.setOrderRoamStatus(OrderStatus.UNDO.getName());
         }
         //pos付款
-        if (OrderPayType.POS.equals(os.getOrderPayType())){
+        if (OrderPayType.POS.getName().equals(os.getOrderPayType())){
           os.setRoamTime(os.getBushPoseTime());//流转时间
           os.setOverTime(os.getBushPoseTime());//客户付款时间
           os.setAgentPayTime(os.getBushPoseTime());//代理商付款时间
         }
+        //客户签收
+        if (OrderStatus.MEMBERSIGNFO.getName().equals(os.getOrderStatus())){
+          os.setOrderRoamStatus(OrderStatus.MEMBERSIGNFO.getName());//状态为客户签收
+          os.setRoamTime(os.getCustomSignforTime());//流转时间
+        }
         Cash cash = null;
-        if (OrderPayType.CASH.equals(os.getOrderPayType())){
+        if (OrderPayType.CASH.getName().equals(os.getOrderPayType())){
           cash = cashService.findById(os.getId());
         }
         //代理商付款状态(收现金有未付款和已付款两种情况)
-        if (OrderPayType.NUPANTEBT.equals(os.getOrderPayType())){
-          os.setAgentPayStatus(0);
+        if (OrderPayType.NUPANTEBT.getName().equals(os.getOrderPayType())){
+          os.setAgentPayStatus(AgentPayType.NUPANTEBT.getName());
         }else if (ObjectUtils.notEqual(cash,null)){
-          if (Cash.CashStatusEnum.UnPay.equals(cash.getStatus())){
-            os.setAgentPayStatus(0);
+          if (Cash.CashStatusEnum.UnPay.getName().equals(cash.getStatus())){
+            os.setAgentPayStatus(AgentPayType.NUPANTEBT.getName());
           }else {
-            os.setAgentPayStatus(1);
+            os.setAgentPayStatus(AgentPayType.PAID.getName());
             os.setOverTime(cash.getPayDate());//客户付款时间
             os.setAgentPayTime(cash.getPayDate());//代理商付款时间
           }
         }else {
-          os.setAgentPayStatus(1);
+          os.setAgentPayStatus(AgentPayType.PAID.getName());
         }
       });
     }
-    return signforPage;
+    return list;
   }
 
 
