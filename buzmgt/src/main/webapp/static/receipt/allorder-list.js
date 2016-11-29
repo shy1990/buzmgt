@@ -205,7 +205,9 @@ function checkEmpty(value){
 Handlebars.registerHelper('whatOrderPayType', function (value, dealType) {
 	var html = '';
 	var tag = '';
-	value = dealType;
+	if (!checkEmpty(dealType)){
+		value = dealType;
+	}
 	switch (value) {
 		case '未支付':
 			tag = 'wfka';
