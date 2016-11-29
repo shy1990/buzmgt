@@ -174,9 +174,11 @@ public class OrderSignforServiceImpl implements OrderSignforService {
         if (StringUtils.isNotEmpty(os.getFastmailNo())){
           os.setOrderRoamStatus(OrderStatus.SHIPPED.getName());
           os.setRoamTime(os.getFastmailTime());//流转时间为发货时间
-          if (OrderPayType.ONLINE.getName().equals(os.getOrderPayType())){
-            os.setOverTime(os.getCreateTime());//设置付款时间
-          }
+        }
+        //线上支付
+        if (OrderPayType.ONLINE.getName().equals(os.getOrderPayType())){
+          os.setOverTime(os.getOnlinePayTime());//客户付款时间
+          os.setAgentPayTime(os.getOnlinePayTime());//业务付款时间
         }
         //业务签收
         if (OrderStatus.YWSIGNFOR.getName().equals(os.getOrderStatus())){

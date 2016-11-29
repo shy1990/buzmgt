@@ -194,7 +194,11 @@ public class OrderSignfor implements Serializable {
 
   @Transient
   private String orderRoamStatus;//订单流转状态
-  
+
+  private Date onlinePayTime;//线上支付时间
+
+  private String dealType;//支付类型
+
   public List<OrderItem> getItems() {
     return items;
   }
@@ -461,5 +465,21 @@ public class OrderSignfor implements Serializable {
 
   public void setOrderRoamStatus(String orderRoamStatus) {
     this.orderRoamStatus = orderRoamStatus;
+  }
+
+  public Date getOnlinePayTime() {
+    return onlinePayTime;
+  }
+
+  public void setOnlinePayTime(Date onlinePayTime) {
+    this.onlinePayTime = onlinePayTime;
+  }
+
+  public String getDealType() {
+    return dealType;
+  }
+
+  public void setDealType(String dealType) {
+    this.dealType = dealType;
   }
 }

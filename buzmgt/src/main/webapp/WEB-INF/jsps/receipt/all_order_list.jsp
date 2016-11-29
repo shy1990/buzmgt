@@ -68,7 +68,7 @@
 		<td><span class="text-blue text-strong">{{orderRoamStatus}}</span></td>
 		<td>{{formDate roamTime}}</td>
 		<td>
-			{{{whatOrderPayType orderPayType}}}
+			{{{whatOrderPayType orderPayType dealType}}}
 		</td>
 		<td>{{formDate overTime}}</td>
 		<td>

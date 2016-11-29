@@ -198,26 +198,45 @@ function checkEmpty(value){
 //<span class="icon-tag-yfka">收现金</span>
 //<span class="text-sbluea">（已付款）</span>agentPayTime
 //<span class="icon-tag-yfka">刷poss</span>
-//<span class="icon-tag-yfka">网上支付</span> 
-Handlebars.registerHelper('whatOrderPayType', function(value) {
-	var html='';
-	var tag='';
+//<span class="icon-tag-yfka">网上支付</span>
+/**
+ * 客户付款状态判断
+ */
+Handlebars.registerHelper('whatOrderPayType', function (value, dealType) {
+	var html = '';
+	var tag = '';
+	value = dealType;
 	switch (value) {
-	case '未支付':
-		tag='wfka';
-		break;
-	case '未报备':
-		tag='wbb';
-		break;
-	case '已报备':
-		tag='ybb';
-		break;
-
-	default:
-		tag='yfka';
-		break;
+		case '未支付':
+			tag = 'wfka';
+			break;
+		case '未报备':
+			tag = 'wbb';
+			break;
+		case '已报备':
+			tag = 'ybb';
+			break;
+		case 'LH':
+			tag = 'yfka';
+			value = '联行支付';
+			break;
+		case 'yeePay':
+			tag = 'yfka';
+			value = '易宝支付';
+			break;
+		case 'XS':
+			tag = 'yfka';
+			value = '微信/支付宝';
+			break;
+		case 'YL':
+			tag = 'yfka';
+			value = '储蓄卡/信用卡';
+			break;
+		default:
+			tag = 'yfka';
+			break;
 	}
-	html='<span class="icon-tag-'+tag+'">'+value+'</span>';
+	html = '<span class="icon-tag-' + tag + '">' + value + '</span>';
 	return html;
 });
 
