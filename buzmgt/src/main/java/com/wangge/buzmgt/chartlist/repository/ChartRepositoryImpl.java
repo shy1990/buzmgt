@@ -60,7 +60,7 @@ public class ChartRepositoryImpl implements ChartListRepository {
      
      String personPercent = createPrent(saleManObj,totalSaleManObj);
 
-    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent, personPercent, totalOrderObj[0]+"", new BigDecimal(totalOrderObj[1]+""));
+    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent, personPercent, cashObj[0]+"", new BigDecimal(cashObj[1] != null ? cashObj[1]+"" : "0"));
 
     return dto;
   }
@@ -80,8 +80,8 @@ public class ChartRepositoryImpl implements ChartListRepository {
     String outboundChartSql = " select count(*),sum(o.order_price)  from biz_order_signfor o  " + regionSql+
                 "  where o.fastmail_no is not  null  and " + dateSql + regionParam;
                     
-    String totalOrderSql=" select count(*),sum(o.order_price) " + regionSql +
-                  " from biz_order_signfor o  where "+dateSql + regionParam;
+    String totalOrderSql=" select count(*),sum(o.order_price) " + 
+                  " from biz_order_signfor o "+regionSql +" where "+dateSql + regionParam;
     
     Query query = em.createNativeQuery(outboundChartSql);
     
@@ -98,7 +98,7 @@ public class ChartRepositoryImpl implements ChartListRepository {
      String amountP = createPrent(outboundChart[1], totalOrder[1]);
      
      
-     ChartDto dto = new  ChartDto(orderP, amountP, totalOrder[0]+"", new BigDecimal(totalOrder[1]+""));
+     ChartDto dto = new  ChartDto(orderP, amountP, outboundChart[0]+"", new BigDecimal(outboundChart[1] != null ? outboundChart[1]+"":"0"));
     
     return dto;
   }
@@ -146,7 +146,7 @@ public class ChartRepositoryImpl implements ChartListRepository {
     
    // ChartDto dto = new  ChartDto(orderPercent, amountPercent, totalOrder[0]+"", new BigDecimal(totalOrder[1]+""));
     
-    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent, personPercent, totalOrderObj[0]+"", new BigDecimal(totalOrderObj[1]+""));
+    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent, personPercent, refusedOrderObj[0]+"", new BigDecimal(refusedOrderObj[1] != null ? refusedOrderObj[1]+"" : "0"));
     return dto;
   }
   
@@ -160,24 +160,24 @@ public class ChartRepositoryImpl implements ChartListRepository {
     
     String unReportsql = "select count(*),sum(o.order_price) " +
   " from biz_order_signfor o " + regionSql +
- " where o.order_pay_type = '0' and " +
+ " where o.order_pay_type is null and o.order_status  in ('0','1') and " +
   "  o.order_no not in (select t.orderno from biz_unpayment_remark t where t.create_time > " +
-    "   trunc(to_date('"+date+"', 'yyyy/MM/dd')-1) " +
-      "   and t.create_time < trunc(to_date('"+date+"', 'yyyy/MM/dd')))  "  + regionParam;
+    "   trunc(to_date('"+date+"', 'yyyy/MM/dd')) " +
+      "   and t.create_time < trunc(to_date('"+date+"', 'yyyy/MM/dd')+1))  and " + dateSql + regionParam;
 
 
     
     
     String salemanSql = "select count(*)  from ( " +
        " select o.user_id  from biz_order_signfor o " +  regionSql +
-       "  where o.order_pay_type is null " +
+       "  where o.order_pay_type is null and  o.order_status  in ('0','1') " +
          "   and o.order_no not in " +
             "   (select t.orderno " +
                "   from biz_unpayment_remark t " +
                "  where t.create_time > " +
                     "   trunc(to_date('"+date+"', 'yyyy/MM/dd')) "+
                   " and t.create_time < " +
-                    "   trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1))  " + regionParam +
+                    "   trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1)) and " + dateSql + regionParam +
          " group by o.user_id )";
     Query query = em.createNativeQuery(unReportsql);
     
@@ -206,7 +206,7 @@ public class ChartRepositoryImpl implements ChartListRepository {
     
    // ChartDto dto = new  ChartDto(orderPercent, amountPercent, totalOrder[0]+"", new BigDecimal(totalOrder[1]+""));
     
-    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent, personPercent, totalOrderObj[0]+"", new BigDecimal(totalOrderObj[1]+""));
+    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent, personPercent, unReportObj[0]+"", new BigDecimal(unReportObj[1] != null ? unReportObj[1]+"" : "0"));
     return dto;
   }
   
@@ -226,7 +226,7 @@ public class ChartRepositoryImpl implements ChartListRepository {
   " from biz_order_signfor o " + regionSql +
  " where  o.order_no  in (select t.orderno from biz_unpayment_remark t where t.create_time > " +
     "   trunc(to_date('"+date+"', 'yyyy/MM/dd')) " +
-      "   and t.create_time < trunc(to_date('"+date+"', 'yyyy/MM/dd')+1))  "  + regionParam;
+      "   and t.create_time < trunc(to_date('"+date+"', 'yyyy/MM/dd')+1))  and  " + dateSql + regionParam;
     
     String salemanSql = "select count(*)  from ( " +
        " select o.user_id  from biz_order_signfor o   " + regionSql +
@@ -236,11 +236,11 @@ public class ChartRepositoryImpl implements ChartListRepository {
                "  where t.create_time > " +
                     "   trunc(to_date('"+date+"', 'yyyy/MM/dd')) "+
                   " and t.create_time < " +
-                    "   trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1))  " + regionParam +
+                    "   trunc(to_date('"+date+"', 'yyyy/MM/dd') + 1)) and " + dateSql + regionParam +
          " group by o.user_id )";
     Query query = em.createNativeQuery(reportsql);
     
-    Object[] unReportObj =   (Object[]) query.getSingleResult();
+    Object[] reportObj =   (Object[]) query.getSingleResult();
     
     query = em.createNativeQuery(createTotalOrder(date));
     
@@ -257,15 +257,15 @@ public class ChartRepositoryImpl implements ChartListRepository {
     
     
    // Object[]  obj = object;
-    String orderPercent = createPrent(unReportObj[0], totalOrderObj[0]);
+    String orderPercent = createPrent(reportObj[0], totalOrderObj[0]);
     
-    String amountPercent = createPrent(unReportObj[1], totalOrderObj[1]);
+    String amountPercent = createPrent(reportObj[1], totalOrderObj[1]);
     
     String personPercent = createPrent(saleManObj,totalSaleManObj);
     
    // ChartDto dto = new  ChartDto(orderPercent, amountPercent, totalOrder[0]+"", new BigDecimal(totalOrder[1]+""));
     
-    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent, personPercent, totalOrderObj[0]+"", new BigDecimal(totalOrderObj[1]+""));
+    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent, personPercent, reportObj[0]+"", new BigDecimal(reportObj[1] != null ? reportObj[1] + "" : "0"));
     return dto;
   }
   
@@ -340,7 +340,7 @@ public class ChartRepositoryImpl implements ChartListRepository {
     
    // ChartDto dto = new  ChartDto(orderPercent, amountPercent, totalOrder[0]+"", new BigDecimal(totalOrder[1]+""));
     
-    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent,serialPercent, personPercent, totalOrderObj[0]+"", new BigDecimal(totalOrderObj[1]+""),statementObj[0]+"");
+    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent,serialPercent, personPercent, statementObj[0]+"", new BigDecimal(statementObj[1] != null ? statementObj[1]+"" : "0"),statementObj[0]+"");
    
     return dto;
   }
@@ -413,7 +413,7 @@ public class ChartRepositoryImpl implements ChartListRepository {
     String serialPercent = createPrent(paidstatementObj[0],waterObj);
    // ChartDto dto = new  ChartDto(orderPercent, amountPercent, totalOrder[0]+"", new BigDecimal(totalOrder[1]+""));
     
-    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent,serialPercent, personPercent, totalOrderObj[0]+"", new BigDecimal(totalOrderObj[1]+""),paidstatementObj[0]+"");
+    ChartDto dto  = new  ChartDto(saleManObj+"", orderPercent, amountPercent,serialPercent, personPercent, paidstatementObj[0]+"", new BigDecimal(paidstatementObj[1] != null ? paidstatementObj[1]+"" : "0"),paidstatementObj[0]+"");
     return dto;
   }
 

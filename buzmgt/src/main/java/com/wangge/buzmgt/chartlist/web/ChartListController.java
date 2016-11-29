@@ -3,7 +3,11 @@ package com.wangge.buzmgt.chartlist.web;
 import java.text.ParseException;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wangge.buzmgt.chartlist.service.ChartListService;
 import com.wangge.buzmgt.dto.ChartDto;
 import com.wangge.buzmgt.log.util.LogUtil;
+import com.wangge.buzmgt.region.entity.Region;
+import com.wangge.buzmgt.region.service.RegionService;
+import com.wangge.buzmgt.sys.entity.User;
+import com.wangge.buzmgt.teammember.entity.Manager;
+import com.wangge.buzmgt.teammember.service.ManagerService;
 import com.wangge.buzmgt.util.DateUtil;
 import com.wangge.buzmgt.util.JsonResponse;
 
@@ -28,11 +37,43 @@ public class ChartListController {
   @Autowired
   private ChartListService chartService;
   
+  @Autowired
+  private RegionService rs;
+  
+  @Autowired
+  private ManagerService ms;
+  
   @RequestMapping(value="/toChartList")
-  public String toChart(@RequestParam(value="regionId",defaultValue="",required=false) String regionId,Model model){
-    
-    if(!StringUtils.isEmpty(regionId)){
+  public String toChart(@RequestParam(value="regionId",defaultValue="",required=false) String regionId,Model model,HttpServletRequest req){
+    String rName = "";
+    String rId = "";
+    /*if(!StringUtils.isEmpty(regionId)){
        model.addAttribute("regionId", regionId);
+    }else{}
+    */
+    if (null != regionId && !"".equals(regionId)) {
+      Region r = rs.getRegionById(regionId);
+      rName = r.getName();
+      rId = r.getId();
+
+      req.getSession().setAttribute("rName", rName);
+      req.getSession().setAttribute("rId", rId);
+
+      model.addAttribute("regionName", rName);
+      model.addAttribute("regionId", rId);
+    } else {
+      Subject subject = SecurityUtils.getSubject();
+      User user = (User) subject.getPrincipal();
+      Manager manager = ms.getById(user.getId());
+      if (null != req.getSession().getAttribute("rName")) {
+        rName = req.getSession().getAttribute("rName") + "";
+        rId = req.getSession().getAttribute("rId") + "";
+      } else {
+        rName = manager.getRegion().getName();
+       // rId = manager.getRegion().getId();
+      }
+      model.addAttribute("regionName", rName);
+      model.addAttribute("regionId", rId);
     }
     
     return "chart/chartList";

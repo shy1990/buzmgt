@@ -41,13 +41,15 @@
             <option>1</option>
             <option>1</option>
         </select> -->
-        <input type="hidden" id="regionId" class="fl ph-select" style="margin-right: 10px" readonly="readonly" value="${regionId}"/>
+        <%-- <input type="hidden" id="regionId" class="fl ph-select" style="margin-right: 10px" readonly="readonly" value="${regionId}"/> --%>
+        
+        <input type="hidden" id="regionId"  readonly="readonly" value="${regionId}"/>
 
 
         <input id="date" type="text" class="form-control form_datetime input-sm ph-select" placeholder="时间选择"
                readonly="readonly" style="background: #fff;">
 
-        <button class="btn btn-blue btn-sm " style="margin: -30px 0 30px  380px" id="button">检索</button>
+        <button class="btn btn-blue btn-sm " style="margin: -30px 0 30px  200px" id="button">检索</button>
     </div>
 
 
@@ -66,13 +68,13 @@
 
                     <div class="col-sm-3">
                         <div id="amountPercent">
-                          <div class="chart" data-percent="90"><span>90%</span></div>
+                          <div class="chart" data-percent="0"><span>0%</span></div>
                         </div>
                         <div class="chart-title">
                             <span class="text-red">总金额：</span>
                         </div>
                         <div class="chart-secd-title">
-                            <span class="text-gery" id="amount">17,150.00元</span>
+                            <span class="text-gery" id="amount">0.00元</span>
                         </div>
                     </div>
                     <div class="col-sm-3">
@@ -81,13 +83,13 @@
                         </div>
                         <div class="chart-title"><span class="text-purple">总单数：</span></div>
                         <div class="chart-secd-title">
-                            <span class="text-gery" id="orders">1050单</span>
+                            <span class="text-gery" id="orders">0单</span>
                         </div>
                     </div>
                 </div>
-                <div class="chart-foot">
+                <!-- <div class="chart-foot">
                     <a href="">查看详情</a>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -130,9 +132,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="chart-foot">
+               <!--  <div class="chart-foot">
                     <a href="">查看详情</a>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -186,9 +188,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="chart-foot">
+                <!-- <div class="chart-foot">
                     <a href="">查看详情</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -241,9 +243,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="chart-foot">
+                <!-- <div class="chart-foot">
                     <a href="">查看详情</a>
-                </div>
+                </div> -->
             </div>
         </div>
             <!--chart5-->
@@ -284,9 +286,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="chart-foot">
+               <!--  <div class="chart-foot">
                     <a href="">查看详情</a>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -328,9 +330,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="chart-foot">
+               <!--  <div class="chart-foot">
                     <a href="">查看详情</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -375,9 +377,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="chart-foot">
+               <!--  <div class="chart-foot">
                     <a href="">查看详情</a>
-                </div>
+                </div> -->
             </div>
         </div>
 
