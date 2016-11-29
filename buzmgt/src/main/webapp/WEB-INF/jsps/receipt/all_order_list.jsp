@@ -56,6 +56,7 @@
 <script id="allorder-table-template" type="text/x-handlebars-template">
 	{{#each content}}
 	<tr>
+		<td>{{formDate createTime}}</td>
 		<td class="">{{orderNo}}</td>
 		<td>{{#with salesMan}}{{truename}}{{/with}}</td>
 		<td>{{shopName}}</td>
@@ -171,6 +172,7 @@ var	base='<%=basePath%>';
 									<table class="table table-hover new-table abnormal-table">
 										<thead>
 											<tr>
+												<th>创建时间</th>
 												<th>订单号</th>
 												<th>业务名称</th>
 												<th>商家名称</th>

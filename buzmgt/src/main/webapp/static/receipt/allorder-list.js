@@ -5,7 +5,7 @@ $(function() {
 	findAllOrderList();
 })
 $('#startTime').datetimepicker({
-	format : "yyyy-mm-dd",
+	format : "yyyy-mm-dd hh:ii",
 	language : 'zh-CN',
 	endDate : new Date(),
 	weekStart : 1,
@@ -13,7 +13,7 @@ $('#startTime').datetimepicker({
 	autoclose : 1,
 	todayHighlight : 1,
 	startView : 2,
-	minView : 2,
+	minView : 0,
 	pickerPosition : "bottom-right",
 	forceParse : 0
 }).on('changeDate', function(ev) {
@@ -28,7 +28,7 @@ $('#startTime').datetimepicker({
 	}
 });
 $('#endTime').datetimepicker({
-	format : "yyyy-mm-dd",
+	format : "yyyy-mm-dd hh:ii",
 	language : 'zh-CN',
 	endDate : new Date(),
 	weekStart : 1,
@@ -36,7 +36,7 @@ $('#endTime').datetimepicker({
 	autoclose : 1,
 	todayHighlight : 1,
 	startView : 2,
-	minView : 2,
+	minView : 0,
 	pickerPosition : "bottom-right",
 	forceParse : 0
 }).on('changeDate', function(ev) {
@@ -55,8 +55,8 @@ $('#endTime').datetimepicker({
  * 初始化日期 最近1天
  */
 function nowTime() {
-	var nowDate = changeDateToString(new Date());
-	var beforeDate = changeDateToString((new Date()).DateAdd('d', -1));
+	var nowDate = changeTimeToString(new Date());
+	var beforeDate = changeTimeToString((new Date()).DateAdd('d', -1));
 	SearchData['sc_GTE_createTime'] = beforeDate;
 	SearchData['sc_LTE_createTime'] = nowDate;
 	$('#startTime').val(beforeDate);

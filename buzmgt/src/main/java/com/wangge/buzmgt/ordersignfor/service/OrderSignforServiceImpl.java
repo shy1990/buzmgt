@@ -203,7 +203,7 @@ public class OrderSignforServiceImpl implements OrderSignforService {
         //pos付款
         if (OrderPayType.POS.getName().equals(os.getOrderPayType())){
           os.setRoamTime(os.getBushPoseTime());//流转时间
-          os.setOverTime(os.getBushPoseTime());//客户付款时间
+          os.setOverTime(os.getCustomSignforTime());//客户付款时间
           os.setAgentPayTime(os.getBushPoseTime());//代理商付款时间
         }
         //客户签收
@@ -220,10 +220,11 @@ public class OrderSignforServiceImpl implements OrderSignforService {
           os.setAgentPayStatus(AgentPayType.NUPANTEBT.getName());
         }else if (ObjectUtils.notEqual(cash,null)){
           if (Cash.CashStatusEnum.UnPay.getName().equals(cash.getStatus())){
-            os.setAgentPayStatus(AgentPayType.NUPANTEBT.getName());
+            os.setAgentPayStatus(AgentPayType.NUPANTEBT.getName());//代理商未付款
+            os.setOverTime(os.getCustomSignforTime());//客户付款时间
           }else {
-            os.setAgentPayStatus(AgentPayType.PAID.getName());
-            os.setOverTime(cash.getPayDate());//客户付款时间
+            os.setAgentPayStatus(AgentPayType.PAID.getName());//代理商已付款
+            os.setOverTime(os.getCustomSignforTime());//客户付款时间
             os.setAgentPayTime(cash.getPayDate());//代理商付款时间
           }
         }else {
@@ -242,9 +243,9 @@ public class OrderSignforServiceImpl implements OrderSignforService {
 
       private final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss SSS";
 
-      private final static String TIME_MIN = " 00:00:00 000";
+      private final static String TIME_MIN = ":00 000";
 
-      private final static String TIME_MAX = " 23:59:59 999";
+      private final static String TIME_MAX = ":59 999";
 
       private final static String TYPE_ORDER_PAY_TYPE = "com.wangge.buzmgt.ordersignfor.entity.OrderSignfor$OrderPayType";
 
